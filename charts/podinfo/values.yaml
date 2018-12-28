@@ -1,0 +1,51 @@
+# Default values for podinfo.
+
+replicaCount: 1
+backend: http://backend-podinfo:9898/echo
+
+image: stefanprodan/podinfo:0.4.0
+imagePullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  externalPort: 9898
+  containerPort: 9898
+  nodePort: 31198
+
+# Heapster or metrics-server add-on required
+hpa:
+  enabled: false
+  maxReplicas: 10
+  # average total CPU usage per pod (1-100)
+  cpu:
+  # average memory usage per pod (100Mi-1Gi)
+  memory:
+  # average http requests per second per pod (k8s-prometheus-adapter)
+  requests:
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - podinfo.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  limits:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+logLevel: debug

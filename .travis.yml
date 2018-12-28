@@ -1,0 +1,22 @@
+---
+language: C
+
+env:
+  global:
+    - HELM_URL=https://storage.googleapis.com/kubernetes-helm
+    - HELM_TAR=helm-v2.4.1-linux-amd64.tar.gz
+
+install:
+  - wget -q ${HELM_URL}/${HELM_TAR}
+  - tar xzfv ${HELM_TAR}
+  - PATH=`pwd`/linux-amd64/:$PATH
+  - helm init --client-only
+
+script:
+  - >
+     for chart in `ls ./charts`; do
+      helm lint ./charts/${chart}
+      if [ $? != 0 ]; then
+       travis_terminate 1
+      fi
+     done
