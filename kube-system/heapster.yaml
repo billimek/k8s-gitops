@@ -1,0 +1,18 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: heapster
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~0.4
+spec:
+  releaseName: heapster
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: heapster
+    version: 0.3.2
+  values:
+    image:
+      repository: k8s.gcr.io/heapster-amd64
+      tag: v1.5.4
