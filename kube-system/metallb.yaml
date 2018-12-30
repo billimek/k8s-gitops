@@ -1,0 +1,20 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: metallb
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+spec:
+  releaseName: metallb
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: metallb
+    version: 0.8.3
+  values:
+    configInline:
+        address-pools:
+        - name: default
+          protocol: layer2
+          addresses:
+          - 10.2.0.100-10.2.0.250
