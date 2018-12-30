@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-backup-restic-pv-10g-kube-system
+  namespace: kube-system
+spec:
+  storageClassName: data
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 10.0.10.7
+    path: "/tank/backups/restic"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-backup-restic-pv-10g-kube-system
+  namespace: kube-system
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: data
+  resources:
+    requests:
+      storage: 1Mi
