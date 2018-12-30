@@ -16,3 +16,6 @@ spec:
     image:
       repository: quay.io/external_storage/nfs-client-provisioner
       tag: v3.1.0-k8s1.11
+    nfs:
+      server: "10.0.10.7"
+      path: "/tank/data/k8s-nfs"
