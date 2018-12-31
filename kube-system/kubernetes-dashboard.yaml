@@ -1,0 +1,27 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~1
+spec:
+  releaseName: kubernetes-dashboard
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: kubernetes-dashboard
+    version: 1.56.1 
+  values:
+    image:
+      repository: k8s.gcr.io/kubernetes-dashboard-amd64
+      tag: v1.10.1
+    replicaCount: 2
+    extraArgs:
+      - --token-ttl=0
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+  valueFileSecrets:
+  - name: "kubernetes-dashboard-values"
