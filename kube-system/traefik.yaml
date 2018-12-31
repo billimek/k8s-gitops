@@ -1,0 +1,60 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~1
+spec:
+  releaseName: traefik
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: traefik
+    version: 1.56.1 
+  values:
+    imageTag: 1.7.6
+    serviceType : LoadBalancer
+    externalTrafficPolicy: Local
+    loadBalancerIP: 10.2.0.100
+    replicas: 2
+    memoryLimit: 100Mi
+    cpuLimit: 1
+    startupArguments:
+      - --ping
+      - --acme.dnschallenge.resolvers="8.8.8.8"
+    debug:
+      enabled: false
+    rbac:
+      enabled: true
+    ssl:
+      enabled: true
+      enforced: true
+      insecureSkipVerify : true
+    kvprovider:
+      storeAcme: true
+      consul:
+        endpoint: consul:8500
+        watch: true
+        prefix: traefik
+    acme:
+      enabled: true
+      staging: false
+      logging: true
+      domains:
+        enabled: true
+      challengeType: dns-01
+      dnsProvider:
+        name: cloudflare
+      delayBeforeCheck: 120
+      persistence:
+        enabled: false
+    dashboard:
+      enabled: true
+      statistics:
+        recentErrors: 25
+    deployment:
+      hostPort:
+        dashboardEnabled: true
+  valueFileSecrets:
+  - name: "traefik-values"

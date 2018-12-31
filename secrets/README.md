@@ -18,4 +18,6 @@ kubectl create secret generic traefik-basic-auth-jeff --from-literal=jeff="$JEFF
 kubectl create secret generic traefik-basic-auth-jeff --from-literal=jeff="$JEFF_AUTH" --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem >! basic-auth-jeff.yaml
 
 kseal values-to-encrypt/consul-values.txt
+
+kseal values-to-encrypt/traefik-values.txt
 ```
