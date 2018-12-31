@@ -20,4 +20,6 @@ kubectl create secret generic traefik-basic-auth-jeff --from-literal=auth="$TRAE
 kseal values-to-encrypt/consul-values.txt
 
 kseal values-to-encrypt/traefik-values.txt
+
+kseal values-to-encrypt/kubernetes-dashboard-values.txt
 ```
