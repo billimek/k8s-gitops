@@ -9,7 +9,7 @@ spec:
   releaseName: ds
   chart:
     repository: https://raw.githubusercontent.com/komljen/helm-charts/master/charts/
-    name: akomljen-charts/descheduler
+    name: descheduler
     version: 0.2.1
   values:
     image:
