@@ -3,6 +3,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: fluxcloud
+  namespace: flux
 spec:
   selector:
     name: fluxcloud
@@ -15,6 +16,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: fluxcloud
+  namespace: flux
 spec:
   replicas: 1
   strategy:
