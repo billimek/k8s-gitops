@@ -23,5 +23,8 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
+    rbac:
+      create: true
+      clusterAdminRole: true
   valueFileSecrets:
   - name: "kubernetes-dashboard-values"
