@@ -22,7 +22,7 @@ spec:
     cpuLimit: 1
     startupArguments:
       - --ping
-      - --acme.dnschallenge.resolvers="8.8.8.8"
+      - --acme.dnschallenge.resolvers=8.8.8.8
     debug:
       enabled: false
     rbac:
