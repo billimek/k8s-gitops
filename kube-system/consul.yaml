@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: consul
-    version: consul
+    version: 3.5.0
   values:
     ImageTag: "1.4.0"
     Image: consul
