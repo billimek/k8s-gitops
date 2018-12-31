@@ -1,0 +1,2 @@
+extraArgs:
+  slack-hook-url: "$SLACK_WEBHOOK_URL"

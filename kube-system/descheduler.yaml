@@ -1,0 +1,21 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: ds
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+spec:
+  releaseName: ds
+  chart:
+    repository: https://raw.githubusercontent.com/komljen/helm-charts/master/charts/
+    name: akomljen-charts/descheduler
+    version: 0.2.1
+  values:
+    image:
+      repository: komljen/descheduler
+      tag: v0.8.0
+    deschedulerPolicy:
+      strategies:
+        RemoveDuplicates:
+          enabled: true

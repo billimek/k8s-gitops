@@ -1,0 +1,20 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: kured
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~1
+spec:
+  releaseName: kured
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: kured
+    version: 1.0.0
+  values:
+    image:
+      repository: quay.io/weaveworks/kured
+      tag: 1.1.0
+  valueFileSecrets:
+  - name: "kured-values"
