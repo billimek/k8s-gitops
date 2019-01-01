@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~0.4
+    flux.weave.works/tag.chart-image: semver:~v3.1
 spec:
   releaseName: nfs-client-provisioner
   chart:
