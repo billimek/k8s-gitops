@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ -z "$DOMAIN" ]]; then
+  echo ".env does not appear to be sourced, sourcing now"
+  . ../.env
+fi
+
 kseal() {
     name=$(basename -s .txt "$@")
     envsubst < "$@" > values.yaml | kubectl -n kube-system create secret generic "$name" --from-file=values.yaml --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem && rm  values.yaml
