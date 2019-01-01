@@ -1,25 +1,25 @@
-apiVersion: flux.weave.works/v1beta1
-kind: HelmRelease
-metadata:
-  name: consul
-  namespace: kube-system
-  annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~1.4
-spec:
-  releaseName: consul
-  chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    name: consul
-    version: 3.5.0
-  values:
-    ImageTag: "1.4.0"
-    Image: consul
-    uiIngress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "traefik"
-        ingress.kubernetes.io/auth-type: "basic"
-        ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
-  valueFileSecrets:
-  - name: "consul-values"
+# apiVersion: flux.weave.works/v1beta1
+# kind: HelmRelease
+# metadata:
+#   name: consul
+#   namespace: kube-system
+#   annotations:
+#     flux.weave.works/automated: "true"
+#     flux.weave.works/tag.chart-image: semver:~1.4
+# spec:
+#   releaseName: consul
+#   chart:
+#     repository: https://kubernetes-charts.storage.googleapis.com/
+#     name: consul
+#     version: 3.5.0
+#   values:
+#     ImageTag: "1.4.0"
+#     Image: consul
+#     uiIngress:
+#       enabled: true
+#       annotations:
+#         kubernetes.io/ingress.class: "traefik"
+#         ingress.kubernetes.io/auth-type: "basic"
+#         ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
+#   valueFileSecrets:
+#   - name: "consul-values"
