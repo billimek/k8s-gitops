@@ -9,7 +9,7 @@ metadata:
 spec:
   releaseName: forwardauth
   chart:
-    repository: https://billimek.github.io/helm-repo
+    repository: https://billimek.github.io/helm-repo/
     name: forwardauth
     version: 0.1.0
   values:
