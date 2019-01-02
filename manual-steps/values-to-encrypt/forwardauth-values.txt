@@ -1,3 +1,5 @@
+ingress:
+  hosts: [auth.$DOMAIN]
 applicationYaml:
   domain: https://${AUTH0_DOMAIN}.auth0.com/
   token-endpoint: https://${AUTH0_DOMAIN}.auth0.com/oauth/token
