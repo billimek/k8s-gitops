@@ -7,7 +7,10 @@ fi
 
 kseal() {
     name=$(basename -s .txt "$@")
-    envsubst < "$@" > values.yaml | kubectl -n kube-system create secret generic "$name" --from-file=values.yaml --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem && rm  values.yaml
+    if [[ -z "$NS" ]]; then
+      NS=default
+    fi
+    envsubst < "$@" > values.yaml | kubectl -n "$NS" create secret generic "$name" --from-file=values.yaml --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem && rm values.yaml
 }
 
 #################
@@ -17,14 +20,16 @@ kubectl create secret generic fluxcloud --from-literal=slack_url="$SLACK_WEBHOOK
 kubectl create secret generic traefik-basic-auth-jeff --from-literal=auth="$JEFF_AUTH" --namespace kube-system --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/basic-auth-jeff-kube-system.yaml
 kubectl create secret generic traefik-basic-auth-jeff --from-literal=auth="$JEFF_AUTH" --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/basic-auth-jeff.yaml
 
-#################
+###################
 # helm chart values
-#################
-kseal values-to-encrypt/consul-values.txt > ../secrets/consul-values.yaml
-kseal values-to-encrypt/traefik-values.txt > ../secrets/traefik-values.yaml
-kseal values-to-encrypt/kubernetes-dashboard-values.txt > ../secrets/kubernetes-dashboard-values.yaml
-kseal values-to-encrypt/kured-values.txt > ../secrets/kured-values.yaml
-kseal values-to-encrypt/forwardauth-values.txt > ../secrets/forwardauth-values.yaml
+###################
+
+NS=kube-system kseal values-to-encrypt/consul-values.txt > ../secrets/consul-values.yaml
+NS=kube-system kseal values-to-encrypt/traefik-values.txt > ../secrets/traefik-values.yaml
+NS=kube-system kseal values-to-encrypt/kubernetes-dashboard-values.txt > ../secrets/kubernetes-dashboard-values.yaml
+NS=kube-system kseal values-to-encrypt/kured-values.txt > ../secrets/kured-values.yaml
+NS=kube-system kseal values-to-encrypt/forwardauth-values.txt > ../secrets/forwardauth-values.yaml
+
 kseal values-to-encrypt/influxdb-values.txt > ../secrets/influxdb-values.yaml
 kseal values-to-encrypt/chronograf-values.txt > ../secrets/chronograf-values.yaml
 kseal values-to-encrypt/prometheus-values.txt > ../secrets/prometheus-values.yaml
