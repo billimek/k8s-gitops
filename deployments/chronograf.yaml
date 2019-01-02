@@ -1,0 +1,30 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: chronograf
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:1.*-alpine
+spec:
+  releaseName: chronograf
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: chronograf
+    version: 1.0.0
+  values:
+    image:
+      tag: "1.7-alpine"
+      repo: docker.io/chronograf
+    persistence:
+      enabled: true
+      storageClass: rook-ceph-block
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+        ingress.kubernetes.io/auth-type: "forward"
+        ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
+        ingress.kubernetes.io/auth-trust-headers: "true"
+  valueFileSecrets:
+  - name: "chronograf-values"
