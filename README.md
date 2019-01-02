@@ -31,7 +31,13 @@ If you are deploying a helm chart that needs to live in a new namespace, Flux se
 
 ### Deletions
 
-[Flux doesn't handle deletions](https://github.com/weaveworks/flux/blob/master/site/faq.md#will-flux-delete-resources-that-are-no-longer-in-the-git-repository).  What this means is that if you remove something from the repo (or even change something to run in a different namespace), it will not clean-up the removed item.  This is a task that you must manually do
+[Flux doesn't handle deletions](https://github.com/weaveworks/flux/blob/master/site/faq.md#will-flux-delete-resources-that-are-no-longer-in-the-git-repository).  What this means is that if you remove something from the repo (or even change something to run in a different namespace), it will not clean-up the removed item.  This is a task that you must manually do.
+
+To remove HelmRelease type entities from flux, you must manually delete the helmrelease object, e.g. to clean-up a helm release named `forwardauth`:
+
+```shell
+kubectl -n kube-system delete helmrelease/forwardauth
+```
 
 ### Secrets & Sensitive information
 
