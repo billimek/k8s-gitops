@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/protocol: https
     ingress.kubernetes.io/auth-type: "forward"
-    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.default.svc.cluster.local/authorize"
+    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
     ingress.kubernetes.io/auth-trust-headers: "true"
     traefik.ingress.kubernetes.io/preserve-host: "true"
 spec:
