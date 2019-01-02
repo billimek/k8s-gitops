@@ -15,7 +15,7 @@ spec:
   values:
     image:
       tag: latest
-      repository: forwardauth
+      repository: index.docker.io/dniel/forwardauth
     replicaCount: 1
     logLevel: PRODUCTION
     ingress:
