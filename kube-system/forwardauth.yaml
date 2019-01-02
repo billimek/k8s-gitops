@@ -1,0 +1,22 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: forwardauth
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: latest
+spec:
+  releaseName: forwardauth
+  chart:
+    repository: https://billimek.github.io/helm-repo
+    name: forwardauth
+    version: 0.1.0
+  values:
+    image:
+      tag: latest
+      repository: forwardauth
+    replicaCount: 1
+    logLevel: PRODUCTION
+  valueFileSecrets:
+  - name: "forwardauth-values"
