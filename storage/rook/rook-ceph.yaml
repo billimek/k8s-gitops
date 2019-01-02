@@ -8,7 +8,7 @@ metadata:
 spec:
   releaseName: rook-ceph
   chart:
-    repository: https://charts.rook.io/stable/
+    repository: https://charts.rook.io/stable
     name: rook-ceph
     version: v0.9.1
   values:
