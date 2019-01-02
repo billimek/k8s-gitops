@@ -17,3 +17,5 @@ for i in yamls/traefik-external/*.txt
 do
   kapply $i
 done
+
+kapply yamls/rook-dashboard-ingress.txt
