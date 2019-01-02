@@ -13,3 +13,9 @@ Create all of the secret files:
 ```shell
 ./create_secrets.sh
 ```
+
+Manually apply the various yaml files that need env variable subsitition:
+
+```shell
+./create_yamls.sh
+```
