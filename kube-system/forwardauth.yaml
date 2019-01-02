@@ -1,13 +1,13 @@
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
-  name: forwardauth
+  name: auth0
   namespace: kube-system
   annotations:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: latest
 spec:
-  releaseName: forwardauth
+  releaseName: auth0
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: forwardauth
