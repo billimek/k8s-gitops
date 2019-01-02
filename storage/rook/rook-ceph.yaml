@@ -8,9 +8,9 @@ metadata:
 spec:
   releaseName: rook-ceph
   chart:
-    repository: https://charts.rook.io/beta
+    repository: https://charts.rook.io/stable/
     name: rook-ceph
-    version: v0.9.0
+    version: v0.9.1
   values:
     agent:
       flexVolumeDirPath: "/var/lib/kubelet/volumeplugins"
