@@ -25,3 +25,7 @@ kseal values-to-encrypt/traefik-values.txt > ../secrets/traefik-values.yaml
 kseal values-to-encrypt/kubernetes-dashboard-values.txt > ../secrets/kubernetes-dashboard-values.yaml
 kseal values-to-encrypt/kured-values.txt > ../secrets/kured-values.yaml
 kseal values-to-encrypt/forwardauth-values.txt > ../secrets/forwardauth-values.yaml
+kseal values-to-encrypt/influxdb-values.txt > ../secrets/influxdb-values.yaml
+kseal values-to-encrypt/chronograf-values.txt > ../secrets/chronograf-values.yaml
+kseal values-to-encrypt/prometheus-values.txt > ../secrets/prometheus-values.yaml
+

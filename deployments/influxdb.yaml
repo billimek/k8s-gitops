@@ -1,0 +1,37 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: influxdb
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:1.*-alpine
+spec:
+  releaseName: influxdb
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: influxdb
+    version: 1.0.0
+  values:
+    image:
+      tag: "1.7-alpine"
+      repo: influxdb
+    service:
+      type: LoadBalancer
+      loadBalancerIP: 10.2.0.101
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClass: rook-ceph-block
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 0.1
+      limits:
+        memory: 2Gi
+        cpu: 4
+    config:
+      opentsdb:
+        enabled: true
+  valueFileSecrets:
+  - name: "influxdb-values"
