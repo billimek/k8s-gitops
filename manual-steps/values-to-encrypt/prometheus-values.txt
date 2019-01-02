@@ -1,6 +1,6 @@
 alertmanager:
   ingress:
-    hosts: "{alert.prom.$DOMAIN}"
+    hosts: "[alert.prom.$DOMAIN]"
 server:
   ingress:
-    hosts: "{prom.$DOMAIN}"
+    hosts: "[prom.$DOMAIN]"
