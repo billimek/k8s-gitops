@@ -1,0 +1,80 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-rke-a-nd
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: "forward"
+    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.default.svc.cluster.local/authorize"
+    ingress.kubernetes.io/auth-trust-headers: "true"
+spec:
+  rules:
+  - host: rke-a.nd.$DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: external-rke-a-nd
+          servicePort: 19999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-rke-a-nd
+spec:
+  ports:
+  - name: http
+    port: 19999
+  type: ExternalName
+  externalName: 10.0.7.17
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-rke-b-nd
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: rke-b.nd.$DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: external-rke-b-nd
+          servicePort: 19999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-rke-b-nd
+spec:
+  ports:
+  - name: http
+    port: 19999
+  type: ExternalName
+  externalName: 10.0.7.18
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-rke-c-nd
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: rke-c.nd.$DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: external-rke-c-nd
+          servicePort: 19999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-rke-c-nd
+spec:
+  ports:
+  - name: http
+    port: 19999
+  type: ExternalName
+  externalName: 10.0.7.19
