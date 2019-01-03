@@ -20,7 +20,7 @@ Install flux.  Where `git.url` should define the repo where the GitOps code live
 
 ```shell
 helm repo add weaveworks https://weaveworks.github.io/flux
-helm upgrade --install flux --set rbac.create=true --set helmOperator.create=true --set helmOperator.updateChartDeps=false --set git.url=git@github.com:billimek/k8s-gitops --namespace flux weaveworks/flux
+helm upgrade --install flux --set rbac.create=true --set helmOperator.create=true --set helmOperator.updateChartDeps=false --set git.url=git@github.com:billimek/k8s-gitops --set additionalArgs="{--connect=ws://fluxcloud}" --namespace flux weaveworks/flux
 ```
 
 ## Caveats
