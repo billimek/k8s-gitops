@@ -18,7 +18,7 @@ spec:
       repo: influxdb
     service:
       type: LoadBalancer
-      loadBalancerIP: 10.2.0.101
+      loadBalancerIP: 10.2.0.151
     persistence:
       enabled: true
       size: 50Gi
