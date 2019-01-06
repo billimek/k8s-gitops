@@ -1,0 +1,40 @@
+nodes:
+  - address: 10.2.0.10
+    hostname_override: k8s-master-a
+    user: ubuntu
+    role: [controlplane,etcd]
+  - address: 10.2.0.11
+    hostname_override: k8s-master-b
+    user: ubuntu
+    role: [controlplane,etcd]
+  - address: 10.2.0.12
+    hostname_override: k8s-master-c
+    user: ubuntu
+    role: [controlplane,etcd]
+  - address: 10.2.0.13
+    hostname_override: k8s-1
+    user: ubuntu
+    role: [worker]
+  - address: 10.2.0.14
+    hostname_override: k8s-2
+    user: ubuntu
+    role: [worker]
+  - address: 10.2.0.15
+    hostname_override: k8s-3
+    user: ubuntu
+    role: [worker]
+ignore_docker_version: true
+authentication:
+    strategy: x509
+    sans:
+      - "10.0.7.30"
+      - "lb-ha"
+ssh_key_path: /home/jeff/.ssh/id_k8s_nodes
+ssh_agent_auth: true
+services:
+  kubelet:
+    extra_args:
+      read-only-port: 10255
+cluster_name: k8s
+ingress:
+    provider: none
