@@ -78,7 +78,7 @@ kubeseal --fetch-cert \
 If desiring to restore the existing kubeseal key,
 
 ```shell
-kubectl replace -f master.key
+kubectl replace -f master.key --force
 kubectl delete pod -n kube-system -l name=sealed-secrets-controller
 ```
 
