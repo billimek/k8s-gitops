@@ -51,5 +51,7 @@ helm init --service-account tiller
 Install flux (for gitops):
 
 ```shell
-helm upgrade --install flux --set rbac.create=true --set helmOperator.create=true --set helmOperator.updateChartDeps=false --set git.url=git@github.com:billimek/k8s-gitops --namespace flux weaveworks/flux
+helm upgrade --install flux --set rbac.create=true --set helmOperator.create=true --set helmOperator.updateChartDeps=false --set git.url=git@github.com:billimek/k8s-gitops --set additionalArgs="{--connect=ws://fluxcloud}" --namespace flux weaveworks/flux
 ```
+
+Once flux is installed, [get the SSH key and give it write access to the github repo](https://github.com/weaveworks/flux/blob/master/site/helm-get-started.md#giving-write-access)
