@@ -40,6 +40,8 @@ Afterwards, edit the generated `kube_config_cluster.yaml` file and change the `s
 
 `export KUBECONFIG=$(pwd)/kube_config_cluster.yaml` to start using the new cluster immediatley.  This can also be copied to `~/.kub/config`
 
+## helm
+
 Install helm:
 
 ```shell
@@ -48,6 +50,8 @@ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceac
 helm init --service-account tiller
 ```
 
+## flux
+
 Install flux (for gitops):
 
 ```shell
@@ -55,3 +59,49 @@ helm upgrade --install flux --set rbac.create=true --set helmOperator.create=tru
 ```
 
 Once flux is installed, [get the SSH key and give it write access to the github repo](https://github.com/weaveworks/flux/blob/master/site/helm-get-started.md#giving-write-access)
+
+## kubeseal
+
+### brand-new cluster
+
+If this is brand-new, get the new public cert via,
+
+```shell
+kubeseal --fetch-cert \
+--controller-namespace=kube-system \
+--controller-name=sealed-secrets \
+>! pub-cert.pem
+```
+
+### restoring existing key
+
+If desiring to restore the existing kubeseal key,
+
+```shell
+kubectl replace -f master.key
+kubectl delete pod -n kube-system -l name=sealed-secrets-controller
+```
+
+## bootstrapping traefik
+
+If wanting to restore existing certs from an old traefik/consul install do the following:
+
+In the existing cluster, make a snspshot of the current state via,
+
+```shell
+kubectl -n kube-system exec -ti consul-0 consul snapshot save traefik.snap
+kubectl -n kube-system cp consul-0:traefik.snap .
+```
+
+In the new cluster, 'restore' the snapshot via,
+
+```shell
+kubectl -n kube-system cp traefik.snap consul-0:traefik.snap
+kubectl -n kube-system exec -ti consul-0 consul snapshot restore traefik.snap
+```
+
+Next un-ignore the flux configuration in [traefik.yaml](kube-system/traefik.yaml) by setting the `flux.weave.works/ignore` annotation to false:
+
+```shell
+flux.weave.works/ignore: "false"
+```
