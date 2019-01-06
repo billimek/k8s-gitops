@@ -20,6 +20,7 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: SPIGOT
+      spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.13.1.jar
       difficulty: normal
       serviceType: LoadBalancer
       gameMode: creative
@@ -47,6 +48,7 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: SPIGOT
+      spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.13.1.jar
       difficulty: normal
       serviceType: LoadBalancer
       gameMode: survival
