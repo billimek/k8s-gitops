@@ -5,7 +5,7 @@ metadata:
   name: mc
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
+    # flux.weave.works/automated: "true"
     # flux.weave.works/tag.chart-image: glob:latest
 spec:
   releaseName: mc
@@ -14,7 +14,7 @@ spec:
     name: minecraft
     version: 0.3.2
   values:
-    image: itzg/minecraft-server:2018-1
+    image: itzg/minecraft-server
     imageTag: latest
     minecraftServer:
       eula: "TRUE"
@@ -32,7 +32,7 @@ metadata:
   name: mcsv
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
+    # flux.weave.works/automated: "true"
     # flux.weave.works/tag.chart-image: glob:latest
 spec:
   releaseName: mcsv
@@ -41,7 +41,7 @@ spec:
     name: minecraft
     version: 0.3.2
   values:
-    image: itzg/minecraft-server:2018-1
+    image: itzg/minecraft-server
     imageTag: latest
     minecraftServer:
       eula: "TRUE"
