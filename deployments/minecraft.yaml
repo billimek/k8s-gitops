@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -13,7 +14,7 @@ spec:
     name: minecraft
     version: 0.3.2
   values:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:latest
     imageTag: latest
     minecraftServer:
       eula: "TRUE"
@@ -40,7 +41,7 @@ spec:
     name: minecraft
     version: 0.3.2
   values:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:latest
     imageTag: latest
     minecraftServer:
       eula: "TRUE"
