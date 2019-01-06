@@ -6,6 +6,7 @@ acme:
       - sans:
         - "$DOMAIN"
       - main: "*.k.$DOMAIN"
+      - main: "*.nd.$DOMAIN"
   dnsProvider:
     cloudflare:
       CLOUDFLARE_EMAIL: $EMAIL
