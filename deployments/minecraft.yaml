@@ -1,0 +1,53 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: mc
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:latest
+spec:
+  releaseName: mc
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: minecraft
+    version: 0.3.2
+  values:
+    image: itzg/minecraft-server
+    imageTag: latest
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      type: SPIGOT
+      difficulty: normal
+      serviceType: LoadBalancer
+      gameMode: creative
+      ops: "83d9416e-216e-4ffb-81ae-d2bd455a398a"
+      motd: "billimek minecraft server (creative)"
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: mcsv
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:latest
+spec:
+  releaseName: mcsv
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: minecraft
+    version: 0.3.2
+  values:
+    image: itzg/minecraft-server
+    imageTag: latest
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      type: SPIGOT
+      difficulty: normal
+      serviceType: LoadBalancer
+      gameMode: survival
+      ops: "83d9416e-216e-4ffb-81ae-d2bd455a398a"
+      motd: "billimek minecraft server (survival)"
