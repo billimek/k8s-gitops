@@ -5,7 +5,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:latest
+    # flux.weave.works/tag.chart-image: glob:latest
 spec:
   releaseName: mc
   chart:
@@ -32,7 +32,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:latest
+    # flux.weave.works/tag.chart-image: glob:latest
 spec:
   releaseName: mcsv
   chart:
