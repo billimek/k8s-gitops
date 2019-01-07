@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:amd64-*
+    flux.weave.works/tag.chart-image: glob:1*
 spec:
   releaseName: nzbget
   chart:
