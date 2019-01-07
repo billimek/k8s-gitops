@@ -3,7 +3,8 @@ ingress:
 extraEnv:
   CAMERA_AUTH: "$CAMERA_AUTH"
 configurator:
-  ingress.hosts: [hass-config.$DOMAIN]
+  ingress:
+    hosts: [hass-config.$DOMAIN]
   username: "$HASS_CONFIG_USERNAME"
   password: "$HASS_CONFIG_PASSWORD"
   hassApiPassword: "$HASS_API_PASSWORD"
