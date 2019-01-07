@@ -1,0 +1,2 @@
+ingress:
+  hosts: [rutorrent.$DOMAIN]
