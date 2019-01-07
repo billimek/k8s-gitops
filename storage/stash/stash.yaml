@@ -1,1 +1,27 @@
-# TODO
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: stash
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.operator: semver:~0.
+spec:
+  releaseName: stash
+  chart:
+    repository: https://charts.appscode.com/stable/
+    name: stash
+    version: 0.8.2
+  values:
+    operator:
+      registry: appscode
+      repository: stash
+      tag: 0.8.2
+    pushgateway:
+      registry: prom
+      repository: pushgateway
+      tag: v0.5.2
+    cleaner:
+      registry: appscode
+      repository: kubectl
+      tag: v1.12
