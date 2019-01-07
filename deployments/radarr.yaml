@@ -1,1 +1,38 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: radarr
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:1*
+spec:
+  releaseName: radarr
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: radarr
+    version: 0.1.3
+  values:
+    image:
+      repository: linuxserver/radarr
+      tag: 147
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    timezone: "America/New_York"
+    persistence:
+      config:
+        enabled: true
+      downloads:
+        enabled: true
+        existingClaim: nfs-media-downloads-pvc-10g
+        accessMode: ReadWriteMany
+      movies:
+        enabled: true
+        existingClaim: nfs-media-pvc-10g
+        subPath: Videos
+        accessMode: ReadWriteMany
+  valueFileSecrets:
+  - name: "radarr-values"
