@@ -52,5 +52,5 @@ spec:
         mode: console
       grafana_net:
         url: https://grafana.net
-      valueFileSecrets:
-      - name: "grafana-values"
+  valueFileSecrets:
+  - name: "grafana-values"
