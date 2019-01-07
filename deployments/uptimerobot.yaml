@@ -1,1 +1,28 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: uptimerobot
+  namespace: default
+  annotations:
+    # flux.weave.works/automated: "true"
+    # flux.weave.works/tag.chart-image: glob:latest
+spec:
+  releaseName: uptimerobot
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: uptimerobot
+    version: 1.1.2
+  values:
+    image:
+      repository: billimek/node-influx-uptimerobot
+      tag: latest
+    debug: true
+    config:
+        delay: 3600
+        influxdb:
+            host: influxdb-influxdb
+            port: 8086
+            database: uptimerobot
+  valueFileSecrets:
+  - name: "uptimerobot-values"
