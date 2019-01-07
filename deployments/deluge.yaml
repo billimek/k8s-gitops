@@ -1,1 +1,35 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: deluge
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:amd64-*
+spec:
+  releaseName: deluge
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: deluge
+    version: 0.1.4
+  values:
+    image:
+      repository: linuxserver/deluge
+      tag: amd64-922742a2-ls4 
+    btService:
+      type: LoadBalancer
+      port: 51414
+      loadBalancerIP: 10.2.0.152
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    timezone: "America/New_York"
+    persistence:
+      downloads:
+        enabled: true
+        existingClaim: nfs-media-pvc-10g
+        subPath: Downloads
+  valueFileSecrets:
+  - name: "deluge-values"
