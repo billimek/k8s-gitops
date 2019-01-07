@@ -1,1 +1,38 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: sonarr
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:1*
+spec:
+  releaseName: sonarr
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: sonarr
+    version: 0.1.1
+  values:
+    image:
+      repository: linuxserver/sonarr
+      tag: 171
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    timezone: "America/New_York"
+    persistence:
+      config:
+        enabled: true
+      downloads:
+        enabled: true
+        existingClaim: nfs-media-downloads-pvc-10g
+        accessMode: ReadWriteMany
+      tv:
+        enabled: true
+        existingClaim: nfs-media-pvc-10g
+        subPath: Videos
+        accessMode: ReadWriteMany
+  valueFileSecrets:
+  - name: "sonarr-values"

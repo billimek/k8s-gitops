@@ -42,5 +42,5 @@ kseal values-to-encrypt/deluge-values.txt > ../secrets/deluge-values.yaml
 kseal values-to-encrypt/nzbget-values.txt > ../secrets/nzbget-values.yaml
 kseal values-to-encrypt/plex-values.txt > ../secrets/plex-values.yaml
 kseal values-to-encrypt/radarr-values.txt > ../secrets/radarr-values.yaml
-
+kseal values-to-encrypt/sonarr-values.txt > ../secrets/sonarr-values.yaml
 
