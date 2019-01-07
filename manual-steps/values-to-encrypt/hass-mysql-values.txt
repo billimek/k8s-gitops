@@ -1,0 +1,1 @@
+mysqlPassword: $HASS_DB_PASSWORD

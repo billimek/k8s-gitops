@@ -1,0 +1,10 @@
+ingress:
+  hosts: [hass.$DOMAIN]
+extraEnv:
+  - CAMERA_AUTH: "$CAMERA_AUTH"
+configurator:
+  ingress.hosts: [hass-config.$DOMAIN]
+  username: "$HASS_CONFIG_USERNAME"
+  password: "$HASS_CONFIG_PASSWORD"
+  hassApiPassword: "$HASS_API_PASSWORD"
+  hassApiUrl: "https://hass.$DOMAIN/api/"
