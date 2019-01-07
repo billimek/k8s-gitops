@@ -1,1 +1,38 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: plex
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:1.*
+spec:
+  releaseName: plex
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: plex
+    version: 0.2.1
+  values:
+    image:
+      tag: 1.14.1.5488-cc260c476
+    kubePlex:
+      enabled: false
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    timezone: "America/New_York"
+    service:
+      type: LoadBalancer
+      loadBalancerIP: 10.2.0.154
+    persistence:
+      transcode:
+        enabled: true
+        claimName: nfs-data-pvc-10g
+        subPath: plex
+      data:
+        enabled: true
+        claimName: nfs-media-pvc-10g
+  valueFileSecrets:
+  - name: "plex-values"
