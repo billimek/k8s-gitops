@@ -1,1 +1,34 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: nzbget
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:amd64-*
+spec:
+  releaseName: nzbget
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: nzbget
+    version: 0.1.4
+  values:
+    image:
+      repository: linuxserver/nzbget
+      tag: 156
+    service:
+      type: LoadBalancer
+      loadBalancerIP: 10.2.0.153
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    timezone: "America/New_York"
+    persistence:
+      downloads:
+        enabled: true
+        existingClaim: nfs-media-pvc-10g
+        subPath: Downloads
+  valueFileSecrets:
+  - name: "nzbget-values"
