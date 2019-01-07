@@ -46,3 +46,4 @@ kseal values-to-encrypt/radarr-values.txt > ../secrets/radarr-values.yaml
 kseal values-to-encrypt/sonarr-values.txt > ../secrets/sonarr-values.yaml
 kseal values-to-encrypt/hass-values.txt > ../secrets/hass-values.yaml
 kseal values-to-encrypt/hass-mysql-values.txt > ../secrets/hass-mysql-values.yaml
+kseal values-to-encrypt/unifi-values.txt > ../secrets/unifi-values.yaml
