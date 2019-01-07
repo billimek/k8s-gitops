@@ -1,1 +1,26 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: hubot
+  namespace: default
+  annotations:
+    # flux.weave.works/automated: "true"
+    # flux.weave.works/tag.chart-image: glob:latest
+spec:
+  releaseName: hubot
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: hubot
+    version: 0.0.1
+  values:
+    image:
+      repository: billimek/hubot
+      tag: latest
+      pullPolicy: Always
+    hubot:
+      config:
+        HUBOT_GRAFANA_S3_STYLE: 'path'
+        HUBOT_GRAFANA_S3_BUCKET: 'public'
+        HUBOT_GRAFANA_S3_REGION: 'us-east-1'
+        HUBOT_HOME_ASSISTANT_EVENTS_DESTINATION: '#general'

@@ -33,4 +33,4 @@ NS=kube-system kseal values-to-encrypt/forwardauth-values.txt > ../secrets/forwa
 kseal values-to-encrypt/influxdb-values.txt > ../secrets/influxdb-values.yaml
 kseal values-to-encrypt/chronograf-values.txt > ../secrets/chronograf-values.yaml
 kseal values-to-encrypt/prometheus-values.txt > ../secrets/prometheus-values.yaml
-
+kseal values-to-encrypt/hubot-values.txt > ../secrets/hubot-values.yaml
