@@ -11,7 +11,7 @@ spec:
   releaseName: plex
   chart:
     repository: https://billimek.github.io/helm-repo/
-    name: plex
+    name: kube-plex
     version: 0.2.1
   values:
     image:
