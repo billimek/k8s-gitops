@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -54,7 +55,7 @@ spec:
     name: mysql
     version: 0.12.0
   values:
-    image: "mysql"
+    image: "mysql:5.7.24"
     imageTag: "5.7.14"
     mysqlUser: "homeassistant"
     mysqlDatabase: "homeassistant"
