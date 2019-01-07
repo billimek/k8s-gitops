@@ -1,1 +1,39 @@
-# TODO
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: unifi
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~5.
+spec:
+  releaseName: unifi
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: unifi
+    version: 0.2.6
+  values:
+    image:
+      repository: jacobalberty/unifi
+      tag: 5.9.29
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 20Gi
+    timezone: "America/New_York"
+    runAsRoot: false
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    controllerService:
+      type: LoadBalancer
+      loadBalancerIP: 10.2.0.156
+    stunService:
+      type: LoadBalancer
+      loadBalancerIP: 10.2.0.157
+    discoveryService:
+      type: LoadBalancer
+      loadBalancerIP: 10.2.0.158
+  valueFileSecrets:
+  - name: "unifi-values"
