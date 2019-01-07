@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: speedtest
-    version: 1.0.2
+    version: 1.0.1
   values:
     image:
       repository: atribe/speedtest-for-influxdb-and-grafana
