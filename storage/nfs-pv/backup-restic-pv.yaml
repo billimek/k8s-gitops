@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-backup-restic-pv-10g
 spec:
-  storageClassName: data
+  storageClassName: data-restic
   capacity:
     storage: 1Mi
   accessModes:
@@ -20,7 +20,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: data
+  storageClassName: data-restic
   resources:
     requests:
       storage: 1Mi
