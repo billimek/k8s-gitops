@@ -1,1 +1,26 @@
-# TODO
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: speedtest
+  namespace: default
+  annotations:
+    # flux.weave.works/automated: "true"
+    # flux.weave.works/tag.chart-image: glob:latest
+spec:
+  releaseName: speedtest
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: speedtest
+    version: 1.0.2
+  values:
+    image:
+      repository: atribe/speedtest-for-influxdb-and-grafana
+      tag: latest
+    debug: true
+    config:
+        delay: 7200
+        influxdb:
+            host: influxdb-influxdb
+            port: 8086
+            database: speedtests
