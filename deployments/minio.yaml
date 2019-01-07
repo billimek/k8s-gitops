@@ -1,1 +1,28 @@
-# TODO
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: minio
+  namespace: default
+  annotations:
+    # flux.weave.works/automated: "true"
+    # flux.weave.works/tag.image: glob:RELEASE..*
+    # flux.weave.works/tag.mcImage: glob:RELEASE.*
+spec:
+  releaseName: minio
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: minio
+    version: 2.3.0
+  values:
+    image:
+      repository: minio/minio
+      tag: latest
+    persistence:
+      existingClaim: "nfs-data-pvc-10g"
+      subPath: "minio"
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: traefik
+  valueFileSecrets:
+  - name: "minio-values"
