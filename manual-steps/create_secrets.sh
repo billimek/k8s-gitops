@@ -36,4 +36,5 @@ kseal values-to-encrypt/prometheus-values.txt > ../secrets/prometheus-values.yam
 kseal values-to-encrypt/hubot-values.txt > ../secrets/hubot-values.yaml
 kseal values-to-encrypt/comcast-values.txt > ../secrets/comcast-values.yaml
 kseal values-to-encrypt/uptimerobot-values.txt > ../secrets/uptimerobot-values.yaml
+kseal values-to-encrypt/grafana-values.txt > ../secrets/grafana-values.yaml
 
