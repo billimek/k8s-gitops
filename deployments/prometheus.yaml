@@ -200,9 +200,12 @@ spec:
                 - proxmox-c:19999
                 - lb:19999
                 - pihole:19999
-                - rke-a:19999
-                - rke-b:19999
-                - rke-c:19999
+                - k8s-master-a:19999
+                - k8s-master-b:19999
+                - k8s-master-c:19999
+                - k8s-1:19999
+                - k8s-2:19999
+                - k8s-3:19999
           - job_name: 'stash-scrape'
             metrics_path: '/metrics'
             params:
