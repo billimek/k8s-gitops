@@ -1,1 +1,69 @@
-# TODO
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: hass
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~0.
+    flux.weave.works/tag.configurator: glob:0.3.*-x86_64
+spec:
+  releaseName: hass
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: home-assistant
+    version: 0.5.1
+  values:
+    image:
+      repository: homeassistant/home-assistant
+      tag: 0.84.6
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      storageClass: nfs-client
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    extraEnv:
+      CAMERA_AUTH: ''
+    configurator:
+      enabled: true
+      image:
+        tag: 0.3.3-x86_64
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "traefik"
+  valueFileSecrets:
+  - name: "hass-values"
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: hass-mysql
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~5.7
+spec:
+  releaseName: hass-mysql
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: mysql
+    version: 0.12.0
+  values:
+    image: "mysql"
+    imageTag: "5.7.14"
+    mysqlUser: "homeassistant"
+    mysqlDatabase: "homeassistant"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 20Gi
+      annotations: {}
+    metrics:
+      enabled: true
+  valueFileSecrets:
+  - name: "hass-mysql-values"
