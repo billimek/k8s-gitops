@@ -16,6 +16,9 @@ spec:
     image:
       repository: grafana/grafana
       tag: 5.4.2
+    chownDataImage:
+      repository: busybox
+      tag: 1.30.0
     securityContext:
       runAsUser: 0
       fsGroup: 0
@@ -37,17 +40,17 @@ spec:
           url: http://prom-prometheus-server
           access: proxy
           isDefault: true
-grafana.ini:
-  paths:
-    data: /var/lib/grafana/data
-    logs: /var/log/grafana
-    plugins: /var/lib/grafana/plugins
-    provisioning: /etc/grafana/provisioning
-  analytics:
-    check_for_updates: true
-  log:
-    mode: console
-  grafana_net:
-    url: https://grafana.net
-  valueFileSecrets:
-  - name: "grafana-values"
+    grafana.ini:
+      paths:
+        data: /var/lib/grafana/data
+        logs: /var/log/grafana
+        plugins: /var/lib/grafana/plugins
+        provisioning: /etc/grafana/provisioning
+      analytics:
+        check_for_updates: true
+      log:
+        mode: console
+      grafana_net:
+        url: https://grafana.net
+      valueFileSecrets:
+      - name: "grafana-values"
