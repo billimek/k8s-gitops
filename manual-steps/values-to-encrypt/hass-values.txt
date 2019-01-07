@@ -1,6 +1,7 @@
 ingress:
   hosts: [hass.$DOMAIN]
-extraEnv: [CAMERA_AUTH: "$CAMERA_AUTH"]
+extraEnv:
+  - CAMERA_AUTH: "$CAMERA_AUTH"
 configurator:
   ingress.hosts: [hass-config.$DOMAIN]
   username: "$HASS_CONFIG_USERNAME"
