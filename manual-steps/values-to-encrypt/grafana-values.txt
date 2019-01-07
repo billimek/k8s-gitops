@@ -10,8 +10,8 @@ grafana.ini:
     team_ids:
     allowed_organizations:
     name: Auth0
-    client_id: ${AUTH0_GRAFANA_CLIENT_ID}
-    client_secret: ${AUTH0_GRAFANA_CLIENT_SECRET}
+    client_id: $AUTH0_GRAFANA_CLIENT_ID
+    client_secret: $AUTH0_GRAFANA_CLIENT_SECRET
     scopes: openid profile email
     auth_url: https://${AUTH0_DOMAIN}.auth0.com/authorize
     token_url: https://${AUTH0_DOMAIN}.auth0.com/oauth/token
