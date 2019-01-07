@@ -39,4 +39,5 @@ kseal values-to-encrypt/uptimerobot-values.txt > ../secrets/uptimerobot-values.y
 kseal values-to-encrypt/grafana-values.txt > ../secrets/grafana-values.yaml
 kseal values-to-encrypt/minio-values.txt > ../secrets/minio-values.yaml
 kseal values-to-encrypt/deluge-values.txt > ../secrets/deluge-values.yaml
+kseal values-to-encrypt/nzbget-values.txt > ../secrets/nzbget-values.yaml
 
