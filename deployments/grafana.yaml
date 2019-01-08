@@ -5,7 +5,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~5.
+    flux.weave.works/tag.chart-image: glob:master
 spec:
   releaseName: grafana
   chart:
@@ -15,7 +15,7 @@ spec:
   values:
     image:
       repository: grafana/grafana
-      tag: 5.4.2
+      tag: master
     chownDataImage:
       repository: busybox
       tag: 1.30.0
@@ -27,6 +27,8 @@ spec:
       accessModes:
         - ReadWriteOnce
       size: 10Gi
+    env:
+      GF_EXPLORE_ENABLED: true
     ingress:
       enabled: true
       annotations:
