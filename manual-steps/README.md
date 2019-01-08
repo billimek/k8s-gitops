@@ -8,13 +8,15 @@ kseal() {
 }
 ```
 
-Create all of the secret files:
+Create all of the secret files - should be a one-time activity unless there is a specific change:
 
 ```shell
 ./create_secrets.sh
 ```
 
 Manually apply the various yaml files that need env variable subsitition:
+
+**NOTA BENE: Wait to run this until _after_ traefik has completed obtaining wildcard certs**
 
 ```shell
 ./create_yamls.sh
