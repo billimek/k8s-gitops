@@ -1,0 +1,55 @@
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: stash-prometheus-server
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+      component: server
+  fileGroups:
+  - path: /data
+    retentionPolicyName: 'keep-last-5'
+  backend:
+    local:
+      mountPath: /mnt/backup/
+      persistentVolumeClaim:
+          claimName: nfs-backup-restic-pv-10g
+    storageSecretName: restic-secret
+  schedule: '@daily'
+  volumeMounts:
+  - mountPath: /data
+    name: storage-volume
+  retentionPolicies:
+  - name: 'keep-last-5'
+    keepLast: 5
+    prune: true
+---
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: stash-prometheus-alertmanager
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+      component: alertmanager
+  fileGroups:
+  - path: /data
+    retentionPolicyName: 'keep-last-5'
+  backend:
+    local:
+      mountPath: /mnt/backup/
+      persistentVolumeClaim:
+          claimName: nfs-backup-restic-pv-10g
+    storageSecretName: restic-secret
+  schedule: '@daily'
+  volumeMounts:
+  - mountPath: /data
+    name: storage-volume
+  retentionPolicies:
+  - name: 'keep-last-5'
+    keepLast: 5
+    prune: true
