@@ -1,16 +1,14 @@
 # HA cluster setup with rancher/rke
 
-![](https://i.imgur.com/Qd7f8lx.png)
-
 ## VMs
 
-See [proxmox instruction](proxmox/README.md)
+See [proxmox instruction](proxmox/README.md) for creating the nodes.  Eventually this should be handled by terraform.
 
 ## loadbalancer (haproxy)
 
 Configure haproxy to use the new k8s nodes with the following in the configuration:
 
-```
+```haproxy
 frontend k8s-ha-api
  bind 10.0.7.30:6443
  mode tcp
@@ -26,7 +24,39 @@ backend k8s-ha-api
  server k8s-c 10.2.0.12:6443 check fall 3 rise 2
 ```
 
-(10.0.7.30 (lb-ha) is a VIP that floats between 10.0.7.10 and 10.0.7.16 via keepalived)
+* 10.0.7.30 (lb-ha) is a VIP that floats between 10.0.7.10 and 10.0.7.16 via keepalived
+* 10.2.0.10. 10.2.0.11, 10.2.0.12 are the master nodes where the kube-apiserver runs
+
+Configure haproxy to route http and https to traefik:
+
+```haproxy
+frontend https_frontend
+    bind 10.0.7.30:443
+    option tcplog
+    mode tcp
+    option clitcpka
+    tcp-request inspect-delay 5s
+    tcp-request content accept if { req.ssl_hello_type 1 }
+    use_backend https_k8s_traefik if { req_ssl_sni -m end .mydomain.com }
+
+backend https_k8s_traefik
+    option tcp-check
+    balance source
+    server     metallb-150 10.2.0.150:443 check
+
+frontend http_frontend
+    bind 10.0.7.30:1080
+    mode http
+    default_backend http_k8s_backend
+
+backend http_k8s_backend
+    mode http
+    balance source
+    server      metallb-150 10.2.0.150:80 check
+```
+
+* 10.2.0.150 is the metallb-assigned IP for traefik
+
 
 ## kubernetes cluster orchestration
 
@@ -44,6 +74,8 @@ Afterwards, edit the generated `kube_config_cluster.yaml` file and change the `s
 
 Install helm:
 
+For a given kubernetes cluster, ensure that [helm is installed](https://docs.helm.sh/using_helm/),
+
 ```shell
 kubectl -n kube-system create serviceaccount tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
@@ -52,13 +84,20 @@ helm init --service-account tiller
 
 ## flux
 
-Install flux (for gitops):
+* Install flux.  Where `git.url` should define the repo where the GitOps code lives:
 
 ```shell
+helm repo add weaveworks https://weaveworks.github.io/flux
 helm upgrade --install flux --set rbac.create=true --set helmOperator.create=true --set helmOperator.updateChartDeps=false --set git.url=git@github.com:billimek/k8s-gitops --set additionalArgs="{--connect=ws://fluxcloud}" --namespace flux weaveworks/flux
 ```
 
-Once flux is installed, [get the SSH key and give it write access to the github repo](https://github.com/weaveworks/flux/blob/master/site/helm-get-started.md#giving-write-access)
+* Once flux is installed, [get the SSH key and give it write access to the github repo](https://github.com/weaveworks/flux/blob/master/site/helm-get-started.md#giving-write-access):
+
+```shell
+kubectl -n flux logs deployment/flux | grep identity.pub | cut -d '"' -f2
+```
+
+* Add the key to the repo as a deploy key with write access as [described in the instructions](https://github.com/weaveworks/flux/blob/master/site/helm-get-started.md#giving-write-access)
 
 ## kubeseal
 
