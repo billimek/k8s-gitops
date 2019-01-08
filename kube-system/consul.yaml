@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~1.4
+    flux.weave.works/tag.chart-image: semver:~1.0
 spec:
   releaseName: consul
   chart:
@@ -13,7 +13,7 @@ spec:
     name: consul
     version: 3.5.0
   values:
-    ImageTag: "1.4.0"
+    ImageTag: "1.0.0"
     Image: consul
     uiIngress:
       enabled: true
