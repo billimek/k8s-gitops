@@ -1,1 +1,28 @@
-# TODO
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: node-red
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:0.*-v8
+spec:
+  releaseName: node-red
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: node-red
+    version: 1.0.1
+  values:
+    image:
+      tag: 0.19.5-v8
+    persistence:
+      enabled: true
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+        ingress.kubernetes.io/auth-type: "basic"
+        ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
+    timezone: "America/New_York"
+  valueFileSecrets:
+  - name: "node-red-values"
