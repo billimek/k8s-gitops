@@ -19,3 +19,6 @@ do
 done
 
 kapply yamls/rook-dashboard-ingress.txt
+
+# loki trial on grafana.net
+kapply yamls/loki.txt
