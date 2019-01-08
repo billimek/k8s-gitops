@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: linuxserver/rutorrent
-      tag: amd64-69a6046c-ls9
+      tag: amd64-dda28998-ls9
     btService:
       type: LoadBalancer
       port: 51413
