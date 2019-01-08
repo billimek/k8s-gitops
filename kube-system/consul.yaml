@@ -15,6 +15,7 @@ spec:
   values:
     ImageTag: "1.4.0"
     Image: consul
+    DisableHostNodeId: true
     uiIngress:
       enabled: true
       annotations:
