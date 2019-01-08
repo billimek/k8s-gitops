@@ -1,0 +1,53 @@
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: stash-minecraft
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mc-minecraft
+  fileGroups:
+  - path: /data
+    retentionPolicyName: 'keep-last-5'
+  backend:
+    local:
+      mountPath: /mnt/backup/
+      persistentVolumeClaim:
+          claimName: nfs-backup-restic-pv-10g
+    storageSecretName: restic-secret
+  schedule: '@daily'
+  volumeMounts:
+  - mountPath: /data
+    name: datadir
+  retentionPolicies:
+  - name: 'keep-last-5'
+    keepLast: 5
+    prune: true
+---
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: stash-minecraft-sv
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mcsv-minecraft
+  fileGroups:
+  - path: /data
+    retentionPolicyName: 'keep-last-5'
+  backend:
+    local:
+      mountPath: /mnt/backup/
+      persistentVolumeClaim:
+          claimName: nfs-backup-restic-pv-10g
+    storageSecretName: restic-secret
+  schedule: '@daily'
+  volumeMounts:
+  - mountPath: /data
+    name: datadir
+  retentionPolicies:
+  - name: 'keep-last-5'
+    keepLast: 5
+    prune: true
