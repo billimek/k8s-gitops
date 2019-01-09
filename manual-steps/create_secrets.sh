@@ -21,6 +21,8 @@ kubectl create secret generic traefik-basic-auth-jeff --from-literal=auth="$JEFF
 kubectl create secret generic traefik-basic-auth-jeff --from-literal=auth="$JEFF_AUTH" --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/basic-auth-jeff.yaml
 kubectl create secret generic restic-secret --from-literal=RESTIC_PASSWORD="$RESTIC_PASSWORD" --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/restic-secret.yaml
 kubectl create secret generic restic-secret --from-literal=RESTIC_PASSWORD="$RESTIC_PASSWORD" --namespace kube-system --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/restic-secret-kube-system.yaml
+kubectl create secret generic restic-secret --from-literal=RESTIC_PASSWORD="$RESTIC_PASSWORD" --namespace logs --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/restic-secret-logs.yaml
+
 
 ###################
 # helm chart values

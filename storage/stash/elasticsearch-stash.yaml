@@ -1,0 +1,55 @@
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: stash-elasticsearch
+  namespace: logs
+spec:
+  selector:
+    matchLabels:
+      app: elasticsearch
+      component: data
+  fileGroups:
+  - path: /usr/share/elasticsearch/data
+    retentionPolicyName: 'keep-last-5'
+  backend:
+    local:
+      mountPath: /mnt/backup/
+      persistentVolumeClaim:
+          claimName: nfs-backup-restic-pv-10g
+    storageSecretName: restic-secret
+  schedule: '@daily'
+  volumeMounts:
+  - mountPath: /usr/share/elasticsearch/data
+    name: data
+  retentionPolicies:
+  - name: 'keep-last-5'
+    keepLast: 5
+    prune: true
+---
+apiVersion: stash.appscode.com/v1alpha1
+kind: Restic
+metadata:
+  name: stash-elasticsearch-master
+  namespace: logs
+spec:
+  selector:
+    matchLabels:
+      app: elasticsearch
+      component: master
+  fileGroups:
+  - path: /usr/share/elasticsearch/data
+    retentionPolicyName: 'keep-last-5'
+  backend:
+    local:
+      mountPath: /mnt/backup/
+      persistentVolumeClaim:
+          claimName: nfs-backup-restic-pv-10g
+    storageSecretName: restic-secret
+  schedule: '@daily'
+  volumeMounts:
+  - mountPath: /usr/share/elasticsearch/data
+    name: data
+  retentionPolicies:
+  - name: 'keep-last-5'
+    keepLast: 5
+    prune: true
