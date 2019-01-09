@@ -1,18 +1,18 @@
-# apiVersion: flux.weave.works/v1beta1
-# kind: HelmRelease
-# metadata:
-#   name: fluentd
-#   namespace: logs
-#   annotations:
-#     flux.weave.works/automated: "true"
-#     flux.weave.works/tag.chart-image: glob:v2.*
-# spec:
-#   releaseName: fluentd
-#   chart:
-#     repository: https://kubernetes-charts.storage.googleapis.com/
-#     name: fluentd
-#     version: 1.3.0
-#   values:
-#     image:
-#       repository: gcr.io/google-containers/fluentd-elasticsearch
-#       tag: v2.3.1
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: fluentd
+  namespace: logs
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:v2.*
+spec:
+  releaseName: fluentd
+  chart:
+    repository: https://kiwigrid.github.io/
+    name: fluentd-elasticsearch
+    version: 2.1.2
+  values:
+    image:
+      repository: gcr.io/google-containers/fluentd-elasticsearch
+      tag: v2.3.2
