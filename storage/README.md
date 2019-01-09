@@ -1,15 +1,27 @@
-# nfs-client-provider
+# nfs-client-provisioner
 
-TBD
+Using the [nfs-client storage type](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)
+
+* [nfs-client-provisioner](nfs-client-provisioner/)
 
 # nfs-pv
 
-TBD
+nfs-based persistent mouts for various pod access (media mount & data mount)
 
-# rook
+* [nfs-pv](nfs-pv/)
 
-TBD
+# rook ceph
+
+Using the [rook](https://rook.io/) operator to provision a distributed storage cluster using [ceph](https://ceph.com/)
+
+![](https://i.imgur.com/v3I5BX7.png)
+
+This will use any un-partitioned block devices on the nodes to act as distributed disks for the ceph storage cluster
+
+* [rook](rook/)
 
 # stash
 
-TBD
+[stash](https://appscode.com/products/stash/) for backing-up persistent storage volumes and cluster data
+
+* [stash](stash/)
