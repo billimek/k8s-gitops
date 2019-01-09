@@ -1,5 +1,7 @@
 # GitOps workflow for kubernetes cluster
 
+![](https://i.imgur.com/qBbjyNx.png)
+
 Leverage [WeaveWorks Flux](https://github.com/weaveworks/flux) to automate cluster state using code residing in this repo
 
 ## Setup
