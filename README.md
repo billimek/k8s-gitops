@@ -1,39 +1,44 @@
 # GitOps workflow for kubernetes cluster
 
-Leverage [WeaveWorks Flux](https://github.com/weaveworks/flux) to automate cluster state based on code residing in this repo
+Leverage [WeaveWorks Flux](https://github.com/weaveworks/flux) to automate cluster state using code residing in this repo
 
 ## Setup
 
-### Helm
+See [cluster bootstrap instructions](cluster/) for bootstrapping a kubernetes cluster for using this repo
 
-For a given kubernetes cluster, ensure that [helm is installed](https://docs.helm.sh/using_helm/),
+## Deep-Dive
 
-```shell
-kubectl -n kube-system create serviceaccount tiller
-kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-helm init --service-account tiller
-```
+### System-level configuration
 
-### Flux
+See [kube-system](kube-system/) for details on system-level configurations (consul/traefik, decsheduler, fluxcloud, forwardauth OAuth, heapster, dashboard, kured, metallb, sealed-secrets)
 
-Install flux.  Where `git.url` should define the repo where the GitOps code lives:
+### Storage
 
-```shell
-helm repo add weaveworks https://weaveworks.github.io/flux
-helm upgrade --install flux --set rbac.create=true --set helmOperator.create=true --set helmOperator.updateChartDeps=false --set git.url=git@github.com:billimek/k8s-gitops --set additionalArgs="{--connect=ws://fluxcloud}" --namespace flux weaveworks/flux
-```
+See [storage](storage/) for details on storage type services (nfs-client, external NFS mounts, rook-ceph, stash)
+
+### Deployments
+
+See [deployments](deployments/) for details on regular workloads (chronograf, comcast usage, deluge, grafana, home-assistant, hubot, influxdb, minecraft, minio, cable modem stats, node-red, nzbget, plex, prometheus, radarr, sonarr, speedtest results, unifi, uptimerobot agent)
+
+### Logging
+
+See [logging](logging/) for details on logging solutions (loki, EFK Stack (elasticSearch, fluentd, kibana)
 
 ## Caveats
 
+### Manual actions
+
+See [manual-steps](manual-steps/) for instructions things that cannot be handled by flux
+
 ### New namespaces
 
-If you are deploying a helm chart that needs to live in a new namespace, Flux seems to expect that the namespace is already created, or else the helm deployment will fail.  When deploying a helm chart in the traditional approach via the `helm` CLI, it would handle the namespace creation for you.  In Flx, you must explicitly create a helm chart (see [storage/rook/namespace.yaml](storage/rook/namespace.yaml) for an example of this)
+If deploying a helm chart that needs to live in a new namespace, Flux seems to expect that the namespace is already created, or else the helm deployment will fail.  When deploying a helm chart in the traditional approach via the `helm` CLI, it would handle the namespace creation for you.  In Flx, you must explicitly create a helm chart (see [storage/rook/namespace.yaml](storage/rook/namespace.yaml) for an example of this)
 
 ### Deletions
 
 [Flux doesn't handle deletions](https://github.com/weaveworks/flux/blob/master/site/faq.md#will-flux-delete-resources-that-are-no-longer-in-the-git-repository).  What this means is that if you remove something from the repo (or even change something to run in a different namespace), it will not clean-up the removed item.  This is a task that you must manually do.
 
-To remove HelmRelease type entities from flux, you must manually delete the helmrelease object, e.g. to clean-up a helm release named `forwardauth`:
+To remove HelmRelease type entities from flux, you must manually delete the helmrelease object, e.g. to clean-up a helm release named `forwardauth`.  This should properly remove the helm chart and associated objects
 
 ```shell
 kubectl -n kube-system delete helmrelease/forwardauth
@@ -41,7 +46,7 @@ kubectl -n kube-system delete helmrelease/forwardauth
 
 ### Secrets & Sensitive information
 
-* [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets) works really well for encrypting secret and senstive information for certain situations:
+* [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets) works really well for encrypting secret and sensitive information for certain situations:
   * Kubernetes `Secret` primitives
   * The usage of those primitives in _Deployments_ ENV variables and volume mounts
   * Helm chart `values.yaml` merging: You can leverage flux & sealed-secrets to automatically merge-in a secured set of values into the helm deployment
