@@ -1,0 +1,24 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: elasticsearch
+  namespace: logs
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~6.
+spec:
+  releaseName: elasticsearch
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: elasticsearch
+    version: 1.17.0
+  values:
+    image:
+      repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
+      tag: "6.5.4"
+    master:
+      persistence:
+        storageClass: "rook-ceph-block"
+    data:
+      persistence:
+        storageClass: "rook-ceph-block"
