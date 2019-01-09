@@ -14,15 +14,15 @@ See [kube-system](kube-system/) for details on system-level configurations (cons
 
 ### Storage
 
-See [storage](storage/) for details on storage type services (nfs-client, external NFS mounts, rook-ceph, stash)
+See [storage](storage/) for details on storage type services (minio, nfs-client, external NFS mounts, rook-ceph, stash)
 
 ### Deployments
 
-See [deployments](deployments/) for details on regular workloads (chronograf, comcast usage, deluge, grafana, home-assistant, hubot, influxdb, minecraft, minio, cable modem stats, node-red, nzbget, plex, prometheus, radarr, sonarr, speedtest results, unifi, uptimerobot agent)
+See [deployments](deployments/) for details on regular workloads (chronograf, comcast usage, deluge, grafana, home-assistant, hubot, influxdb, minecraft, cable modem stats, node-red, nzbget, plex, prometheus, radarr, sonarr, speedtest results, unifi, uptimerobot agent)
 
 ### Logging
 
-See [logging](logging/) for details on logging solutions (loki, EFK Stack (elasticSearch, fluentd, kibana)
+See [logging](logging/) for details on logging solutions (loki, EFK Stack (elasticSearch, fluentd, kibana))
 
 ## Caveats
 
