@@ -1,3 +1,11 @@
+# minio
+
+![](https://i.imgur.com/RF0aYAg.png)
+
+S3-compatible bucket storage service
+
+* [minio.yaml](minio.yaml)
+
 # nfs-client-provisioner
 
 Using the [nfs-client storage type](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)
