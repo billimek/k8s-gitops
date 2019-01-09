@@ -1,10 +1,12 @@
 # Kubernetes nodes in proxmox
 
+![](https://i.imgur.com/O4e6ev0.png)
+
 On `proxmox` host OS:
 
 ## Base template
 
-Create the base template:
+Creating the base template:
 
 ```shell
 qm create 9001 --memory 4096 --cores 4 --net0 virtio,bridge=vmbr0,tag=20 --net1 virtio,bridge=vmbr1
