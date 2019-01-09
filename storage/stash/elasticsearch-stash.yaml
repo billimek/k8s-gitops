@@ -15,7 +15,7 @@ spec:
     local:
       mountPath: /mnt/backup/
       persistentVolumeClaim:
-          claimName: nfs-backup-restic-pv-10g
+          claimName: nfs-backup-restic-pv-10g-logs
     storageSecretName: restic-secret
   schedule: '@daily'
   volumeMounts:
@@ -43,7 +43,7 @@ spec:
     local:
       mountPath: /mnt/backup/
       persistentVolumeClaim:
-          claimName: nfs-backup-restic-pv-10g
+          claimName: nfs-backup-restic-pv-10g-logs
     storageSecretName: restic-secret
   schedule: '@daily'
   volumeMounts:
