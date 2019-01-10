@@ -213,7 +213,7 @@ spec:
             honor_labels: true
             static_configs:
               - targets:
-                - stash-operator:56789
+                - stash:56789
           - job_name: 'wmi-exporter-scrape'
             metrics_path: '/metrics'
             params:
