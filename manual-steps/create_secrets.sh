@@ -34,6 +34,9 @@ NS=kube-system kseal values-to-encrypt/kubernetes-dashboard-values.txt > ../secr
 NS=kube-system kseal values-to-encrypt/kured-values.txt > ../secrets/kured-values.yaml
 NS=kube-system kseal values-to-encrypt/forwardauth-values.txt > ../secrets/forwardauth-values.yaml
 
+NS=logs kseal values-to-encrypt/kibana-values.txt > ../secrets/kibana-values.yaml
+
+
 kseal values-to-encrypt/influxdb-values.txt > ../secrets/influxdb-values.yaml
 kseal values-to-encrypt/chronograf-values.txt > ../secrets/chronograf-values.yaml
 kseal values-to-encrypt/prometheus-values.txt > ../secrets/prometheus-values.yaml
@@ -52,3 +55,4 @@ kseal values-to-encrypt/hass-values.txt > ../secrets/hass-values.yaml
 kseal values-to-encrypt/hass-mysql-values.txt > ../secrets/hass-mysql-values.yaml
 kseal values-to-encrypt/unifi-values.txt > ../secrets/unifi-values.yaml
 kseal values-to-encrypt/node-red-values.txt > ../secrets/node-red-values.yaml
+
