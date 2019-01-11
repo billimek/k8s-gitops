@@ -1,0 +1,46 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: elasticsearch-curator
+  namespace: logs
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~5.
+spec:
+  releaseName: elasticsearch-curator
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: elasticsearch-curator
+    version: 1.0.1
+  values:
+    image:
+      repository: quay.io/pires/docker-elasticsearch-curator
+      tag: 5.5.4
+    config:
+      elasticsearch:
+        hosts:
+          - elasticsearch-client.logs
+    configMaps:
+      # Delete indices older than 30 days
+      action_file_yml: |-
+        ---
+        actions:
+          1:
+            action: delete_indices
+            description: "Clean up ES by deleting old indices"
+            options:
+              timeout_override:
+              continue_if_exception: False
+              disable_action: False
+              ignore_empty_list: True
+            filters:
+            - filtertype: age
+              source: name
+              direction: older
+              timestring: '%Y.%m.%d'
+              unit: days
+              unit_count: 30
+              field:
+              stats_result:
+              epoch:
+              exclude: False
