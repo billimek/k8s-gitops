@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: external-rke-a-nd
+  name: external-k8s-master-a
   annotations:
     kubernetes.io/ingress.class: traefik
     ingress.kubernetes.io/auth-type: "forward"
@@ -9,72 +9,165 @@ metadata:
     ingress.kubernetes.io/auth-trust-headers: "true"
 spec:
   rules:
-  - host: rke-a.nd.$DOMAIN
+  - host: k8s-master-a.nd.$DOMAIN
     http:
       paths:
       - backend:
-          serviceName: external-rke-a-nd
+          serviceName: external-k8s-master-a
           servicePort: 19999
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: external-rke-a-nd
+  name: external-k8s-master-a
 spec:
   ports:
   - name: http
     port: 19999
   type: ExternalName
-  externalName: 10.0.7.17
+  externalName: 10.2.0.10
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: external-rke-b-nd
+  name: external-k8s-master-b
   annotations:
     kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: "forward"
+    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
+    ingress.kubernetes.io/auth-trust-headers: "true"
 spec:
   rules:
-  - host: rke-b.nd.$DOMAIN
+  - host: k8s-master-b.nd.$DOMAIN
     http:
       paths:
       - backend:
-          serviceName: external-rke-b-nd
+          serviceName: external-k8s-master-b
           servicePort: 19999
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: external-rke-b-nd
+  name: external-k8s-master-b
 spec:
   ports:
   - name: http
     port: 19999
   type: ExternalName
-  externalName: 10.0.7.18
+  externalName: 10.2.0.11
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: external-rke-c-nd
+  name: external-k8s-master-c
   annotations:
     kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: "forward"
+    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
+    ingress.kubernetes.io/auth-trust-headers: "true"
 spec:
   rules:
-  - host: rke-c.nd.$DOMAIN
+  - host: k8s-master-c.nd.$DOMAIN
     http:
       paths:
       - backend:
-          serviceName: external-rke-c-nd
+          serviceName: external-k8s-master-c
           servicePort: 19999
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: external-rke-c-nd
+  name: external-k8s-master-c
 spec:
   ports:
   - name: http
     port: 19999
   type: ExternalName
-  externalName: 10.0.7.19
+  externalName: 10.2.0.13
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-k8s-1
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: "forward"
+    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
+    ingress.kubernetes.io/auth-trust-headers: "true"
+spec:
+  rules:
+  - host: k8s-1.nd.$DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: external-k8s-1
+          servicePort: 19999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-k8s-1
+spec:
+  ports:
+  - name: http
+    port: 19999
+  type: ExternalName
+  externalName: 10.2.0.13
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-k8s-2
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: "forward"
+    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
+    ingress.kubernetes.io/auth-trust-headers: "true"
+spec:
+  rules:
+  - host: k8s-2.nd.$DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: external-k8s-2
+          servicePort: 19999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-k8s-2
+spec:
+  ports:
+  - name: http
+    port: 19999
+  type: ExternalName
+  externalName: 10.2.0.14
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-k8s-3
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/auth-type: "forward"
+    ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
+    ingress.kubernetes.io/auth-trust-headers: "true"
+spec:
+  rules:
+  - host: k8s-3.nd.$DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: external-k8s-3
+          servicePort: 19999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-k8s-3
+spec:
+  ports:
+  - name: http
+    port: 19999
+  type: ExternalName
+  externalName: 10.2.0.15
