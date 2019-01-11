@@ -22,3 +22,11 @@ spec:
     data:
       persistence:
         storageClass: "rook-ceph-block"
+      resources:
+        limits:
+          cpu: "1"
+          memory: "2048Mi"
+        requests:
+          cpu: "25m"
+          memory: "1536Mi"
+      additionalJavaOpts: "-XX:MaxRAM=1536m,-XX:+UnlockExperimentalVMOptions,-XX:+UseCGroupMemoryLimitForHeap,-XX:MaxRAMFraction=1"
