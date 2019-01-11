@@ -24,7 +24,7 @@ See [deployments](deployments/) for details on regular workloads (chronograf, co
 
 ### Logging
 
-See [logging](logging/) for details on logging solutions (loki, EFK Stack (elasticSearch, fluentd, kibana))
+See [logging](logging/) for details on logging solutions (loki, EFK Stack (elasticSearch, fluentd, kibana), elasticsearch-curator)
 
 ## Caveats
 
