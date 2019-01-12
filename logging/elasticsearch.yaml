@@ -29,4 +29,4 @@ spec:
         requests:
           cpu: "25m"
           memory: "1536Mi"
-      additionalJavaOpts: "-XX:MaxRAM=1536m,-XX:+UnlockExperimentalVMOptions,-XX:+UseCGroupMemoryLimitForHeap,-XX:MaxRAMFraction=1"
+      additionalJavaOpts: "-XX:MaxRAM=1536m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1"
