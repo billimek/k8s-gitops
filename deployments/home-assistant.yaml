@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:0.*
+    flux.weave.works/tag.chart-image: semver:*
     flux.weave.works/tag.configurator: glob:0.3.*-x86_64
 spec:
   releaseName: hass
