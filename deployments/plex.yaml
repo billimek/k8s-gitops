@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: kube-plex
-    version: 0.2.1
+    version: 0.2.2
   values:
     image:
       tag: 1.14.1.5488-cc260c476
