@@ -17,6 +17,7 @@ spec:
       tag: 0.19.5-v8
     persistence:
       enabled: true
+    flows: "flows.json"
     ingress:
       enabled: true
       annotations:
