@@ -1,0 +1,13 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: openebs
+  namespace: openebs
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: openebs
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: openebs
+    version: 0.8.1
