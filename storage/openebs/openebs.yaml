@@ -10,6 +10,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: openebs
+    version: 0.8.1
   values:
     apiserver:
       image: "quay.io/openebs/m-apiserver"
