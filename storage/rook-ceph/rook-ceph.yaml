@@ -16,10 +16,14 @@ spec:
     agent:
       flexVolumeDirPath: "/var/lib/kubelet/volumeplugins"
       toleration: NoSchedule
-      tolerationKey: storage-node
+      tolerationKey: node-role.kubernetes.io/controlplane
     discover:
       toleration: NoSchedule
-      tolerationKey: storage-node
+      tolerationKey: node-role.kubernetes.io/controlplane
     tolerations:
-      toleration: NoSchedule
-      tolerationKey: storage-node
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/controlplane
+      value: "true"
+    - effect: NoExecute
+      key: node-role.kubernetes.io/etcd
+      value: "true"
