@@ -191,23 +191,23 @@ spec:
   # tolerate taints with a key of 'storage-node'.
   placement:
   all:
-    # nodeAffinity:
-    #   requiredDuringSchedulingIgnoredDuringExecution:
-    #     nodeSelectorTerms:
-    #     - matchExpressions:
-    #       - key: node-role.kubernetes.io/controlplane
-    #         operator: Equal
-    #         values:
-    #         - true
-    tolerations:
-    - key: node-role.kubernetes.io/controlplane
-      operator: Equal
-      effect: NoSchedule
-
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/controlplane
+            operator: Equal
+            values:
+            - true
     # tolerations:
-    # - effect: NoSchedule
-    #   key: "node-role.kubernetes.io/controlplane"
-    #   value: "true"
+    # - key: node-role.kubernetes.io/controlplane
+    #   operator: Equal
+    #   effect: NoSchedule
+
+    tolerations:
+    - effect: NoSchedule
+      key: "node-role.kubernetes.io/controlplane"
+      value: "true"
 
 #  placement:
 #    all:
@@ -259,7 +259,7 @@ spec:
     nodes:
     - name: k8s-master-a
       config:
-      storeType: bluestore
+        storeType: bluestore
     - name: k8s-master-b
       config:
         storeType: bluestore
