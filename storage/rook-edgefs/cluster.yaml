@@ -124,16 +124,16 @@ spec:
   #  - path: /mnt/disks/ssd1
   #  - path: /mnt/disks/ssd2
     useAllDevices: true
-  #  config:
+    config:
   #    rtVerifyChid: "0"           # may improve CPU utilization
   #    lmdbPageSize: "32768"       # larger value can improve stream operations
   #    useMetadataOffload: "true"  # enable use of SSD device as metadata offload
   #    useBCache: "true"           # enable SSD cache device and read-cache
   #    useBCacheWB: "true"         # enable SSD write-cache
-  #    useMetadataMask: "0xff"     # all metadata on SSD
+      # useMetadataMask: "0xff"     # all metadata on SSD
   #    rtrdPLevelOverride: "4"     # enable large device partitioning, only needed if automatic not working
   #    sync: "0"                   # highest performance, consistent on pod/software failures, not-consistent on power failures
-  #    useAllSSD: "true"           # use only SSDs during deployment
+      useAllSSD: "true"           # use only SSDs during deployment
   #  nodes:
   #  - name: node3071ub16
   #  - name: node3072ub16
