@@ -38,7 +38,7 @@ qm clone "$TEMPLATE" 203 --name k8s-1
 qm set 203 --sshkey ~/.ssh/id_k8s_nodes.pub
 qm set 203 --ipconfig0 ip=10.2.0.13/24,gw=10.2.0.1
 qm set 203 --ipconfig1 ip=10.0.10.53/24
-qm set 203 --scsi1 /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3Z1NW0KA01733D,discard=on,backup=0,ssd=1,replicate=0
+qm set 203 --scsi1 /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3Z1NW0KA01733D,discard=on,backup=0,ssd=1,replicate=0,serial=S3Z1NW0KA01733D
 qm set 203 --memory 8192
 
 qm clone "$TEMPLATE" 204 --name k8s-2
@@ -56,5 +56,5 @@ qm set 205 --memory 8192
 qm migrate 205 proxmox-c
 
 qm start 203
-ssh proxmox-b 'qm set 204 --scsi1 /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3Z1NW0KA01748E,discard=on,backup=0,ssd=1,replicate=0 && qm start 204'
-ssh proxmox-c 'qm set 205 --scsi1 /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3Z1NB0K624788N,discard=on,backup=0,ssd=1,replicate=0 && qm start 205'
+ssh proxmox-b 'qm set 204 --scsi1 /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3Z1NW0KA01748E,discard=on,backup=0,ssd=1,replicate=0,serial=S3Z1NW0KA01748E && qm start 204'
+ssh proxmox-c 'qm set 205 --scsi1 /dev/disk/by-id/ata-Samsung_SSD_860_EVO_500GB_S3Z1NB0K624788N,discard=on,backup=0,ssd=1,replicate=0,serial=S3Z1NB0K624788N && qm start 205'
