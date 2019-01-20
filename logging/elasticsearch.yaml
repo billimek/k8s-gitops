@@ -4,7 +4,7 @@ metadata:
   name: elasticsearch
   namespace: logs
   annotations:
-    flux.weave.works/ignore: "true"
+    flux.weave.works/ignore: "false"
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~6.
 spec:
@@ -19,10 +19,10 @@ spec:
       tag: "6.5.4"
     master:
       persistence:
-        storageClass: "openebs-jiva-default"
+        storageClass: "rook-ceph-block"
     data:
       persistence:
-        storageClass: "openebs-jiva-default"
+        storageClass: "rook-ceph-block"
       resources:
         limits:
           cpu: "1"
