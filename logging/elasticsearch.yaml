@@ -4,7 +4,7 @@ metadata:
   name: elasticsearch
   namespace: logs
   annotations:
-    flux.weave.works/ignore: "true"
+    flux.weave.works/ignore: "false"
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~6.
 spec:
