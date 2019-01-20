@@ -191,18 +191,24 @@ spec:
   # tolerate taints with a key of 'storage-node'.
   placement:
   all:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: node-role.kubernetes.io/controlplane
-            operator: Equal
-            values:
-            - true
+    # nodeAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #     nodeSelectorTerms:
+    #     - matchExpressions:
+    #       - key: node-role.kubernetes.io/controlplane
+    #         operator: Equal
+    #         values:
+    #         - true
     tolerations:
     - key: node-role.kubernetes.io/controlplane
       operator: Equal
       effect: NoSchedule
+
+    # tolerations:
+    # - effect: NoSchedule
+    #   key: "node-role.kubernetes.io/controlplane"
+    #   value: "true"
+
 #  placement:
 #    all:
 #      nodeAffinity:
@@ -235,7 +241,7 @@ spec:
 #    mon:
 #    osd:
   storage: # cluster level storage configuration and selection
-    useAllNodes: true
+    useAllNodes: false
     useAllDevices: true
     location:
     config:
@@ -250,6 +256,10 @@ spec:
 #    - path: /rook/storage-dir
 # Individual nodes and their config can be specified as well, but 'useAllNodes' above must be set to false. Then, only the named
 # nodes below will be used as storage resources.  Each node's 'name' field should match their 'kubernetes.io/hostname' label.
+    nodes:
+    - name: k8s-master-a
+    - name: k8s-master-b
+    - name: k8s-master-c
 #    nodes:
 #    - name: "172.17.4.101"
 #      directories: # specific directories to use for storage can be specified for each node
