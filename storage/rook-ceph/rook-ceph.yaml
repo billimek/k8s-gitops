@@ -1,0 +1,17 @@
+# apiVersion: flux.weave.works/v1beta1
+# kind: HelmRelease
+# metadata:
+#   name: rook-ceph
+#   namespace: rook-ceph-system
+#   annotations:
+#     flux.weave.works/automated: "false"
+#     flux.weave.works/ignore: "true"
+# spec:
+#   releaseName: rook-ceph
+#   chart:
+#     repository: https://charts.rook.io/alpha
+#     name: rook-ceph
+#     version: v0.9.1
+#   values:
+#     agent:
+#       flexVolumeDirPath: "/var/lib/kubelet/volumeplugins"
