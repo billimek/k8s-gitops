@@ -190,26 +190,18 @@ spec:
   # The example under 'all' would have all services scheduled on kubernetes nodes labeled with 'role=storage-node' and
   # tolerate taints with a key of 'storage-node'.
   placement:
-  all:
-    # nodeAffinity:
-    #   requiredDuringSchedulingIgnoredDuringExecution:
-    #     nodeSelectorTerms:
-    #     - matchExpressions:
-    #       - key: node-role.kubernetes.io/controlplane
-    #         operator: Equal
-    #         values:
-    #         - true
-    # tolerations:
-    # - key: node-role.kubernetes.io/controlplane
-    #   operator: Equal
-    #   effect: NoSchedule
-    tolerations:
-    - effect: NoSchedule
-      key: node-role.kubernetes.io/controlplane
-      operator: Exists
-    - effect: NoExecute
-      key: node-role.kubernetes.io/etcd
-      operator: Exists
+    all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: role
+              operator: In
+              values:
+              - storage-node
+      tolerations:
+      - key: storage-node
+        operator: Exists
 
 #  placement:
 #    all:
