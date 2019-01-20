@@ -191,6 +191,14 @@ spec:
   # tolerate taints with a key of 'storage-node'.
   placement:
   all:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/controlplane
+            operator: Equal
+            values:
+            - true
     tolerations:
     - key: node-role.kubernetes.io/controlplane
       operator: Equal
