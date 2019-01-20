@@ -5,7 +5,7 @@ metadata:
   namespace: openebs
   annotations:
     flux.weave.works/automated: "false"
-    flux.weave.works/ignore: "false"
+    flux.weave.works/ignore: "true"
 spec:
   releaseName: openebs
   chart:
@@ -29,6 +29,8 @@ spec:
     ndm:
       image: "quay.io/openebs/node-disk-manager-amd64"
       imageTag: "v0.2.0"
+      sparse:
+        enabled: "false"
     jiva:
       image: "quay.io/openebs/jiva"
       imageTag: "0.8.0"
