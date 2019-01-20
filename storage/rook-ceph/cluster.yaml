@@ -195,9 +195,6 @@ spec:
       - effect: NoSchedule
         key: node-role.kubernetes.io/controlplane
         value: "true"
-      - effect: NoExecute
-        key: node-role.kubernetes.io/etcd
-        value: "true"
 #  placement:
 #    all:
 #      nodeAffinity:
