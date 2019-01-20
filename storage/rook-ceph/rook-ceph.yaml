@@ -15,3 +15,11 @@ spec:
   values:
     agent:
       flexVolumeDirPath: "/var/lib/kubelet/volumeplugins"
+      toleration: NoSchedule
+      tolerationKey: storage-node
+    discover:
+      toleration: NoSchedule
+      tolerationKey: storage-node
+    tolerations:
+      toleration: NoSchedule
+      tolerationKey: storage-node
