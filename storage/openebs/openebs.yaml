@@ -5,7 +5,7 @@ metadata:
   namespace: openebs
   annotations:
     flux.weave.works/automated: "false"
-    flux.weave.works/ignore: "true"
+    flux.weave.works/ignore: "false"
 spec:
   releaseName: openebs
   chart:
