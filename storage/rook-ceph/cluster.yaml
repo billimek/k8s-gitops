@@ -258,8 +258,14 @@ spec:
 # nodes below will be used as storage resources.  Each node's 'name' field should match their 'kubernetes.io/hostname' label.
     nodes:
     - name: k8s-master-a
+      config:
+      storeType: bluestore
     - name: k8s-master-b
+      config:
+        storeType: bluestore
     - name: k8s-master-c
+      config:
+        storeType: bluestore
 #    nodes:
 #    - name: "172.17.4.101"
 #      directories: # specific directories to use for storage can be specified for each node
