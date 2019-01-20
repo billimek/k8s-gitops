@@ -5,7 +5,7 @@ metadata:
   namespace: rook-ceph-system
   annotations:
     flux.weave.works/automated: "false"
-    flux.weave.works/ignore: "false"
+    flux.weave.works/ignore: "true"
 spec:
   releaseName: rook-ceph
   chart:
