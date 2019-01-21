@@ -5,7 +5,7 @@ metadata:
   namespace: rook-ceph-system
   annotations:
     flux.weave.works/automated: "false"
-    flux.weave.works/ignore: "false"
+    flux.weave.works/ignore: "true"
 spec:
   releaseName: rook-ceph
   chart:
@@ -15,12 +15,12 @@ spec:
   values:
     agent:
       flexVolumeDirPath: "/var/lib/kubelet/volumeplugins"
-      toleration: NoSchedule
-      tolerationKey: node-role.kubernetes.io/controlplane
-    discover:
-      toleration: NoSchedule
-      tolerationKey: node-role.kubernetes.io/controlplane
-    tolerations:
-    - effect: NoSchedule
-      key: node-role.kubernetes.io/controlplane
-      value: "true"
+    #   toleration: NoSchedule
+    #   tolerationKey: node-role.kubernetes.io/controlplane
+    # discover:
+    #   toleration: NoSchedule
+    #   tolerationKey: node-role.kubernetes.io/controlplane
+    # tolerations:
+    # - effect: NoSchedule
+    #   key: node-role.kubernetes.io/controlplane
+    #   value: "true"
