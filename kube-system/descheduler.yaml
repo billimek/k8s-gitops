@@ -25,12 +25,12 @@ spec:
           params:
             nodeResourceUtilizationThresholds:
               thresholds:
-                cpu: 10
-                memory: 10
-                pods: 10
+                cpu: 40
+                memory: 40
+                pods: 50
               targetThresholds:
-                cpu: 50
-                memory: 50
+                cpu: 70
+                memory: 70
                 pods: 100
         RemovePodsViolatingInterPodAntiAffinity:
           enabled: true
