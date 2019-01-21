@@ -47,6 +47,22 @@ kubectl apply -f storageclass.yaml
 
 Example of finding and mounting a pvc in the proxmox host:
 
+Find the mappings between kubernetes pvc and ceph rbds:
+
+```shell
+➜ for i in $(kubectl get pv | grep rbd | awk '{print $1}')
+do
+echo "$i => $(kubectl describe pv "$i" | grep RBDImage | awk '{print $2}')"
+done
+pvc-880f2c76-1d23-11e9-86f8-36db0084bcac => kubernetes-dynamic-pvc-8dc13bbc-1d23-11e9-b4f5-524dbb781fe7
+pvc-881d660e-1d23-11e9-86f8-36db0084bcac => kubernetes-dynamic-pvc-882c0839-1d23-11e9-b4f5-524dbb781fe7
+pvc-c0ed5031-1d23-11e9-86f8-36db0084bcac => kubernetes-dynamic-pvc-c36d7e3a-1d23-11e9-b4f5-524dbb781fe7
+pvc-de0ff848-1d23-11e9-86f8-36db0084bcac => kubernetes-dynamic-pvc-de1ca1be-1d23-11e9-b4f5-524dbb781fe7
+pvc-ec6878d8-1d23-11e9-86f8-36db0084bcac => kubernetes-dynamic-pvc-f01af949-1d23-11e9-b4f5-524dbb781fe7
+```
+
+Then, acess the rbd image on the ceph server:
+
 ```shell
 root@proxmox:/# rbd list kube
 kubernetes-dynamic-pvc-2672ff6d-f6b5-11e8-a795-0a580a2a001c
