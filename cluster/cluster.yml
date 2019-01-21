@@ -35,6 +35,8 @@ services:
   kubelet:
     extra_args:
       read-only-port: 10255
+    extra_binds:
+    - "/lib/modules:/lib/modules"
 cluster_name: k8s
 ingress:
     provider: none
