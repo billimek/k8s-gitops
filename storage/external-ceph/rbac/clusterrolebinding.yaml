@@ -2,6 +2,7 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: rbd-provisioner
+  namespace: kube-system
 subjects:
   - kind: ServiceAccount
     name: rbd-provisioner
