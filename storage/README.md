@@ -20,6 +20,8 @@ nfs-based persistent mouts for various pod access (media mount & data mount)
 
 # rook ceph
 
+**CURRENTLY NOT USING see https://github.com/billimek/k8s-gitops/issues/3 for details**
+
 Using the [rook](https://rook.io/) operator to provision a distributed storage cluster using [ceph](https://ceph.com/)
 
 ![](https://i.imgur.com/v3I5BX7.png)
@@ -27,6 +29,12 @@ Using the [rook](https://rook.io/) operator to provision a distributed storage c
 This will use any un-partitioned block devices on the nodes to act as distributed disks for the ceph storage cluster
 
 * [rook](rook/)
+
+# external ceph
+
+external ceph cluster provided by proxmox accessed using the [ceph rbd provisioner](https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd)
+
+* [external-ceph](external-ceph/)
 
 # stash
 
