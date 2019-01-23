@@ -60,6 +60,7 @@ spec:
       enabled: true
       accessMode: ReadWriteOnce
       size: 20Gi
+      storageClass: "rbd"
       annotations: {}
     metrics:
       enabled: true
