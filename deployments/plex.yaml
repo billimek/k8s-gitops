@@ -34,7 +34,7 @@ spec:
       data:
         enabled: true
         claimName: nfs-media-pvc-10g
-        config:
-          storageClass: "rbd"
+      config:
+        storageClass: "rbd"
   valueFileSecrets:
   - name: "plex-values"
