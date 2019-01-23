@@ -33,5 +33,6 @@ spec:
       config:
         enabled: true
         storageClass: "rbd"
+        size: 30Gi
   valueFileSecrets:
   - name: "nzbget-values"
