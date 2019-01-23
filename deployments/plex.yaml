@@ -36,5 +36,6 @@ spec:
         claimName: nfs-media-pvc-10g
       config:
         storageClass: "rbd"
+        accessMode: ReadWriteOnce
   valueFileSecrets:
   - name: "plex-values"
