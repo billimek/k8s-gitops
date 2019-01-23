@@ -53,6 +53,7 @@ spec:
       persistentVolume:
         enabled: true
         storageClass: "rbd"
+        size: 30Gi
     pushgateway:
       image:
         repository: prom/pushgateway
