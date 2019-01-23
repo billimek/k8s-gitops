@@ -18,7 +18,7 @@ spec:
       repo: docker.io/chronograf
     persistence:
       enabled: true
-      storageClass: nfs-client
+      storageClass: rbd
     ingress:
       enabled: true
       annotations:
