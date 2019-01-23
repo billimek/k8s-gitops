@@ -1,7 +1,5 @@
 # External ceph cluster for kubernetes
 
-**NOT USING THIS AT THE MOMENT**
-
 https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd
 
 ## Setup
@@ -45,7 +43,7 @@ kubectl apply -f storageclass.yaml
 
 ## Working with rbd volumes
 
-Example of finding and mounting a pvc in the proxmox host:
+Example of finding and mounting a pvc in the proxmox host
 
 Find the mappings between kubernetes pvc and ceph rbds:
 
