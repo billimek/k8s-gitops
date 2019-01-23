@@ -22,7 +22,7 @@ spec:
     persistence:
       enabled: true
       size: 50Gi
-      storageClass: nfs-client
+      storageClass: rbd
     resources:
       requests:
         memory: 256Mi
