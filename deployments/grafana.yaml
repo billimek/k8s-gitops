@@ -24,6 +24,7 @@ spec:
       fsGroup: 0
     persistence:
       enabled: true
+      storageClassName: "rbd"
       accessModes:
         - ReadWriteOnce
       size: 10Gi

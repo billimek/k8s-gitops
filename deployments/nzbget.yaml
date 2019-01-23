@@ -30,5 +30,8 @@ spec:
         enabled: true
         existingClaim: nfs-media-pvc-10g
         subPath: Downloads
+      config:
+        enabled: true
+        storageClass: "rbd"
   valueFileSecrets:
   - name: "nzbget-values"

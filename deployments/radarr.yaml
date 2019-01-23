@@ -25,6 +25,7 @@ spec:
     persistence:
       config:
         enabled: true
+        storageClass: "rbd"
       downloads:
         enabled: true
         existingClaim: nfs-media-downloads-pvc-10g
