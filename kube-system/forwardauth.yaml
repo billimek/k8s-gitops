@@ -16,12 +16,11 @@ spec:
     image:
       tag: latest
       repository: index.docker.io/dniel/forwardauth
-    replicaCount: 1
+    replicaCount: 2
     logLevel: DEBUG
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: traefik
-      path: /
   valueFileSecrets:
   - name: "forwardauth-values"
