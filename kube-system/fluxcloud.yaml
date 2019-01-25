@@ -63,13 +63,11 @@ spec:
             {{ range $resourceResult.PerContainer }}
             {{ if not (eq .Current.String .Target.String) }}
             * Updating *{{ replace $resourceName.String ":fluxhelmrelease" "" }}* to *{{ .Current.Tag }}*
-
             {{ end }}
             {{ end }}
             {{ end }}
             {{ if eq $resourceResult.Status "error" }}
             *Error updating {{ replace $resourceName.String ":fluxhelmrelease" "" }}*
-
             *Error message*: {{ $resourceResult.Error }}
             {{ end }}
             {{ end }}
