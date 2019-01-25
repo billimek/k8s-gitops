@@ -29,7 +29,7 @@ spec:
                 memory: 30
                 pods: 50
               targetThresholds:
-                cpu: 70
+                cpu: 75
                 memory: 50
                 pods: 100
         RemovePodsViolatingInterPodAntiAffinity:
