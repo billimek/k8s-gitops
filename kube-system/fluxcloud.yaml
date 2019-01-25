@@ -69,7 +69,7 @@ spec:
             {{ end }}
             {{ if eq $resourceResult.Status "error" }}
             *Error updating {{ replace $resourceName.String ":fluxhelmrelease" "" }}*
-            
+
             *Error message*: {{ $resourceResult.Error }}
             {{ end }}
             {{ end }}
