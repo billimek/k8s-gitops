@@ -51,24 +51,3 @@ spec:
           value: "https://github.com/billimek/k8s-gitops/"
         - name: LISTEN_ADDRESS
           value: ":3032"
-        - name: TITLE_TEMPLATE
-          value: |2-
-            {{ if eq .EventType "commit" }}Applying changes from commit{{ end }}
-            {{ if eq .EventType "autorelease" }}Auto releasing resources{{ end }}
-        - name: BODY_TEMPLATE
-          value: >2-
-            {{ if or (eq .EventType "autorelease") (eq .EventType "commit") }}
-            {{ range $resourceName, $resourceResult := .EventResult }}
-            {{ if eq $resourceResult.Status "success" }}
-            {{ range $resourceResult.PerContainer }}
-            {{ if not (eq .Current.String .Target.String) }}
-            * Updating *{{ replace $resourceName.String ":fluxhelmrelease" "" }}* to *{{ .Current.Tag }}*
-            {{ end }}
-            {{ end }}
-            {{ end }}
-            {{ if eq $resourceResult.Status "error" }}
-            *Error updating {{ replace $resourceName.String ":fluxhelmrelease" "" }}*
-            *Error message*: {{ $resourceResult.Error }}
-            {{ end }}
-            {{ end }}
-            {{ end }}
