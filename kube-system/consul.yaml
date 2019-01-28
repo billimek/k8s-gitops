@@ -15,6 +15,7 @@ spec:
   values:
     ImageTag: "1.0.0"
     Image: consul
+    StorageClass: "rbd"
     uiIngress:
       enabled: true
       annotations:
