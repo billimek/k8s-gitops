@@ -29,7 +29,7 @@ spec:
     configurator:
       enabled: true
       image:
-        tag: 0.3.3-x86_64
+        tag: 0.3.4-x86_64
       ingress:
         enabled: true
         annotations:
