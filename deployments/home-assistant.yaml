@@ -21,7 +21,7 @@ spec:
       enabled: true
       accessMode: ReadWriteOnce
       size: 10Gi
-      storageClass: nfs-client
+      storageClass: rbd
     ingress:
       enabled: true
       annotations:
