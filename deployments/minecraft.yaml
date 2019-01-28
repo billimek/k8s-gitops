@@ -46,8 +46,8 @@ spec:
   values:
     image: itzg/minecraft-server
     imageTag: latest
-		persistence:
-			storageClass: "rbd"
+    persistence:
+      storageClass: "rbd"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
