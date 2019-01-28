@@ -17,6 +17,7 @@ spec:
       tag: 0.19.5-v8
     persistence:
       enabled: true
+      storageClass: "rbd"
     flows: "flows.json"
     ingress:
       enabled: true
