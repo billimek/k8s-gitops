@@ -18,6 +18,9 @@ spec:
     imageTag: latest
     persistence:
       storageClass: "rbd"
+      dataDir:
+        enabled: true
+        Size: 10Gi
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
@@ -48,6 +51,9 @@ spec:
     imageTag: latest
     persistence:
       storageClass: "rbd"
+      dataDir:
+        enabled: true
+        Size: 10Gi
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
