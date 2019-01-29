@@ -1,0 +1,3 @@
+floodSecret: "2600"
+ingress:
+  hosts: [flood.$DOMAIN]
