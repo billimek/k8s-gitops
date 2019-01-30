@@ -6,7 +6,7 @@ metadata:
   namespace: kube-system
   annotations:
     flux.weave.works/ignore: "false"
-    flux.weave.works/automated: "true"
+    flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: semver:~1
 spec:
   releaseName: traefik
@@ -15,8 +15,8 @@ spec:
     name: traefik
     version: 1.59.2
   values:
-    image: traefik:1.7.8
-    imageTag: 1.7.6
+    image: traefik
+    imageTag: 1.7.8
     serviceType: LoadBalancer
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
