@@ -20,7 +20,7 @@ See [storage](storage/) for details on storage type services (minio, nfs-client,
 
 ### Deployments
 
-See [deployments](deployments/) for details on regular workloads (chronograf, comcast usage, deluge, grafana, home-assistant, hubot, influxdb, minecraft, cable modem stats, node-red, nzbget, plex, prometheus, radarr, sonarr, speedtest results, unifi, uptimerobot agent)
+See [deployments](deployments/) for details on regular workloads (chronograf, comcast usage, grafana, home-assistant, hubot, influxdb, minecraft, cable modem stats, node-red, nzbget, plex, prometheus, radarr, rtorrent-flood, sonarr, speedtest results, unifi, uptimerobot agent)
 
 ### Logging
 

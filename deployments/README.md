@@ -16,14 +16,6 @@ Based on this [custom helm chart](https://github.com/billimek/billimek-charts/tr
 
 * [comcast.yaml](comcast.yaml)
 
-# deluge
-
-torrent client
-
-![](https://i.imgur.com/HE3Ab40.png)
-
-* [deluge.yaml](deluge.yaml)
-
 # grafana
 
 Metrics and observability dashboard software
@@ -105,11 +97,13 @@ movie downloader
 
 * [radarr.yaml](radarr.yaml)
 
-# rutorrent
+# rtorrent-flood
+
+![](https://i.imgur.com/ZtMrsbm.png)
 
 torrent client
 
-* [rutorrent.yaml](rutorrent.yaml)
+* [rtorrent-flood.yaml](rtorrent-flood.yaml)
 
 # sonarr
 
