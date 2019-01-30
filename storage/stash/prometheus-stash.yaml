@@ -17,7 +17,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g
     storageSecretName: restic-secret
-  schedule: '@daily'
+  schedule: '@every 24h'
   volumeMounts:
   - mountPath: /data
     name: storage-volume
@@ -45,7 +45,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g
     storageSecretName: restic-secret
-  schedule: '@daily'
+  schedule: '@every 24h'
   volumeMounts:
   - mountPath: /data
     name: storage-volume
