@@ -1,12 +1,12 @@
 apiVersion: stash.appscode.com/v1alpha1
 kind: Restic
 metadata:
-  name: stash-rutorrent
+  name: stash-rtorrent-flood
   namespace: default
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/instance: rutorrent
+      app.kubernetes.io/instance: rtorrent-flood
   fileGroups:
   - path: /config
     retentionPolicyName: 'keep-last-5'
@@ -16,7 +16,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g
     storageSecretName: restic-secret
-  schedule: '@daily'
+  schedule: '@every 24h'
   volumeMounts:
   - mountPath: /config
     name: config
