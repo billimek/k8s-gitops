@@ -1,0 +1,1 @@
+{"jobID":"a390b50a-c06e-80f8-9294-45b4597f0d72","spec":{"type":"policy","cause":{"Message":"","User":"Jeff Billimek \u003cjeff@billimek.com\u003e"},"spec":{"kube-system:helmrelease/traefik":{"add":{},"remove":{"automated":"true"}}}},"result":null}
