@@ -16,7 +16,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g
     storageSecretName: restic-secret
-  schedule: '@every 24h'
+  schedule: '0 0 13 * * *'
   volumeMounts:
   - mountPath: /var/lib/grafana
     name: storage
