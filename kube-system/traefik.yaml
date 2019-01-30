@@ -14,7 +14,7 @@ spec:
     name: traefik
     version: 1.59.2
   values:
-    image: traefik
+    image: traefik:v1.7.8
     imageTag: 1.7.8
     serviceType: LoadBalancer
     externalTrafficPolicy: Local
