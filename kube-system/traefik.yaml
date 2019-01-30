@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -14,17 +15,17 @@ spec:
     name: traefik
     version: 1.59.2
   values:
-    image: traefik
+    image: traefik:1.7.8
     imageTag: 1.7.6
-    serviceType : LoadBalancer
+    serviceType: LoadBalancer
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
     replicas: 2
     memoryLimit: 100Mi
     cpuLimit: 1
     startupArguments:
-      - --ping
-      - --acme.dnschallenge.resolvers=8.8.8.8
+    - --ping
+    - --acme.dnschallenge.resolvers=8.8.8.8
     debug:
       enabled: false
     rbac:
@@ -32,7 +33,7 @@ spec:
     ssl:
       enabled: true
       enforced: true
-      insecureSkipVerify : true
+      insecureSkipVerify: true
     kvprovider:
       storeAcme: true
       consul:
