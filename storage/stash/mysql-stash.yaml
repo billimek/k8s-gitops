@@ -16,7 +16,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g
     storageSecretName: restic-secret
-  schedule: '@every 24h'
+  schedule: '0 0 10 * * *'
   volumeMounts:
   - mountPath: /var/lib/mysql
     name: data

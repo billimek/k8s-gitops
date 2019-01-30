@@ -17,7 +17,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g-logs
     storageSecretName: restic-secret
-  schedule: '@every 24h'
+  schedule: '0 0 7 * * *'
   spec.paused: true
   volumeMounts:
   - mountPath: /usr/share/elasticsearch/data
@@ -46,7 +46,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g-logs
     storageSecretName: restic-secret
-  schedule: '@every 24h'
+  schedule: '0 30 7 * * *'
   spec.paused: true
   volumeMounts:
   - mountPath: /usr/share/elasticsearch/data
