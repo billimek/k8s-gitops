@@ -16,7 +16,7 @@ spec:
       persistentVolumeClaim:
           claimName: nfs-backup-restic-pv-10g-kube-system
     storageSecretName: restic-secret
-  schedule: '@daily'
+  schedule: '@every 24h'
   volumeMounts:
   - mountPath: /var/lib/consul
     name: datadir
