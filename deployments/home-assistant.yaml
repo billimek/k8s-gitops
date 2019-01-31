@@ -46,7 +46,7 @@ metadata:
   name: hass-mysql
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
+    flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: semver:~5.7
 spec:
   releaseName: hass-mysql
@@ -55,8 +55,8 @@ spec:
     name: mysql
     version: 0.12.0
   values:
-    image: "mysql:5.7.25"
-    imageTag: "5.7.14"
+    image: "mysql"
+    imageTag: "5.7.25"
     mysqlUser: "homeassistant"
     mysqlDatabase: "homeassistant"
     persistence:
