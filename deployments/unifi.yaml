@@ -5,7 +5,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~5.
+    flux.weave.works/tag.chart-image: semver:~5
 spec:
   releaseName: unifi
   chart:
