@@ -19,7 +19,7 @@ spec:
   schedule: '0 0 15 * * *'
   volumeMounts:
   - mountPath: /flood-db
-    name: config
+    name: flood-db
   retentionPolicies:
   - name: 'keep-last-5'
     keepLast: 5
