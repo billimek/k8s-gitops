@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -15,4 +16,4 @@ spec:
   values:
     image:
       repository: gcr.io/google-containers/fluentd-elasticsearch
-      tag: v2.3.2
+      tag: v2.4.0
