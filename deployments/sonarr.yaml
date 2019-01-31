@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:1*
+    flux.weave.works/tag.chart-image: 'regexp:^([0-9][0-9][0-9]+)$'
 spec:
   releaseName: sonarr
   chart:
