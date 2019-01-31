@@ -55,7 +55,7 @@ spec:
     name: mysql
     version: 0.12.0
   values:
-    image: "mysql"
+    image: "mysql:5.7.25"
     imageTag: "5.7.14"
     mysqlUser: "homeassistant"
     mysqlDatabase: "homeassistant"
