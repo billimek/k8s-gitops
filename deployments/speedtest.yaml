@@ -17,6 +17,7 @@ spec:
     image:
       repository: atribe/speedtest-for-influxdb-and-grafana
       tag: latest
+      pullPolicy: Always
     debug: true
     config:
         delay: 7200
