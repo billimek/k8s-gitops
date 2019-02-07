@@ -12,3 +12,4 @@ applicationYaml:
       scope: "profile openid email"
       redirect-uri: https://auth.${DOMAIN}/oauth2/signin
       token-cookie-domain: ${DOMAIN}
+      verify-access-token: false
