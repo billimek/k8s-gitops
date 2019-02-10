@@ -1,2 +1,4 @@
 ingress:
   hostName: rabbitmq.$DOMAIN
+managementUsername: admin
+managementPassword: $RABBITMQ_PASSWORD
