@@ -1,0 +1,2 @@
+ingress:
+  hosts: [unifi-db.$DOMAIN]
