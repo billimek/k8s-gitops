@@ -22,7 +22,8 @@ spec:
     rabbitmqWebMQTTPlugin:
       enabled: true
     service:
-      loadBalancerIP: ""
+      clusterIP: ""
+      # loadBalancerIP: ""
       type: LoadBalancer
     persistentVolume:
       enabled: true
