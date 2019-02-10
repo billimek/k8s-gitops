@@ -26,8 +26,8 @@ spec:
     runAsRoot: false
     mongodb:
       enabled: true
-      dbUri: mongodb://ubnt:ubnt@unifi-mongodb/unifi
-      statDbUri: mongodb://ubnt:ubnt@unifi-mongodb/unifi_stat
+      dbUri: "mongodb://ubnt:ubnt@unifi-mongodb/unifi"
+      statDbUri: "mongodb://ubnt:ubnt@unifi-mongodb/unifi_stat"
       databaseName: unifi
     ingress:
       enabled: true
