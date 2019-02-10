@@ -26,8 +26,8 @@ spec:
     runAsRoot: false
     mongodb:
       enabled: true
-      dbUri: "mongodb://ubnt:ubnt@unifi-mongodb/unifi"
-      statDbUri: "mongodb://ubnt:ubnt@unifi-mongodb/unifi_stat"
+      dbUri: "mongodb://unifi-mongodb/unifi"
+      statDbUri: "mongodb://unifi-mongodb/unifi_stat"
       databaseName: unifi
     ingress:
       enabled: true
@@ -55,6 +55,4 @@ spec:
       registry: docker.io
       repository: bitnami/mongodb
       tag: 4.0.6
-    mongodbUsername: ubnt
-    mongodbPassword: ubnt
-    mongodbDatabase: unifi
+    usePassword: false
