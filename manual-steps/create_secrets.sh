@@ -58,4 +58,5 @@ kseal values-to-encrypt/hass-mysql-values.txt > ../secrets/hass-mysql-values.yam
 kseal values-to-encrypt/unifi-values.txt > ../secrets/unifi-values.yaml
 kseal values-to-encrypt/unifi-externaldb-values.txt > ../secrets/unifi-externaldb-values.yaml
 kseal values-to-encrypt/node-red-values.txt > ../secrets/node-red-values.yaml
+kseal values-to-encrypt/rabbitmq-values.txt > ../secrets/rabbitmq-values.yaml
 
