@@ -8,7 +8,7 @@ metadata:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~5
 spec:
-  releaseName: unifi
+  releaseName: unifi-externaldb
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: unifi
