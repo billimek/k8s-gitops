@@ -33,12 +33,6 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
-    controllerService:
-      type: ClusterIP
-    stunService:
-      type: ClusterIP
-    discoveryService:
-      type: ClusterIP
   valueFileSecrets:
   - name: "unifi-externaldb-values"
 ---
