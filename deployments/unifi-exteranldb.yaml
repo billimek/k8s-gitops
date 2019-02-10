@@ -51,7 +51,7 @@ metadata:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~4.0
 spec:
-  releaseName: unifi
+  releaseName: unifi-mongodb
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: mongodb
