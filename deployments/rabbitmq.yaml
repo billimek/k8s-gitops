@@ -30,8 +30,5 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
-    prometheus:
-      exporter:
-        enabled: true
   valueFileSecrets:
   - name: "rabbitmq-values"
