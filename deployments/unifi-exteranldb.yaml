@@ -2,7 +2,7 @@
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
-  name: unifi
+  name: unifi-externaldb
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
@@ -24,18 +24,40 @@ spec:
       storageClass: rbd
     timezone: "America/New_York"
     runAsRoot: false
+    mongodb:
+      enabled: true
+      dbUri: mongodb://mongo/unifi
+      statDbUri: mongodb://mongo/unifi_stat
+      databaseName: unifi
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
     controllerService:
-      type: LoadBalancer
-      loadBalancerIP: 10.2.0.156
+      type: ClusterIP
     stunService:
-      type: LoadBalancer
-      loadBalancerIP: 10.2.0.157
+      type: ClusterIP
     discoveryService:
-      type: LoadBalancer
-      loadBalancerIP: 10.2.0.158
+      type: ClusterIP
   valueFileSecrets:
-  - name: "unifi-values"
+  - name: "unifi-externaldb-values"
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: unifi-mongodb
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~4.0
+spec:
+  releaseName: unifi
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: mongodb
+    version: 5.3.2
+  values:
+    image:
+      registry: docker.io
+      repository: bitnami/mongodb
+      tag: 4.0.6
