@@ -5,7 +5,7 @@ metadata:
   name: rabbitmq
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
+    flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: glob:3.*-alpine
 spec:
   releaseName: rabbitmq
@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: rabbitmq
-      tag: 3.7-management-alpine
+      tag: 3.7-alpine
     rabbitmqMQTTPlugin:
       enabled: true
     rabbitmqWebMQTTPlugin:
