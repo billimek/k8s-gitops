@@ -1,12 +1,17 @@
 ingress:
   hostName: rabbitmq.$DOMAIN
 managementPassword: $RABBITMQ_PASSWORD
-rabbitmqUsername: guest
+rabbitmqUsername: admin
 rabbitmqPassword: $RABBITMQ_PASSWORD
+rabbitmqMQTTPlugin:
+  config: |
+    mqtt.default_user     = admin
+    mqtt.default_pass     = $RABBITMQ_PASSWORD
+    mqtt.allow_anonymous  = true
 definitions:
   users: |-
   {
-    "name": "mqtt",
+    "name": "admin",
     "password": "$RABBITMQ_PASSWORD",
     "tags": "administrator"
   }
