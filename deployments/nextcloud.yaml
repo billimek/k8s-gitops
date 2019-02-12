@@ -19,7 +19,7 @@ spec:
       tag: 15.0.2-apache
     persistence:
       enabled: true
-      existingClaim: nfs-data-nextcloud-pv-10g
+      existingClaim: nfs-data-nextcloud-pvc-10g
     ingress:
       enabled: true
       annotations:
