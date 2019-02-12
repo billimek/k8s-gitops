@@ -19,8 +19,12 @@ spec:
       tag: 3.7-alpine
     rabbitmqMQTTPlugin:
       enabled: true
+      config: |
+        mqtt.default_user     = guest
+        mqtt.default_pass     = guest
+        mqtt.allow_anonymous  = true
     rabbitmqWebMQTTPlugin:
-      enabled: true
+      enabled: false
     service:
       clusterIP: ""
       loadBalancerIP: "10.2.0.102"
@@ -31,5 +35,6 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
+    rabbitmqErlangCookie: "9uVNsf2plnpyslPjqUVaDmGTUml2wJlb"
   valueFileSecrets:
   - name: "rabbitmq-values"
