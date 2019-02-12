@@ -1,0 +1,40 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: nextcloud
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:15.*.*-apache
+spec:
+  releaseName: nextcloud
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: nextcloud
+    version: 1.0.1
+  values:
+    image:
+      repository: nextcloud
+      tag: 15.0.2-apache
+    persistence:
+      enabled: true
+      existingClaim: nfs-data-nextcloud-pv-10g
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+    internalDatabase:
+      enabled: false
+    mariadb:
+      enabled: true
+      db:
+        name: nextcloud
+        user: nextcloud
+        password: changeme
+      persistence:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 8Gi
+  valueFileSecrets:
+  - name: "nextcloud-values"
