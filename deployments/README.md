@@ -89,6 +89,15 @@ Metrics and observability collection and dashboard software
 
 * [prometheus.yaml](prometheus.yaml)
 
+# rabbitmq
+
+![](https://i.imgur.com/Uz7RG9Y.png)
+
+MQTT Provided by RabbitMQ-HA helm chart
+
+* [rabbitmq.yaml](rabbitmq.yaml)
+
+
 # radarr
 
 ![](https://i.imgur.com/eAgWySC.png)
