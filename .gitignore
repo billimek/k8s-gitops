@@ -18,4 +18,3 @@ auth
 master.key
 *.snap
 cluster/*cluster.yml
-pub-cert.pem
