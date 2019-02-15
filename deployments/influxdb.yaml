@@ -5,16 +5,16 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:1.*-alpine
+    flux.weave.works/tag.chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+-alpine)$'
 spec:
   releaseName: influxdb
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: influxdb
-    version: 1.0.0
+    version: 1.1.2
   values:
     image:
-      tag: "1.7-alpine"
+      tag: "1.7.3-alpine"
       repo: influxdb
     service:
       type: LoadBalancer
@@ -28,7 +28,7 @@ spec:
         memory: 256Mi
         cpu: 0.1
       limits:
-        memory: 2Gi
+        memory: 4Gi
         cpu: 4
     config:
       opentsdb:
