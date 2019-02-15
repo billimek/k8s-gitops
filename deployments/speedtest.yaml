@@ -22,6 +22,6 @@ spec:
     config:
         delay: 7200
         influxdb:
-            host: influxdb-influxdb
+            host: influxdb
             port: 8086
             database: speedtests

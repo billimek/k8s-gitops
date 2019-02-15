@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: influxdb-influxdb
+      app: influxdb
   fileGroups:
   - path: /var/lib/influxdb
     retentionPolicyName: 'keep-last-5'

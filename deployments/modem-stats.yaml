@@ -21,6 +21,6 @@ spec:
     config:
         delay: 600
         influxdb:
-            host: influxdb-influxdb
+            host: influxdb
             port: 8086
             database: cable_modem_stats

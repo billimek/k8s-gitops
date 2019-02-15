@@ -21,7 +21,7 @@ spec:
     config:
         delay: 3600
         influxdb:
-            host: influxdb-influxdb
+            host: influxdb
             port: 8086
             database: comcast
   valueFileSecrets:
