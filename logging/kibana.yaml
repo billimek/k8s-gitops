@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: "docker.elastic.co/kibana/kibana-oss"
-      tag: "6.6.0"
+      tag: "6.6.1"
     persistentVolumeClaim:
       enabled: true
     ingress:
