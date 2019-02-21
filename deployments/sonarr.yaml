@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: latest
+      tag: '176'
       pullPolicy: Always
     ingress:
       enabled: true

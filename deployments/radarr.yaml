@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: linuxserver/radarr
-      tag: latest
+      tag: '151'
       pullPolicy: Always
     ingress:
       enabled: true
