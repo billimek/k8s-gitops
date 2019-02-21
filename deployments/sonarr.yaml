@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'regexp:^([0-9][0-9][0-9]+)$'
+    flux.weave.works/tag.chart-image: 'glob:amd64-3.*.*.*'
 spec:
   releaseName: sonarr
   chart:
@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: '176'
+      tag: 'amd64-3.0.1.374-ls16'
       pullPolicy: Always
     ingress:
       enabled: true
