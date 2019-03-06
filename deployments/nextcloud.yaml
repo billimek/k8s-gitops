@@ -31,7 +31,6 @@ spec:
       db:
         name: nextcloud
         user: nextcloud
-        password: changeme
       persistence:
         enabled: true
         accessMode: ReadWriteOnce
