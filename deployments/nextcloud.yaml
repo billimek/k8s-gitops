@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:15.*.*-apache
+    flux.weave.works/tag.chart-image: 'regexp:^(15\.[0-9]+\.[0-9]+-apache)$'
 spec:
   releaseName: nextcloud
   chart:
@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: nextcloud
-      tag: 15.0-apache
+      tag: 15.0.5-apache
     persistence:
       enabled: true
       existingClaim: nfs-data-nextcloud-pvc-10g
