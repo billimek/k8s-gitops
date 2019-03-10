@@ -6,17 +6,17 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'regexp:^([0-9][0-9][0-9]+)$'
+    flux.weave.works/tag.chart-image: 'regexp:^(amd64-v2.*-r.*-.*)$'
 spec:
   releaseName: nzbget
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: nzbget
-    version: 0.1.4
+    version: 1.0.0
   values:
     image:
       repository: linuxserver/nzbget
-      tag: 156
+      tag: amd64-v21.0-r2296-ls5
     service:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.153
