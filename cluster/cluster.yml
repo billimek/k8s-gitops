@@ -23,7 +23,6 @@ nodes:
     hostname_override: k8s-3
     user: ubuntu
     role: [worker]
-ignore_docker_version: true
 authentication:
     strategy: x509
     sans:
