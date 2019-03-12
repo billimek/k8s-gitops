@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-      tag: "6.6.1"
+      tag: "6.6.2"
     master:
       persistence:
         storageClass: "rbd"
