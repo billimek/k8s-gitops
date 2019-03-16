@@ -5,8 +5,8 @@ metadata:
   name: unifi
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:*
+    flux.weave.works/automated: "false"
+    flux.weave.works/tag.chart-image: semver:~5
 spec:
   releaseName: unifi
   chart:
@@ -15,8 +15,8 @@ spec:
     version: 0.3.1
   values:
     image:
-      repository: docker.io/jacobalberty/unifi
-      tag: 5.10.12
+      repository: jacobalberty/unifi
+      tag: 5.10.20
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
