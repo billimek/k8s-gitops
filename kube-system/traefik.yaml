@@ -6,16 +6,17 @@ metadata:
   namespace: kube-system
   annotations:
     flux.weave.works/ignore: "false"
+    flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~1
 spec:
   releaseName: traefik
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: traefik
-    version: 1.59.2
+    version: 1.64.0
   values:
     image: traefik
-    imageTag: 1.7.8
+    imageTag: 1.7.9
     serviceType: LoadBalancer
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
@@ -58,5 +59,17 @@ spec:
     deployment:
       hostPort:
         dashboardEnabled: true
+    autoscaling:
+      minReplicas: 2
+      maxReplicas: 3
+      metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          targetAverageUtilization: 60
+      - type: Resource
+        resource:
+          name: memory
+          targetAverageUtilization: 60
   valueFileSecrets:
   - name: "traefik-values"
