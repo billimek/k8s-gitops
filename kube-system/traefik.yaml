@@ -21,8 +21,6 @@ spec:
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
     replicas: 2
-    memoryLimit: 100Mi
-    cpuLimit: 1
     startupArguments:
     - --ping
     - --acme.dnschallenge.resolvers=8.8.8.8
