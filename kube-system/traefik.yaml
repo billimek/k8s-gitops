@@ -59,17 +59,5 @@ spec:
     deployment:
       hostPort:
         dashboardEnabled: true
-    autoscaling:
-      minReplicas: 2
-      maxReplicas: 3
-      metrics:
-      - type: Resource
-        resource:
-          name: cpu
-          targetAverageUtilization: 60
-      - type: Resource
-        resource:
-          name: memory
-          targetAverageUtilization: 60
   valueFileSecrets:
   - name: "traefik-values"
