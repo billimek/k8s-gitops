@@ -24,6 +24,7 @@ spec:
           port: 1514
           targetPort: syslog-udp
           protocol: UDP
+        beats: null
     ports:
       - name: syslog-udp
         containerPort: 1514
