@@ -71,6 +71,16 @@ spec:
           port 24220
           tag fluentd.monitor.metrics
         </source>
+        # syslog
+        <source>
+          @type syslog
+          port 5140
+          bind 0.0.0.0
+          tag system
+          <parse>
+            message_format auto
+          </parse>
+        </source>
       system.conf: |-
         <system>
           root_dir /tmp/fluentd-buffers/
@@ -80,21 +90,28 @@ spec:
           @type forward
           port 24224
           bind 0.0.0.0
-          @type syslog
-          port 5140
-          bind 0.0.0.0
-          tag system
         </source>
       output.conf: |
         <match **>
           @type elasticsearch
-          @log_level debug
-          index_name fluentd-syslog
-          type_name syslog
           # Replace with the host/port to your Elasticsearch cluster.
           host "#{ENV['OUTPUT_HOST']}"
           port "#{ENV['OUTPUT_PORT']}"
           scheme "#{ENV['OUTPUT_SCHEME']}"
           ssl_version "#{ENV['OUTPUT_SSL_VERSION']}"
           logstash_format true
+          logstash_prefix fluentd-syslog
+          <buffer>
+            @type file
+            path /var/log/fluentd-buffers/kubernetes.system.buffer
+            flush_mode interval
+            retry_type exponential_backoff
+            flush_thread_count 2
+            flush_interval 5s
+            retry_forever
+            retry_max_interval 30
+            chunk_limit_size "#{ENV['OUTPUT_BUFFER_CHUNK_LIMIT']}"
+            queue_limit_length "#{ENV['OUTPUT_BUFFER_QUEUE_LIMIT']}"
+            overflow_action block
+          </buffer>
         </match>
