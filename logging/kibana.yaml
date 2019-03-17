@@ -24,9 +24,8 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "traefik"
         ingress.kubernetes.io/protocol: "http"
-        ingress.kubernetes.io/auth-type: "forward"
-        ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
-        ingress.kubernetes.io/auth-trust-headers: "true"
+        ingress.kubernetes.io/auth-type: "basic"
+        ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
     env:
       ELASTICSEARCH_URL: "http://elasticsearch-client.logs:9200"
   valueFileSecrets:
