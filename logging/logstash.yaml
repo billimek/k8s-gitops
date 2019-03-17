@@ -36,9 +36,9 @@ spec:
         containerPort: 5044
         protocol: UDP
     livenessProbe:
-      initialDelaySeconds: 40
+      initialDelaySeconds: 120
     readinessProbe:
-      initialDelaySeconds: 40
+      initialDelaySeconds: 120
     exporter:
       logstash:
         enabled: true
