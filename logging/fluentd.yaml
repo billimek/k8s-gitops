@@ -83,11 +83,12 @@ spec:
           @type syslog
           port 5140
           bind 0.0.0.0
-          tag syslog
+          tag system
         </source>
       output.conf: |
         <match **>
           @type elasticsearch
+          @log_level debug
           index_name fluentd-syslog
           type_name syslog
           # Replace with the host/port to your Elasticsearch cluster.
