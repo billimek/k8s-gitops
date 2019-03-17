@@ -92,9 +92,8 @@ spec:
           bind 0.0.0.0
         </source>
       output.conf: |
-        <match **>
+        <match syslog.**>
           @type elasticsearch
-          # Replace with the host/port to your Elasticsearch cluster.
           host "#{ENV['OUTPUT_HOST']}"
           port "#{ENV['OUTPUT_PORT']}"
           scheme "#{ENV['OUTPUT_SCHEME']}"
