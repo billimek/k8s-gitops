@@ -1,26 +1,32 @@
-# ---
-# apiVersion: flux.weave.works/v1beta1
-# kind: HelmRelease
-# metadata:
-#   name: loki
-#   namespace: logs
-#   annotations:
-#     flux.weave.works/ignore: "true"
-#     flux.weave.works/automated: "true"
-#     flux.weave.works/tag.loki: glob:master
-#     flux.weave.works/tag.promtail: glob:master
-# spec:
-#   releaseName: loki
-#   chart:
-#     repository: https://billimek.github.io/helm-repo/
-#     name: loki
-#     version: 0.0.1
-#   values:
-#     loki:
-#       image:
-#         repository: grafana/loki
-#         tag: master
-#     promtail:
-#       image:
-#         repository: grafana/promtail
-#         tag: master 
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: logs
+  annotations:
+    flux.weave.works/ignore: "true"
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.loki: glob:master
+    flux.weave.works/tag.promtail: glob:master
+spec:
+  releaseName: loki
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: loki
+    version: 0.1.0
+  values:
+    loki:
+      image:
+        repository: grafana/loki
+        tag: master
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClassName: rbd
+    promtail:
+      image:
+        repository: grafana/promtail
+        tag: master 
+      nameOverride: promtail-local
+      deploymentStrategy: RollingUpdate
