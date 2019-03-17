@@ -86,9 +86,6 @@ spec:
           tag system
         </source>
       output.conf: |
-        <match system.**>
-          @type stdout
-        </match>
         <match **>
           @type elasticsearch
           index_name syslog
