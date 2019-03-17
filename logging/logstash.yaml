@@ -27,9 +27,9 @@ spec:
           targetPort: syslog-udp
           protocol: UDP
     ports:
-    - name: syslog-udp
-      containerPort: 1514
-      protocol: UDP
+      - name: syslog-udp
+        containerPort: 1514
+        protocol: UDP
     exporter:
       logstash:
         enabled: true
