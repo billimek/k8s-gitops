@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: "docker.elastic.co/logstash/logstash-oss"
-      tag: "6.6.1"
+      tag: "6.6.2"
     service:
       type: LoadBalancer
       ports:
@@ -26,9 +26,9 @@ spec:
           protocol: UDP
         beats: null
     ports:
-      - name: syslog-udp
-        containerPort: 1514
-        protocol: UDP
+    - name: syslog-udp
+      containerPort: 1514
+      protocol: UDP
     exporter:
       logstash:
         enabled: true
