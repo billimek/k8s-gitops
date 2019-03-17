@@ -20,7 +20,7 @@ spec:
     service:
       type: LoadBalancer
       annotations:
-        metallb.universe.tf/allow-shared-ip: "true"
+        kubernetes.io/allow-mixed-protocol: true
       ports:
         syslog-udp:
           port: 1514
