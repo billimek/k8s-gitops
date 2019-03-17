@@ -20,7 +20,7 @@ spec:
     service:
       type: LoadBalancer
       annotations:
-        kubernetes.io/allow-mixed-protocol: true
+        kubernetes.io/allow-mixed-protocol: "true"
       ports:
         syslog-udp:
           port: 1514
