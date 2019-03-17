@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: elasticsearch-curator
-    version: 1.0.1
+    version: 1.2.1
   values:
     image:
       repository: quay.io/pires/docker-elasticsearch-curator
