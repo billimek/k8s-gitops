@@ -35,6 +35,10 @@ spec:
       - name: beats
         containerPort: 5044
         protocol: UDP
+    livenessProbe:
+      initialDelaySeconds: 40
+    readinessProbe:
+      initialDelaySeconds: 40
     exporter:
       logstash:
         enabled: true
