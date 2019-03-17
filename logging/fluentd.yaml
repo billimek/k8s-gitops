@@ -77,9 +77,6 @@ spec:
           port 5140
           bind 0.0.0.0
           tag system
-          <parse>
-            message_format auto
-          </parse>
         </source>
       system.conf: |-
         <system>
