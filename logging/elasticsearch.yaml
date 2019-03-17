@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: elasticsearch
-    version: 1.17.0
+    version: 1.21.2
   values:
     image:
       repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
