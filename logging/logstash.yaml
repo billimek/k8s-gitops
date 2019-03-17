@@ -1,0 +1,44 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: logstash
+  namespace: logs
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~6
+spec:
+  releaseName: logstash
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: logstash
+    version: 1.5.2
+  values:
+    image:
+      repository: "docker.elastic.co/logstash/logstash-oss"
+      tag: "6.6.1"
+    service:
+      type: LoadBalancer
+      ports:
+        syslog-udp:
+          port: 1514
+          targetPort: syslog-udp
+          protocol: UDP
+    ports:
+      - name: syslog-udp
+        containerPort: 1514
+        protocol: UDP
+    exporter:
+      logstash:
+        enabled: true
+    elasticsearch:
+      host: elasticsearch-client.logs.svc.cluster.local
+      port: 9200
+    inputs:
+      main: |-
+        input {
+          udp {
+            port => 1514
+            type => syslog
+          }
+        }
