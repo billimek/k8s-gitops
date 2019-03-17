@@ -83,6 +83,7 @@ spec:
           @type syslog
           port 5140
           bind 0.0.0.0
+          tag syslog
         </source>
       output.conf: |
         <match **>
