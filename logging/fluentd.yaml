@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://kiwigrid.github.io/
     name: fluentd-elasticsearch
-    version: 2.1.2
+    version: 2.6.0
   values:
     image:
       repository: gcr.io/google-containers/fluentd-elasticsearch
