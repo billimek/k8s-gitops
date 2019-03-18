@@ -16,10 +16,12 @@ spec:
     image:
       repository: quay.io/pires/docker-elasticsearch-curator
       tag: 5.5.4
-    config:
-      elasticsearch:
+    config_yml: |-
+      ---
+      client:
         hosts:
           - elasticsearch-client.logs
+        port: 9200
     configMaps:
       # Delete indices older than 30 days
       action_file_yml: |-
