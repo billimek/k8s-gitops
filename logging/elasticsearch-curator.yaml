@@ -23,7 +23,7 @@ spec:
           hosts:
             - elasticsearch-client.logs
           port: 9200
-      # Delete indices older than 20 days
+      # Delete indices older than 30 days
       action_file_yml: |-
         ---
         actions:
@@ -41,7 +41,7 @@ spec:
               direction: older
               timestring: '%Y.%m.%d'
               unit: days
-              unit_count: 20
+              unit_count: 30
               field:
               stats_result:
               epoch:
