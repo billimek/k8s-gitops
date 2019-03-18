@@ -5,7 +5,7 @@ metadata:
   name: loki
   namespace: logs
   annotations:
-    flux.weave.works/ignore: "true"
+    flux.weave.works/ignore: "false"
     flux.weave.works/automated: "true"
     flux.weave.works/tag.loki: glob:master
     flux.weave.works/tag.promtail: glob:master
@@ -17,9 +17,12 @@ spec:
     version: 0.1.0
   values:
     loki:
+      replicas: 1
+      deploymentStrategy: Recreate
       image:
         repository: grafana/loki
         tag: master
+        pullPolicy: Always # Always pull while in BETA
     persistence:
       enabled: true
       size: 50Gi
