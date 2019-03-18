@@ -24,6 +24,7 @@ spec:
     data:
       persistence:
         storageClass: "rbd"
+        size: "60Gi"
       resources:
         limits:
           cpu: "1"
