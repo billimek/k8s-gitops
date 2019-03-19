@@ -1,35 +1,35 @@
----
-apiVersion: flux.weave.works/v1beta1
-kind: HelmRelease
-metadata:
-  name: elasticsearch
-  namespace: logs
-  annotations:
-    flux.weave.works/ignore: "false"
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~6
-spec:
-  releaseName: elasticsearch
-  chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    name: elasticsearch
-    version: 1.21.2
-  values:
-    image:
-      repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-      tag: "6.6.2"
-    master:
-      persistence:
-        storageClass: "rbd"
-    data:
-      persistence:
-        storageClass: "rbd"
-        size: "60Gi"
-      resources:
-        limits:
-          cpu: "1"
-          memory: "2048Mi"
-        requests:
-          cpu: "25m"
-          memory: "1536Mi"
-      additionalJavaOpts: "-XX:MaxRAM=1536m"
+# ---
+# apiVersion: flux.weave.works/v1beta1
+# kind: HelmRelease
+# metadata:
+#   name: elasticsearch
+#   namespace: logs
+#   annotations:
+#     flux.weave.works/ignore: "false"
+#     flux.weave.works/automated: "true"
+#     flux.weave.works/tag.chart-image: semver:~6
+# spec:
+#   releaseName: elasticsearch
+#   chart:
+#     repository: https://kubernetes-charts.storage.googleapis.com/
+#     name: elasticsearch
+#     version: 1.21.2
+#   values:
+#     image:
+#       repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
+#       tag: "6.6.2"
+#     master:
+#       persistence:
+#         storageClass: "rbd"
+#     data:
+#       persistence:
+#         storageClass: "rbd"
+#         size: "60Gi"
+#       resources:
+#         limits:
+#           cpu: "1"
+#           memory: "2048Mi"
+#         requests:
+#           cpu: "25m"
+#           memory: "1536Mi"
+#       additionalJavaOpts: "-XX:MaxRAM=1536m"
