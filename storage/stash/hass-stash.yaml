@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: home-assistant
+      app.kubernetes.io/name: home-assistant
   fileGroups:
   - path: /config
     retentionPolicyName: 'keep-last-5'
