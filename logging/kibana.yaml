@@ -30,6 +30,6 @@ spec:
       ELASTICSEARCH_HOSTS: "http://elasticsearch-client.logs:9200"
     files:
       kibana.yml:
-        elasticsearch.hosts: http://elasticsearch-client:9200
+        elasticsearch.hosts: http://elasticsearch-client.logs:9200
   valueFileSecrets:
   - name: "kibana-values"
