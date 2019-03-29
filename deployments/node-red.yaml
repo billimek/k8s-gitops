@@ -11,10 +11,10 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: node-red
-    version: 1.0.1
+    version: 1.2.0
   values:
     image:
-      tag: 0.19.5-v8
+      tag: 0.20.2-v10
     persistence:
       enabled: true
       storageClass: "rbd"
