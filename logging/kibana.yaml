@@ -27,6 +27,6 @@ spec:
         ingress.kubernetes.io/auth-type: "basic"
         ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
     env:
-      ELASTICSEARCH_URL: "http://elasticsearch-client.logs:9200"
+      ELASTICSEARCH_HOSTS: "http://elasticsearch-client.logs:9200"
   valueFileSecrets:
   - name: "kibana-values"
