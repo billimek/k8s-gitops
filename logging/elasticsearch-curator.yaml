@@ -21,7 +21,7 @@ spec:
         ---
         client:
           hosts:
-            - elasticsearch-client.logs
+            - elasticsearch-master.logs
           port: 9200
       # Delete indices older than 30 days
       action_file_yml: |-
