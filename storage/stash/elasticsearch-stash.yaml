@@ -20,7 +20,7 @@ spec:
   spec.paused: true
   volumeMounts:
   - mountPath: /usr/share/elasticsearch/data
-    name: data
+    name: elasticsearch-master
   retentionPolicies:
   - name: 'keep-last-5'
     keepLast: 5
