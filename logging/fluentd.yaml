@@ -18,7 +18,7 @@ spec:
       repository: gcr.io/google-containers/fluentd-elasticsearch
       tag: v2.4.0
     elasticsearch:
-      host: 'elasticsearch-master'
+      host: 'elasticsearch-master.logs'
 ---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
@@ -39,7 +39,7 @@ spec:
       repository: gcr.io/google-containers/fluentd-elasticsearch
       tag: v2.4.0
     output:
-      host: elasticsearch-master.logs.svc.cluster.local
+      host: elasticsearch-master.logs
       port: 9200
     service:
       type: LoadBalancer
