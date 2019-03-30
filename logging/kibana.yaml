@@ -17,6 +17,7 @@ spec:
     image: "docker.elastic.co/kibana/kibana"
     imageTag: "6.7.0"
     elasticsearchURL: "http://elasticsearch-master:9200"
+    elasticsearchHosts: "http://elasticsearch-master:9200"
     ingress:
       enabled: true
       annotations:
