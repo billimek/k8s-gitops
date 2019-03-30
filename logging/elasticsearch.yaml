@@ -26,9 +26,6 @@ spec:
       data: "true"
     volumeClaimTemplate:
       storageClassName: "rbd"
-    updateStrategy: RollingUpdate
-    volumeClaimTemplate:
-      storageClassName: "rbd"
       resources:
         requests:
           storage: 60Gi
