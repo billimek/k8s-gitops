@@ -17,7 +17,7 @@ spec:
   values:
     image: "docker.elastic.co/elasticsearch/elasticsearch"
     imageTag: "6.6.2"
-    clusterName: "elasticsearch"
+    clusterName: "es"
     nodeGroup: "master"
     roles:
       master: "true"
@@ -46,7 +46,7 @@ spec:
     image: "docker.elastic.co/elasticsearch/elasticsearch"
     imageTag: "6.6.2"
     replicas: 2
-    clusterName: "elasticsearch"
+    clusterName: "es"
     nodeGroup: "data"
     roles:
       master: "false"
