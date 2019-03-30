@@ -1,36 +1,36 @@
----
-apiVersion: flux.weave.works/v1beta1
-kind: HelmRelease
-metadata:
-  name: kibana
-  namespace: logs
-  annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~6
-spec:
-  releaseName: kibana
-  chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    name: kibana
-    version: 2.0.0
-  values:
-    image:
-      repository: "docker.elastic.co/kibana/kibana-oss"
-      tag: "6.7.0"
-    persistentVolumeClaim:
-      enabled: true
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "traefik"
-        ingress.kubernetes.io/protocol: "http"
-        ingress.kubernetes.io/auth-type: "basic"
-        ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
-    env:
-      ELASTICSEARCH_HOSTS: "http://elasticsearch-client.logs:9200"
-    files:
-      kibana.yml:
-        elasticsearch.hosts: http://elasticsearch-client.logs:9200
-        elasticsearch.url: http://elasticsearch-client.logs:9200
-  valueFileSecrets:
-  - name: "kibana-values"
+# ---
+# apiVersion: flux.weave.works/v1beta1
+# kind: HelmRelease
+# metadata:
+#   name: kibana
+#   namespace: logs
+#   annotations:
+#     flux.weave.works/automated: "true"
+#     flux.weave.works/tag.chart-image: semver:~6
+# spec:
+#   releaseName: kibana
+#   chart:
+#     repository: https://helm.elastic.co
+#     name: kibana
+#     version: 6.6.2-alpha1
+#   values:
+#     image:
+#       repository: "docker.elastic.co/kibana/kibana-oss"
+#       tag: "6.7.0"
+#     persistentVolumeClaim:
+#       enabled: true
+#     ingress:
+#       enabled: true
+#       annotations:
+#         kubernetes.io/ingress.class: "traefik"
+#         ingress.kubernetes.io/protocol: "http"
+#         ingress.kubernetes.io/auth-type: "basic"
+#         ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
+#     env:
+#       ELASTICSEARCH_HOSTS: "http://elasticsearch-client.logs:9200"
+#     files:
+#       kibana.yml:
+#         elasticsearch.hosts: http://elasticsearch-client.logs:9200
+#         elasticsearch.url: http://elasticsearch-client.logs:9200
+#   valueFileSecrets:
+#   - name: "kibana-values"
