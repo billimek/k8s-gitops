@@ -25,5 +25,9 @@ spec:
         ingress.kubernetes.io/protocol: "http"
         ingress.kubernetes.io/auth-type: "basic"
         ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
+    kibanaConfig:
+      kibana.yml: |
+        elasticsearch:
+          hosts: "http://elasticsearch-master:9200"
   valueFileSecrets:
   - name: "kibana-values"
