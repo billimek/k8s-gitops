@@ -1,12 +1,12 @@
 apiVersion: stash.appscode.com/v1alpha1
 kind: Restic
 metadata:
-  name: stash-elasticsearch
+  name: stash-elasticsearch-data
   namespace: logs
 spec:
   selector:
     matchLabels:
-      app: elasticsearch
+      app: elasticsearch-data
       component: data
   fileGroups:
   - path: /usr/share/elasticsearch/data
@@ -35,8 +35,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: elasticsearch
-      component: master
+      app: elasticsearch-master
   fileGroups:
   - path: /usr/share/elasticsearch/data
     retentionPolicyName: 'keep-last-5'
