@@ -6,17 +6,17 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'glob:amd64-0.*.*.*'
+    flux.weave.works/tag.chart-image: 'glob:amd64-v0.*.*.*'
 spec:
   releaseName: radarr
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: radarr
-    version: 1.1.1
+    version: 2.0.0
   values:
     image:
       repository: linuxserver/radarr
-      tag: 'amd64-0.2.0.1331-ls9'
+      tag: 'amd64-v0.2.0.1293-ls9'
       pullPolicy: Always
     ingress:
       enabled: true
