@@ -5,14 +5,14 @@ metadata:
   name: rtorrent-flood
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
+    flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: glob:0.9.*
 spec:
   releaseName: rtorrent-flood
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: rtorrent-flood
-    version: 2.0.3
+    version: 2.0.4
   values:
     image:
       repository: wonderfall/rtorrent-flood
