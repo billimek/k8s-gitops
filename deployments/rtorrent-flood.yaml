@@ -12,11 +12,11 @@ spec:
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: rtorrent-flood
-    version: 2.0.4
+    version: 2.0.5
   values:
     image:
-      repository: billimek/flood
-      tag: edit-feeds
+      repository: wonderfall/rtorrent-flood
+      tag: 0.9.7-0.13.7
     uid: 1001
     gid: 1001
     guiService:
