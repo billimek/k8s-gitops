@@ -15,8 +15,8 @@ spec:
     version: 2.0.6
   values:
     image:
-      repository: billimek/flood
-      tag: edit-feeds
+      repository: wonderfall/rtorrent-flood
+      tag: 0.9.7-0.13.7
     uid: 1001
     gid: 1001
     guiService:
