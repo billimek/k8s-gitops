@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: linuxserver/nzbget
-      tag: amd64-v21.0-r2302-ls8
+      tag: amd64-v21.0-r2302-ls9
     service:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.153
