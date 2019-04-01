@@ -6,7 +6,7 @@ metadata:
   namespace: logs
   annotations:
     flux.weave.works/ignore: "false"
-    flux.weave.works/automated: "true"
+    flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: semver:~6
 spec:
   releaseName: elasticsearch-master
@@ -15,7 +15,7 @@ spec:
     name: elasticsearch
     version: 6.6.2-alpha1
   values:
-    image: "docker.elastic.co/elasticsearch/elasticsearch:6.7.0"
+    image: "docker.elastic.co/elasticsearch/elasticsearch"
     imageTag: "6.7.0"
     clusterName: "elasticsearch"
     nodeGroup: "master"
