@@ -2,34 +2,31 @@
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
-  name: elasticsearch
+  name: elasticsearch-master
   namespace: logs
   annotations:
     flux.weave.works/ignore: "false"
-    flux.weave.works/automated: "true"
+    flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: semver:~6
 spec:
-  releaseName: elasticsearch
+  releaseName: elasticsearch-master
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://helm.elastic.co
     name: elasticsearch
-    version: 1.21.2
+    version: 6.6.2-alpha1
   values:
-    image:
-      repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-      tag: "6.6.2"
-    master:
-      persistence:
-        storageClass: "rbd"
-    data:
-      persistence:
-        storageClass: "rbd"
-        size: "60Gi"
+    image: "docker.elastic.co/elasticsearch/elasticsearch"
+    imageTag: "6.7.0"
+    clusterName: "elasticsearch"
+    nodeGroup: "master"
+    replicas: 3
+    roles:
+      master: "true"
+      ingest: "true"
+      data: "true"
+    volumeClaimTemplate:
+      storageClassName: "rbd"
       resources:
-        limits:
-          cpu: "1"
-          memory: "2048Mi"
         requests:
-          cpu: "25m"
-          memory: "1536Mi"
-      additionalJavaOpts: "-XX:MaxRAM=1536m"
+          storage: 60Gi
+    updateStrategy: RollingUpdate

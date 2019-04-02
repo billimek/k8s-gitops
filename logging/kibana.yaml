@@ -5,20 +5,19 @@ metadata:
   name: kibana
   namespace: logs
   annotations:
-    flux.weave.works/automated: "true"
+    flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: semver:~6
 spec:
   releaseName: kibana
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://helm.elastic.co
     name: kibana
-    version: 2.0.0
+    version: 6.6.2-alpha1
   values:
-    image:
-      repository: "docker.elastic.co/kibana/kibana-oss"
-      tag: "6.6.2"
-    persistentVolumeClaim:
-      enabled: true
+    image: "docker.elastic.co/kibana/kibana"
+    imageTag: "6.7.0"
+    elasticsearchURL: "http://elasticsearch-master:9200"
+    elasticsearchHosts: "http://elasticsearch-master:9200"
     ingress:
       enabled: true
       annotations:
@@ -26,7 +25,11 @@ spec:
         ingress.kubernetes.io/protocol: "http"
         ingress.kubernetes.io/auth-type: "basic"
         ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
-    env:
-      ELASTICSEARCH_URL: "http://elasticsearch-client.logs:9200"
+    kibanaConfig:
+      kibana.yml: |
+        server.name: kibana
+        server.host: "0"
+        elasticsearch.hosts: [ "http://elasticsearch-master:9200" ]
+        xpack.monitoring.ui.container.elasticsearch.enabled: true
   valueFileSecrets:
   - name: "kibana-values"

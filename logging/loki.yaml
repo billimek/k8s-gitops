@@ -5,31 +5,31 @@ metadata:
   name: loki
   namespace: logs
   annotations:
-    flux.weave.works/ignore: "true"
+    flux.weave.works/ignore: "false"
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.loki: glob:master
-    flux.weave.works/tag.promtail: glob:master
+    flux.weave.works/tag.loki: glob:latest
+    flux.weave.works/tag.promtail: glob:latest
 spec:
   releaseName: loki
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: loki
-    version: 0.1.0
+    version: 0.5.0
   values:
     loki:
       replicas: 1
       deploymentStrategy: Recreate
       image:
         repository: grafana/loki
-        tag: master
+        tag: latest
         pullPolicy: Always # Always pull while in BETA
-    persistence:
-      enabled: true
-      size: 50Gi
-      storageClassName: rbd
+      persistence:
+        enabled: true
+        size: 50Gi
+        storageClassName: rbd
     promtail:
       image:
         repository: grafana/promtail
-        tag: master 
+        tag: latest 
       nameOverride: promtail-local
       deploymentStrategy: RollingUpdate

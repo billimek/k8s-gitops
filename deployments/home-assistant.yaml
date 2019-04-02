@@ -5,6 +5,7 @@ metadata:
   name: hass
   namespace: default
   annotations:
+    flux.weave.works/ignore: "false"
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~0
 spec:
@@ -12,11 +13,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
-    version: 0.5.1
+    version: 0.6.2
   values:
     image:
       repository: homeassistant/home-assistant
-      tag: 0.89.2
+      tag: 0.90.2
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
