@@ -24,7 +24,7 @@ spec:
     startupArguments:
     - --ping
     debug:
-      enabled: true
+      enabled: false
     rbac:
       enabled: true
     ssl:
