@@ -62,3 +62,46 @@ spec:
         dashboardEnabled: true
   valueFileSecrets:
   - name: "traefik-values"
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: traefik-test
+  namespace: kube-system
+  annotations:
+    flux.weave.works/ignore: "false"
+    flux.weave.works/automated: "false"
+    flux.weave.works/tag.chart-image: semver:~1
+spec:
+  releaseName: traefik-test
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: traefik-test
+    version: 1.66.0
+  values:
+    image: traefik
+    imageTag: 1.7.10
+    serviceType: LoadBalancer
+    externalTrafficPolicy: Local
+    loadBalancerIP: 10.2.0.170
+    replicas: 1
+    startupArguments:
+    - --ping
+    debug:
+      enabled: false
+    rbac:
+      enabled: true
+    ssl:
+      enabled: true
+      enforced: true
+      insecureSkipVerify: true
+      upstream: false
+    dashboard:
+      enabled: true
+      statistics:
+        recentErrors: 25
+    deployment:
+      hostPort:
+        dashboardEnabled: true
+  valueFileSecrets:
+  - name: "traefik-test-values"
