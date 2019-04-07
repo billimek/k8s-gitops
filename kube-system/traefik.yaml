@@ -30,8 +30,9 @@ spec:
       enabled: true
     ssl:
       enabled: true
-      enforced: true
+      enforced: false
       insecureSkipVerify: true
+      upstream: true
     # kvprovider:
     #   storeAcme: true
     #   consul:
