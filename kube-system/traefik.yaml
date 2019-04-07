@@ -32,14 +32,14 @@ spec:
       enabled: true
       enforced: true
       insecureSkipVerify: true
-    kvprovider:
-      storeAcme: true
-      consul:
-        endpoint: consul:8500
-        watch: true
-        prefix: traefik
+    # kvprovider:
+    #   storeAcme: true
+    #   consul:
+    #     endpoint: consul:8500
+    #     watch: true
+    #     prefix: traefik
     acme:
-      enabled: true
+      enabled: false
       staging: false
       logging: true
       domains:
