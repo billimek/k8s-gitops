@@ -13,19 +13,19 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: traefik
-    version: 1.64.0
+    version: 1.66.0
   values:
     image: traefik
-    imageTag: 1.7.9
+    imageTag: 1.7.10
     serviceType: LoadBalancer
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
-    replicas: 2
+    replicas: 1
     startupArguments:
     - --ping
     - --acme.dnschallenge.resolvers=1.1.1.1
     debug:
-      enabled: false
+      enabled: true
     rbac:
       enabled: true
     ssl:
