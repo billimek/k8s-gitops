@@ -23,7 +23,6 @@ spec:
     replicas: 1
     startupArguments:
     - --ping
-    - --acme.dnschallenge.resolvers=1.1.1.1
     debug:
       enabled: true
     rbac:
@@ -55,11 +54,11 @@ spec:
     #   persistence:
     #     enabled: false
     dashboard:
-      enabled: true
+      enabled: false
       statistics:
         recentErrors: 25
     deployment:
       hostPort:
-        dashboardEnabled: true
+        dashboardEnabled: false
   valueFileSecrets:
   - name: "traefik-values"
