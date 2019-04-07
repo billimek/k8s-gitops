@@ -25,6 +25,7 @@ kubectl create secret generic restic-secret --from-literal=RESTIC_PASSWORD="$RES
 kubectl create secret generic restic-secret --from-literal=RESTIC_PASSWORD="$RESTIC_PASSWORD" --namespace logs --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/restic-secret-logs.yaml
 kubectl create secret generic ceph-admin-secret --from-literal=auth="$EXTERNAL_CEPH_ADMIN_SECRET" --namespace kube-system --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/external-ceph-admin-secret-kube-system.yaml
 kubectl create secret generic ceph-secret --from-literal=auth="$EXTERNAL_CEPH_SECRET" --namespace kube-system --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/external-ceph-secret-kube-system.yaml
+kubectl create secret generic cloudflare-api-key --from-literal=api-key="$CF_API_KEY" --namespace cert-manager --dry-run -o json | kubeseal --format=yaml --cert=../pub-cert.pem > ../secrets/cloudflare-api-key.yaml
 
 
 
