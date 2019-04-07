@@ -23,7 +23,7 @@ spec:
     replicas: 2
     startupArguments:
     - --ping
-    - --acme.dnschallenge.resolvers=8.8.8.8
+    - --acme.dnschallenge.resolvers=1.1.1.1
     debug:
       enabled: false
     rbac:
@@ -48,6 +48,9 @@ spec:
       dnsProvider:
         name: cloudflare
       delayBeforeCheck: 120
+      resolvers:
+      - 1.1.1.1:53
+      - 8.8.8.8:53
       persistence:
         enabled: false
     dashboard:

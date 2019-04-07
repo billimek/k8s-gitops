@@ -16,3 +16,8 @@ dashboard:
   auth :
     basic:
        $TRAEFIK_AUTH
+  ingress:
+    tls:
+      - secretName: acme-crt-secret
+        hosts:
+          - t.k.$DOMAIN
