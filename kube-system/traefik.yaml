@@ -29,9 +29,9 @@ spec:
       enabled: true
     ssl:
       enabled: true
-      enforced: false
+      enforced: true
       insecureSkipVerify: true
-      upstream: true
+      upstream: false
     # kvprovider:
     #   storeAcme: true
     #   consul:
@@ -54,11 +54,11 @@ spec:
     #   persistence:
     #     enabled: false
     dashboard:
-      enabled: false
+      enabled: true
       statistics:
         recentErrors: 25
     deployment:
       hostPort:
-        dashboardEnabled: false
+        dashboardEnabled: true
   valueFileSecrets:
   - name: "traefik-values"
