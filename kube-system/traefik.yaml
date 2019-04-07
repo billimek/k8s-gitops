@@ -76,7 +76,7 @@ spec:
   releaseName: traefik-test
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
-    name: traefik-test
+    name: traefik
     version: 1.66.0
   values:
     image: traefik
