@@ -38,21 +38,21 @@ spec:
     #     endpoint: consul:8500
     #     watch: true
     #     prefix: traefik
-    acme:
-      enabled: false
-      staging: false
-      logging: true
-      domains:
-        enabled: true
-      challengeType: dns-01
-      dnsProvider:
-        name: cloudflare
-      delayBeforeCheck: 120
-      resolvers:
-      - 1.1.1.1:53
-      - 8.8.8.8:53
-      persistence:
-        enabled: false
+    # acme:
+    #   enabled: false
+    #   staging: false
+    #   logging: true
+    #   domains:
+    #     enabled: true
+    #   challengeType: dns-01
+    #   dnsProvider:
+    #     name: cloudflare
+    #   delayBeforeCheck: 120
+    #   resolvers:
+    #   - 1.1.1.1:53
+    #   - 8.8.8.8:53
+    #   persistence:
+    #     enabled: false
     dashboard:
       enabled: true
       statistics:
