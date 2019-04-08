@@ -20,7 +20,7 @@ spec:
     serviceType: LoadBalancer
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
-    replicas: 1
+    replicas: 2
     startupArguments:
     - --ping
     debug:

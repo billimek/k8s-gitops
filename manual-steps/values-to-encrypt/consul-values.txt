@@ -1,2 +1,0 @@
-uiIngress:
-  hosts: [consul.k.$DOMAIN]

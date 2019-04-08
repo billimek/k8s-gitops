@@ -123,24 +123,4 @@ kubectl delete pod -n kube-system -l name=sealed-secrets-controller
 
 ## bootstrapping traefik
 
-If wanting to restore existing certs from an old traefik/consul install do the following:
-
-In the existing cluster, make a snspshot of the current state via,
-
-```shell
-kubectl -n kube-system exec -ti consul-0 consul snapshot save traefik.snap
-kubectl -n kube-system cp consul-0:traefik.snap .
-```
-
-In the new cluster, 'restore' the snapshot via,
-
-```shell
-kubectl -n kube-system cp traefik.snap consul-0:traefik.snap
-kubectl -n kube-system exec -ti consul-0 consul snapshot restore traefik.snap
-```
-
-Next un-ignore the flux configuration in [traefik.yaml](kube-system/traefik.yaml) by setting the `flux.weave.works/ignore` annotation to false:
-
-```shell
-flux.weave.works/ignore: "false"
-```
+See the [cert-manager backup/restore documentation](https://docs.cert-manager.io/en/latest/tasks/backup-restore-crds.html) for backing-up and restoring the data when migrating.
