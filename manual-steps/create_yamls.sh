@@ -6,6 +6,10 @@ if [[ -z "$DOMAIN" ]]; then
 fi
 
 kapply() {
+  # if [[ -z "$NS" ]]; then
+  #   NS=default
+  # fi
+  # envsubst < "$@" | kubectl -n "$NS" apply -f -
   envsubst < "$@" | kubectl apply -f -
 }
 
@@ -22,3 +26,5 @@ kapply yamls/rook-dashboard-ingress.txt
 
 # loki trial on grafana.net
 kapply yamls/loki.txt
+
+kapply yamls/cert-manager-letsencrypt.txt

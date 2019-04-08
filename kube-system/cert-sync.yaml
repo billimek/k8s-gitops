@@ -15,7 +15,7 @@ rules:
   verbs: ["create", "watch"]
 - apiGroups: [""]
   resources: ["secrets"]
-  resourceNames: ["acme-test-crt-secret"]
+  resourceNames: ["acme-crt-secret"]
   verbs: ["get", "patch"]
 - apiGroups: [""]
   resources: ["namespaces"]
@@ -64,7 +64,7 @@ spec:
             while read ns; do
               if [ "$ns" != "kube-system" ]; then
                 echo "$(date '+%Y-%m-%d %H:%M:%S') namespace - $ns"
-                kubectl -n "kube-system" get secret "acme-test-crt-secret" -o yaml --export | \
+                kubectl -n "kube-system" get secret "acme-crt-secret" -o yaml --export | \
                   kubectl -n "$ns" apply -f -
               fi
             done
@@ -78,7 +78,7 @@ spec:
           set -e
           while true; do
             echo "$(date '+%Y-%m-%d %H:%M:%S') starting watch loop"
-            kubectl -n "kube-system" get secret "acme-test-crt-secret" --watch --no-headers -o "custom-columns=:metadata.name" | \
+            kubectl -n "kube-system" get secret "acme-crt-secret" --watch --no-headers -o "custom-columns=:metadata.name" | \
             while read secret; do
               export=$(kubectl -n "kube-system" get secret "$secret" -o yaml --export)
               for ns in $(kubectl get ns --field-selector="status.phase==Active" --no-headers -o "custom-columns=:metadata.name"); do

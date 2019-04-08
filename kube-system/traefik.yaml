@@ -32,27 +32,27 @@ spec:
       enforced: true
       insecureSkipVerify: true
       upstream: false
-    kvprovider:
-      storeAcme: true
-      consul:
-        endpoint: consul:8500
-        watch: true
-        prefix: traefik
-    acme:
-      enabled: false
-      staging: false
-      logging: true
-      domains:
-        enabled: true
-      challengeType: dns-01
-      dnsProvider:
-        name: cloudflare
-      delayBeforeCheck: 120
-      resolvers:
-      - 1.1.1.1:53
-      - 8.8.8.8:53
-      persistence:
-        enabled: false
+    # kvprovider:
+    #   storeAcme: true
+    #   consul:
+    #     endpoint: consul:8500
+    #     watch: true
+    #     prefix: traefik
+    # acme:
+    #   enabled: false
+    #   staging: false
+    #   logging: true
+    #   domains:
+    #     enabled: true
+    #   challengeType: dns-01
+    #   dnsProvider:
+    #     name: cloudflare
+    #   delayBeforeCheck: 120
+    #   resolvers:
+    #   - 1.1.1.1:53
+    #   - 8.8.8.8:53
+    #   persistence:
+    #     enabled: false
     dashboard:
       enabled: true
       statistics:
