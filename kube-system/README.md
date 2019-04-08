@@ -5,15 +5,14 @@
 * [cert-manager.yaml](cert-manager.yaml)
 * [cert-manager-chart.yaml](cert-manager-chart.yaml)
 * [cert-sync.yaml](cert-sync.yaml)
-* [cert-manager-letsencrypt.txt](../yamls/cert-manager-letsencrypt.txt)
+* [cert-manager-letsencrypt.txt](../manual-steps/yamls/cert-manager-letsencrypt.txt)
 
 # traefik
 
 ![](https://i.imgur.com/gwienvX.png)
 
-traefik in HA-mode (multiple replicas) leveraging consul as a KV store and leveraging cloudflair DNS for wildcard certs
+traefik in HA-mode (multiple replicas) leveraging cert-manager as the central cert store
 
-* [consul.yaml](consul.yaml)
 * [traefik.yaml](traefik.yaml)
 
 # descheduler
