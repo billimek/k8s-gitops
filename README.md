@@ -12,7 +12,7 @@ See [cluster bootstrap instructions](cluster/) for bootstrapping a kubernetes cl
 
 ### System-level configuration
 
-See [kube-system](kube-system/) for details on system-level configurations (consul/traefik, decsheduler, fluxcloud, forwardauth OAuth, heapster, dashboard, kured, metallb, sealed-secrets)
+See [kube-system](kube-system/) for details on system-level configurations (cert-manager, traefik, decsheduler, fluxcloud, forwardauth OAuth, heapster, dashboard, kured, metallb, sealed-secrets)
 
 ### Storage
 

@@ -1,4 +1,13 @@
-# consul & traefik
+# cert-manager
+
+[cert-manager](https://github.com/jetstack/cert-manager) for natively automatically obtaining and renewing LetsEncrypt certificates
+
+* [cert-manager.yaml](cert-manager.yaml)
+* [cert-manager-chart.yaml](cert-manager-chart.yaml)
+* [cert-sync.yaml](cert-sync.yaml)
+* [cert-manager-letsencrypt.txt](../yamls/cert-manager-letsencrypt.txt)
+
+# traefik
 
 ![](https://i.imgur.com/gwienvX.png)
 
