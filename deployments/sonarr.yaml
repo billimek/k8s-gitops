@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: 'amd64-2.0.0.5322-ls12'
+      tag: 'amd64-2.0.0.5321-ls52'
       pullPolicy: Always
     ingress:
       enabled: true
