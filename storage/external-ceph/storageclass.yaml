@@ -6,7 +6,7 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "true"
 provisioner: ceph.com/rbd
 parameters:
-  monitors: 10.0.7.7:6789,10.0.7.9:6789,10.0.7.14:6789
+  monitors: 10.0.10.7:6789,10.0.10.9:6789,10.0.10.14:6789
   pool: kube
   adminId: admin
   adminSecretNamespace: kube-system
