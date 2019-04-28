@@ -1,26 +1,26 @@
-apiVersion: stash.appscode.com/v1alpha1
-kind: Restic
-metadata:
-  name: stash-chronograf
-  namespace: default
-spec:
-  selector:
-    matchLabels:
-      app: chronograf-chronograf
-  fileGroups:
-  - path: /var/lib/chronograf
-    retentionPolicyName: 'keep-last-5'
-  backend:
-    local:
-      mountPath: /mnt/backup/
-      persistentVolumeClaim:
-          claimName: nfs-backup-restic-pv-10g
-    storageSecretName: restic-secret
-  schedule: '0 0 19 * * *'
-  volumeMounts:
-  - mountPath: /var/lib/chronograf
-    name: data
-  retentionPolicies:
-  - name: 'keep-last-5'
-    keepLast: 5
-    prune: true
+# apiVersion: stash.appscode.com/v1alpha1
+# kind: Restic
+# metadata:
+#   name: stash-chronograf
+#   namespace: default
+# spec:
+#   selector:
+#     matchLabels:
+#       app: chronograf-chronograf
+#   fileGroups:
+#   - path: /var/lib/chronograf
+#     retentionPolicyName: 'keep-last-5'
+#   backend:
+#     local:
+#       mountPath: /mnt/backup/
+#       persistentVolumeClaim:
+#           claimName: nfs-backup-restic-pv-10g
+#     storageSecretName: restic-secret
+#   schedule: '0 0 19 * * *'
+#   volumeMounts:
+#   - mountPath: /var/lib/chronograf
+#     name: data
+#   retentionPolicies:
+#   - name: 'keep-last-5'
+#     keepLast: 5
+#     prune: true
