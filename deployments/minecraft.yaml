@@ -23,7 +23,7 @@ spec:
         Size: 10Gi
     minecraftServer:
       eula: "TRUE"
-      version: "LATEST"
+      version: "1.14"
       type: SPIGOT
       spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
       difficulty: normal
@@ -56,7 +56,7 @@ spec:
         Size: 10Gi
     minecraftServer:
       eula: "TRUE"
-      version: "LATEST"
+      version: "1.14"
       type: SPIGOT
       spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
       difficulty: normal
