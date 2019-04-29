@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -15,12 +16,12 @@ spec:
   values:
     image:
       repository: grafana/grafana
-      tag: 6.1.4
+      tag: 6.1.6
     persistence:
       enabled: true
       storageClassName: "rbd"
       accessModes:
-        - ReadWriteOnce
+      - ReadWriteOnce
       size: 10Gi
     env:
       GF_EXPLORE_ENABLED: true
