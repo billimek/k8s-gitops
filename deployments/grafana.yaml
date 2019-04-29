@@ -5,23 +5,17 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:master
+    flux.weave.works/tag.chart-image: semver:~6
 spec:
   releaseName: grafana
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: grafana
-    version: 1.21.3
+    version: 3.3.3
   values:
     image:
       repository: grafana/grafana
-      tag: master
-    chownDataImage:
-      repository: busybox
-      tag: 1.30.0
-    securityContext:
-      runAsUser: 0
-      fsGroup: 0
+      tag: 6.1.4
     persistence:
       enabled: true
       storageClassName: "rbd"
