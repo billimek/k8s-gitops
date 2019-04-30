@@ -58,11 +58,15 @@ spec:
       dataDir:
         enabled: true
         Size: 10Gi
+    resources:
+      requests:
+        memory: 1024Mi
     minecraftServer:
       eula: "TRUE"
       version: "1.14"
       type: SPIGOT
       spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
+      jvmOpts: "-Xmx1024M -Xms1024M"
       difficulty: normal
       serviceType: LoadBalancer
       gameMode: survival
