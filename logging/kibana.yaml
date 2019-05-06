@@ -15,7 +15,7 @@ spec:
     version: 7.0.1-alpha1
   values:
     image: "docker.elastic.co/kibana/kibana"
-    imageTag: "6.7.2"
+    imageTag: "7.0.1"
     elasticsearchURL: "http://elasticsearch-master:9200"
     elasticsearchHosts: "http://elasticsearch-master:9200"
     ingress:
