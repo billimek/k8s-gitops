@@ -9,7 +9,7 @@ metadata:
     flux.weave.works/tag.alertmanager: glob:v0.15.*
     flux.weave.works/tag.configmapReload: glob:v0.2.*
     flux.weave.works/tag.nodeExporter: glob:v0.17.*
-    flux.weave.works/tag.server: glob:v2.6.*
+    flux.weave.works/tag.server: glob:v2.9.*
     flux.weave.works/tag.pushgateway: glob:v0.6.*
 spec:
   releaseName: prometheus
