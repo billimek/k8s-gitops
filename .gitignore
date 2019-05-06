@@ -18,3 +18,4 @@ auth
 master.key
 *.snap
 cluster/*cluster.yml
+*.rkestate
