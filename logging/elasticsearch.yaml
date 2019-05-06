@@ -7,16 +7,17 @@ metadata:
   annotations:
     flux.weave.works/ignore: "false"
     flux.weave.works/automated: "false"
-    flux.weave.works/tag.chart-image: semver:~6
+    flux.weave.works/tag.chart-image: semver:~7
 spec:
   releaseName: elasticsearch-master
   chart:
     repository: https://helm.elastic.co
     name: elasticsearch
-    version: 6.6.2-alpha1
+    version: 7.0.1-alpha1
   values:
     image: "docker.elastic.co/elasticsearch/elasticsearch"
-    imageTag: "6.7.0"
+    imageTag: "6.7.1"
+    esMajorVersion: 6
     clusterName: "elasticsearch"
     nodeGroup: "master"
     replicas: 3

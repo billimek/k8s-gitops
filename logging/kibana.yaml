@@ -6,16 +6,16 @@ metadata:
   namespace: logs
   annotations:
     flux.weave.works/automated: "false"
-    flux.weave.works/tag.chart-image: semver:~6
+    flux.weave.works/tag.chart-image: semver:~7
 spec:
   releaseName: kibana
   chart:
     repository: https://helm.elastic.co
     name: kibana
-    version: 6.6.2-alpha1
+    version: 7.0.1-alpha1
   values:
     image: "docker.elastic.co/kibana/kibana"
-    imageTag: "6.7.0"
+    imageTag: "6.7.2"
     elasticsearchURL: "http://elasticsearch-master:9200"
     elasticsearchHosts: "http://elasticsearch-master:9200"
     ingress:
