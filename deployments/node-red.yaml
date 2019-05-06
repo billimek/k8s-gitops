@@ -5,16 +5,16 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:0.*-v8
+    flux.weave.works/tag.chart-image: glob:0.*-v10
 spec:
   releaseName: node-red
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: node-red
-    version: 1.2.0
+    version: 1.2.1
   values:
     image:
-      tag: 0.20.2-v10
+      tag: 0.20.5-v10
     persistence:
       enabled: true
       storageClass: "rbd"
