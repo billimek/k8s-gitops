@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus
-    version: 8.4.8
+    version: 8.10.3
   values:
     alertmanager:
       image:
@@ -42,7 +42,7 @@ spec:
     server:
       image:
         repository: prom/prometheus
-        tag: v2.6.1
+        tag: v2.9.2
       ingress:
         enabled: true
         annotations:
