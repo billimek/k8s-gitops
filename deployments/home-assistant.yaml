@@ -28,7 +28,7 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "traefik"
     configurator:
-      enabled: true
+      enabled: false
       image:
         tag: 0.3.4-x86_64
       ingress:
