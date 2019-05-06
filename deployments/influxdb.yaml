@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: influxdb
-    version: 1.1.2
+    version: 1.1.4
   values:
     image:
       tag: "1.7.3-alpine"
