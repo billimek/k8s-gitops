@@ -17,6 +17,7 @@ spec:
     image:
       repository: grafana/grafana
       tag: 6.1.6
+    deploymentStrategy: Recreate
     persistence:
       enabled: true
       storageClassName: "rbd"
