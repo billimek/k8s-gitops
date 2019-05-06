@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://billimek.github.io/helm-repo/
     name: home-assistant
-    version: 0.9.0
+    version: 0.9.1
   values:
     image:
       repository: homeassistant/home-assistant
