@@ -19,39 +19,40 @@ spec:
       tag: v2.4.0
     elasticsearch:
       host: 'elasticsearch-master.logs'
-    output.conf: |-
-      <match **>
-        @id elasticsearch
-        @type elasticsearch
-        @log_level info
-        include_tag_key true
-        type_name _doc
-        host "#{ENV['OUTPUT_HOST']}"
-        port "#{ENV['OUTPUT_PORT']}"
-        scheme "#{ENV['OUTPUT_SCHEME']}"
-        ssl_version "#{ENV['OUTPUT_SSL_VERSION']}"
-        ssl_verify true
-        user "#{ENV['OUTPUT_USER']}"
-        password "#{ENV['OUTPUT_PASSWORD']}"
-        logstash_format true
-        logstash_prefix "#{ENV['LOGSTASH_PREFIX']}"
-        reconnect_on_error true
-        verify_es_version_at_startup true
-        default_elasticsearch_version 7
-        <buffer>
-          @type file
-          path /var/log/fluentd-buffers/kubernetes.system.buffer
-          flush_mode interval
-          retry_type exponential_backoff
-          flush_thread_count 2
-          flush_interval 5s
-          retry_forever
-          retry_max_interval 30
-          chunk_limit_size "#{ENV['OUTPUT_BUFFER_CHUNK_LIMIT']}"
-          queue_limit_length "#{ENV['OUTPUT_BUFFER_QUEUE_LIMIT']}"
-          overflow_action block
-        </buffer>
-      </match>
+    configMaps:
+      output.conf: |-
+        <match **>
+          @id elasticsearch
+          @type elasticsearch
+          @log_level info
+          include_tag_key true
+          type_name _doc
+          host "#{ENV['OUTPUT_HOST']}"
+          port "#{ENV['OUTPUT_PORT']}"
+          scheme "#{ENV['OUTPUT_SCHEME']}"
+          ssl_version "#{ENV['OUTPUT_SSL_VERSION']}"
+          ssl_verify true
+          user "#{ENV['OUTPUT_USER']}"
+          password "#{ENV['OUTPUT_PASSWORD']}"
+          logstash_format true
+          logstash_prefix "#{ENV['LOGSTASH_PREFIX']}"
+          reconnect_on_error true
+          verify_es_version_at_startup true
+          default_elasticsearch_version 7
+          <buffer>
+            @type file
+            path /var/log/fluentd-buffers/kubernetes.system.buffer
+            flush_mode interval
+            retry_type exponential_backoff
+            flush_thread_count 2
+            flush_interval 5s
+            retry_forever
+            retry_max_interval 30
+            chunk_limit_size "#{ENV['OUTPUT_BUFFER_CHUNK_LIMIT']}"
+            queue_limit_length "#{ENV['OUTPUT_BUFFER_QUEUE_LIMIT']}"
+            overflow_action block
+          </buffer>
+        </match>
 
 
 ---
