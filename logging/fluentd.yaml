@@ -24,7 +24,7 @@ spec:
         <match **>
           @id elasticsearch
           @type elasticsearch
-          @log_level info
+          @log_level error
           include_tag_key true
           type_name _doc
           host "#{ENV['OUTPUT_HOST']}"
