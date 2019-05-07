@@ -53,8 +53,6 @@ spec:
             overflow_action block
           </buffer>
         </match>
-
-
 ---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease

@@ -13,7 +13,78 @@ https://github.com/grafana/loki
 * [elasticsearch.yaml](elasticsearch.yaml) - elasticsearch - uses a TON of memory
 * [fluentd.yaml](fluentd.yaml) - fluentd for collecting all container logs from the kubernetes cluster
 * [kibana.yaml](kibana.yaml) - kibana log viewer UI
-* [elasticsearch-curator.yaml](elasticsearch-curator.yaml) - removes any logs older than 30 days - if you don't explicitly prune logs, elasticsearch will run out of space and go into a read-only mode and it's non-trivial to recover from
+
+## Elasticsearch index templates
+
+See [index templates](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html) for details.  It appears that it is necessary to manually create index templatess for elasticsearch in order to apply [deletion policies](https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started-index-lifecycle-management.html).
+
+This is what I have configured:
+
+for `logstash-*`:
+
+```json
+PUT _template/logstash
+{
+  "index_patterns": ["logstash-*"],
+  "settings": {
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "_source": {
+      "enabled": false
+    },
+    "properties": {
+      "host_name": {
+        "type": "keyword"
+      },
+      "@message": { "type": "text", "index": "true" },
+      "@source": { "type": "text", "index": "false" },
+      "@source_host": { "type": "text", "index": "false" },
+      "@source_path": { "type": "text", "index": "false" },
+      "@tags": { "type": "text", "index": "false" },
+      "@timestamp": { "type": "date", "index": "false" },
+      "@type": { "type": "text", "index": "false" },
+      "created_at": {
+        "type": "date",
+        "format": "EEE MMM dd HH:mm:ss Z yyyy"
+      }
+    }
+  }
+}
+```
+
+for `fluentd-syslog-*`:
+
+```json
+PUT _template/fluentd-syslog
+{
+  "index_patterns": ["fluentd-syslog-*"],
+  "settings": {
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "_source": {
+      "enabled": false
+    },
+    "properties": {
+      "host.keyword": {
+        "type": "keyword"
+      },
+      "@message": { "type": "text", "index": "true" },
+      "@source": { "type": "text", "index": "false" },
+      "@ident": { "type": "text", "index": "true" },
+      "@host": { "type": "text", "index": "true" },
+      "@pid": { "type": "text", "index": "false" },
+      "@timestamp": { "type": "date", "index": "false" },
+      "@type": { "type": "text", "index": "false" },
+      "created_at": {
+        "type": "date",
+        "format": "EEE MMM dd HH:mm:ss Z yyyy"
+      }
+    }
+  }
+}
+```
 
 # remote syslog logging
 
