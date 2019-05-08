@@ -59,30 +59,6 @@ for `fluentd-syslog-*`:
 PUT _template/fluentd-syslog
 {
   "index_patterns": ["fluentd-syslog-*"],
-  "settings": {
-    "number_of_shards": 1
-  },
-  "mappings": {
-    "_source": {
-      "enabled": false
-    },
-    "properties": {
-      "host.keyword": {
-        "type": "keyword"
-      },
-      "@message": { "type": "text", "index": "true" },
-      "@source": { "type": "text", "index": "false" },
-      "@ident": { "type": "text", "index": "true" },
-      "@host": { "type": "text", "index": "true" },
-      "@pid": { "type": "text", "index": "false" },
-      "@timestamp": { "type": "date", "index": "false" },
-      "@type": { "type": "text", "index": "false" },
-      "created_at": {
-        "type": "date",
-        "format": "EEE MMM dd HH:mm:ss Z yyyy"
-      }
-    }
-  }
 }
 ```
 
