@@ -4,9 +4,8 @@ metadata:
   name: minio
   namespace: default
   annotations:
-    # flux.weave.works/automated: "true"
-    # flux.weave.works/tag.image: glob:RELEASE..*
-    # flux.weave.works/tag.mcImage: glob:RELEASE.*
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:RELEASE..*
 spec:
   releaseName: minio
   chart:
@@ -16,7 +15,7 @@ spec:
   values:
     image:
       repository: minio/minio
-      tag: latest
+      tag: RELEASE.2019-04-09T01-22-30Z
     persistence:
       existingClaim: "nfs-data-pvc-10g"
       subPath: "minio"
