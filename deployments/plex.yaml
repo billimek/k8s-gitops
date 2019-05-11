@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: plexinc/pms-docker
-      tag: 1.15.4.993-bb4a2cb6c
+      tag: 1.15.4.994-107756f7e
     kubePlex:
       enabled: false
     ingress:
@@ -40,7 +40,7 @@ spec:
         accessMode: ReadWriteOnce
     resources:
       limits:
-       gpu.intel.com/i915: 1
+        gpu.intel.com/i915: 1
       # requests:
       #  gpu.intel.com/i915: 1
   valueFileSecrets:
