@@ -14,6 +14,7 @@ spec:
     version: 1.2.1
   values:
     image:
+      repository: nodered/node-red-docker
       tag: 0.20.5-v10
     persistence:
       enabled: true
