@@ -26,30 +26,6 @@ for `logstash-*`:
 PUT _template/logstash
 {
   "index_patterns": ["logstash-*"],
-  "settings": {
-    "number_of_shards": 1
-  },
-  "mappings": {
-    "_source": {
-      "enabled": false
-    },
-    "properties": {
-      "host_name": {
-        "type": "keyword"
-      },
-      "@message": { "type": "text", "index": "true" },
-      "@source": { "type": "text", "index": "false" },
-      "@source_host": { "type": "text", "index": "false" },
-      "@source_path": { "type": "text", "index": "false" },
-      "@tags": { "type": "text", "index": "false" },
-      "@timestamp": { "type": "date", "index": "false" },
-      "@type": { "type": "text", "index": "false" },
-      "created_at": {
-        "type": "date",
-        "format": "EEE MMM dd HH:mm:ss Z yyyy"
-      }
-    }
-  }
 }
 ```
 
