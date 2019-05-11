@@ -14,8 +14,8 @@ spec:
     version: 1.1.4
   values:
     image:
+      repo: "influxdb"
       tag: "1.7.3-alpine"
-      repo: influxdb
     service:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.151
