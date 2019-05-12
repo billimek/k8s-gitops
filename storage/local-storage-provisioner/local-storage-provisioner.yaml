@@ -19,3 +19,9 @@ spec:
       namespace: kube-system
     classes:
     - name: local-disks
+      hostDir: /mnt/local-disks
+      volumeMode: Filesystem
+      fsType: ext4
+      blockCleanerCommand:
+        - "/scripts/shred.sh"
+        - "2"
