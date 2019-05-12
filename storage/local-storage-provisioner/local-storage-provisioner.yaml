@@ -25,3 +25,4 @@ spec:
       blockCleanerCommand:
         - "/scripts/shred.sh"
         - "2"
+      storageClass: true
