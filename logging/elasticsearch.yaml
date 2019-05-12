@@ -40,6 +40,7 @@ metadata:
   annotations:
     flux.weave.works/ignore: "false"
     flux.weave.works/tag.chart-image: semver:~7
+    flux.weave.works/automated: 'true'
 spec:
   releaseName: elasticsearch-data
   chart:
