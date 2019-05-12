@@ -41,6 +41,8 @@ metadata:
     flux.weave.works/ignore: "false"
     flux.weave.works/tag.chart-image: semver:~7
     flux.weave.works/automated: 'true'
+    flux.weave.works/locked_user: Jeff Billimek <jeff@billimek.com>
+    flux.weave.works/locked: 'true'
 spec:
   releaseName: elasticsearch-data
   chart:
