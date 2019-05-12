@@ -16,7 +16,7 @@ See [kube-system](kube-system/) for details on system-level configurations (cert
 
 ### Storage
 
-See [storage](storage/) for details on storage type services (minio, nfs-client, external NFS mounts, external ceph, stash)
+See [storage](storage/) for details on storage type services (local storage provider, minio, nfs-client, external NFS mounts, external ceph, stash)
 
 ### Deployments
 

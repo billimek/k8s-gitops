@@ -18,14 +18,44 @@ https://github.com/grafana/loki
 
 See [index templates](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html) for details.  It appears that it is necessary to manually create index templatess for elasticsearch in order to apply [deletion policies](https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started-index-lifecycle-management.html).
 
-This is what I have configured:
+This is what I have configured for elasticsearch:
+
+### New `delete-after-30-days` ILM policy
+
+```json
+PUT _ilm/policy/delete-after-30d
+{
+  "delete-after-30d" : {
+    "policy" : {
+      "phases" : {
+        "hot" : {
+          "min_age" : "0ms",
+          "actions" : {
+            "set_priority" : {
+              "priority" : 100
+            }
+          }
+        },
+        "delete" : {
+          "min_age" : "30d",
+          "actions" : {
+            "delete" : { }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Index patterns
 
 for `logstash-*`:
 
 ```json
 PUT _template/logstash
 {
-  "index_patterns": ["logstash-*"],
+  "index_patterns": ["logstash-*"]
 }
 ```
 
@@ -34,9 +64,11 @@ for `fluentd-syslog-*`:
 ```json
 PUT _template/fluentd-syslog
 {
-  "index_patterns": ["fluentd-syslog-*"],
+  "index_patterns": ["fluentd-syslog-*"]
 }
 ```
+
+... After creating the index patterns, it is necessary to 'apply' the index patterns to the newly-created ILM deletion policy so that all _new_ indexes created (with the above patterns) will have the policy automatically associated.
 
 # remote syslog logging
 

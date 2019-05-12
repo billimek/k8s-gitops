@@ -31,38 +31,3 @@ spec:
         requests:
           storage: 60Gi
     updateStrategy: RollingUpdate
----
-apiVersion: flux.weave.works/v1beta1
-kind: HelmRelease
-metadata:
-  name: elasticsearch-data
-  namespace: logs
-  annotations:
-    flux.weave.works/ignore: "true"
-    flux.weave.works/tag.chart-image: semver:~7
-    flux.weave.works/automated: 'true'
-    flux.weave.works/locked_user: Jeff Billimek <jeff@billimek.com>
-    flux.weave.works/locked: 'false'
-spec:
-  releaseName: elasticsearch-data
-  chart:
-    repository: https://helm.elastic.co
-    name: elasticsearch
-    version: 7.0.1-alpha1
-  values:
-    image: "docker.elastic.co/elasticsearch/elasticsearch"
-    imageTag: "7.0.1"
-    esMajorVersion: 7
-    clusterName: "elasticsearch"
-    nodeGroup: "data"
-    replicas: 3
-    roles:
-      master: "false"
-      ingest: "false"
-      data: "true"
-    volumeClaimTemplate:
-      storageClassName: "local-disks"
-      resources:
-        requests:
-          storage: 60Gi
-    updateStrategy: RollingUpdate
