@@ -1,0 +1,21 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: local-storage-provisioner
+  namespace: kube-system
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.daemonset: semver:~v2
+spec:
+  releaseName: local-storage-provisioner
+  chart:
+    repository: https://billimek.github.io/helm-repo/
+    name: provisioner
+    version: 2.3.2
+  values:
+    daemonset:
+      image: quay.io/external_storage/local-volume-provisioner:v2.3.2
+    common:
+      namespace: kube-system
+    classes:
+    - name: local-disks
