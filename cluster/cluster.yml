@@ -36,6 +36,7 @@ services:
       read-only-port: 10255
     extra_binds:
     - "/lib/modules:/lib/modules"
+    - "/mnt:/mnt:rshared"
 cluster_name: k8s
 ingress:
     provider: none
