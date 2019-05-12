@@ -26,7 +26,7 @@ spec:
       ingest: "true"
       data: "true"
     volumeClaimTemplate:
-      storageClassName: "rbd"
+      storageClassName: "local-disks"
       resources:
         requests:
           storage: 60Gi
