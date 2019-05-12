@@ -1,0 +1,1 @@
+{"jobID":"1e1b13c6-a884-709b-4c20-f05d6c7f4371","spec":{"type":"policy","cause":{"Message":"","User":"Jeff Billimek \u003cjeff@billimek.com\u003e"},"spec":{"logs:helmrelease/elasticsearch-data":{"add":{"automated":"true"},"remove":{}}}},"result":null}
