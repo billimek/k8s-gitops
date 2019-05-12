@@ -26,4 +26,4 @@ spec:
         - "/scripts/shred.sh"
         - "2"
       storageClass:
-        reclaimPolicy: Retain
+        reclaimPolicy: Delete
