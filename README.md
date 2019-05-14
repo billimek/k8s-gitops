@@ -6,7 +6,7 @@ Leverage [WeaveWorks Flux](https://github.com/weaveworks/flux) to automate clust
 
 ## Setup
 
-See [cluster bootstrap instructions](cluster/) for bootstrapping a kubernetes cluster for using this repo
+See [cluster bootstrap instructions](setup/cluster/) for bootstrapping a kubernetes cluster for using this repo
 
 ## Deep-Dive
 
@@ -30,7 +30,7 @@ See [logging](logging/) for details on logging solutions (loki, EFK Stack (elast
 
 ### Manual actions
 
-See [manual-steps](manual-steps/) for instructions things that cannot be handled by flux
+See [manual-steps](setup/manual-steps/) for instructions things that cannot be handled by flux
 
 ### New namespaces
 
