@@ -2,7 +2,7 @@ apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
   name: influxdb
-  namespace: default
+  namespace: monitoring
   annotations:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+-alpine)$'

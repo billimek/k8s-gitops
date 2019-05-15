@@ -44,8 +44,8 @@ NS=monitoring kseal values-to-encrypt/prometheus-operator-values.txt > ../../sec
 NS=monitoring kseal values-to-encrypt/chronograf-values.txt > ../../secrets/chronograf-values.yaml
 NS=monitoring kseal values-to-encrypt/comcast-values.txt > ../../secrets/comcast-values.yaml
 NS=monitoring kseal values-to-encrypt/uptimerobot-values.txt > ../../secrets/uptimerobot-values.yaml
+NS=monitoring kseal values-to-encrypt/influxdb-values.txt > ../../secrets/influxdb-values.yaml
 
-kseal values-to-encrypt/influxdb-values.txt > ../../secrets/influxdb-values.yaml
 kseal values-to-encrypt/prometheus-values.txt > ../../secrets/prometheus-values.yaml
 kseal values-to-encrypt/hubot-values.txt > ../../secrets/hubot-values.yaml
 kseal values-to-encrypt/grafana-values.txt > ../../secrets/grafana-values.yaml
