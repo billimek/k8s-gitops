@@ -29,12 +29,12 @@ spec:
           ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
           ingress.kubernetes.io/auth-trust-headers: "true"
       storage:
-        volumeClaimTemplate:
-          spec:
-            storageClassName: "rbd"
-            resources:
-              requests:
-                storagesize: 30Gi
+      volumeClaimTemplate:
+        spec:
+          storageClassName: rbd
+          resources:
+            requests:
+              storage: 30Gi
     grafana:
       image:
         repository: grafana/grafana
@@ -118,12 +118,12 @@ spec:
           repository: quay.io/prometheus/prometheus
           tag: v2.9.1
         storageSpec:
-          volumeClaimTemplate:
-            spec:
-              storageClassName: "rbd"
-              resources:
-                requests:
-                  storagesize: 30Gi
+         volumeClaimTemplate:
+           spec:
+             storageClassName: rbd
+             resources:
+               requests:
+                 storage: 50Gi
         additionalScrapeConfigs:
         - job_name: 'netdata-scrape'
           metrics_path: '/api/v1/allmetrics'
