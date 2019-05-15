@@ -6,7 +6,7 @@ prometheus:
     hosts: [prom-server.$DOMAIN]
 grafana:
   ingress:
-    hosts: [graf.$DOMAIN]
+    hosts: [grafana.$DOMAIN]
   adminPassword: "$GRAFANA_PASSWORD"
   grafana.ini:
     server:

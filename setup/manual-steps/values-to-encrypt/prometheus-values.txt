@@ -1,6 +1,0 @@
-alertmanager:
-  ingress:
-    hosts: [alert.prom.$DOMAIN]
-server:
-  ingress:
-    hosts: [prom.$DOMAIN]
