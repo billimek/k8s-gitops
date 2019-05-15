@@ -55,29 +55,36 @@ spec:
       additionalDataSources:
       - name: loki
         type: loki
+        access: proxy
         url: http://loki.logs.svc.cluster.local:3100
       - name: influxdb
         type: influxdb
+        access: proxy
         url: http://influxdb:8086
         database: telegraf
       - name: cable_modem_stats
         type: influxdb
+        access: proxy
         url: http://influxdb:8086
         database: cable_modem_stats
       - name: comcast
         type: influxdb
+        access: proxy
         url: http://influxdb:8086
         database: comcast
       - name: home_assistant
         type: influxdb
+        access: proxy
         url: http://influxdb:8086
         database: home_assistant
       - name: speedtests
         type: influxdb
+        access: proxy
         url: http://influxdb:8086
         database: speedtests
       - name: uptimerobot
         type: influxdb
+        access: proxy
         url: http://influxdb:8086
         database: uptimerobot
       grafana.ini:
