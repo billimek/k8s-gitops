@@ -2,26 +2,27 @@
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
-  name: speedtest
-  namespace: default
+  name: comcast
+  namespace: monitoring
   annotations:
     # flux.weave.works/automated: "true"
     # flux.weave.works/tag.chart-image: glob:latest
 spec:
-  releaseName: speedtest
+  releaseName: comcast
   chart:
     repository: https://billimek.github.io/helm-repo/
-    name: speedtest
-    version: 1.1.0
+    name: comcast
+    version: 1.0.0
   values:
     image:
-      repository: atribe/speedtest-for-influxdb-and-grafana
+      repository: billimek/comcastusage-for-influxdb
       tag: latest
-      pullPolicy: Always
     debug: true
     config:
-        delay: 7200
+        delay: 3600
         influxdb:
             host: influxdb
             port: 8086
-            database: speedtests
+            database: comcast
+  valueFileSecrets:
+  - name: "comcast-values"

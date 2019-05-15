@@ -3,7 +3,7 @@ apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
   name: chronograf
-  namespace: default
+  namespace: monitoring
   annotations:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: glob:1.*-alpine

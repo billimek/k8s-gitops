@@ -3,7 +3,7 @@ apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
   name: prometheus-operator
-  namespace: default
+  namespace: monitoring
   annotations:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.alertmanager.alertmanagerSpec: semver:~0
@@ -48,6 +48,46 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "traefik"
+      additionalDataSources:
+      # - name: prometheus-sample
+      #   access: proxy
+      #   basicAuth: true
+      #   basicAuthPassword: pass
+      #   basicAuthUser: daco
+      #   editable: false
+      #   jsonData:
+      #       tlsSkipVerify: true
+      #   orgId: 1
+      #   type: prometheus
+      #   url: https://prometheus.svc:9090
+      #   version: 1
+      - name: loki
+        type: loki
+        url: http://loki.logs.svc.cluster.local:3100
+      - name: influxdb
+        type: influxdb
+        url: http://influxdb:8086
+        database: telegraf
+      - name: cable_modem_stats
+        type: influxdb
+        url: http://influxdb:8086
+        database: cable_modem_stats
+      - name: comcast
+        type: influxdb
+        url: http://influxdb:8086
+        database: comcast
+      - name: home_assistant
+        type: influxdb
+        url: http://influxdb:8086
+        database: home_assistant
+      - name: speedtests
+        type: influxdb
+        url: http://influxdb:8086
+        database: speedtests
+      - name: uptimerobot
+        type: influxdb
+        url: http://influxdb:8086
+        database: uptimerobot
       grafana.ini:
         paths:
           data: /var/lib/grafana/data
@@ -64,6 +104,15 @@ spec:
       enabled: false
     kubeDns:
       enabled: true
+    kubeEtcd:
+      enabled: true
+      endpoints:
+      - 10.2.0.10
+      - 10.2.0.11
+      - 10.2.0.12
+      service:
+        port: 2379
+        targetPort: 2379
     prometheus:
       ingress:
         enabled: true
