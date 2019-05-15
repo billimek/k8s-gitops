@@ -28,10 +28,11 @@ spec:
           ingress.kubernetes.io/auth-type: "forward"
           ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
           ingress.kubernetes.io/auth-trust-headers: "true"
-      storage:
+      storage: {}
         volumeClaimTemplate:
           spec:
             storageClassName: rbd
+            accessModes: ["ReadWriteOnce"]
             resources:
               requests:
                 storage: 30Gi
