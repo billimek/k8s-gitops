@@ -10,7 +10,7 @@ grafana:
   adminPassword: "$GRAFANA_PASSWORD"
   grafana.ini:
     server:
-      root_url: https://graf.${DOMAIN}
+      root_url: https://grafana.${DOMAIN}
     auth.generic_oauth:
       enabled: true
       allow_sign_up: true
