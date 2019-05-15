@@ -6,8 +6,10 @@ metadata:
   namespace: monitoring
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.alertmanager.alertmanagerSpec: semver:~0
-    flux.weave.works/tag.prometheus.prometheusSpec: semver:~2
+    # flux.weave.works/tag.alertmanager.alertmanagerSpec: semver:~0
+    flux.weave.works/tag.alertmanager.alertmanagerSpec: glob:v0.16.*
+    flux.weave.works/tag.prometheus.prometheusSpec: glob:v2.*.*
+    flux.weave.works/tag.prometheusOperator: glob:v0.*.*    
     flux.weave.works/tag.grafana: semver:~6
 spec:
   releaseName: prometheus-operator
