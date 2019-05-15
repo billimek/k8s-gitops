@@ -11,9 +11,9 @@ metadata:
 spec:
   releaseName: hass
   chart:
-    repository: https://billimek.github.io/helm-repo/
+    repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
-    version: 0.9.2
+    version: 0.9.0
   values:
     image:
       repository: homeassistant/home-assistant
@@ -27,17 +27,6 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
-    configurator:
-      enabled: false
-      image:
-        tag: 0.3.4-x86_64
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: "traefik"
-          ingress.kubernetes.io/auth-type: "forward"
-          ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
-          ingress.kubernetes.io/auth-trust-headers: "true"
     vscode:
       enabled: true
       ingress:
@@ -63,7 +52,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: mysql
-    version: 0.12.0
+    version: 1.0.0
   values:
     image: "mysql"
     imageTag: "5.7.25"
