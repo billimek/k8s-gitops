@@ -29,12 +29,12 @@ spec:
           ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
           ingress.kubernetes.io/auth-trust-headers: "true"
       storage:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: rbd
-          resources:
-            requests:
-              storage: 30Gi
+        volumeClaimTemplate:
+          spec:
+            storageClassName: rbd
+            resources:
+              requests:
+                storage: 30Gi
     grafana:
       image:
         repository: grafana/grafana
