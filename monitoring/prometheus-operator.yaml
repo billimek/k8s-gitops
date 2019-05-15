@@ -28,9 +28,13 @@ spec:
           ingress.kubernetes.io/auth-type: "forward"
           ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
           ingress.kubernetes.io/auth-trust-headers: "true"
-      persistentVolume:
-        enabled: true
-        storageClass: "rbd"
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "rbd"
+            resources:
+              requests:
+                storagesize: 30Gi
     grafana:
       image:
         repository: grafana/grafana
@@ -49,18 +53,6 @@ spec:
         annotations:
           kubernetes.io/ingress.class: "traefik"
       additionalDataSources:
-      # - name: prometheus-sample
-      #   access: proxy
-      #   basicAuth: true
-      #   basicAuthPassword: pass
-      #   basicAuthUser: daco
-      #   editable: false
-      #   jsonData:
-      #       tlsSkipVerify: true
-      #   orgId: 1
-      #   type: prometheus
-      #   url: https://prometheus.svc:9090
-      #   version: 1
       - name: loki
         type: loki
         url: http://loki.logs.svc.cluster.local:3100
@@ -121,14 +113,17 @@ spec:
           ingress.kubernetes.io/auth-type: "forward"
           ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
           ingress.kubernetes.io/auth-trust-headers: "true"
-      persistentVolume:
-        enabled: true
-        storageClass: "rbd"
-        size: 30Gi
       prometheusSpec:
         image:
           repository: quay.io/prometheus/prometheus
           tag: v2.9.1
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: "rbd"
+              resources:
+                requests:
+                  storagesize: 30Gi
         additionalScrapeConfigs:
         - job_name: 'netdata-scrape'
           metrics_path: '/api/v1/allmetrics'
