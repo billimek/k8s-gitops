@@ -10,9 +10,9 @@ metadata:
 spec:
   releaseName: plex
   chart:
-    repository: https://billimek.github.io/helm-repo/
+    repository: https://billimek.com/billimek-charts/
     name: kube-plex
-    version: 0.2.4
+    version: 0.2.3
   values:
     image:
       repository: plexinc/pms-docker

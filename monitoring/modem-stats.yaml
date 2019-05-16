@@ -10,9 +10,9 @@ metadata:
 spec:
   releaseName: modem-stats
   chart:
-    repository: https://billimek.github.io/helm-repo/
+    repository: https://billimek.com/billimek-charts/
     name: modem-stats
-    version: 1.0.0
+    version: 1.0.3
   values:
     image:
       repository: billimek/sb6183-for-influxdb

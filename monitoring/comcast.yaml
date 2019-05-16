@@ -10,9 +10,9 @@ metadata:
 spec:
   releaseName: comcast
   chart:
-    repository: https://billimek.github.io/helm-repo/
+    repository: https://billimek.com/billimek-charts/
     name: comcast
-    version: 1.0.0
+    version: 1.0.1
   values:
     image:
       repository: billimek/comcastusage-for-influxdb
