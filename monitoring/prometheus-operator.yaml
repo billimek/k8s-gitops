@@ -126,6 +126,7 @@ spec:
         image:
           repository: quay.io/prometheus/prometheus
           tag: v2.9.1
+        retention: 730d
         storageSpec:
          volumeClaimTemplate:
            spec:
