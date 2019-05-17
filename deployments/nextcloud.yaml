@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: nextcloud
-      tag: 15.0.7-apache
+      tag: 15.0.8-apache
     persistence:
       enabled: true
       existingClaim: nfs-data-nextcloud-pvc-10g
