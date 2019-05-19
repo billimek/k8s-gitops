@@ -17,5 +17,5 @@
 auth
 master.key
 *.snap
-cluster/*cluster.yml
+setup/cluster/*cluster.yml
 *.rkestate
