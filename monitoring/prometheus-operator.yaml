@@ -10,7 +10,7 @@ metadata:
     # flux.weave.works/tag.alertmanager.alertmanagerSpec: semver:~0
     flux.weave.works/tag.alertmanager.alertmanagerSpec: glob:v0.16.*
     flux.weave.works/tag.prometheus.prometheusSpec: glob:v2.*.*
-    flux.weave.works/tag.prometheusOperator: glob:v0.*.*    
+    flux.weave.works/tag.prometheusOperator: glob:v0.*.*
 spec:
   releaseName: prometheus-operator
   chart:
@@ -40,7 +40,7 @@ spec:
     grafana:
       image:
         repository: grafana/grafana
-        tag: 6.1.6
+        tag: 6.2.0
       deploymentStrategy: Recreate
       persistence:
         enabled: true
@@ -128,12 +128,12 @@ spec:
           tag: v2.9.1
         retention: 730d
         storageSpec:
-         volumeClaimTemplate:
-           spec:
-             storageClassName: rbd
-             resources:
-               requests:
-                 storage: 50Gi
+          volumeClaimTemplate:
+            spec:
+              storageClassName: rbd
+              resources:
+                requests:
+                  storage: 50Gi
         additionalScrapeConfigs:
         - job_name: 'netdata-scrape'
           metrics_path: '/api/v1/allmetrics'
