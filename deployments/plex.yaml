@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: plexinc/pms-docker
-      tag: 1.15.4.994-107756f7e
+      tag: 1.15.6.1079-78232c603
     kubePlex:
       enabled: false
     ingress:
