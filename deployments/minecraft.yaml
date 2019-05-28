@@ -26,7 +26,7 @@ spec:
     #     memory: 1024Mi
     minecraftServer:
       eula: "TRUE"
-      version: "1.14.1"
+      version: "1.14.2"
       type: PAPER
       # spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
       paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.1/latest/download
@@ -64,7 +64,7 @@ spec:
         memory: 1024Mi
     minecraftServer:
       eula: "TRUE"
-      version: "1.14.1"
+      version: "1.14.2"
       type: PAPER
       # spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
       paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.1/latest/download
