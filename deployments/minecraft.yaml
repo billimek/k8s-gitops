@@ -29,7 +29,7 @@ spec:
       version: "1.14.2"
       type: PAPER
       # spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
-      paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.1/latest/download
+      paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.2/latest/download
       # jvmOpts: "-Xmx1024M -Xms1024M"
       difficulty: normal
       serviceType: LoadBalancer
@@ -67,7 +67,7 @@ spec:
       version: "1.14.2"
       type: PAPER
       # spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
-      paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.1/latest/download
+      paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.2/latest/download
       jvmOpts: "-Xmx1024M -Xms1024M"
       difficulty: normal
       serviceType: LoadBalancer
