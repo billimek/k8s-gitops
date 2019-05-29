@@ -32,5 +32,36 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "traefik"
     rabbitmqErlangCookie: "9uVNsf2plnpyslPjqUVaDmGTUml2wJlb"
+    definitions:
+      permissions: |-
+        {
+          "user": "mqtt",
+          "vhost": "/",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        }
+      queues: |-
+    #    {
+    #       "name":"myName",
+    #       "vhost":"/rabbit",
+    #       "durable":true,
+    #       "auto_delete":false,
+    #       "arguments":{}
+    #    }
+    ## Sets the policies in definitions.json. This can be used to control the high
+    ## availability of queues by mirroring them to multiple nodes.
+    ## Ref: https://www.rabbitmq.com/ha.html
+      policies: |-
+        {
+          "name": "ha-all",
+          "pattern": ".*",
+          "vhost": "/",
+          "definition": {
+            "ha-mode": "all",
+            "ha-sync-mode": "automatic",
+            "ha-sync-batch-size": 1
+          }
+        }
   valueFileSecrets:
   - name: "rabbitmq-values"
