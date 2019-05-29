@@ -12,9 +12,9 @@ metadata:
 spec:
   releaseName: loki
   chart:
-    repository: https://billimek.github.io/helm-repo/
-    name: loki
-    version: 0.5.0
+    repository: https://grafana.github.io/loki/charts
+    name: loki-stack
+    version: 0.9.5
   values:
     loki:
       replicas: 1
