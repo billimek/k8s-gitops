@@ -68,7 +68,7 @@ spec:
       type: PAPER
       # spigotDownloadUrl: https://cdn.getbukkit.org/spigot/spigot-1.14.jar
       paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.2/latest/download
-      jvmOpts: "-Xmx1024M -Xms1024M"
+      jvmOpts: "-Xmx1024M -Xms1024M  -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs"
       difficulty: normal
       serviceType: LoadBalancer
       gameMode: survival
