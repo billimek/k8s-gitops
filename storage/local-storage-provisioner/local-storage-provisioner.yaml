@@ -9,7 +9,7 @@ metadata:
 spec:
   releaseName: local-storage-provisioner
   chart:
-    repository: https://billimek.github.io/helm-repo/
+    repository: https://billimek.com/billimek-charts/
     name: provisioner
     version: 2.3.2
   values:
