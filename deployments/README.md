@@ -1,29 +1,3 @@
-# chronograf
-
-Dashboard for influxdb
-
-![](https://i.imgur.com/PPbhf5O.png)
-
-* [chronograf.yaml](chronograf.yaml)
-
-# comcast
-
-Collect comcast usage data for reporting
-
-![](https://i.imgur.com/mSBIWuu.png)
-
-Based on this [custom helm chart](https://github.com/billimek/billimek-charts/tree/master/comcast)
-
-* [comcast.yaml](comcast.yaml)
-
-# grafana
-
-Metrics and observability dashboard software
-
-![](https://i.imgur.com/hTo49Uo.png)
-
-* [grafana.yaml](grafana.yaml)
-
 # home-assistant
 
 
@@ -39,25 +13,11 @@ A bot for slack
 
 * [hubot.yaml](hubot.yaml)
 
-# influxdb
-
-Metrics collection database
-
-* [influxdb.yaml](influxdb.yaml)
-
 # minecraft
 
 ![](https://i.imgur.com/zBha0RP.png)
 
 * [minecraft.yaml](minecraft.yaml)
-
-# modem-stats
-
-![](https://i.imgur.com/muHDysr.png)
-
-Collect cable modem statistics for reporting
-
-* [modem-stats.yaml](modem-stats.yaml)
 
 # node-red
 
@@ -80,14 +40,6 @@ Usenet download client
 ![](https://i.imgur.com/nDyS9OA.jpg)
 
 * [plex.yaml](plex.yaml)
-
-# prometheus
-
-![](https://i.imgur.com/xFOepF3.png)
-
-Metrics and observability collection and dashboard software
-
-* [prometheus.yaml](prometheus.yaml)
 
 # rabbitmq
 
@@ -122,14 +74,6 @@ tv show downloader
 
 * [sonarr.yaml](sonarr.yaml)
 
-# speedtest
-
-![](https://i.imgur.com/avohPk6.png)
-
-ISP speed test results collector
-
-* [speedtest.yaml](speedtest.yaml)
-
 # unifi
 
 ![](https://i.imgur.com/uakfLZo.png)
@@ -137,9 +81,3 @@ ISP speed test results collector
 ubiquiti unifi controller for wireless access points
 
 * [unifi.yaml](unifi.yaml)
-
-# uptimerobot
-
-Based on this [custom helm chart](https://github.com/billimek/billimek-charts/tree/master/uptimerobot)
-
-* [uptimerobot.yaml](uptimerobot.yaml)

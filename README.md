@@ -20,7 +20,11 @@ See [storage](storage/) for details on storage type services (local storage prov
 
 ### Deployments
 
-See [deployments](deployments/) for details on regular workloads (chronograf, comcast usage, grafana, home-assistant, hubot, influxdb, minecraft, cable modem stats, node-red, nzbget, plex, prometheus, rabbitmq, radarr, rtorrent-flood, sonarr, speedtest results, unifi, uptimerobot agent)
+See [deployments](deployments/) for details on regular workloads (home-assistant, hubot, minecraft, node-red, nzbget, plex, rabbitmq, radarr, rtorrent-flood, sonarr, unifi)
+
+### Monitoring
+
+See [monitoring](monitoring/) for details on regular workloads (chronograf, comcast usage, grafana, influxdb, cable modem stats, prometheus-operator, speedtest results, uptimerobot agent)
 
 ### Logging
 
