@@ -19,6 +19,8 @@ nodes:
     hostname_override: k8s-2
     user: ubuntu
     role: [worker]
+    labels:
+      app: intel-gpu-plugin
   - address: 10.2.0.15
     hostname_override: k8s-3
     user: ubuntu
@@ -37,6 +39,9 @@ services:
     extra_binds:
     - "/lib/modules:/lib/modules"
     - "/mnt:/mnt:rshared"
+#    etcd:
+#      extra_args:
+#        listen-metrics-urls: http://0.0.0.0:2379
 cluster_name: k8s
 ingress:
     provider: none

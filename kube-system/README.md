@@ -41,6 +41,12 @@ Metrics that actually works for kubernetes-dashboard. This may stop working in k
 
 * [heapster.yaml](heapster.yaml)
 
+# Intel GPU Plugin
+
+Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/tree/master/cmd/gpu_plugin) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via the `gpu.intel.com/i915` node resource
+
+* [intel-gpu_plugin.yaml](intel-gpu_plugin.yaml)
+
 # kubernetes dashboard
 
 ![](https://i.imgur.com/Jl1blwE.png)

@@ -12,7 +12,7 @@ See [cluster bootstrap instructions](setup/cluster/) for bootstrapping a kuberne
 
 ### System-level configuration
 
-See [kube-system](kube-system/) for details on system-level configurations (cert-manager, traefik, decsheduler, fluxcloud, forwardauth OAuth, heapster, dashboard, kured, metallb, sealed-secrets)
+See [kube-system](kube-system/) for details on system-level configurations (cert-manager, traefik, decsheduler, fluxcloud, forwardauth OAuth, heapster, intel gpu plugin, dashboard, kured, metallb, sealed-secrets)
 
 ### Storage
 
