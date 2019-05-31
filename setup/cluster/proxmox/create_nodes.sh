@@ -46,6 +46,7 @@ qm set 204 --sshkey ~/.ssh/id_k8s_nodes.pub
 qm set 204 --ipconfig0 ip=10.2.0.14/24,gw=10.2.0.1
 qm set 204 --ipconfig1 ip=10.0.10.54/24
 qm set 204 --memory 8192
+qm set 204 -hostpci0 00:02.0,mdev=i915-GVTg_V5_8
 qm migrate 204 proxmox-b
 
 qm clone "$TEMPLATE" 205 --name k8s-3
