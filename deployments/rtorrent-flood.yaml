@@ -15,8 +15,8 @@ spec:
     version: 2.0.8
   values:
     image:
-      repository: billimek/rtorrent-flood
-      tag: latest
+      repository: wonderfall/rtorrent-flood
+      tag: 0.9.7-0.13.7
     uid: 1001
     gid: 1001
     guiService:
