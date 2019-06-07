@@ -6,26 +6,33 @@ metadata:
   namespace: logs
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:v2.*
+    flux.weave.works/tag.chart-image: glob:v2.*.*
 spec:
   releaseName: fluentd
   chart:
     repository: https://kiwigrid.github.io/
     name: fluentd-elasticsearch
-    version: 2.6.0
+    version: 3.0.1
   values:
     image:
       repository: gcr.io/google-containers/fluentd-elasticsearch
-      tag: v2.4.0
+      tag: v2.5.2
     elasticsearch:
       host: 'elasticsearch-master.logs'
     tolerations:
-      - effect: NoExecute
-        key: "node-role.kubernetes.io/etcd"
+      - key: node-role.kubernetes.io/etcd
         value: "true"
-      - effect: NoSchedule
-        key: "node-role.kubernetes.io/controlplane"
-        value: "true"
+        effect: NoSchedule
+			- key: node-role.kubernetes.io/controlplane
+				value: "true"
+				effect: NoSchedule
+#    tolerations:
+#      - effect: NoExecute
+#        key: "node-role.kubernetes.io/etcd"
+#        value: "true"
+#      - effect: NoSchedule
+#        key: "node-role.kubernetes.io/controlplane"
+#        value: "true"
     configMaps:
       output.conf: |-
         <match **>
