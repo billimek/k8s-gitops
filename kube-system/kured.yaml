@@ -16,5 +16,10 @@ spec:
     image:
       repository: quay.io/weaveworks/kured
       tag: 1.1.0
+    tolerations:
+      - key: "node-role.kubernetes.io/etcd"
+        operator: "Exists"
+      - key: "node-role.kubernetes.io/controlplane"
+        operator: "Exists"
   valueFileSecrets:
   - name: "kured-values"
