@@ -20,10 +20,12 @@ spec:
     elasticsearch:
       host: 'elasticsearch-master.logs'
     tolerations:
-      - key: node-role.kubernetes.io/controlplane
-        effect: NoSchedule
-      - key: node-role.kubernetes.io/etcd
-        effect: NoSchedule
+      - effect: NoExecute
+        key: "node-role.kubernetes.io/etcd"
+        value: "true"
+      - effect: NoSchedule
+        key: "node-role.kubernetes.io/controlplane"
+        value: "true"
     configMaps:
       output.conf: |-
         <match **>
