@@ -19,6 +19,11 @@ spec:
       tag: v2.4.0
     elasticsearch:
       host: 'elasticsearch-master.logs'
+    tolerations:
+      - key: node-role.kubernetes.io/controlplane
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/etcd
+        effect: NoSchedule
     configMaps:
       output.conf: |-
         <match **>
@@ -147,3 +152,4 @@ spec:
             overflow_action block
           </buffer>
         </match>
+
