@@ -114,6 +114,12 @@ spec:
       service:
         port: 2379
         targetPort: 2379
+    prometheus-node-exporter:
+      tolerations:
+        - key: "node-role.kubernetes.io/etcd"
+          operator: "Exists"
+        - key: "node-role.kubernetes.io/controlplane"
+          operator: "Exists"
     prometheus:
       ingress:
         enabled: true
