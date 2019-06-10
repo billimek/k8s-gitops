@@ -11,11 +11,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: kured
-    version: 1.1.1
+    version: 1.2.0
   values:
     image:
-      repository: quay.io/weaveworks/kured
-      tag: 1.1.0
+      repository: weaveworks/kured
+      tag: 1.2.0
     tolerations:
       - key: "node-role.kubernetes.io/etcd"
         operator: "Exists"
