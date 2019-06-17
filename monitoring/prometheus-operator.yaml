@@ -40,7 +40,7 @@ spec:
     grafana:
       image:
         repository: grafana/grafana
-        tag: 6.2.2
+        tag: 6.2.3
       deploymentStrategy: Recreate
       persistence:
         enabled: true
@@ -116,10 +116,10 @@ spec:
         targetPort: 2379
     prometheus-node-exporter:
       tolerations:
-        - key: "node-role.kubernetes.io/etcd"
-          operator: "Exists"
-        - key: "node-role.kubernetes.io/controlplane"
-          operator: "Exists"
+      - key: "node-role.kubernetes.io/etcd"
+        operator: "Exists"
+      - key: "node-role.kubernetes.io/controlplane"
+        operator: "Exists"
     prometheus:
       ingress:
         enabled: true
