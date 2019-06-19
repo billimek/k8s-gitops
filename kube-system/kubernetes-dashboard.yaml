@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: kubernetes-dashboard
-    version: 1.5.0
+    version: 1.5.2
   values:
     image:
       repository: k8s.gcr.io/kubernetes-dashboard-amd64

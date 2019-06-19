@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: nfs-client-provisioner
-    version: 1.2.5
+    version: 1.2.6
   values:
     image:
       repository: quay.io/external_storage/nfs-client-provisioner

@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
-    version: 5.12.2
+    version: 5.12.3
   values:
     alertmanager:
       alertmanagerSpec:

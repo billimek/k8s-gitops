@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minecraft
-    version: 1.0.2
+    version: 1.0.3
   values:
     image: itzg/minecraft-server
     imageTag: latest
@@ -51,7 +51,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minecraft
-    version: 1.0.2
+    version: 1.0.3
   values:
     image: itzg/minecraft-server
     imageTag: latest

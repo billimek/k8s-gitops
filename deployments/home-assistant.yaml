@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
-    version: 0.9.2
+    version: 0.9.3
   values:
     image:
       repository: homeassistant/home-assistant
@@ -52,7 +52,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: mysql
-    version: 1.0.0
+    version: 1.2.0
   values:
     image: "mysql"
     imageTag: "5.7.25"

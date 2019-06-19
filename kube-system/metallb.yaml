@@ -10,7 +10,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: metallb
-    version: 0.9.5
+    version: 0.9.6
   values:
     configInline:
         address-pools:

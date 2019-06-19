@@ -6,17 +6,17 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'regexp:^(15\.[0-9]+\.[0-9]+-apache)$'
+    flux.weave.works/tag.chart-image: 'regexp:^(16\.[0-9]+\.[0-9]+-apache)$'
 spec:
   releaseName: nextcloud
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: nextcloud
-    version: 1.0.2
+    version: 1.3.0
   values:
     image:
       repository: nextcloud
-      tag: 15.0.8-apache
+      tag: 16.0.1-apache
     persistence:
       enabled: true
       existingClaim: nfs-data-nextcloud-pvc-10g
