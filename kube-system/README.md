@@ -5,7 +5,7 @@
 * [cert-manager.yaml](cert-manager.yaml)
 * [cert-manager-chart.yaml](cert-manager-chart.yaml)
 * [cert-sync.yaml](cert-sync.yaml)
-* [cert-manager-letsencrypt.txt](../manual-steps/yamls/cert-manager-letsencrypt.txt)
+* [cert-manager-letsencrypt.txt](../setup/manual-steps/yamls/cert-manager-letsencrypt.txt)
 
 # traefik
 
