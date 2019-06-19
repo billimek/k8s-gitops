@@ -88,7 +88,7 @@ helm init --service-account tiller
 
 ```shell
 helm repo add weaveworks https://weaveworks.github.io/flux
-helm upgrade --install flux --set helmOperator.create=true --set git.url=git@github.com:billimek/k8s-gitops --set additionalArgs="{--connect=ws://fluxcloud}" --set prometheus.enabled=true --namespace flux weaveworks/flux
+helm upgrade --install flux --set helmOperator.create=true --set git.url=git@github.com:billimek/k8s-gitops --set additionalArgs="{--connect=ws://fluxcloud}" --set prometheus.enabled=true --set syncGarbageCollection.enabled=true --set syncGarbageCollection.dry=true --namespace flux weaveworks/flux
 
 
 ```
