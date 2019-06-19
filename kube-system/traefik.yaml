@@ -21,8 +21,8 @@ spec:
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
     replicas: 2
-    startupArguments:
-    - --ping
+    # startupArguments:
+    # - --ping
     debug:
       enabled: false
     rbac:
