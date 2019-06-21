@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:0.*-v10
+    flux.weave.works/tag.chart-image: 'regexp:^(0\.[0-9]+\.[0-9]+-v10)$'
 spec:
   releaseName: node-red
   chart:
@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: nodered/node-red-docker
-      tag: 0.20.5-slim-v10
+      tag: 0.20.5-v10
     persistence:
       enabled: true
       storageClass: "rbd"
