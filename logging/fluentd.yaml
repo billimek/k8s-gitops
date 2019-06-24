@@ -16,14 +16,14 @@ spec:
   values:
     image:
       repository: gcr.io/fluentd-elasticsearch/fluentd
-      tag: v2.5.2
+      tag: v2.6.0
     elasticsearch:
       host: 'elasticsearch-master.logs'
     tolerations:
-      - key: "node-role.kubernetes.io/etcd"
-        operator: "Exists"
-      - key: "node-role.kubernetes.io/controlplane"
-        operator: "Exists"
+    - key: "node-role.kubernetes.io/etcd"
+      operator: "Exists"
+    - key: "node-role.kubernetes.io/controlplane"
+      operator: "Exists"
 #    tolerations:
 #      - effect: NoExecute
 #        key: "node-role.kubernetes.io/etcd"
@@ -91,9 +91,9 @@ spec:
       type: LoadBalancer
       externalPort: 80
       ports:
-        - name: "syslog"
-          protocol: UDP
-          containerPort: 5140
+      - name: "syslog"
+        protocol: UDP
+        containerPort: 5140
     persistence:
       enabled: true
     configMaps:
