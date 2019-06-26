@@ -14,7 +14,7 @@ spec:
     version: 1.1.7
   values:
     image:
-      repo: "influxdb"
+      repository: "influxdb"
       tag: "1.7.3-alpine"
     service:
       type: LoadBalancer
