@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -15,7 +16,7 @@ spec:
   values:
     image:
       repository: "influxdb"
-      tag: "1.7.3-alpine"
+      tag: "1.7.6-alpine"
     service:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.151
