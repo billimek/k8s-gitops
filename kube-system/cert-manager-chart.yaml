@@ -4,18 +4,18 @@ metadata:
   name: cert-manager
   namespace: cert-manager
   annotations:
-    flux.weave.works/automated: "false"
+    flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~0
 spec:
   releaseName: cert-manager
   chart:
     repository: https://charts.jetstack.io/
     name: cert-manager
-    version: v0.8.0
+    version: v0.1.0
   values:
     image:
       repository: quay.io/jetstack/cert-manager-controller
-      tag: v0.8.0
+      tag: v0.8.1
     extraArgs: 
       - --dns01-recursive-nameservers=1.1.1.1:53
       - --dns01-recursive-nameservers-only
