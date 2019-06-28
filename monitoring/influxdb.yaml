@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: "influxdb"
-      tag: "1.7.6-alpine"
+      tag: "1.7.7-alpine"
     service:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.151
