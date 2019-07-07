@@ -199,4 +199,4 @@ spec:
   - name: http
     port: 19999
   type: ExternalName
-  externalName: 10.2.0.17
+  externalName: 10.2.0.16
