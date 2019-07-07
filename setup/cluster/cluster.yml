@@ -25,6 +25,12 @@ nodes:
     hostname_override: k8s-3
     user: ubuntu
     role: [worker]
+  - address: 10.2.0.16
+    hostname_override: k8s-4
+    user: ubuntu
+    role: [worker]
+    labels:
+      app: intel-gpu-plugin
 authentication:
     strategy: x509
     sans:
