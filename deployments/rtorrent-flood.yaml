@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: wonderfall/rtorrent-flood
-      tag: 0.9.7-0.13.7
+      tag: new
     uid: 1001
     gid: 1001
     guiService:
