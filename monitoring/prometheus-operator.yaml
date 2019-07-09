@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
-    version: 5.12.3
+    version: 5.15.0
   values:
     alertmanager:
       alertmanagerSpec:
@@ -132,7 +132,7 @@ spec:
 #        image:
 #          repository: quay.io/prometheus/prometheus
 #          tag: v2.9.1
-        retention: 365d
+        retention: 90d
         storageSpec:
           volumeClaimTemplate:
             spec:
