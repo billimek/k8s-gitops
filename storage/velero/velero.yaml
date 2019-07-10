@@ -23,10 +23,6 @@ spec:
       backupStorageLocation:
         name: aws
         bucket: velero
-        config:
-          region: us-east-1
-          s3ForcePathStyle: true
-          s3Url: http://minio.default.svc:9000
     deployRestic: true
     restic:
       podVolumePath: /opt/rke/var/lib/kubelet/pods

@@ -4,6 +4,9 @@ configuration:
       name: aws
         config:
           publicUrl: https://minio.$DOMAIN
+          region: us-east-1
+          s3ForcePathStyle: true
+          s3Url: http://minio.default.svc:9000
 credentials:
   secretContents:
     cloud: |
