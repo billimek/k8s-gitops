@@ -2,5 +2,7 @@ config:
   publicUrl: https://minio.$DOMAIN
 credentials:
   secretContents:
-    aws_access_key_id: $MINIO_ACCESS_KEY
-    aws_secret_access_key: $MINIO_SECRET_KEY
+    cloud: |
+      [default]
+      aws_access_key_id = MINIO_ACCESS_KEY
+      aws_secret_access_key = MINIO_SECRET_KEY
