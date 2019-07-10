@@ -1,5 +1,9 @@
-config:
-  publicUrl: https://minio.$DOMAIN
+configuration:
+  provider: aws
+    backupStorageLocation:
+      name: aws
+        config:
+          publicUrl: https://minio.$DOMAIN
 credentials:
   secretContents:
     cloud: |
