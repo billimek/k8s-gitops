@@ -38,5 +38,10 @@ spec:
     restic:
       podVolumePath: /opt/rke/var/lib/kubelet/pods
       privileged: false
+    schedules:
+      daily-backup:
+        schedule: "0 0 * * *"
+        template:
+          ttl: "240h"
   valueFileSecrets:
   - name: "velero-values"
