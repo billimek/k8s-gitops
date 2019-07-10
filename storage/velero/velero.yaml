@@ -18,6 +18,7 @@ spec:
       tag: v1.0.0
     metrics:
       enabled: true
+    snapshotsEnabled: false
     deployRestic: true
     restic:
       podVolumePath: /opt/rke/var/lib/kubelet/pods
