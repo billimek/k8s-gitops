@@ -46,6 +46,8 @@ NS=monitoring kseal values-to-encrypt/comcast-values.txt > ../../secrets/comcast
 NS=monitoring kseal values-to-encrypt/uptimerobot-values.txt > ../../secrets/uptimerobot-values.yaml
 NS=monitoring kseal values-to-encrypt/influxdb-values.txt > ../../secrets/influxdb-values.yaml
 
+NS=velero kseal values-to-encrypt/velero-values.txt > ../../secrets/velero-values.yaml
+
 kseal values-to-encrypt/hubot-values.txt > ../../secrets/hubot-values.yaml
 kseal values-to-encrypt/minio-values.txt > ../../secrets/minio-values.yaml
 kseal values-to-encrypt/rtorrent-flood-values.txt > ../../secrets/rtorrent-flood-values.yaml

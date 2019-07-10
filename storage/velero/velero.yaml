@@ -1,0 +1,36 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: velero
+  namespace: velero
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~1
+spec:
+  releaseName: velero
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: velero
+    version: 1.0.0
+  values:
+    image:
+      repository: gcr.io/heptio-images/velero
+      tag: v1.0.0
+    metrics:
+      enabled: true
+    configuration:
+      provider: aws
+      backupStorageLocation:
+        name: aws
+        bucket: velero
+        config:
+          region: us-east-1
+          s3ForcePathStyle: true
+          s3Url: http://minio.default.svc:9000
+          publicUrl: https://minio.eviljungle.com
+    deployRestic: true
+    restic:
+      podVolumePath: /opt/rke/var/lib/kubelet/pods
+      privileged: false
+  valueFileSecrets:
+  - name: "velero-values"
