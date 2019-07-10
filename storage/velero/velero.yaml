@@ -27,7 +27,6 @@ spec:
           region: us-east-1
           s3ForcePathStyle: true
           s3Url: http://minio.default.svc:9000
-          publicUrl: https://minio.eviljungle.com
     deployRestic: true
     restic:
       podVolumePath: /opt/rke/var/lib/kubelet/pods
