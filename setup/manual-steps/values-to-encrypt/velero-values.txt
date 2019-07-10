@@ -2,6 +2,7 @@ configuration:
   provider: aws
     backupStorageLocation:
       name: aws
+        bucket: velero
         config:
           publicUrl: https://minio.$DOMAIN
           region: us-east-1

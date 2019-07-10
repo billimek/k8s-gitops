@@ -18,11 +18,6 @@ spec:
       tag: v1.0.0
     metrics:
       enabled: true
-    configuration:
-      provider: aws
-      backupStorageLocation:
-        name: aws
-        bucket: velero
     deployRestic: true
     restic:
       podVolumePath: /opt/rke/var/lib/kubelet/pods
