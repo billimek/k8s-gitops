@@ -8,6 +8,10 @@ configuration:
       s3ForcePathStyle: true
       s3Url: http://minio.default.svc:9000
       publicUrl: https://minio.$DOMAIN
+  volumeSnapshotLocation:
+    name: aws
+    config:
+      region: us-east-1
 credentials:
   secretContents:
     cloud: |
