@@ -15,7 +15,7 @@ spec:
     name: elasticsearch
     version: 7.2.0
   values:
-    image: "docker.elastic.co/elasticsearch/elasticsearch:7.2.0"
+    image: "docker.elastic.co/elasticsearch/elasticsearch"
     imageTag: "7.2.0"
     esMajorVersion: 7
     clusterName: "elasticsearch"
