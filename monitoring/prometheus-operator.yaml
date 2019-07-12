@@ -23,6 +23,7 @@ spec:
 #        image:
 #          repository: quay.io/prometheus/alertmanager
 #          tag: v0.16.2
+        logFormat: logfmt
         storage:
           volumeClaimTemplate:
             spec:
