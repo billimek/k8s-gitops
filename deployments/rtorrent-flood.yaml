@@ -5,6 +5,7 @@ metadata:
   name: rtorrent-flood
   namespace: default
   annotations:
+    flux.weave.works/ignore: "true"
     flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: glob:0.9.*
 spec:
