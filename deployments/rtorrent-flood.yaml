@@ -5,7 +5,7 @@ metadata:
   name: rtorrent-flood
   namespace: default
   annotations:
-    flux.weave.works/ignore: "true"
+    flux.weave.works/ignore: "false"
     flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: glob:0.9.*
 spec:
@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: rtorrent-flood
-    version: 2.0.9
+    version: 3.0.0
   values:
     image:
       repository: wonderfall/rtorrent-flood
@@ -25,7 +25,7 @@ spec:
       port: 3000
     btService:
       type: LoadBalancer
-      port: 49184
+      port: 49161
       loadBalancerIP: 10.2.0.159
     ingress:
       enabled: true
