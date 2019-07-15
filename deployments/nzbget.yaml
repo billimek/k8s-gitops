@@ -32,7 +32,7 @@ spec:
         subPath: Downloads
       config:
         enabled: true
-        storageClass: "rbd"
+        storageClass: "nfs-client"
         size: 30Gi
   valueFileSecrets:
   - name: "nzbget-values"
