@@ -21,7 +21,7 @@ spec:
     clusterName: "elasticsearch"
     nodeGroup: "master"
     replicas: 3
-    esJavaOpts: "-Xmx128m -Xms128m"
+    esJavaOpts: "-Xmx256m -Xms256m"
     resources:
       requests:
         cpu: "100m"
