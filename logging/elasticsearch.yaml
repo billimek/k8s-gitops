@@ -20,7 +20,7 @@ spec:
     esMajorVersion: 7
     clusterName: "elasticsearch"
     nodeGroup: "master"
-    replicas: 3
+    replicas: 1
     roles:
       master: "true"
       ingest: "true"
