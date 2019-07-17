@@ -21,14 +21,14 @@ spec:
     clusterName: "elasticsearch"
     nodeGroup: "master"
     replicas: 3
-		esJavaOpts: "-Xmx128m -Xms128m"
-		resources:
-			requests:
-				cpu: "100m"
-				memory: "512M"
-			limits:
-				cpu: "1000m"
-				memory: "512M"
+    esJavaOpts: "-Xmx128m -Xms128m"
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "512M"
+      limits:
+        cpu: "1000m"
+        memory: "512M"
     roles:
       master: "true"
       ingest: "true"
