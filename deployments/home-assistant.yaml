@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
-    version: 0.9.3
+    version: 0.9.4
   values:
     image:
       repository: homeassistant/home-assistant
@@ -27,6 +27,8 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
     vscode:
       enabled: true
       ingress:
