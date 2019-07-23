@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -15,7 +16,7 @@ spec:
   values:
     image:
       repository: quay.io/jetstack/cert-manager-controller
-      tag: v0.8.1
-    extraArgs: 
-      - --dns01-recursive-nameservers=1.1.1.1:53
-      - --dns01-recursive-nameservers-only
+      tag: v0.9.0
+    extraArgs:
+    - --dns01-recursive-nameservers=1.1.1.1:53
+    - --dns01-recursive-nameservers-only
