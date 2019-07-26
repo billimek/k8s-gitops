@@ -134,6 +134,7 @@ spec:
 #          repository: quay.io/prometheus/prometheus
 #          tag: v2.9.1
         retention: 90d
+        enableAdminAPI: true
         storageSpec:
           volumeClaimTemplate:
             spec:
