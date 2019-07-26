@@ -21,7 +21,7 @@ spec:
     snapshotsEnabled: false
     deployRestic: true
     restic:
-      podVolumePath: /opt/rke/var/lib/kubelet/pods
+      # podVolumePath: /opt/rke/var/lib/kubelet/pods
       privileged: false
     # schedules:
     #   daily-backup:
