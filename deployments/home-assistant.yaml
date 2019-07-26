@@ -42,25 +42,10 @@ spec:
   - name: "hass-values"
 ---
 apiVersion: velero.io/v1
-kind: Backup
-metadata:
-  creationTimestamp: null
-  name: hass-backup
-  namespace: velero
-spec:
-  includedNamespaces:
-  - '*'
-  labelSelector:
-    matchLabels:
-      app.kubernetes.io/name: home-assistant
-  storageLocation: ""
-  ttl: 168h0m0s
----
-apiVersion: velero.io/v1
 kind: Schedule
 metadata:
   creationTimestamp: null
-  name: hass-schedule
+  name: hass-backup
   namespace: velero
 spec:
   schedule: 0 6 * * *
