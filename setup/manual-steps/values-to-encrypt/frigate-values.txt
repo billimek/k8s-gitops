@@ -1,3 +1,5 @@
 ingress:
-  hosts: [host: frigate.$DOMAIN]
+  hosts: 
+  - host: frigate.$DOMAIN
+    paths: ["/"]
 rtspPassword: "$RTSP_PASSWORD"
