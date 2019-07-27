@@ -12,12 +12,12 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: frigate
-    version: 0.1.2
+    version: 0.1.3
   values:
     image:
       repository: blakeblackshear/frigate
       tag: 0.2.0-beta
-    config:
+    config: |
       mqtt:
         host: rabbitmq-rabbitmq-ha.default.svc
         topic_prefix: frigate
