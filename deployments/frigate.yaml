@@ -1,0 +1,154 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: frigate
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "false"
+    flux.weave.works/tag.chart-image: 'semver:0'
+spec:
+  releaseName: frigate
+  chart:
+    repository: https://billimek.com/billimek-charts/
+    name: frigate
+    version: 0.1.1
+  values:
+    image:
+      repository: blakeblackshear/frigate
+      tag: 0.2.0-beta
+    config:
+      mqtt:
+        host: rabbitmq-rabbitmq-ha.default.svc
+        topic_prefix: frigate
+      cameras:
+        porch:
+          rtsp:
+            user: view
+            host: porch
+            port: 554
+            password: $RTSP_PASSWORD
+            path: /cam/realmonitor?channel=1&subtype=1
+          take_frame: 1
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
+          regions:
+            - size: 576
+              x_offset: 104
+              y_offset: 0
+              min_person_area: 5000
+              threshold: 0.85
+            - size: 300
+              x_offset: 404
+              y_offset: 0
+              min_person_area: 2000
+              threshold: 0.85
+        front:
+          rtsp:
+            user: view
+            host: front
+            port: 554
+            password: $RTSP_PASSWORD
+            path: /cam/realmonitor?channel=1&subtype=1
+          take_frame: 1
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
+          regions:
+            - size: 480
+              x_offset: 104
+              y_offset: 0
+              min_person_area: 5000
+              threshold: 0.85
+        driveway:
+          rtsp:
+            user: view
+            host: driveway
+            port: 554
+            password: $RTSP_PASSWORD
+            path: /cam/realmonitor?channel=1&subtype=1
+          take_frame: 1
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
+          regions:
+            - size: 480
+              x_offset: 104
+              y_offset: 0
+              min_person_area: 5000
+              threshold: 0.85
+        pool:
+          rtsp:
+            user: view
+            host: pool
+            port: 554
+            password: $RTSP_PASSWORD
+            path: /cam/realmonitor?channel=1&subtype=1
+          take_frame: 1
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
+          regions:
+            - size: 480
+              x_offset: 104
+              y_offset: 0
+              min_person_area: 5000
+              threshold: 0.85
+        basement:
+          rtsp:
+            user: view
+            host: basement
+            port: 554
+            password: $RTSP_PASSWORD
+            path: /h264Preview_01_sub
+          take_frame: 1
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
+          regions:
+            - size: 480
+              x_offset: 104
+              y_offset: 0
+              min_person_area: 5000
+              threshold: 0.85
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "traefik"
+        ingress.kubernetes.io/auth-type: "basic"
+        ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: tpu
+              operator: In
+              values:
+              - google-coral
+    resources:
+      limits:
+        gpu.intel.com/i915: 1
+  valueFileSecrets:
+  - name: "frigate-values"

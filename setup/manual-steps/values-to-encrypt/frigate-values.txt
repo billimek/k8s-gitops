@@ -1,0 +1,4 @@
+ingress:
+  hosts:
+    - host: frigate.$DOMAIN
+rtspPassword: "$RTSP_PASSWORD"
