@@ -31,6 +31,7 @@ nodes:
     role: [worker]
     labels:
       app: intel-gpu-plugin
+      tpu: google-coral
 authentication:
     strategy: x509
     sans:
@@ -38,6 +39,7 @@ authentication:
       - "lb-ha"
 ssh_key_path: /home/jeff/.ssh/id_k8s_nodes
 ssh_agent_auth: true
+# ignore_docker_version: true
 services:
   kubelet:
     extra_args:
@@ -45,6 +47,8 @@ services:
     extra_binds:
     - "/lib/modules:/lib/modules"
     - "/mnt:/mnt:rshared"
+    - "/dev/bus:/dev/bus:rshared"
+    - "/dev/dri:/dev/dri:rshared"
 #    etcd:
 #      extra_args:
 #        listen-metrics-urls: http://0.0.0.0:2379
