@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: quay.io/fluentd_elasticsearch/fluentd
-      tag: v2.6.0
+      tag: v2.7.0
     elasticsearch:
       host: 'elasticsearch-master.logs'
     tolerations:
