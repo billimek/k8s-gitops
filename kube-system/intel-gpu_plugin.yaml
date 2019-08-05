@@ -25,6 +25,7 @@ spec:
                 fieldPath: spec.nodeName
         image: billimek/intel-gpu-plugin:devel
         imagePullPolicy: IfNotPresent
+        command: ["/usr/bin/intel_gpu_device_plugin"]
         args: ["-shared-dev-num", "4"]
         volumeMounts:
         - name: devfs
