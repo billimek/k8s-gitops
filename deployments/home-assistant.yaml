@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: homeassistant/home-assistant
-      tag: 0.96.5
+      tag: 0.97.0
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
@@ -44,7 +44,7 @@ spec:
 apiVersion: velero.io/v1
 kind: Schedule
 metadata:
-  creationTimestamp: null
+  creationTimestamp:
   name: hass-backup
   namespace: velero
 spec:
@@ -57,9 +57,9 @@ spec:
         app.kubernetes.io/name: home-assistant
     ttl: 168h0m0s
 status:
-  lastBackup: null
+  lastBackup:
   phase: ""
-  validationErrors: null
+  validationErrors:
 ---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
