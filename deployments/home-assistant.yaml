@@ -41,26 +41,6 @@ spec:
   valueFileSecrets:
   - name: "hass-values"
 ---
-apiVersion: velero.io/v1
-kind: Schedule
-metadata:
-  creationTimestamp:
-  name: hass-backup
-  namespace: velero
-spec:
-  schedule: 0 6 * * *
-  template:
-    includedNamespaces:
-    - '*'
-    labelSelector:
-      matchLabels:
-        app.kubernetes.io/name: home-assistant
-    ttl: 168h0m0s
-status:
-  lastBackup:
-  phase: ""
-  validationErrors:
----
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
