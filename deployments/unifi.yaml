@@ -41,3 +41,23 @@ spec:
       backup.velero.io/backup-volumes: unifi-data
   valueFileSecrets:
   - name: "unifi-values"
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  creationTimestamp:
+  name: unifi-backup
+  namespace: velero
+spec:
+  schedule: 0 6 * * *
+  template:
+    includedNamespaces:
+    - '*'
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: unifi
+    ttl: 168h0m0s
+status:
+  lastBackup:
+  phase: ""
+  validationErrors:
