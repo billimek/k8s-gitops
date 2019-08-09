@@ -22,9 +22,6 @@ spec:
       createCustomResource: false
     alertmanager:
       alertmanagerSpec:
-#        image:
-#          repository: quay.io/prometheus/alertmanager
-#          tag: v0.16.2
         storage:
           volumeClaimTemplate:
             spec:
@@ -43,7 +40,8 @@ spec:
       image:
         repository: grafana/grafana
         tag: 6.3.2
-      deploymentStrategy: Recreate
+      deploymentStrategy: 
+        type: Recreate
       persistence:
         enabled: true
         storageClassName: "rbd"
