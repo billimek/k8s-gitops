@@ -141,7 +141,7 @@ spec:
               storageClassName: rbd
               resources:
                 requests:
-                  storage: 50Gi
+                  storage: 100Gi
         additionalScrapeConfigs:
         - job_name: 'netdata-scrape'
           metrics_path: '/api/v1/allmetrics'
