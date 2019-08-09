@@ -18,6 +18,8 @@ spec:
     name: prometheus-operator
     version: 6.4.1
   values:
+    prometheusOperator:
+      createCustomResource: false
     alertmanager:
       alertmanagerSpec:
 #        image:
