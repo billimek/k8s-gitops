@@ -16,14 +16,13 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
-    version: 6.4.0
+    version: 6.4.1
   values:
     alertmanager:
       alertmanagerSpec:
 #        image:
 #          repository: quay.io/prometheus/alertmanager
 #          tag: v0.16.2
-        logFormat: logfmt
         storage:
           volumeClaimTemplate:
             spec:
@@ -102,10 +101,6 @@ spec:
           mode: console
         grafana_net:
           url: https://grafana.net
-    coreDns:
-      enabled: true
-    kubeDns:
-      enabled: true
     kubeEtcd:
       enabled: true
       endpoints:
@@ -164,14 +159,6 @@ spec:
             - k8s-2:19999
             - k8s-3:19999
             - k8s-4:19999
-        - job_name: 'stash-scrape'
-          metrics_path: '/metrics'
-          params:
-            format: [prometheus]
-          honor_labels: true
-          static_configs:
-          - targets:
-            - stash.kube-system:56789
         - job_name: 'wmi-exporter-scrape'
           metrics_path: '/metrics'
           params:
