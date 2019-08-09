@@ -103,7 +103,7 @@ spec:
         grafana_net:
           url: https://grafana.net
     coreDns:
-      enabled: false
+      enabled: true
     kubeDns:
       enabled: true
     kubeEtcd:
