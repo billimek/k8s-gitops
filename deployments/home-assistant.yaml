@@ -31,6 +31,9 @@ spec:
       backup.velero.io/backup-volumes: config
     vscode:
       enabled: true
+      image:
+        repository: codercom/code-server
+        tag: 1.1156-vsc1.33.1
       ingress:
         enabled: true
         annotations:
