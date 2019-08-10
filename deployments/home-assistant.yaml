@@ -44,6 +44,39 @@ spec:
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
+  name: hass-postgresql
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "false"
+    flux.weave.works/tag.chart-image: semver:~11
+spec:
+  releaseName: hass-postgresql
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: postgresql
+    version: 6.2.0
+  values:
+    image:
+      repository: bitnami/postgresql
+      tag: 11.4.0-debian-9-r34
+    postgresqlUsername: "homeassistant"
+    replication:
+      enabled: true
+      slaveReplicas: 2
+      synchronousCommit: "on"
+      numSynchronousReplicas: 1
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      storageClass: "rbd"
+    metrics:
+      enabled: true
+  valueFileSecrets:
+  - name: "hass-postgresql-values"
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
   name: hass-mysql
   namespace: default
   annotations:
