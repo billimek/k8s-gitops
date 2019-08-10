@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: "docker.io/chronograf"
-      tag: "1.7.11-alpine"
+      tag: "1.7-alpine"
     persistence:
       enabled: true
       storageClass: rbd
