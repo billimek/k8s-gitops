@@ -15,5 +15,5 @@ vscode:
     - hass-vscode.$DOMAIN
   password: $HASS_API_PASSWORD
   extraEnv:
-    HASS_SERVER: http://hass-home-assistant/
+    HASS_SERVER: http://localhost:8123
     HASS_TOKEN: $HASS_TOKEN
