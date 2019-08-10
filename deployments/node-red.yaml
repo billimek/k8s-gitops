@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: node-red
-    version: 1.3.0
+    version: 1.3.1
   values:
     image:
       repository: nodered/node-red-docker

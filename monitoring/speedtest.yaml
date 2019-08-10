@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: speedtest
-    version: 1.1.6
+    version: 1.1.7
   values:
     image:
       repository: atribe/speedtest-for-influxdb-and-grafana

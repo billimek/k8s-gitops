@@ -12,11 +12,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: chronograf
-    version: 1.0.2
+    version: 1.0.3
   values:
     image:
       repository: "docker.io/chronograf"
-      tag: "1.7-alpine"
+      tag: "1.7.11-alpine"
     persistence:
       enabled: true
       storageClass: rbd

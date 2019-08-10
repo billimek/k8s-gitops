@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: traefik
-    version: 1.70.2
+    version: 1.75.1
   values:
     image: traefik
     imageTag: 1.7.12
