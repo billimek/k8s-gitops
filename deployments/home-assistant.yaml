@@ -60,6 +60,7 @@ spec:
       repository: bitnami/postgresql
       tag: 11.4.0-debian-9-r34
     postgresqlUsername: "homeassistant"
+    postgresqlDatabase: "homeassistant"
     replication:
       enabled: true
       slaveReplicas: 2
