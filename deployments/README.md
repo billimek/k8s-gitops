@@ -3,7 +3,7 @@
 
 ![](https://i.imgur.com/OMwEZYO.png)
 
-This also installs a mysql deployment for holding the Home Assistant state and history information
+This also installs a postgresql deployment for holding the Home Assistant state and history information
 
 * [home-assistant.yaml](home-assistant.yaml)
 
