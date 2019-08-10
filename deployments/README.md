@@ -1,5 +1,12 @@
-# home-assistant
+# frigate
 
+![](https://i.imgur.com/hv7bh6m.png)
+
+Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object detection on RTSP cameras with the Google Coral
+
+* [frigate.yaml](frigate.yaml)
+
+# home-assistant
 
 ![](https://i.imgur.com/OMwEZYO.png)
 

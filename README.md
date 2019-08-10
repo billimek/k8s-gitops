@@ -20,7 +20,7 @@ See [storage](storage/) for details on storage type services (local storage prov
 
 ### Deployments
 
-See [deployments](deployments/) for details on regular workloads (home-assistant, hubot, minecraft, node-red, nzbget, plex, rabbitmq, radarr, rtorrent-flood, sonarr, unifi)
+See [deployments](deployments/) for details on regular workloads (frigate, home-assistant, hubot, minecraft, node-red, nzbget, plex, rabbitmq, radarr, rtorrent-flood, sonarr, unifi)
 
 ### Monitoring
 
