@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: quay.io/jetstack/cert-manager-controller
-      tag: v0.9.0
+      tag: v0.9.1
     extraArgs:
     - --dns01-recursive-nameservers=1.1.1.1:53
     - --dns01-recursive-nameservers-only
