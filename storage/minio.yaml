@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -15,7 +16,7 @@ spec:
   values:
     image:
       repository: minio/minio
-      tag: RELEASE.2019-08-07T01-59-21Z
+      tag: RELEASE.2019-08-14T20-37-41Z
     persistence:
       existingClaim: "nfs-data-pvc-10g"
       subPath: "minio"
