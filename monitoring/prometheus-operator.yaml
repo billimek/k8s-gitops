@@ -54,6 +54,8 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "traefik"
+      plugins:
+        - natel-discrete-panel
       additionalDataSources:
       - name: loki
         type: loki
