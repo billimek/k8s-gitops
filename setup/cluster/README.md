@@ -97,6 +97,8 @@ helm upgrade --install flux \
   --set syncGarbageCollection.dry=true \
   --set helmOperator.createCRD=true \
   --set workers=2 \
+  --set registry.rps=1 \
+  --set registry.burst=1 \
   --namespace flux fluxcd/flux
 ```
 
