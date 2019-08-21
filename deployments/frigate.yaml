@@ -65,9 +65,14 @@ spec:
             - yuv420p
           regions:
             - size: 480
-              x_offset: 104
+              x_offset: 224
               y_offset: 0
               min_person_area: 5000
+              threshold: 0.85
+            - size: 224
+              x_offset: 0
+              y_offset: 256
+              min_person_area: 3000
               threshold: 0.85
         driveway:
           rtsp:
@@ -86,9 +91,14 @@ spec:
             - yuv420p
           regions:
             - size: 480
-              x_offset: 104
+              x_offset: 224
               y_offset: 0
               min_person_area: 5000
+              threshold: 0.85
+            - size: 224
+              x_offset: 0
+              y_offset: 256
+              min_person_area: 3000
               threshold: 0.85
         pool:
           rtsp:
@@ -107,9 +117,14 @@ spec:
             - yuv420p
           regions:
             - size: 480
-              x_offset: 104
+              x_offset: 224
               y_offset: 0
               min_person_area: 5000
+              threshold: 0.85
+            - size: 224
+              x_offset: 0
+              y_offset: 256
+              min_person_area: 3000
               threshold: 0.85
         basement:
           rtsp:
@@ -127,10 +142,15 @@ spec:
             - -hwaccel_output_format
             - yuv420p
           regions:
-            - size: 480
-              x_offset: 104
+            - size: 352
+              x_offset: 0
               y_offset: 0
-              min_person_area: 5000
+              min_person_area: 3000
+              threshold: 0.85
+            - size: 288
+              x_offset: 352
+              y_offset: 64
+              min_person_area: 3000
               threshold: 0.85
     ingress:
       enabled: true
