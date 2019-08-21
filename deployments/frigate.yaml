@@ -71,7 +71,7 @@ spec:
               threshold: 0.85
             - size: 224
               x_offset: 0
-              y_offset: 256
+              y_offset: 136
               min_person_area: 3000
               threshold: 0.85
         driveway:
@@ -123,7 +123,7 @@ spec:
               threshold: 0.85
             - size: 224
               x_offset: 0
-              y_offset: 256
+              y_offset: 96
               min_person_area: 3000
               threshold: 0.85
         basement:
