@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: blakeblackshear/frigate
-      tag: 0.2.0
+      tag: 0.2.1-beta
     config: |
       mqtt:
         host: rabbitmq-rabbitmq-ha.default.svc
@@ -37,6 +37,7 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+            - -skip_frame nokey
           regions:
             - size: 576
               x_offset: 104
@@ -63,6 +64,7 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+            - -skip_frame nokey
           regions:
             - size: 480
               x_offset: 104
@@ -84,6 +86,7 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+            - -skip_frame nokey
           regions:
             - size: 480
               x_offset: 104
@@ -105,6 +108,7 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+            - -skip_frame nokey
           regions:
             - size: 480
               x_offset: 104
@@ -126,6 +130,7 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+            - -skip_frame nokey
           regions:
             - size: 480
               x_offset: 104
@@ -136,8 +141,9 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "traefik"
-        ingress.kubernetes.io/auth-type: "basic"
-        ingress.kubernetes.io/auth-secret: "traefik-basic-auth-jeff"
+        ingress.kubernetes.io/auth-type: "forward"
+        ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
+        ingress.kubernetes.io/auth-trust-headers: "true"
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
