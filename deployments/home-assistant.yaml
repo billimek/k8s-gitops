@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: homeassistant/home-assistant
-      tag: 0.97.2
+      tag: 0.98.0
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
