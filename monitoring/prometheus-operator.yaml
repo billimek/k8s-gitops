@@ -39,7 +39,7 @@ spec:
     grafana:
       image:
         repository: grafana/grafana
-        tag: 6.3.3
+        tag: 6.3.4
       deploymentStrategy:
         type: Recreate
       persistence:
@@ -55,7 +55,7 @@ spec:
         annotations:
           kubernetes.io/ingress.class: "traefik"
       plugins:
-        - natel-discrete-panel
+      - natel-discrete-panel
       additionalDataSources:
       - name: loki
         type: loki
@@ -175,6 +175,6 @@ spec:
           bearer_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiM2FjNjVlNjQ1OTU0NWNhOWJiZWZiZDE5OWM4MDMzMiIsImlhdCI6MTU2NzEyODYwOCwiZXhwIjoxODgyNDg4NjA4fQ.NkSaaxMnJMYy-38gBsdlKt35-aKKSMDofGzBeBQmVnw'
           scheme: http
           static_configs:
-            - targets: ['hass-home-assistant.default.svc:8123']
+          - targets: ['hass-home-assistant.default.svc:8123']
   valueFileSecrets:
   - name: "prometheus-operator-values"
