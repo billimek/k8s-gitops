@@ -5,7 +5,7 @@ metadata:
   name: hass
   namespace: default
   annotations:
-    flux.weave.works/ignore: "true"
+    flux.weave.works/ignore: "false"
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~0
 spec:
