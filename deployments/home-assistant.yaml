@@ -5,7 +5,7 @@ metadata:
   name: hass
   namespace: default
   annotations:
-    flux.weave.works/ignore: "false"
+    flux.weave.works/ignore: "true"
     flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: semver:~0
 spec:
@@ -13,11 +13,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
-    version: 0.9.4
+    version: 0.9.6
   values:
     image:
       repository: homeassistant/home-assistant
-      tag: 0.97.2
+      tag: 0.98.0
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
@@ -57,11 +57,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: postgresql
-    version: 6.2.1
+    version: 6.3.2
   values:
     image:
       repository: bitnami/postgresql
-      tag: 11.4.0-debian-9-r34
+      tag: 11.5.0-debian-9-r1
     postgresqlUsername: "homeassistant"
     postgresqlDatabase: "homeassistant"
     replication:
