@@ -1,3 +1,4 @@
+---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
@@ -14,7 +15,7 @@ spec:
     version: 2.3.2
   values:
     daemonset:
-      image: quay.io/external_storage/local-volume-provisioner:v2.3.2
+      image: quay.io/external_storage/local-volume-provisioner:v2.3.3
     common:
       namespace: kube-system
     classes:
@@ -23,7 +24,7 @@ spec:
       volumeMode: Filesystem
       fsType: ext4
       blockCleanerCommand:
-        - "/scripts/shred.sh"
-        - "2"
+      - "/scripts/shred.sh"
+      - "2"
       storageClass:
         reclaimPolicy: Delete
