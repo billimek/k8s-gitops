@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: nodered/node-red-docker
-      tag: 0.20.7-v10
+      tag: 0.20.8-v10
     persistence:
       enabled: true
       storageClass: "rbd"
