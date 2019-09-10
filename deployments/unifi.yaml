@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: jacobalberty/unifi
-      tag: 5.10.27
+      tag: 5.11.39
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
