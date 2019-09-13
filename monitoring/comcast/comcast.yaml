@@ -25,4 +25,4 @@ spec:
             port: 8086
             database: comcast
   valueFileSecrets:
-  - name: "comcast-values"
+  - name: "comcast-helm-values"

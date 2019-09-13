@@ -177,4 +177,4 @@ spec:
           static_configs:
           - targets: ['hass-home-assistant.default.svc:8123']
   valueFileSecrets:
-  - name: "prometheus-operator-values"
+  - name: "prometheus-operator-helm-values"
