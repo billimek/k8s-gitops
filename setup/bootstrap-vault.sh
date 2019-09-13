@@ -29,7 +29,7 @@ kvault() {
 }
 
 initVault() {
-  message "initializing and unsealing vault"
+  message "initializing and unsealing vault (if necesary)"
   VAULT_READY=1
   while [ $VAULT_READY != 0 ]; do
     kubectl -n kube-system wait --for condition=Initialized pod/vault-0 > /dev/null 2>&1
@@ -44,10 +44,10 @@ initVault() {
   VAULT_READY=1
   while [ $VAULT_READY != 0 ]; do
     init_status=$(kubectl -n kube-system exec "vault-0" -- vault status -format=json 2>/dev/null | jq -r '.initialized')
-    if [ "$init_status" == "false" ]; then
+    if [ "$init_status" == "false" ] || [ "$init_status" == "true" ]; then
       VAULT_READY=0
     else
-      echo "vault pod is almost ready, waiting for it to show sealed"
+      echo "vault pod is almost ready, waiting for it to report status"
       sleep 5
     fi
   done
@@ -151,18 +151,30 @@ loadSecretsToVault() {
   ####################
   # helm chart values
   ####################
-  kvault "kube-system/traefik/traefik-helm-values.txt"
+  kvault "kube-system/forwardauth/forwardauth-helm-values.txt"
+  kvault "kube-system/kubernetes-dashboard/kubernetes-dashboard-helm-values.txt"
   kvault "kube-system/kured/kured-helm-values.txt"
+  kvault "kube-system/traefik/traefik-helm-values.txt"
+  kvault "logs/kibana/kibana-helm-values.txt"
   kvault "monitoring/chronograf/chronograf-helm-values.txt"
-  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
   kvault "monitoring/comcast/comcast-helm-values.txt"
+  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
   kvault "monitoring/uptimerobot/uptimerobot-helm-values.txt"
-  kvault "default/rabbitmq/rabbitmq-helm-values.txt"
-  kvault "default/node-red/node-red-helm-values.txt"
+  kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
   kvault "default/home-assistant/hass-postgresql-helm-values.txt"
-  kvault "default/plex/plex-helm-values.txt"
+  kvault "default/hubot/hubot-helm-values.txt"
+  kvault "default/minio/minio-helm-values.txt"
+  kvault "default/nextcloud/nextcloud-helm-values.txt"
+  kvault "default/node-red/node-red-helm-values.txt"
+  kvault "default/nzbget/nzbget-helm-values.txt"
   # kvault "default/pihole/pihole-helm-values.txt"
+  kvault "default/plex/plex-helm-values.txt"
+  kvault "default/rabbitmq/rabbitmq-helm-values.txt"
+  kvault "default/rtorrent-flood/rtorrent-flood-helm-values.txt"
+  kvault "default/sonarr/sonarr-helm-values.txt"
+  kvault "default/unifi/unifi-helm-values.txt"
+  kvault "velero/velero/velero-helm-values.txt"
 }
 
 FIRST_RUN=1

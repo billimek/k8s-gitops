@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: traefik-basic-auth-jeff
+  namespace: logs
+spec:
+  keys:
+    - auth
+  path: secrets/kube-system/traefik-basic-auth-jeff
+  type: Opaque

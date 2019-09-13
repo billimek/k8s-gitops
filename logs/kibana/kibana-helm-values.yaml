@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: kibana-helm-values
+  namespace: logs
+spec:
+  keys:
+    - values.yaml
+  path: secrets/logs/kibana/kibana-helm-values
+  type: Opaque

@@ -1,0 +1,3 @@
+config:
+  uptimerobot:
+    apikey: "$UPTIMEROBOT_APIKEY"

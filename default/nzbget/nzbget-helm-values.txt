@@ -1,0 +1,4 @@
+ingress:
+  hosts: [nzbget.$DOMAIN]
+  tls:
+    - secretName: acme-crt-secret

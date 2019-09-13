@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: cloudflare-api-key
+  namespace: kube-system
+spec:
+  keys:
+    - api-key
+  path: secrets/kube-system/cloudflare-api-key
+  type: Opaque

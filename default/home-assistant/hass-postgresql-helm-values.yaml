@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: hass-postgresql-helm-values
+  namespace: default
+spec:
+  keys:
+    - values.yaml
+  path: secrets/default/home-assistant/hass-postgresql-helm-values
+  type: Opaque

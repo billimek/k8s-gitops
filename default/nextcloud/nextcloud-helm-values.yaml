@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: nextcloud-helm-values
+  namespace: default
+spec:
+  keys:
+    - values.yaml
+  path: secrets/default/nextcloud/nextcloud-helm-values
+  type: Opaque

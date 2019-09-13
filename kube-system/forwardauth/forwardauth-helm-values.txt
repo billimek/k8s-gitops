@@ -1,0 +1,15 @@
+ingress:
+  hosts: [auth.$DOMAIN]
+applicationYaml:
+  domain: https://${AUTH0_DOMAIN}.auth0.com/
+  token-endpoint: https://${AUTH0_DOMAIN}.auth0.com/oauth/token
+  authorize-url: https://${AUTH0_DOMAIN}.auth0.com/authorize
+  default:
+      name: auth.${DOMAIN}
+      client-id: $AUTH0_CLIENT_ID
+      client-secret: $AUTH0_CLIENT_SECRET
+      audience: https://${AUTH0_DOMAIN}.auth0.com/api/v2/
+      scope: "profile openid email"
+      redirect-uri: https://auth.${DOMAIN}/oauth2/signin
+      token-cookie-domain: ${DOMAIN}
+      verify-access-token: false

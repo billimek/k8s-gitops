@@ -1,0 +1,4 @@
+config:
+  comcast:
+    username: "$COMCAST_USERNAME"
+    password: "$COMCAST_PASSWORD"
