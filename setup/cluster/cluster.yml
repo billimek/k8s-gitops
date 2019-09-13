@@ -39,6 +39,7 @@ authentication:
       - "lb-ha"
 ssh_key_path: /home/jeff/.ssh/id_k8s_nodes
 ssh_agent_auth: true
+kubernetes_version: v1.15.2-rancher1-1
 # ignore_docker_version: true
 services:
   kubelet:
