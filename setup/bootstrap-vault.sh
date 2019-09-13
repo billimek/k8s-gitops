@@ -106,41 +106,41 @@ loginVault() {
   fi
 }
 
-# setupVaultSecretsOperator() {
-#   message "configuring vault for vault-secrets-operator"
-#   vault secrets enable -path=secrets -version=1 kv
+setupVaultSecretsOperator() {
+  message "configuring vault for vault-secrets-operator"
+  vault secrets enable -path=secrets -version=1 kv
 
-#   # create read-only policy for kubernetes
-#   cat <<EOF | vault policy write vault-secrets-operator -
-#   path "secrets/*" {
-#     capabilities = ["read"]
-#   }
-# EOF
+  # create read-only policy for kubernetes
+  cat <<EOF | vault policy write vault-secrets-operator -
+  path "secrets/*" {
+    capabilities = ["read"]
+  }
+EOF
 
-#   export VAULT_SECRETS_OPERATOR_NAMESPACE=$(kubectl -n kube-system get sa vault-secrets-operator -o jsonpath="{.metadata.namespace}")
-#   export VAULT_SECRET_NAME=$(kubectl -n kube-system get sa vault-secrets-operator -o jsonpath="{.secrets[*]['name']}")
-#   export SA_JWT_TOKEN=$(kubectl -n kube-system get secret $VAULT_SECRET_NAME -o jsonpath="{.data.token}" | base64 --decode; echo)
-#   export SA_CA_CRT=$(kubectl -n kube-system get secret $VAULT_SECRET_NAME -o jsonpath="{.data['ca\.crt']}" | base64 --decode; echo)
-#   export K8S_HOST=$(kubectl -n kube-system config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+  export VAULT_SECRETS_OPERATOR_NAMESPACE=$(kubectl -n kube-system get sa vault-secrets-operator -o jsonpath="{.metadata.namespace}")
+  export VAULT_SECRET_NAME=$(kubectl -n kube-system get sa vault-secrets-operator -o jsonpath="{.secrets[*]['name']}")
+  export SA_JWT_TOKEN=$(kubectl -n kube-system get secret $VAULT_SECRET_NAME -o jsonpath="{.data.token}" | base64 --decode; echo)
+  export SA_CA_CRT=$(kubectl -n kube-system get secret $VAULT_SECRET_NAME -o jsonpath="{.data['ca\.crt']}" | base64 --decode; echo)
+  export K8S_HOST=$(kubectl -n kube-system config view --minify -o jsonpath='{.clusters[0].cluster.server}')
 
-#   # Verify the environment variables
-#   # env | grep -E 'VAULT_SECRETS_OPERATOR_NAMESPACE|VAULT_SECRET_NAME|SA_JWT_TOKEN|SA_CA_CRT|K8S_HOST'
+  # Verify the environment variables
+  # env | grep -E 'VAULT_SECRETS_OPERATOR_NAMESPACE|VAULT_SECRET_NAME|SA_JWT_TOKEN|SA_CA_CRT|K8S_HOST'
 
-#   vault auth enable kubernetes
+  vault auth enable kubernetes
 
-#   # Tell Vault how to communicate with the Kubernetes cluster
-#   vault write auth/kubernetes/config \
-#     token_reviewer_jwt="$SA_JWT_TOKEN" \
-#     kubernetes_host="$K8S_HOST" \
-#     kubernetes_ca_cert="$SA_CA_CRT"
+  # Tell Vault how to communicate with the Kubernetes cluster
+  vault write auth/kubernetes/config \
+    token_reviewer_jwt="$SA_JWT_TOKEN" \
+    kubernetes_host="$K8S_HOST" \
+    kubernetes_ca_cert="$SA_CA_CRT"
 
-#   # Create a role named, 'vault-secrets-operator' to map Kubernetes Service Account to Vault policies and default token TTL
-#   vault write auth/kubernetes/role/vault-secrets-operator \
-#     bound_service_account_names="vault-secrets-operator" \
-#     bound_service_account_namespaces="$VAULT_SECRETS_OPERATOR_NAMESPACE" \
-#     policies=vault-secrets-operator \
-#     ttl=24h
-# }
+  # Create a role named, 'vault-secrets-operator' to map Kubernetes Service Account to Vault policies and default token TTL
+  vault write auth/kubernetes/role/vault-secrets-operator \
+    bound_service_account_names="vault-secrets-operator" \
+    bound_service_account_namespaces="$VAULT_SECRETS_OPERATOR_NAMESPACE" \
+    policies=vault-secrets-operator \
+    ttl=24h
+}
 
 loadSecretsToVault() {
   message "writing secrets to vault"
@@ -151,26 +151,26 @@ loadSecretsToVault() {
   ####################
   # helm chart values
   ####################
-  # kvault "kube-system/traefik/traefik-helm-values.txt"
-  # kvault "kube-system/kured/kured-helm-values.txt"
-  # kvault "monitoring/chronograf/chronograf-helm-values.txt"
-  # kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
-  # kvault "monitoring/comcast/comcast-helm-values.txt"
-  # kvault "monitoring/uptimerobot/uptimerobot-helm-values.txt"
-  # kvault "default/rabbitmq/rabbitmq-helm-values.txt"
-  # kvault "default/node-red/node-red-helm-values.txt"
-  # kvault "default/home-assistant/home-assistant-helm-values.txt"
-  # kvault "default/home-assistant/hass-postgresql-helm-values.txt"
-  # kvault "default/plex/plex-helm-values.txt"
+  kvault "kube-system/traefik/traefik-helm-values.txt"
+  kvault "kube-system/kured/kured-helm-values.txt"
+  kvault "monitoring/chronograf/chronograf-helm-values.txt"
+  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
+  kvault "monitoring/comcast/comcast-helm-values.txt"
+  kvault "monitoring/uptimerobot/uptimerobot-helm-values.txt"
+  kvault "default/rabbitmq/rabbitmq-helm-values.txt"
+  kvault "default/node-red/node-red-helm-values.txt"
+  kvault "default/home-assistant/home-assistant-helm-values.txt"
+  kvault "default/home-assistant/hass-postgresql-helm-values.txt"
+  kvault "default/plex/plex-helm-values.txt"
   # kvault "default/pihole/pihole-helm-values.txt"
 }
 
 FIRST_RUN=1
 initVault
 loginVault
-# if [ $FIRST_RUN == 0 ]; then 
-#   setupVaultSecretsOperator
-# fi
-# loadSecretsToVault
+if [ $FIRST_RUN == 0 ]; then 
+  setupVaultSecretsOperator
+fi
+loadSecretsToVault
 
 kill $VAULT_FWD_PID
