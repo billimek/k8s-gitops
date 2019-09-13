@@ -1,0 +1,38 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: flux
+  namespace: flux
+  annotations:
+    flux.weave.works/automated: "false"
+    flux.weave.works/tag.chart-image: semver:~1.14
+spec:
+  releaseName: flux
+  chart:
+    repository: https://charts.fluxcd.io/
+    name: flux
+    version: 0.14.0
+  values:
+    image:
+      repository: docker.io/fluxcd/flux
+      tag: 1.14.1
+    helmOperator:
+      create: true
+      createCRD: true
+    git:
+      url: "git@github.com:billimek/k8s-gitops"
+    registry:
+      rps: 1
+      burst: 1
+    memcached:
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
+    additionalArgs:
+    - --connect=ws://fluxcloud
+    prometheus:
+      enabled: true
+    syncGarbageCollection:
+      enabled: true
+      dry: true

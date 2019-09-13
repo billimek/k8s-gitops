@@ -1,3 +1,9 @@
+# flux
+
+FluxCD Flux
+
+* [flux.yaml](flux/flux.yaml)
+
 # fluxcloud
 
 ![](https://i.imgur.com/yixxNm9.png)
