@@ -4,7 +4,7 @@
 
 Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object detection on RTSP cameras with the Google Coral
 
-* [frigate.yaml](frigate.yaml)
+* [frigate.yaml](frigate/frigate.yaml)
 
 # home-assistant
 
@@ -12,19 +12,19 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 
 This also installs a postgresql deployment for holding the Home Assistant state and history information
 
-* [home-assistant.yaml](home-assistant.yaml)
+* [home-assistant.yaml](home-assistant/home-assistant.yaml)
 
 # hubot
 
 A bot for slack
 
-* [hubot.yaml](hubot.yaml)
+* [hubot.yaml](hubot/hubot.yaml)
 
 # minecraft
 
 ![](https://i.imgur.com/zBha0RP.png)
 
-* [minecraft.yaml](minecraft.yaml)
+* [minecraft.yaml](minecraft/minecraft.yaml)
 
 # node-red
 
@@ -32,7 +32,7 @@ A bot for slack
 
 Rules-engine for automations
 
-* [node-red.yaml](node-red.yaml)
+* [node-red.yaml](node-red/node-red.yaml)
 
 # nzbget
 
@@ -40,13 +40,13 @@ Rules-engine for automations
 
 Usenet download client
 
-* [nzbget.yaml](nzbget.yaml)
+* [nzbget.yaml](nzbget/nzbget.yaml)
 
 # plex
 
 ![](https://i.imgur.com/nDyS9OA.jpg)
 
-* [plex.yaml](plex.yaml)
+* [plex.yaml](plex/plex.yaml)
 
 # rabbitmq
 
@@ -54,7 +54,7 @@ Usenet download client
 
 MQTT Provided by RabbitMQ-HA helm chart
 
-* [rabbitmq.yaml](rabbitmq.yaml)
+* [rabbitmq.yaml](rabbitmq/rabbitmq.yaml)
 
 
 # radarr
@@ -63,7 +63,7 @@ MQTT Provided by RabbitMQ-HA helm chart
 
 movie downloader
 
-* [radarr.yaml](radarr.yaml)
+* [radarr.yaml](radarr/radarr.yaml)
 
 # rtorrent-flood
 
@@ -71,7 +71,7 @@ movie downloader
 
 torrent client
 
-* [rtorrent-flood.yaml](rtorrent-flood.yaml)
+* [rtorrent-flood.yaml](rtorrent-flood/rtorrent-flood.yaml)
 
 # sonarr
 
@@ -79,7 +79,7 @@ torrent client
 
 tv show downloader
 
-* [sonarr.yaml](sonarr.yaml)
+* [sonarr.yaml](sonarr/sonarr.yaml)
 
 # unifi
 
@@ -87,4 +87,4 @@ tv show downloader
 
 ubiquiti unifi controller for wireless access points
 
-* [unifi.yaml](unifi.yaml)
+* [unifi.yaml](unifi/unifi.yaml)
