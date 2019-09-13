@@ -6,35 +6,28 @@ Leverage [WeaveWorks Flux](https://github.com/weaveworks/flux) to automate clust
 
 ## Setup
 
-See [cluster bootstrap instructions](setup/cluster/) for bootstrapping a kubernetes cluster for using this repo
+* See [cluster bootstrap instructions](setup/cluster/) for bootstrapping a kubernetes cluster
+* See [gitops bootstrap instructions](setup/) for bootstrapping flux gitopsfor using this repo
 
-## Deep-Dive
+## Workloads (by namespace)
 
-### System-level configuration
+### kube-system
 
 See [kube-system](kube-system/) for details on system-level configurations (cert-manager, traefik, decsheduler, fluxcloud, forwardauth OAuth, heapster, intel gpu plugin, dashboard, kured, metallb, sealed-secrets)
 
-### Storage
+### default
 
-See [storage](storage/) for details on storage type services (local storage provider, minio, nfs-client, external NFS mounts, external ceph, stash)
-
-### Deployments
-
-See [deployments](deployments/) for details on regular workloads (frigate, home-assistant, hubot, minecraft, node-red, nzbget, plex, rabbitmq, radarr, rtorrent-flood, sonarr, unifi)
+See [default](default/) for details on regular workloads (frigate, home-assistant, hubot, minecraft, node-red, nzbget, plex, rabbitmq, radarr, rtorrent-flood, sonarr, unifi)
 
 ### Monitoring
 
 See [monitoring](monitoring/) for details on regular workloads (chronograf, comcast usage, grafana, influxdb, cable modem stats, prometheus-operator, speedtest results, uptimerobot agent)
 
-### Logging
+### Logs
 
-See [logging](logging/) for details on logging solutions (loki, EFK Stack (elasticSearch, fluentd, kibana), elasticsearch-curator)
+See [logs](logs/) for details on logging solutions (loki, EFK Stack (elasticSearch, fluentd, kibana), elasticsearch-curator)
 
 ## Caveats
-
-### Manual actions
-
-See [manual-steps](setup/manual-steps/) for instructions things that cannot be handled by flux
 
 ### New namespaces
 
@@ -52,8 +45,6 @@ kubectl -n kube-system delete helmrelease/forwardauth
 
 ### Secrets & Sensitive information
 
-* [sealed-secrets](https://github.com/bitnami-labs/sealed-secrets) works really well for encrypting secret and sensitive information for certain situations:
-  * Kubernetes `Secret` primitives
-  * The usage of those primitives in _Deployments_ ENV variables and volume mounts
-  * Helm chart `values.yaml` merging: You can leverage flux & sealed-secrets to automatically merge-in a secured set of values into the helm deployment
-* Securing other sensitive things that don't fall into the above categories must be handled manually outside of Flux
+Secrets are handled via [vault](https://github.com/hashicorp/vault-helm) and the [vault-secrets-operator](https://github.com/ricoberger/vault-secrets-operator).
+
+See [the kube-system readme](kube-system/README.md) & the [bootstrap-vault.sh](setup/bootstrap-vault.sh) for more details on both of these.

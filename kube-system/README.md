@@ -19,7 +19,7 @@ external ceph cluster provided by proxmox accessed using the [ceph rbd provision
 
 * [external-ceph](external-ceph/)
 
-# OAuth
+# OAuth (forwardauth)
 
 oAuth using [forwardauth for Auth0](https://github.com/dniel/traefik-forward-auth0)
 
@@ -100,14 +100,6 @@ Setup requires some manual steps:
 
 * [metallb.yaml](metallb/metallb.yaml)
 
-# minio
-
-![](https://i.imgur.com/RF0aYAg.png)
-
-S3-compatible bucket storage service
-
-* [minio.yaml](minio/minio.yaml)
-
 # nfs-client-provisioner
 
 Using the [nfs-client storage type](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)
@@ -119,12 +111,6 @@ Using the [nfs-client storage type](https://github.com/kubernetes-incubator/exte
 nfs-based persistent mouts for various pod access (media mount & data mount)
 
 * [nfs-pv](nfs-pv/)
-
-# sealed-secrets
-
-[Handle encryption of secrets for GitOps workflows](https://github.com/bitnami-labs/sealed-secrets)
-
-* [sealed-secrets.yaml](sealed-secrets/sealed-secrets.yaml)
 
 # traefik
 
