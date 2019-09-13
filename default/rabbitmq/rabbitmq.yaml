@@ -64,4 +64,4 @@ spec:
           }
         }
   valueFileSecrets:
-  - name: "rabbitmq-values"
+  - name: "rabbitmq-helm-values"

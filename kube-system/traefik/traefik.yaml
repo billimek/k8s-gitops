@@ -42,5 +42,5 @@ spec:
       hostPort:
         dashboardEnabled: true
   valueFileSecrets:
-  - name: "traefik-values"
+  - name: "traefik-helm-values"
 

@@ -36,4 +36,4 @@ spec:
         accessMode: ReadWriteOnce
         size: 8Gi
   valueFileSecrets:
-  - name: "nextcloud-values"
+  - name: "nextcloud-helm-values"

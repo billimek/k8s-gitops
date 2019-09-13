@@ -35,4 +35,4 @@ spec:
         storageClass: "nfs-client"
         size: 30Gi
   valueFileSecrets:
-  - name: "nzbget-values"
+  - name: "nzbget-helm-values"

@@ -172,4 +172,4 @@ spec:
       limits:
         gpu.intel.com/i915: 1
   valueFileSecrets:
-  - name: "frigate-values"
+  - name: "frigate-helm-values"

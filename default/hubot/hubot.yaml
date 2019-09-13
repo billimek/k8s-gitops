@@ -25,4 +25,4 @@ spec:
         HUBOT_GRAFANA_S3_REGION: 'us-east-1'
         HUBOT_HOME_ASSISTANT_EVENTS_DESTINATION: '#general'
   valueFileSecrets:
-  - name: "hubot-values"
+  - name: "hubot-helm-values"

@@ -22,4 +22,4 @@ spec:
       - key: "node-role.kubernetes.io/controlplane"
         operator: "Exists"
   valueFileSecrets:
-  - name: "kured-values"
+  - name: "kured-helm-values"

@@ -46,4 +46,4 @@ spec:
       # requests:
       #  gpu.intel.com/i915: 1
   valueFileSecrets:
-  - name: "plex-values"
+  - name: "plex-helm-values"

@@ -37,4 +37,4 @@ spec:
         subPath: Videos
         accessMode: ReadWriteMany
   valueFileSecrets:
-  - name: "sonarr-values"
+  - name: "sonarr-helm-values"

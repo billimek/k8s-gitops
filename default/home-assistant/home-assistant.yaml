@@ -42,7 +42,7 @@ spec:
           ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
           ingress.kubernetes.io/auth-trust-headers: "true"
   valueFileSecrets:
-  - name: "hass-values"
+  - name: "hass-helm-values"
 ---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
@@ -76,4 +76,4 @@ spec:
     metrics:
       enabled: true
   valueFileSecrets:
-  - name: "hass-postgresql-values"
+  - name: "hass-postgresql-helm-values"
