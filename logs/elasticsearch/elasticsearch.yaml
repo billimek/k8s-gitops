@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://helm.elastic.co
     name: elasticsearch
-    version: 7.2.0
+    version: 7.3.0
   values:
     # image: "docker.elastic.co/elasticsearch/elasticsearch"
     # imageTag: "7.2.0"
@@ -21,14 +21,14 @@ spec:
     clusterName: "elasticsearch"
     nodeGroup: "master"
     replicas: 3
-#    esJavaOpts: "-Xmx256m -Xms256m"
-#    resources:
-#      requests:
-#        cpu: "100m"
-#        memory: "1G"
-#      limits:
-#        cpu: "1000m"
-#        memory: "1G"
+    # esJavaOpts: "-Xmx128m -Xms128m"
+    # resources:
+    #   requests:
+    #     cpu: "100m"
+    #     memory: "512M"
+    #   limits:
+    #     cpu: "1000m"
+    #     memory: "512M"
     roles:
       master: "true"
       ingest: "true"
