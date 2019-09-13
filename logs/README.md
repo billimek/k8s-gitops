@@ -4,15 +4,15 @@
 
 https://github.com/grafana/loki
 
-* [loki.yaml](loki.yaml)
+* [loki.yaml](loki/loki.yaml)
 
 # EFK stack
 
 ![](https://i.imgur.com/9u80N7l.png)
 
-* [elasticsearch.yaml](elasticsearch.yaml) - elasticsearch - uses a TON of memory
-* [fluentd.yaml](fluentd.yaml) - fluentd for collecting all container logs from the kubernetes cluster
-* [kibana.yaml](kibana.yaml) - kibana log viewer UI
+* [elasticsearch.yaml](elasticsearch/elasticsearch.yaml) - elasticsearch - uses a TON of memory
+* [fluentd.yaml](fluentd/fluentd.yaml) - fluentd for collecting all container logs from the kubernetes cluster
+* [kibana.yaml](kibana/kibana.yaml) - kibana log viewer UI
 
 ## Elasticsearch index templates
 
@@ -74,7 +74,7 @@ PUT _template/fluentd-syslog
 
 ![](https://i.imgur.com/SpDKmQg.png)
 
-* [fluentd.yaml](fluentd.yaml) - fluentd (deployed as fluentd-syslog) for listening as a syslog server on UDP/5140 for collecting all syslog messages from all hosts external from the cluster
+* [fluentd.yaml](fluentd/fluentd.yaml) - fluentd (deployed as fluentd-syslog) for listening as a syslog server on UDP/5140 for collecting all syslog messages from all hosts external from the cluster
   * Configure the remote rsyslog daemon with something like, 
   
   ``` shell
