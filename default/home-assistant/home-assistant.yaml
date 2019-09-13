@@ -42,7 +42,7 @@ spec:
           ingress.kubernetes.io/auth-url: "http://auth0-forwardauth.kube-system.svc.cluster.local/authorize"
           ingress.kubernetes.io/auth-trust-headers: "true"
   valueFileSecrets:
-  - name: "hass-helm-values"
+  - name: "home-assistant-helm-values"
 ---
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
