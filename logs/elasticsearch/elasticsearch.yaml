@@ -21,6 +21,7 @@ spec:
     clusterName: "elasticsearch"
     nodeGroup: "master"
     replicas: 3
+    clusterHealthCheckParams: ""
     # esJavaOpts: "-Xmx128m -Xms128m"
     # resources:
     #   requests:
