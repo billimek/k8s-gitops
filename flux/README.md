@@ -1,0 +1,7 @@
+# fluxcloud
+
+![](https://i.imgur.com/yixxNm9.png)
+
+Send messages to slack for flux events
+
+* [fluxcloud.yaml](fluxcloud/fluxcloud.yaml)
