@@ -21,7 +21,7 @@ spec:
     clusterName: "elasticsearch"
     nodeGroup: "master"
     replicas: 3
-    clusterHealthCheckParams: "wait_for_status=red&timeout=50s"
+    # clusterHealthCheckParams: "wait_for_status=red&timeout=50s"
     # esJavaOpts: "-Xmx128m -Xms128m"
     # resources:
     #   requests:
