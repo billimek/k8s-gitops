@@ -1,9 +1,0 @@
-nextcloud:
-  host: nextcloud.$DOMAIN
-  username: admin
-  password: $NEXTCLOUD_ADMIN_PASSWORD
-mariadb:
-  db:
-    password: $NEXTCLOUD_ADMIN_PASSWORD
-  rootUser:
-    password: $NEXTCLOUD_ADMIN_PASSWORD

@@ -55,28 +55,6 @@ kubectl -n flux logs deployment/flux | grep identity.pub | cut -d '"' -f2
 
 * Add the key to the repo as a deploy key with write access as [described in the instructions](https://github.com/weaveworks/flux/blob/master/site/helm-get-started.md#giving-write-access)
 
-## kubeseal
-
-### brand-new cluster
-
-If this is brand-new, get the new public cert via,
-
-```shell
-kubeseal --fetch-cert \
---controller-namespace=kube-system \
---controller-name=sealed-secrets \
->! pub-cert.pem
-```
-
-### restoring existing key
-
-If desiring to restore the existing kubeseal key,
-
-```shell
-kubectl replace -f master.key --force
-kubectl delete pod -n kube-system -l name=sealed-secrets-controller
-```
-
 ## bootstrapping traefik
 
 See the [cert-manager backup/restore documentation](https://docs.cert-manager.io/en/latest/tasks/backup-restore-crds.html) for backing-up and restoring the data when migrating.

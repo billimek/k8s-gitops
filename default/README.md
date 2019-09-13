@@ -26,6 +26,14 @@ A bot for slack
 
 * [minecraft.yaml](minecraft/minecraft.yaml)
 
+# minio
+
+![](https://i.imgur.com/RF0aYAg.png)
+
+S3-compatible bucket storage service
+
+* [minio.yaml](minio/minio.yaml)
+
 # node-red
 
 ![](https://i.imgur.com/XxN4KJK.png)

@@ -1,2 +1,0 @@
-ingress:
-  hosts: [kibana.$DOMAIN]
