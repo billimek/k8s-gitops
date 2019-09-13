@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: forwardauth-helm-values
+  namespace: kube-system
+spec:
+  keys:
+    - values.yaml
+  path: secrets/kube-system/forwardauth/forwardauth-helm-values
+  type: Opaque

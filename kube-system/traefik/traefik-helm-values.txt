@@ -1,0 +1,10 @@
+dashboard:
+  domain: t.$DOMAIN
+  auth :
+    basic:
+       $TRAEFIK_AUTH
+  ingress:
+    tls:
+      - hosts:
+        - t.$DOMAIN
+        secretName: acme-crt-secret
