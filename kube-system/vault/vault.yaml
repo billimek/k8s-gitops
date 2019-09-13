@@ -1,0 +1,48 @@
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: vault
+  namespace: kube-system
+spec:
+  releaseName: vault
+  chart:
+    git: https://github.com/hashicorp/vault-helm
+    ref: master
+    path: .
+  values:
+    server:
+      extraSecretEnvironmentVars:
+        - envName: VAULT_TOKEN
+          secretName: vault
+          secretKey: vault-unwrap-token
+      tolerations: |
+        - key: "arm"
+          operator: "Exists"
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 250m
+        limits:
+          memory: 256Mi
+          cpu: 250m
+      standalone:
+        enabled: "true"
+        config: |
+          ui = true
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+          }
+          storage "file" {
+            path = "/vault/data"
+          }
+          seal "transit" {
+            address = "http://lb:8200"
+            disable_renewal = "false"
+            key_name = "autounseal"
+            mount_path = "transit/"
+            tls_skip_verify = "true"
+          }
+    ui:
+      enabled: true
