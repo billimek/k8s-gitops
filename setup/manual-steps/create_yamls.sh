@@ -21,7 +21,3 @@ for i in yamls/traefik-external/*.txt
 do
   kapply $i
 done
-
-kapply yamls/rook-dashboard-ingress.txt
-
-kapply yamls/cert-manager-letsencrypt.txt
