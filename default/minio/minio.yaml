@@ -25,4 +25,4 @@ spec:
       annotations:
         kubernetes.io/ingress.class: traefik
   valueFileSecrets:
-  - name: "minio-values"
+  - name: "minio-helm-values"

@@ -30,4 +30,4 @@ spec:
         template:
           ttl: "168h"
   valueFileSecrets:
-  - name: "velero-values"
+  - name: "velero-helm-values"

@@ -27,4 +27,4 @@ spec:
       create: true
       clusterAdminRole: true
   valueFileSecrets:
-  - name: "kubernetes-dashboard-values"
+  - name: "kubernetes-dashboard-helm-values"

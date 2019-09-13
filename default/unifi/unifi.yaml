@@ -40,4 +40,4 @@ spec:
     podAnnotations:
       backup.velero.io/backup-volumes: unifi-data
   valueFileSecrets:
-  - name: "unifi-values"
+  - name: "unifi-helm-values"

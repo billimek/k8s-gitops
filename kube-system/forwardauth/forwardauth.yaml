@@ -23,4 +23,4 @@ spec:
       annotations:
         kubernetes.io/ingress.class: traefik
   valueFileSecrets:
-  - name: "forwardauth-values"
+  - name: "forwardauth-helm-values"

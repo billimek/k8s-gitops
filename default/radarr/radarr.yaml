@@ -37,4 +37,4 @@ spec:
         subPath: Videos
         accessMode: ReadWriteMany
   valueFileSecrets:
-  - name: "radarr-values"
+  - name: "radarr-helm-values"

@@ -34,5 +34,3 @@ spec:
     config:
       opentsdb:
         enabled: true
-  valueFileSecrets:
-  - name: "influxdb-values"
