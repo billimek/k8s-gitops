@@ -14,7 +14,7 @@ spec:
   chart:
     repository: https://grafana.github.io/loki/charts
     name: loki-stack
-    version: 0.9.5
+    version: 0.16.2
   values:
     loki:
       replicas: 1
