@@ -70,6 +70,10 @@ PUT _template/fluentd-syslog
 
 ... After creating the index patterns, it is necessary to 'apply' the index patterns to the newly-created ILM deletion policy so that all _new_ indexes created (with the above patterns) will have the policy automatically associated.
 
+### Kibana saved search patterns
+
+Import [saved_searches.ndjson](saved_searches.ndjson) to Kibana
+
 # remote syslog logging
 
 ![](https://i.imgur.com/SpDKmQg.png)
