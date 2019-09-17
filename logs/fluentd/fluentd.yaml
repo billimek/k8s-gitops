@@ -5,6 +5,7 @@ metadata:
   name: fluentd
   namespace: logs
   annotations:
+    fluxcd.io/ignore: true
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: glob:v2.*.*
 spec:
@@ -72,6 +73,7 @@ metadata:
   name: fluentd-syslog
   namespace: logs
   annotations:
+    fluxcd.io/ignore: true
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: glob:v2.*
 spec:
