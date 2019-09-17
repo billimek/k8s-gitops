@@ -16,8 +16,8 @@ spec:
     version: 3.0.1
   values:
     image:
-      repository: wonderfall/rtorrent-flood
-      tag: new
+      repository: themetabay/flood
+      tag: latest
     uid: 1001
     gid: 1001
     guiService:
