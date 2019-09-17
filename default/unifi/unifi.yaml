@@ -23,7 +23,7 @@ spec:
       size: 20Gi
       storageClass: rbd
     timezone: "America/New_York"
-    runAsRoot: false
+    runAsRoot: true
     ingress:
       enabled: true
       annotations:
