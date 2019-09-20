@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: rabbitmq
-      tag: 3.7.17-alpine
+      tag: 3.7.18-alpine
     rabbitmqMQTTPlugin:
       enabled: true
     rabbitmqWebMQTTPlugin:
