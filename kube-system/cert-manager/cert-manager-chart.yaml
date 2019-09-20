@@ -5,18 +5,15 @@ metadata:
   name: cert-manager
   namespace: kube-system
   annotations:
-    flux.weave.works/automated: "false"
-    flux.weave.works/tag.chart-image: semver:~0
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: semver:~v0.
 spec:
   releaseName: cert-manager
   chart:
     repository: https://charts.jetstack.io/
     name: cert-manager
-    version: v0.9.1
+    version: v0.1.0
   values:
-    image:
-      repository: quay.io/jetstack/cert-manager-controller
-      tag: v0.9.1
     webhook:
       enabled: false
     extraArgs:
