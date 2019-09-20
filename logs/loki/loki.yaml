@@ -27,9 +27,19 @@ spec:
         enabled: true
         size: 50Gi
         storageClassName: rbd
+      serviceMonitor:
+        enabled: true
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
     promtail:
       image:
         repository: grafana/promtail
         tag: latest 
       nameOverride: promtail-local
       deploymentStrategy: RollingUpdate
+      serviceMonitor:
+        enabled: true
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
