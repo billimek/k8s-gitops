@@ -1,13 +1,13 @@
 apiVersion: flux.weave.works/v1beta1
 kind: HelmRelease
 metadata:
-  name: ds
+  name: descheduler
   namespace: kube-system
   annotations:
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~0.2
 spec:
-  releaseName: ds
+  releaseName: descheduler
   chart:
     repository: https://raw.githubusercontent.com/komljen/helm-charts/master/charts/
     name: descheduler
@@ -25,12 +25,12 @@ spec:
           params:
             nodeResourceUtilizationThresholds:
               thresholds:
-                cpu: 30
-                memory: 30
-                pods: 50
+                cpu: 20
+                memory: 20
+                pods: 20
               targetThresholds:
-                cpu: 75
-                memory: 50
+                cpu: 40
+                memory: 40
                 pods: 100
         RemovePodsViolatingInterPodAntiAffinity:
           enabled: true
