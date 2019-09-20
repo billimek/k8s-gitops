@@ -10,7 +10,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: metallb
-    version: 0.10.0
+    version: 0.11.2
   values:
     configInline:
         address-pools:
@@ -18,3 +18,12 @@ spec:
           protocol: layer2
           addresses:
           - 10.2.0.100-10.2.0.250
+          # - 10.2.0.200-10.2.0.250 # <-- k3s
+    controller:
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
+    speaker:
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
