@@ -13,16 +13,15 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: traefik
-    version: 1.75.1
+    version: 1.77.0
   values:
     image: traefik
-    imageTag: 1.7.12
+    imageTag: 1.7.14
     serviceType: LoadBalancer
     externalTrafficPolicy: Local
     loadBalancerIP: 10.2.0.150
+    # loadBalancerIP: 10.2.0.210 # <-- k3s
     replicas: 2
-    # startupArguments:
-    # - --ping
     debug:
       enabled: false
     rbac:
@@ -41,6 +40,15 @@ spec:
     deployment:
       hostPort:
         dashboardEnabled: true
+    metrics:
+      prometheus:
+        enabled: true
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring
+        interval: 30s
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
   valueFileSecrets:
   - name: "traefik-helm-values"
-
