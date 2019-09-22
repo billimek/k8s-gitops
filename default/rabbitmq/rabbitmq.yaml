@@ -26,7 +26,7 @@ spec:
       loadBalancerIP: "10.2.0.102"
       type: LoadBalancer
     persistentVolume:
-      enabled: true
+      enabled: false
     ingress:
       enabled: true
       annotations:
