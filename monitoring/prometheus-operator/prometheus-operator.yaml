@@ -148,6 +148,7 @@ spec:
               resources:
                 requests:
                   storage: 100Gi
+        serviceMonitorSelectorNilUsesHelmValues: false
         additionalScrapeConfigs:
         - job_name: 'netdata-scrape'
           metrics_path: '/api/v1/allmetrics'
