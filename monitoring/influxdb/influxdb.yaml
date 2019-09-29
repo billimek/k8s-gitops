@@ -6,20 +6,21 @@ metadata:
   namespace: monitoring
   annotations:
     flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+-alpine)$'
+    flux.weave.works/tag.chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+)$'
 spec:
   releaseName: influxdb
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: influxdb
-    version: 1.3.2
+    version: 1.3.3
   values:
     image:
       repository: "influxdb"
-      tag: "1.7.8-alpine"
+      tag: "1.7.8"
     service:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.151
+      # loadBalancerIP: 10.2.0.220 # <-- k3s
     persistence:
       enabled: true
       size: 50Gi
@@ -34,3 +35,6 @@ spec:
     config:
       opentsdb:
         enabled: true
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
