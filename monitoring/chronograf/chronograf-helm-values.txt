@@ -1,2 +1,5 @@
 ingress:
   hostname: "chronograf.$DOMAIN"
+  tls:
+  - hosts:
+    - chronograf.$DOMAIN
