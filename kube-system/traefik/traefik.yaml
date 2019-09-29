@@ -5,7 +5,7 @@ metadata:
   name: traefik
   namespace: kube-system
   annotations:
-    flux.weave.works/ignore: "false"
+    fluxcd.io/ignore: true
     flux.weave.works/automated: "false"
     flux.weave.works/tag.chart-image: semver:~1
 spec:

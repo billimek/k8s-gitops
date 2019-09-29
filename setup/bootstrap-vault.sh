@@ -147,7 +147,7 @@ EOF
 loadSecretsToVault() {
   message "writing secrets to vault"
   vault kv put secrets/flux/fluxcloud slack_url="$SLACK_WEBHOOK_URL"
-  vault kv put secrets/kube-system/traefik-basic-auth-jeff auth="$JEFF_AUTH"
+  vault kv put secrets/kube-system/nginx-basic-auth-jeff auth="$JEFF_AUTH"
   vault kv put secrets/kube-system/cloudflare-api-key api-key="$CF_API_KEY"
 
   ####################
@@ -156,7 +156,6 @@ loadSecretsToVault() {
   kvault "kube-system/forwardauth/forwardauth-helm-values.txt"
   kvault "kube-system/kubernetes-dashboard/kubernetes-dashboard-helm-values.txt"
   kvault "kube-system/kured/kured-helm-values.txt"
-  kvault "kube-system/traefik/traefik-helm-values.txt"
   kvault "logs/kibana/kibana-helm-values.txt"
   kvault "monitoring/chronograf/chronograf-helm-values.txt"
   kvault "monitoring/comcast/comcast-helm-values.txt"
