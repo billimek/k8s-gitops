@@ -1,3 +1,6 @@
 ingress:
   hosts: [plex.$DOMAIN]
+  tls:
+  - hosts:
+    - plex.$DOMAIN
 claimToken: "$PLEX_CLAIM_TOKEN"
