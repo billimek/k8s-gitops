@@ -43,8 +43,6 @@ kubernetes_version: v1.15.2-rancher1-1
 # ignore_docker_version: true
 services:
   kubelet:
-    extra_args:
-      read-only-port: 10255
     extra_binds:
     - "/lib/modules:/lib/modules"
     - "/mnt:/mnt:rshared"

@@ -19,12 +19,6 @@ external ceph cluster provided by proxmox accessed using the [ceph rbd provision
 
 * [external-ceph](external-ceph/)
 
-# Heapster
-
-Metrics that actually works for kubernetes-dashboard. This may stop working in kubernetes 1.13
-
-* [heapster.yaml](heapster/heapster.yaml)
-
 # Intel GPU Plugin
 
 Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/tree/master/cmd/gpu_plugin) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via the `gpu.intel.com/i915` node resource
