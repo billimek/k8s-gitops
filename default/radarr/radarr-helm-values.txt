@@ -1,2 +1,5 @@
 ingress:
   hosts: [radarr.$DOMAIN]
+  tls:
+  - hosts:
+    - radarr.$DOMAIN
