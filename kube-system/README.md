@@ -37,12 +37,6 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 
 * [intel-gpu_plugin.yaml](intel-gpu_plugin/intel-gpu_plugin.yaml)
 
-# kubernetes dashboard
-
-![](https://i.imgur.com/Jl1blwE.png)
-
-* [kubernetes-dashboard.yaml](kubernetes-dashboard/kubernetes-dashboard.yaml)
-
 # kured
 
 ![](https://i.imgur.com/wYWTMGI.png)
