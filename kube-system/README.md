@@ -19,12 +19,6 @@ external ceph cluster provided by proxmox accessed using the [ceph rbd provision
 
 * [external-ceph](external-ceph/)
 
-# OAuth (forwardauth)
-
-oAuth using [forwardauth for Auth0](https://github.com/dniel/traefik-forward-auth0)
-
-* [forwardauth.yaml](forwardauth/forwardauth.yaml)
-
 # Heapster
 
 Metrics that actually works for kubernetes-dashboard. This may stop working in kubernetes 1.13
