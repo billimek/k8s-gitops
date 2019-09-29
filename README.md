@@ -13,7 +13,7 @@ Leverage [WeaveWorks Flux](https://github.com/weaveworks/flux) to automate clust
 
 ### kube-system
 
-See [kube-system](kube-system/) for details on system-level configurations (cert-manager, traefik, decsheduler, fluxcloud, intel gpu plugin, kured, metallb, sealed-secrets)
+See [kube-system](kube-system/) for details on system-level configurations (cert-manager, decsheduler, fluxcloud, intel gpu plugin, kured, metallb, nginx, sealed-secrets)
 
 ### default
 

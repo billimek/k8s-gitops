@@ -94,13 +94,11 @@ nfs-based persistent mouts for various pod access (media mount & data mount)
 
 * [nfs-pv](nfs-pv/)
 
-# traefik
+# nginx
 
-![](https://i.imgur.com/gwienvX.png)
+[nginx-ingress controller](https://github.com/kubernetes/ingress-nginx) leveraging cert-manager as the central cert store
 
-traefik in HA-mode (multiple replicas) leveraging cert-manager as the central cert store
-
-* [traefik.yaml](traefik/traefik.yaml)
+* [nginx/](nginx/)
 
 # vault
 
