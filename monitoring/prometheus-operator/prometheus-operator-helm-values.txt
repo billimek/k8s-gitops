@@ -1,12 +1,21 @@
 alertmanager:
   ingress:
     hosts: [prom-alert.$DOMAIN]
+    tls:
+    - hosts:
+      - prom-alert.$DOMAIN
 prometheus:
   ingress:
     hosts: [prom-server.$DOMAIN]
+    tls:
+    - hosts:
+      - prom-server.$DOMAIN
 grafana:
   ingress:
     hosts: [grafana.$DOMAIN]
+    tls:
+    - hosts:
+      - grafana.$DOMAIN
   adminPassword: "$GRAFANA_PASSWORD"
   grafana.ini:
     server:

@@ -30,7 +30,7 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: "traefik"
+        kubernetes.io/ingress.class: "nginx"
     rabbitmqErlangCookie: "9uVNsf2plnpyslPjqUVaDmGTUml2wJlb"
     definitions:
       permissions: |-

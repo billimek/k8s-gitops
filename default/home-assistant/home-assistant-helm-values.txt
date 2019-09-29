@@ -1,18 +1,27 @@
 ingress:
   hosts: 
   - hass.$DOMAIN
+  tls:
+  - hosts:
+    - hass.$DOMAIN
 extraEnv:
   CAMERA_AUTH: $CAMERA_AUTH
 configurator:
   ingress:
     hosts: 
     - hass-config.$DOMAIN
+    tls:
+    - hosts:
+      - hass-config.$DOMAIN
   hassApiPassword: $HASS_API_PASSWORD
   hassApiUrl: https://hass.$DOMAIN/api/
 vscode:
   ingress:
     hosts: 
     - hass-vscode.$DOMAIN
+    tls:
+    - hosts:
+      - hass-vscode.$DOMAIN
   password: $HASS_API_PASSWORD
   extraEnv:
     HASS_SERVER: http://localhost:8123

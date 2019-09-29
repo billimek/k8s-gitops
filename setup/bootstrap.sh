@@ -83,9 +83,9 @@ installManualObjects(){
   kapply "$REPO_ROOT"/kube-system/cert-manager/cert-manager-letsencrypt.txt
 
   ###################
-  # traefik-external
+  # nginx-external
   ###################
-  for i in "$REPO_ROOT"/kube-system/traefik/traefik-external/*.txt
+  for i in "$REPO_ROOT"/kube-system/nginx/nginx-external/*.txt
   do
     kapply "$i"
   done

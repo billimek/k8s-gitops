@@ -1,2 +1,5 @@
 ingress:
-  hosts: [d.k.$DOMAIN]
+  hosts: [d.$DOMAIN]
+  tls:
+  - hosts:
+    - d.$DOMAIN

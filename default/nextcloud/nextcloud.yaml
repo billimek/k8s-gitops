@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: nextcloud
-    version: 1.7.0
+    version: 1.7.2
   values:
     image:
       repository: nextcloud
@@ -23,7 +23,7 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: "traefik"
+        kubernetes.io/ingress.class: "nginx"
     internalDatabase:
       enabled: false
     mariadb:

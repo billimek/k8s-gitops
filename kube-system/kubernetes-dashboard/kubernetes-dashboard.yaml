@@ -22,7 +22,7 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: "traefik"
+        kubernetes.io/ingress.class: "nginx"
     rbac:
       create: true
       clusterAdminRole: true

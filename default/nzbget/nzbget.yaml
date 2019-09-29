@@ -23,7 +23,7 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: "traefik"
+        kubernetes.io/ingress.class: "nginx"
     timezone: "America/New_York"
     persistence:
       downloads:
