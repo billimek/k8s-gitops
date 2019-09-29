@@ -1,0 +1,36 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: nginx-ingress
+  namespace: kube-system
+  annotations:
+    fluxcd.io/ignore: false
+    flux.weave.works/automated: "false"
+    flux.weave.works/tag.chart-image: semver:~0.
+spec:
+  releaseName: nginx-ingress
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: nginx-ingress
+    version: 1.21.0
+  values:
+    controller:
+      image:
+        repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
+        tag: "0.25.1"
+      replicaCount: 2
+      service:
+        loadBalancerIP: 10.2.0.150
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          # namespace: monitoring
+        prometheusRule:
+          enabled: false
+      # tolerations:
+      # - key: "arm"
+      #   operator: "Exists"
+      extraArgs:
+        default-ssl-certificate: "kube-system/acme-crt-secret"
