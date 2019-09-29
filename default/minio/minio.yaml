@@ -23,6 +23,6 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: traefik
+        kubernetes.io/ingress.class: nginx
   valueFileSecrets:
   - name: "minio-helm-values"
