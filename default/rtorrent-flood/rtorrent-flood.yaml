@@ -16,7 +16,7 @@ spec:
     version: 3.0.1
   values:
     image:
-      repository: themetabay/flood
+      repository: jfurrow/flood-ui
       tag: latest
     uid: 1001
     gid: 1001
