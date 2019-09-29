@@ -13,11 +13,11 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: rtorrent-flood
-    version: 3.0.1
+    version: 3.1.1
   values:
-    image:
-      repository: jfurrow/flood-ui
-      tag: latest
+    # image:
+    #   repository: jfurrow/flood-ui
+    #   tag: latest
     uid: 1001
     gid: 1001
     guiService:
