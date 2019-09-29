@@ -1,2 +1,5 @@
 ingress:
   hosts: [kibana.$DOMAIN]
+  tls:
+  - hosts:
+    - kibana.$DOMAIN
