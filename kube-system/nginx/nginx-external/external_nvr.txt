@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: external-nvr
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: nvr.$DOMAIN
+    http:
+      paths:
+      - backend:
+          serviceName: external-nvr
+          servicePort: 81
+  tls:
+  - hosts:
+    - nvr.$DOMAIN
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-nvr
+spec:
+  ports:
+  - name: http
+    port: 81
+  type: ExternalName
+  externalName: nvr.local
