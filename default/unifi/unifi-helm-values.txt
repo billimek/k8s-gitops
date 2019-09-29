@@ -1,2 +1,5 @@
 ingress:
   hosts: [unifi.$DOMAIN]
+  tls:
+  - hosts:
+    - unifi.$DOMAIN

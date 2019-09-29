@@ -27,7 +27,7 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: "traefik"
+        kubernetes.io/ingress.class: "nginx"
     controllerService:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.156
