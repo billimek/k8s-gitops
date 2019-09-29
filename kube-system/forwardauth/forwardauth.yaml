@@ -4,6 +4,7 @@ metadata:
   name: auth0
   namespace: kube-system
   annotations:
+    fluxcd.io/ignore: true
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: glob:latest
 spec:
