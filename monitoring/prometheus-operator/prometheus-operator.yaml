@@ -35,7 +35,7 @@ spec:
     grafana:
       image:
         repository: grafana/grafana
-        tag: 6.3.6
+        tag: 6.4.0
       deploymentStrategy:
         type: Recreate
       persistence:
@@ -53,17 +53,17 @@ spec:
       plugins:
       - natel-discrete-panel
       dashboardProviders:
-       dashboardproviders.yaml:
-         apiVersion: 1
-         providers:
-         - name: 'default'
-           orgId: 1
-           folder: ''
-           type: file
-           disableDeletion: false
-           editable: true
-           options:
-             path: /var/lib/grafana/dashboards/default
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
       dashboards:
         default:
           nginx-dashboard:
