@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://charts.jetstack.io/
     name: cert-manager
-    version: v0.1.0
+    version: v0.10.1
   values:
     webhook:
       enabled: false
