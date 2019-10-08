@@ -5,6 +5,7 @@ metadata:
   name: chronograf
   namespace: monitoring
   annotations:
+    fluxcd.io/ignore: true
     flux.weave.works/automated: "true"
     flux.weave.works/tag.chart-image: semver:~1.7
 spec:

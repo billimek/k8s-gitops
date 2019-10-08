@@ -5,7 +5,7 @@ metadata:
   name: loki
   namespace: logs
   annotations:
-    flux.weave.works/ignore: "false"
+    fluxcd.io/ignore: true
     flux.weave.works/automated: "true"
     flux.weave.works/tag.loki: glob:latest
     flux.weave.works/tag.promtail: glob:latest
