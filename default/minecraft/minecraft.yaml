@@ -5,7 +5,7 @@ metadata:
   name: mc
   namespace: default
   annotations:
-    fluxcd.io/ignore: true
+    fluxcd.io/ignore: false
     # flux.weave.works/automated: "true"
     # flux.weave.works/tag.chart-image: glob:latest
 spec:
@@ -47,7 +47,7 @@ metadata:
   name: mcsv
   namespace: default
   annotations:
-    fluxcd.io/ignore: true
+    fluxcd.io/ignore: false
     # flux.weave.works/automated: "true"
     # flux.weave.works/tag.chart-image: glob:latest
 spec:
