@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: linuxserver/radarr
-      tag: 'amd64-v0.2.0.1358-ls36'
+      tag: 'amd64-v0.2.0.1358-ls37'
       pullPolicy: Always
     ingress:
       enabled: true
