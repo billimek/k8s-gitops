@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: sonarr
-    version: 2.0.6
+    version: 2.0.7
   values:
     image:
       repository: linuxserver/sonarr
@@ -23,6 +23,8 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "nginx"
     timezone: "America/New_York"
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
     persistence:
       config:
         enabled: true

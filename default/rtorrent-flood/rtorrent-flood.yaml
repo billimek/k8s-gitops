@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: rtorrent-flood
-    version: 3.1.2
+    version: 3.1.3
   values:
     image:
       repository: jfurrow/flood-ui
@@ -31,6 +31,8 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
     persistence:
       config:
         enabled: true
