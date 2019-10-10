@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: plexinc/pms-docker
-      tag: 1.17.0.1841-d42cfa161
+      tag: 1.18.0.1913-e5cc93306
     podAnnotations:
       backup.velero.io/backup-volumes: config
     kubePlex:
