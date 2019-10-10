@@ -33,7 +33,7 @@ spec:
       enabled: true
       image:
         repository: codercom/code-server
-        tag: 2.1582-vsc1.38.1
+        tag: 2.1583-vsc1.38.1
       ingress:
         enabled: true
         annotations:
