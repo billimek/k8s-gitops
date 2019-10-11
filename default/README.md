@@ -54,7 +54,7 @@ Usenet download client
 
 # pihole
 
-TODO: need picture
+![](https://i.imgur.com/X2e9P6u.png)
 
 * [pihole.yaml](pihole/pihole.yaml)
 
