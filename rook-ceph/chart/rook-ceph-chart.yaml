@@ -1,0 +1,17 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: rook-ceph
+  namespace: rook-ceph
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: rook-ceph
+  chart:
+    repository: https://charts.rook.io/release
+    name: rook-ceph
+    version: v1.1.2
+  values:
+    csi:
+      kubeletDirPath: /var/lib/rancher/k3s/agent/kubelet
