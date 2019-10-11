@@ -6,5 +6,5 @@ metadata:
 spec:
   keys:
     - api-key
-  path: secrets/kube-system/cloudflare-api-key
+  path: secrets/cert-manager/cloudflare-api-key
   type: Opaque

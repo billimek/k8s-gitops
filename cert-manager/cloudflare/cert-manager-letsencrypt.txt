@@ -8,14 +8,15 @@ spec:
     email: $EMAIL
     privateKeySecretRef:
       name: letsencrypt-test
-    dns01:
-      providers:
-        - name: cf-dns
-          cloudflare:
-            email: $EMAIL
-            apiKeySecretRef:
-              name: cloudflare-api-key
-              key: api-key
+    solvers:
+    - selector: {}
+      dns01:
+        cloudflare:
+          email: $EMAIL
+          apiKeySecretRef:
+            name: cloudflare-api-key
+            key: api-key
+
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
@@ -27,14 +28,14 @@ spec:
     email: $EMAIL
     privateKeySecretRef:
       name: letsencrypt-prod
-    dns01:
-      providers:
-        - name: cf-dns
-          cloudflare:
-            email: $EMAIL
-            apiKeySecretRef:
-              name: cloudflare-api-key
-              key: api-key
+    solvers:
+    - selector: {}
+      dns01:
+        cloudflare:
+          email: $EMAIL
+          apiKeySecretRef:
+            name: cloudflare-api-key
+            key: api-key
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
