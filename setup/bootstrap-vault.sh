@@ -110,11 +110,11 @@ loginVault() {
 
 setupVaultSecretsOperator() {
   message "configuring vault for vault-secrets-operator"
-  vault secrets enable -path=secrets -version=1 kv
+  vault secrets enable -path=secrets -version=2 kv
 
   # create read-only policy for kubernetes
   cat <<EOF | vault policy write vault-secrets-operator -
-  path "secrets/*" {
+  path "secrets/data/*" {
     capabilities = ["read"]
   }
 EOF
