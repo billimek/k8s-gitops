@@ -26,6 +26,12 @@ spec:
     resources:
       requests:
         memory: 1024Mi
+    livenessProbe:
+      initialDelaySeconds: 60
+      periodSeconds: 5
+    readinessProbe:
+      initialDelaySeconds: 60
+      periodSeconds: 5
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
