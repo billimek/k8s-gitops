@@ -21,7 +21,7 @@ spec:
       tag: 0.2.1-beta
     config: |
       mqtt:
-        host: rabbitmq-rabbitmq-ha.default.svc
+        host: rabbitmq-ha.default.svc
         topic_prefix: frigate
       cameras:
         porch:
