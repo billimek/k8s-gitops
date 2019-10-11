@@ -17,8 +17,7 @@ spec:
         - name: default
           protocol: layer2
           addresses:
-          - 10.2.0.200-10.2.0.250
-          # - 10.2.0.100-10.2.0.250 # <-- k8s
+          - 10.2.0.100-10.2.0.250
     controller:
       tolerations:
       - key: "arm"

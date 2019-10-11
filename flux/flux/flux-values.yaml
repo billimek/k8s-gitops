@@ -1,7 +1,7 @@
 helmOperator:
   create: false
 git:
-  url: "git@github.com:billimek/k3s-gitops"
+  url: "git@github.com:billimek/k8s-gitops"
 registry:
   rps: 1
   burst: 1

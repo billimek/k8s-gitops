@@ -15,4 +15,4 @@ spec:
     version: 0.15.0
   valuesFrom:
   - externalSourceRef:
-      url: https://raw.githubusercontent.com/billimek/k3s-gitops/master/flux/flux/flux-values.yaml
+      url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/flux/flux/flux-values.yaml

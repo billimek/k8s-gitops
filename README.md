@@ -1,4 +1,8 @@
-# Light-weight mixed-architecture cluster setup with k3s using gitops
+# GitOps workflow for kubernetes cluster
+
+![](https://i.imgur.com/qBbjyNx.png)
+
+Leverage [Flux](https://github.com/fluxcd/flux) to automate cluster state using code residing in this repo
 
 ## Setup
 
@@ -14,3 +18,4 @@ See [setup/README.md](setup/README.md) for more details.
 * [monitoring](monitoring/)
 * [rook-ceph](rook-ceph/)
 * [velero](velero/)
+

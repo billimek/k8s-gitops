@@ -41,10 +41,10 @@ spec:
         - name: SLACK_CHANNEL
           value: "#notifications"
         - name: SLACK_USERNAME
-          value: Flux Deployer (k3s)
+          value: Flux Deployer
         - name: SLACK_ICON_EMOJI
-          value: ":blue_heart:"
+          value: ":heart:"
         - name: GITHUB_URL
-          value: "https://github.com/billimek/k3s-gitops/"
+          value: "https://github.com/billimek/k8s-gitops/"
         - name: LISTEN_ADDRESS
           value: ":3032"

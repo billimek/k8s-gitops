@@ -95,7 +95,7 @@ installFlux() {
 
 k3sMasterNode
 ks3amd64WorkerNodes
-# ks3OdroidWorkerNodes
+ks3OdroidWorkerNodes
 ks3armWorkerNodes
 
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"

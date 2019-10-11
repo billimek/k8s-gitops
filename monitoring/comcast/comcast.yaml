@@ -5,7 +5,7 @@ metadata:
   name: comcast
   namespace: monitoring
   annotations:
-    fluxcd.io/ignore: true
+    fluxcd.io/ignore: false
 spec:
   releaseName: comcast
   rollback:

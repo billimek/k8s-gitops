@@ -23,8 +23,7 @@ spec:
         tag: "0.25.1"
       replicaCount: 3
       service:
-        loadBalancerIP: 10.2.0.210
-        # loadBalancerIP: 10.2.0.150 # <-- k8s
+        loadBalancerIP: 10.2.0.150
       metrics:
         enabled: true
         serviceMonitor:
