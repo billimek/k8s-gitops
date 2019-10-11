@@ -62,9 +62,9 @@ spec:
             echo "$(date '+%Y-%m-%d %H:%M:%S') starting watch loop"
             kubectl get ns --watch --field-selector="status.phase==Active" --no-headers -o "custom-columns=:metadata.name" | \
             while read ns; do
-              if [ "$ns" != "kube-system" ]; then
+              if [ "$ns" != "cert-manager" ]; then
                 echo "$(date '+%Y-%m-%d %H:%M:%S') namespace - $ns"
-                kubectl -n "kube-system" get secret "acme-crt-secret" -o yaml --export | \
+                kubectl -n "cert-manager" get secret "acme-crt-secret" -o yaml --export | \
                   kubectl -n "$ns" apply --validate=false -f -
               fi
             done
@@ -78,11 +78,11 @@ spec:
           set -e
           while true; do
             echo "$(date '+%Y-%m-%d %H:%M:%S') starting watch loop"
-            kubectl -n "kube-system" get secret "acme-crt-secret" --watch --no-headers -o "custom-columns=:metadata.name" | \
+            kubectl -n "cert-manager" get secret "acme-crt-secret" --watch --no-headers -o "custom-columns=:metadata.name" | \
             while read secret; do
-              export=$(kubectl -n "kube-system" get secret "$secret" -o yaml --export)
+              export=$(kubectl -n "cert-manager" get secret "$secret" -o yaml --export)
               for ns in $(kubectl get ns --field-selector="status.phase==Active" --no-headers -o "custom-columns=:metadata.name"); do
-                if [ "$ns" != "kube-system" ]; then
+                if [ "$ns" != "cert-manager" ]; then
                   echo "$(date '+%Y-%m-%d %H:%M:%S') namespace - $ns"
                   echo "$export" | kubectl -n "$ns" apply --validate=false -f -
                 fi
