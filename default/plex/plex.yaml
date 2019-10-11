@@ -44,10 +44,10 @@ spec:
       config:
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
-    # resources:
-    #   limits:
-    #     gpu.intel.com/i915: 1
-    #   # requests:
-    #   #   gpu.intel.com/i915: 1
+    resources:
+      limits:
+        gpu.intel.com/i915: 1
+      # requests:
+      #   gpu.intel.com/i915: 1
   valueFileSecrets:
   - name: "plex-helm-values"
