@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: minio/minio
-      tag: RELEASE.2019-10-02T21-19-38Z
+      tag: RELEASE.2019-10-11T00-38-09Z
     persistence:
       existingClaim: "nfs-data-pvc"
       subPath: "minio"
