@@ -1,13 +1,15 @@
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: descheduler
   namespace: kube-system
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~0.2
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: semver:~0.2
 spec:
   releaseName: descheduler
+  rollback:
+    enable: true
   chart:
     repository: https://raw.githubusercontent.com/komljen/helm-charts/master/charts/
     name: descheduler

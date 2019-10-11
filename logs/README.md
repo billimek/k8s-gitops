@@ -4,9 +4,9 @@
 
 https://github.com/grafana/loki
 
-* [loki.yaml](loki/loki.yaml)
+* [loki/loki.yaml](loki/loki.yaml)
 
-# EFK stack
+# EFK stack (CURRENTLY DISABLED)
 
 ![](https://i.imgur.com/9u80N7l.png)
 
@@ -74,11 +74,11 @@ PUT _template/fluentd-syslog
 
 Import [saved_searches.ndjson](saved_searches.ndjson) to Kibana
 
-# remote syslog logging
+# remote syslog logging (CURRENTLY DISABLED)
 
 ![](https://i.imgur.com/SpDKmQg.png)
 
-* [fluentd.yaml](fluentd/fluentd.yaml) - fluentd (deployed as fluentd-syslog) for listening as a syslog server on UDP/5140 for collecting all syslog messages from all hosts external from the cluster
+* [fluentd.yaml](fluentd/fluentd-syslog.yaml) - fluentd (deployed as fluentd-syslog) for listening as a syslog server on UDP/5140 for collecting all syslog messages from all hosts external from the cluster
   * Configure the remote rsyslog daemon with something like, 
   
   ``` shell

@@ -1,13 +1,13 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: prometheus-operator
   namespace: monitoring
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.grafana: semver:~6
-
+    fluxcd.io/ignore: false
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.grafana: semver:~6
 spec:
   releaseName: prometheus-operator
   chart:
@@ -22,10 +22,13 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: rbd
+              storageClassName: rook-ceph-block
               resources:
                 requests:
                   storage: 10Gi
+        # tolerations:
+        # - key: "arm"
+        #   operator: "Exists"
       ingress:
         enabled: true
         annotations:
@@ -36,14 +39,15 @@ spec:
       image:
         repository: grafana/grafana
         tag: 6.4.2
-      deploymentStrategy:
-        type: Recreate
+      # tolerations:
+      # - key: "arm"
+      #   operator: "Exists"
       persistence:
         enabled: true
-        storageClassName: "rbd"
-        accessModes:
-        - ReadWriteOnce
+        storageClassName: "rook-ceph-block"
         size: 10Gi
+        accessModes:
+          - ReadWriteOnce
       env:
         GF_EXPLORE_ENABLED: true
       ingress:
@@ -69,6 +73,30 @@ spec:
           nginx-dashboard:
             url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
             datasource: Prometheus
+          ceph-cluster:
+            url: https://grafana.com/api/dashboards/2842/revisions/10/download
+            datasource: Prometheus
+          ceph-osd:
+            url: https://grafana.com/api/dashboards/5336/revisions/3/download
+            datasource: Prometheus
+          ceph-pools:
+            url: https://grafana.com/api/dashboards/5342/revisions/3/download
+            datasource: Prometheus
+          # cable-modem-stats:
+          #   url: https://raw.githubusercontent.com/billimek/k3s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
+          #   datasource: influxdb
+          # comcast-sucks:
+          #   url: https://raw.githubusercontent.com/billimek/k3s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/comcast_sucks.json
+          #   datasource: influxdb
+          # home-assistant:
+          #   url: https://raw.githubusercontent.com/billimek/k3s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/home_assistant.json
+          #   datasource: influxdb
+          # ups:
+          #   url: https://raw.githubusercontent.com/billimek/k3s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/ups.json
+          #   datasource: influxdb
+          # netdata:
+          #   url: https://raw.githubusercontent.com/billimek/k3s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/netdata.json
+          #   datasource: Prometheus
       additionalDataSources:
       - name: loki
         type: loki
@@ -117,19 +145,10 @@ spec:
         grafana_net:
           url: https://grafana.net
     kubeEtcd:
-      enabled: true
-      endpoints:
-      - 10.2.0.10
-      - 10.2.0.11
-      - 10.2.0.12
-      service:
-        port: 2379
-        targetPort: 2379
+      enabled: false
     prometheus-node-exporter:
       tolerations:
-      - key: "node-role.kubernetes.io/etcd"
-        operator: "Exists"
-      - key: "node-role.kubernetes.io/controlplane"
+      - key: "arm"
         operator: "Exists"
     prometheus:
       ingress:
@@ -138,17 +157,24 @@ spec:
           kubernetes.io/ingress.class: "nginx"
           nginx.ingress.kubernetes.io/auth-type: "basic"
           nginx.ingress.kubernetes.io/auth-secret: "nginx-basic-auth-jeff"
+          # ingress.kubernetes.io/auth-trust-headers: "true"
       prometheusSpec:
+#        image:
+#          repository: quay.io/prometheus/prometheus
+#          tag: v2.9.1
         retention: 30d
         enableAdminAPI: true
+        serviceMonitorSelectorNilUsesHelmValues: false
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: rbd
+              storageClassName: rook-ceph-block
               resources:
                 requests:
                   storage: 100Gi
-        serviceMonitorSelectorNilUsesHelmValues: false
+        # tolerations:
+        # - key: "arm"
+        #   operator: "Exists"
         additionalScrapeConfigs:
         - job_name: 'netdata-scrape'
           metrics_path: '/api/v1/allmetrics'
@@ -164,13 +190,6 @@ spec:
             - proxmox-c:19999
             - lb:19999
             - pihole:19999
-            - k8s-master-a:19999
-            - k8s-master-b:19999
-            - k8s-master-c:19999
-            - k8s-1:19999
-            - k8s-2:19999
-            - k8s-3:19999
-            - k8s-4:19999
         - job_name: 'wmi-exporter-scrape'
           metrics_path: '/metrics'
           params:
@@ -179,12 +198,12 @@ spec:
           static_configs:
           - targets:
             - nvr:9182
-        - job_name: 'hass'
+        - job_name: 'home-assistant'
           scrape_interval: 60s
           metrics_path: /api/prometheus
           bearer_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiM2FjNjVlNjQ1OTU0NWNhOWJiZWZiZDE5OWM4MDMzMiIsImlhdCI6MTU2NzEyODYwOCwiZXhwIjoxODgyNDg4NjA4fQ.NkSaaxMnJMYy-38gBsdlKt35-aKKSMDofGzBeBQmVnw'
           scheme: http
           static_configs:
-          - targets: ['hass-home-assistant.default.svc:8123']
+            - targets: ['home-assistant.default.svc:8123']
   valueFileSecrets:
   - name: "prometheus-operator-helm-values"

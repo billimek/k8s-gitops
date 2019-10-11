@@ -1,14 +1,16 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: nzbget
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
 spec:
   releaseName: nzbget
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: nzbget
@@ -28,7 +30,7 @@ spec:
     persistence:
       downloads:
         enabled: true
-        existingClaim: nfs-media-pvc-10g
+        existingClaim: nfs-media-pvc
         subPath: Downloads
       config:
         enabled: true
@@ -36,5 +38,8 @@ spec:
         size: 30Gi
     podAnnotations:
       backup.velero.io/backup-volumes: config
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
   valueFileSecrets:
   - name: "nzbget-helm-values"

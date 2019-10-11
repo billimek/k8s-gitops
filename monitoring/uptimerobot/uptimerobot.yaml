@@ -1,14 +1,15 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: uptimerobot
   namespace: monitoring
   annotations:
-    # flux.weave.works/automated: "true"
-    # flux.weave.works/tag.chart-image: glob:latest
+    fluxcd.io/ignore: true
 spec:
   releaseName: uptimerobot
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: uptimerobot

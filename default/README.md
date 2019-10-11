@@ -13,6 +13,7 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 This also installs a postgresql deployment for holding the Home Assistant state and history information
 
 * [home-assistant.yaml](home-assistant/home-assistant.yaml)
+* [postgresql.yaml](home-assistant/postgresql.yaml)
 
 # hubot
 
@@ -24,7 +25,8 @@ A bot for slack
 
 ![](https://i.imgur.com/zBha0RP.png)
 
-* [minecraft.yaml](minecraft/minecraft.yaml)
+* [minecraft-creative.yaml](minecraft/minecraft-creative.yaml)
+* [minecraft-survival.yaml](minecraft/minecraft-survival.yaml)
 
 # minio
 
@@ -50,6 +52,12 @@ Usenet download client
 
 * [nzbget.yaml](nzbget/nzbget.yaml)
 
+# pihole
+
+TODO: need picture
+
+* [pihole.yaml](pihole/pihole.yaml)
+
 # plex
 
 ![](https://i.imgur.com/nDyS9OA.jpg)
@@ -63,7 +71,6 @@ Usenet download client
 MQTT Provided by RabbitMQ-HA helm chart
 
 * [rabbitmq.yaml](rabbitmq/rabbitmq.yaml)
-
 
 # radarr
 

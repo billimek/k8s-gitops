@@ -1,14 +1,16 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: sonarr
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'glob:amd64-2.*.*.*'
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: 'glob:amd64-2.*.*.*'
 spec:
   releaseName: sonarr
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: sonarr
@@ -16,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: 'amd64-2.0.0.5338-ls10'
+      tag: 'amd64-2.0.0.5338-ls37'
       pullPolicy: Always
     ingress:
       enabled: true
@@ -28,14 +30,14 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: "rbd"
+        storageClass: "rook-ceph-block"
       downloads:
         enabled: true
-        existingClaim: nfs-media-downloads-pvc-10g
+        existingClaim: nfs-media-downloads-pvc
         accessMode: ReadWriteMany
       tv:
         enabled: true
-        existingClaim: nfs-media-pvc-10g
+        existingClaim: nfs-media-pvc
         subPath: Videos
         accessMode: ReadWriteMany
   valueFileSecrets:

@@ -1,0 +1,40 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: mc
+  namespace: default
+  annotations:
+    # fluxcd.io/automated: "true"
+    # fluxcd.io/tag.chart-image: glob:latest
+spec:
+  releaseName: mc
+  rollback:
+    enable: true
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: minecraft
+    version: 1.1.0
+  values:
+    image: itzg/minecraft-server
+    imageTag: latest
+    persistence:
+      storageClass: "rook-ceph-block"
+      dataDir:
+        enabled: true
+        Size: 10Gi
+    resources:
+      requests:
+        memory: 1024Mi
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      type: PAPER
+      paperDownloadUrl: https://papermc.io/api/v1/paper/1.14.4/latest/download
+      forceReDownload: true
+      jvmOpts: "-Xmx1024M -Xms1024M  -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs"
+      difficulty: normal
+      serviceType: LoadBalancer
+      gameMode: creative
+      ops: "83d9416e-216e-4ffb-81ae-d2bd455a398a"
+      motd: "billimek minecraft server (creative)"

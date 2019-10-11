@@ -1,22 +1,22 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: kibana
   namespace: logs
   annotations:
     fluxcd.io/ignore: true
-    flux.weave.works/automated: "false"
-    flux.weave.works/tag.chart-image: semver:~7
+    fluxcd.io/automated: "false"
+    fluxcd.io/tag.chart-image: semver:~7
 spec:
   releaseName: kibana
+  rollback:
+    enable: true
   chart:
     repository: https://helm.elastic.co
     name: kibana
     version: 7.3.0
   values:
-    # image: "docker.elastic.co/kibana/kibana"
-    # imageTag: "7.1.1"
     elasticsearchURL: "http://elasticsearch-master:9200"
     elasticsearchHosts: "http://elasticsearch-master:9200"
     ingress:

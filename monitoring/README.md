@@ -4,7 +4,7 @@ Dashboard for influxdb
 
 ![](https://i.imgur.com/PPbhf5O.png)
 
-* [chronograf.yaml](chronograf/chronograf.yaml)
+* [chronograf/chronograf.yaml](chronograf/chronograf.yaml)
 
 # comcast
 
@@ -14,13 +14,13 @@ Collect comcast usage data for reporting
 
 Based on this [custom helm chart](https://github.com/billimek/billimek-charts/tree/master/comcast)
 
-* [comcast.yaml](comcast/comcast.yaml)
+* [comcast/comcast.yaml](comcast/comcast.yaml)
 
 # influxdb
 
 Metrics collection database
 
-* [influxdb.yaml](influxdb/influxdb.yaml)
+* [influxdb/influxdb.yaml](influxdb/influxdb.yaml)
 
 # modem-stats
 
@@ -28,15 +28,18 @@ Metrics collection database
 
 Collect cable modem statistics for reporting
 
-* [modem-stats.yaml](modem-stats/modem-stats.yaml)
+* [modem-stats/modem-stats.yaml](modem-stats/modem-stats.yaml)
 
 # prometheus-operator
 
 ![](https://i.imgur.com/xFOepF3.png)
 
-Metrics and observability collection and dashboard software
+![](https://i.imgur.com/hTo49Uo.png)
 
-* [prometheus-operator.yaml](prometheus-operator/prometheus-operator.yaml)
+Metrics and observability collection and dashboard software - also installs grafana
+
+* [prometheus-operator/prometheus-operator.yaml](prometheus-operator/prometheus-operator.yaml)
+* [prometheus-operator/prometheus-operator-helm-values.yaml](prometheus-operator/prometheus-operator-helm-values.yaml)
 
 # speedtest
 
@@ -44,10 +47,11 @@ Metrics and observability collection and dashboard software
 
 ISP speed test results collector
 
-* [speedtest.yaml](speedtest/speedtest.yaml)
+* [speedtest/speedtest.yaml](speedtest/speedtest.yaml)
 
 # uptimerobot
 
 Based on this [custom helm chart](https://github.com/billimek/billimek-charts/tree/master/uptimerobot)
 
-* [uptimerobot.yaml](uptimerobot/uptimerobot.yaml)
+* [uptimerobot/uptimerobot.yaml](uptimerobot/uptimerobot.yaml)
+* [uptimerobot/uptimerobot-helm-values.yaml](uptimerobot/uptimerobot-helm-values.yaml)

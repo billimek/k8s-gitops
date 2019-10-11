@@ -161,13 +161,13 @@ loadSecretsToVault() {
   kvault "monitoring/uptimerobot/uptimerobot-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
-  kvault "default/home-assistant/hass-postgresql-helm-values.txt"
+  kvault "default/home-assistant/postgresql-helm-values.txt"
   kvault "default/hubot/hubot-helm-values.txt"
   kvault "default/minio/minio-helm-values.txt"
-  kvault "default/nextcloud/nextcloud-helm-values.txt"
+  # kvault "default/nextcloud/nextcloud-helm-values.txt"
   kvault "default/node-red/node-red-helm-values.txt"
   kvault "default/nzbget/nzbget-helm-values.txt"
-  # kvault "default/pihole/pihole-helm-values.txt"
+  kvault "default/pihole/pihole-helm-values.txt"
   kvault "default/plex/plex-helm-values.txt"
   kvault "default/rabbitmq/rabbitmq-helm-values.txt"
   kvault "default/radarr/radarr-helm-values.txt"
@@ -178,6 +178,7 @@ loadSecretsToVault() {
 }
 
 FIRST_RUN=1
+export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
 initVault
 loginVault
 if [ $FIRST_RUN == 0 ]; then 

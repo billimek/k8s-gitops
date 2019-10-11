@@ -1,0 +1,47 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: pihole
+  namespace: default
+  annotations:
+    fluxcd.io/ignore: true
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: 'regexp:^(4\.[0-9]+\.[0-9]+(-[0-9]+)?)$'
+spec:
+  releaseName: pihole
+  rollback:
+    enable: true
+  chart:
+    git: https://github.com/billimek/pihole-kubernetes
+    ref: integration
+    path: pihole
+  values:
+    image:
+      repository: pihole/pihole
+      tag: 4.3.2-1
+    replicaCount: 2
+    DNS1: 10.0.7.1
+    DNS2: 10.0.7.1
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
+    serviceTCP:
+      type: LoadBalancer
+      externalTrafficPolicy: Local
+      loadBalancerIP: 10.2.0.223
+      annotations:
+        metallb.universe.tf/address-pool: network-services
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+    serviceUDP:
+      type: LoadBalancer
+      externalTrafficPolicy: Local
+      loadBalancerIP: 10.2.0.223
+      annotations:
+        metallb.universe.tf/address-pool: network-services
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+    persistentVolumeClaim:
+      enabled: true
+      storageClass: "nfs-client"
+  valueFileSecrets:
+  - name: "pihole-helm-values"

@@ -1,12 +1,13 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: velero
   namespace: velero
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~v1
+    fluxcd.io/ignore: false
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: semver:~v1
 spec:
   releaseName: velero
   chart:
@@ -22,7 +23,7 @@ spec:
     snapshotsEnabled: false
     deployRestic: true
     restic:
-      # podVolumePath: /opt/rke/var/lib/kubelet/pods
+      podVolumePath: /var/lib/rancher/k3s/agent/kubelet/pods
       privileged: false
     # schedules:
     #   daily-backup:

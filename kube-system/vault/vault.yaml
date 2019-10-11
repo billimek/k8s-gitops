@@ -1,4 +1,4 @@
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: vault
@@ -25,6 +25,10 @@ spec:
         limits:
           memory: 256Mi
           cpu: 250m
+      dataStorage:
+        enabled: true
+        size: 10Gi
+        storageClass: nfs-client
       standalone:
         enabled: "true"
         config: |
@@ -38,11 +42,11 @@ spec:
             path = "/vault/data"
           }
           seal "transit" {
-            address = "http://lb:8200"
+            address = "http://10.0.7.16:8200"
             disable_renewal = "false"
             key_name = "autounseal"
             mount_path = "transit/"
             tls_skip_verify = "true"
           }
-    ui:
-      enabled: true
+    # ui:
+    #   enabled: true
