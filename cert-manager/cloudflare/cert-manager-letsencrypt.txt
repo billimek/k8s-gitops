@@ -57,6 +57,5 @@ spec:
       - '*.$DOMAIN'
       - '*.nd.$DOMAIN'
   issuerRef:
-    name: letsencrypt-test
-    # name: letsencrypt-prod # <--- k8s
+    name: letsencrypt-prod
     kind: ClusterIssuer
