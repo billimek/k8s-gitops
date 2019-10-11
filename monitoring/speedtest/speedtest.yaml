@@ -1,18 +1,19 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: speedtest
   namespace: monitoring
   annotations:
-    # flux.weave.works/automated: "true"
-    # flux.weave.works/tag.chart-image: glob:latest
+    fluxcd.io/ignore: false
 spec:
   releaseName: speedtest
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: speedtest
-    version: 1.1.7
+    version: 1.1.8
   values:
     image:
       repository: atribe/speedtest-for-influxdb-and-grafana

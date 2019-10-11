@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-media-pv-10g
+  name: nfs-media-pv
 spec:
   storageClassName: media
   capacity:
@@ -10,13 +10,13 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: 10.0.10.7
+    server: 10.0.7.7
     path: "/tank/media"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nfs-media-pvc-10g
+  name: nfs-media-pvc
 spec:
   accessModes:
     - ReadWriteMany

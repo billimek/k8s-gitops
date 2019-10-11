@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: pihole-helm-values
+  namespace: default
+spec:
+  keys:
+    - values.yaml
+  path: secrets/default/pihole/pihole-helm-values
+  type: Opaque

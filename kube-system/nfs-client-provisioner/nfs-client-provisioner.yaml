@@ -1,13 +1,15 @@
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: nfs-client-provisioner
   namespace: kube-system
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: semver:~v3.1
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: semver:~v3.1
 spec:
   releaseName: nfs-client-provisioner
+  rollback:
+    enable: true
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: nfs-client-provisioner
@@ -17,7 +19,7 @@ spec:
       repository: quay.io/external_storage/nfs-client-provisioner
       tag: v3.1.0-k8s1.11
     nfs:
-      server: "10.0.10.7"
+      server: "10.0.7.7"
       path: "/tank/data/k8s-nfs"
     storageClass:
-      defaultClass: false
+      defaultClass: true

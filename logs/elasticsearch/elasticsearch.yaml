@@ -1,22 +1,22 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: elasticsearch-master
   namespace: logs
   annotations:
     fluxcd.io/ignore: true
-    flux.weave.works/automated: "false"
-    flux.weave.works/tag.chart-image: semver:~7
+    fluxcd.io/automated: "false"
+    fluxcd.io/tag.chart-image: semver:~7
 spec:
   releaseName: elasticsearch-master
+  rollback:
+    enable: true
   chart:
     repository: https://helm.elastic.co
     name: elasticsearch
     version: 7.3.0
   values:
-    # image: "docker.elastic.co/elasticsearch/elasticsearch"
-    # imageTag: "7.2.0"
     esMajorVersion: 7
     clusterName: "elasticsearch"
     nodeGroup: "master"
@@ -35,8 +35,7 @@ spec:
       ingest: "true"
       data: "true"
     volumeClaimTemplate:
-      storageClassName: "local-disks"
+      storageClassName: "nfs-client"
       resources:
         requests:
           storage: 60Gi
-    updateStrategy: RollingUpdate

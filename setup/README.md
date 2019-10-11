@@ -1,29 +1,41 @@
+# Light-weight mixed-architecture cluster setup with k3s
 
-Function to handle variable subsitution on the fly:
-
-```shell
-kseal() {
-    name=$(basename -s .txt "$@")
-    envsubst < "$@" > values.yaml | kubectl -n kube-system create secret generic "$name" --from-file=values.yaml --dry-run -o json | kubeseal --format=yaml --cert=/../pub-cert.pem && rm values.yaml
-}
-```
-
-## Bootstrap the gitops cluster
-
-This will automatically create the limited number of manual `kubectl apply` steps and invoke the `bootstrap-vault.sh` script (see below)
+## k3s node installation
 
 ```shell
-./bootstrap.sh
+./bootstrap-cluster.sh
 ```
 
-## Bootstrap just vault
+This [script](bootstrap-cluster.sh) does several things:
 
-This will:
+1. Installs k3s to the master node
+1. Installs k3s workers to other nodes (mixed amd64 and arm architecture)
+1. Retrieves the new kubeconfig file and places it in $REPO_ROOT/setup/kubeconfig
+1. Installs helm
+1. Installs flux
+1. Retrieves the new flux public key and saves it to the GitHub repo as a repo key (see [add-repo-key.sh](add-repo-key.sh))
+1. Bootstraps the vault-secret-operator with the auto-unwrap token
+1. Bootstraps cert-manager with letsencrypt information
+1. Bootstraps vault (see [bootstrap-vault.sh](bootstrap-vault.sh) for more detail)
+   * Initializes vault if it has not already been initialized
+   * Unseals vault
+   * Configures vault to accept requests from vault-secrets-operator
+   * Writes all secrets (held locally in the `.env` file) to vault for vault-secrets-operator to act on
 
-* Initial setup of vault
-* Configure vault (if needed) to work with the vault-secrets-operator
-* Write all necessary secrets into vault
+(example of the entire process):
+[![asciicast](https://asciinema.org/a/266944.png)](https://asciinema.org/a/266944?speed=2)
+
+## k3s teardown (uninstall everything)
 
 ```shell
-./bootstrap-vault.sh
+./teardown.sh
 ```
+
+This [script](teardown.sh) will:
+
+1. Remove all pods and pvcs
+1. Uninstall k3s from all worker nodes
+1. Uninstall k3s from the master node
+
+(example of the entire process):
+[![asciicast](https://asciinema.org/a/266949.png)](https://asciinema.org/a/266949?speed=2)

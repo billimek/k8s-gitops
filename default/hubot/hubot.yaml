@@ -1,14 +1,16 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: hubot
   namespace: default
   annotations:
-    # flux.weave.works/automated: "true"
-    # flux.weave.works/tag.chart-image: glob:latest
+    fluxcd.io/automated: "false"
+    fluxcd.io/tag.chart-image: semver:~3
 spec:
   releaseName: hubot
+  rollback:
+    enable: true
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: hubot
@@ -17,7 +19,6 @@ spec:
     image:
       repository: billimek/hubot
       tag: latest
-      pullPolicy: Always
     hubot:
       config:
         HUBOT_GRAFANA_S3_STYLE: 'path'

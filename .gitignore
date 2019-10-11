@@ -19,3 +19,4 @@ master.key
 *.snap
 setup/cluster/*cluster.yml
 *.rkestate
+kubeconfig

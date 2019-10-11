@@ -40,9 +40,6 @@ spec:
               key: slack_url
         - name: SLACK_CHANNEL
           value: "#notifications"
-        # Or configure multiple channels
-        # (comma separated <channel>=<namespace>) string:
-        #  value: "#kubernetes=*,#team=team"
         - name: SLACK_USERNAME
           value: Flux Deployer
         - name: SLACK_ICON_EMOJI

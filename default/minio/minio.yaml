@@ -1,12 +1,13 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: minio
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: glob:RELEASE.*
+    fluxcd.io/ignore: false
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: glob:RELEASE.*
 spec:
   releaseName: minio
   chart:
@@ -18,7 +19,7 @@ spec:
       repository: minio/minio
       tag: RELEASE.2019-10-02T21-19-38Z
     persistence:
-      existingClaim: "nfs-data-pvc-10g"
+      existingClaim: "nfs-data-pvc"
       subPath: "minio"
     ingress:
       enabled: true

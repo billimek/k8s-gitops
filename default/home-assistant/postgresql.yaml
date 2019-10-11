@@ -1,0 +1,39 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: hass-postgresql
+  namespace: default
+  annotations:
+    fluxcd.io/ignore: false
+    fluxcd.io: "false"
+    fluxcd.io: semver:~11
+spec:
+  releaseName: hass-postgresql
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: postgresql
+    version: 6.3.11
+  values:
+    image:
+      repository: bitnami/postgresql
+      tag: 11.5.0-debian-9-r34
+    postgresqlUsername: "homeassistant"
+    postgresqlDatabase: "homeassistant"
+    replication:
+      enabled: true
+      slaveReplicas: 2
+      synchronousCommit: "on"
+      numSynchronousReplicas: 1
+    persistence:
+      enabled: true
+      #accessMode: ReadWriteOnce
+      storageClass: "rook-ceph-block"
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+    volumePermissions:
+      enabled: true
+  valueFileSecrets:
+  - name: "postgresql-helm-values"

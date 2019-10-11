@@ -1,0 +1,18 @@
+helmOperator:
+  create: false
+git:
+  url: "git@github.com:billimek/k8s-gitops"
+registry:
+  rps: 1
+  burst: 1
+memcached:
+  tolerations:
+  - key: "arm"
+    operator: "Exists"
+additionalArgs:
+- --connect=ws://fluxcloud
+prometheus:
+  enabled: true
+syncGarbageCollection:
+  enabled: true
+  dry: false

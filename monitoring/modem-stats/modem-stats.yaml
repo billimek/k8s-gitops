@@ -1,18 +1,19 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: modem-stats
   namespace: monitoring
   annotations:
-    # flux.weave.works/automated: "true"
-    # flux.weave.works/tag.chart-image: glob:latest
+    fluxcd.io/ignore: false
 spec:
   releaseName: modem-stats
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: modem-stats
-    version: 1.0.7
+    version: 1.0.8
   values:
     image:
       repository: billimek/sb6183-for-influxdb

@@ -1,8 +1,9 @@
 # flux
 
-FluxCD Flux
+[Flux](https://github.com/fluxcd/flux) to automate cluster state using code residing in this repo
 
-* [flux.yaml](flux/flux.yaml)
+* [flux/flux.yaml](flux/flux.yaml)
+* [helm-operator/helm-operator.yaml](helm-operator/helm-operator.yaml)
 
 # fluxcloud
 
@@ -10,4 +11,4 @@ FluxCD Flux
 
 Send messages to slack for flux events
 
-* [fluxcloud.yaml](fluxcloud/fluxcloud.yaml)
+* [fluxcloud/fluxcloud.yaml](fluxcloud/fluxcloud.yaml)

@@ -1,18 +1,19 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: comcast
   namespace: monitoring
   annotations:
-    # flux.weave.works/automated: "true"
-    # flux.weave.works/tag.chart-image: glob:latest
+    fluxcd.io/ignore: false
 spec:
   releaseName: comcast
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: comcast
-    version: 1.0.6
+    version: 1.0.7
   values:
     image:
       repository: billimek/comcastusage-for-influxdb

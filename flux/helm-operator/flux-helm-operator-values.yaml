@@ -1,0 +1,8 @@
+createCRD: true
+git:
+  ssh:
+    secretName: flux-git-deploy
+chartsSyncInterval: "10m"
+statusUpdateInterval: "10m"
+prometheus:
+  enabled: true

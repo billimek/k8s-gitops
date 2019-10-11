@@ -1,14 +1,16 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: frigate
   namespace: default
   annotations:
-    flux.weave.works/automated: "false"
-    flux.weave.works/tag.chart-image: 'semver:0'
+    fluxcd.io/automated: "false"
+    fluxcd.io/tag.chart-image: 'semver:0'
 spec:
   releaseName: frigate
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: frigate

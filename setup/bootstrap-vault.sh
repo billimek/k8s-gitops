@@ -110,11 +110,11 @@ loginVault() {
 
 setupVaultSecretsOperator() {
   message "configuring vault for vault-secrets-operator"
-  vault secrets enable -path=secrets -version=1 kv
+  vault secrets enable -path=secrets -version=2 kv
 
   # create read-only policy for kubernetes
   cat <<EOF | vault policy write vault-secrets-operator -
-  path "secrets/*" {
+  path "secrets/data/*" {
     capabilities = ["read"]
   }
 EOF
@@ -161,13 +161,13 @@ loadSecretsToVault() {
   kvault "monitoring/uptimerobot/uptimerobot-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
-  kvault "default/home-assistant/hass-postgresql-helm-values.txt"
+  kvault "default/home-assistant/postgresql-helm-values.txt"
   kvault "default/hubot/hubot-helm-values.txt"
   kvault "default/minio/minio-helm-values.txt"
-  kvault "default/nextcloud/nextcloud-helm-values.txt"
+  # kvault "default/nextcloud/nextcloud-helm-values.txt"
   kvault "default/node-red/node-red-helm-values.txt"
   kvault "default/nzbget/nzbget-helm-values.txt"
-  # kvault "default/pihole/pihole-helm-values.txt"
+  kvault "default/pihole/pihole-helm-values.txt"
   kvault "default/plex/plex-helm-values.txt"
   kvault "default/rabbitmq/rabbitmq-helm-values.txt"
   kvault "default/radarr/radarr-helm-values.txt"
@@ -178,6 +178,7 @@ loadSecretsToVault() {
 }
 
 FIRST_RUN=1
+export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
 initVault
 loginVault
 if [ $FIRST_RUN == 0 ]; then 

@@ -1,14 +1,16 @@
 ---
-apiVersion: flux.weave.works/v1beta1
+apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
   name: radarr
   namespace: default
   annotations:
-    flux.weave.works/automated: "true"
-    flux.weave.works/tag.chart-image: 'glob:amd64-v0.*.*.*'
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: 'glob:amd64-v0.*.*.*'
 spec:
   releaseName: radarr
+  rollback:
+    enable: true
   chart:
     repository: https://billimek.com/billimek-charts/
     name: radarr
@@ -17,7 +19,6 @@ spec:
     image:
       repository: linuxserver/radarr
       tag: 'amd64-v0.2.0.1358-ls37'
-      pullPolicy: Always
     ingress:
       enabled: true
       annotations:
@@ -28,14 +29,14 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: "rbd"
+        storageClass: "rook-ceph-block"
       downloads:
         enabled: true
-        existingClaim: nfs-media-downloads-pvc-10g
+        existingClaim: nfs-media-downloads-pvc
         accessMode: ReadWriteMany
       movies:
         enabled: true
-        existingClaim: nfs-media-pvc-10g
+        existingClaim: nfs-media-pvc
         subPath: Videos
         accessMode: ReadWriteMany
   valueFileSecrets:
