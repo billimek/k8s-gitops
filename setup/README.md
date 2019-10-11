@@ -3,10 +3,10 @@
 ## k3s node installation
 
 ```shell
-./bootstrap-k3s.sh
+./bootstrap-cluster.sh
 ```
 
-This [script](bootstrap-k3s.sh) does several things:
+This [script](bootstrap-cluster.sh) does several things:
 
 1. Installs k3s to the master node
 1. Installs k3s workers to other nodes (mixed amd64 and arm architecture)
@@ -28,10 +28,10 @@ This [script](bootstrap-k3s.sh) does several things:
 ## k3s teardown (uninstall everything)
 
 ```shell
-./teardown-k3s.sh
+./teardown.sh
 ```
 
-This [script](teardown-k3s.sh) will:
+This [script](teardown.sh) will:
 
 1. Remove all pods and pvcs
 1. Uninstall k3s from all worker nodes
