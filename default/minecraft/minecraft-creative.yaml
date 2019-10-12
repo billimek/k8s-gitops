@@ -5,8 +5,6 @@ metadata:
   name: mc
   namespace: default
   annotations:
-    # fluxcd.io/automated: "true"
-    # fluxcd.io/tag.chart-image: glob:latest
 spec:
   releaseName: mc
   rollback:
@@ -14,7 +12,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minecraft
-    version: 1.1.2
+    version: 1.1.1
   values:
     image: itzg/minecraft-server
     imageTag: latest
