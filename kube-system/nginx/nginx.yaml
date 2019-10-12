@@ -15,12 +15,12 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: nginx-ingress
-    version: 1.21.0
+    version: 1.24.3
   values:
     controller:
-      image:
-        repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-        tag: "0.25.1"
+      # image:
+      #   repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
+      #   tag: "0.25.1"
       replicaCount: 3
       service:
         loadBalancerIP: 10.2.0.150
