@@ -27,10 +27,10 @@ spec:
       requests:
         memory: 1024Mi
     livenessProbe:
-      initialDelaySeconds: 60
+      initialDelaySeconds: 120
       periodSeconds: 5
     readinessProbe:
-      initialDelaySeconds: 60
+      initialDelaySeconds: 120
       periodSeconds: 5
     minecraftServer:
       eula: "TRUE"
