@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -15,6 +14,8 @@ spec:
       labels:
         app: intel-gpu-plugin
     spec:
+      nodeSelector:
+        app: intel-gpu-plugin
       containers:
       - name: intel-gpu-plugin
         env:
@@ -22,17 +23,17 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-        image: intel/intel-gpu-plugin:0.15.0
+        image: billimek/intel-gpu-plugin:devel
         imagePullPolicy: IfNotPresent
-        securityContext:
-          readOnlyRootFilesystem: true
+        command: ["/usr/bin/intel_gpu_device_plugin"]
+        args: ["-shared-dev-num", "4"]
         volumeMounts:
         - name: devfs
           mountPath: /dev
         - name: sysfs
           mountPath: /sys
         - name: kubeletsockets
-          mountPath: /lib/rancher/k3s/agent/kubelet/device-plugins
+          mountPath: /var/lib/kubelet/device-plugins
       volumes:
       - name: devfs
         hostPath:
