@@ -12,9 +12,9 @@ spec:
   rollback:
     enable: true
   chart:
-    git: https://github.com/billimek/billimek-charts
-    ref: local_dev
-    path: frigate
+    repository: https://billimek.com/billimek-charts/
+    name: frigate
+    version: 0.1.7
   values:
     image:
       repository: blakeblackshear/frigate
@@ -32,13 +32,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           regions:
             - size: 576
               x_offset: 104
@@ -58,13 +58,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           regions:
             - size: 480
               x_offset: 224
@@ -84,13 +84,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           regions:
             - size: 480
               x_offset: 224
@@ -110,13 +110,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           regions:
             - size: 480
               x_offset: 224
@@ -136,13 +136,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /h264Preview_01_sub
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           regions:
             - size: 352
               x_offset: 0
