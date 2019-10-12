@@ -27,6 +27,8 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ["/usr/bin/intel_gpu_device_plugin"]
         args: ["-shared-dev-num", "4"]
+        securityContext:
+          privileged: true
         volumeMounts:
         - name: devfs
           mountPath: /dev
