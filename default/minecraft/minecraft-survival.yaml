@@ -14,7 +14,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minecraft
-    version: 1.1.0
+    version: 1.1.2
   values:
     image: itzg/minecraft-server
     imageTag: latest
@@ -44,3 +44,4 @@ spec:
       gameMode: survival
       ops: "83d9416e-216e-4ffb-81ae-d2bd455a398a"
       motd: "billimek minecraft server (survival)"
+      loadBalancerIP: 10.2.0.161
