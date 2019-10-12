@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minio
-    version: 2.5.11
+    version: 2.5.16
   values:
     image:
       repository: minio/minio
