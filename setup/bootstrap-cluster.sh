@@ -34,10 +34,10 @@ k3sMasterNode() {
 ks3amd64WorkerNodes() {
   for node in $K3S_WORKERS_AMD64; do
     message "joining amd64 $node to $K3S_MASTER"
-    EXTRA_ARGS=""
-    if [ "$node" == "k3s-1" ]; then
-      EXTRA_ARGS="--node-label app=intel-gpu-plugin"
-    fi
+    # EXTRA_ARGS=""
+    # if [ "$node" == "k3s-1" ]; then
+    #   EXTRA_ARGS="--node-label app=intel-gpu-plugin"
+    # fi
     ssh -o "StrictHostKeyChecking=no" ubuntu@"$node" "curl -sfL https://get.k3s.io | K3S_URL=https://k3s-0:6443 K3S_TOKEN=$NODE_TOKEN INSTALL_K3S_VERSION='$K3S_VERSION' sh -s - $EXTRA_ARGS"
   done
 }
