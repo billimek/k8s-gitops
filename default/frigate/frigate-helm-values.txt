@@ -4,5 +4,5 @@ ingress:
   - hosts:
     - frigate.$DOMAIN
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN.com/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
 rtspPassword: "$RTSP_PASSWORD"

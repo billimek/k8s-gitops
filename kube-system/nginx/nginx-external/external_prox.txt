@@ -6,6 +6,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     #nginx.ingress.kubernetes.io/preserve-host: "true"
+    nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
 spec:
   rules:
   - host: prox.$DOMAIN
@@ -37,9 +38,7 @@ spec:
             servicePort: 8006
   tls:
   - hosts:
-    - prox.$DOMAIN
-  annotations:
-    nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN.com/oauth2/auth"
+    - prox.$DOMAIN   
 ---
 apiVersion: v1
 kind: Service

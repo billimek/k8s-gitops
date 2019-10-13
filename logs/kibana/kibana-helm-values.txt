@@ -3,3 +3,5 @@ ingress:
   tls:
   - hosts:
     - kibana.$DOMAIN
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
