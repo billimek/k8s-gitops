@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: comcast
-    version: 1.0.7
+    version: 1.0.8
   values:
     image:
       repository: billimek/comcastusage-for-influxdb

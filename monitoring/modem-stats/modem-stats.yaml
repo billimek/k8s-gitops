@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: modem-stats
-    version: 1.0.8
+    version: 1.0.9
   values:
     image:
       repository: billimek/sb6183-for-influxdb
