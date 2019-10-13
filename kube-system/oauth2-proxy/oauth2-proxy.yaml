@@ -26,5 +26,5 @@ spec:
       oidc-issuer-url: https://billimek.auth0.com/
       skip-provider-button:
       pass-authorization-header:
-    valueFileSecrets:
+  valueFileSecrets:
   - name: "oauth2-proxy-helm-values"
