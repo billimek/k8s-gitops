@@ -49,6 +49,12 @@ nginx-ingress controller leveraging cert-manager as the central cert store for t
 
 * [nginx/](nginx/)
 
+# oauth2-proxy
+
+[OAuth2 authenticating proxy](https://github.com/pusher/oauth2_proxy) leveraging Auth0
+
+* [oauth2-proxy/](oauth2-proxy/)
+
 # vault
 
 [vault-helm chart](https://github.com/hashicorp/vault-helm)
