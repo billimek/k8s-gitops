@@ -148,7 +148,7 @@ loadSecretsToVault() {
   message "writing secrets to vault"
   vault kv put secrets/flux/fluxcloud slack_url="$SLACK_WEBHOOK_URL"
   vault kv put secrets/kube-system/nginx-basic-auth-jeff auth="$JEFF_AUTH"
-  vault kv put secrets/kube-system/cloudflare-api-key api-key="$CF_API_KEY"
+  vault kv put secrets/cert-manager/cloudflare-api-key api-key="$CF_API_KEY"
 
   ####################
   # helm chart values
