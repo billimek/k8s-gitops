@@ -40,6 +40,8 @@ spec:
       # tolerations:
       # - key: "arm"
       #   operator: "Exists"
+      podAnnotations:
+        backup.velero.io/backup-volumes: storage
       persistence:
         enabled: true
         storageClassName: "rook-ceph-block"
