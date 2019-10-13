@@ -21,10 +21,6 @@ spec:
     #     operator: "Exists"
     ingress:
       enabled: true
-    extraArgs:
-      provider: oidc
-      oidc-issuer-url: https://billimek.auth0.com/
-      skip-provider-button:
-      pass-authorization-header:
+      path: /oauth2
   valueFileSecrets:
   - name: "oauth2-proxy-helm-values"
