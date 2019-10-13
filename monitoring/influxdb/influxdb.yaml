@@ -34,6 +34,10 @@ spec:
       limits:
         memory: 4Gi
         # cpu: 4
+    livenessProbe:
+      timeoutSeconds: 10
+    livenessProbe:
+      readinessProbe: 10
     config:
       opentsdb:
         enabled: true
