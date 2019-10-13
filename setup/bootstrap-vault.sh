@@ -154,6 +154,7 @@ loadSecretsToVault() {
   # helm chart values
   ####################
   kvault "kube-system/kured/kured-helm-values.txt"
+  kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
   kvault "logs/kibana/kibana-helm-values.txt"
   kvault "monitoring/chronograf/chronograf-helm-values.txt"
   kvault "monitoring/comcast/comcast-helm-values.txt"

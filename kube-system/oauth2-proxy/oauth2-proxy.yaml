@@ -1,0 +1,30 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: oauth2-proxy
+  namespace: kube-system
+  annotations:
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: semver:~v4
+spec:
+  releaseName: oauth2-proxy
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: oauth2-proxy
+    version: 1.0.1
+  values:
+    image:
+      repository: "quay.io/pusher/oauth2_proxy"
+      tag: "v4.0.0"
+    # tolerations:
+    #   - key: "arm"
+    #     operator: "Exists"
+    ingress:
+      enabled: true
+    extraArgs:
+      provider: oidc
+      oidc-issuer-url: https://billimek.auth0.com/
+      skip-provider-button:
+      pass-authorization-header:
+    valueFileSecrets:
+  - name: "oauth2-proxy-helm-values"
