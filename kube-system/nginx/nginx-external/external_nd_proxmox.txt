@@ -5,7 +5,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start?rd=https://$host$request_uri
+    nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start
 spec:
   rules:
   - host: proxmox.nd.$DOMAIN
