@@ -36,8 +36,8 @@ spec:
         # cpu: 4
     livenessProbe:
       timeoutSeconds: 10
-    livenessProbe:
-      readinessProbe: 10
+    readinessProbe:
+      timeoutSeconds: 10
     config:
       opentsdb:
         enabled: true
