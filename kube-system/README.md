@@ -41,13 +41,13 @@ nfs-based persistent mounts for various pod access (media mount & data mount)
 
 * [nfs-pv/](nfs-pv/)
 
-# traefik
+# nginx
 
-![](https://i.imgur.com/gwienvX.png)
+![](https://i.imgur.com/b21MHEE.png)
 
-traefik in HA-mode (multiple replicas) leveraging cert-manager as the central cert store
+nginx-ingress controller leveraging cert-manager as the central cert store for the wildcard certificate
 
-* [traefik/](traefik/)
+* [nginx/](nginx/)
 
 # vault
 
