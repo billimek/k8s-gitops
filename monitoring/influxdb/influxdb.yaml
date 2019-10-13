@@ -39,6 +39,6 @@ spec:
         enabled: true
     podAnnotations:
       backup.velero.io/backup-volumes: data
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
+    # tolerations:
+    # - key: "arm"
+    #   operator: "Exists"
