@@ -4,12 +4,16 @@ alertmanager:
     tls:
     - hosts:
       - prom-alert.$DOMAIN
+    annotations:
+      nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN.com/oauth2/auth"
 prometheus:
   ingress:
     hosts: [prom-server.$DOMAIN]
     tls:
     - hosts:
       - prom-server.$DOMAIN
+    annotations:
+      nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN.com/oauth2/auth"
 grafana:
   ingress:
     hosts: [grafana.$DOMAIN]

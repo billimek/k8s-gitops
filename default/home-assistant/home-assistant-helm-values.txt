@@ -22,6 +22,8 @@ vscode:
     tls:
     - hosts:
       - hass-vscode.$DOMAIN
+    annotations:
+      nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN.com/oauth2/auth"
   password: $HASS_API_PASSWORD
   extraEnv:
     HASS_SERVER: http://localhost:8123
