@@ -24,6 +24,7 @@ spec:
       replicaCount: 3
       service:
         loadBalancerIP: 10.2.0.150
+        externalTrafficPolicy: Local
       metrics:
         enabled: true
         serviceMonitor:
@@ -36,3 +37,8 @@ spec:
       #   operator: "Exists"
       extraArgs:
         default-ssl-certificate: "kube-system/acme-crt-secret"
+      defaultBackend:
+        enabled: true
+        image:
+          repository: billimek/custom-error-pages
+          tag: 0.4
