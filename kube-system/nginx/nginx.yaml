@@ -21,7 +21,7 @@ spec:
       # image:
       #   repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
       #   tag: "0.25.1"
-      replicaCount: 3
+      replicaCount: 2
       service:
         loadBalancerIP: 10.2.0.150
         externalTrafficPolicy: Local
@@ -37,8 +37,8 @@ spec:
       #   operator: "Exists"
       extraArgs:
         default-ssl-certificate: "kube-system/acme-crt-secret"
-      defaultBackend:
-        enabled: true
-        image:
-          repository: billimek/custom-error-pages
-          tag: 0.4
+    defaultBackend:
+      enabled: true
+      image:
+        repository: billimek/custom-error-pages
+        tag: 0.4
