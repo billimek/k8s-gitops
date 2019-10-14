@@ -43,12 +43,12 @@ spec:
             - size: 576
               x_offset: 104
               y_offset: 0
-              min_person_area: 5000
+              # min_person_area: 5000
               threshold: 0.85
             - size: 300
               x_offset: 404
               y_offset: 0
-              min_person_area: 2000
+              # min_person_area: 2000
               threshold: 0.85
         front:
           rtsp:
@@ -69,12 +69,12 @@ spec:
             - size: 480
               x_offset: 224
               y_offset: 0
-              min_person_area: 5000
+              # min_person_area: 5000
               threshold: 0.85
             - size: 224
               x_offset: 0
               y_offset: 136
-              min_person_area: 3000
+              # min_person_area: 3000
               threshold: 0.85
         driveway:
           rtsp:
@@ -95,12 +95,12 @@ spec:
             - size: 480
               x_offset: 224
               y_offset: 0
-              min_person_area: 5000
+              # min_person_area: 5000
               threshold: 0.85
             - size: 224
               x_offset: 0
               y_offset: 256
-              min_person_area: 3000
+              # min_person_area: 3000
               threshold: 0.85
         pool:
           rtsp:
@@ -147,12 +147,12 @@ spec:
             - size: 352
               x_offset: 0
               y_offset: 0
-              min_person_area: 3000
+              # min_person_area: 3000
               threshold: 0.85
             - size: 288
               x_offset: 352
               y_offset: 64
-              min_person_area: 3000
+              # min_person_area: 3000
               threshold: 0.85
     ingress:
       enabled: true
