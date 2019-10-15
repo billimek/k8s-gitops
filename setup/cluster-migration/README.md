@@ -1,3 +1,5 @@
+**DEPRECATION:** This was used originally to help 'migrate' from an rke-provisioned cluster to the (now) k3s-provisioned cluster. Keeping it here for history.
+
 (for context see https://github.com/billimek/k8s-gitops/issues/54)
 
 ## pre-flight
