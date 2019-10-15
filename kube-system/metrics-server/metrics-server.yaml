@@ -18,4 +18,4 @@ spec:
   values:
     image:
       repository: gcr.io/google_containers/metrics-server-amd64
-      tag: v0.3.5
+      tag: v0.3.6
