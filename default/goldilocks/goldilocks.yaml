@@ -12,7 +12,7 @@ spec:
   rollback:
     enable: true
   chart:
-    repository: https://charts.fairwinds.com/incubator
+    repository: https://charts.fairwinds.com/stable
     name: goldilocks
     version: 1.0.0
   values:
