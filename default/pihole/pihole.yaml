@@ -21,8 +21,8 @@ spec:
       repository: pihole/pihole
       tag: 4.3.2-1
     replicaCount: 2
-    DNS1: "10.0.7.1#53"
-    DNS2: "no"
+    DNS1: "10.0.7.1"
+    DNS2: "10.0.7.1"
     tolerations:
     - key: "arm"
       operator: "Exists"
