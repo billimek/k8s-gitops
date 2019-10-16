@@ -16,9 +16,10 @@ spec:
     name: goldilocks
     version: 1.0.0
   values:
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
+    dashboard:
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "nginx"
   valueFileSecrets:
   - name: "goldilocks-helm-values"
