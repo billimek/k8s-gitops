@@ -1,6 +1,7 @@
 dashboard:
   ingress:
-    hosts: [goldilocks.$DOMAIN]
+    hosts: 
+      - host: goldilocks.$DOMAIN
     tls:
     - hosts:
       - goldilocks.$DOMAIN
