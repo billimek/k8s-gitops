@@ -20,7 +20,7 @@ spec:
     controller:
       image:
         repository: quay.io/jcmoraisjr/haproxy-ingress
-        tag: "v0.8-beta.2"
+        tag: "v0.9-snapshot.1"
       replicaCount: 2
       service:
         loadBalancerIP: 10.2.0.170
