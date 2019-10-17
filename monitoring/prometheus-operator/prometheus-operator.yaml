@@ -185,6 +185,9 @@ spec:
             - proxmox:19999
             - proxmox-b:19999
             - proxmox-c:19999
+            - k3s-0:19999
+            - k3s-1:19999
+            - k3s-2:19999
             - k8s-4:19999
             - lb:19999
             - pihole:19999
