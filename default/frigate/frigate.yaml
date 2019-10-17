@@ -151,7 +151,7 @@ spec:
               threshold: 0.85
             - size: 352
               x_offset: 288
-              y_offset: 64
+              y_offset: 0
               # min_person_area: 3000
               threshold: 0.85
     ingress:
