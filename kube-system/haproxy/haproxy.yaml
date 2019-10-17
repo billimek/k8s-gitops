@@ -29,6 +29,10 @@ spec:
         enabled: true
       metrics:
         enabled: true
+        service:
+          annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "10254"
       extraArgs:
         default-ssl-certificate: "kube-system/acme-crt-secret"
     defaultBackend:
