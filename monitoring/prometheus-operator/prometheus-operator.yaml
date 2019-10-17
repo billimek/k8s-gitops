@@ -36,7 +36,7 @@ spec:
     grafana:
       image:
         repository: grafana/grafana
-        tag: 6.4.2
+        tag: 6.4.3
       # tolerations:
       # - key: "arm"
       #   operator: "Exists"
@@ -47,7 +47,7 @@ spec:
         storageClassName: "rook-ceph-block"
         size: 10Gi
         accessModes:
-          - ReadWriteOnce
+        - ReadWriteOnce
       env:
         GF_EXPLORE_ENABLED: true
       ingress:
@@ -205,6 +205,6 @@ spec:
           bearer_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiM2FjNjVlNjQ1OTU0NWNhOWJiZWZiZDE5OWM4MDMzMiIsImlhdCI6MTU2NzEyODYwOCwiZXhwIjoxODgyNDg4NjA4fQ.NkSaaxMnJMYy-38gBsdlKt35-aKKSMDofGzBeBQmVnw'
           scheme: http
           static_configs:
-            - targets: ['home-assistant.default.svc:8123']
+          - targets: ['home-assistant.default.svc:8123']
   valueFileSecrets:
   - name: "prometheus-operator-helm-values"
