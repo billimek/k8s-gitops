@@ -43,12 +43,12 @@ spec:
             - size: 480
               x_offset: 224
               y_offset: 0
-              # min_person_area: 5000
+              min_person_area: 1000
               threshold: 0.85
             - size: 480
               x_offset: 0
               y_offset: 0
-              # min_person_area: 2000
+              min_person_area: 1000
               threshold: 0.85
         front:
           rtsp:
