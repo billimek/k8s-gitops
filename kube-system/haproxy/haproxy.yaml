@@ -6,7 +6,7 @@ metadata:
   namespace: kube-system
   annotations:
     fluxcd.io/ignore: false
-    fluxcd.io/automated: "true"
+    fluxcd.io/automated: "false"
     fluxcd.io/tag.chart-image: semver:~0.
 spec:
   releaseName: haproxy-ingress
@@ -20,11 +20,14 @@ spec:
     controller:
       image:
         repository: quay.io/jcmoraisjr/haproxy-ingress
-        tag: "v0.7.3"
+        tag: "v0.8-beta.2"
       replicaCount: 2
       service:
         loadBalancerIP: 10.2.0.170
         externalTrafficPolicy: Local
+      config:
+        # forwardfor: ifmissing
+        ssl-redirect: "true"
       stats:
         enabled: true
       metrics:
