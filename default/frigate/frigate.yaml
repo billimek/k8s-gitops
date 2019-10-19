@@ -17,8 +17,9 @@ spec:
     version: 0.1.7
   values:
     image:
-      repository: blakeblackshear/frigate
-      tag: 0.2.1-beta
+      repository: billimek/frigate
+      tag: latest
+      imagePullPolicy: Always
     config: |
       mqtt:
         host: rabbitmq-ha.default.svc
@@ -32,23 +33,21 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
           regions:
             - size: 480
               x_offset: 224
               y_offset: 0
-              # min_person_area: 4000
               threshold: 0.85
             - size: 480
               x_offset: 0
               y_offset: 0
-              # min_person_area: 4000
               threshold: 0.85
         front:
           rtsp:
@@ -58,13 +57,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
           regions:
             - size: 480
               x_offset: 224
@@ -84,23 +83,21 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
           regions:
             - size: 480
               x_offset: 224
               y_offset: 0
-              # min_person_area: 5000
               threshold: 0.85
             - size: 480
               x_offset: 0
               y_offset: 0
-              # min_person_area: 3000
               threshold: 0.85
         pool:
           rtsp:
@@ -110,23 +107,21 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
           regions:
             - size: 480
               x_offset: 224
               y_offset: 0
-              # min_person_area: 2000
               threshold: 0.85
             - size: 480
               x_offset: 0
               y_offset: 0
-              # min_person_area: 2000
               threshold: 0.85
         basement:
           rtsp:
@@ -136,23 +131,21 @@ spec:
             password: $RTSP_PASSWORD
             path: /h264Preview_01_sub
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
+          ffmpeg_hwaccel_args:
+            - -hwaccel
+            - vaapi
+            - -hwaccel_device
+            - /dev/dri/renderD128
+            - -hwaccel_output_format
+            - yuv420p
           regions:
             - size: 352
               x_offset: 0
               y_offset: 0
-              # min_person_area: 3000
               threshold: 0.85
             - size: 352
               x_offset: 288
               y_offset: 0
-              # min_person_area: 3000
               threshold: 0.85
     ingress:
       enabled: true
@@ -167,8 +160,8 @@ spec:
               operator: In
               values:
               - google-coral
-                #    resources:
-                #      limits:
-                #        gpu.intel.com/i915: 1
+    resources:
+      limits:
+        gpu.intel.com/i915: 1
   valueFileSecrets:
   - name: "frigate-helm-values"
