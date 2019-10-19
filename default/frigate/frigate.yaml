@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: billimek/frigate
-      tag: latest
+      tag: ffmpeg4
       imagePullPolicy: Always
     config: |
       mqtt:
@@ -40,6 +40,13 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+          ffmpeg_output_args:
+            - -vf
+            - mpdecimate
+            - -f
+            - rawvideo
+            - -pix_fmt
+            - rgb24
           regions:
             - size: 480
               x_offset: 224
@@ -64,6 +71,13 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+          ffmpeg_output_args:
+            - -vf
+            - mpdecimate
+            - -f
+            - rawvideo
+            - -pix_fmt
+            - rgb24
           regions:
             - size: 480
               x_offset: 224
@@ -90,6 +104,13 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+          ffmpeg_output_args:
+            - -vf
+            - mpdecimate
+            - -f
+            - rawvideo
+            - -pix_fmt
+            - rgb24
           regions:
             - size: 480
               x_offset: 224
@@ -114,6 +135,13 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+          ffmpeg_output_args:
+            - -vf
+            - mpdecimate
+            - -f
+            - rawvideo
+            - -pix_fmt
+            - rgb24
           regions:
             - size: 480
               x_offset: 224
@@ -138,6 +166,13 @@ spec:
             - /dev/dri/renderD128
             - -hwaccel_output_format
             - yuv420p
+          ffmpeg_output_args:
+            - -vf
+            - mpdecimate
+            - -f
+            - rawvideo
+            - -pix_fmt
+            - rgb24
           regions:
             - size: 352
               x_offset: 0
