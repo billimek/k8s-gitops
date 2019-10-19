@@ -21,7 +21,7 @@ spec:
       enabled: true
       image:
         repository: billimek/rtorrent
-         tag: test
+        tag: test
     flood:
       image:
         repository: jfurrow/flood-ui
