@@ -147,10 +147,12 @@ spec:
               x_offset: 224
               y_offset: 0
               threshold: 0.85
+              min_person_area: 500
             - size: 480
               x_offset: 0
               y_offset: 0
               threshold: 0.85
+              min_person_area: 500
         basement:
           rtsp:
             user: view
