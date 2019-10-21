@@ -22,6 +22,8 @@ spec:
       #   repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
       #   tag: "0.25.1"
       replicaCount: 2
+      config:
+        custom-http-errors: 404,403,500,503
       service:
         loadBalancerIP: 10.2.0.150
         externalTrafficPolicy: Local
