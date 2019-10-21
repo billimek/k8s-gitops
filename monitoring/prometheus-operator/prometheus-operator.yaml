@@ -33,6 +33,7 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8"
     grafana:
       image:
         repository: grafana/grafana
@@ -54,6 +55,7 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8"
       plugins:
       - natel-discrete-panel
       dashboardProviders:
@@ -155,6 +157,7 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8"
       prometheusSpec:
 #        image:
 #          repository: quay.io/prometheus/prometheus
