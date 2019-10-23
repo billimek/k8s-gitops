@@ -43,4 +43,4 @@ spec:
           path: /sys
       - name: kubeletsockets
         hostPath:
-          path: /var/lib/kubelet/pod-resources
+          path: /var/lib/kubelet/device-plugins
