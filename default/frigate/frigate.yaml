@@ -33,13 +33,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           ffmpeg_output_args:
             - -vf
             - mpdecimate
@@ -64,13 +64,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           ffmpeg_output_args:
             - -vf
             - mpdecimate
@@ -97,13 +97,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           ffmpeg_output_args:
             - -vf
             - mpdecimate
@@ -128,13 +128,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           ffmpeg_output_args:
             - -vf
             - mpdecimate
@@ -161,13 +161,13 @@ spec:
             password: $RTSP_PASSWORD
             path: /h264Preview_01_sub
           take_frame: 1
-          ffmpeg_hwaccel_args:
-            - -hwaccel
-            - vaapi
-            - -hwaccel_device
-            - /dev/dri/renderD128
-            - -hwaccel_output_format
-            - yuv420p
+          # ffmpeg_hwaccel_args:
+          #   - -hwaccel
+          #   - vaapi
+          #   - -hwaccel_device
+          #   - /dev/dri/renderD128
+          #   - -hwaccel_output_format
+          #   - yuv420p
           ffmpeg_output_args:
             - -vf
             - mpdecimate
@@ -198,8 +198,8 @@ spec:
               operator: In
               values:
               - google-coral
-    resources:
-      limits:
-        gpu.intel.com/i915: 1
+    # resources:
+    #   limits:
+    #     gpu.intel.com/i915: 1
   valueFileSecrets:
   - name: "frigate-helm-values"
