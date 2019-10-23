@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: rabbitmq-ha
-    version: 1.33.1
+    version: 1.34.1
   values:
     image:
       repository: rabbitmq
