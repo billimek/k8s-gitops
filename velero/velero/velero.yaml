@@ -23,7 +23,7 @@ spec:
     snapshotsEnabled: false
     deployRestic: true
     restic:
-      podVolumePath: /var/lib/rancher/k3s/agent/kubelet/pods
+      podVolumePath: /var/lib/kubelet/pods
       privileged: false
     schedules:
       daily-backup:

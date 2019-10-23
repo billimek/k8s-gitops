@@ -14,4 +14,4 @@ spec:
     version: v1.1.2
   values:
     csi:
-      kubeletDirPath: /var/lib/rancher/k3s/agent/kubelet
+      kubeletDirPath: /var/lib/kubelet
