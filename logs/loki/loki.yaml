@@ -32,7 +32,7 @@ spec:
     promtail:
       image:
         repository: grafana/promtail
-        tag: v0.3.0 
+        tag: v0.4.0
       serviceMonitor:
         enabled: true
       tolerations:
