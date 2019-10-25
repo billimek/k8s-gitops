@@ -19,7 +19,7 @@ spec:
     loki:
       image:
         repository: grafana/loki
-        tag: v0.3.0
+        tag: v0.4.0
       persistence:
         enabled: true
         size: 50Gi
