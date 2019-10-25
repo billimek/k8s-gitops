@@ -31,7 +31,6 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8"
     # podAnnotations:
     #   backup.velero.io/backup-volumes: data
     timezone: "America/New_York"
