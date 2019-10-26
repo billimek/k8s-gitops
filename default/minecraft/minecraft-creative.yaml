@@ -4,7 +4,6 @@ kind: HelmRelease
 metadata:
   name: mc
   namespace: default
-  annotations:
 spec:
   releaseName: mc
   rollback:
@@ -24,6 +23,12 @@ spec:
     resources:
       requests:
         memory: 1024Mi
+    livenessProbe:
+      initialDelaySeconds: 120
+      periodSeconds: 5
+    readinessProbe:
+      initialDelaySeconds: 120
+      periodSeconds: 5
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
     minecraftServer:

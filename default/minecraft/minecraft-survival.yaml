@@ -4,9 +4,6 @@ kind: HelmRelease
 metadata:
   name: mcsv
   namespace: default
-  annotations:
-    # fluxcd.io/automated: "true"
-    # fluxcd.io/tag.chart-image: glob:latest
 spec:
   releaseName: mcsv
   rollback:
