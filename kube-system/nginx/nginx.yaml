@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: nginx-ingress
-    version: 1.24.3
+    version: 1.24.4
   values:
     controller:
       # image:
@@ -24,6 +24,8 @@ spec:
       replicaCount: 2
       config:
         custom-http-errors: 404,403,500,503
+        global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
+        global-auth-signin: "https://auth.$host/oauth2/start"
       service:
         loadBalancerIP: 10.2.0.150
         externalTrafficPolicy: Local
