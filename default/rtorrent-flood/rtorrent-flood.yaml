@@ -55,6 +55,5 @@ spec:
         cpu: 35m
       limits:
         memory: 1000Mi
-        cpu: 100m
   valueFileSecrets:
   - name: "rtorrent-flood-helm-values"

@@ -24,7 +24,6 @@ spec:
         cpu: 25m
       limits:
         memory: 1000Mi
-        cpu: 50m
     metrics:
       enabled: true
     snapshotsEnabled: false

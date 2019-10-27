@@ -47,6 +47,5 @@ spec:
         cpu: 25m
       limits:
         memory: 400Mi
-        cpu: 50m
   valueFileSecrets:
   - name: "nzbget-helm-values"

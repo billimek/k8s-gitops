@@ -47,7 +47,6 @@ spec:
           cpu: 25m
         limits:
           memory: 600Mi
-          cpu: 50m
     defaultBackend:
       enabled: true
       image:
@@ -59,4 +58,3 @@ spec:
           cpu: 25m
         limits:
           memory: 350Mi
-          cpu: 50m

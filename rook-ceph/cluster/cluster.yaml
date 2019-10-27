@@ -23,28 +23,24 @@ spec:
           cpu: "25m"
           memory: "250Mi"
       limits:
-        cpu: "50m"
         memory: "512Mi"
     mgr:
       requests:
           cpu: "50m"
           memory: "300Mi"
       limits:
-        cpu: "100m"
         memory: "400Mi"
     mon:
       requests:
           cpu: "35m"
           memory: "800Mi"
       limits:
-        cpu: "100m"
         memory: "1000Mi"
     osd:
       requests:
           cpu: "35m"
           memory: "2000Mi"
       limits:
-        cpu: "100m"
         memory: "4000Mi"
   storage:
     useAllNodes: true

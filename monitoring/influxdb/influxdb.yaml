@@ -33,7 +33,6 @@ spec:
         cpu: 100m
       limits:
         memory: 3000Mi
-        cpu: 150m
     livenessProbe:
       timeoutSeconds: 10
     readinessProbe:

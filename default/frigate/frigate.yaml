@@ -203,7 +203,6 @@ spec:
         cpu: 750m
       limits:
         memory: 750Mi
-        cpu: 2500m
         # gpu.intel.com/i915: 1
   valueFileSecrets:
   - name: "frigate-helm-values"
