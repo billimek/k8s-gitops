@@ -36,19 +36,19 @@ spec:
           memory: "800Mi"
       limits:
         memory: "1024Mi"
-    osd:
-      requests:
-          cpu: "35m"
-          memory: "2048Mi"
-      limits:
-        memory: "4096Mi"
+    # osd:
+    #   requests:
+    #       cpu: "35m"
+    #       memory: "2048Mi"
+    #   limits:
+    #     memory: "4096Mi"
     rbdmirror:
       requests:
           cpu: "25m"
           memory: "250Mi"
       limits:
         memory: "512Mi"
-    osdprepare:
+    prepareosd:
       requests:
           cpu: "35m"
           memory: "256Mi"
