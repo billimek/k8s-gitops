@@ -44,7 +44,7 @@ spec:
           kubernetes.io/ingress.class: "nginx"
     resources:
       limits:
-        cpu: 1000m
+        cpu: 2000m
         memory: 2500Mi
       requests:
         cpu: 35m
