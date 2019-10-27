@@ -35,7 +35,7 @@ spec:
           cpu: "35m"
           memory: "800Mi"
       limits:
-        memory: "1000Mi"
+        memory: "1024Mi"
     osd:
       requests:
           cpu: "35m"
