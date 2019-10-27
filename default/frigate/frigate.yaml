@@ -197,8 +197,13 @@ spec:
               operator: In
               values:
               - google-coral
-    # resources:
-    #   limits:
-    #     gpu.intel.com/i915: 1
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: 1500m
+      limits:
+        memory: 750Mi
+        cpu: 750m
+        # gpu.intel.com/i915: 1
   valueFileSecrets:
   - name: "frigate-helm-values"

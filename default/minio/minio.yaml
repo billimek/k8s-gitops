@@ -25,5 +25,12 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
+    resources:
+      requests:
+        memory: 350Mi
+        cpu: 25m
+      limits:
+        memory: 500Mi
+        cpu: 50m
   valueFileSecrets:
   - name: "minio-helm-values"

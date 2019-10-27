@@ -22,7 +22,11 @@ spec:
         Size: 10Gi
     resources:
       requests:
-        memory: 1024Mi
+        memory: 1500Mi
+        cpu: 250m
+      limits:
+        memory: 2000Mi
+        cpu: 500m
     livenessProbe:
       initialDelaySeconds: 120
       periodSeconds: 5

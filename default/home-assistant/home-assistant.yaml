@@ -42,5 +42,12 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+    resources:
+      limits:
+        cpu: 100m
+        memory: 2500Mi
+      requests:
+        cpu: 35m
+        memory: 2000Mi
   valueFileSecrets:
   - name: "home-assistant-helm-values"

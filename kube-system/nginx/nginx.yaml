@@ -41,8 +41,22 @@ spec:
       #   operator: "Exists"
       extraArgs:
         default-ssl-certificate: "kube-system/acme-crt-secret"
+      resources:
+        requests:
+          memory: 500Mi
+          cpu: 25m
+        limits:
+          memory: 600Mi
+          cpu: 50m
     defaultBackend:
       enabled: true
       image:
         repository: billimek/custom-error-pages
         tag: 0.4.4
+      resources:
+        requests:
+          memory: 250Mi
+          cpu: 25m
+        limits:
+          memory: 350Mi
+          cpu: 50m
