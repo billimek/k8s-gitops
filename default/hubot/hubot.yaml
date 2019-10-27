@@ -24,5 +24,11 @@ spec:
       HUBOT_GRAFANA_S3_BUCKET: 'public'
       HUBOT_GRAFANA_S3_REGION: 'us-east-1'
       HUBOT_HOME_ASSISTANT_EVENTS_DESTINATION: '#general'
+    externalScripts:
+      - hubot-diagnostics
+      - hubot-help
+      - hubot-http-status
+      - hubot-grafana
+      - hubot-alias
   valueFileSecrets:
   - name: "hubot-helm-values"
