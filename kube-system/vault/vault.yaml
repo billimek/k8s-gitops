@@ -24,7 +24,6 @@ spec:
           cpu: 250m
         limits:
           memory: 256Mi
-          cpu: 250m
       dataStorage:
         enabled: true
         size: 10Gi

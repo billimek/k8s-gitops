@@ -37,7 +37,6 @@ spec:
           cpu: 15m
         limits:
           memory: 500Mi
-          cpu: 35m
     schedules:
       daily-backup:
         schedule: "0 6 * * *"
