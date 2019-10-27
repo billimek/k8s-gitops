@@ -40,5 +40,12 @@ spec:
         existingClaim: nfs-media-pvc
         subPath: Videos
         accessMode: ReadWriteMany
+    resources:
+      requests:
+        memory: 350Mi
+        cpu: 25m
+      limits:
+        memory: 500Mi
+        cpu: 50m
   valueFileSecrets:
   - name: "sonarr-helm-values"

@@ -15,6 +15,14 @@ spec:
     name: prometheus-operator
     version: 6.21.0
   values:
+    server:
+      resources:
+        requests:
+          memory: 1000Mi
+          cpu: 25m
+        limits:
+          memory: 2000Mi
+          cpu: 100m
     prometheusOperator:
       createCustomResource: true
     alertmanager:

@@ -49,5 +49,12 @@ spec:
       data:
         enabled: true
         existingClaim: nfs-media-downloads-pvc
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 35m
+      limits:
+        memory: 1000Mi
+        cpu: 100m
   valueFileSecrets:
   - name: "rtorrent-flood-helm-values"

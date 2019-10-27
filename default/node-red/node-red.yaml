@@ -35,5 +35,12 @@ spec:
     #   backup.velero.io/backup-volumes: data
     timezone: "America/New_York"
     enableProjects: true
+    resources:
+      requests:
+        memory: 350Mi
+        cpu: 25m
+      limits:
+        memory: 500Mi
+        cpu: 50m
   valueFileSecrets:
   - name: "node-red-helm-values"

@@ -18,6 +18,13 @@ spec:
     image:
       repository: gcr.io/heptio-images/velero
       tag: v1.1.0
+    resources:
+      requests:
+        memory: 300Mi
+        cpu: 25m
+      limits:
+        memory: 1000Mi
+        cpu: 50m
     metrics:
       enabled: true
     snapshotsEnabled: false
@@ -25,6 +32,13 @@ spec:
     restic:
       podVolumePath: /var/lib/kubelet/pods
       privileged: false
+      resources:
+        requests:
+          memory: 200Mi
+          cpu: 15m
+        limits:
+          memory: 500Mi
+          cpu: 35m
     schedules:
       daily-backup:
         schedule: "0 6 * * *"

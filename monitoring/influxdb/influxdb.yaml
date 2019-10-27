@@ -29,11 +29,11 @@ spec:
       storageClass: nfs-client
     resources:
       requests:
-        memory: 256Mi
-        cpu: 0.1
+        memory: 2000Mi
+        cpu: 100m
       limits:
-        memory: 4Gi
-        # cpu: 4
+        memory: 3000Mi
+        cpu: 150m
     livenessProbe:
       timeoutSeconds: 10
     readinessProbe:
