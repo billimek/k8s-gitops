@@ -14,16 +14,15 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: hubot
-    version: 0.0.2
+    version: 1.0.0
   values:
     image:
-      repository: billimek/hubot
-      tag: latest
-    hubot:
-      config:
-        HUBOT_GRAFANA_S3_STYLE: 'path'
-        HUBOT_GRAFANA_S3_BUCKET: 'public'
-        HUBOT_GRAFANA_S3_REGION: 'us-east-1'
-        HUBOT_HOME_ASSISTANT_EVENTS_DESTINATION: '#general'
+      repository: minddocdev/hubot
+      tag: 3.3.2
+    config:
+      HUBOT_GRAFANA_S3_STYLE: 'path'
+      HUBOT_GRAFANA_S3_BUCKET: 'public'
+      HUBOT_GRAFANA_S3_REGION: 'us-east-1'
+      HUBOT_HOME_ASSISTANT_EVENTS_DESTINATION: '#general'
   valueFileSecrets:
   - name: "hubot-helm-values"
