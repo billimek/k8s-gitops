@@ -46,10 +46,10 @@ spec:
     resources:
       limits:
         gpu.intel.com/i915: 1
-        cpu: 1000m
-        memory: 4.9Gi
+        cpu: 750m
+        memory: 4900Mi
       requests:
         cpu: 35m
-        memory: 1.5Gi
+        memory: 1500Mi
   valueFileSecrets:
   - name: "plex-helm-values"
