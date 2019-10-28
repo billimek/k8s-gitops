@@ -20,34 +20,34 @@ spec:
   resources:
     api:
       requests:
-          cpu: "25m"
-          memory: "250Mi"
+          cpu: 25m
+          memory: 250Mi
       limits:
-        memory: "512Mi"
+        memory: 512Mi
     mgr:
       requests:
-          cpu: "50m"
-          memory: "300Mi"
+          cpu: 50m
+          memory: 300Mi
       limits:
-        memory: "512Mi"
+        memory: 512Mi
     mon:
       requests:
-          cpu: "35m"
-          memory: "800Mi"
+          cpu: 35m
+          memory: 800Mi
       limits:
-        memory: "1024Mi"
+        memory: 1024Mi
     rbdmirror:
       requests:
-          cpu: "25m"
-          memory: "250Mi"
+          cpu: 25m
+          memory: 250Mi
       limits:
-        memory: "512Mi"
+        memory: 512Mi
     prepareosd:
       requests:
-          cpu: "35m"
-          memory: "256Mi"
+          cpu: 35m
+          memory: 256Mi
       limits:
-        memory: "256Mi"
+        memory: 256Mi
   storage:
     useAllNodes: true
     useAllDevices: true
