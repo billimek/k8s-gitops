@@ -1,0 +1,38 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: ser2sock
+  namespace: default
+spec:
+  releaseName: ser2sock
+  rollback:
+    enable: true
+  chart:
+    repository: https://billimek.com/billimek-charts/
+    name: ser2sock
+    version: 0.0.1
+  values:
+    image:
+      repository: tenstartups/ser2sock
+      tag: armhf
+      imagePullPolicy: Always
+    timezone: "America/New York"
+    service:
+      type: LoadBalancer
+      loadBalancerIP: 10.2.0.152
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: usb
+              operator: In
+              values:
+              - alarmdecoder
+    # resources:
+    #   requests:
+    #     memory: 50Mi
+    #     cpu: 15m
+    #   limits:
+    #     memory: 100Mi
