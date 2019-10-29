@@ -16,7 +16,7 @@ spec:
     version: 2.5.16
   values:
     image:
-      repository: minio/minio
+      repository: jessestuart/minio
       tag: RELEASE.2019-10-12T01-39-57Z
     persistence:
       existingClaim: "nfs-data-pvc"
@@ -25,6 +25,9 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     resources:
       requests:
         memory: 350Mi
