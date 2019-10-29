@@ -18,9 +18,6 @@ spec:
       tag: armhf
       imagePullPolicy: Always
     timezone: "America/New York"
-    service:
-      type: LoadBalancer
-      loadBalancerIP: 10.2.0.152
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -33,9 +30,9 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-    # resources:
-    #   requests:
-    #     memory: 50Mi
-    #     cpu: 15m
-    #   limits:
-    #     memory: 100Mi
+    resources:
+      requests:
+        memory: 50Mi
+        cpu: 15m
+      limits:
+        memory: 250Mi
