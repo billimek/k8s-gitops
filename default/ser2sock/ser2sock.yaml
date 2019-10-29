@@ -30,6 +30,9 @@ spec:
               operator: In
               values:
               - alarmdecoder
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     # resources:
     #   requests:
     #     memory: 50Mi
