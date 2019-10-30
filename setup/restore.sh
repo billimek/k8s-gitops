@@ -8,7 +8,7 @@
 #   3. (reccomended) key-based ssh-access without interactive password
 #   4. (HIGHLY RECCOMENDED) source and destination workloads are scaled-to-zero prior to running this
 
-BACKUP_LOCATION="/mnt/backups/cluster-20191026"
+BACKUP_LOCATION="/mnt/backups/cluster"
 PVCS_TO_RESTORE_CEPHFS=""
 # PVCS_TO_RESTORE_RBD="home-assistant mc-minecraft-datadir mcsv-minecraft-datadir kube-plex-config radarr-config rtorrent-flood-config sonarr-config unifi prometheus-operator-grafana"
 PVCS_TO_RESTORE_RBD="prometheus-prometheus-operator-prometheus-db-prometheus-prometheus-operator-prometheus-0 prometheus-operator-grafana"
