@@ -32,7 +32,7 @@ spec:
       metrics:
         enabled: true
         serviceMonitor:
-          enabled: true
+          enabled: false
           namespace: kube-system
         prometheusRule:
           enabled: false
