@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
-    version: 6.21.0
+    version: 7.0.0
   values:
     server:
       resources:
