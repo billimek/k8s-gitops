@@ -13,7 +13,7 @@ spec:
   rollback:
     enable: true
   chart:
-    git: https://MoJo2600/pihole-kubernetes
+    git: https://github.com/MoJo2600/pihole-kubernetes.git
     ref: master
     path: pihole
   values:
