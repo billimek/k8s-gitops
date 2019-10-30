@@ -1,0 +1,6 @@
+floodSecret: "2600"
+ingress:
+  hosts: [qb.$DOMAIN]
+  tls:
+  - hosts:
+    - qb.$DOMAIN
