@@ -22,12 +22,13 @@ spec:
       tag: 4.1.8.99201910202234-6729-cb31684ubuntu18.04.1-ls47
     uid: 1001
     gid: 1001
+    umask: "0022"
     guiService:
       type: ClusterIP
       # port: 8080
     btService:
       type: LoadBalancer
-      # port: 49161
+      port: 6881
       loadBalancerIP: 10.2.0.155
     ingress:
       enabled: true
@@ -43,14 +44,15 @@ spec:
       data:
         enabled: true
         existingClaim: nfs-media-downloads-pvc
+        subPath: torrents
     tolerations:
     - key: "arm"
       operator: "Exists"
     resources:
       requests:
         memory: 250Mi
-        cpu: 35m
+        cpu: 25m
       limits:
-        memory: 1000Mi
+        memory: 3000Mi
   valueFileSecrets:
   - name: "qbittorrent-helm-values"
