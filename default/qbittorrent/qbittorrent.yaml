@@ -15,14 +15,14 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: qbittorrent
-    version: 0.0.1
+    version: 1.0.0
   values:
     image:
       repository: linuxserver/qbittorrent
       tag: 4.1.8.99201910202234-6729-cb31684ubuntu18.04.1-ls47
     uid: 1001
     gid: 1001
-    umask: "0022"
+    # umask: "0022"
     guiService:
       type: ClusterIP
       # port: 8080
