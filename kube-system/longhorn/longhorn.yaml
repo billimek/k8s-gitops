@@ -18,3 +18,5 @@ spec:
       tls: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+  valueFileSecrets:
+  - name: "longhorn-helm-values"
