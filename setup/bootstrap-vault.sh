@@ -23,6 +23,7 @@ message() {
 
 kvault() {
   name="secrets/$(dirname "$@")/$(basename -s .txt "$@")"
+  echo "Writing $name to vault"
   if output=$(envsubst < "$REPO_ROOT/$*"); then
     printf '%s' "$output" | vault kv put "$name" values.yaml=-
   fi
@@ -154,6 +155,7 @@ loadSecretsToVault() {
   # helm chart values
   ####################
   kvault "kube-system/kured/kured-helm-values.txt"
+  kvault "kube-system/longhorn/longhorn-helm-values.txt"
   kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
   kvault "logs/kibana/kibana-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"

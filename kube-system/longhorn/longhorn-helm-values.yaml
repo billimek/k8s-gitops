@@ -1,0 +1,10 @@
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: longhorn-helm-values
+  namespace: default
+spec:
+  keys:
+    - values.yaml
+  path: secrets/default/longhorn/longhorn-helm-values
+  type: Opaque
