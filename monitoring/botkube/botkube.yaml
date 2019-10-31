@@ -14,8 +14,10 @@ spec:
     repository: https://infracloudio.github.io/charts
     name: botkube
     version: v0.9.0
-  # values:
-  #   # settings:
-  #   #   clustername: k8s
+  values:
+    image:
+      repository: infracloudio/botkube
+    # settings:
+    #   clustername: k8s
   valueFileSecrets:
   - name: "botkube-helm-values"
