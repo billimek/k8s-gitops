@@ -6,5 +6,5 @@ metadata:
 spec:
   keys:
     - values.yaml
-  path: secrets/default/longhorn/longhorn-helm-values
+  path: secrets/kube-system/longhorn/longhorn-helm-values
   type: Opaque
