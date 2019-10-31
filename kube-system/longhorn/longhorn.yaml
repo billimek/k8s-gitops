@@ -21,6 +21,6 @@ spec:
     persistence:
       defaultClass: false
     csi:
-      kubeletRootDir: /var/lib/kubelet
+      kubeletRootDir: /var/lib/rancher/k3s/agent/kubelet
   valueFileSecrets:
   - name: "longhorn-helm-values"
