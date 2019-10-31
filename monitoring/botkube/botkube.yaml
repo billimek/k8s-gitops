@@ -17,7 +17,8 @@ spec:
   values:
     image:
       repository: infracloudio/botkube
-    settings:
-      clustername: k8s
+    config:
+      settings:
+        clustername: k8s
   valueFileSecrets:
   - name: "botkube-helm-values"
