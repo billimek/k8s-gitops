@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: linuxserver/qbittorrent
-      tag: 4.1.9.99201911010006-6736-eea38e7ubuntu18.04.1-ls49
+      tag: 4.1.9.99201911020617-6737-5d98721ubuntu18.04.1-ls50
     uid: 1001
     gid: 1001
     # umask: "0022"
