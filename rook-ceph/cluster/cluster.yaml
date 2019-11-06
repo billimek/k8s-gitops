@@ -48,12 +48,6 @@ spec:
           memory: 250Mi
       limits:
         memory: 512Mi
-    prepareosd:
-      requests:
-          cpu: 35m
-          memory: 256Mi
-      limits:
-        memory: 256Mi
   storage:
     useAllNodes: true
     useAllDevices: true
