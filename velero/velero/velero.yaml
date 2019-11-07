@@ -16,14 +16,17 @@ spec:
     version: 2.2.1
   values:
     image:
-      repository: gcr.io/heptio-images/velero
-      tag: v1.1.0
+      repository: velero/velero
+      tag: v1.2.0
     resources:
       requests:
         memory: 300Mi
         cpu: 25m
       limits:
         memory: 1000Mi
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     metrics:
       enabled: true
     snapshotsEnabled: false
