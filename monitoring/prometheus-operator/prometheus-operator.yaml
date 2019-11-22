@@ -153,6 +153,10 @@ spec:
           url: https://grafana.net
     kubeEtcd:
       enabled: false
+    kubeControllerManager:
+      enabled: false
+    kubeScheduler:
+      enabled: false
     prometheus-node-exporter:
       tolerations:
       - key: "arm"
