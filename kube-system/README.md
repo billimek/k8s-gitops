@@ -19,10 +19,6 @@ Automatically drain and reboot nodes when a reboot is required (e.g. a kernel up
 
 * [metallb/metallb.yaml](metallb/metallb.yaml)
 
-# metrics-server
-
-* [metrics-server/metrics-server.yaml](metrics-server/metrics-server.yaml)
-
 # nfs-client-provisioner
 
 Using the [nfs-client storage type](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)
