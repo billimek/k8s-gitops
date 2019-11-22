@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: kured
-    version: 1.4.0
+    version: 1.4.1
   values:
     image:
       repository: billimek/kured
