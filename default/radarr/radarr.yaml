@@ -5,7 +5,7 @@ metadata:
   name: radarr
   namespace: default
   annotations:
-    fluxcd.io/automated: "true"
+    fluxcd.io/automated: "false"
     fluxcd.io/tag.chart-image: 'glob:amd64-v0.*.*.*'
 spec:
   releaseName: radarr
@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/radarr
-      tag: 'amd64-v0.2.0.1358-ls13'
+      tag: '5.14'
     ingress:
       enabled: true
       annotations:
