@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: 'glob:amd64-2.*.*.*'
+    fluxcd.io/tag.chart-image: 'glob:2.*.*.*-ls*'
 spec:
   releaseName: sonarr
   rollback:
@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: 'amd64-2.0.0.5337-ls89'
+      tag: '2.0.0.5338-ls42'
       pullPolicy: Always
     ingress:
       enabled: true
