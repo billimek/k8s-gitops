@@ -46,6 +46,12 @@ This [script](teardown.sh) will:
 
 After initial bootstrapping, it will be necessary to run scripts to apply manual changes that can't be natively handled via Flux.  This is for yaml files that need `envsubst` prior to application to the cluster.  This is also for updates to values stored in **vault**.
 
+### `.env` file
+
+There are references to the `.env` file in the below scripts. This file is automatically sourced in order to populate secrets and sensitive information used in the scripts at runtime. This file is also prevented from commits via `.gitignore`.
+
+A sample [.env.sample](.env.sample) file is provided as reference. To use this, `cp .env.sample .env` and make the necessary modifications for the secrets for your particular configuration.
+
 ### objects
 
 To apply necessary changes to kubernetes native objects, run [bootstrap-objects.sh](bootstrap-objects.sh):
