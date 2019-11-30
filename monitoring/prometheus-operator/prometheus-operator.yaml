@@ -215,12 +215,5 @@ spec:
           static_configs:
           - targets:
             - nvr:9182
-        - job_name: 'home-assistant'
-          scrape_interval: 60s
-          metrics_path: /api/prometheus
-          bearer_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiM2FjNjVlNjQ1OTU0NWNhOWJiZWZiZDE5OWM4MDMzMiIsImlhdCI6MTU2NzEyODYwOCwiZXhwIjoxODgyNDg4NjA4fQ.NkSaaxMnJMYy-38gBsdlKt35-aKKSMDofGzBeBQmVnw'
-          scheme: http
-          static_configs:
-          - targets: ['home-assistant.default.svc:8123']
   valueFileSecrets:
   - name: "prometheus-operator-helm-values"
