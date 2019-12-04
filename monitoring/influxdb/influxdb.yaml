@@ -41,7 +41,7 @@ spec:
       opentsdb:
         enabled: true
     podAnnotations:
-      backup.velero.io/backup-volumes: data
+      backup.velero.io/backup-volumes: influxdb-data
     # tolerations:
     # - key: "arm"
     #   operator: "Exists"
