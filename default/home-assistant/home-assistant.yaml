@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
-    version: 0.9.10
+    version: 0.9.11
   values:
     image:
       repository: homeassistant/home-assistant
@@ -32,6 +32,15 @@ spec:
     # tolerations:
     # - key: "arm"
     #   operator: "Exists"
+    probes:
+      liveness:
+        initialDelaySeconds: 60
+        failureThreshold: 5
+        timeoutSeconds: 10
+      readiness:
+        initialDelaySeconds: 120
+        failureThreshold: 5
+        timeoutSeconds: 10
     podAnnotations:
       backup.velero.io/backup-volumes: config
     vscode:
