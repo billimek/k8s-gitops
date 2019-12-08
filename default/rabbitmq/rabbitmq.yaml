@@ -79,8 +79,7 @@ spec:
           "definition": {
             "ha-mode": "all",
             "ha-sync-mode": "automatic",
-            "ha-sync-batch-size": 1,
-            "max-length": 1000
+            "ha-sync-batch-size": 1
           }
         }
   valueFileSecrets:
