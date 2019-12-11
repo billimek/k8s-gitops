@@ -1,3 +1,4 @@
+---
 apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
@@ -15,7 +16,7 @@ spec:
   values:
     image:
       repository: "quay.io/pusher/oauth2_proxy"
-      tag: "v4.0.0"
+      tag: "v4.1.0"
     replicaCount: 2
     # tolerations:
     #   - key: "arm"
