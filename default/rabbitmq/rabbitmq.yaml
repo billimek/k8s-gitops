@@ -35,9 +35,9 @@ spec:
     rabbitmqErlangCookie: "9uVNsf2plnpyslPjqUVaDmGTUml2wJlb"
     forceBoot:
       enabled: true
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
+    # tolerations:
+    # - key: "arm"
+    #   operator: "Exists"
     resources:
       limits:
         memory: 512Mi
