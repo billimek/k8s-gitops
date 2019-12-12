@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://charts.fluxcd.io/
     name: flux
-    version: 0.15.0
+    version: 0.16.0
   valuesFrom:
   - externalSourceRef:
       url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/flux/flux/flux-values.yaml
