@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: influxdb
-    version: 3.0.1
+    version: 3.0.2
   values:
     image:
       repository: "influxdb"
