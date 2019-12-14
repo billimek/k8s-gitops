@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: oauth2-proxy
-    version: 2.0.0
+    version: 2.1.1
   values:
     image:
       repository: "quay.io/pusher/oauth2_proxy"
