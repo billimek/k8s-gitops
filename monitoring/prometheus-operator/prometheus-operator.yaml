@@ -111,43 +111,46 @@ spec:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charge-details.json
             datasource: TeslaMate
           charges:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/charges.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charges.json
+            datasource: TeslaMate
+          charging-stats:
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charging-stats.json
             datasource: TeslaMate
           degradation:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/degradation.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/degradation.json
             datasource: TeslaMate
           drive-details:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/drive-details.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/drive-details.json
             datasource: TeslaMate
           drives:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/drives.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/drives.json
             datasource: TeslaMate
           efficiency:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/efficiency.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/efficiency.json
             datasource: TeslaMate
           locations:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/locations.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/locations.json
             datasource: TeslaMate
           mileage:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/mileage.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/mileage.json
             datasource: TeslaMate
           overview-dash:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/overview-dash.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/overview-dash.json
             datasource: TeslaMate
           position:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/position.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/position.json
             datasource: TeslaMate
           states:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/states.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/states.json
             datasource: TeslaMate
           updates:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/updates.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/updates.json
             datasource: TeslaMate
           vampire-drain:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/vampire-drain.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/vampire-drain.json
             datasource: TeslaMate
           visited:
-            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/visited.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/visited.json
             datasource: TeslaMate
       additionalDataSources:
       - name: loki
