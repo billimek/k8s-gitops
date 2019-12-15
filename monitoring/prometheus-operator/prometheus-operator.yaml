@@ -65,6 +65,7 @@ spec:
           kubernetes.io/ingress.class: "nginx"
       plugins:
       - natel-discrete-panel
+      - pr0ps-trackmap-panel
       dashboardProviders:
         dashboardproviders.yaml:
           apiVersion: 1
@@ -106,6 +107,48 @@ spec:
           # netdata:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/netdata.json
           #   datasource: Prometheus
+          charge-details:
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charge-details.json
+            datasource: TeslaMate
+          charges:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/charges.json
+            datasource: TeslaMate
+          degradation:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/degradation.json
+            datasource: TeslaMate
+          drive-details:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/drive-details.json
+            datasource: TeslaMate
+          drives:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/drives.json
+            datasource: TeslaMate
+          efficiency:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/efficiency.json
+            datasource: TeslaMate
+          locations:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/locations.json
+            datasource: TeslaMate
+          mileage:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/mileage.json
+            datasource: TeslaMate
+          overview-dash:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/overview-dash.json
+            datasource: TeslaMate
+          position:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/position.json
+            datasource: TeslaMate
+          states:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/states.json
+            datasource: TeslaMate
+          updates:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/updates.json
+            datasource: TeslaMate
+          vampire-drain:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/vampire-drain.json
+            datasource: TeslaMate
+          visited:
+            url: https://github.com/adriankumpf/teslamate/raw/master/grafana/dashboards/visited.json
+            datasource: TeslaMate
       additionalDataSources:
       - name: loki
         type: loki
