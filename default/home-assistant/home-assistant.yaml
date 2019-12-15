@@ -36,7 +36,7 @@ spec:
       liveness:
         initialDelaySeconds: 240
         failureThreshold: 5
-        timeoutSeconds: 30
+        timeoutSeconds: 120
       readiness:
         initialDelaySeconds: 240
         failureThreshold: 5
