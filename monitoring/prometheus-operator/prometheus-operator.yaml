@@ -78,6 +78,17 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/default
+          - name: 'teslamate'
+            orgId: 1
+            folder: Teslamate
+            # folderUid: Nr4ofiDZk
+            type: file
+            disableDeletion: false
+            editable: true
+            # updateIntervalSeconds: -1
+            allowUiUpdates: true
+            options:
+              path: /var/lib/grafana/dashboards/teslamate
       dashboards:
         default:
           nginx-dashboard:
@@ -107,6 +118,7 @@ spec:
           # netdata:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/netdata.json
           #   datasource: Prometheus
+        teslamate:
           charge-details:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charge-details.json
             datasource: TeslaMate
