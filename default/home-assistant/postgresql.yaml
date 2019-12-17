@@ -6,29 +6,25 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/ignore: false
-    fluxcd.io: "false"
-    fluxcd.io: semver:~11
+    fluxcd.io/automated: "false"
+    fluxcd.io/tag.chart-image: semver:~12
 spec:
   releaseName: hass-postgresql
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: postgresql
-    version: 6.3.11
+    version: 8.0.0
   values:
     image:
-      repository: bitnami/postgresql
-      tag: 11.5.0-debian-9-r34
+      repository: postgres
+      tag: 12.1
+    postgresqlDataDir: "/data/pgdata"
     postgresqlUsername: "homeassistant"
     postgresqlDatabase: "homeassistant"
-    replication:
-      enabled: true
-      slaveReplicas: 2
-      synchronousCommit: "on"
-      numSynchronousReplicas: 1
     persistence:
       enabled: true
-      #accessMode: ReadWriteOnce
       storageClass: "rook-ceph-block"
+      mountPath: "/data/"
     metrics:
       enabled: true
       serviceMonitor:
