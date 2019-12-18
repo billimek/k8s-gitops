@@ -13,11 +13,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minio
-    version: 2.5.18
+    version: 4.0.0
   values:
     image:
       repository: jessestuart/minio
-      tag: RELEASE.2019-10-12T01-39-57Z
+      tag: RELEASE.2019-12-17T23-16-33Z
     persistence:
       existingClaim: "nfs-data-pvc"
       subPath: "minio"
