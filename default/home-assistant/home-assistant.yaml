@@ -34,11 +34,11 @@ spec:
     #   operator: "Exists"
     probes:
       liveness:
-        initialDelaySeconds: 360
+        initialDelaySeconds: 300
         failureThreshold: 30
-        timeoutSeconds: 240
+        timeoutSeconds: 120
       readiness:
-        initialDelaySeconds: 360
+        initialDelaySeconds: 300
         failureThreshold: 30
         timeoutSeconds: 30
     podAnnotations:
