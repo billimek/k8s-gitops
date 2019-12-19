@@ -34,12 +34,12 @@ spec:
     #   operator: "Exists"
     probes:
       liveness:
-        initialDelaySeconds: 240
-        failureThreshold: 5
+        initialDelaySeconds: 120
+        failureThreshold: 15
         timeoutSeconds: 120
       readiness:
-        initialDelaySeconds: 240
-        failureThreshold: 5
+        initialDelaySeconds: 120
+        failureThreshold: 15
         timeoutSeconds: 30
     podAnnotations:
       backup.velero.io/backup-volumes: config
