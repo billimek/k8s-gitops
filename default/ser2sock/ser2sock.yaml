@@ -36,5 +36,3 @@ spec:
         cpu: 15m
       limits:
         memory: 250Mi
-    service:
-      type: LoadBalancer
