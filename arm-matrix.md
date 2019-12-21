@@ -4,14 +4,14 @@
 
 | workload                | armhf (32-bit) | arm64 (64-bit) | image | notes |
 |-------------------------|----------------|----------------|-------|-------|
-| cert-manager            | X | X | TBD | This should arrive with cert-manager release v0.12 |
+| cert-manager            | X | X | `quay.io/jetstack/cert-manager-controller` | This shipped with release v0.12 |
 | home-assistant          | X | X | `homeassistant/home-assistant` | The vscode sudecard container is amd64 only |
 | minio                   | X | X | `jessestuart/minio` | |
 | node-red                | X | X | `nodered/node-red` | |
 | nzbget                  | X | X | `linuxserver/nzbget` | |
 | pihole                  | X | X | `pihole/pihole` | |
 | rabbitmq                | X | X | `rabbitmq` | |
-| ser2sock                | X |  | `tenstartups/ser2sock` | This is an armhf-only image. Not multi-arch  |
+| ser2sock                | X | X | `tenstartups/ser2sock` | Seems to work on arm64 ¯\\\_(ツ)_/¯  |
 | radarr                  | X | X | `linuxserver/radarr` | Not running on arm now due to no ceph-csi container support for arm |
 | sonarr                  | X | X | `linuxserver/sonarr` | Not running on arm now due to no ceph-csi container support for arm |
 | unifi                   | X | X | `linuxserver/unifi-controller` | Not running this image right now - instead running `jacobalberty/unifi` which is amd64-only |
