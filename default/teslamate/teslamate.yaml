@@ -24,7 +24,6 @@ spec:
       enabled: true
       host: rabbitmq-ha
       username: mqtt
-      password: mqtt
     ingress:
       enabled: true
       annotations:

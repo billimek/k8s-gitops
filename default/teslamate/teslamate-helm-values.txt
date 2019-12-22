@@ -1,4 +1,5 @@
-
+mqtt:
+  password: $RABBITMQ_MQTT_USER_PASSWORD
 ingress:
   hosts:
     - teslamate.$DOMAIN
