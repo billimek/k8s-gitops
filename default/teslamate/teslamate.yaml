@@ -35,7 +35,7 @@ spec:
     postgresql:
       image:
         repository: postgres
-        tag: 12.1
+        tag: '12.1'
       persistence:
         enabled: true
         storageClass: nfs-client
