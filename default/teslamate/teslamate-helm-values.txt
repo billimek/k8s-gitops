@@ -5,23 +5,8 @@ ingress:
   tls:
     - hosts:
       - teslamate.$DOMAIN
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start
 postgresql:
   postgresqlPassword: $TESLAMATE_DB_PASSWORD
-
-
-managementPassword: $teslamate_PASSWORD
-teslamateUsername: admin
-teslamatePassword: $teslamate_PASSWORD
-teslamateMQTTPlugin:
-  config: |
-    mqtt.default_user     = admin
-    mqtt.default_pass     = $teslamate_PASSWORD
-    mqtt.allow_anonymous  = true
-    mqtt.subscription_ttl = 86400000
-definitions:
-  users: |-
-    {
-      "name": "mqtt",
-      "password": "$teslamate_MQTT_USER_PASSWORD",
-      "tags": "mqtt"
-    }
