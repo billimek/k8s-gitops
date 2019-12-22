@@ -32,6 +32,12 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
     postgresql:
       image:
         repository: postgres
