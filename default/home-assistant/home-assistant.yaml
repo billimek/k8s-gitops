@@ -12,7 +12,7 @@ metadata:
 spec:
   releaseName: home-assistant
   rollback:
-    enable: false
+    enable: true
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
