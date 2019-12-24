@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: teslamate/teslamate
-      tag: 1.14.0
+      tag: 1.14.1
     timeZone: "America/New_York"
     mqtt:
       enabled: true
