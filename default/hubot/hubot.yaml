@@ -9,6 +9,7 @@ metadata:
     fluxcd.io/tag.chart-image: semver:~3
 spec:
   releaseName: hubot
+  helmVersion: v3
   rollback:
     enable: true
   chart:
