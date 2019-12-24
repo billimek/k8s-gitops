@@ -9,6 +9,7 @@ metadata:
     fluxcd.io/tag.chart-image: 'semver:0'
 spec:
   releaseName: frigate
+  helmVersion: v3
   rollback:
     enable: true
   chart:
