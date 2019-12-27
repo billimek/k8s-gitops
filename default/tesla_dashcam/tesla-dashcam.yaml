@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tesla-dashcam
 spec:
-  schedule: "* 5 * * *"
+  schedule: "0 5 * * *"
   jobTemplate:
     spec:
       template:
