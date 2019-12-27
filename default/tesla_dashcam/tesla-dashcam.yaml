@@ -1,0 +1,35 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: tesla-dashcam
+  labels:
+    app: tesla-dashcam
+spec:
+  schedule: "* 5 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: tesla-dashcam
+            env:
+            - name: TZ
+              value: America/New_York
+            image: magicalyak/tesla_dashcam:latest
+            args: ["--delete_source", "--skip_existing", "--motion_only", "--output", "/output", "/input"]
+            # args: ["--gpu", "--gpu_type=intel", "--enc=x265", "--delete_source", "--skip_existing", "--motion_only", "--output", "/output", "/input"]
+            # resources:
+            #   limits:
+            #     gpu.intel.com/i915: "1"
+            volumeMounts:
+            - mountPath: /input
+              name: media
+              subPath: Videos/Tesla/SentryClips/
+            - mountPath: /output
+              name: media
+              subPath: Videos/tesla_dashcam/
+          volumes:
+          - name: media
+            persistentVolumeClaim:
+              claimName: nfs-media-pvc
