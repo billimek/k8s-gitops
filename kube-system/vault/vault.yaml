@@ -7,7 +7,7 @@ spec:
   releaseName: vault
   chart:
     git: https://github.com/hashicorp/vault-helm
-    ref: v0.3.0
+    ref: v0.3.1
     path: .
   values:
     server:
