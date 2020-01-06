@@ -17,9 +17,8 @@ spec:
       tolerations: |
         - key: "arm"
           operator: "Exists"
-      storage:
-        enabled: true
-        storageClass: nfs-client
+      storageClass: nfs-client
+      storage: 10Gi
     client:
       tolerations: |
         - key: "arm"
