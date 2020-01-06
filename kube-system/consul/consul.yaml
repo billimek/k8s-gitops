@@ -5,6 +5,9 @@ metadata:
   namespace: kube-system
 spec:
   releaseName: consul
+  helmVersion: v3
+  rollback:
+    enabled: false
   chart:
     git: https://github.com/hashicorp/consul-helm
     ref: v0.15.0
@@ -17,4 +20,8 @@ spec:
       storage:
         enabled: true
         storageClass: nfs-client
+    client:
+      tolerations: |
+        - key: "arm"
+          operator: "Exists"
 
