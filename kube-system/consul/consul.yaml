@@ -1,0 +1,20 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: consul
+  namespace: kube-system
+spec:
+  releaseName: consul
+  chart:
+    git: https://github.com/hashicorp/consul-helm
+    ref: v0.15.0
+    path: .
+  values:
+    server:
+      tolerations: |
+        - key: "arm"
+          operator: "Exists"
+      storage:
+        enabled: true
+        storageClass: nfs-client
+
