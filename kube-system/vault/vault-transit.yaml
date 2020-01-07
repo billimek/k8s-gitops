@@ -1,0 +1,43 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: vault-transit
+  namespace: kube-system
+spec:
+  releaseName: vault-transit
+  helmVersion: v3
+  chart:
+    git: https://github.com/hashicorp/vault-helm
+    ref: v0.3.1
+    path: .
+  values:
+    server:
+      tolerations: |
+        - key: "arm"
+          operator: "Exists"
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 250m
+        limits:
+          memory: 256Mi
+      dataStorage:
+        enabled: true
+        size: 10Gi
+        storageClass: nfs-client
+      standalone:
+        enabled: "false"
+      ha:
+        enabled: "true"
+        config: |
+          ui = "false"
+          max_lease_ttl = "43800h" # 5 years
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+          }
+          storage "consul" {
+            path = "vault"
+            address = "HOST_IP:8500"
+          }

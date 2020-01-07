@@ -5,6 +5,7 @@
 | workload                | armhf (32-bit) | arm64 (64-bit) | image | notes |
 |-------------------------|----------------|----------------|-------|-------|
 | cert-manager            | X | X | `quay.io/jetstack/cert-manager-controller` | This shipped with release v0.12 |
+| consul                  | X | X | `consul` | |
 | home-assistant          | X | X | `homeassistant/home-assistant` | The vscode sudecard container is amd64 only |
 | minio                   | X | X | `jessestuart/minio` | |
 | node-red                | X | X | `nodered/node-red` | |

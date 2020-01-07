@@ -59,107 +59,19 @@ nginx-ingress controller leveraging cert-manager as the central cert store for t
 
 ## Vault transit unseal server
 
-Vault is implemented with a [transit seal type](https://www.vaultproject.io/docs/configuration/seal/transit.html) with a dedicated 'transit' vault on a remote host outside of the kubernetes cluster.  In this case, it's a raspberry pi3b host running vault as a docker container.
+* [vault/vault-transit.yaml](vault/vault-transit.yaml)
 
-Instructions inspired from [auto unseal with transit guide](https://learn.hashicorp.com/vault/operations/autounseal-transit):
+Vault is implemented with a [transit seal type](https://www.vaultproject.io/docs/configuration/seal/transit.html) with a dedicated 'transit' vault server also running in kubernetes cluster.  This is not ideal and is only done to help automate the unsealing of the 'real' vault server.
 
-**Prerequisites**
+TODO: explore alternative vault unseal approaches (sidecar to auto unseal, selfhosted KMS server, etc)
 
-* Docker
-* `vault` CLI
+Automation inspired from [auto unseal with transit guide](https://learn.hashicorp.com/vault/operations/autounseal-transit).  The [vault/vault-transit.yaml](vault/vault-transit.yaml) chart will deploy an HA vault server whos only purpose is to act as a transit server for the `vault-ha` server with the actual data.  See [../setup/bootstrap-vault-transit.sh](../setup/bootstrap-vault-transit.sh) for how the transit server configuration is automated.
 
-### 1. Bootstrap dedicated vault transit server
+## Vault HA server
 
-```shell
-# make persistent directories and set permissions
-mkdir -p vault/config
-mkdir -p vault/data
-sudo chown 100:100 vault/data
+* [vault/vault-ha.yaml](vault/vault-ha.yaml)
 
-# make initial config file
-tee vault/config/config.hcl <<EOF
-storage "file" {
-    path = "/vault/data"
-}
-
-listener "tcp" {
-  tls_disable = 1
-  address = "[::]:8200"
-  cluster_address = "[::]:8201"
-}
-EOF
-
-# run vault server
-docker run -d --name vault --cap-add=IPC_LOCK -p 8200:8200 -v $(pwd)/vault/config:/vault/config -v $(pwd)/vault/data:/vault/data vault server
-
-# initialize vault & make note of root token and unseal key
-VAULT_ADDR=http://127.0.0.1:8200 vault operator init -n 1 -t 1
-
-# unseal the vault server
-VAULT_ADDR=http://127.0.0.1:8200 vault operator unseal <unseal key from above>
-```
-
-### 2. Configure dedicated vault server to act as a transit server
-
-```shell
-# login to the vault server with the root token
-VAULT_ADDR=http://127.0.0.1:8200 vault login <root token from above>
-
-# Enable the transit secrets engine
-VAULT_ADDR=http://127.0.0.1:8200 vault secrets enable transit
-
-# Create a key named 'autounseal'
-VAULT_ADDR=http://127.0.0.1:8200 vault write -f transit/keys/autounseal
-
-# Create a policy file
-tee autounseal.hcl <<EOF
-path "transit/encrypt/autounseal" {
-   capabilities = [ "update" ]
-}
-
-path "transit/decrypt/autounseal" {
-   capabilities = [ "update" ]
-}
-EOF
-
-# Create an 'autounseal' policy
-VAULT_ADDR=http://127.0.0.1:8200 vault policy write autounseal autounseal.hcl
-
-# Create a client token with autounseal policy attached and response wrap it with TTL of 600 seconds.
-VAULT_ADDR=http://127.0.0.1:8200 vault token create -policy="autounseal" -wrap-ttl=600
-
-# make note of the "wrapping_token" from the output above
-
-# unwrap the autounseal token and capture the client token
-VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=<wrapping_token> vault unwrap
-
-# make note of the "token" - this will be the client token used for the actual vault instance(s)
-```
-
-The token above will be used to populate a special kubernetes secret leveraged by the vault helm chart to populate the `$VAULT_TOKEN` env variable.  This secret is populated with something like this,
-
-```shell
-kubectl --namespace kube-system create secret generic vault --from-literal=vault-unwrap-token="$VAULT_UNSEAL_TOKEN"
-```
-
-See the [vault/vault.yaml](vault/vault.yaml) & [../setup/bootstrap-vault.sh](../setup/bootstrap-vault.sh) files for reference on how these are implemented in this cluster.
-
-## Setup
-
-After deployment, initialize vault via:
-
-```shell
-kubectl -n kube-system port-forward svc/vault 8200:8200 &
-export VAULT_ADDR='http://127.0.0.1:8200'
-vault operator init -recovery-shares=1 -recovery-threshold=1
-```
-
-Make note of the unseal key and root token and keep in a very safe place
-
-```shell
-vault operator unseal <unseal key from above>
-vault login <root token from above>
-```
+See the [vault/vault-ha.yaml](vault/vault-ha.yaml) & [../setup/bootstrap-vault.sh](../setup/bootstrap-vault.sh) files for reference on how these are implemented in this cluster.  The server leverages the vault-transit server to automatically unseal as needed.
 
 # vault-secrets-operator
 
