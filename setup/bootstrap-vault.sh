@@ -184,7 +184,7 @@ loadSecretsToVault() {
   kvault "velero/velero/velero-helm-values.txt"
 }
 
-FIRST_RUN=0
+FIRST_RUN=1
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
 initVault
 loginVault
