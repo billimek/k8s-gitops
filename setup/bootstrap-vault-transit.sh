@@ -109,7 +109,7 @@ loginVault() {
   vault auth list >/dev/null 2>&1
   if [[ "$?" -ne 0 ]]; then
     echo "not logged into vault!"
-    echo "1. port-forward the vault service (e.g. 'kubectl -n kube-system port-forward svc/vault 8200:8200 &')"
+    echo "1. port-forward the vault service (e.g. 'kubectl -n kube-system port-forward svc/vault-transit 8200:8200 &')"
     echo "2. set VAULT_ADDR (e.g. 'export VAULT_ADDR=http://localhost:8200')"
     echo "3. login: (e.g. 'vault login <some token>')"
     exit 1

@@ -28,8 +28,6 @@ installManualObjects(){
   ##########
   # secrets
   ##########
-  kubectl --namespace kube-system delete secret vault > /dev/null 2>&1
-  kubectl --namespace kube-system create secret generic vault --from-literal=vault-unwrap-token="$VAULT_UNSEAL_TOKEN"
 
   ###################
   # nginx-external
