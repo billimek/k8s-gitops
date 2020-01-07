@@ -34,6 +34,7 @@ spec:
         replicas: 3
         config: |
           ui = "false"
+          default_lease_ttl = "43800h" # 5 years
           max_lease_ttl = "43800h" # 5 years
           listener "tcp" {
             tls_disable = 1
