@@ -6,6 +6,8 @@ metadata:
 spec:
   releaseName: vault-transit
   helmVersion: v3
+  rollback:
+    enabled: true
   chart:
     git: https://github.com/hashicorp/vault-helm
     ref: v0.3.1
@@ -29,6 +31,7 @@ spec:
         enabled: "false"
       ha:
         enabled: "true"
+        replicas: 3
         config: |
           ui = "false"
           max_lease_ttl = "43800h" # 5 years

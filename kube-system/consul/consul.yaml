@@ -7,7 +7,7 @@ spec:
   releaseName: consul
   helmVersion: v3
   rollback:
-    enabled: false
+    enabled: true
   chart:
     git: https://github.com/hashicorp/consul-helm
     ref: v0.15.0
