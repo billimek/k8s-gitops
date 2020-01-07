@@ -4,6 +4,7 @@
 # trap "kill 0" EXIT
 
 export REPO_ROOT=$(git rev-parse --show-toplevel)
+export REPLIACS="0 1 2"
 
 need() {
     which "$1" &>/dev/null || die "Binary '$1' is missing but required"
@@ -12,6 +13,7 @@ need() {
 need "vault"
 need "kubectl"
 need "sed"
+need "jq"
 
 . "$REPO_ROOT"/setup/.env
 
@@ -80,18 +82,22 @@ initVault() {
 
   if [ "$sealed_status" == "true" ]; then
     echo "unsealing vault"
-    kubectl -n kube-system exec "vault-ha-0" -- vault operator unseal "$VAULT_RECOVERY_TOKEN" || exit 1
+    for replica in $REPLIACS; do
+      echo "unsealing vault-transit-${replica}"
+      kubectl -n kube-system exec "vault-ha-${replica}" -- vault operator unseal "$VAULT_TRANSIT_RECOVERY_TOKEN" || exit 1
+    done
   fi
+}
+
+portForwardVault() {
+  message "port-forwarding vault"
+  kubectl -n kube-system port-forward svc/vault-ha 8200:8200 >/dev/null 2>&1 &
+  VAULT_FWD_PID=$!
+  sleep 5
 }
 
 loginVault() {
   message "logging into vault"
-  kubectl -n kube-system port-forward svc/vault-ha 8200:8200 >/dev/null 2>&1 &
-  VAULT_FWD_PID=$!
-  sleep 5
-
-  export VAULT_ADDR='http://127.0.0.1:8200'
-
   if [ -z "$VAULT_ROOT_TOKEN" ]; then
     echo "VAULT_ROOT_TOKEN is not set! Check $REPO_ROOT/setup/.env"
     exit 1
@@ -187,6 +193,7 @@ loadSecretsToVault() {
 FIRST_RUN=1
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
 initVault
+portForwardVault
 loginVault
 if [ $FIRST_RUN == 0 ]; then 
   setupVaultSecretsOperator
