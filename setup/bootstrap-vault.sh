@@ -33,7 +33,7 @@ initVault() {
   message "initializing and unsealing vault (if necesary)"
   VAULT_READY=1
   while [ $VAULT_READY != 0 ]; do
-    kubectl -n kube-system wait --for condition=Initialized pod/vault-0 > /dev/null 2>&1
+    kubectl -n kube-system wait --for condition=Initialized pod/vault-ha-0 > /dev/null 2>&1
     VAULT_READY="$?"
     if [ $VAULT_READY != 0 ]; then 
       echo "waiting for vault pod to be somewhat ready..."
@@ -44,7 +44,7 @@ initVault() {
 
   VAULT_READY=1
   while [ $VAULT_READY != 0 ]; do
-    init_status=$(kubectl -n kube-system exec "vault-0" -- vault status -format=json 2>/dev/null | jq -r '.initialized')
+    init_status=$(kubectl -n kube-system exec "vault-ha-0" -- vault status -format=json 2>/dev/null | jq -r '.initialized')
     if [ "$init_status" == "false" ] || [ "$init_status" == "true" ]; then
       VAULT_READY=0
     else
@@ -53,12 +53,12 @@ initVault() {
     fi
   done
 
-  sealed_status=$(kubectl -n kube-system exec "vault-0" -- vault status -format=json 2>/dev/null | jq -r '.sealed')
-  init_status=$(kubectl -n kube-system exec "vault-0" -- vault status -format=json 2>/dev/null | jq -r '.initialized')
+  sealed_status=$(kubectl -n kube-system exec "vault-ha-0" -- vault status -format=json 2>/dev/null | jq -r '.sealed')
+  init_status=$(kubectl -n kube-system exec "vault-ha-0" -- vault status -format=json 2>/dev/null | jq -r '.initialized')
 
   if [ "$init_status" == "false" ]; then
     echo "initializing vault"
-    vault_init=$(kubectl -n kube-system exec "vault-0" -- vault operator init -format json -recovery-shares=1 -recovery-threshold=1) || exit 1
+    vault_init=$(kubectl -n kube-system exec "vault-ha-0" -- vault operator init -format json -recovery-shares=1 -recovery-threshold=1) || exit 1
     export VAULT_RECOVERY_TOKEN=$(echo $vault_init | jq -r '.recovery_keys_b64[0]')
     export VAULT_ROOT_TOKEN=$(echo $vault_init | jq -r '.root_token')
     echo "VAULT_RECOVERY_TOKEN is: $VAULT_RECOVERY_TOKEN"
@@ -80,13 +80,13 @@ initVault() {
 
   if [ "$sealed_status" == "true" ]; then
     echo "unsealing vault"
-    kubectl -n kube-system exec "vault-0" -- vault operator unseal "$VAULT_RECOVERY_TOKEN" || exit 1
+    kubectl -n kube-system exec "vault-ha-0" -- vault operator unseal "$VAULT_RECOVERY_TOKEN" || exit 1
   fi
 }
 
 loginVault() {
   message "logging into vault"
-  kubectl -n kube-system port-forward svc/vault 8200:8200 >/dev/null 2>&1 &
+  kubectl -n kube-system port-forward svc/vault-ha 8200:8200 >/dev/null 2>&1 &
   VAULT_FWD_PID=$!
   sleep 5
 
@@ -184,7 +184,7 @@ loadSecretsToVault() {
   kvault "velero/velero/velero-helm-values.txt"
 }
 
-FIRST_RUN=1
+FIRST_RUN=0
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
 initVault
 loginVault

@@ -1,3 +1,9 @@
+# consul
+
+Deployed in support of running vault in HA mode.  Will likely deprecate whenever the [vault raft storage](https://www.vaultproject.io/docs/configuration/storage/raft.html) support is baked-in to the vault chart.
+
+* [consul/consul.yaml](consul/consul.yaml)
+
 # Intel GPU Plugin
 
 Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/tree/master/cmd/gpu_plugin) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via the `gpu.intel.com/i915` node resource
@@ -47,11 +53,9 @@ nginx-ingress controller leveraging cert-manager as the central cert store for t
 
 # vault
 
-[vault-helm chart](https://github.com/hashicorp/vault-helm)
+[vault-helm chart](https://github.com/hashicorp/vault-helm) deployed in HA mode leveraging consul as the storage backend
 
-* [vault/vault.yaml](vault/vault.yaml)
-
-TODO: Implement vault in HA mode
+* [vault/vault-ha.yaml](vault/vault-ha.yaml)
 
 ## Vault transit unseal server
 
