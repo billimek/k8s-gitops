@@ -5,6 +5,7 @@ metadata:
   namespace: kube-system
 spec:
   releaseName: vault-ha
+  helmVersion: v3
   chart:
     git: https://github.com/hashicorp/vault-helm
     ref: v0.3.1
