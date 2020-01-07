@@ -47,7 +47,7 @@ spec:
             address = "HOST_IP:8500"
           }
           seal "transit" {
-            address = "http://lb:8200"
+            address = "http://vault-transit:8200"
             disable_renewal = "false"
             key_name = "autounseal"
             mount_path = "transit/"
