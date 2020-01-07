@@ -38,6 +38,6 @@ spec:
             cluster_address = "[::]:8201"
           }
           storage "consul" {
-            path = "vault"
+            path = "vault-transit"
             address = "HOST_IP:8500"
           }
