@@ -13,11 +13,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: rabbitmq-ha
-    version: 1.37.0
+    version: 1.38.1
   values:
     image:
       repository: rabbitmq
-      tag: 3.7.23-alpine
+      tag: 3.8.0-alpine
     rabbitmqMQTTPlugin:
       enabled: true
     rabbitmqWebMQTTPlugin:
