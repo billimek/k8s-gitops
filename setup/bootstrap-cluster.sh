@@ -5,7 +5,7 @@ K3S_MASTER="k3s-0"
 K3S_WORKERS_AMD64="k3s-1 k3s-2 k8s-4"
 K3S_WORKERS_RPI="pi4-b"
 K3S_WORKERS_RPI_ARM64="pi4-a pi4-c"
-K3S_VERSION="v1.0.0"
+K3S_VERSION="v1.17.0+k3s.1"
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
