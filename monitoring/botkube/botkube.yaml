@@ -16,7 +16,7 @@ spec:
     version: v0.9.1
   values:
     image:
-      repository: infracloudio/botkube
+      repository: edgarpf/botkube
     config:
       settings:
         clustername: k8s
