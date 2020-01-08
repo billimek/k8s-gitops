@@ -92,7 +92,8 @@ initVault() {
 portForwardVault() {
   message "port-forwarding vault"
   kubectl -n kube-system port-forward svc/vault-ha 8200:8200 >/dev/null 2>&1 &
-  VAULT_FWD_PID=$!
+  export VAULT_FWD_PID=$!
+
   sleep 5
 }
 
@@ -192,6 +193,8 @@ loadSecretsToVault() {
 
 FIRST_RUN=1
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
+export VAULT_ADDR='http://127.0.0.1:8200'
+
 initVault
 portForwardVault
 loginVault
