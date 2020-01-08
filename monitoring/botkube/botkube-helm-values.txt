@@ -1,7 +1,6 @@
-config:
-  communications:
-    slack:
-      enabled: true
-      channel: 'notifications'
-      token: '$BOTKUBE_SLACK_TOKEN'
-      notiftype: short
+communications:
+  slack:
+    enabled: true
+    channel: 'notifications'
+    token: '$BOTKUBE_SLACK_TOKEN'
+    notiftype: short
