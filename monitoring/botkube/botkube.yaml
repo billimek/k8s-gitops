@@ -16,7 +16,8 @@ spec:
     version: v0.9.1
   values:
     image:
-      repository: edgarpf/botkube
+      repository: billimek/botkube
+      tag: v0.9.1
     config:
       settings:
         clustername: k8s
