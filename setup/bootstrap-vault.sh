@@ -83,8 +83,8 @@ initVault() {
   if [ "$sealed_status" == "true" ]; then
     echo "unsealing vault"
     for replica in $REPLIACS; do
-      echo "unsealing vault-transit-${replica}"
-      kubectl -n kube-system exec "vault-ha-${replica}" -- vault operator unseal "$VAULT_TRANSIT_RECOVERY_TOKEN" || exit 1
+      echo "unsealing vault-ha-${replica}"
+      kubectl -n kube-system exec "vault-ha-${replica}" -- vault operator unseal "$VAULT_RECOVERY_TOKEN" || exit 1
     done
   fi
 }

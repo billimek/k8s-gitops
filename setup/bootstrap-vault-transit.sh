@@ -132,7 +132,7 @@ createVaultUnsealToken() {
   export WRAPPING_TOKEN=$(vault token create -policy="autounseal" -wrap-ttl=600 -format json | jq -r '.wrap_info.token') || exit 1
 
   # unwrap the autounseal token and capture the client token
-  export VAULT_UNSEAL_TOKEN=$(VAULT_TOKEN="$WRAPPING_TOKEN" vault unwrap -wrap-ttl=43800h -format json | jq -r '.wrap_info.token') || exit 1
+  export VAULT_UNSEAL_TOKEN=$(VAULT_TOKEN="$WRAPPING_TOKEN" vault unwrap -format json | jq -r '.auth.client_token') || exit 1
 
   # persist the VAULT_UNSEAL_TOKEN in the .env file
   # sed -i operates differently in OSX vs linux
