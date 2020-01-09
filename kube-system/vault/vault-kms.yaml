@@ -14,10 +14,12 @@ spec:
     path: .
   values:
     server:
-      extraSecretEnvironmentVars:
-        - envName: GOOGLE_APPLICATION_CREDENTIALS
-          secretName: kms-vault
-          secretKey: kms-vault-984a38134bbc.json
+      extraEnvironmentVars:
+        GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/kms-vault/kms-vault-984a38134bbc.json
+      extraVolumes:
+        - type: secret
+          name: kms-vault
+          path: /vault/userconfig
       tolerations: |
         - key: "arm"
           operator: "Exists"
