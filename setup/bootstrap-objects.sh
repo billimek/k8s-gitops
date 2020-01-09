@@ -28,6 +28,7 @@ installManualObjects(){
   ##########
   # secrets
   ##########
+  kubectl -n kube-system create secret generic kms-vault --from-literal=account.json="$(echo $VAULT_KMS_ACCOUNT_JSON | base64 --decode)"
 
   ###################
   # nginx-external

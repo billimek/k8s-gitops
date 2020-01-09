@@ -55,23 +55,11 @@ nginx-ingress controller leveraging cert-manager as the central cert store for t
 
 [vault-helm chart](https://github.com/hashicorp/vault-helm) deployed in HA mode leveraging consul as the storage backend
 
-* [vault/vault-ha.yaml](vault/vault-ha.yaml)
-
-## Vault transit unseal server
-
-* [vault/vault-transit.yaml](vault/vault-transit.yaml)
-
-Vault is implemented with a [transit seal type](https://www.vaultproject.io/docs/configuration/seal/transit.html) with a dedicated 'transit' vault server also running in kubernetes cluster.  This is not ideal and is only done to help automate the unsealing of the 'real' vault server.
-
-TODO: explore alternative vault unseal approaches (sidecar to auto unseal, selfhosted KMS server, etc)
-
-Automation inspired from [auto unseal with transit guide](https://learn.hashicorp.com/vault/operations/autounseal-transit).  The [vault/vault-transit.yaml](vault/vault-transit.yaml) chart will deploy an HA vault server whos only purpose is to act as a transit server for the `vault-ha` server with the actual data.  See [../setup/bootstrap-vault-transit.sh](../setup/bootstrap-vault-transit.sh) for how the transit server configuration is automated.
-
 ## Vault HA server
 
-* [vault/vault-ha.yaml](vault/vault-ha.yaml)
+* [vault/vault.yaml](vault/vault.yaml)
 
-See the [vault/vault-ha.yaml](vault/vault-ha.yaml) & [../setup/bootstrap-vault.sh](../setup/bootstrap-vault.sh) files for reference on how these are implemented in this cluster.  The server leverages the vault-transit server to automatically unseal as needed.
+See the [vault/vault.yaml](vault/vault.yaml) & [../setup/bootstrap-vault.sh](../setup/bootstrap-vault.sh) files for reference on how these are implemented in this cluster.  The server leverages the Google KMS keystore for automatic unseal as needed.  Further information about Google KMS for unsealing are [Vault GCPKMS Documentation](https://www.vaultproject.io/docs/configuration/seal/gcpckms.html), [Autounseal with GCP KMS](https://learn.hashicorp.com/vault/operations/autounseal-gcp-kms), & [Authenticating to Google Cloud Platform](https://cloud.google.com/kubernetes-engine/docs/tutorials/authenticating-to-cloud-platform) for passing service account json via a secret.
 
 # vault-secrets-operator
 
