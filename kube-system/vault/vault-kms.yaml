@@ -1,0 +1,50 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: vault-kms
+  namespace: kube-system
+spec:
+  releaseName: vault-kms
+  helmVersion: v3
+  rollback:
+    enabled: false
+  chart:
+    git: https://github.com/hashicorp/vault-helm
+    ref: v0.3.1
+    path: .
+  values:
+    server:
+      extraSecretEnvironmentVars:
+        - envName: GOOGLE_APPLICATION_CREDENTIALS
+          secretName: kms-vault
+          secretKey: kms-vault-984a38134bbc.json
+      tolerations: |
+        - key: "arm"
+          operator: "Exists"
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 250m
+        limits:
+          memory: 256Mi
+      standalone:
+        enabled: "false"
+      ha:
+        enabled: "true"
+        config: |
+          ui = true
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+          }
+          storage "consul" {
+            path = "vault"
+            address = "HOST_IP:8500"
+          }
+          seal "gcpckms" {
+            project     = "kms-vault"
+            region      = "global"
+            key_ring    = "vault-unseal"
+            crypto_key  = "vault-key"
+          }
