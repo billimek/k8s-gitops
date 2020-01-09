@@ -1,10 +1,10 @@
 apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
-  name: vault-kms
+  name: vault
   namespace: kube-system
 spec:
-  releaseName: vault-kms
+  releaseName: vault
   helmVersion: v3
   rollback:
     enabled: false
@@ -15,7 +15,7 @@ spec:
   values:
     server:
       extraEnvironmentVars:
-        GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/kms-vault/kms-vault-984a38134bbc.json
+        GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/kms-vault/account.json
       extraVolumes:
         - type: secret
           name: kms-vault
@@ -41,7 +41,7 @@ spec:
             cluster_address = "[::]:8201"
           }
           storage "consul" {
-            path = "vault-kms"
+            path = "vault"
             address = "HOST_IP:8500"
           }
           seal "gcpckms" {
