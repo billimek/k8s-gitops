@@ -8,13 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Validate Helm v2 Releases in root dir
-        uses: stefanprodan/hrval-action@v2.6.0
+        uses: stefanprodan/hrval-action@v2.9.0
         with:
           helmRelease: ./
           helmVersion: v2
           kubernetesVersion: 1.17.0
       - name: Validate Helm v3 in root dir
-        uses: stefanprodan/hrval-action@v2.6.0
+        uses: stefanprodan/hrval-action@v2.9.0
         with:
           helmRelease: ./
           helmVersion: v3
