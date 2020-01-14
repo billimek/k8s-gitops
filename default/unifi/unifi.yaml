@@ -11,7 +11,7 @@ metadata:
 spec:
   releaseName: unifi
   rollback:
-    enable: true
+    enable: false
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: unifi
