@@ -35,22 +35,22 @@ spec:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.156
       annotations:
-        metallb.universe.tf/allow-shared-ip: unifi-tcp
+        metallb.universe.tf/allow-shared-ip: unifi
     controllerService:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.156
       annotations:
-        metallb.universe.tf/allow-shared-ip: unifi-tcp
+        metallb.universe.tf/allow-shared-ip: unifi
     stunService:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.156
       annotations:
-        metallb.universe.tf/allow-shared-ip: unifi-udp
+        metallb.universe.tf/allow-shared-ip: unifi
     discoveryService:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.156
       annotations:
-        metallb.universe.tf/allow-shared-ip: unifi-udp
+        metallb.universe.tf/allow-shared-ip: unifi
     podAnnotations:
       backup.velero.io/backup-volumes: unifi-data
     resources:
