@@ -33,7 +33,7 @@ spec:
           - cat
         filters:
           person:
-            min_area: 1000
+            min_area: 2500
             max_area: 100000
             threshold: 0.85
           dog:
@@ -52,7 +52,7 @@ spec:
           objects:
             filters:
               person:
-                min_area: 1000
+                min_area: 1500
                 max_area: 100000
                 threshold: 0.95
           regions:
@@ -66,22 +66,6 @@ spec:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          objects:
-            track:
-              - person
-              - dog
-              - cat
-              - car
-              - truck
-            filters:
-              car:
-                min_area: 1000
-                max_area: 100000
-                threshold: 0.85
-              truck:
-                min_area: 1000
-                max_area: 100000
-                threshold: 0.85
           regions:
             - size: 480
               x_offset: 224
