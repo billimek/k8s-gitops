@@ -23,7 +23,7 @@ spec:
       imagePullPolicy: Always
     config: |
       mqtt:
-        host: rabbitmq-ha.default.svc
+        host: vernemq.default.svc
         topic_prefix: frigate
       cameras:
         porch:

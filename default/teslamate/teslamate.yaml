@@ -22,7 +22,7 @@ spec:
     timeZone: "America/New_York"
     mqtt:
       enabled: true
-      host: rabbitmq-ha
+      host: vernemq
       username: mqtt
     ingress:
       enabled: true
