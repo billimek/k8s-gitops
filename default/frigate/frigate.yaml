@@ -11,180 +11,105 @@ spec:
   releaseName: frigate
   helmVersion: v3
   rollback:
-    enable: true
+    enable: false
   chart:
-    repository: https://billimek.com/billimek-charts/
-    name: frigate
-    version: 0.1.7
+    git: https://github.com/billimek/billimek-charts
+    ref: frigate_0.4.0
+    path: charts/frigate
   values:
     image:
-      repository: billimek/frigate
-      tag: ffmpeg4
+      repository: blakeblackshear/frigate
+      tag: 0.4.0-beta
       imagePullPolicy: Always
     config: |
+      web_port: 5000
       mqtt:
         host: vernemq.default.svc
         topic_prefix: frigate
+      objects:
+        track:
+          - person
+          - dog
+          - cat
+        filters:
+          person:
+            min_area: 5000
+            max_area: 100000
+            threshold: 0.85
       cameras:
         porch:
-          rtsp:
-            user: view
-            host: porch
-            port: 554
-            password: $RTSP_PASSWORD
-            path: /cam/realmonitor?channel=1&subtype=1
+          ffmpeg:
+            input: rtsp://viewer:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
-          ffmpeg_output_args:
-            - -vf
-            - mpdecimate
-            - -f
-            - rawvideo
-            - -pix_fmt
-            - rgb24
           regions:
             - size: 480
               x_offset: 224
               y_offset: 0
-              threshold: 0.85
             - size: 480
               x_offset: 0
               y_offset: 0
-              threshold: 0.85
         front:
-          rtsp:
-            user: view
-            host: front
-            port: 554
-            password: $RTSP_PASSWORD
-            path: /cam/realmonitor?channel=1&subtype=1
+          ffmpeg:
+            input: rtsp://viewer:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
-          ffmpeg_output_args:
-            - -vf
-            - mpdecimate
-            - -f
-            - rawvideo
-            - -pix_fmt
-            - rgb24
+          objects:
+            track:
+              - person
+              - dog
+              - cat
+              - car
+              - truck
+            filters:
+              person:
+                min_area: 1000
+                max_area: 100000
+                threshold: 0.85
           regions:
             - size: 480
               x_offset: 224
               y_offset: 0
-              min_person_area: 1000
-              threshold: 0.85
             - size: 480
               x_offset: 0
               y_offset: 0
-              min_person_area: 1000
-              threshold: 0.85
         driveway:
-          rtsp:
-            user: view
-            host: driveway
-            port: 554
-            password: $RTSP_PASSWORD
-            path: /cam/realmonitor?channel=1&subtype=1
+          ffmpeg:
+            input: rtsp://viewer:{FRIGATE_RTSP_PASSWORD}@driveway:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
-          ffmpeg_output_args:
-            - -vf
-            - mpdecimate
-            - -f
-            - rawvideo
-            - -pix_fmt
-            - rgb24
           regions:
             - size: 480
               x_offset: 224
               y_offset: 0
-              threshold: 0.85
             - size: 480
               x_offset: 0
               y_offset: 0
-              threshold: 0.85
         pool:
-          rtsp:
-            user: view
-            host: pool
-            port: 554
-            password: $RTSP_PASSWORD
-            path: /cam/realmonitor?channel=1&subtype=1
+          ffmpeg:
+            input: rtsp://viewer:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
-          ffmpeg_output_args:
-            - -vf
-            - mpdecimate
-            - -f
-            - rawvideo
-            - -pix_fmt
-            - rgb24
+          objects:
+            filters:
+              person:
+                min_area: 500
+                max_area: 100000
+                threshold: 0.85
           regions:
             - size: 480
               x_offset: 224
               y_offset: 0
-              threshold: 0.85
-              min_person_area: 500
             - size: 480
               x_offset: 0
               y_offset: 0
-              threshold: 0.85
-              min_person_area: 500
         basement:
-          rtsp:
-            user: view
-            host: basement
-            port: 554
-            password: $RTSP_PASSWORD
-            path: /h264Preview_01_sub
+          ffmpeg:
+            input: rtsp://viewer:{FRIGATE_RTSP_PASSWORD}@basement:554/h264Preview_01_sub
           take_frame: 1
-          # ffmpeg_hwaccel_args:
-          #   - -hwaccel
-          #   - vaapi
-          #   - -hwaccel_device
-          #   - /dev/dri/renderD128
-          #   - -hwaccel_output_format
-          #   - yuv420p
-          ffmpeg_output_args:
-            - -vf
-            - mpdecimate
-            - -f
-            - rawvideo
-            - -pix_fmt
-            - rgb24
           regions:
             - size: 352
               x_offset: 0
               y_offset: 0
-              threshold: 0.85
             - size: 352
               x_offset: 288
               y_offset: 0
-              threshold: 0.85
     ingress:
       enabled: true
       annotations:
