@@ -13,9 +13,9 @@ spec:
   rollback:
     enable: false
   chart:
-    git: https://github.com/billimek/billimek-charts
-    ref: frigate_0.4.0
-    path: charts/frigate
+    repository: https://billimek.com/billimek-charts/
+    name: frigate
+    version: 2.0.0
   values:
     image:
       repository: blakeblackshear/frigate
@@ -33,7 +33,15 @@ spec:
           - cat
         filters:
           person:
-            min_area: 5000
+            min_area: 1000
+            max_area: 100000
+            threshold: 0.85
+          dog:
+            min_area: 1000
+            max_area: 100000
+            threshold: 0.85
+          cat:
+            min_area: 1000
             max_area: 100000
             threshold: 0.85
       cameras:
@@ -60,7 +68,11 @@ spec:
               - car
               - truck
             filters:
-              person:
+              car:
+                min_area: 1000
+                max_area: 100000
+                threshold: 0.85
+              truck:
                 min_area: 1000
                 max_area: 100000
                 threshold: 0.85
