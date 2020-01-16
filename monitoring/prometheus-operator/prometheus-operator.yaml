@@ -155,7 +155,7 @@ spec:
           position:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/position.json
             # datasource: TeslaMate
-          position:
+          projected-range:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/projected-range.json
             # datasource: TeslaMate
           states:
