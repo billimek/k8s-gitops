@@ -103,9 +103,9 @@ spec:
           ceph-pools:
             url: https://grafana.com/api/dashboards/5342/revisions/3/download
             datasource: Prometheus
-          # vernemq:
-          #   url: https://raw.githubusercontent.com/vernemq/vernemq/master/metrics_scripts/grafana/VerneMQ%20Node%20Metrics.json
-          #   datasource: Prometheus
+          vernemq:
+            url: https://raw.githubusercontent.com/vernemq/vernemq/master/metrics_scripts/grafana/VerneMQ%20Node%20Metrics.json
+            datasource: Prometheus
           # cable-modem-stats:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
           #   datasource: influxdb
@@ -131,9 +131,9 @@ spec:
           charging-stats:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charging-stats.json
             # datasource: TeslaMate
-          degradation:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/degradation.json
-            # datasource: TeslaMate
+          # degradation:
+          #   url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/degradation.json
+          #   # datasource: TeslaMate
           drive-details:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/drive-details.json
             # datasource: TeslaMate
@@ -154,6 +154,9 @@ spec:
             # datasource: TeslaMate
           position:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/position.json
+            # datasource: TeslaMate
+          position:
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/projected-range.json
             # datasource: TeslaMate
           states:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/states.json
