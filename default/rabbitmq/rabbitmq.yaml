@@ -24,7 +24,7 @@ spec:
       enabled: true
     service:
       clusterIP: ""
-      loadBalancerIP: "10.2.0.102"
+      loadBalancerIP: "10.2.0.152"
       type: LoadBalancer
     persistentVolume:
       enabled: false

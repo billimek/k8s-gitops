@@ -25,7 +25,7 @@ spec:
       create: true
     service:
       type: LoadBalancer
-      loadBalancerIP: 10.2.0.103
+      loadBalancerIP: 10.2.0.102
     statefulset:
       podAnnotations:
         prometheus.io/scrape: "true"
