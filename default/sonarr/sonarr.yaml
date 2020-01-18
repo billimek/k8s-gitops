@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: '2.0.0.5338-ls45'
+      tag: '2.0.0.5337-ls93'
       pullPolicy: Always
     ingress:
       enabled: true
