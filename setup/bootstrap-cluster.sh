@@ -3,8 +3,7 @@
 # nodes
 K3S_MASTER="k3s-0"
 K3S_WORKERS_AMD64="k3s-1 k3s-2 k8s-4"
-K3S_WORKERS_RPI="pi4-b"
-K3S_WORKERS_RPI_ARM64="pi4-a pi4-c"
+K3S_WORKERS_RPI_ARM64="pi4-a pi4-b pi4-c"
 K3S_VERSION="v1.17.0+k3s.1"
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -43,18 +42,6 @@ ks3amd64WorkerNodes() {
       EXTRA_ARGS="--node-label tpu=google-coral --node-label app=intel-gpu-plugin"
     fi
     ssh -o "StrictHostKeyChecking=no" ubuntu@"$node" "curl -sfL https://get.k3s.io | K3S_URL=https://k3s-0:6443 K3S_TOKEN=$NODE_TOKEN INSTALL_K3S_VERSION='$K3S_VERSION' sh -s - $EXTRA_ARGS"
-  done
-}
-
-ks3armWorkerNodes() {
-  NODE_TOKEN=$(ssh -o "StrictHostKeyChecking=no" ubuntu@"$K3S_MASTER" "sudo cat /var/lib/rancher/k3s/server/node-token")
-  for node in $K3S_WORKERS_RPI; do
-    message "joining pi4 $node to $K3S_MASTER"
-    EXTRA_ARGS=""
-    if [ "$node" == "pi4-c" ]; then
-      EXTRA_ARGS="--node-label usb=alarmdecoder"
-    fi
-    ssh -o "StrictHostKeyChecking=no" pi@"$node" "curl -sfL https://get.k3s.io | K3S_URL=https://k3s-0:6443 K3S_TOKEN=$NODE_TOKEN INSTALL_K3S_VERSION='$K3S_VERSION' sh -s - --node-taint arm=true:NoExecute --data-dir /mnt/usb/var/lib/rancher $EXTRA_ARGS"
   done
 }
 
@@ -109,8 +96,6 @@ installFlux() {
 
 k3sMasterNode
 ks3amd64WorkerNodes
-ks3armWorkerNodes
-ks3armWorkerNodes
 ks3arm64WorkerNodes
 
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
