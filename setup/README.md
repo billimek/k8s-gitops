@@ -11,7 +11,7 @@
 This [script](bootstrap-cluster.sh) does several things:
 
 1. Installs k3s to the master node
-1. Installs k3s workers to other nodes (mixed amd64 and arm architecture)
+1. Installs k3s workers to other nodes (mixed amd64 and arm64 architecture)
 1. Retrieves the new kubeconfig file and places it in $REPO_ROOT/setup/kubeconfig
 1. Installs helm
 1. Installs flux

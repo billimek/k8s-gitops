@@ -1,10 +1,10 @@
-# chronograf
+# botkube
 
-Dashboard for influxdb
+https://www.botkube.io/
 
-![](https://i.imgur.com/PPbhf5O.png)
+![](https://i.imgur.com/yQ8sqtK.png)
 
-* [chronograf/chronograf.yaml](chronograf/chronograf.yaml)
+* [botkube/botkube.yaml](botkube/botkube.yaml)
 
 # comcast
 

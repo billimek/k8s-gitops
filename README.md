@@ -1,6 +1,6 @@
 # GitOps workflow for kubernetes cluster
 
-![](https://i.imgur.com/qBbjyNx.png)
+![](https://i.imgur.com/9tvyWMp.png)
 
 Leverage [Flux](https://github.com/fluxcd/flux) to automate cluster state using code residing in this repo
 
