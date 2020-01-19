@@ -18,7 +18,7 @@ spec:
       repository: robertslando/zwave2mqtt
       tag: arm64v8-2.1.0-dev
     timezone: "America/New York"
-    device: "/dev/ttyUSB0"
+    device: "/dev/ttyACM0"
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
