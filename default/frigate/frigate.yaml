@@ -20,7 +20,7 @@ spec:
     image:
       repository: blakeblackshear/frigate
       tag: 0.4.0-beta
-      imagePullPolicy: Always
+      pullPolicy: Always
     config: |
       web_port: 5000
       mqtt:
@@ -48,6 +48,8 @@ spec:
         porch:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
+          height: 704
+          width: 480
           take_frame: 1
           objects:
             filters:
@@ -65,6 +67,8 @@ spec:
         front:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=1
+          height: 704
+          width: 480
           take_frame: 1
           regions:
             - size: 480
@@ -76,6 +80,8 @@ spec:
         driveway:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway:554/cam/realmonitor?channel=1&subtype=1
+          height: 704
+          width: 480
           take_frame: 1
           regions:
             - size: 480
@@ -87,6 +93,8 @@ spec:
         pool:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=1
+          height: 704
+          width: 480
           take_frame: 1
           objects:
             filters:
@@ -104,6 +112,8 @@ spec:
         basement:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/h264Preview_01_sub
+          height: 640
+          width: 352
           take_frame: 1
           regions:
             - size: 352
