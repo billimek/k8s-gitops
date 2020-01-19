@@ -1,0 +1,42 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: zwave2mqtt
+  namespace: default
+spec:
+  releaseName: zwave2mqtt
+  helmVersion: v3
+  rollback:
+    enable: false
+  chart:
+    repository: https://billimek.com/billimek-charts/
+    name: zwave2mqtt
+    version: 1.0.0
+  values:
+    image:
+      repository: robertslando/zwave2mqtt
+      tag: 2.1.0-dev
+    timezone: "America/New York"
+    device: "/dev/ttyUSB0"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - zwave-controller
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
+    persistence:
+      enabled: true
+      storageClass: "nfs-client"
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+  valueFileSecrets:
+  - name: "zwave2mqtt-helm-values"

@@ -162,11 +162,8 @@ loadSecretsToVault() {
   # helm chart values
   ####################
   kvault "kube-system/kured/kured-helm-values.txt"
-  # kvault "kube-system/longhorn/longhorn-helm-values.txt"
   kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
-  kvault "logs/kibana/kibana-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"
-  kvault "monitoring/chronograf/chronograf-helm-values.txt"
   kvault "monitoring/comcast/comcast-helm-values.txt"
   kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
   kvault "monitoring/uptimerobot/uptimerobot-helm-values.txt"
@@ -176,7 +173,6 @@ loadSecretsToVault() {
   kvault "default/home-assistant/postgresql-helm-values.txt"
   kvault "default/hubot/hubot-helm-values.txt"
   kvault "default/minio/minio-helm-values.txt"
-  # kvault "default/nextcloud/nextcloud-helm-values.txt"
   kvault "default/node-red/node-red-helm-values.txt"
   kvault "default/nzbget/nzbget-helm-values.txt"
   kvault "default/pihole/pihole-helm-values.txt"
@@ -188,6 +184,7 @@ loadSecretsToVault() {
   kvault "default/sonarr/sonarr-helm-values.txt"
   kvault "default/teslamate/teslamate-helm-values.txt"
   kvault "default/unifi/unifi-helm-values.txt"
+  kvault "default/zwave2mqtt/zwave2mqtt-helm-values.txt"
   kvault "velero/velero/velero-helm-values.txt"
 }
 
