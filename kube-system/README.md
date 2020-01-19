@@ -1,5 +1,7 @@
 # consul
 
+![](https://i.imgur.com/pJDyame.png)
+
 Deployed in support of running vault in HA mode.  Will likely deprecate whenever the [vault raft storage](https://www.vaultproject.io/docs/configuration/storage/raft.html) support is baked-in to the vault chart.
 
 * [consul/consul.yaml](consul/consul.yaml)

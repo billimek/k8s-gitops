@@ -6,6 +6,14 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 
 * [frigate.yaml](frigate/frigate.yaml)
 
+# goldilocks
+
+![](https://i.imgur.com/500FwQp.png)
+
+Installs [goldilocks](https://github.com/FairwindsOps/goldilocks): to help with resource allocation selection
+
+* [goldilocks.yaml](goldilocks/goldilocks.yaml)
+
 # home-assistant
 
 ![](https://i.imgur.com/OMwEZYO.png)
@@ -64,13 +72,13 @@ Usenet download client
 
 * [plex.yaml](plex/plex.yaml)
 
-# rabbitmq
+# qbittorrent
 
-![](https://i.imgur.com/Uz7RG9Y.png)
+![](https://i.imgur.com/gL8PzSs.png)
 
-MQTT Provided by RabbitMQ-HA helm chart
+[qbittorrent](https://www.qbittorrent.org/) is a bittorrent client
 
-* [rabbitmq.yaml](rabbitmq/rabbitmq.yaml)
+* [qbittorrent.yaml](qbittorrent/qbittorrent.yaml)
 
 # radarr
 
@@ -88,6 +96,12 @@ torrent client
 
 * [rtorrent-flood.yaml](rtorrent-flood/rtorrent-flood.yaml)
 
+# ser2sock
+
+[ser2sock](https://github.com/nutechsoftware/ser2sock) is a serial to socket redirector.  This is used to bridge a home alarm panel to home-assistant for home automation.
+
+* [ser2sock.yaml](ser2sock/ser2sock.yaml)
+
 # sonarr
 
 ![](https://i.imgur.com/0CS5ADs.png)
@@ -96,6 +110,23 @@ tv show downloader
 
 * [sonarr.yaml](sonarr/sonarr.yaml)
 
+# tesla_dashcam
+
+![](https://i.imgur.com/2tbqMGa.jpg)
+
+[tesla_dashcam](https://github.com/ehendrix23/tesla_dashcam) is a kubernetes cron job that runs nightly to combine multiple different dashcam videos into a single multi-pane video from the car cameras.
+
+* [tesla_dashcam.yaml](tesla_dashcam/tesla_dashcam.yaml)
+
+# teslamate
+
+![](https://i.imgur.com/qNlrxjH.png)
+![](https://i.imgur.com/f12RcId.png)
+
+[teslamate](https://github.com/adriankumpf/teslamate) is a tool and collection of grafana dashboards which collect metrics and observability data about your tesla vehicle.
+
+* [teslamate.yaml](teslamate/teslamate.yaml)
+
 # unifi
 
 ![](https://i.imgur.com/uakfLZo.png)
@@ -103,3 +134,11 @@ tv show downloader
 ubiquiti unifi controller for wireless access points
 
 * [unifi.yaml](unifi/unifi.yaml)
+
+# verenmq
+
+![](https://i.imgur.com/VQ5AZIV.png)
+
+[verenmq](https://github.com/vernemq/vernemq) is a clustered MQTT broker
+
+* [verenmq.yaml](verenmq/verenmq.yaml)
