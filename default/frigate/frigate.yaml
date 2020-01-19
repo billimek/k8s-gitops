@@ -49,6 +49,8 @@ spec:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
+          snapshots:
+            show_timestamp: False
           objects:
             filters:
               person:
@@ -66,6 +68,8 @@ spec:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
+          snapshots:
+            show_timestamp: False
           regions:
             - size: 480
               x_offset: 224
@@ -77,6 +81,8 @@ spec:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
+          snapshots:
+            show_timestamp: False
           regions:
             - size: 480
               x_offset: 224
@@ -88,6 +94,8 @@ spec:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=1
           take_frame: 1
+          snapshots:
+            show_timestamp: False
           objects:
             filters:
               person:
@@ -105,6 +113,8 @@ spec:
           ffmpeg:
             input: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/h264Preview_01_sub
           take_frame: 1
+          snapshots:
+            show_timestamp: False
           regions:
             - size: 352
               x_offset: 0
