@@ -3,7 +3,7 @@
 # nodes
 K3S_MASTER="k3s-0"
 K3S_WORKERS_AMD64="k3s-1 k3s-2 k8s-4"
-K3S_WORKERS_RPI_ARM64="pi4-a pi4-b pi4-c"
+K3S_WORKERS_RPI_ARM64="pi4-a pi4-b pi4-c pi3-a"
 K3S_VERSION="v1.17.0+k3s.1"
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -52,6 +52,9 @@ ks3arm64WorkerNodes() {
     EXTRA_ARGS=""
     if [ "$node" == "pi4-c" ]; then
       EXTRA_ARGS="--node-label usb=alarmdecoder"
+    fi
+    if [ "$node" == "pi3-a" ]; then
+      EXTRA_ARGS="--node-label app=zwave-controller"
     fi
     ssh -o "StrictHostKeyChecking=no" ubuntu@"$node" "curl -sfL https://get.k3s.io | K3S_URL=https://k3s-0:6443 K3S_TOKEN=$NODE_TOKEN INSTALL_K3S_VERSION='$K3S_VERSION' sh -s - --node-taint arm=true:NoExecute --data-dir /mnt/usb/var/lib/rancher $EXTRA_ARGS"
   done
