@@ -66,6 +66,7 @@ spec:
       plugins:
       - natel-discrete-panel
       - pr0ps-trackmap-panel
+      - grafana-piechart-panel
       dashboardProviders:
         dashboardproviders.yaml:
           apiVersion: 1
@@ -122,8 +123,8 @@ spec:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/netdata.json
           #   datasource: Prometheus
         teslamate:
-          charge-details:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charge-details.json
+          charge-level:
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charge-level.json
             # datasource: TeslaMate
           charges:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/charges.json
@@ -134,9 +135,9 @@ spec:
           # degradation:
           #   url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/degradation.json
           #   # datasource: TeslaMate
-          drive-details:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/drive-details.json
-            # datasource: TeslaMate
+          # drive-details:
+          #   url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/drive-details.json
+          #   # datasource: TeslaMate
           drives:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/drives.json
             # datasource: TeslaMate
@@ -152,9 +153,9 @@ spec:
           overview-dash:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/overview-dash.json
             # datasource: TeslaMate
-          position:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/position.json
-            # datasource: TeslaMate
+          # position:
+          #   url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/position.json
+          #   # datasource: TeslaMate
           projected-range:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/master/grafana/dashboards/projected-range.json
             # datasource: TeslaMate
