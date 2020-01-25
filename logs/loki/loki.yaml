@@ -19,7 +19,7 @@ spec:
     loki:
       image:
         repository: grafana/loki
-        tag: v1.3.0
+        tag: v0.4.0
       persistence:
         enabled: true
         size: 50Gi
@@ -39,11 +39,11 @@ spec:
       - key: "arm"
         operator: "Exists"
       extraScrapeConfigs:
-        - job_name: syslog
-          syslog:
-            listen_address: 0.0.0.0:1514
-            labels:
-              job: "syslog"
-          relabel_configs:
-            - source_labels: ['__syslog_message_hostname']
-              target_label: 'host'
+      - job_name: syslog
+        syslog:
+          listen_address: 0.0.0.0:1514
+          labels:
+            job: "syslog"
+        relabel_configs:
+        - source_labels: ['__syslog_message_hostname']
+          target_label: 'host'
