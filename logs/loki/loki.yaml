@@ -14,12 +14,12 @@ spec:
   chart:
     repository: https://grafana.github.io/loki/charts
     name: loki-stack
-    version: 0.17.3
+    version: 0.27.0
   values:
     loki:
       image:
         repository: grafana/loki
-        tag: v0.4.0
+        tag: v1.3.0
       persistence:
         enabled: true
         size: 50Gi
@@ -38,3 +38,12 @@ spec:
       tolerations:
       - key: "arm"
         operator: "Exists"
+      extraScrapeConfigs:
+        - job_name: syslog
+          syslog:
+            listen_address: 0.0.0.0:1514
+            labels:
+              job: "syslog"
+          relabel_configs:
+            - source_labels: ['__syslog_message_hostname']
+              target_label: 'host'
