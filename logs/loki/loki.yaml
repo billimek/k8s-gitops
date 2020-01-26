@@ -7,8 +7,8 @@ metadata:
   annotations:
     fluxcd.io/ignore: false
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.loki: semver:~v1.2
-    fluxcd.io/tag.promtail: semver:~v1.2
+    fluxcd.io/tag.loki: semver:~v1.3
+    fluxcd.io/tag.promtail: semver:~v1.3
 spec:
   releaseName: loki
   chart:
@@ -19,7 +19,7 @@ spec:
     loki:
       image:
         repository: grafana/loki
-        tag: v1.2.0
+        tag: v1.3.0
       persistence:
         enabled: true
         size: 50Gi
@@ -32,7 +32,7 @@ spec:
     promtail:
       image:
         repository: grafana/promtail
-        tag: v1.2.0
+        tag: v1.3.0
       serviceMonitor:
         enabled: true
       tolerations:
