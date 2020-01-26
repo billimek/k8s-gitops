@@ -165,6 +165,10 @@ spec:
           visited:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.15.1/grafana/dashboards/visited.json
             # datasource: TeslaMate
+          charge-details:
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.15.1/grafana/dashboards/internal/charge-details.json
+          drive-details:
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.15.1/grafana/dashboards/internal/drive-details.json
       additionalDataSources:
       - name: loki
         type: loki
