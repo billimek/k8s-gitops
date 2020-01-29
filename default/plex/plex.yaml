@@ -11,7 +11,7 @@ metadata:
 spec:
   releaseName: plex
   rollback:
-    enable: true
+    enable: false
   chart:
     git: https://github.com/munnerz/kube-plex
     ref: master
