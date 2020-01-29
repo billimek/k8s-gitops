@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: frigate
-    version: 2.0.0
+    version: 2.1.0
   values:
     image:
       repository: blakeblackshear/frigate
