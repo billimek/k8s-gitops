@@ -33,7 +33,10 @@ spec:
       downloads:
         enabled: false
       movies:
-        enabled: false
+        enabled: true
+        existingClaim: nfs-media-pvc
+        subPath: Videos
+        accessMode: ReadWriteMany
       extraExistingClaimMounts:
         - name: media
           existingClaim: nfs-media-pvc
