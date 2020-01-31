@@ -5,8 +5,8 @@ metadata:
   name: radarr
   namespace: default
   annotations:
-    fluxcd.io/automated: "false"
-    fluxcd.io/tag.chart-image: 'semver:3'
+    fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: semver:3.0
 spec:
   releaseName: radarr
   rollback:
