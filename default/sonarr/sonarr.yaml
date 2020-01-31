@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: semver:~3.
+    fluxcd.io/tag.chart-image: semver:3.0
 spec:
   releaseName: sonarr
   rollback:
@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: '176'
+      tag: 3.0.3.688-ls169
     ingress:
       enabled: true
       annotations:
@@ -35,10 +35,10 @@ spec:
       tv:
         enabled: false
       extraExistingClaimMounts:
-      - name: media
-        existingClaim: nfs-media-pvc
-        mountPath: /media
-        readOnly: false
+        - name: media
+          existingClaim: nfs-media-pvc
+          mountPath: /media
+          readOnly: false
     resources:
       requests:
         memory: 350Mi
