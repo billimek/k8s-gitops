@@ -27,15 +27,15 @@ spec:
     - key: "arm"
       operator: "Exists"
     affinity:
-      # podAntiAffinity:
-      #   requiredDuringSchedulingIgnoredDuringExecution:
-      #   - weight: 100
-      #     podAffinityTerm:
-      #       labelSelector:
-      #         matchExpressions:
-      #         - key: release
-      #           operator: In
-      #           values: ["pihole-1"]
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: release
+                operator: In
+                values: 
+                - pihole-1
+            topologyKey: "kubernetes.io/hostname"
     serviceTCP:
       type: LoadBalancer
       externalTrafficPolicy: Local
