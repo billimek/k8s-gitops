@@ -90,7 +90,7 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-    affinity:
+    affinity: |
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
