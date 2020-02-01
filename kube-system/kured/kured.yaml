@@ -19,6 +19,8 @@ spec:
     tolerations:
       - key: "arm"
         operator: "Exists"
+      - key: "armhf"
+        operator: "Exists"
   valueFileSecrets:
   - name: "kured-helm-values"
 

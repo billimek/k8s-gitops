@@ -26,3 +26,5 @@ spec:
       tolerations:
       - key: "arm"
         operator: "Exists"
+      - key: "armhf"
+        operator: "Exists"
