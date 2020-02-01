@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: robertslando/zwave2mqtt
-      tag: arm32v7-2.1.1
+      tag: 2.1.1
     timezone: "America/New York"
     device: "/dev/ttyACM0"
     affinity:
@@ -29,7 +29,7 @@ spec:
               values:
               - zwave-controller
     tolerations:
-    - key: "armhf"
+    - key: "arm"
       operator: "Exists"
     persistence:
       enabled: true
