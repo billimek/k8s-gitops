@@ -107,14 +107,14 @@ spec:
       loadBalancerIP: 10.2.0.170
       annotations:
         metallb.universe.tf/address-pool: network-services
-        metallb.universe.tf/allow-shared-ip: pihole-svc
+        metallb.universe.tf/allow-shared-ip: pihole-1-svc
     serviceUDP:
       type: LoadBalancer
       externalTrafficPolicy: Local
       loadBalancerIP: 10.2.0.170
       annotations:
         metallb.universe.tf/address-pool: network-services
-        metallb.universe.tf/allow-shared-ip: pihole-svc
+        metallb.universe.tf/allow-shared-ip: pihole-1-svc
     persistentVolumeClaim:
       enabled: true
       storageClass: "nfs-client"
