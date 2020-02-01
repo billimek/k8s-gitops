@@ -26,6 +26,17 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: release
+                operator: In
+                values:
+                - pihole-1
     serviceTCP:
       type: LoadBalancer
       externalTrafficPolicy: Local
@@ -79,6 +90,17 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: release
+                operator: In
+                values:
+                - pihole-0
     serviceTCP:
       type: LoadBalancer
       externalTrafficPolicy: Local
