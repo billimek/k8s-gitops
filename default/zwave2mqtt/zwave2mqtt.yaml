@@ -16,7 +16,7 @@ spec:
   values:
     image:
       repository: robertslando/zwave2mqtt
-      tag: 2.1.1
+      tag: arm32v7-2.1.1
     timezone: "America/New York"
     device: "/dev/ttyACM0"
     affinity:
