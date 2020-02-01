@@ -90,7 +90,7 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-    affinity: |
+    affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
@@ -99,6 +99,7 @@ spec:
                 operator: In
                 values: 
                 - pihole-0
+            topologyKey: "kubernetes.io/hostname"
     serviceTCP:
       type: LoadBalancer
       externalTrafficPolicy: Local
