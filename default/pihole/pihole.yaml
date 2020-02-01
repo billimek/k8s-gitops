@@ -28,15 +28,14 @@ spec:
       operator: "Exists"
     affinity:
       podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
+        requiredDuringSchedulingIgnoredDuringExecution:
         - weight: 100
           podAffinityTerm:
             labelSelector:
               matchExpressions:
               - key: release
                 operator: In
-                values:
-                - pihole-1
+                values: ["pihole-1"]
     serviceTCP:
       type: LoadBalancer
       externalTrafficPolicy: Local
@@ -92,15 +91,14 @@ spec:
       operator: "Exists"
     affinity:
       podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
+        requiredDuringSchedulingIgnoredDuringExecution:
         - weight: 100
           podAffinityTerm:
             labelSelector:
               matchExpressions:
               - key: release
                 operator: In
-                values:
-                - pihole-0
+                values: ["pihole-0"]
     serviceTCP:
       type: LoadBalancer
       externalTrafficPolicy: Local
