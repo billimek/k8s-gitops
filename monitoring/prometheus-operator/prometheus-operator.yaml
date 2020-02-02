@@ -96,7 +96,7 @@ spec:
             url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
             datasource: Prometheus
           ceph-cluster:
-            url: https://grafana.com/api/dashboards/2842/revisions/10/download
+            url: https://grafana.com/api/dashboards/2842/revisions/11/download
             datasource: Prometheus
           ceph-osd:
             url: https://grafana.com/api/dashboards/5336/revisions/3/download
@@ -106,6 +106,9 @@ spec:
             datasource: Prometheus
           vernemq:
             url: https://raw.githubusercontent.com/vernemq/vernemq/master/metrics_scripts/grafana/VerneMQ%20Node%20Metrics.json
+            datasource: Prometheus
+          velero:
+            url: https://grafana.com/api/dashboards/11055/revisions/2/download
             datasource: Prometheus
           # cable-modem-stats:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
