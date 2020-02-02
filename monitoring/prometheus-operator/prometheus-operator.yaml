@@ -110,6 +110,9 @@ spec:
           velero:
             url: https://grafana.com/api/dashboards/11055/revisions/2/download
             datasource: Prometheus
+          flux:
+            url: https://grafana.com/api/dashboards/10475/revisions/1/download
+            datasource: Prometheus
           # cable-modem-stats:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
           #   datasource: influxdb
