@@ -30,7 +30,7 @@ spec:
       config:
         enabled: true
         storageClass: "rook-ceph-block"
-        size: 5Gi
+        size: 6Gi
       downloads:
         enabled: false
       movies:
