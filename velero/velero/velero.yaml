@@ -36,6 +36,8 @@ spec:
     #   operator: "Exists"
     metrics:
       enabled: true
+      serviceMonitor:
+        enabled: true
     snapshotsEnabled: false
     deployRestic: true
     restic:
