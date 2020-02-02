@@ -10,8 +10,8 @@
 
 BACKUP_LOCATION="/mnt/backups/cluster"
 PVCS_TO_RESTORE_CEPHFS=""
-# PVCS_TO_RESTORE_RBD="home-assistant mc-minecraft-datadir mcsv-minecraft-datadir kube-plex-config radarr-config rtorrent-flood-config sonarr-config unifi prometheus-operator-grafana"
-PVCS_TO_RESTORE_RBD="prometheus-prometheus-operator-prometheus-db-prometheus-prometheus-operator-prometheus-0 prometheus-operator-grafana"
+# PVCS_TO_RESTORE_RBD="prometheus-prometheus-operator-prometheus-db-prometheus-prometheus-operator-prometheus-0 data-hass-postgresql-postgresql-0 home-assistant unifi prometheus-operator-grafana mcsv-minecraft-datadir mc-minecraft-datadir rtorrent-flood-config radarr-config sonarr-config plex-kube-plex-config"
+PVCS_TO_RESTORE_RBD=""
 # PVCS_TO_RESTORE_NFS="node-red influxdb"
 PVCS_TO_RESTORE_NFS=""
 

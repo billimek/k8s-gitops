@@ -8,8 +8,8 @@
 #   3. (reccomended) key-based ssh-access without interactive password
 #   4. (HIGHLY RECCOMENDED) source and destination workloads are scaled-to-zero prior to running this
 
-# PVCS_TO_BACKUP="home-assistant mc-minecraft-datadir mcsv-minecraft-datadir node-red kube-plex-config radarr-config rtorrent-flood-config sonarr-config unifi influxdb prometheus-operator-grafana"
-PVCS_TO_BACKUP="prometheus-prometheus-operator-prometheus-db-prometheus-prometheus-operator-prometheus-0 prometheus-operator-grafana"
+# PVCS_TO_BACKUP="prometheus-prometheus-operator-prometheus-db-prometheus-prometheus-operator-prometheus-0 data-hass-postgresql-postgresql-0 home-assistant unifi prometheus-operator-grafana mcsv-minecraft-datadir mc-minecraft-datadir rtorrent-flood-config radarr-config sonarr-config plex-kube-plex-config"
+PVCS_TO_BACKUP=""
 BACKUP_LOCATION="/mnt/backups/cluster"
 
 #### backup the stuff from ceph rbd
