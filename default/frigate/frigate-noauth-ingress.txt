@@ -2,15 +2,11 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   annotations:
-    helm.fluxcd.io/antecedent: default:helmrelease/frigate
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
   labels:
     app.kubernetes.io/instance: frigate
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: frigate
-    app.kubernetes.io/version: 0.4.0
-    helm.sh/chart: frigate-2.1.0
   name: frigate-noauth
 spec:
   rules:
