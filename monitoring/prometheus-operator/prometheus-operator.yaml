@@ -243,6 +243,15 @@ spec:
 #        image:
 #          repository: quay.io/prometheus/prometheus
 #          tag: v2.9.1
+        ruleSelector: {}
+        ruleNamespaceSelector: {}
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelector: {}
+        serviceMonitorNamespaceSelector: {}
+        serviceMonitorSelectorNilUsesHelmValues: false
+        podMonitorSelector: {}
+        podMonitorNamespaceSelector: {}
+        podMonitorSelectorNilUsesHelmValues: false
         retention: 30d
         enableAdminAPI: true
         serviceMonitorSelectorNilUsesHelmValues: false
