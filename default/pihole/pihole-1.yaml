@@ -2,70 +2,6 @@
 apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
-  name: pihole-0
-  namespace: default
-  annotations:
-    fluxcd.io/ignore: false
-    fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: 'regexp:^(4\.[0-9]+\.[0-9]+(-[0-9]+)?)$'
-spec:
-  releaseName: pihole-0
-  helmVersion: v3
-  rollback:
-    enable: true
-  chart:
-    repository: https://mojo2600.github.io/pihole-kubernetes/
-    name: pihole
-    version: 1.3.1
-  values:
-    image:
-      repository: pihole/pihole
-      tag: 4.3.2-1
-    replicaCount: 1
-    DNS1: "10.0.7.1"
-    DNS2: "10.0.7.1"
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: release
-                operator: In
-                values: 
-                - pihole-1
-            topologyKey: "kubernetes.io/hostname"
-    serviceTCP:
-      type: LoadBalancer
-      externalTrafficPolicy: Local
-      loadBalancerIP: 10.2.0.160
-      annotations:
-        metallb.universe.tf/address-pool: network-services
-        metallb.universe.tf/allow-shared-ip: pihole-svc
-    serviceUDP:
-      type: LoadBalancer
-      externalTrafficPolicy: Local
-      loadBalancerIP: 10.2.0.160
-      annotations:
-        metallb.universe.tf/address-pool: network-services
-        metallb.universe.tf/allow-shared-ip: pihole-svc
-    persistentVolumeClaim:
-      enabled: true
-      storageClass: "nfs-client"
-    resources:
-      requests:
-        memory: 300Mi
-        cpu: 25m
-      limits:
-        memory: 400Mi
-  valueFileSecrets:
-  - name: "pihole-helm-values"
----
-apiVersion: helm.fluxcd.io/v1
-kind: HelmRelease
-metadata:
   name: pihole-1
   namespace: default
   annotations:
@@ -118,6 +54,10 @@ spec:
     persistentVolumeClaim:
       enabled: true
       storageClass: "nfs-client"
+    # ingress:
+    #   enabled: true
+    #   annotations:
+    #     kubernetes.io/ingress.class: "nginx"
     resources:
       requests:
         memory: 300Mi
