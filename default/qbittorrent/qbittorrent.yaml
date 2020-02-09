@@ -12,7 +12,7 @@ spec:
   releaseName: qbittorrent
   helmVersion: v3
   rollback:
-    enable: true
+    enable: false
   chart:
     repository: https://billimek.com/billimek-charts/
     name: qbittorrent
@@ -20,10 +20,9 @@ spec:
   values:
     image:
       repository: linuxserver/qbittorrent
-      tag: 4.3.0202002081056-6849-8b330e3ubuntu18.04.1-ls1
+      tag: 14.2.0.99201912180418-6819-118af03ubuntu18.04.1-ls60
     uid: 1001
     gid: 1001
-    umask: "022"
     guiService:
       type: ClusterIP
       # port: 8080
@@ -40,9 +39,9 @@ spec:
     persistence:
       config:
         enabled: true
-        size: 1Gi
+        size: 5Gi
         storageClass: nfs-client
-      data:
+      downloads:
         enabled: false
       extraMounts:
         - name: media
