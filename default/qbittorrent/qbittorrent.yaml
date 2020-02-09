@@ -23,7 +23,7 @@ spec:
       tag: 4.3.0202002081056-6849-8b330e3ubuntu18.04.1-ls1
     uid: 1001
     gid: 1001
-    # umask: "0022"
+    umask: "022"
     guiService:
       type: ClusterIP
       # port: 8080
