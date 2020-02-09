@@ -72,14 +72,6 @@ Usenet download client
 
 * [plex.yaml](plex/plex.yaml)
 
-# qbittorrent
-
-![](https://i.imgur.com/gL8PzSs.png)
-
-[qbittorrent](https://www.qbittorrent.org/) is a bittorrent client
-
-* [qbittorrent.yaml](qbittorrent/qbittorrent.yaml)
-
 # radarr
 
 ![](https://i.imgur.com/eAgWySC.png)
