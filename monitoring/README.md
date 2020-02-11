@@ -6,16 +6,6 @@ https://www.botkube.io/
 
 * [botkube/botkube.yaml](botkube/botkube.yaml)
 
-# comcast
-
-Collect comcast usage data for reporting
-
-![](https://i.imgur.com/mSBIWuu.png)
-
-Based on this [custom helm chart](https://github.com/billimek/billimek-charts/tree/master/comcast)
-
-* [comcast/comcast.yaml](comcast/comcast.yaml)
-
 # influxdb
 
 Metrics collection database
