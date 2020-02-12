@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: linuxserver/nzbget
-      tag: v21.0-ls40
+      tag: v21.0-ls41
     service:
       type: LoadBalancer
       loadBalancerIP: 10.2.0.153
@@ -31,8 +31,8 @@ spec:
       downloads:
         enabled: false
       extraMounts:
-        - name: media
-          claimName: nfs-media-pvc
+      - name: media
+        claimName: nfs-media-pvc
       config:
         enabled: true
         storageClass: "nfs-client"
