@@ -278,14 +278,6 @@ spec:
             - proxmox:19999
             - proxmox-b:19999
             - proxmox-c:19999
-            - k3s-0:19999
-            - k3s-1:19999
-            - k3s-2:19999
-            - k3s-3:19999
-            - pi4-a:19999
-            - pi4-b:19999
-            - pi4-c:19999
-            - pihole:19999
         - job_name: 'wmi-exporter-scrape'
           metrics_path: '/metrics'
           params:
