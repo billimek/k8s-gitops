@@ -38,11 +38,11 @@ spec:
             threshold: 0.85
           dog:
             min_area: 1000
-            max_area: 100000
+            max_area: 10000
             threshold: 0.85
           cat:
             min_area: 1000
-            max_area: 100000
+            max_area: 10000
             threshold: 0.85
       cameras:
         porch:
