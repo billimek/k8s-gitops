@@ -23,4 +23,8 @@ spec:
       tolerations: |
         - key: "arm"
           operator: "Exists"
-
+    ui:
+      enabled: "true"
+      service:
+        enabled: true
+        type: ClusterIP
