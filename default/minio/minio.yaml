@@ -6,18 +6,18 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/ignore: false
-    fluxcd.io/automated: "true"
+    fluxcd.io/automated: "false"
     fluxcd.io/tag.chart-image: glob:RELEASE.*
 spec:
   releaseName: minio
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minio
-    version: 4.0.1
+    version: 5.0.11
   values:
-    image:
-      repository: jessestuart/minio
-      tag: RELEASE.2019-12-17T23-16-33Z
+    # image:
+    #   repository: jessestuart/minio
+    #   tag: RELEASE.2020-02-07T23-28-16Z
     persistence:
       existingClaim: "nfs-data-pvc"
       subPath: "minio"
