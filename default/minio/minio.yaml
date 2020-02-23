@@ -15,9 +15,9 @@ spec:
     name: minio
     version: 5.0.11
   values:
-    # image:
-    #   repository: jessestuart/minio
-    #   tag: RELEASE.2020-02-07T23-28-16Z
+    image:
+      repository: jessestuart/minio
+      tag: RELEASE.2020-02-07T23-28-16Z
     persistence:
       existingClaim: "nfs-data-pvc"
       subPath: "minio"
