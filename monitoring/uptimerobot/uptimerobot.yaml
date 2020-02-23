@@ -13,7 +13,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: uptimerobot
-    version: 2.0.0
+    version: 2.0.1
   values:
     image:
       repository: billimek/node-influx-uptimerobot
