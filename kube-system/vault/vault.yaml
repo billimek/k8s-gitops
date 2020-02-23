@@ -10,7 +10,7 @@ spec:
     enabled: false
   chart:
     git: https://github.com/hashicorp/vault-helm
-    ref: v0.3.1
+    ref: v0.4.0
     path: .
   values:
     server:
