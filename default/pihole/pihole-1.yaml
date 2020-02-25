@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: pihole/pihole
-      tag: upgrade_v4.3.3
+      tag: release-v4.3.4
     replicaCount: 1
     DNS1: "10.0.7.1"
     DNS2: "10.0.7.1"
