@@ -15,12 +15,14 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: frigate
-    version: 2.1.1
+    version: 3.0.0
   values:
-    image:
-      repository: blakeblackshear/frigate
-      tag: 0.4.0-beta
-      pullPolicy: Always
+    # image:
+    #   repository: blakeblackshear/frigate
+    #   tag: 0.5.0
+    #   pullPolicy: Always
+    coral:
+      enabled: true
     config: |
       web_port: 5000
       mqtt:
@@ -53,6 +55,7 @@ spec:
           height: 480
           width: 704
           take_frame: 1
+          fps: 5
           objects:
             filters:
               person:
@@ -74,6 +77,7 @@ spec:
           height: 480
           width: 704
           take_frame: 1
+          fps: 5
           regions:
             - size: 480
               x_offset: 224
@@ -89,6 +93,7 @@ spec:
           height: 480
           width: 704
           take_frame: 1
+          fps: 5
           regions:
             - size: 480
               x_offset: 224
@@ -104,6 +109,7 @@ spec:
           height: 480
           width: 704
           take_frame: 1
+          fps: 5
           objects:
             filters:
               person:
@@ -125,6 +131,7 @@ spec:
           height: 352
           width: 640
           take_frame: 1
+          fps: 5
           regions:
             - size: 352
               x_offset: 0
