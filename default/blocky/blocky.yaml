@@ -139,3 +139,6 @@ spec:
         # a fixed LoadBalancer IP
       annotations: {}
 
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
