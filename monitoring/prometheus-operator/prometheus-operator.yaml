@@ -113,6 +113,9 @@ spec:
           flux:
             url: https://grafana.com/api/dashboards/10475/revisions/1/download
             datasource: Prometheus
+          blocky:
+            url: https://raw.githubusercontent.com/0xERR0R/blocky/master/docs/blocky-grafana.json
+            datasource: Prometheus
           # cable-modem-stats:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
           #   datasource: influxdb
