@@ -283,5 +283,9 @@ spec:
             - proxmox:9100
             - proxmox-b:9100
             - proxmox-c:9100
+        - job_name: 'blocky'
+          static_configs:
+          - targets:
+            - blocky-prometheus:4000
   valueFileSecrets:
   - name: "prometheus-operator-helm-values"
