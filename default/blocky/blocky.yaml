@@ -142,3 +142,14 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
+
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values: 
+                - blocky
+            topologyKey: "kubernetes.io/hostname"
