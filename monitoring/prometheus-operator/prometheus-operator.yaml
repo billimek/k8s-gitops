@@ -286,6 +286,6 @@ spec:
         - job_name: 'blocky'
           static_configs:
           - targets:
-            - blocky-prometheus:4000
+            - blocky-prometheus.default.svc:4000
   valueFileSecrets:
   - name: "prometheus-operator-helm-values"
