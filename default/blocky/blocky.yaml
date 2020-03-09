@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: blocky
-    version: 1.1.1
+    version: 2.0.0
   values:
     image:
       repository: spx01/blocky
@@ -97,6 +97,7 @@ spec:
       httpPort: 4000
       # optional: Log level (one from debug, info, warn, error). Default: info
       logLevel: info
+
     # Probes configuration
     probes:
       liveness:
@@ -130,14 +131,8 @@ spec:
         metallb.universe.tf/address-pool: network-services
         metallb.universe.tf/allow-shared-ip: blocky-svc
 
-    servicePrometheus:
+    serviceMonitor:
       enabled: true
-      port: 4000
-      type: ClusterIP
-      externalTrafficPolicy: Local
-      loadBalancerIP: ""
-        # a fixed LoadBalancer IP
-      annotations: {}
 
     tolerations:
     - key: "arm"
