@@ -115,7 +115,7 @@ spec:
       enabled: true
       type: LoadBalancer
       externalTrafficPolicy: Local
-      loadBalancerIP: 10.2.0.170
+      loadBalancerIP: 10.2.0.160
         # a fixed LoadBalancer IP
       annotations:
         metallb.universe.tf/address-pool: network-services
@@ -125,7 +125,7 @@ spec:
       enabled: true
       type: LoadBalancer
       externalTrafficPolicy: Local
-      loadBalancerIP: 10.2.0.170
+      loadBalancerIP: 10.2.0.160
         # a fixed LoadBalancer IP
       annotations:
         metallb.universe.tf/address-pool: network-services
