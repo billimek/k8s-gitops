@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: blocky
-    version: 2.0.0
+    version: 2.1.0
   values:
     image:
       repository: spx01/blocky
@@ -85,6 +85,15 @@ spec:
         # If > 0, use this value, if TTL is greater
         # Default: 0
         maxTime: -1
+      # optional: configuration of client name resolution
+      clientLookup:
+          # this DNS resolver will be used to perform reverse DNS lookup (typically local router)
+          upstream: udp:10.0.7.1
+          # optional: some routers return multiple names for client (host name and user defined name). Define which single name should be used.
+          # Example: take second name if present, if not take first name
+          singleNameOrder:
+            - 2
+            - 1
       # optional: configuration for prometheus metrics endpoint
       prometheus:
         # enabled if true
