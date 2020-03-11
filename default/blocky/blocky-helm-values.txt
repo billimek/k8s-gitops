@@ -1,0 +1,6 @@
+config:
+  conditional:
+    mapping:
+      status.$DOMAIN: udp:1.1.1.1
+      $DOMAIN: udp:10.0.7.1
+      local: udp:10.0.7.1
