@@ -28,7 +28,11 @@ spec:
     config: |
       upstream:
           externalResolvers:
-            - udp:10.0.7.1
+            - udp:8.8.8.8
+            - udp:8.8.4.4
+            - udp:1.1.1.1
+            - tcp-tls:1.0.0.1:853
+            - https://cloudflare-dns.com/dns-query
       # optional: custom IP address for domain name (with all sub-domains)
       # example: query "printer.lan" or "my.printer.lan" will return 192.168.178.3
       # customDNS:
