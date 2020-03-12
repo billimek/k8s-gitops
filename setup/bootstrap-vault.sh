@@ -177,7 +177,6 @@ loadSecretsToVault() {
   kvault "default/nzbget/nzbget-helm-values.txt"
   kvault "default/pihole/pihole-helm-values.txt"
   kvault "default/plex/plex-helm-values.txt"
-  kvault "default/rabbitmq/rabbitmq-helm-values.txt"
   kvault "default/radarr/radarr-helm-values.txt"
   kvault "default/rtorrent-flood/rtorrent-flood-helm-values.txt"
   kvault "default/sonarr/sonarr-helm-values.txt"
