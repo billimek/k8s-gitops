@@ -116,5 +116,7 @@ spec:
         cpu: 50m
       limits:
         memory: 1000Mi
-  valueFileSecrets:
-  - name: "blocky-helm-values"
+  valuesFrom:
+  - secretKeyRef:
+      name: blocky-helm-values
+
