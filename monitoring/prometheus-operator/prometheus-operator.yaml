@@ -10,6 +10,8 @@ metadata:
     fluxcd.io/tag.grafana: semver:~6
 spec:
   releaseName: prometheus-operator
+  rollback:
+    enable: true
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
