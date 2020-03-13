@@ -52,6 +52,6 @@ spec:
         cpu: 35m
         memory: 2000Mi
     monitoring:
-      enabled: true
+      enabled: false
   valueFileSecrets:
   - name: "home-assistant-helm-values"
