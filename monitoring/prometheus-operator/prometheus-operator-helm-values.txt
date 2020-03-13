@@ -17,13 +17,15 @@ prometheus:
       nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
       nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start
   prometheusSpec:
+    additionalScrapeConfigs:
     - job_name: 'home-assistant'
       scrape_interval: 60s
-      metrics_path: /api/prometheus
+      metrics_path: '/api/prometheus'
       bearer_token: '$PROM_HASS_TOKEN'
       scheme: http
       static_configs:
-      - targets: ['home-assistant.default.svc:8123']
+      - targets: 
+        - home-assistant.default.svc:8123
 grafana:
   ingress:
     hosts: [grafana.$DOMAIN]

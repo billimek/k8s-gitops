@@ -288,5 +288,6 @@ spec:
             - proxmox:9100
             - proxmox-b:9100
             - proxmox-c:9100
-  valueFileSecrets:
-  - name: "prometheus-operator-helm-values"
+  valuesFrom:
+  - secretKeyRef:
+      name: prometheus-operator-helm-values

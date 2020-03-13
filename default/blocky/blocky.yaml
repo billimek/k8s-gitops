@@ -123,4 +123,3 @@ spec:
   valuesFrom:
   - secretKeyRef:
       name: blocky-helm-values
-
