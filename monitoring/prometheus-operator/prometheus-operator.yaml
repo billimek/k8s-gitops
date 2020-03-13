@@ -273,21 +273,6 @@ spec:
         # tolerations:
         # - key: "arm"
         #   operator: "Exists"
-        additionalScrapeConfigs:
-        - job_name: 'wmi-exporter-scrape'
-          metrics_path: '/metrics'
-          params:
-            format: [prometheus]
-          honor_labels: true
-          static_configs:
-          - targets:
-            - nvr:9182
-        - job_name: 'node'
-          static_configs:
-          - targets:
-            - proxmox:9100
-            - proxmox-b:9100
-            - proxmox-c:9100
   valuesFrom:
   - secretKeyRef:
       name: prometheus-operator-helm-values

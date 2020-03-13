@@ -18,6 +18,20 @@ prometheus:
       nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start
   prometheusSpec:
     additionalScrapeConfigs:
+    - job_name: 'wmi-exporter-scrape'
+      metrics_path: '/metrics'
+      params:
+        format: [prometheus]
+      honor_labels: true
+      static_configs:
+      - targets:
+        - nvr:9182
+    - job_name: 'node'
+      static_configs:
+      - targets:
+        - proxmox:9100
+        - proxmox-b:9100
+        - proxmox-c:9100
     - job_name: 'home-assistant'
       scrape_interval: 60s
       metrics_path: '/api/prometheus'
