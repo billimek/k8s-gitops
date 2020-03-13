@@ -27,7 +27,7 @@ spec:
             include:  
               - all
             ignore:                 # List of namespaces to be ignored (omitempty), used only with include: all
-              -                     # example : include [all], ignore [x,y,z] 
+              - rook-ceph                    # example : include [all], ignore [x,y,z] 
           events:                   # List of lifecycle events you want to receive, e.g create, update, delete, error OR all
             - create
             - delete
@@ -128,7 +128,7 @@ spec:
             include:  
               - all
             ignore:
-              -
+              - rook-ceph
           events:
             - delete
             - error
@@ -147,7 +147,7 @@ spec:
             include:  
               - all
             ignore:
-              -
+              - rook-ceph
           events:
             - create
             - update
