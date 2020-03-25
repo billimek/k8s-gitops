@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: jacobalberty/unifi
-      tag: 5.12.35
+      tag: 5.12.66
     persistence:
       enabled: true
       size: 20Gi
