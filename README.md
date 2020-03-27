@@ -17,5 +17,5 @@ See [setup/README.md](setup/README.md) for more details.
 * [logs](logs/)
 * [monitoring](monitoring/)
 * [rook-ceph](rook-ceph/)
+* [system-upgrade](system-upgrade/)
 * [velero](velero/)
-
