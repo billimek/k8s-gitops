@@ -35,8 +35,8 @@ spec:
     args:
     - prepare
     - server-plan
-    image: billimek/k3s-upgrade:v1.17.4-k3s1
+    image: rancher/k3s-upgrade:v1.17.4-k3s1
   serviceAccountName: system-upgrade
   upgrade:
-    image: billimek/k3s-upgrade:v1.17.4-k3s1
+    image: rancher/k3s-upgrade:v1.17.4-k3s1
   channel: https://github.com/rancher/k3s/releases/latest
