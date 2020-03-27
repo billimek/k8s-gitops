@@ -87,3 +87,6 @@ spec:
             type: Directory
         - name: tmp
           emptyDir: {}
+      tolerations:
+      - key: arm
+        operator: Exists
