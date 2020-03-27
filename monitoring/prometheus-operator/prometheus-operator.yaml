@@ -42,6 +42,22 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+    nodeExporter:
+      serviceMonitor:
+        relabelings:
+        - action: replace
+          regex: (.*)
+          replacement: $1
+          sourceLabels:
+          - __meta_kubernetes_pod_node_name
+          targetLabel: kubernetes_node
+    kubelet:
+      serviceMonitor:
+        metricRelabelings:
+        - action: replace
+          sourceLabels:
+          - node
+          targetLabel: instance
     grafana:
       # image:
         # repository: grafana/grafana
