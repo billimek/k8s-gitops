@@ -65,7 +65,7 @@ spec:
     - name: "k3s-1"
       devices:
       - name: "sdb"
-    - name: "k30s-c"
+    - name: "k3os-c"
       devices:
       - name: "sdb"
     - name: "k3s-3"
