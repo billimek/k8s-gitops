@@ -13,6 +13,11 @@ spec:
       operator: In
       values:
       - "true"
+    - {key: k3os.io/mode, operator: DoesNotExist}
+    - key: kubernetes.io/arch
+      operator: In
+      values:
+      - "amd64"
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade:v1.17.4-k3s1
@@ -31,6 +36,11 @@ spec:
     matchExpressions:
     - key: node-role.kubernetes.io/master
       operator: DoesNotExist
+    - {key: k3os.io/mode, operator: DoesNotExist}
+    - key: kubernetes.io/arch
+      operator: In
+      values:
+      - "amd64"
   prepare:
     args:
     - prepare
