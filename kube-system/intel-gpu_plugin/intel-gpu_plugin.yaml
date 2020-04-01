@@ -24,7 +24,7 @@ spec:
               fieldRef:
                 fieldPath: spec.nodeName
         image: billimek/intel-gpu-plugin:0.17.0
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
         volumeMounts:
