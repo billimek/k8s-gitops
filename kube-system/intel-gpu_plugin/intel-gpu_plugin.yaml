@@ -23,7 +23,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-        image: billimek/intel-gpu-plugin:devel-20200401
+        image: intel/intel-gpu-plugin:0.17.0
         imagePullPolicy: IfNotPresent
         command: ["/usr/bin/intel_gpu_device_plugin"]
         args: ["-shared-dev-num", "4"]
