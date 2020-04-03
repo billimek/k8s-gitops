@@ -1,52 +1,52 @@
-# Server plan
-apiVersion: upgrade.cattle.io/v1
-kind: Plan
-metadata:
-  name: server-plan
-  namespace: system-upgrade
-spec:
-  concurrency: 1
-  cordon: true
-  nodeSelector:
-    matchExpressions:
-    - key: node-role.kubernetes.io/master
-      operator: In
-      values:
-      - "true"
-    - {key: k3os.io/mode, operator: DoesNotExist}
-    - key: kubernetes.io/arch
-      operator: In
-      values:
-      - "amd64"
-  serviceAccountName: system-upgrade
-  upgrade:
-    image: rancher/k3s-upgrade:v1.17.4-k3s1
-  channel: https://github.com/rancher/k3s/releases/latest
----
-# Agent plan
-apiVersion: upgrade.cattle.io/v1
-kind: Plan
-metadata:
-  name: agent-plan
-  namespace: system-upgrade
-spec:
-  concurrency: 1
-  cordon: true
-  nodeSelector:
-    matchExpressions:
-    - key: node-role.kubernetes.io/master
-      operator: DoesNotExist
-    - {key: k3os.io/mode, operator: DoesNotExist}
-    - key: kubernetes.io/arch
-      operator: In
-      values:
-      - "amd64"
-  prepare:
-    args:
-    - prepare
-    - server-plan
-    image: rancher/k3s-upgrade:v1.17.4-k3s1
-  serviceAccountName: system-upgrade
-  upgrade:
-    image: rancher/k3s-upgrade:v1.17.4-k3s1
-  channel: https://github.com/rancher/k3s/releases/latest
+# # Server plan
+# apiVersion: upgrade.cattle.io/v1
+# kind: Plan
+# metadata:
+#   name: server-plan
+#   namespace: system-upgrade
+# spec:
+#   concurrency: 1
+#   cordon: true
+#   nodeSelector:
+#     matchExpressions:
+#     - key: node-role.kubernetes.io/master
+#       operator: In
+#       values:
+#       - "true"
+#     - {key: k3os.io/mode, operator: DoesNotExist}
+#     - key: kubernetes.io/arch
+#       operator: In
+#       values:
+#       - "amd64"
+#   serviceAccountName: system-upgrade
+#   upgrade:
+#     image: rancher/k3s-upgrade:v1.17.4-k3s1
+#   channel: https://github.com/rancher/k3s/releases/latest
+# ---
+# # Agent plan
+# apiVersion: upgrade.cattle.io/v1
+# kind: Plan
+# metadata:
+#   name: agent-plan
+#   namespace: system-upgrade
+# spec:
+#   concurrency: 1
+#   cordon: true
+#   nodeSelector:
+#     matchExpressions:
+#     - key: node-role.kubernetes.io/master
+#       operator: DoesNotExist
+#     - {key: k3os.io/mode, operator: DoesNotExist}
+#     - key: kubernetes.io/arch
+#       operator: In
+#       values:
+#       - "amd64"
+#   prepare:
+#     args:
+#     - prepare
+#     - server-plan
+#     image: rancher/k3s-upgrade:v1.17.4-k3s1
+#   serviceAccountName: system-upgrade
+#   upgrade:
+#     image: rancher/k3s-upgrade:v1.17.4-k3s1
+#   channel: https://github.com/rancher/k3s/releases/latest
