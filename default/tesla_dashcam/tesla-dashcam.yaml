@@ -17,7 +17,7 @@ spec:
             - name: TZ
               value: America/New_York
             image: magicalyak/tesla_dashcam:latest
-            args: ["--delete_source", "--skip_existing", "--motion_only", "--output", "/output", "/input"]
+            args: ["--delete_source", "--skip_existing", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
             # args: ["--gpu", "--gpu_type=intel", "--enc=x265", "--delete_source", "--skip_existing", "--motion_only", "--output", "/output", "/input"]
             # resources:
             #   limits:
@@ -25,7 +25,7 @@ spec:
             volumeMounts:
             - mountPath: /input
               name: media
-              subPath: Videos/Tesla/SentryClips/
+              subPath: Videos/Tesla/
             - mountPath: /output
               name: media
               subPath: Videos/tesla_dashcam/
