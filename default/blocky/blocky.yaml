@@ -21,7 +21,7 @@ spec:
   values:
     image:
       repository: spx01/blocky
-      tag: v0.5
+      tag: v0.6
     replicas: 2
     timeZone: "America/New_York"
 
@@ -29,31 +29,31 @@ spec:
     config:
       upstream:
         externalResolvers:
-          - udp:8.8.8.8
-          - udp:8.8.4.4
-          - udp:1.1.1.1
-          - tcp-tls:1.0.0.1:853
-          - https://cloudflare-dns.com/dns-query
+        - udp:8.8.8.8
+        - udp:8.8.4.4
+        - udp:1.1.1.1
+        - tcp-tls:1.0.0.1:853
+        - https://cloudflare-dns.com/dns-query
       conditional:
         mapping:
           local: udp:10.0.7.1
       blocking:
         blackLists:
           ads:
-            - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-            - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-            - https://mirror1.malwaredomains.com/files/justdomains
-            - http://sysctl.org/cameleon/hosts
-            - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
-            - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+          - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+          - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+          - https://mirror1.malwaredomains.com/files/justdomains
+          - http://sysctl.org/cameleon/hosts
+          - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
+          - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
           special: []
           #   - https://hosts-file.net/ad_servers.txt
         whiteLists:
           ads:
-            - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
+          - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
         clientGroupsBlock:
           default:
-            - ads
+          - ads
             # - special
       clientLookup:
         upstream: udp:10.0.7.1
@@ -106,13 +106,13 @@ spec:
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values: 
-                - blocky
-            topologyKey: "kubernetes.io/hostname"
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - blocky
+          topologyKey: "kubernetes.io/hostname"
 
     resources:
       requests:
