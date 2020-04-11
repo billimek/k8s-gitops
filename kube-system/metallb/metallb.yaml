@@ -13,11 +13,20 @@ spec:
     version: 0.12.0
   values:
     configInline:
+        peers:
+        - peer-address: 10.0.7.1
+          peer-asn: 64512
+          my-asn: 64512
         address-pools:
         - name: default
           protocol: layer2
           addresses:
           - 10.2.0.100-10.2.0.250
+        - name: bgp
+          protocol: bgp
+          addresses:
+          -  10.0.6.0/24
+          avoid-buggy-ips: true
     controller:
       tolerations:
       - key: "arm"
