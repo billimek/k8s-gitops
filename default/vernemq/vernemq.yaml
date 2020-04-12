@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://vernemq.github.io/docker-vernemq
     name: vernemq
-    version: 1.6.1
+    version: 1.6.2
   values:
     image:
       repository: vernemq/vernemq
