@@ -14,14 +14,14 @@ spec:
   chart:
     repository: https://vmware-tanzu.github.io/helm-charts
     name: velero
-    version: 2.9.10
+    version: 2.8.1
   values:
     image:
       repository: velero/velero
       tag: v1.3.2
     initContainers:
     - name: velero-plugin-for-aws
-      image: velero/velero-plugin-for-aws:v1.0.0
+      image: velero/velero-plugin-for-aws:v1.0.1
       imagePullPolicy: IfNotPresent
       volumeMounts:
       - mountPath: /target
