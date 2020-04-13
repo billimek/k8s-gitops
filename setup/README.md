@@ -13,7 +13,6 @@ This [script](bootstrap-cluster.sh) does several things:
 1. Installs k3s to the master node
 1. Installs k3s workers to other nodes (mixed amd64 and arm64 architecture)
 1. Retrieves the new kubeconfig file and places it in $REPO_ROOT/setup/kubeconfig
-1. Installs helm
 1. Installs flux
 1. Retrieves the new flux public key and saves it to the GitHub repo as a repo key (see [add-repo-key.sh](add-repo-key.sh))
 1. Bootstraps the vault-secret-operator with the auto-unwrap token

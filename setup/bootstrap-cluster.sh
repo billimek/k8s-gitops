@@ -60,21 +60,6 @@ ks3arm64WorkerNodes() {
   done
 }
 
-installHelm() {
-  message "installing helm (tiller)"
-  kubectl -n kube-system create sa tiller
-  kubectl create clusterrolebinding tiller-cluster-rule \
-      --clusterrole=cluster-admin \
-      --serviceaccount=kube-system:tiller
-  helm init --upgrade --wait --service-account tiller
-
-  HELM_SUCCESS="$?"
-  if [ "$HELM_SUCCESS" != 0 ]; then
-    echo "helm init failed - no bueno!"
-    exit 1
-  fi
-}
-
 installFlux() {
   message "installing flux"
   # install flux
@@ -102,7 +87,6 @@ ks3amd64WorkerNodes
 ks3arm64WorkerNodes
 
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
-installHelm
 installFlux
 "$REPO_ROOT"/setup/bootstrap-objects.sh
 "$REPO_ROOT"/setup/bootstrap-vault.sh
