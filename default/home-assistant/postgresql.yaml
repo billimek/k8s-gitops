@@ -12,7 +12,7 @@ spec:
   releaseName: hass-postgresql
   helmVersion: v3
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://charts.bitnami.com/bitnami
     name: postgresql
     version: 8.7.3
   values:
