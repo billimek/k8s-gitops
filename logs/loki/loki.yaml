@@ -20,7 +20,7 @@ spec:
     loki:
       image:
         repository: grafana/loki
-        tag: v1.4.1
+        tag: 1.4.1
       persistence:
         enabled: true
         size: 50Gi
@@ -33,7 +33,7 @@ spec:
     promtail:
       image:
         repository: grafana/promtail
-        tag: v1.4.1
+        tag: 1.4.1
       serviceMonitor:
         enabled: true
       tolerations:
