@@ -6,18 +6,18 @@ metadata:
   namespace: kube-system
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: semver:~v4
+    fluxcd.io/tag.chart-image: semver:~v5
 spec:
   releaseName: oauth2-proxy
   helmVersion: v3
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: oauth2-proxy
-    version: 2.2.2
+    version: 2.4.1
   values:
     image:
       repository: "quay.io/pusher/oauth2_proxy"
-      tag: "v4.1.0"
+      tag: "v5.1.0"
     replicaCount: 2
     # tolerations:
     #   - key: "arm"
