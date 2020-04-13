@@ -7,20 +7,20 @@ metadata:
   annotations:
     fluxcd.io/ignore: false
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.loki: semver:~v1.3
-    fluxcd.io/tag.promtail: semver:~v1.3
+    fluxcd.io/tag.loki: semver:~v1.
+    fluxcd.io/tag.promtail: semver:~v1.
 spec:
   releaseName: loki
   helmVersion: v3
   chart:
     repository: https://grafana.github.io/loki/charts
     name: loki-stack
-    version: 0.32.1
+    version: 0.34.2
   values:
     loki:
       image:
         repository: grafana/loki
-        tag: v1.3.0
+        tag: v1.4.1
       persistence:
         enabled: true
         size: 50Gi
@@ -33,7 +33,7 @@ spec:
     promtail:
       image:
         repository: grafana/promtail
-        tag: v1.3.0
+        tag: v1.4.1
       serviceMonitor:
         enabled: true
       tolerations:
