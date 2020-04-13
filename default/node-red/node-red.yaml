@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: node-red
-    version: 1.4.1
+    version: 1.4.2
   values:
     image:
       repository: nodered/node-red
