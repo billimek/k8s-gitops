@@ -60,12 +60,6 @@ Usenet download client
 
 * [nzbget.yaml](nzbget/nzbget.yaml)
 
-# pihole
-
-![](https://i.imgur.com/X2e9P6u.png)
-
-* [pihole.yaml](pihole/pihole.yaml)
-
 # plex
 
 ![](https://i.imgur.com/nDyS9OA.jpg)
