@@ -29,16 +29,16 @@ spec:
           -  10.0.6.0/24
           avoid-buggy-ips: true
     controller:
-      image:
-        repository: metallb/controller
-        tag: v0.9.3
+      # image:
+      #   repository: metallb/controller
+      #   tag: v0.9.3
       tolerations:
       - key: "arm"
         operator: "Exists"
     speaker:
-      image:
-        repository: metallb/controller
-        tag: v0.9.3
+      # image:
+      #   repository: metallb/controller
+      #   tag: v0.9.3
       tolerations:
       - key: "arm"
         operator: "Exists"
