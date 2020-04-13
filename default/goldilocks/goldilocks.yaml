@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://charts.fairwinds.com/stable
     name: goldilocks
-    version: 1.0.0
+    version: 2.2.4
   values:
     installVPA: true
     dashboard:
