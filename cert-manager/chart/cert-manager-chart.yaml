@@ -9,6 +9,7 @@ metadata:
     fluxcd.io/tag.chart-image: semver:~v0.
 spec:
   releaseName: cert-manager
+  helmVersion: v3
   rollback:
     enable: false
   chart:

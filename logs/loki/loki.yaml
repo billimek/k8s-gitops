@@ -11,6 +11,7 @@ metadata:
     fluxcd.io/tag.promtail: semver:~v1.3
 spec:
   releaseName: loki
+  helmVersion: v3
   chart:
     repository: https://grafana.github.io/loki/charts
     name: loki-stack

@@ -11,6 +11,7 @@ metadata:
     # filter.fluxcd.io/vscode: "regex:^2.[0-9]+-.*$"
 spec:
   releaseName: home-assistant
+  helmVersion: v3
   rollback:
     enable: true
   chart:

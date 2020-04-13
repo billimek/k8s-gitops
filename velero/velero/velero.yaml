@@ -10,6 +10,7 @@ metadata:
     fluxcd.io/tag.chart-image: semver:~v1
 spec:
   releaseName: velero
+  helmVersion: v3
   chart:
     repository: https://vmware-tanzu.github.io/helm-charts
     name: velero

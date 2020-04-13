@@ -11,6 +11,7 @@ metadata:
     fluxcd.io/tag.postgresql: semver:~11
 spec:
   releaseName: teslamate
+  helmVersion: v3
   chart:
     repository: https://billimek.com/billimek-charts/
     name: teslamate
