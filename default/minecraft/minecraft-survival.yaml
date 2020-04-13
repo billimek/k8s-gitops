@@ -6,6 +6,7 @@ metadata:
   namespace: default
 spec:
   releaseName: mcsv
+  helmVersion: v3
   rollback:
     enable: true
   chart:

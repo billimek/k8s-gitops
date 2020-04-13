@@ -8,6 +8,7 @@ metadata:
     fluxcd.io/automated: "false"
 spec:
   releaseName: rook-ceph
+  helmVersion: v3
   chart:
     repository: https://charts.rook.io/release
     name: rook-ceph

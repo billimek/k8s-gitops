@@ -10,6 +10,7 @@ metadata:
     fluxcd.io/tag.chart-image: glob:RELEASE.*
 spec:
   releaseName: minio
+  helmVersion: v3
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minio

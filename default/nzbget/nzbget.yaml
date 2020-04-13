@@ -9,6 +9,7 @@ metadata:
     fluxcd.io/tag.chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
 spec:
   releaseName: nzbget
+  helmVersion: v3
   rollback:
     enable: true
   chart:

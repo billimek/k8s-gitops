@@ -9,6 +9,7 @@ metadata:
     fluxcd.io/tag.chart-image: semver:3.0
 spec:
   releaseName: sonarr
+  helmVersion: v3
   rollback:
     enable: true
   chart:

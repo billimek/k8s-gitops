@@ -10,6 +10,7 @@ metadata:
     fluxcd.io/tag.chart-image: semver:~0.
 spec:
   releaseName: nginx-ingress
+  helmVersion: v3
   rollback:
     enable: true
   chart:

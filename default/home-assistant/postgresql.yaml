@@ -10,6 +10,7 @@ metadata:
     fluxcd.io/tag.chart-image: semver:~12
 spec:
   releaseName: hass-postgresql
+  helmVersion: v3
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: postgresql

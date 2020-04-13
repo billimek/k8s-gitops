@@ -8,6 +8,7 @@ metadata:
     fluxcd.io/ignore: false
 spec:
   releaseName: uptimerobot
+  helmVersion: v3
   rollback:
     enable: true
   chart:

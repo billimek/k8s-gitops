@@ -8,6 +8,7 @@ metadata:
     fluxcd.io/tag.chart-image: semver:~1
 spec:
   releaseName: kured
+  helmVersion: v3
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: kured
