@@ -78,7 +78,7 @@ spec:
         - ReadWriteOnce
       env:
         GF_EXPLORE_ENABLED: true
-        GF_DISABVLE_SANITIZE_HTML: true
+        GF_DISABLE_SANITIZE_HTML: true
       ingress:
         enabled: true
         annotations:
