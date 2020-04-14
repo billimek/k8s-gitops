@@ -28,7 +28,7 @@ spec:
         # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
         # global-auth-signin: "https://auth.$server_name/oauth2/start"
       service:
-        loadBalancerIP: 10.2.0.150
+        loadBalancerIP: 10.0.6.150
         externalTrafficPolicy: Local
       metrics:
         enabled: true
