@@ -54,4 +54,4 @@ spec:
         enabled: true
         type: LoadBalancer
         port: 1514
-        loadBalancerIP: 10.2.0.152
+        loadBalancerIP: 10.0.6.51

@@ -32,7 +32,7 @@ spec:
     timezone: "America/New_York"
     service:
       type: LoadBalancer
-      loadBalancerIP: 10.2.0.154
+      loadBalancerIP: 10.0.6.53
     persistence:
       transcode:
         enabled: true

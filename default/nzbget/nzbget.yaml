@@ -22,7 +22,7 @@ spec:
       tag: v21.0-ls48
     service:
       type: LoadBalancer
-      loadBalancerIP: 10.2.0.153
+      loadBalancerIP: 10.0.6.52
     ingress:
       enabled: true
       annotations:

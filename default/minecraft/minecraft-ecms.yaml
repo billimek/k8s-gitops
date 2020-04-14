@@ -47,4 +47,4 @@ spec:
       gameMode: creative
       ops: "83d9416e-216e-4ffb-81ae-d2bd455a398a"
       motd: "ECMS Minecraft"
-      loadBalancerIP: 10.2.0.163
+      loadBalancerIP: 10.0.6.103
