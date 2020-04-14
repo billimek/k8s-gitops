@@ -4,7 +4,7 @@ configuration:
     name: aws
     bucket: velero
     config:
-      region: us-east-1
+      region: minio
       s3ForcePathStyle: true
       s3Url: http://minio.default.svc:9000
       publicUrl: https://minio.$DOMAIN
@@ -12,7 +12,7 @@ configuration:
     name: aws
     resticTimeout: 6h
     config:
-      region: us-east-1
+      region: minio
 credentials:
   secretContents:
     cloud: |

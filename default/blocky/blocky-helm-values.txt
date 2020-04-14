@@ -7,5 +7,5 @@ config:
       local: udp:10.0.7.1
   customDNS:
       mapping:
-        mcsv.$DOMAIN: 10.2.0.162
-        ecms.$DOMAIN: 10.2.0.163
+        mcsv.$DOMAIN: 10.0.6.102
+        ecms.$DOMAIN: 10.0.6.103
