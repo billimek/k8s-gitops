@@ -79,18 +79,18 @@ spec:
     serviceTCP:
       enabled: true
       type: LoadBalancer
-      externalTrafficPolicy: Cluster
+      externalTrafficPolicy: Local
       loadBalancerIP: 10.0.6.100
       annotations:
-        metallb.universe.tf/allow-shared-ip: blocky-svc
+        metallb.universe.tf/allow-shared-ip: blocky
 
     serviceUDP:
       enabled: true
       type: LoadBalancer
-      externalTrafficPolicy: Cluster
+      externalTrafficPolicy: Local
       loadBalancerIP: 10.0.6.100
       annotations:
-        metallb.universe.tf/allow-shared-ip: blocky-svc
+        metallb.universe.tf/allow-shared-ip: blocky
 
     serviceMonitor:
       enabled: true
