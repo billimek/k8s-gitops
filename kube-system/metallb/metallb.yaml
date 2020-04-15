@@ -19,11 +19,6 @@ spec:
         peer-asn: 64512
         my-asn: 64512
       address-pools:
-      - name: default
-        protocol: layer2
-        addresses:
-        - 10.2.0.100-10.2.0.250
-        auto-assign: false
       - name: bgp
         protocol: bgp
         addresses:
