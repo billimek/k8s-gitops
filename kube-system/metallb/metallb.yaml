@@ -30,16 +30,16 @@ spec:
       prometheusRule:
         enabled: true
     controller:
-      # image:
-      #   repository: metallb/controller
-      #   tag: v0.9.3
+      image:
+        repository: metallb/controller
+        tag: v0.9.3
       tolerations:
       - key: "arm"
         operator: "Exists"
     speaker:
-      # image:
-      #   repository: metallb/controller
-      #   tag: v0.9.3
+      image:
+        repository: metallb/speaker
+        tag: v0.9.3
       tolerations:
       - key: "arm"
         operator: "Exists"
