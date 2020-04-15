@@ -6,7 +6,7 @@ metadata:
   namespace: logs
   annotations:
     fluxcd.io/ignore: false
-    # fluxcd.io/automated: "true"
+    fluxcd.io/automated: "true"
     fluxcd.io/tag.loki: semver:~v1.
     fluxcd.io/tag.promtail: semver:~v1.
 spec:
@@ -18,9 +18,9 @@ spec:
     version: 0.34.2
   values:
     loki:
-      # image:
-      #   repository: grafana/loki
-      #   tag: 1.4.1
+      image:
+        repository: grafana/loki
+        tag: 1.4.1
       persistence:
         enabled: true
         size: 50Gi
@@ -31,9 +31,9 @@ spec:
       - key: "arm"
         operator: "Exists"
     promtail:
-      # image:
-      #   repository: grafana/promtail
-      #   tag: 1.4.1
+      image:
+        repository: grafana/promtail
+        tag: 1.4.1
       serviceMonitor:
         enabled: true
       tolerations:
