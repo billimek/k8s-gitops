@@ -71,12 +71,3 @@ spec:
     - name: "k3s-3"
       devices:
       - name: "sda"
-    - name: "proxmox"
-      devices:
-      - name: "sdh"
-    - name: "proxmox-b"
-      devices:
-      - name: "sda"
-    - name: "proxmox-c"
-      devices:
-      - name: "sda"
