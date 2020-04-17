@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/ignore: false
-    fluxcd.io/automated: "true"
+    fluxcd.io/automated: "false"
     fluxcd.io/tag.chart-image: semver:~1.
     fluxcd.io/tag.postgresql: semver:~11
 spec:
@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: teslamate/teslamate
-      tag: 1.19.0-dev
+      tag: 1.18.2
     timeZone: "America/New_York"
     mqtt:
       enabled: true
