@@ -49,8 +49,8 @@ spec:
       limits:
         memory: 512Mi
   storage:
-    useAllNodes: false
-    useAllDevices: false
+    useAllNodes: true
+    useAllDevices: true
     deviceFilter:
     location:
     config:
@@ -58,19 +58,19 @@ spec:
       # databaseSizeMB: "1024" # this value can be removed for environments with normal sized disks (100 GB or larger)
       # journalSizeMB: "1024"  # this value can be removed for environments with normal sized disks (20 GB or larger)
       osdsPerDevice: "1"
-    nodes:
-    - name: "k3s-0"
-      devices:
-      - name: "sdb"
-    - name: "k3os-a"
-      devices:
-      - name: "sdb"
-    - name: "k3os-b"
-      devices:
-      - name: "sdb"
-    - name: "k3os-c"
-      devices:
-      - name: "sdb"
-    - name: "k3s-3"
-      devices:
-      - name: "sda"
+    # nodes:
+    # - name: "k3s-0"
+    #   devices:
+    #   - name: "sdb"
+    # - name: "k3os-a"
+    #   devices:
+    #   - name: "sdb"
+    # - name: "k3os-b"
+    #   devices:
+    #   - name: "sdb"
+    # - name: "k3os-c"
+    #   devices:
+    #   - name: "sdb"
+    # - name: "k3s-3"
+    #   devices:
+    #   - name: "sda"
