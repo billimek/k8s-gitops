@@ -78,7 +78,7 @@ spec:
                   {{ range .Alerts -}}
                     *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
 
-                  *Description:* {{ .Annotations.description }}
+                  *Message:* {{ .Annotations.message }}
 
                   *Details:*
                     {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
