@@ -43,6 +43,7 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+      config:
         route:
           # group_by: ['alertname', 'job']
           # group_wait: 30s
