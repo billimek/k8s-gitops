@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: rtorrent-flood
-    version: 4.1.0
+    version: 4.1.1
   values:
     # rtorrent:
     #   enabled: true
