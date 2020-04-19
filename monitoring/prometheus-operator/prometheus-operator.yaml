@@ -44,15 +44,15 @@ spec:
         annotations:
           kubernetes.io/ingress.class: "nginx"
         route:
-          group_by: ['alertname', 'job']
-          group_wait: 30s
-          group_interval: 5m
-          repeat_interval: 6h
+          # group_by: ['alertname', 'job']
+          # group_wait: 30s
+          # group_interval: 5m
+          # repeat_interval: 6h
           receiver: 'slack-notifications'
-          routes:
-            - match:
-                alertname: Watchdog
-              receiver: 'null'
+          # routes:
+          #   - match:
+          #       alertname: Watchdog
+          #     receiver: 'null'
         receivers:
           - name: 'slack-notifications'
             slack_configs:
@@ -73,15 +73,11 @@ spec:
                 )
               {{- end }}
             text: >-
-              {{ with index .Alerts 0 -}}
-                :chart_with_upwards_trend: *<{{ .GeneratorURL }}|Graph>*
-              {{ end }}
-
-              *Alert details*:
-
               {{ range .Alerts -}}
                 *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
               *Description:* {{ .Annotations.description }}
+
               *Details:*
                 {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
                 {{ end }}
