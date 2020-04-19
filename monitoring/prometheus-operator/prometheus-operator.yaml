@@ -55,6 +55,7 @@ spec:
           #       alertname: Watchdog
           #     receiver: 'null'
         receivers:
+          - name: 'null'
           - name: 'slack-notifications'
             slack_configs:
               - channel: '#notifications'
