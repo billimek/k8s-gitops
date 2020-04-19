@@ -7,6 +7,9 @@ alertmanager:
     annotations:
       nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
       nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start
+  config:
+    global:
+      slack_api_url: $SLACK_WEBHOOK_URL
 prometheus:
   ingress:
     hosts: [prom-server.$DOMAIN]
