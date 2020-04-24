@@ -30,6 +30,9 @@ spec:
     - key: "arm"
       operator: "Exists"
     cainjector:
+      replicaCount: 1
+      extraArgs:
+        - --leader-elect=false
       tolerations:
       - key: "arm"
         operator: "Exists"
