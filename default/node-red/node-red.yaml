@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: nodered/node-red
-      tag: 1.0.5-12-minimal
+      tag: 1.0.6-12-minimal
     persistence:
       enabled: true
       storageClass: "nfs-client"
