@@ -14,11 +14,11 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minio
-    version: 5.0.21
+    version: 5.0.23
   values:
     image:
       repository: jessestuart/minio
-      tag: RELEASE.2020-03-25T07-03-04Z
+      tag: RELEASE.2020-04-23T00-58-49Z
     persistence:
       existingClaim: "nfs-data-pvc"
       subPath: "minio"
@@ -35,5 +35,8 @@ spec:
         cpu: 25m
       limits:
         memory: 500Mi
+    metrics:
+      serviceMonitor:
+        enabled: true
   valueFileSecrets:
   - name: "minio-helm-values"
