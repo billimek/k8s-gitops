@@ -1,0 +1,21 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: speedtest-prometheus
+  namespace: monitoring
+spec:
+  releaseName: speedtest-prometheus
+  rollback:
+    enable: true
+  chart:
+    repository: https://billimek.com/billimek-charts/
+    name: speedtest-prometheus
+    version: 1.0.1
+  values:
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
+    serviceMonitor:
+      enabled: true
+      interval: "60m"
