@@ -8,17 +8,18 @@ metadata:
     fluxcd.io/ignore: false
 spec:
   releaseName: botkube
-  helmVersion: v3
   rollback:
     enable: true
   chart:
     repository: https://infracloudio.github.io/charts
     name: botkube
-    version: v0.9.1
+    version: v0.10.0
   values:
     image:
-      repository: billimek/botkube
-      tag: v0.9.1
+      repository: infracloudio/botkube
+      tag: v0.10.0
+    serviceMonitor:
+      enabled: true
     config:
       settings:
         clustername: k8s
