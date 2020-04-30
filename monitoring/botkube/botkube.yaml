@@ -20,8 +20,6 @@ spec:
       tag: v0.10.0
     serviceMonitor:
       enabled: true
-    rbac:
-      create: false
     config:
       settings:
         clustername: k8s
