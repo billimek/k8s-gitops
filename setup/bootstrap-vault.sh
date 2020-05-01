@@ -80,6 +80,12 @@ initVault() {
     FIRST_RUN=0
   fi
 
+  REPLIACS_LIST=($REPLIACS)
+  for replica in "${REPLIACS_LIST[@]:1}"; do
+    echo "joining pod vault-${replica} to raft cluster"
+    kubectl -n kube-system exec "vault-${replica}" -- vault operator raft join http://vault-0.vault-internal:8200 || exit 1
+  done
+
   if [ "$sealed_status" == "true" ]; then
     echo "unsealing vault"
     for replica in $REPLIACS; do

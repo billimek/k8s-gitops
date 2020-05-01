@@ -1,11 +1,3 @@
-# consul
-
-![](https://i.imgur.com/pJDyame.png)
-
-Deployed in support of running vault in HA mode.  Will likely deprecate whenever the [vault raft storage](https://www.vaultproject.io/docs/configuration/storage/raft.html) support is baked-in to the vault chart.
-
-* [consul/consul.yaml](consul/consul.yaml)
-
 # Intel GPU Plugin
 
 Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/tree/master/cmd/gpu_plugin) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via the `gpu.intel.com/i915` node resource
