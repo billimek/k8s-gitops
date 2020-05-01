@@ -5,7 +5,6 @@ metadata:
   namespace: kube-system
 spec:
   releaseName: vault
-  helmVersion: v3
   rollback:
     enabled: false
   chart:
@@ -33,20 +32,26 @@ spec:
         enabled: "false"
       ha:
         enabled: "true"
-        config: |
-          ui = true
-          listener "tcp" {
-            tls_disable = 1
-            address = "[::]:8200"
-            cluster_address = "[::]:8201"
-          }
-          storage "consul" {
-            path = "vault"
-            address = "HOST_IP:8500"
-          }
-          seal "gcpckms" {
-            project     = "kms-vault"
-            region      = "global"
-            key_ring    = "vault-unseal"
-            crypto_key  = "vault-key"
-          }
+        replicas: 3
+        raft:
+          enabled: true
+          setNodeId: true
+          config: |
+            ui = true
+            listener "tcp" {
+              tls_disable = 1
+              address = "[::]:8200"
+              cluster_address = "[::]:8201"
+            }
+            storage "raft" {
+              path = "/vault/data"
+            }
+            seal "gcpckms" {
+              project     = "kms-vault"
+              region      = "global"
+              key_ring    = "vault-unseal"
+              crypto_key  = "vault-key"
+            }
+    ui:
+      enabled: true
+      serviceType: "ClusterIP"
