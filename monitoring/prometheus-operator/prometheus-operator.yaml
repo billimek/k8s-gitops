@@ -128,7 +128,7 @@ spec:
       - natel-discrete-panel
       - pr0ps-trackmap-panel
       - grafana-piechart-panel
-      - grafana-worldmap-panel-ng
+      - grafana-worldmap-panel
       dashboardProviders:
         dashboardproviders.yaml:
           apiVersion: 1
