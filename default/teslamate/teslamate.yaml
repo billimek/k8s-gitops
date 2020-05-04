@@ -37,6 +37,17 @@ spec:
         cpu: 50m
       limits:
         memory: 500Mi
+    probes:
+      liveness:
+        failureThreshold: 15
+        periodSeconds: 10
+      readiness:
+        failureThreshold: 15
+        periodSeconds: 10
+      startup:
+        initialDelaySeconds: 15
+        failureThreshold: 30
+        periodSeconds: 10
     postgresql:
       image:
         repository: postgres
