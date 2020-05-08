@@ -32,5 +32,8 @@ spec:
         enabled: true
     volumePermissions:
       enabled: true
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
   valueFileSecrets:
   - name: "postgresql-helm-values"
