@@ -14,11 +14,11 @@ spec:
   chart:
     repository: https://charts.bitnami.com/bitnami
     name: postgresql
-    version: 8.7.4
+    version: 8.9.5
   values:
     image:
       repository: postgres
-      tag: 12.1
+      tag: 12.2
     postgresqlDataDir: "/data/pgdata"
     postgresqlUsername: "homeassistant"
     postgresqlDatabase: "homeassistant"
@@ -32,8 +32,9 @@ spec:
         enabled: true
     volumePermissions:
       enabled: true
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
+    # master:
+    #   tolerations:
+    #   - key: "arm"
+    #     operator: "Exists"
   valueFileSecrets:
   - name: "postgresql-helm-values"
