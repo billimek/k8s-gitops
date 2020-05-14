@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
-    version: 8.12.13
+    version: 8.13.7
   values:
     server:
       resources:
@@ -27,6 +27,12 @@ spec:
           memory: 2000Mi
     prometheusOperator:
       createCustomResource: true
+      image:
+        repository: quay.io/coreos/prometheus-operator
+        tag: v0.39.0
+      prometheusConfigReloaderImage:
+        repository: quay.io/coreos/prometheus-config-reloader
+        tag: v0.39.0
     alertmanager:
       alertmanagerSpec:
         storage:
