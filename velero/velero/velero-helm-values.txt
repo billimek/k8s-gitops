@@ -1,7 +1,7 @@
 configuration:
   provider: aws
   backupStorageLocation:
-    name: aws
+    name: default
     bucket: velero
     config:
       region: minio
