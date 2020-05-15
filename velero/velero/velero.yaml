@@ -34,7 +34,7 @@ spec:
         memory: 1000Mi
     tolerations:
     - key: "arm"
-    operator: "Exists"
+      operator: "Exists"
     metrics:
       enabled: true
       serviceMonitor:
@@ -46,7 +46,7 @@ spec:
       privileged: false
       tolerations:
       - key: "arm"
-      operator: "Exists"
+        operator: "Exists"
       resources:
         requests:
           memory: 200Mi
