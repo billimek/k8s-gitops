@@ -32,9 +32,9 @@ spec:
         cpu: 25m
       limits:
         memory: 1000Mi
-    # tolerations:
-    #   - key: "arm"
-    #   operator: "Exists"
+    tolerations:
+      - key: "arm"
+      operator: "Exists"
     metrics:
       enabled: true
       serviceMonitor:
@@ -44,6 +44,9 @@ spec:
     restic:
       podVolumePath: /var/lib/kubelet/pods
       privileged: false
+      tolerations:
+        - key: "arm"
+        operator: "Exists"
       resources:
         requests:
           memory: 200Mi
