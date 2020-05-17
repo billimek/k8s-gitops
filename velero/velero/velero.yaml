@@ -21,7 +21,7 @@ spec:
       tag: v1.3.2
     initContainers:
     - name: velero-plugin-for-aws
-      image: velero/velero-plugin-for-aws:v1.0.1
+      image: raspbernetes/velero-aws-plugin:v1.0.1
       imagePullPolicy: IfNotPresent
       volumeMounts:
       - mountPath: /target
