@@ -4,15 +4,6 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 
 * [intel-gpu_plugin/intel-gpu_plugin.yaml](intel-gpu_plugin/intel-gpu_plugin.yaml)
 
-# kured
-
-![](https://i.imgur.com/wYWTMGI.png)
-
-Automatically drain and reboot nodes when a reboot is required (e.g. a kernel update was applied): https://github.com/weaveworks/kured
-
-* [kured/kured.yaml](kured/kured.yaml)
-* [kured/kured-helm-values.yaml](kured/kured-helm-values.yaml)
-
 # metallb
 
 [Run your own on-prem LoadBalancer](https://metallb.universe.tf/)
