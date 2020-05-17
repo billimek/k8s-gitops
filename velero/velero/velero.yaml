@@ -21,7 +21,7 @@ spec:
       tag: v1.3.2
     initContainers:
     - name: velero-plugin-for-aws
-      image: raspbernetes/velero-aws-plugin:v1.0.1
+      image: velero/velero-plugin-for-aws:v1.0.1
       imagePullPolicy: IfNotPresent
       volumeMounts:
       - mountPath: /target
@@ -32,9 +32,9 @@ spec:
         cpu: 25m
       limits:
         memory: 1000Mi
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
+    # tolerations:
+    # - key: "arm"
+    #   operator: "Exists"
     metrics:
       enabled: true
       serviceMonitor:
