@@ -143,15 +143,15 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: tpu
-              operator: In
-              values:
-              - google-coral
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #       - matchExpressions:
+    #         - key: tpu
+    #           operator: In
+    #           values:
+    #           - google-coral
     resources:
       requests:
         memory: 1000Mi
@@ -159,5 +159,6 @@ spec:
       limits:
         memory: 2500Mi
         # gpu.intel.com/i915: 1
+        kkohtaka.org/edgetpu: 1
   valueFileSecrets:
   - name: "frigate-helm-values"
