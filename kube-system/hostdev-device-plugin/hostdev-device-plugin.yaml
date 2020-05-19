@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hostdev-device-plugin
+  namespace: kube-system
+  labels:
+    name: hostdev-device-plugin
+spec:
+  selector:
+    matchLabels:
+      name: hostdev-device-plugin
+  template:
+    metadata:
+      labels:
+        name: hostdev-device-plugin
+    spec:
+      tolerations:
+      - key: arm
+      hostNetwork: true
+      containers:
+      - name: hostdev
+        image: billimek/k8s-hostdev-plugin:1.0.0
+        args: ["--devs", "/dev/serial/by-id/usb-0658_0200-if00:r,/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0:r"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: device-plugin
+          mountPath: /var/lib/kubelet/device-plugins
+        - name: dev
+          mountPath: /dev
+      volumes:
+      - name: device-plugin
+        hostPath:
+          path: /var/lib/kubelet/device-plugins
+      - name: dev
+        hostPath:
+          path: /dev
