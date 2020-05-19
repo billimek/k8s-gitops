@@ -27,7 +27,7 @@ spec:
         - name: dev
           mountPath: /dev
         tolerations:
-          - key: "arm"
+        - key: "arm"
           operator: "Exists"
         hostNetwork: true
         containers:
