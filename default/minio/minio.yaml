@@ -41,6 +41,8 @@ spec:
         cpu: 25m
       limits:
         memory: 1000Mi
+    securityContext:
+      enabled: false
     metrics:
       serviceMonitor:
         enabled: true
