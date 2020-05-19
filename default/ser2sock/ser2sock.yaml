@@ -19,6 +19,7 @@ spec:
       tag: armhf
       imagePullPolicy: Always
     timezone: "America/New York"
+    device: "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0"
     tolerations:
     - key: "arm"
       operator: "Exists"
