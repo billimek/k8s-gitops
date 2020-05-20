@@ -14,11 +14,14 @@ spec:
       labels:
         name: hostdev-device-plugin
     spec:
+      tolerations:
+      - key: arm
+        operator: Exists
       hostNetwork: true
       containers:
       - name: hostdev
-        image: billimek/k8s-hostdev-plugin:1.0.1
-        args: ["--devs", "/dev/ttyACM0:r,/dev/ttyUSB0:r"]
+        image: billimek/k8s-hostdev-plugin:1.0.4
+        args: ["--devs", "/dev/serial/by-id/usb-0658_0200-if00:r,/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0:r"]
         securityContext:
           privileged: true
         volumeMounts:
@@ -26,28 +29,6 @@ spec:
           mountPath: /var/lib/kubelet/device-plugins
         - name: dev
           mountPath: /dev
-        tolerations:
-        - key: "arm"
-          operator: "Exists"
-        hostNetwork: true
-        containers:
-          - name: hostdev
-        image: billimek/k8s-hostdev-plugin:1.0.2
-        args: ["--devs", "/dev/serial/by-id/usb-0658_0200-if00:r,/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0:r"]
-        securityContext:
-          privileged: true
-        volumeMounts:
-          - name: device-plugin
-            mountPath: /var/lib/kubelet/device-plugins
-      - name: dev
-        mountPath: /dev
-        volumes:
-          - name: device-plugin
-        hostPath:
-          path: /var/lib/kubelet/device-plugins
-      - name: dev
-        hostPath:
-          path: /dev
       volumes:
       - name: device-plugin
         hostPath:
