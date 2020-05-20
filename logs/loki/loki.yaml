@@ -6,12 +6,11 @@ metadata:
   namespace: logs
   annotations:
     fluxcd.io/ignore: false
-    fluxcd.io/automated: "true"
+    fluxcd.io/automated: "false"
     fluxcd.io/tag.loki: semver:~v1.
     fluxcd.io/tag.promtail: semver:~v1.
 spec:
   releaseName: loki
-  helmVersion: v3
   chart:
     repository: https://grafana.github.io/loki/charts
     name: loki-stack
@@ -33,7 +32,7 @@ spec:
     promtail:
       image:
         repository: grafana/promtail
-        tag: 1.5.0
+        tag: 1.4.1
       serviceMonitor:
         enabled: true
       tolerations:
