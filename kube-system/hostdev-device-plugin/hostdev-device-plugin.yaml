@@ -21,7 +21,7 @@ spec:
       containers:
       - name: hostdev
         image: billimek/k8s-hostdev-plugin:1.0.4
-        args: ["--devs", "/dev/ttyACM0:rw,/dev/ttyUSB0:rw,/dev/serial/by-id/usb-0658_0200-if00:r,/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0:r"]
+        args: ["--devs", "/dev/serial/by-id/usb-0658_0200-if00:r,/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0:r"]
         securityContext:
           privileged: true
         volumeMounts:
