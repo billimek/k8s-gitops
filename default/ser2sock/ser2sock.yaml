@@ -29,4 +29,4 @@ spec:
         cpu: 15m
       limits:
         memory: 250Mi
-        hostdev.k8s.io/dev_serial_by-id_usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port: 1
+        hostdev.k8s.io/dev_serial_by-id_usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0: 1
