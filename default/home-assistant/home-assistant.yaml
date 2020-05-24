@@ -17,7 +17,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: home-assistant
-    version: 0.13.2
+    version: 0.13.3
   values:
     image:
       repository: homeassistant/home-assistant
@@ -30,6 +30,9 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+    service:
+      type: LoadBalancer
+      loadBalancerIP: 10.0.6.56
     tolerations:
     - key: "arm"
       operator: "Exists"
