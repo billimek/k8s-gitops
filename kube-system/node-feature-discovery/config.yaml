@@ -33,12 +33,12 @@ data:
         - name: "coral-tpu"
           matchOn:
             - usbId:
-                class: ["fe"]
-                vendor: ["1a6e"]
-                device: ["089a"]
-        - name: "coral-tpu2"
-          matchOn:
-            - usbId:
-                class: ["ff"]
-                vendor: ["18d1"]
-                device: ["9302"]
+                # class: ["fe"]
+                vendor: ["1a6e", "18d1"]
+                # device: ["089a"]
+        # - name: "coral-tpu2"
+        #   matchOn:
+        #     - usbId:
+        #         class: ["ff"]
+        #         vendor: ["18d1"]
+        #         device: ["9302"]
