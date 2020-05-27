@@ -23,10 +23,15 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - {key: "feature.node.kubernetes.io/custom-alarmdecoder", operator: In, values: ["true"]}
     resources:
       requests:
         memory: 50Mi
         cpu: 15m
       limits:
         memory: 250Mi
-        hostdev.k8s.io/dev_serial_by-id_usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0: 1
