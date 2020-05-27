@@ -1,35 +1,36 @@
-apiVersion: batch/v1beta1
-kind: CronJob
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: tesla-dashcam
   labels:
     app: tesla-dashcam
 spec:
-  schedule: "0 8 * * *"
-  jobTemplate:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: tesla-dashcam
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: tesla-dashcam
     spec:
-      template:
-        spec:
-          restartPolicy: Never
-          containers:
-          - name: tesla-dashcam
-            env:
-            - name: TZ
-              value: America/New_York
-            image: magicalyak/tesla_dashcam:latest
-            args: ["--delete_source", "--skip_existing", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
-            # args: ["--gpu", "--gpu_type=intel", "--enc=x265", "--delete_source", "--skip_existing", "--motion_only", "--output", "/output", "/input"]
-            # resources:
-            #   limits:
-            #     gpu.intel.com/i915: "1"
-            volumeMounts:
-            - mountPath: /input
-              name: media
-              subPath: Videos/Tesla/
-            - mountPath: /output
-              name: media
-              subPath: Videos/tesla_dashcam/
-          volumes:
-          - name: media
-            persistentVolumeClaim:
-              claimName: nfs-media-pvc
+      containers:
+      - name: tesla-dashcam
+        env:
+        - name: TZ
+          value: America/New_York
+        image: billimek/tesla_dashcam:1.0.0
+        args: ["--delete_source", "--skip_existing", "--monitor", "--monitor_trigger", "ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
+        volumeMounts:
+        - mountPath: /input
+          name: media
+          subPath: Videos/Tesla/
+        - mountPath: /output
+          name: media
+          subPath: Videos/tesla_dashcam/
+      volumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: nfs-media-pvc
