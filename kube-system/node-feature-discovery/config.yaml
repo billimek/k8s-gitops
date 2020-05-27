@@ -34,5 +34,5 @@ data:
           matchOn:
             - usbId:
                 # class: ["fe"]
-                vendor: ["1a6e","18d1"]
+                vendor: ["1a6e", "18d1"]
                 # device: ["089a"]
