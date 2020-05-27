@@ -17,6 +17,9 @@ spec:
       repository: us.gcr.io/k8s-artifacts-prod/descheduler/descheduler
       tag: v0.18.0
     schedule: "*/2 * * * *"
+    cmdOptions:
+      v: 3
+      evict-local-storage-pods:
     deschedulerPolicy:
       strategies:
         RemoveDuplicates:
@@ -29,4 +32,4 @@ spec:
         RemovePodsViolatingInterPodAntiAffinity:
           enabled: true
         LowNodeUtilization:
-          enabled: true
+          enabled: false
