@@ -30,6 +30,7 @@ spec:
               - all
             ignore:                 # List of namespaces to be ignored (omitempty), used only with include: all
               - rook-ceph                    # example : include [all], ignore [x,y,z] 
+              - kube-system
           events:                   # List of lifecycle events you want to receive, e.g create, update, delete, error OR all
             - create
             - delete
