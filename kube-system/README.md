@@ -30,6 +30,12 @@ nginx-ingress controller leveraging cert-manager as the central cert store for t
 
 * [nginx/](nginx/)
 
+# node-feature-discovery
+
+Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery) to dynamically label nodes that contain specific USB devices we care about
+
+* [node-feature-discovery](node-feature-discovery/)
+
 # oauth2-proxy
 
 [OAuth2 authenticating proxy](https://github.com/pusher/oauth2_proxy) leveraging Auth0

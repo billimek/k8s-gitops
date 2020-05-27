@@ -22,6 +22,12 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - {key: "feature.node.kubernetes.io/zwave", operator: In, values: ["true"]}
     persistence:
       enabled: true
       storageClass: "nfs-client"
@@ -29,8 +35,5 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
-    resources:
-      limits:
-        hostdev.k8s.io/dev_serial_by-id_usb-0658_0200-if00: 1
   valueFileSecrets:
   - name: "zwave2mqtt-helm-values"
