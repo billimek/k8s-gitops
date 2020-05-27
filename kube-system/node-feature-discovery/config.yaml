@@ -36,7 +36,7 @@ data:
                 class: ["fe"]
                 vendor: ["1a6e"]
                 device: ["089a"]
-        - name: "coral-tpu"
+        - name: "coral-tpu2"
           matchOn:
             - usbId:
                 class: ["ff"]
