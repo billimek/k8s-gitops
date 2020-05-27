@@ -19,7 +19,7 @@ spec:
     schedule: "*/2 * * * *"
     cmdOptions:
       v: 3
-      evict-local-storage-pods: 
+      evict-local-storage-pods: ''
     deschedulerPolicy:
       strategies:
         RemoveDuplicates:
