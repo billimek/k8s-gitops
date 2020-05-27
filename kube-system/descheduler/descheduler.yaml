@@ -1,0 +1,30 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: descheduler
+  namespace: kube-system
+spec:
+  releaseName: descheduler
+  rollback:
+    enabled: false
+  chart:
+    # using direct git repo until https://github.com/kubernetes-sigs/descheduler/pull/298 is merged
+    git: https://github.com/stevehipwell/descheduler/
+    ref: helm-chart
+    path: charts/descheduler
+  values:
+    image:
+      repository: us.gcr.io/k8s-artifacts-prod/descheduler/descheduler
+      tag: v0.18.0
+    schedule: "*/2 * * * *"
+    deschedulerPolicy:
+      strategies:
+        RemoveDuplicates:
+          enabled: true
+        RemovePodsViolatingNodeAffinity:
+          enabled: true
+          params:
+            nodeAffinityType:
+            - requiredDuringSchedulingIgnoredDuringExecution
+        RemovePodsViolatingInterPodAntiAffinity:
+          enabled: true
