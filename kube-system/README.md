@@ -1,3 +1,9 @@
+# descheduler
+
+Leveraging descheduler to automatically evict pods that no longer satisfy their NodeAffinity constraints.  This is used to work in concert with `node-feature-discovery` such that when USB devices are moved from one node to a different node, the pods requiring the USB devices will be properly forced to reschedule to the new location
+
+* [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
+
 # Intel GPU Plugin
 
 Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/tree/master/cmd/gpu_plugin) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via the `gpu.intel.com/i915` node resource
