@@ -78,7 +78,7 @@ spec:
             - "nfd-worker"
           args:
             - "--sleep-interval=60s"
-            - "--sources=custom,usb"
+            - "--sources=custom,usb,pci"
           volumeMounts:
             - name: host-boot
               mountPath: "/host-boot"
