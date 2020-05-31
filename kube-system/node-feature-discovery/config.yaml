@@ -34,4 +34,7 @@ data:
           matchOn:
             - usbId:
                 vendor: ["1a6e", "18d1"]
-
+        - name: "intel-gpu"
+          matchOn:
+            - pciId:
+                vendor: ["8086"]
