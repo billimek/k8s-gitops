@@ -15,7 +15,7 @@ spec:
         app: intel-gpu-plugin
     spec:
       nodeSelector:
-        app: intel-gpu-plugin
+        feature.node.kubernetes.io/custom-intel-gpu: "true"
       containers:
       - name: intel-gpu-plugin
         env:
