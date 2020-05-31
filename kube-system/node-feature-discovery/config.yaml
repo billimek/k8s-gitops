@@ -37,4 +37,5 @@ data:
         - name: "intel-gpu"
           matchOn:
             - pciId:
+                class: ["0300"]
                 vendor: ["8086"]
