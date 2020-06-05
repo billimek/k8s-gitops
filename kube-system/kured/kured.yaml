@@ -21,8 +21,7 @@ spec:
     - key: "arm"	
       operator: "Exists"	
     extraArgs:
-      start-time: 2am
-      end-time: 9am
-      time-zone: "America/New_York"
+      start-time: 7am
+      end-time: 2pm
   valueFileSecrets:	
   - name: "kured-helm-values"
