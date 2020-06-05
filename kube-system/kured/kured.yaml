@@ -23,6 +23,6 @@ spec:
     extraArgs:
       start-time: 2am
       end-time: 9am
-      time-zone: America/New_York
+      time-zone: "America/New_York"
   valueFileSecrets:	
   - name: "kured-helm-values"
