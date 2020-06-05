@@ -1,3 +1,4 @@
+
 ---
 apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
@@ -5,23 +6,18 @@ metadata:
   name: velero
   namespace: velero
   annotations:
-    fluxcd.io/ignore: false
+    fluxcd.io/ignore: "false"
     fluxcd.io/automated: "false"
-    fluxcd.io/tag.chart-image: semver:~v1
 spec:
   releaseName: velero
-  helmVersion: v3
   chart:
     repository: https://vmware-tanzu.github.io/helm-charts
     name: velero
-    version: 2.9.15
+    version: 2.12.0
   values:
-    image:
-      repository: velero/velero
-      tag: v1.3.2
     initContainers:
     - name: velero-plugin-for-aws
-      image: velero/velero-plugin-for-aws:v1.0.1
+      image: velero/velero-plugin-for-aws:v1.1.0
       imagePullPolicy: IfNotPresent
       volumeMounts:
       - mountPath: /target
@@ -31,7 +27,7 @@ spec:
         memory: 300Mi
         cpu: 25m
       limits:
-        memory: 1000Mi
+        memory: 1500Mi
     # tolerations:
     # - key: "arm"
     #   operator: "Exists"
@@ -41,6 +37,7 @@ spec:
         enabled: true
     snapshotsEnabled: false
     deployRestic: true
+    # installCRDs: false
     restic:
       podVolumePath: /var/lib/kubelet/pods
       privileged: false
@@ -52,7 +49,7 @@ spec:
           memory: 200Mi
           cpu: 15m
         limits:
-          memory: 500Mi
+          memory: 2000Mi
     schedules:
       daily-backup:
         schedule: "0 6 * * *"
