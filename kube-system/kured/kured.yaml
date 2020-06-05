@@ -12,7 +12,7 @@ spec:
   chart:	
     repository: https://kubernetes-charts.storage.googleapis.com/	
     name: kured	
-    version: 1.5.01
+    version: 1.5.1
   values:	
     image:	
       repository: raspbernetes/kured	
