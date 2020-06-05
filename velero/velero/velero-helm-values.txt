@@ -10,9 +10,9 @@ configuration:
       publicUrl: https://minio.$DOMAIN
   volumeSnapshotLocation:
     name: aws
-    resticTimeout: 6h
     config:
       region: minio
+  resticTimeout: 6h
 credentials:
   secretContents:
     cloud: |
