@@ -29,6 +29,8 @@ spec:
           args:
             - "--policy-config-file"
             - "/policy-dir/policy.yaml"
+            - "--evict-local-storage-pods"
+            - "''"
             - "--v"
             - "3"
             - "--descheduling-interval"
