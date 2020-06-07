@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: linuxserver/nzbget
-      tag: v21.0-ls55
+      tag: v21.0-ls56
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.52
