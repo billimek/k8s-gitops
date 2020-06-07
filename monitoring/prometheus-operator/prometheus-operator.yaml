@@ -10,7 +10,6 @@ metadata:
     fluxcd.io/tag.grafana: semver:~6
 spec:
   releaseName: prometheus-operator
-  helmVersion: v3
   rollback:
     enable: true
   chart:
@@ -36,9 +35,9 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
-        # tolerations:
-        # - key: "arm"
-        #   operator: "Exists"
+        tolerations:
+        - key: "arm"
+          operator: "Exists"
       ingress:
         enabled: true
         annotations:

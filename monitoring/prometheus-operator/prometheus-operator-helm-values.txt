@@ -44,6 +44,13 @@ prometheus:
       static_configs:
       - targets: 
         - home-assistant.default.svc:8123
+    - job_name: 'upsc-exporter'
+      static_configs:
+      - targets:
+        - proxmox:9102
+        - proxmox-b:9102
+        - proxmox-c:9102
+        - k3s-pi4-c:9102
 grafana:
   ingress:
     hosts: [grafana.$DOMAIN]
