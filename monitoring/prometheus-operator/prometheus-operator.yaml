@@ -29,9 +29,9 @@ spec:
       prometheusConfigReloaderImage:
         repository: quay.io/coreos/prometheus-config-reloader
         tag: v0.39.0
-			configmapReloadImage:
-				repository: jimmidyson/configmap-reload
-				tag: v0.3.0
+      configmapReloadImage:
+        repository: jimmidyson/configmap-reload
+        tag: v0.3.0
     alertmanager:
       alertmanagerSpec:
         storage:
