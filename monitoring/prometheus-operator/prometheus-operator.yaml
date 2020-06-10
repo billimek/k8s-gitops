@@ -38,9 +38,9 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
-        tolerations:
-        - key: "arm"
-          operator: "Exists"
+       # tolerations:
+       # - key: "arm"
+       #   operator: "Exists"
       ingress:
         enabled: true
         annotations:
