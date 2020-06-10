@@ -26,6 +26,9 @@ spec:
           memory: 2000Mi
     prometheusOperator:
       createCustomResource: true
+      prometheusConfigReloaderImage:
+        repository: quay.io/coreos/prometheus-config-reloader
+        tag: v0.39.0
     alertmanager:
       alertmanagerSpec:
         storage:
