@@ -15,9 +15,9 @@ spec:
   rollback:
     enable: true
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://billimek.com/billimek-charts/
     name: home-assistant
-    version: 0.13.3
+    version: 1.0.0
   values:
     image:
       repository: homeassistant/home-assistant
