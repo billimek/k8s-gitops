@@ -15,7 +15,7 @@ spec:
     version: 1.2.2
   values:
     image: itzg/minecraft-server
-    imageTag: latest
+    imageTag: adopt13
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
