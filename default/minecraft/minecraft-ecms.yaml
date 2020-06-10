@@ -6,13 +6,12 @@ metadata:
   namespace: default
 spec:
   releaseName: mc-ecms
-  helmVersion: v3
   rollback:
     enable: true
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://itzg.github.io/minecraft-server-charts/
     name: minecraft
-    version: 1.2.2
+    version: 2.0.0
   values:
     image: itzg/minecraft-server
     imageTag: latest
