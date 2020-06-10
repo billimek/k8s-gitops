@@ -29,6 +29,9 @@ spec:
       prometheusConfigReloaderImage:
         repository: quay.io/coreos/prometheus-config-reloader
         tag: v0.39.0
+			configmapReloadImage:
+				repository: jimmidyson/configmap-reload
+				tag: v0.3.0
     alertmanager:
       alertmanagerSpec:
         storage:
@@ -38,9 +41,9 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
-       # tolerations:
-       # - key: "arm"
-       #   operator: "Exists"
+        tolerations:
+        - key: "arm"
+          operator: "Exists"
       ingress:
         enabled: true
         annotations:
@@ -106,9 +109,9 @@ spec:
       # image:
         # repository: grafana/grafana
         # tag: 6.5.2
-      # tolerations:
-      # - key: "arm"
-      #   operator: "Exists"
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
       deploymentStrategy:
         type: Recreate
       podAnnotations:
@@ -331,9 +334,9 @@ spec:
               resources:
                 requests:
                   storage: 100Gi
-        # tolerations:
-        # - key: "arm"
-        #   operator: "Exists"
+        tolerations:
+        - key: "arm"
+          operator: "Exists"
   valuesFrom:
   - secretKeyRef:
       name: prometheus-operator-helm-values
