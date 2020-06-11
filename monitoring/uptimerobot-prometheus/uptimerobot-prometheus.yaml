@@ -1,0 +1,27 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: uptimerobot-prometheus
+  namespace: monitoring
+  annotations:
+    fluxcd.io/ignore: false
+spec:
+  releaseName: uptimerobot-prometheus
+  rollback:
+    enable: true
+  chart:
+    repository: https://billimek.com/billimek-charts/
+    name: uptimerobot-prometheus
+    version: 1.0.0
+  values:
+    image:
+      repository: billimek/prometheus-uptimerobot-exporter
+      tag: 0.0.1
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
+    serviceMonitor:
+      enabled: true
+  valueFileSecrets:
+  - name: "uptimerobot-prometheus-helm-values"
