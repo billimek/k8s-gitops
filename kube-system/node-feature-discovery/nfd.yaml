@@ -62,7 +62,7 @@ spec:
               fieldRef:
                 fieldPath: spec.nodeName
           # using adaptant's custom image until there are proper multi-arch images
-          image: adaptant/node-feature-discovery:latest
+          image: raspbernetes/node-feature-discovery:b1a8fb1dee28121f602bd8658a9f67b5bae204ec
           name: nfd-master
           command:
             - "nfd-master"
@@ -72,7 +72,7 @@ spec:
               fieldRef:
                 fieldPath: spec.nodeName
           # using adaptant's custom image until there are proper multi-arch images
-          image: adaptant/node-feature-discovery:latest
+          image: raspbernetes/node-feature-discovery:b1a8fb1dee28121f602bd8658a9f67b5bae204ec
           name: nfd-worker
           command:
             - "nfd-worker"
