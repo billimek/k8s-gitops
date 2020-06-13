@@ -16,7 +16,7 @@ spec:
     csi:
       kubeletDirPath: /var/lib/kubelet
       cephcsi:
-        image: jamesorlakin/multiarch-cephcsi:2.1.0
+        image: raspbernetes/ceph-csi:v2.1.2
       registrar:
         image: raspbernetes/csi-node-driver-registrar:1.3.0
       provisioner:
