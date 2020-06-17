@@ -59,7 +59,6 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-              - status.availableReplicas
         - name: statefulset
           namespaces:
             include:  
@@ -75,7 +74,6 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-              - status.readyReplicas
         - name: ingress
           namespaces:
             include:  
