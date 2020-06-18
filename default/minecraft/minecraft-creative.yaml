@@ -44,6 +44,5 @@ spec:
       difficulty: normal
       serviceType: LoadBalancer
       gameMode: creative
-      ops: "83d9416e-216e-4ffb-81ae-d2bd455a398a"
       motd: "billimek minecraft server (creative)"
       loadBalancerIP: 10.0.6.101

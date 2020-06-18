@@ -50,6 +50,5 @@ spec:
       difficulty: normal
       serviceType: LoadBalancer
       gameMode: survival
-      ops: "83d9416e-216e-4ffb-81ae-d2bd455a398a"
       motd: "billimek minecraft server (survival)"
       loadBalancerIP: 10.0.6.102
