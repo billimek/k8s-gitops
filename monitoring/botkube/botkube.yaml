@@ -158,7 +158,6 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-              - status.numberReady
         - name: job
           namespaces:
             include:  
