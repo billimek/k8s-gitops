@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://vernemq.github.io/docker-vernemq
     name: vernemq
-    version: 1.6.2
+    version: 1.6.3
   values:
     image:
       repository: vernemq/vernemq
@@ -37,3 +37,13 @@ spec:
         value: "yes"
       - name: DOCKER_VERNEMQ_ALLOW_ANONYMOUS
         value: "on"
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - vernemq
+          topologyKey: "kubernetes.io/hostname"
