@@ -37,13 +37,4 @@ spec:
         value: "yes"
       - name: DOCKER_VERNEMQ_ALLOW_ANONYMOUS
         value: "on"
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - vernemq
-          topologyKey: "kubernetes.io/hostname"
+    podAntiAffinity: hard
