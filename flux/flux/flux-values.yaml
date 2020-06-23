@@ -2,6 +2,8 @@ helmOperator:
   create: false
 git:
   url: "git@github.com:billimek/k8s-gitops"
+image:
+  repository: fluxcd/flux-prerelease:master-c02b716f
 registry:
   rps: 1
   burst: 1
