@@ -14,14 +14,14 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: minio
-    version: 5.0.27
+    version: 5.0.30
   values:
     image:
       repository: jessestuart/minio
-      tag: RELEASE.2020-04-23T00-58-49Z
+      tag: RELEASE.2020-06-14T18-32-17Z
     mcImage:
       repository: jessestuart/mc
-      tag: RELEASE.2020-04-17T08-55-48Z
+      tag: RELEASE.2020-06-26T19-56-55Z
     helmKubectlJqImage:
       repository: drnic/kubectl
       tag: 1.16
