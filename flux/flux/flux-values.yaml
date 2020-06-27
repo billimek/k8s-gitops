@@ -4,7 +4,7 @@ git:
   url: "git@github.com:billimek/k8s-gitops"
 image:
   repository: fluxcd/flux-prerelease
-  tag: master-c02b716f
+  tag: master-1f0f862b
 registry:
   rps: 1
   burst: 1
