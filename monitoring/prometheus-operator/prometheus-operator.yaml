@@ -106,9 +106,9 @@ spec:
           - node
           targetLabel: instance
     grafana:
-      # image:
-        # repository: grafana/grafana
-        # tag: 6.5.2
+      image:
+        repository: grafana/grafana
+        tag: 7.0.4
       tolerations:
       - key: "arm"
         operator: "Exists"
@@ -186,6 +186,9 @@ spec:
           uptimerobot:
             url: https://raw.githubusercontent.com/lekpamartin/uptimerobot_exporter/master/dashboards/grafana.json
             datasource: Prometheus
+          1-node-exporter:
+            url: https://grafana.com/api/dashboards/11074/revisions/4/download
+            datasource: Prometheus 
           # cable-modem-stats:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
           #   datasource: influxdb
@@ -203,54 +206,54 @@ spec:
           #   datasource: Prometheus
         teslamate:
           charge-level:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/charge-level.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/charge-level.json
             # datasource: TeslaMate
           charges:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/charges.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/charges.json
             # datasource: TeslaMate
           charging-stats:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/charging-stats.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/charging-stats.json
             # datasource: TeslaMate
           drive-stats:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/drive-stats.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/drive-stats.json
             # datasource: TeslaMate
           drives:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/drives.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/drives.json
             # datasource: TeslaMate
           efficiency:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/efficiency.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/efficiency.json
             # datasource: TeslaMate
           locations:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/locations.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/locations.json
             # datasource: TeslaMate
           mileage:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/mileage.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/mileage.json
             # datasource: TeslaMate
           overview:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/overview.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/overview.json
             # datasource: TeslaMate
           projected-range:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/projected-range.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/projected-range.json
             # datasource: TeslaMate
           states:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/states.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/states.json
             # datasource: TeslaMate
           trip:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/trip.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/trip.json
             # datasource: TeslaMate
           updates:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/updates.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/updates.json
             # datasource: TeslaMate
           vampire-drain:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/vampire-drain.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/vampire-drain.json
             # datasource: TeslaMate
           visited:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/visited.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/visited.json
             # datasource: TeslaMate
           charge-details:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/internal/charge-details.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/internal/charge-details.json
           drive-details:
-            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.3/grafana/dashboards/internal/drive-details.json
+            url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/internal/drive-details.json
       additionalDataSources:
       - name: loki
         type: loki
