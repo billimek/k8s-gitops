@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: plex
-    version: 1.0.0
+    version: 1.3.0
   values:
     image:
       repository: plexinc/pms-docker
