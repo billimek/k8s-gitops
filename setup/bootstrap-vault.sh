@@ -79,6 +79,8 @@ initVault() {
     echo "SAVE THESE VALUES!"
 
     REPLIACS_LIST=($REPLIACS)
+    echo "sleeping 10 seconds to allow first vault to be ready"
+    sleep 10
     for replica in "${REPLIACS_LIST[@]:1}"; do
       echo "joining pod vault-${replica} to raft cluster"
       kubectl -n kube-system exec "vault-${replica}" -- vault operator raft join http://vault-0.vault-internal:8200 || exit 1
