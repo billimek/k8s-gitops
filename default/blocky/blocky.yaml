@@ -24,8 +24,6 @@ spec:
       tag: v0.8
     replicas: 2
     timeZone: "America/New_York"
-
-    # blocky configuration
     config:
       upstream:
         externalResolvers:
@@ -40,21 +38,33 @@ spec:
       blocking:
         blackLists:
           ads:
-          - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
           - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+          - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
           - https://mirror1.malwaredomains.com/files/justdomains
           - http://sysctl.org/cameleon/hosts
           - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
           - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
-          special: []
-          #   - https://hosts-file.net/ad_servers.txt
+          kids:
+          - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts
         whiteLists:
           ads:
           - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
+          - https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/white.list
         clientGroupsBlock:
           default:
           - ads
-            # - special
+          Ansleys-XR.local:
+          - ads
+          - kids
+          ansleys-pc.local:
+          - ads
+          - kids
+          Ansleys-iPad.local:
+          - ads
+          - kids
+          Brinleys-iPad-2.local:
+          - ads
+          - kids
       clientLookup:
         upstream: udp:10.0.7.1
       prometheus:
@@ -62,8 +72,6 @@ spec:
         path: /metrics
       httpPort: 4000
       logLevel: info
-
-    # Probes configuration
     probes:
       liveness:
         failureThreshold: 5
@@ -75,7 +83,6 @@ spec:
         initialDelaySeconds: 5
         failureThreshold: 30
         periodSeconds: 10
-
     serviceTCP:
       enabled: true
       type: LoadBalancer
@@ -83,7 +90,6 @@ spec:
       loadBalancerIP: 10.0.6.100
       annotations:
         metallb.universe.tf/allow-shared-ip: blocky
-
     serviceUDP:
       enabled: true
       type: LoadBalancer
@@ -91,14 +97,11 @@ spec:
       loadBalancerIP: 10.0.6.100
       annotations:
         metallb.universe.tf/allow-shared-ip: blocky
-
     serviceMonitor:
       enabled: true
-
     tolerations:
     - key: "arm"
       operator: "Exists"
-
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -109,7 +112,6 @@ spec:
               values:
               - blocky
           topologyKey: "kubernetes.io/hostname"
-
     resources:
       requests:
         memory: 280Mi
