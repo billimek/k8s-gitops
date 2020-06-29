@@ -65,6 +65,9 @@ spec:
           Brinleys-iPad-2.local:
           - ads
           - kids
+          Jeffs-Xs.local:
+          - ads
+          - kids
       clientLookup:
         upstream: udp:10.0.7.1
       prometheus:
