@@ -1,0 +1,43 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: mc-br
+  namespace: default
+spec:
+  releaseName: mc-br
+  rollback:
+    enable: true
+  chart:
+    repository: https://itzg.github.io/minecraft-server-charts/
+    name: minecraft-bedrock
+    version: 1.0.0
+  values:
+    # image: itzg/minecraft-bedrock-server
+    # imageTag: latest
+    persistence:
+      storageClass: "rook-ceph-block"
+      dataDir:
+        enabled: true
+        Size: 10Gi
+    # resources:
+    #   requests:
+    #     memory: 1500Mi
+    #     cpu: 250m
+    #   limits:
+    #     memory: 2000Mi
+    # livenessProbe:
+    #   initialDelaySeconds: 120
+    #   periodSeconds: 5
+    # readinessProbe:
+    #   initialDelaySeconds: 120
+    #   periodSeconds: 5
+    podAnnotations:
+      backup.velero.io/backup-volumes: datadir
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      difficulty: normal
+      gameMode: creative
+      serviceType: LoadBalancer
+      loadBalancerIP: 10.0.6.105
