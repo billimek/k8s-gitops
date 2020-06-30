@@ -44,6 +44,9 @@ spec:
         tolerations:
         - key: "arm"
           operator: "Exists"
+        podMetadata:
+          annotations:
+            backup.velero.io/backup-volumes: alertmanager-prometheus-operator-alertmanager-db
       ingress:
         enabled: true
         annotations:
@@ -348,7 +351,6 @@ spec:
         podMetadata:
           annotations:
             backup.velero.io/backup-volumes: prometheus-prometheus-operator-prometheus-db
-            backup.velero.io/backup-volumes: alertmanager-prometheus-operator-alertmanager-db
   valuesFrom:
   - secretKeyRef:
       name: prometheus-operator-helm-values
