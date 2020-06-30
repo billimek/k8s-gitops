@@ -45,7 +45,7 @@ spec:
           - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
           - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
           kids:
-          - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts
+          - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts
         whiteLists:
           ads:
           - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
