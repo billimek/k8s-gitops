@@ -345,6 +345,9 @@ spec:
         tolerations:
         - key: "arm"
           operator: "Exists"
+        podMetadata:
+          annotations:
+            backup.velero.io/backup-volumes: prometheus-prometheus-operator-prometheus-db
   valuesFrom:
   - secretKeyRef:
       name: prometheus-operator-helm-values
