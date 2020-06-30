@@ -2,10 +2,10 @@
 apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
-  name: mc-br
+  name: mcsv-br
   namespace: default
 spec:
-  releaseName: mc-br
+  releaseName: mcsv-br
   rollback:
     enable: true
   chart:
@@ -36,7 +36,7 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       difficulty: normal
-      gameMode: creative
+      gameMode: survival
       levelName: world
       serviceType: LoadBalancer
-      loadBalancerIP: 10.0.6.103
+      loadBalancerIP: 10.0.6.104
