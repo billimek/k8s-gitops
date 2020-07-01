@@ -38,5 +38,6 @@ spec:
       difficulty: normal
       gameMode: survival
       levelName: world
+      serverName: "(survival) billimek minecraft"
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.104

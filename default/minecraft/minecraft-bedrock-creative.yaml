@@ -38,5 +38,6 @@ spec:
       difficulty: normal
       gameMode: creative
       levelName: world
+      serverName: "(creative) billimek minecraft"
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.103
