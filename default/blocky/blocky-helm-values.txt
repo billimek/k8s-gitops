@@ -8,4 +8,4 @@ config:
   customDNS:
       mapping:
         mcsv.$DOMAIN: 10.0.6.102
-        ecms.$DOMAIN: 10.0.6.103
+        mcsv-br.$DOMAIN: 10.0.6.104
