@@ -3,11 +3,11 @@ helmOperator:
 git:
   url: "git@github.com:billimek/k8s-gitops"
 image:
-  repository: fluxcd/flux
+  repository: docker.io/fluxcd/flux
   tag: 1.19.0
 registry:
-  rps: 1
-  burst: 1
+  rps: 50
+  burst: 50
 memcached:
   tolerations:
   - key: "arm"
