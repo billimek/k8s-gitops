@@ -3,8 +3,8 @@ helmOperator:
 git:
   url: "git@github.com:billimek/k8s-gitops"
 image:
-  repository: fluxcd/flux-prerelease
-  tag: master-1f0f862b
+  repository: fluxcd/flux
+  tag: 1.19.0
 registry:
   rps: 1
   burst: 1
