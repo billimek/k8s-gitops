@@ -21,7 +21,7 @@ spec:
   values:
     image:
       repository: spx01/blocky
-      tag: v0.8
+      tag: v0.9.1
     replicas: 2
     timeZone: "America/New_York"
     config:
@@ -63,6 +63,9 @@ spec:
           - ads
           - kids
           Brinleys-iPad-2.local:
+          - ads
+          - kids
+          brinley-pc.local:
           - ads
           - kids
       clientLookup:
