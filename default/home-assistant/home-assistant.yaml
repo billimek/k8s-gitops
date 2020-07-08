@@ -5,7 +5,7 @@ metadata:
   name: home-assistant
   namespace: default
   annotations:
-    fluxcd.io/ignore: false
+    fluxcd.io/ignore: "false"
     fluxcd.io/automated: "true"
     fluxcd.io/tag.chart-image: semver:~0.
     filter.fluxcd.io/vscode: "regex:^3.[0-9]+-.*$"

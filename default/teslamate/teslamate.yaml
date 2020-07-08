@@ -5,7 +5,7 @@ metadata:
   name: teslamate
   namespace: default
   annotations:
-    fluxcd.io/ignore: false
+    fluxcd.io/ignore: "false"
     fluxcd.io/automated: "false"
     fluxcd.io/tag.chart-image: semver:~1.
     fluxcd.io/tag.postgresql: semver:~11

@@ -5,7 +5,7 @@ metadata:
   name: loki
   namespace: logs
   annotations:
-    fluxcd.io/ignore: false
+    fluxcd.io/ignore: "false"
     fluxcd.io/automated: "false"
     fluxcd.io/tag.loki: semver:~v1.
     fluxcd.io/tag.promtail: semver:~v1.

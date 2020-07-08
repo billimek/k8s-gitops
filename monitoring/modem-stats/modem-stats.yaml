@@ -5,7 +5,7 @@ metadata:
   name: modem-stats
   namespace: monitoring
   annotations:
-    fluxcd.io/ignore: false
+    fluxcd.io/ignore: "false"
 spec:
   releaseName: modem-stats
   helmVersion: v3
