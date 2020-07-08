@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: sonarr
-    version: 4.1.0
+    version: 4.1.1
   values:
     image:
       repository: linuxserver/sonarr

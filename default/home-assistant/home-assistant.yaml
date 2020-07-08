@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: home-assistant
-    version: 1.0.0
+    version: 1.0.1
   values:
     image:
       repository: homeassistant/home-assistant
