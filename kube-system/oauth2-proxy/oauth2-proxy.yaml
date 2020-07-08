@@ -9,11 +9,10 @@ metadata:
     fluxcd.io/tag.chart-image: semver:~v5
 spec:
   releaseName: oauth2-proxy
-  helmVersion: v3
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: oauth2-proxy
-    version: 2.4.1
+    version: 3.2.0
   values:
     image:
       repository: "quay.io/pusher/oauth2_proxy"
