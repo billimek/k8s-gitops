@@ -33,12 +33,8 @@ spec:
         storageClass: "rook-ceph-block"
         size: 2Gi
       media:
-        enabled: false
-      extraExistingClaimMounts:
-        - name: media
-          existingClaim: nfs-media-pvc
-          mountPath: /media
-          readOnly: false
+        enabled: true
+        existingClaim: nfs-media-pvc
     resources:
       requests:
         memory: 350Mi
