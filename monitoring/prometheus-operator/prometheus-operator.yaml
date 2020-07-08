@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
-    version: 8.15.12
+    version: 8.15.14
   values:
     server:
       resources:
@@ -183,7 +183,7 @@ spec:
             url: https://grafana.com/api/dashboards/11055/revisions/2/download
             datasource: Prometheus
           flux:
-            url: https://grafana.com/api/dashboards/10475/revisions/1/download
+            url: https://raw.githubusercontent.com/fluxcd/flux/master/chart/flux/dashboards/flux-dashboard.json
             datasource: Prometheus
           blocky:
             url: https://raw.githubusercontent.com/0xERR0R/blocky/master/docs/blocky-grafana.json
