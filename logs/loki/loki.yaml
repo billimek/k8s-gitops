@@ -14,12 +14,12 @@ spec:
   chart:
     repository: https://grafana.github.io/loki/charts
     name: loki-stack
-    version: 0.34.2
+    version: 0.38.1
   values:
     loki:
-      image:
-        repository: grafana/loki
-        tag: 1.4.1
+      # image:
+      #   repository: grafana/loki
+      #   tag: 1.5.0
       persistence:
         enabled: true
         size: 50Gi
@@ -30,9 +30,9 @@ spec:
       - key: "arm"
         operator: "Exists"
     promtail:
-      image:
-        repository: grafana/promtail
-        tag: 1.4.1
+      # image:
+      #   repository: grafana/promtail
+      #   tag: 1.5.0
       serviceMonitor:
         enabled: true
       tolerations:
