@@ -18,7 +18,7 @@ spec:
     image: itzg/minecraft-server
     imageTag: adopt13
     persistence:
-      storageClass: "nfs-client"
+      storageClass: "rook-cephfs"
       dataDir:
         enabled: true
         Size: 10Gi
