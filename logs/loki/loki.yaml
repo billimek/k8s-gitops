@@ -50,6 +50,8 @@ spec:
         relabel_configs:
         - source_labels: ['__syslog_message_hostname']
           target_label: 'host'
+        - source_labels: ['__syslog_message_app_name']
+          target_label: 'app'
       syslogService:
         enabled: true
         type: LoadBalancer
