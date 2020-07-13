@@ -26,6 +26,10 @@ spec:
         storageClassName: nfs-client
       serviceMonitor:
         enabled: true
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "http-metrics"
+        backup.velero.io/backup-volumes: storage
       tolerations:
       - key: "arm"
         operator: "Exists"
@@ -37,8 +41,6 @@ spec:
         enabled: true
       tolerations:
       - key: "arm"
-        operator: "Exists"
-      - key: "armhf"
         operator: "Exists"
       extraScrapeConfigs:
       - job_name: syslog
