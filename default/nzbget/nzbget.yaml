@@ -38,8 +38,8 @@ spec:
         enabled: true
         storageClass: "nfs-client"
         size: 30Gi
-    # podAnnotations:
-    #   backup.velero.io/backup-volumes: config
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
     tolerations:
     - key: "arm"
       operator: "Exists"
