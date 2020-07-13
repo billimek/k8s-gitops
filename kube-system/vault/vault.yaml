@@ -22,6 +22,8 @@ spec:
       tolerations: |
         - key: "arm"
           operator: "Exists"
+      annotations:
+        backup.velero.io/backup-volumes: data
       resources:
         requests:
           memory: 256Mi
