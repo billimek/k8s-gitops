@@ -63,5 +63,7 @@ spec:
         tolerations:
         - key: "arm"
           operator: "Exists"
+        podAnnotations:
+          backup.velero.io/backup-volumes: data
   valueFileSecrets:
   - name: "teslamate-helm-values"
