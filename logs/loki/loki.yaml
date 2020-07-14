@@ -29,7 +29,7 @@ spec:
       podAnnotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "http-metrics"
-        backup.velero.io/backup-volumes: storage
+        # backup.velero.io/backup-volumes: storage
       tolerations:
       - key: "arm"
         operator: "Exists"
