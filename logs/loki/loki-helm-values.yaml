@@ -2,7 +2,7 @@ apiVersion: ricoberger.de/v1alpha1
 kind: VaultSecret
 metadata:
   name: loki-helm-values
-  namespace: default
+  namespace: logs
 spec:
   keys:
     - values.yaml
