@@ -139,7 +139,6 @@ spec:
         annotations:
           kubernetes.io/ingress.class: "nginx"
       plugins:
-      - grafana-image-renderer
       - natel-discrete-panel
       - pr0ps-trackmap-panel
       - grafana-piechart-panel
