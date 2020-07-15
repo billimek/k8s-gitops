@@ -23,4 +23,4 @@ spec:
       server: "10.0.7.7"
       path: "/tank/data/k8s-nfs"
     storageClass:
-      defaultClass: true
+      defaultClass: false
