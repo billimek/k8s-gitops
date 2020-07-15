@@ -54,7 +54,7 @@ spec:
         tag: '11.7'
       persistence:
         enabled: true
-        storageClass: nfs-client
+        storageClass: rook-ceph-block
       shmVolume:
         enabled: false
       volumePermissions:
