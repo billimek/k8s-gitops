@@ -339,7 +339,7 @@ spec:
 #          tag: v2.9.1
         replicas: 2
         externalLabels: 
-          prometheus_replica: true
+          prometheus_replica: "true"
         ruleSelector: {}
         ruleNamespaceSelector: {}
         ruleSelectorNilUsesHelmValues: false
