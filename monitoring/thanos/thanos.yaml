@@ -21,6 +21,8 @@ spec:
       repository: quay.io/thanos/thanos
       tag: v0.13.0
     query:
+      replicaLabels: 
+        - prometheus_replica
       http:
         ingress:
           enabled: true
