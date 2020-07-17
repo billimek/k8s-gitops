@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://itzg.github.io/minecraft-server-charts/
     name: minecraft
-    version: 2.0.4
+    version: 2.0.5
   values:
     image: itzg/minecraft-server
     imageTag: adopt13
