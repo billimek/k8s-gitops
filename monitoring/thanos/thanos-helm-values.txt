@@ -5,7 +5,7 @@ objstore:
     endpoint: "minio.default.svc:9000"
     region: ""
     access_key: "${MINIO_ACCESS_KEY}"
-    insecure: false
+    insecure: true
     signature_version2: false
     encrypt_sse: false
     secret_key: "${MINIO_SECRET_KEY}"
