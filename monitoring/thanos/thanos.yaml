@@ -20,6 +20,29 @@ spec:
     image:
       repository: quay.io/thanos/thanos
       tag: v0.13.0
+    query:
+      http:
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: "nginx"
+    objstore:
+      type: S3
+      config:
+        bucket: "thanos"
+        endpoint: "minio.default.svc:9000"
+        region: ""
+        insecure: true
+        signature_version2: false
+        encrypt_sse: false
+        put_user_metadata: {}
+        http_config:
+          idle_conn_timeout: 0s
+          response_header_timeout: 0s
+          insecure_skip_verify: false
+        trace:
+          enable: false
+        part_size: 0
   valuesFrom:
   - secretKeyRef:
       name: thanos-helm-values
