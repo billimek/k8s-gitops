@@ -17,9 +17,9 @@ spec:
     name: thanos
     version: 0.3.23
   values:
-    # image:
-    #   repository: quay.io/thanos/thanos
-    #   tag: v0.13.0
+    image:
+      repository: quay.io/thanos/thanos
+      tag: v0.13.0
   valuesFrom:
   - secretKeyRef:
       name: thanos-helm-values
