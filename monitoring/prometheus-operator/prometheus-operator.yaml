@@ -260,7 +260,16 @@ spec:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/internal/charge-details.json
           drive-details:
             url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.19.4/grafana/dashboards/internal/drive-details.json
+      sidecar:
+        datasources:
+          enabled: true
+          defaultDatasourceEnabled: false
       additionalDataSources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://thanos-query-http:10902/
+        isDefault: true
       - name: loki
         type: loki
         access: proxy
@@ -352,6 +361,12 @@ spec:
         podMetadata:
           annotations:
             backup.velero.io/backup-volumes: prometheus-prometheus-operator-prometheus-db
+        thanos:
+          image: quay.io/thanos/thanos:v0.13.0
+          version: v0.13.0
+          objectStorageConfig:
+            name: thanos
+            key: object-store.yaml
   valuesFrom:
   - secretKeyRef:
       name: prometheus-operator-helm-values
