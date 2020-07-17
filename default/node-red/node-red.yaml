@@ -23,7 +23,7 @@ spec:
       tag: 1.1.2-12-minimal
     persistence:
       enabled: true
-      storageClass: "nfs-client"
+      storageClass: "rook-ceph-block"
     tolerations:
     - key: "arm"
       operator: "Exists"
