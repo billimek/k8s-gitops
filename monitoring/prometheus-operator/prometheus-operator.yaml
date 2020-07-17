@@ -356,9 +356,9 @@ spec:
               resources:
                 requests:
                   storage: 100Gi
-        tolerations:
-        - key: "arm"
-          operator: "Exists"
+        # tolerations:
+        # - key: "arm"
+        #   operator: "Exists"
         podMetadata:
           annotations:
             backup.velero.io/backup-volumes: prometheus-prometheus-operator-prometheus-db
