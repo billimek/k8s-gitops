@@ -175,6 +175,7 @@ loadSecretsToVault() {
   kvault "logs/loki/loki-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"
   kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
+  kvault "monitoring/thanos/thanos-helm-values.txt"
   kvault "monitoring/uptimerobot-prometheus/uptimerobot-prometheus-helm-values.txt"
   kvault "default/blocky/blocky-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
