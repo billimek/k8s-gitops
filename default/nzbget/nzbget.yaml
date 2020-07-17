@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: nzbget
-    version: 3.2.0
+    version: 3.2.1
   values:
     image:
       repository: linuxserver/nzbget
@@ -36,7 +36,7 @@ spec:
         claimName: nfs-media-pvc
       config:
         enabled: true
-        storageClass: "nfs-client"
+        storageClass: "rook-ceph-block"
         size: 30Gi
     podAnnotations:
       backup.velero.io/backup-volumes: config
