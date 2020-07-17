@@ -346,7 +346,7 @@ spec:
         podMonitorSelector: {}
         podMonitorNamespaceSelector: {}
         podMonitorSelectorNilUsesHelmValues: false
-        retention: 30d
+        retention: 15d
         enableAdminAPI: true
         storageSpec:
           volumeClaimTemplate:
