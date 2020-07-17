@@ -352,6 +352,12 @@ spec:
         podMetadata:
           annotations:
             backup.velero.io/backup-volumes: prometheus-prometheus-operator-prometheus-db
+        thanos:
+          image: quay.io/thanos/thanos:v0.13.0
+          version: v0.13.0
+          objectStorageConfig:
+            name: thanos
+            key: object-store.yaml
   valuesFrom:
   - secretKeyRef:
       name: prometheus-operator-helm-values
