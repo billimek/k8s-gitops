@@ -26,6 +26,8 @@ spec:
           enabled: true
           annotations:
             kubernetes.io/ingress.class: "nginx"
+    compact:
+      retentionResolution1h: 5y
     objstore:
       type: S3
       config:
