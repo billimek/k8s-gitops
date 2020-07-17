@@ -13,6 +13,9 @@ spec:
     path: .
   values:
     server:
+      dataStorage:
+        enabled: true
+        storageClass: "rook-ceph-block"
       extraEnvironmentVars:
         GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/kms-vault/account.json
       extraVolumes:
