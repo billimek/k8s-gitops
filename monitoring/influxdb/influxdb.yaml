@@ -10,7 +10,6 @@ metadata:
     fluxcd.io/tag.chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+)$'
 spec:
   releaseName: influxdb
-  helmVersion: v3
   rollback:
     enable: true
   chart:
@@ -26,7 +25,7 @@ spec:
     persistence:
       enabled: true
       size: 50Gi
-      storageClass: nfs-client
+      storageClass: rook-ceph-block
     resources:
       requests:
         memory: 2000Mi
