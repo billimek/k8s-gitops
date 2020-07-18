@@ -337,7 +337,7 @@ spec:
 #        image:
 #          repository: quay.io/prometheus/prometheus
 #          tag: v2.9.1
-        replicas: 2
+        replicas: 1
         externalLabels: 
           prometheus_replica: "true"
         ruleSelector: {}
