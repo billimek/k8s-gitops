@@ -28,7 +28,7 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "nginx"
     timezone: "America/New_York"
-    service:
+    serviceTCP:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.53
     persistence:
