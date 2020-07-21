@@ -31,6 +31,15 @@ spec:
     serviceTCP:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.53
+      externalTrafficPolicy: Local
+      annotations:
+        metallb.universe.tf/allow-shared-ip: plex
+    serviceUDP:
+      type: LoadBalancer
+      loadBalancerIP: 10.0.6.53
+      externalTrafficPolicy: Local
+      annotations:
+        metallb.universe.tf/allow-shared-ip: plex
     persistence:
       transcode:
         enabled: true
