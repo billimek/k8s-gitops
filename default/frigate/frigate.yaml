@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: blakeblackshear/frigate
-      tag: 0.5.1
+      tag: 0.5.2
     #   pullPolicy: Always
     coral:
       enabled: true
