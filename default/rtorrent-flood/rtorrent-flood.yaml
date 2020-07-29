@@ -40,6 +40,7 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+        nginx.ingress.kubernetes.io/proxy-buffering: "off"
     podAnnotations:
       backup.velero.io/backup-volumes: config
     persistence:
