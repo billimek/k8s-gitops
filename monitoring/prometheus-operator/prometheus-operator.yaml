@@ -341,7 +341,7 @@ spec:
         annotations:
           kubernetes.io/ingress.class: "nginx"
       prometheusSpec:
-#        image:
+       image:
 #          repository: quay.io/prometheus/prometheus
          tag: v2.20.0
         replicas: 2
