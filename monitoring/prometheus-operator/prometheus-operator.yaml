@@ -7,7 +7,7 @@ metadata:
   annotations:
     fluxcd.io/ignore: "false"
     fluxcd.io/automated: "false"
-    fluxcd.io/tag.grafana: semver:~6
+    fluxcd.io/tag.grafana: semver:~7
 spec:
   releaseName: prometheus-operator
   rollback:
@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.storage.googleapis.com/
     name: prometheus-operator
-    version: 8.16.1
+    version: 9.3.0
   values:
     defaultRules:
       rules:
@@ -96,6 +96,13 @@ spec:
                     {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
                     {{ end }}
                   {{ end }}
+        inhibit_rules:
+        - source_match:
+            severity: 'critical'
+          target_match:
+            severity: 'warning'
+          # Apply inhibition if the alertname is the same.
+          equal: ['alertname', 'namespace']
     nodeExporter:
       serviceMonitor:
         relabelings:
@@ -113,9 +120,9 @@ spec:
           - node
           targetLabel: instance
     grafana:
-      image:
-        repository: grafana/grafana
-        tag: 7.0.4
+      # image:
+      #   repository: grafana/grafana
+      #   tag: 7.0.4
       tolerations:
       - key: "arm"
         operator: "Exists"
@@ -336,7 +343,7 @@ spec:
       prometheusSpec:
 #        image:
 #          repository: quay.io/prometheus/prometheus
-#          tag: v2.9.1
+         tag: v2.20.0
         replicas: 2
         replicaExternalLabelName: "replica"
         ruleSelector: {}
