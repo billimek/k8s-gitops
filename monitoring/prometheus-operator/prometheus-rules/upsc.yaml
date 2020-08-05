@@ -1,0 +1,37 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: upsc-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: upsc.rules
+    rules:
+    - alert: UPS5MinutesRemain
+      annotations:
+        description: UPS almost depleted
+        summary: UPS {{$labels.instance}} has less than 5 minutes of battery left
+      expr: upsc_battery_runtime/60 < 5
+      for: 30s
+      labels:
+        severity: critical       
+    - alert: UPS10MinutesRemain
+      annotations:
+        description: UPS almost depleted
+        summary: UPS {{$labels.instance}} has less than 10 minutes of battery left
+      expr: upsc_battery_runtime/60 < 10
+      for: 30s
+      labels:
+        severity: critical
+    # - alert: UPSOnBattery
+    #   annotations:
+    #     description: UPS is running on its battery
+    #     summary: UPS {{$labels.instance}} is running on batteries
+    #   expr: TBD > 0
+    #   for: 5m
+    #   labels:
+    #     severity: critical
