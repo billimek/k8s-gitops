@@ -1,28 +1,31 @@
----	
-apiVersion: helm.fluxcd.io/v1	
-kind: HelmRelease	
-metadata:	
-  name: kured	
-  namespace: kube-system	
-  annotations:	
+  
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: kured
+  namespace: kube-system
+  annotations:
+    fluxcd.io/ignore: "false"
     fluxcd.io/automated: "true"	
-    fluxcd.io/tag.chart-image: semver:~1	
-spec:	
-  releaseName: kured	
-  chart:	
-    repository: https://kubernetes-charts.storage.googleapis.com/	
+    fluxcd.io/tag.chart-image: semver:~1
+spec:
+  releaseName: kured
+  chart:
+    repository: https://weaveworks.github.io/kured
     name: kured	
-    version: 1.6.0
-  values:	
-    image:	
-      repository: raspbernetes/kured	
+    version: 2.0.3
+  values:
+    image:
+      repository: raspbernetes/kured
       tag: 1.4.4
+    configuration:
+      startTime: "1:00"
+      endTime: "6:00"
+      timeZone: "America/New_York"
     tolerations:	
     - key: "arm"	
       operator: "Exists"	
-    extraArgs:
-      start-time: 7am
-      end-time: 2pm
     metrics:
       create: true
   valueFileSecrets:	
