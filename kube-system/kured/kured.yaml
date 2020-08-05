@@ -23,5 +23,7 @@ spec:
     extraArgs:
       start-time: 7am
       end-time: 2pm
+    metrics:
+      create: true
   valueFileSecrets:	
   - name: "kured-helm-values"
