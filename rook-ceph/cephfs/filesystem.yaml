@@ -10,6 +10,7 @@ spec:
   dataPools:
     - replicated:
         size: 3
+  preservePoolsOnDelete: true
   metadataServer:
     activeCount: 1
     activeStandby: true
