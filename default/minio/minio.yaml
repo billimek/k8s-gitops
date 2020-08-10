@@ -12,16 +12,16 @@ spec:
   releaseName: minio
   helmVersion: v3
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://helm.min.io/
     name: minio
-    version: 5.0.31
+    version: 6.0.4
   values:
     image:
       repository: jessestuart/minio
-      tag: RELEASE.2020-07-12T19-14-17Z
+      tag: RELEASE.2020-08-08T04-50-06Z
     mcImage:
       repository: jessestuart/mc
-      tag: RELEASE.2020-06-26T19-56-55Z
+      tag: RELEASE.2020-08-08T02-33-58Z
     helmKubectlJqImage:
       repository: drnic/kubectl
       tag: 1.16
