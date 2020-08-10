@@ -15,11 +15,11 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: radarr
-    version: 4.1.1
+    version: 4.1.3
   values:
     image:
       repository: linuxserver/radarr
-      tag: 3.0.0.3049-ls10
+      tag: 3.0.0.3391-ls18
     ingress:
       enabled: true
       annotations:

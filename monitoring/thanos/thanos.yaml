@@ -15,7 +15,7 @@ spec:
   chart:
     repository: https://kubernetes-charts.banzaicloud.com
     name: thanos
-    version: 0.3.23
+    version: 0.3.24
   values:
     image:
       repository: quay.io/thanos/thanos

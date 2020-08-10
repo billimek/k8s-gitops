@@ -16,7 +16,7 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: node-red
-    version: 2.0.1
+    version: 2.0.2
   values:
     image:
       repository: nodered/node-red
