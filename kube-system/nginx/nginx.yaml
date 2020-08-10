@@ -16,12 +16,12 @@ spec:
   chart:
     repository: https://kubernetes.github.io/ingress-nginx
     name: ingress-nginx
-    version: 2.3.0
+    version: 2.11.2
   values:
     controller:
       image:
-        repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-        tag: "0.32.0"
+        repository: us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller
+        tag: "v0.34.1"
       replicaCount: 2
       config:
         custom-http-errors: 404,403,500,503
