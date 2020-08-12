@@ -14,7 +14,7 @@ spec:
     version: 1.0.0
   values:
     image:
-      repository: raspbernetes/node-feature-discovery:v0.6.0
+      repository: raspbernetes/node-feature-discovery
       tag: "v0.6.0"
     sources:
       # - cpu
