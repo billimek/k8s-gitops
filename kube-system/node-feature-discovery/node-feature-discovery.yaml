@@ -5,6 +5,7 @@ metadata:
   namespace: kube-system
   annotations:
     fluxcd.io/automated: "true"
+    fluxcd.io/tag.chart-image: semver:~v0
 spec:
   releaseName: node-feature-discovery
   helmVersion: v3
