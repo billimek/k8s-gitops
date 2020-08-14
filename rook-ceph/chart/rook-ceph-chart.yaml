@@ -11,12 +11,12 @@ spec:
   chart:
     repository: https://charts.rook.io/release
     name: rook-ceph
-    version: v1.4.0
+    version: v1.4.1
   values:
     csi:
       kubeletDirPath: /var/lib/kubelet
       cephcsi:
-        image: quay.io/cephcsi/cephcsi:v3.0.0
+        image: quay.io/cephcsi/cephcsi:v3.1.0
       registrar:
         image: raspbernetes/csi-node-driver-registrar:1.3.0
       provisioner:
