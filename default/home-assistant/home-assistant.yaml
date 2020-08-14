@@ -17,11 +17,11 @@ spec:
   chart:
     repository: https://billimek.com/billimek-charts/
     name: home-assistant
-    version: 1.0.5
+    version: 1.2.0
   values:
     image:
       repository: homeassistant/home-assistant
-      tag: 0.113.3
+      tag: 0.114.0
     persistence:
       enabled: true
       size: 10Gi
@@ -61,5 +61,14 @@ spec:
         memory: 2000Mi
     monitoring:
       enabled: false
+		postgresql:
+			enabled: true
+			global:
+				postgresql:
+					postgresqlUsername: home-assistant
+					postgresqlDatabase: home-assistant
+			persistence:
+				enabled: true
+        storageClass: "rook-ceph-block"
   valueFileSecrets:
   - name: "home-assistant-helm-values"

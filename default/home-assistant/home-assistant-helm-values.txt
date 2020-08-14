@@ -6,6 +6,10 @@ ingress:
     - hass.$DOMAIN
 extraEnv:
   CAMERA_AUTH: $CAMERA_AUTH
+postgresql:
+  global:
+    postgresql:
+      postgresqlPassword: $HASS_DB_PASSWORD
 configurator:
   ingress:
     hosts: 
