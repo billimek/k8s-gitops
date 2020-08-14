@@ -6,7 +6,10 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
+    repository.fluxcd.io/chart-image: image.repository
+    tag.fluxcd.io/chart-image: image.tag
+    filter.fluxcd.io/chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
+    # fluxcd.io/tag.chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
 spec:
   releaseName: nzbget
   helmVersion: v3
