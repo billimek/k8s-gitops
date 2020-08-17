@@ -21,7 +21,7 @@ spec:
     configuration:
       startTime: "1:00"
       endTime: "6:00"
-      timeZone: "America/New_York"
+      timeZone: "EST5EDT"
     tolerations:
     - key: "arm"
       operator: "Exists"
