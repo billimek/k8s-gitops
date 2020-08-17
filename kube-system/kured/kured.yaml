@@ -7,13 +7,13 @@ metadata:
   namespace: kube-system
   annotations:
     fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "true"	
+    fluxcd.io/automated: "true"
     fluxcd.io/tag.chart-image: semver:~1
 spec:
   releaseName: kured
   chart:
     repository: https://weaveworks.github.io/kured
-    name: kured	
+    name: kured
     version: 2.0.3
   values:
     image:
@@ -23,10 +23,10 @@ spec:
       startTime: "1:00"
       endTime: "6:00"
       timeZone: "America/New_York"
-    tolerations:	
-    - key: "arm"	
-      operator: "Exists"	
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     metrics:
       create: true
-  valueFileSecrets:	
+  valueFileSecrets:
   - name: "kured-helm-values"
