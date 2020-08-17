@@ -1,4 +1,3 @@
-  
 ---
 apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
@@ -18,7 +17,7 @@ spec:
   values:
     image:
       repository: raspbernetes/kured
-      tag: 1.4.4
+      tag: 1.4.5
     configuration:
       startTime: "1:00"
       endTime: "6:00"
