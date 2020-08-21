@@ -123,9 +123,9 @@ spec:
       # image:
       #   repository: grafana/grafana
       #   tag: 7.0.4
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
+      # tolerations:
+      # - key: "arm"
+      #   operator: "Exists"
       deploymentStrategy:
         type: Recreate
       podAnnotations:
