@@ -18,4 +18,3 @@ prometheus:
     namespace: flux
 dashboards:
   enabled: true
-  namespace: monitoring

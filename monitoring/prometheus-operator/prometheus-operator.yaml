@@ -273,6 +273,7 @@ spec:
           defaultDatasourceEnabled: false
         dashboards:
           enabled: true
+          searchNamespace: ALL
       additionalDataSources:
       - name: Prometheus
         type: prometheus
