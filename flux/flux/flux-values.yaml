@@ -26,4 +26,5 @@ syncGarbageCollection:
   dry: false
 dashboards:
   enabled: true
+  namespace: monitoring
   
