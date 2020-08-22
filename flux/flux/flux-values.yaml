@@ -27,4 +27,3 @@ syncGarbageCollection:
 dashboards:
   enabled: true
   namespace: monitoring
-  
