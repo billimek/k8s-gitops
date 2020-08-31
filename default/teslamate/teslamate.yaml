@@ -12,9 +12,9 @@ metadata:
 spec:
   releaseName: teslamate
   chart:
-    repository: https://billimek.com/billimek-charts/
+    repository: https://k8s-at-home.com/charts/
     name: teslamate
-    version: 2.0.4
+    version: 3.0.0
   values:
     image:
       repository: teslamate/teslamate

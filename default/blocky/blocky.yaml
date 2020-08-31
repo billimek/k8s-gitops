@@ -15,13 +15,13 @@ spec:
   rollback:
     enable: true
   chart:
-    repository: https://billimek.com/billimek-charts/
+    repository: https://k8s-at-home.com/charts/
     name: blocky
-    version: 3.3.0
+    version: 4.0.0
   values:
     image:
       repository: spx01/blocky
-      tag: v0.9.1
+      tag: v0.10.0
     replicas: 2
     timeZone: "America/New_York"
     config:

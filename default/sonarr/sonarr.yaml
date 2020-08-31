@@ -13,13 +13,13 @@ spec:
   rollback:
     enable: true
   chart:
-    repository: https://billimek.com/billimek-charts/
+    repository: https://k8s-at-home.com/charts/
     name: sonarr
-    version: 4.1.3
+    version: 5.0.0
   values:
     image:
       repository: linuxserver/sonarr
-      tag: 3.0.3.906-ls36
+      tag: 3.0.3.911-ls39
     ingress:
       enabled: true
       annotations:

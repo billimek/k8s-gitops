@@ -13,13 +13,13 @@ spec:
   rollback:
     enable: true
   chart:
-    repository: https://billimek.com/billimek-charts/
+    repository: https://k8s-at-home.com/charts/
     name: radarr
-    version: 4.1.3
+    version: 5.0.0
   values:
     image:
       repository: linuxserver/radarr
-      tag: 3.0.0.3391-ls18
+      tag: 3.0.0.3544-ls21
     ingress:
       enabled: true
       annotations:

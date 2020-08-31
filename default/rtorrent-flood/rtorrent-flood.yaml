@@ -14,9 +14,9 @@ spec:
   rollback:
     enable: true
   chart:
-    repository: https://billimek.com/billimek-charts/
+    repository: https://k8s-at-home.com/charts/
     name: rtorrent-flood
-    version: 4.1.1
+    version: 5.0.0
   values:
     # rtorrent:
     #   enabled: true
