@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: regex:^(v[0-9]+\.[0-9]+-ls.*)$
+    filter.fluxcd.io/chart-image: regex:^(v[0-9]+\.[0-9]+-r[0-9]+-ls.*)$
     # fluxcd.io/tag.chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
 spec:
   releaseName: nzbget
@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: linuxserver/nzbget
-      tag: v21.0-ls61
+      tag: v21.1-r2311-ls7
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.52
