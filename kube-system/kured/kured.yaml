@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: raspbernetes/kured
-      tag: 1.4.5
+      tag: 1.5.0
     configuration:
       startTime: "1:00"
       endTime: "6:00"
