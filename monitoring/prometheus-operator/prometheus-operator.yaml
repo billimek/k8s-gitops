@@ -61,7 +61,8 @@ spec:
           # group_wait: 30s
           # group_interval: 5m
           # repeat_interval: 6h
-          receiver: 'slack-notifications'
+          # receiver: 'slack-notifications'
+          receiver: 'pagerduty'
           # routes:
           #   - match:
           #       alertname: Watchdog
