@@ -7,7 +7,11 @@ export REPO_ROOT=$(git rev-parse --show-toplevel)
 export REPLIACS="0 1 2"
 
 need() {
-    which "$1" &>/dev/null || die "Binary '$1' is missing but required"
+    if ! command -v "$1" &> /dev/null
+    then
+        echo "Binary '$1' is missing but required"
+        exit 1
+    fi
 }
 
 need "vault"
@@ -196,6 +200,11 @@ loadSecretsToVault() {
   kvault "velero/velero/velero-helm-values.txt"
 }
 
+loadSecretsToVault-oneoff() {
+  message "writing secrets to vault"
+  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
+}
+
 FIRST_RUN=1
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
 export VAULT_ADDR='http://127.0.0.1:8200'
@@ -206,6 +215,7 @@ loginVault
 if [ $FIRST_RUN == 0 ]; then 
   setupVaultSecretsOperator
 fi
-loadSecretsToVault
+# loadSecretsToVault
+loadSecretsToVault-oneoff
 
 kill $VAULT_FWD_PID
