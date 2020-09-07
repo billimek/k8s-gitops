@@ -62,6 +62,7 @@ spec:
               key_ring    = "vault-unseal"
               crypto_key  = "vault-key"
             }
+            service_registration "kubernetes" {}
     ui:
       enabled: true
       serviceType: "ClusterIP"
