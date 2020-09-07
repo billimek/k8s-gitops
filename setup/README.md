@@ -4,7 +4,7 @@
 
 ### k3s node installation
 
-See [k3os bootstrapping](https://github.com/billimek/homelab-infrastructure/tree/master/k3os) for details on creating the k3os cluster itself
+See [k3s bootstrapping](https://github.com/billimek/homelab-infrastructure/tree/master/k3s) for details on creating the k3s cluster itself
 
 Once a cluster is in-place, ensure that the `$KUBECONFIG` environment variable is set properly, or the target cluster is set in the `~/.kube/config` file.
 

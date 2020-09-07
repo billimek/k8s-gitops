@@ -1,3 +1,11 @@
+# blocky
+
+![](https://i.imgur.com/EeoHuZa.png)
+
+Installs [blocky](https://github.com/0xERR0R/blocky): DNS proxy as ad-blocker for local network
+
+* [blocky.yaml](blocky/blocky.yaml)
+
 # frigate
 
 ![](https://i.imgur.com/hv7bh6m.png)
@@ -16,12 +24,10 @@ Installs [goldilocks](https://github.com/FairwindsOps/goldilocks): to help with 
 
 # home-assistant
 
-![](https://i.imgur.com/OMwEZYO.png)
-
-This also installs a postgresql deployment for holding the Home Assistant state and history information
+![](https://i.imgur.com/04TtJFw.png)
 
 * [home-assistant.yaml](home-assistant/home-assistant.yaml)
-* [postgresql.yaml](home-assistant/postgresql.yaml)
+* Home Assistant configuration & settings are persisted to a [configuration repo](https://github.com/billimek/home-assistant-config) 
 
 # hubot
 
@@ -35,6 +41,8 @@ A bot for slack
 
 * [minecraft-creative.yaml](minecraft/minecraft-creative.yaml)
 * [minecraft-survival.yaml](minecraft/minecraft-survival.yaml)
+* [minecraft-bedrock-creative.yaml](minecraft/minecraft-bedrock-creative.yaml)
+* [minecraft-bedrock-survival.yaml](minecraft/minecraft-bedrock-survival.yaml)
 
 # minio
 
@@ -46,11 +54,12 @@ S3-compatible bucket storage service
 
 # node-red
 
-![](https://i.imgur.com/XxN4KJK.png)
+![](https://i.imgur.com/ABTbYw1.png)
 
 Rules-engine for automations
 
 * [node-red.yaml](node-red/node-red.yaml)
+* Node-Red configuration is persisted to a [configuration repo](https://github.com/billimek/node-red-config)
 
 # nzbget
 
