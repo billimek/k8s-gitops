@@ -74,6 +74,7 @@ spec:
             severity: 'warning'
           # Apply inhibition if the alertname is the same.
           equal: ['alertname', 'namespace']
+        templates: ["*.tmpl"]
       templateFiles:
         pagerduty-custom.tmpl: |-
           {{- define "pagerduty.custom.description" -}}{{ if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else }}[{{ .CommonLabels.cluster }}][{{ .CommonLabels.alertname }}][{{ .CommonLabels.severity }}]{{- range .Alerts }} {{ .Labels.namespace }}/{{ if ne .Labels.app "" }}{{ .Labels.app }}{{ else }}{{ .Labels.job }}{{ end }}: {{ if ne .Annotations.description ""}}{{ .Annotations.description }}{{ else }}{{ .Annotations.message }}{{ end }};{{ end -}}{{ end }}{{- end -}}
