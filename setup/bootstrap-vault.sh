@@ -176,6 +176,7 @@ loadSecretsToVault() {
   ####################
   kvault "kube-system/kured/kured-helm-values.txt"
   kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
+  kvault "kube-system/vault/vault-helm-values.txt"
   kvault "logs/loki/loki-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"
   kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
@@ -202,7 +203,7 @@ loadSecretsToVault() {
 
 loadSecretsToVault-oneoff() {
   message "writing secrets to vault"
-  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
+  kvault "kube-system/vault/vault-helm-values.txt"
 }
 
 FIRST_RUN=1
