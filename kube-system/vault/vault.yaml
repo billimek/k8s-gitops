@@ -6,7 +6,7 @@ metadata:
 spec:
   releaseName: vault
   rollback:
-    enabled: false
+    enabled: true
   chart:
     git: https://github.com/hashicorp/vault-helm
     ref: v0.7.0
