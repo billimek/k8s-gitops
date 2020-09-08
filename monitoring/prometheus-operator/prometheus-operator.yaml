@@ -68,6 +68,8 @@ spec:
                 alertname: Watchdog
               receiver: 'null'
             - receiver: 'pagerduty'
+              match:
+                severity: critical
               continue: true
             - receiver: 'slack-notifications'
         inhibit_rules:
