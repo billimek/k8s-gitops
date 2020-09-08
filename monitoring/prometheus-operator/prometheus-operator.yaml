@@ -77,7 +77,8 @@ spec:
         templates: ["*.tmpl"]
       templateFiles:
         pagerduty-custom.tmpl: |-
-          {{- define "pagerduty.custom.description" -}}{{ range .Alerts }}{{ if ne .Annotations.message ""}}{{ .Annotations.message }}{{ else }}{{ template "pagerduty.default.description" }}{{ end }}{{ end }}{{- end -}}
+          {{- define "pagerduty.custom.description" -}}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ range .Alerts }}{{ if ne .Annotations.summary ""}}{{ .Annotations.summary }}{{ else if .Annotations.message ""}}{{ .Annotations.message }}{{ else if .Annotations.description ""}}{{ .Annotations.description }}{{ else }}{{ .Labels.alertname }}{{ end }}{{ end }}{{- end -}}
+
     nodeExporter:
       serviceMonitor:
         relabelings:
