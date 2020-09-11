@@ -55,5 +55,29 @@ spec:
         schedule: "0 6 * * *"
         template:
           ttl: "120h"
+      mc-skyblock-minecraft-hourly:
+        labels:
+          app: mc-skyblock-minecraft
+        schedule: "0 * * * *"
+        template:
+          ttl: "120h"
+          includedNamespaces:
+          - default
+      mcsv-minecraft-hourly:
+        labels:
+          app: mcsv-minecraft
+        schedule: "0 * * * *"
+        template:
+          ttl: "120h"
+          includedNamespaces:
+          - default
+      mc-minecraft-hourly:
+        labels:
+          app: mc-minecraft
+        schedule: "0 * * * *"
+        template:
+          ttl: "120h"
+          includedNamespaces:
+          - default
   valueFileSecrets:
   - name: "velero-helm-values"
