@@ -57,6 +57,12 @@ Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-
 
 * [oauth2-proxy/](oauth2-proxy/)
 
+# registry-creds
+
+[registry-creds](https://github.com/alexellis/registry-creds): Automate Kubernetes registry credentials, to extend Docker Hub limits.  This is (sadly) necessary to have cluster-wide imagePulls use an authenticated Docker account so that the cluster doesn't get rate-limited and become unable to schedule workloads. This has already happened once.
+
+* [registry-creds/](registry-creds)
+
 # vault
 
 [vault-helm chart](https://github.com/hashicorp/vault-helm) deployed in HA mode leveraging consul as the storage backend
