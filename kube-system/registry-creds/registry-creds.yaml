@@ -226,10 +226,10 @@ spec:
         name: manager
         resources:
           limits:
-            memory: 30Mi
+            memory: 100Mi
           requests:
             cpu: 100m
-            memory: 100Mi
+            memory: 30Mi
       terminationGracePeriodSeconds: 10
       tolerations:
       - key: arm
