@@ -203,7 +203,7 @@ loadSecretsToVault() {
 
 loadSecretsToVault-oneoff() {
   message "writing secrets to vault"
-  kvault "kube-system/vault/vault-helm-values.txt"
+  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
 }
 
 FIRST_RUN=1
