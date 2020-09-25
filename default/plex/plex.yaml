@@ -28,6 +28,8 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "nginx"
     timezone: "America/New_York"
+    plexUid: 1001
+    plexGid: 1001
     serviceTCP:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.53
