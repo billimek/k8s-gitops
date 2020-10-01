@@ -189,7 +189,7 @@ spec:
         severity: info
       annotations:
         summary: "Host EDAC Correctable Errors detected (instance {{ $labels.instance }})"
-        description: "{{ $labels.instance }} has had {{ printf "%.0f" $value }} correctable memory errors reported by EDAC in the last 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        description: "{{ $labels.instance }} has had {{ printf \"%.0f\" $value }} correctable memory errors reported by EDAC in the last 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostEdacUncorrectableErrorsDetected
       expr: node_edac_uncorrectable_errors_total > 0
       for: 5m
@@ -197,7 +197,7 @@ spec:
         severity: warning
       annotations:
         summary: "Host EDAC Uncorrectable Errors detected (instance {{ $labels.instance }})"
-        description: "{{ $labels.instance }} has had {{ printf "%.0f" $value }} uncorrectable memory errors reported by EDAC in the last 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        description: "{{ $labels.instance }} has had {{ printf \"%.0f\" $value }} uncorrectable memory errors reported by EDAC in the last 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostNetworkReceiveErrors
       expr: increase(node_network_receive_errs_total[5m]) > 0
       for: 5m
@@ -205,7 +205,7 @@ spec:
         severity: warning
       annotations:
         summary: "Host Network Receive Errors (instance {{ $labels.instance }})"
-        description: "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} receive errors in the last five minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        description: "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last five minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostNetworkTransmitErrors
       expr: increase(node_network_transmit_errs_total[5m]) > 0
       for: 5m
@@ -213,4 +213,4 @@ spec:
         severity: warning
       annotations:
         summary: "Host Network Transmit Errors (instance {{ $labels.instance }})"
-        description: "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} transmit errors in the last five minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        description: "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last five minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
