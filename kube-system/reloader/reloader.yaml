@@ -10,4 +10,3 @@ spec:
     repository: https://stakater.github.io/stakater-charts
     name: reloader
     version: v0.0.69
-  values:
