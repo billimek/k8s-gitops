@@ -155,14 +155,6 @@ spec:
       annotations:
         summary: "Host RAID disk failure (instance {{ $labels.instance }})"
         description: "At least one device in RAID array on {{ $labels.instance }} failed. Array {{ $labels.md_device }} needs attention and possibly a disk swap\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-    - alert: HostKernelVersionDeviations
-      expr: count(sum(label_replace(node_uname_info, "kernel", "$1", "release", "([0-9]+.[0-9]+.[0-9]+).*")) by (kernel)) > 1
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Host kernel version deviations (instance {{ $labels.instance }})"
-        description: "Different kernel versions are running\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostOomKillDetected
       expr: increase(node_vmstat_oom_kill[5m]) > 0
       for: 5m
