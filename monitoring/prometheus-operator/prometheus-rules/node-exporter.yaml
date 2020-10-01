@@ -107,17 +107,6 @@ spec:
       annotations:
         summary: "Host high CPU load (instance {{ $labels.instance }})"
         description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-    # 1000 context switches is an arbitrary number.
-    # Alert threshold depends on nature of application.
-    # Please read: https://github.com/samber/awesome-prometheus-alerts/issues/58
-    - alert: HostContextSwitching
-      expr: (rate(node_context_switches_total[5m])) / (count without(cpu, mode) (node_cpu_seconds_total{mode="idle"})) > 1000
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Host context switching (instance {{ $labels.instance }})"
-        description: "Context switching is growing on node (> 1000 / s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostSwapIsFillingUp
       expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80
       for: 5m
