@@ -43,22 +43,6 @@ spec:
       annotations:
         summary: "Host unusual network throughput out (instance {{ $labels.instance }})"
         description: "Host network interfaces are probably sending too much data (> 100 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-    - alert: HostUnusualDiskReadRate
-      expr: sum by (instance) (irate(node_disk_read_bytes_total[2m])) / 1024 / 1024 > 50
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Host unusual disk read rate (instance {{ $labels.instance }})"
-        description: "Disk is probably reading too much data (> 50 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-    - alert: HostUnusualDiskWriteRate
-      expr: sum by (instance) (irate(node_disk_written_bytes_total[2m])) / 1024 / 1024 > 50
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "Host unusual disk write rate (instance {{ $labels.instance }})"
-        description: "Disk is probably writing too much data (> 50 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostOutOfDiskSpace
       expr: (node_filesystem_avail_bytes{mountpoint="/rootfs"}  * 100) / node_filesystem_size_bytes{mountpoint="/rootfs"} < 10
       for: 5m
