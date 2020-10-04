@@ -14,11 +14,11 @@ spec:
   chart:
     repository: https://k8s-at-home.com/charts/
     name: teslamate
-    version: 3.0.0
+    version: 3.0.1
   values:
     image:
       repository: teslamate/teslamate
-      tag: 1.19.4
+      tag: 1.20.0
     timeZone: "America/New_York"
     mqtt:
       enabled: true
