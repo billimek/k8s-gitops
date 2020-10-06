@@ -30,8 +30,8 @@ spec:
         - udp:8.8.8.8
         - udp:8.8.4.4
         - udp:1.1.1.1
-        - tcp-tls:1.0.0.1:853
-        - https://cloudflare-dns.com/dns-query
+        # - tcp-tls:1.0.0.1:853
+        # - https://cloudflare-dns.com/dns-query
       conditional:
         mapping:
           local: udp:10.0.7.1
@@ -67,15 +67,15 @@ spec:
           - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
           kids:
           - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts
-          none:
-          - nil
+          minimal:
+          - https://raw.githubusercontent.com/AdguardTeam/AdguardFilters/master/EnglishFilter/sections/adservers.txt
         whiteLists:
           ads:
           - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
           - https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/white.list
         clientGroupsBlock:
           default:
-            - none
+            - minimal
           10.0.2.1/24:
             - ads
           "*nsley*":
