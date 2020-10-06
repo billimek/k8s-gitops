@@ -19,7 +19,7 @@ spec:
   values:
     rbac:
       create: true
-    replicaCount: 2
+    replicaCount: 1
     isClusterService: false
     serviceType: LoadBalancer
     service:
@@ -54,6 +54,8 @@ spec:
       - name: loop
       - name: reload
       - name: loadbalance
+      - name: file
+        parameters: eviljungle.com
     zoneFiles:
      - filename: eviljungle.com
        domain: eviljungle.com
