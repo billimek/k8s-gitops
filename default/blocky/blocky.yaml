@@ -73,10 +73,10 @@ spec:
             - none
           10.0.2.1/24:
             - ads
-          *nsley*:
+          "*nsley*":
             - ads
             - kids
-          *rinley*:
+          "*rinley*":
             - ads
             - kids
       clientLookup:
