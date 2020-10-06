@@ -60,7 +60,7 @@ spec:
      - filename: eviljungle.com
        domain: eviljungle.com
        contents: |
-         eviljungle.com.   IN SOA a.root-servers.net. nstld.verisign-grs.com. 2020100602 1800 900 604800 86400
+         eviljungle.com.   IN SOA etta.ns.cloudflare.com. dns.cloudflare.com. 2020100600 10000 2400 604800 3600
          eviljungle.com.   IN A   10.0.6.150
          *.eviljungle.com. IN A   10.0.6.150
     prometheus:
