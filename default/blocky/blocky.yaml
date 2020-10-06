@@ -22,7 +22,7 @@ spec:
     image:
       repository: spx01/blocky
       tag: v0.10
-    replicas: 2
+    replicas: 3
     timeZone: "America/New_York"
     config:
       upstream:
