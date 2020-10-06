@@ -1,0 +1,67 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: coredns
+  namespace: network
+  annotations:
+    fluxcd.io/ignore: "false"
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: coredns
+  helmVersion: v3
+  rollback:
+    enable: false
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: coredns
+    version: 1.13.4
+  values:
+    rbac:
+      create: true
+    replicaCount: 2
+    isClusterService: false
+    serviceType: LoadBalancer
+    service:
+      externalTrafficPolicy: Local
+      loadBalancerIP: 10.0.6.99
+      annotations:
+        metallb.universe.tf/allow-shared-ip: coredns
+    servers:
+    - zones:
+      - zone: eviljungle.com.
+        scheme: dns://
+        # use_tcp: true
+      port: 53
+      plugins:
+      - name: errors
+      - name: health
+        configBlock: |-
+          lameduck 5s
+      - name: ready
+      - name: kubernetes
+        parameters: cluster.local in-addr.arpa ip6.arpa
+        configBlock: |-
+          pods insecure
+          fallthrough in-addr.arpa ip6.arpa
+          ttl 30
+      - name: prometheus
+        parameters: 0.0.0.0:9153
+      - name: forward
+        parameters: . /etc/resolv.conf
+      - name: cache
+        parameters: 30
+      - name: loop
+      - name: reload
+      - name: loadbalance
+    zoneFiles:
+     - filename: eviljungle.com
+       domain: eviljungle.com
+       contents: |
+         eviljungle.com.   IN A   10.0.6.150
+         *.eviljungle.com. IN A   10.0.6.150
+    prometheus:
+      service:
+        enabled: true
+      monitor:
+        enabled: true
