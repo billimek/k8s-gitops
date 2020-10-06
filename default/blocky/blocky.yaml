@@ -35,6 +35,15 @@ spec:
       conditional:
         mapping:
           local: udp:10.0.7.1
+          status.eviljungle.com: udp:1.1.1.1
+          cloud.eviljungle.com: udp:8.8.8.8
+          eviljungle.com: udp:10.0.7.1
+          local: udp:10.0.7.1
+      customDNS:
+          mapping:
+            mcsv.eviljungle.com: 10.0.6.102
+            mcsv-br.eviljungle.com: 10.0.6.104
+            skyblock.eviljungle.com: 10.0.6.105
       blocking:
         blackLists:
           ads:
@@ -121,6 +130,3 @@ spec:
         cpu: 50m
       limits:
         memory: 1000Mi
-  valuesFrom:
-  - secretKeyRef:
-      name: blocky-helm-values
