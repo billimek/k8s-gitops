@@ -55,7 +55,7 @@ spec:
       - name: reload
       - name: loadbalance
       - name: file
-        parameters: eviljungle.com
+        parameters: /etc/coredns/eviljungle.com
     zoneFiles:
      - filename: eviljungle.com
        domain: eviljungle.com
