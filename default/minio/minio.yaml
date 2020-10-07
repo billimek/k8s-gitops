@@ -14,7 +14,7 @@ spec:
   chart:
     repository: https://helm.min.io/
     name: minio
-    version: 6.0.4
+    version: 7.1.2
   values:
     image:
       repository: jessestuart/minio
