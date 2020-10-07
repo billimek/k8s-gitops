@@ -34,10 +34,10 @@ installManualObjects(){
   ###################
   # nginx
   ###################
-  for i in "$REPO_ROOT"/kube-system/nginx/nginx-external/*.txt
-  do
-    kapply "$i"
-  done
+  # for i in "$REPO_ROOT"/kube-system/nginx/nginx-external/*.txt
+  # do
+  #   kapply "$i"
+  # done
 
   kapply "$REPO_ROOT"/default/frigate/frigate-noauth-ingress.txt
 
