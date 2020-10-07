@@ -5,17 +5,16 @@ metadata:
   name: cert-manager
   namespace: cert-manager
   annotations:
-    fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: semver:~v0.
+    fluxcd.io/automated: "false"
+    fluxcd.io/tag.chart-image: semver:~v1.
 spec:
   releaseName: cert-manager
-  helmVersion: v3
   rollback:
     enable: false
   chart:
     repository: https://charts.jetstack.io/
     name: cert-manager
-    version: v0.14.2
+    version: v1.0.2
   values:
     installCRDs: true
     webhook:
@@ -31,8 +30,8 @@ spec:
       operator: "Exists"
     cainjector:
       replicaCount: 1
-      extraArgs:
-        - --leader-elect=false
+      # extraArgs:
+      #   - --leader-elect=false
       tolerations:
       - key: "arm"
         operator: "Exists"
