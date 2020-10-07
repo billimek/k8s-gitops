@@ -1,12 +1,3 @@
-query:
-  http:
-    ingress:
-      hosts: ["thanos.$DOMAIN"]
-      tls:
-      - hosts: ["thanos.$DOMAIN"]
-      annotations:
-        nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start
 objstore:
   config:
     access_key: "${MINIO_ACCESS_KEY}"
