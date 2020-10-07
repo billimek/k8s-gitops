@@ -17,7 +17,7 @@ spec:
   chart:
     repository: https://k8s-at-home.com/charts/
     name: node-red
-    version: 3.0.0
+    version: 3.1.0
   values:
     image:
       repository: nodered/node-red
@@ -33,6 +33,13 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+      hosts: [node-red.eviljungle.com]
+      tls:
+      - hosts:
+        - node-red.eviljungle.com
+      annotations:
+        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
     podAnnotations:
       backup.velero.io/backup-volumes: data
     timezone: "America/New_York"

@@ -187,7 +187,6 @@ loadSecretsToVault() {
   kvault "default/home-assistant/postgresql-helm-values.txt"
   kvault "default/hubot/hubot-helm-values.txt"
   kvault "default/minio/minio-helm-values.txt"
-  kvault "default/node-red/node-red-helm-values.txt"
   kvault "default/nzbget/nzbget-helm-values.txt"
   kvault "default/plex/plex-helm-values.txt"
   kvault "default/radarr/radarr-helm-values.txt"
