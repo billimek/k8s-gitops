@@ -7,7 +7,6 @@ metadata:
   annotations:
     fluxcd.io/ignore: "false"
     fluxcd.io/automated: "true"
-    # fluxcd.io/tag.chart-image: semver:~0.
     filter.fluxcd.io/chart-image: semver:~0.
     filter.fluxcd.io/vscode: "regex:^3.[0-9]+-.*$"
 spec:
@@ -17,7 +16,7 @@ spec:
   chart:
     repository: https://k8s-at-home.com/charts/
     name: home-assistant
-    version: 2.0.0
+    version: 2.5.0
   values:
     image:
       repository: homeassistant/home-assistant
@@ -30,6 +29,11 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+      hosts: 
+      - hass.eviljungle.com
+      tls:
+      - hosts:
+        - hass.eviljungle.com
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.56
@@ -53,6 +57,14 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+        hosts: 
+        - hass-vscode.eviljungle.com
+        tls:
+        - hosts:
+          - hass-vscode.eviljungle.com
+        annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
     resources:
       limits:
         memory: 2500Mi

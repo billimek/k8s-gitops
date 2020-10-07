@@ -1,34 +1,10 @@
-ingress:
-  hosts: 
-  - hass.$DOMAIN
-  tls:
-  - hosts:
-    - hass.$DOMAIN
 extraEnv:
   CAMERA_AUTH: $CAMERA_AUTH
 postgresql:
   global:
     postgresql:
       postgresqlPassword: $HASS_DB_PASSWORD
-configurator:
-  ingress:
-    hosts: 
-    - hass-config.$DOMAIN
-    tls:
-    - hosts:
-      - hass-config.$DOMAIN
-  hassApiPassword: $HASS_API_PASSWORD
-  hassApiUrl: https://hass.$DOMAIN/api/
 vscode:
-  ingress:
-    hosts: 
-    - hass-vscode.$DOMAIN
-    tls:
-    - hosts:
-      - hass-vscode.$DOMAIN
-    annotations:
-      nginx.ingress.kubernetes.io/auth-url: "https://auth.$DOMAIN/oauth2/auth"
-      nginx.ingress.kubernetes.io/auth-signin: https://auth.$DOMAIN/oauth2/start
   password: $HASS_API_PASSWORD
   extraEnv:
     HASS_SERVER: http://localhost:8123
