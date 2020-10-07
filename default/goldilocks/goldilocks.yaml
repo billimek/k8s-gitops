@@ -18,7 +18,7 @@ spec:
     version: 3.0.2
   values:
     vpa:
-      enabled: false
+      enabled: true
     dashboard:
       ingress:
         enabled: true
