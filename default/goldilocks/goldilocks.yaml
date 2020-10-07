@@ -1,36 +1,36 @@
----
-apiVersion: helm.fluxcd.io/v1
-kind: HelmRelease
-metadata:
-  name: goldilocks
-  namespace: default
-  annotations:
-    fluxcd.io/automated: "false"
-    fluxcd.io/tag.chart-image: 'semver:0'
-spec:
-  releaseName: goldilocks
-  helmVersion: v3
-  rollback:
-    enable: true
-  chart:
-    repository: https://charts.fairwinds.com/stable
-    name: goldilocks
-    version: 3.0.2
-  values:
-    vpa:
-      enabled: true
-    dashboard:
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: "nginx"
-          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
-        hosts: 
-          - host: goldilocks.eviljungle.com
-            paths: ["/"]
-        tls:
-        - hosts:
-          - goldilocks.eviljungle.com
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+# ---
+# apiVersion: helm.fluxcd.io/v1
+# kind: HelmRelease
+# metadata:
+#   name: goldilocks
+#   namespace: default
+#   annotations:
+#     fluxcd.io/automated: "false"
+#     fluxcd.io/tag.chart-image: 'semver:0'
+# spec:
+#   releaseName: goldilocks
+#   helmVersion: v3
+#   rollback:
+#     enable: true
+#   chart:
+#     repository: https://charts.fairwinds.com/stable
+#     name: goldilocks
+#     version: 3.0.2
+#   values:
+#     vpa:
+#       enabled: true
+#     dashboard:
+#       ingress:
+#         enabled: true
+#         annotations:
+#           kubernetes.io/ingress.class: "nginx"
+#           nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+#         hosts: 
+#           - host: goldilocks.eviljungle.com
+#             paths: ["/"]
+#         tls:
+#         - hosts:
+#           - goldilocks.eviljungle.com
+#         annotations:
+#           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+#           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
