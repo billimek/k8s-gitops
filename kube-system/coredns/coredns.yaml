@@ -61,7 +61,6 @@ spec:
        domain: eviljungle.com
        contents: |
          eviljungle.com.   IN SOA etta.ns.cloudflare.com. dns.cloudflare.com. 2020100600 10000 2400 604800 3600
-         eviljungle.com.   IN A   10.0.7.1
          mcsv.eviljungle.com. IN A   10.0.6.102
          mcsv-br.eviljungle.com. IN A  10.0.6.104
          skyblock.eviljungle.com. IN A 10.0.6.105
