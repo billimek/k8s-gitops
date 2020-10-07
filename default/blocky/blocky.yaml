@@ -22,40 +22,22 @@ spec:
     image:
       repository: spx01/blocky
       tag: v0.10
-    replicas: 3
+    replicas: 2
     timeZone: "America/New_York"
     config:
       upstream:
         externalResolvers:
-        - udp:8.8.8.8
-        - udp:8.8.4.4
-        - udp:1.1.1.1
-        # - tcp-tls:1.0.0.1:853
-        # - https://cloudflare-dns.com/dns-query
+        - tcp+udp:8.8.8.8
+        - tcp+udp:8.8.4.4
+        - tcp+udp:1.1.1.1
+        - tcp-tls:1.0.0.1:853
+        - https://cloudflare-dns.com/dns-query
       conditional:
         mapping:
-          local: udp:10.0.7.1
-          status.eviljungle.com: udp:1.1.1.1
-          cloud.eviljungle.com: udp:8.8.8.8
-          eviljungle.com: udp:10.0.7.1
-      customDNS:
-        mapping:
-          # eviljungle.com: 10.0.7.1
-          mcsv.eviljungle.com: 10.0.6.102
-          mcsv-br.eviljungle.com: 10.0.6.104
-          skyblock.eviljungle.com: 10.0.6.105
-          nas: 10.0.7.11
-          nvr: 10.0.7.13
-          nvr.local: 10.0.7.13
-          proxmox: 10.0.7.7
-          proxmox.local: 10.0.7.7
-          proxmox-b: 10.0.7.9
-          proxmox-b.local: 10.0.7.9
-          proxmox-c: 10.0.7.14
-          proxmox-c.local: 10.0.7.14
-          k3s-0: 10.2.0.30
-          whitebridge: 10.0.7.1
-          unifi: 10.0.6.55
+          local: tcp+udp:10.0.7.1
+          status.eviljungle.com: tcp+udp:1.1.1.1
+          cloud.eviljungle.com: tcp+udp:8.8.8.8
+          eviljungle.com: tcp+udp:10.0.6.99
       blocking:
         blackLists:
           ads:
@@ -67,15 +49,12 @@ spec:
           - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
           kids:
           - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts
-          minimal:
-          - https://raw.githubusercontent.com/AdguardTeam/AdguardFilters/master/EnglishFilter/sections/adservers.txt
         whiteLists:
           ads:
-          - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
           - https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/white.list
         clientGroupsBlock:
           default:
-            - minimal
+            - ads
           10.0.2.1/24:
             - ads
           "*nsley*":
@@ -85,7 +64,7 @@ spec:
             - ads
             - kids
       clientLookup:
-        upstream: udp:10.0.7.1
+        upstream: tcp+udp:10.0.7.1
       prometheus:
         enable: true
         path: /metrics
