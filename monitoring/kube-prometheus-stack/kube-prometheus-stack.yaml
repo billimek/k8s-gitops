@@ -50,7 +50,7 @@ spec:
           operator: "Exists"
         podMetadata:
           annotations:
-            backup.velero.io/backup-volumes: alertmanager-prometheus-operator-alertmanager-db
+            backup.velero.io/backup-volumes: alertmanager-kube-prometheus-stack-alertmanager-db
       ingress:
         enabled: true
         annotations:
@@ -136,23 +136,6 @@ spec:
         tls:
         - hosts:
           - grafana.eviljungle.com
-      grafana.ini:
-        server:
-          root_url: https://grafana.${DOMAIN}
-        auth.basic:
-          disable_login_form: true
-        auth.generic_oauth:
-          enabled: true
-          allow_sign_up: true
-          team_ids:
-          allowed_organizations:
-          name: Auth0
-          client_id: $AUTH0_GRAFANA_CLIENT_ID
-          client_secret: $AUTH0_GRAFANA_CLIENT_SECRET
-          scopes: openid profile email
-          auth_url: https://${AUTH0_DOMAIN}.auth0.com/authorize
-          token_url: https://${AUTH0_DOMAIN}.auth0.com/oauth/token
-          api_url: https://${AUTH0_DOMAIN}.auth0.com/userinfo
       plugins:
       - natel-discrete-panel
       - pr0ps-trackmap-panel
@@ -387,7 +370,7 @@ spec:
         #   operator: "Exists"
         podMetadata:
           annotations:
-            backup.velero.io/backup-volumes: prometheus-prometheus-operator-prometheus-db
+            backup.velero.io/backup-volumes: prometheus-kube-prometheus-stack-prometheus-db
         thanos:
           image: quay.io/thanos/thanos:v0.13.0
           version: v0.13.0
