@@ -194,7 +194,6 @@ loadSecretsToVault() {
   kvault "default/sonarr/sonarr-helm-values.txt"
   kvault "default/teslamate/teslamate-helm-values.txt"
   kvault "default/unifi/unifi-helm-values.txt"
-  kvault "default/zwave2mqtt/zwave2mqtt-helm-values.txt"
   kvault "velero/velero/velero-helm-values.txt"
 }
 

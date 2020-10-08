@@ -11,7 +11,7 @@ spec:
   chart:
     repository: https://k8s-at-home.com/charts/
     name: zwave2mqtt
-    version: 3.0.0
+    version: 3.0.1
   values:
     image:
       repository: robertslando/zwave2mqtt
@@ -34,6 +34,13 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+      hosts: [zwave2mqtt.eviljungle.com]
+      tls:
+      - hosts:
+        - zwave2mqtt.eviljungle.com
+      annotations:
+        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
     podAnnotations:
       backup.velero.io/backup-volumes: config
   valueFileSecrets:
