@@ -43,5 +43,3 @@ spec:
         nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
     podAnnotations:
       backup.velero.io/backup-volumes: config
-  valueFileSecrets:
-  - name: "zwave2mqtt-helm-values"
