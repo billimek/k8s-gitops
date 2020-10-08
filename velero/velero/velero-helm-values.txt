@@ -1,18 +1,3 @@
-configuration:
-  provider: aws
-  backupStorageLocation:
-    name: default
-    bucket: velero
-    config:
-      region: us-east-1
-      s3ForcePathStyle: true
-      s3Url: http://minio.default.svc:9000
-      publicUrl: https://minio.$DOMAIN
-  volumeSnapshotLocation:
-    name: aws
-    config:
-      region: us-east-1
-  resticTimeout: 6h
 credentials:
   secretContents:
     cloud: |

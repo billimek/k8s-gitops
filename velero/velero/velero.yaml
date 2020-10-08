@@ -13,8 +13,23 @@ spec:
   chart:
     repository: https://vmware-tanzu.github.io/helm-charts
     name: velero
-    version: 2.12.13
+    version: 2.13.2
   values:
+    configuration:
+      provider: aws
+      backupStorageLocation:
+        name: default
+        bucket: velero
+        config:
+          region: us-east-1
+          s3ForcePathStyle: true
+          s3Url: http://minio.default.svc:9000
+          publicUrl: https://minio.eviljungle.com
+      volumeSnapshotLocation:
+        name: aws
+        config:
+          region: us-east-1
+      resticTimeout: 6h
     initContainers:
     - name: velero-plugin-for-aws
       image: velero/velero-plugin-for-aws:v1.1.0
