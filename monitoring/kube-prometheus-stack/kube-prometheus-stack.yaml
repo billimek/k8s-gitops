@@ -17,11 +17,10 @@ spec:
     name: kube-prometheus-stack
     version: 9.4.10
   values:
-    defaultRules:
-      rules:
-        kubeApiserverAvailability: true
-        kubeApiserver: true
-        kubelet: false
+    # defaultRules:
+    #   rules:
+    #     kubeApiserverAvailability: true
+    #     kubeApiserver: true
     server:
       resources:
         requests:
