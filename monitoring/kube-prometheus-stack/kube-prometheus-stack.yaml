@@ -30,9 +30,9 @@ spec:
           memory: 2000Mi
     prometheusOperator:
       createCustomResource: true
-      prometheusConfigReloaderImage:
-        repository: quay.io/coreos/prometheus-config-reloader
-        tag: v0.39.0
+      # prometheusConfigReloaderImage:
+      #   repository: quay.io/coreos/prometheus-config-reloader
+      #   tag: v0.39.0
       configmapReloadImage:
         repository: jimmidyson/configmap-reload
         tag: v0.3.0
@@ -348,9 +348,9 @@ spec:
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
       prometheusSpec:
-        image:
-          repository: quay.io/prometheus/prometheus
-          tag: v2.20.0
+        # image:
+        #   repository: quay.io/prometheus/prometheus
+        #   tag: v2.20.0
         replicas: 2
         replicaExternalLabelName: "replica"
         ruleSelector: {}
