@@ -55,6 +55,13 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+        hosts: [prom-alert.eviljungle.com]
+        tls:
+        - hosts:
+          - prom-alert.eviljungle.com
+        annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
       config:
         route:
           # group_by: ['alertname', 'job']
@@ -83,7 +90,6 @@ spec:
       templateFiles:
         pagerduty-custom.tmpl: |-
           {{- define "pagerduty.custom.description" -}}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}{{- end -}}
-
     nodeExporter:
       serviceMonitor:
         relabelings:
@@ -126,6 +132,27 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+        hosts: [grafana.eviljungle.com]
+        tls:
+        - hosts:
+          - grafana.eviljungle.com
+      grafana.ini:
+        server:
+          root_url: https://grafana.${DOMAIN}
+        auth.basic:
+          disable_login_form: true
+        auth.generic_oauth:
+          enabled: true
+          allow_sign_up: true
+          team_ids:
+          allowed_organizations:
+          name: Auth0
+          client_id: $AUTH0_GRAFANA_CLIENT_ID
+          client_secret: $AUTH0_GRAFANA_CLIENT_SECRET
+          scopes: openid profile email
+          auth_url: https://${AUTH0_DOMAIN}.auth0.com/authorize
+          token_url: https://${AUTH0_DOMAIN}.auth0.com/oauth/token
+          api_url: https://${AUTH0_DOMAIN}.auth0.com/userinfo
       plugins:
       - natel-discrete-panel
       - pr0ps-trackmap-panel
@@ -324,6 +351,13 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+        hosts: [prom-server.eviljungle.com]
+        tls:
+        - hosts:
+          - prom-server.eviljungle.com
+        annotations:
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
       prometheusSpec:
         image:
           repository: quay.io/prometheus/prometheus
