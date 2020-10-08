@@ -13,9 +13,9 @@ spec:
   rollback:
     enable: true
   chart:
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    name: prometheus-operator
-    version: 9.3.1
+    repository: https://prometheus-community.github.io/helm-charts
+    name: kube-prometheus-stack
+    version: 9.4.10
   values:
     defaultRules:
       rules:
