@@ -179,7 +179,7 @@ loadSecretsToVault() {
   kvault "kube-system/vault/vault-helm-values.txt"
   kvault "logs/loki/loki-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"
-  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
+  kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
   kvault "monitoring/thanos/thanos-helm-values.txt"
   kvault "monitoring/uptimerobot-prometheus/uptimerobot-prometheus-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
@@ -199,7 +199,7 @@ loadSecretsToVault() {
 
 loadSecretsToVault-oneoff() {
   message "writing secrets to vault"
-  kvault "monitoring/prometheus-operator/prometheus-operator-helm-values.txt"
+  kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
 }
 
 FIRST_RUN=1
