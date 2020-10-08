@@ -2,14 +2,14 @@
 apiVersion: helm.fluxcd.io/v1
 kind: HelmRelease
 metadata:
-  name: prometheus-operator
+  name: kube-prometheus-stack
   namespace: monitoring
   annotations:
     fluxcd.io/ignore: "false"
     fluxcd.io/automated: "false"
     fluxcd.io/tag.grafana: semver:~7
 spec:
-  releaseName: prometheus-operator
+  releaseName: kube-prometheus-stack
   rollback:
     enable: true
   chart:
@@ -396,4 +396,4 @@ spec:
             key: object-store.yaml
   valuesFrom:
   - secretKeyRef:
-      name: prometheus-operator-helm-values
+      name: kube-prometheus-stack-helm-values
