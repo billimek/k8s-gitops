@@ -19,8 +19,8 @@ spec:
   values:
     defaultRules:
       rules:
-        kubeApiserverAvailability: false
-        kubeApiserver: false
+        kubeApiserverAvailability: true
+        kubeApiserver: true
     server:
       resources:
         requests:
@@ -320,8 +320,14 @@ spec:
     kubeEtcd:
       enabled: false
     kubeControllerManager:
-      enabled: false
+      enabled: true
+      endpoints:
+      - 10.2.0.30
     kubeScheduler:
+      enabled: true
+      endpoints:
+      - 10.2.0.30
+    kubeProxy:
       enabled: false
     prometheus-node-exporter:
       tolerations:
