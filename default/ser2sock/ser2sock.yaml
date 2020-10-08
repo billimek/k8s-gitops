@@ -12,7 +12,7 @@ spec:
   chart:
     repository: https://k8s-at-home.com/charts/
     name: ser2sock
-    version: 2.0.0
+    version: 2.0.1
   values:
     image:
       repository: tenstartups/ser2sock
