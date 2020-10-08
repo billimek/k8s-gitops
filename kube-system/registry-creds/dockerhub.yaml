@@ -1,0 +1,8 @@
+apiVersion: ops.alexellis.io/v1
+kind: ClusterPullSecret
+metadata:
+  name: dockerhub
+spec:
+  secretRef:
+    name: registry-creds-secret
+    namespace: kube-system
