@@ -52,18 +52,6 @@ installManualObjects(){
   done
   kapply "$REPO_ROOT"/rook-ceph/dashboard/ingress.txt
 
-  #########################
-  # cert-manager bootstrap
-  #########################
-  CERT_MANAGER_READY=1
-  while [ $CERT_MANAGER_READY != 0 ]; do
-    echo "waiting for cert-manager to be fully ready..."
-    kubectl -n cert-manager wait --for condition=Available deployment/cert-manager > /dev/null 2>&1
-    CERT_MANAGER_READY="$?"
-    sleep 5
-  done
-  kapply "$REPO_ROOT"/cert-manager/cloudflare/cert-manager-letsencrypt.txt
-
 }
 
 export KUBECONFIG="$REPO_ROOT/setup/kubeconfig"
