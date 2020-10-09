@@ -39,8 +39,6 @@ installManualObjects(){
   #   kapply "$i"
   # done
 
-  kapply "$REPO_ROOT"/default/frigate/frigate-noauth-ingress.txt
-
   ###################
   # rook
   ###################

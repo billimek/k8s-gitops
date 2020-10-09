@@ -10,7 +10,7 @@ metadata:
   name: frigate-noauth
 spec:
   rules:
-  - host: frigate.$DOMAIN
+  - host: frigate.eviljungle.com
     http:
       paths:
       - backend:
@@ -19,4 +19,4 @@ spec:
         path: /.*/best\.jpg
   tls:
   - hosts:
-    - frigate.$DOMAIN
+    - frigate.eviljungle.com
