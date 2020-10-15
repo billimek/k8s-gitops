@@ -4,6 +4,9 @@ kind: HelmRelease
 metadata:
   name: mc-skyblock
   namespace: default
+  annotations:
+    fluxcd.io/automated: "true"
+    filter.fluxcd.io/chart-image: regex:^(1\.[0-9]+\.[0-9]+-adopt13)$
 spec:
   releaseName: mc-skyblock
   rollback:
@@ -14,7 +17,7 @@ spec:
     version: 2.0.7
   values:
     image: itzg/minecraft-server
-    imageTag: adopt13
+    imageTag: 1.8.0-adopt13
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
@@ -40,6 +43,8 @@ spec:
       timeoutSeconds: 1
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
+    extraEnv:
+      ENABLE_AUTOPAUSE: TRUE
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
@@ -48,7 +53,14 @@ spec:
       forceReDownload: true
       jvmOpts: "-Xmx1024M -Xms1024M  -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs"
       difficulty: easy
+      maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: survival
       motd: "billimek minecraft server (skyblock)"
+      icon: https://static.planetminecraft.com/files/resource_media/screenshot/1818/636544733395786830-1525075410.png
       loadBalancerIP: 10.0.6.105
+      rcon:
+        enabled: true
+        port: 25575
+        password: "mc-rcon"
+        serviceType: LoadBalancer
