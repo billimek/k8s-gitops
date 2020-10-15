@@ -39,11 +39,6 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: TRUE
-    rcon:
-      enabled: true
-      port: 25575
-      password: "mc-rcon"
-      serviceType: LoadBalancer
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
@@ -58,3 +53,8 @@ spec:
       motd: "billimek minecraft server (creative)"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
       loadBalancerIP: 10.0.6.101
+      rcon:
+        enabled: true
+        port: 25575
+        password: "mc-rcon"
+        serviceType: LoadBalancer
