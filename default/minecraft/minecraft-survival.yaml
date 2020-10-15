@@ -56,7 +56,7 @@ spec:
       maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: survival
-      motd: "billimek minecraft server (survival)"
+      motd: "\u00a7feviljungle\u00a7: (\u00a7e\u00a7lsurvival\nl - \u00a7c\u00a7lHARDCORE\u00a7)"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
       loadBalancerIP: 10.0.6.102
       rcon:
