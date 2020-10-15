@@ -340,13 +340,12 @@ spec:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts: [prom-server.eviljungle.com]
         tls:
         - hosts:
           - prom-server.eviljungle.com
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
       prometheusSpec:
         # image:
         #   repository: quay.io/prometheus/prometheus
