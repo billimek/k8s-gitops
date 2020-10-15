@@ -33,13 +33,12 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
       hosts: [node-red.eviljungle.com]
       tls:
       - hosts:
         - node-red.eviljungle.com
-      annotations:
-        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
     podAnnotations:
       backup.velero.io/backup-volumes: data
     timezone: "America/New_York"
