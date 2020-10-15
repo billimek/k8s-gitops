@@ -39,8 +39,6 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: TRUE
-      MAX_TICK_TIME: "-1"
-      ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
     rcon:
       enabled: true
       port: 25575
@@ -54,7 +52,9 @@ spec:
       forceReDownload: true
       jvmOpts: "-Xmx1024M -Xms1024M  -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -Dusing.aikars.flags=mcflags.emc.gs"
       difficulty: normal
+      maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: creative
       motd: "billimek minecraft server (creative)"
+      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
       loadBalancerIP: 10.0.6.101
