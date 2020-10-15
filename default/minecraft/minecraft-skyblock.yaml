@@ -56,7 +56,7 @@ spec:
       maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: survival
-      motd: "mc-skyblock.eviljungle.com\n\u00A7b\u00A7lskyblock\u00A7r\n"
+      motd: "skyblock.eviljungle.com\n\u00A7b\u00A7lskyblock\u00A7r\n"
       icon: https://static.planetminecraft.com/files/resource_media/screenshot/1818/636544733395786830-1525075410.png
       loadBalancerIP: 10.0.6.105
       rcon:
