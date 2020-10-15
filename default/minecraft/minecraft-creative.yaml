@@ -4,6 +4,9 @@ kind: HelmRelease
 metadata:
   name: mc
   namespace: default
+  annotations:
+    fluxcd.io/automated: "true"
+    filter.fluxcd.io/chart-image: regex:^(1\.[0-9]+\.[0-9]+-adopt13)$
 spec:
   releaseName: mc
   rollback:
@@ -14,7 +17,7 @@ spec:
     version: 2.0.7
   values:
     image: itzg/minecraft-server
-    imageTag: adopt13
+    imageTag: 1.8.0-adopt13
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
@@ -34,6 +37,15 @@ spec:
       periodSeconds: 5
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
+    extraEnv:
+      ENABLE_AUTOPAUSE: TRUE
+      MAX_TICK_TIME: "-1"
+      ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
+    rcon:
+      enabled: true
+      port: 25575
+      password: "mc-rcon"
+      serviceType: LoadBalancer
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
