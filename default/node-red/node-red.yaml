@@ -8,7 +8,6 @@ metadata:
     fluxcd.io/ignore: "false"
     fluxcd.io/automated: "true"
     filter.fluxcd.io/chart-image: regex:^(1\.[0-9]+\.[0-9]+-12-minimal)$
-    # fluxcd.io/tag.chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+-12-minimal)$'
 spec:
   releaseName: node-red
   helmVersion: v3
