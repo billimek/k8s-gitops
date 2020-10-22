@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: semver:3.0
+    filter.fluxcd.io/chart-image: semver:~3.0
 spec:
   releaseName: sonarr
   helmVersion: v3

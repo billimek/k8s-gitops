@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "false"
-    fluxcd.io/tag.chart-image: semver:~3
+    filter.fluxcd.io/chart-image: semver:~3
 spec:
   releaseName: hubot
   helmVersion: v3

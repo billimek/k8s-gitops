@@ -6,7 +6,7 @@ metadata:
   namespace: cert-manager
   annotations:
     fluxcd.io/automated: "false"
-    fluxcd.io/tag.chart-image: semver:~v1.
+    filter.fluxcd.io/chart-image: semver:~v1.
 spec:
   releaseName: cert-manager
   rollback:

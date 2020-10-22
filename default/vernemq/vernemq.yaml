@@ -6,7 +6,7 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "false"
-    fluxcd.io/tag.chart-image: 'semver:0'
+    filter.fluxcd.io/chart-image: 'semver:0'
 spec:
   releaseName: vernemq
   helmVersion: v3

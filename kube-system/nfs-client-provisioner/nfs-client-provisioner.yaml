@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
   annotations:
     fluxcd.io/automated: "true"
-    fluxcd.io/tag.chart-image: semver:~v3.1
+    filter.fluxcd.io/chart-image: semver:~v3.1
 spec:
   releaseName: nfs-client-provisioner
   helmVersion: v3
