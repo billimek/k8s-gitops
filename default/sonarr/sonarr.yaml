@@ -6,7 +6,8 @@ metadata:
   namespace: default
   annotations:
     fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: semver:~3.0
+    # filter.fluxcd.io/chart-image: semver:~3.0
+    filter.fluxcd.io/chart-image: 'regexp:^(3\.0\.[0-9]+\.[0-9]+-ls[0-9]+)$'
 spec:
   releaseName: sonarr
   helmVersion: v3
