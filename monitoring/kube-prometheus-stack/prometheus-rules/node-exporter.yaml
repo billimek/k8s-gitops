@@ -165,7 +165,7 @@ spec:
         description: "{{ $labels.instance }} has had {{ printf \"%.0f\" $value }} uncorrectable memory errors reported by EDAC in the last 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostNetworkReceiveErrors
       expr: increase(node_network_receive_errs_total[5m]) > 0
-      for: 5m
+      for: 15m
       labels:
         severity: warning
       annotations:
@@ -173,7 +173,7 @@ spec:
         description: "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last five minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostNetworkTransmitErrors
       expr: increase(node_network_transmit_errs_total[5m]) > 0
-      for: 5m
+      for: 15m
       labels:
         severity: warning
       annotations:
