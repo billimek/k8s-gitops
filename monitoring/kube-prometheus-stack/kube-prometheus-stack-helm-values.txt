@@ -61,6 +61,7 @@ prometheus:
         - proxmox-b:8081
         - proxmox-c:8081
         - k3s-pi4-c:8081
+        - pi3-b:8081
 grafana:
   adminPassword: "$GRAFANA_PASSWORD"
   grafana.ini:
