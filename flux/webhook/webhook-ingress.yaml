@@ -4,7 +4,7 @@ metadata:
   name: flux-git-webhook
   namespace: flux
   annotations:
-    kubernetes.io/ingress.class: nginx    
+    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/rewrite-target: /api/flux/v11/sync-git
     nginx.ingress.kubernetes.io/auth-type: basic
