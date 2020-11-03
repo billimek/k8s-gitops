@@ -190,7 +190,7 @@ spec:
             url: https://raw.githubusercontent.com/lekpamartin/uptimerobot_exporter/master/dashboards/grafana.json
             datasource: Prometheus
           1-node-exporter:
-            url: https://grafana.com/api/dashboards/11074/revisions/4/download
+            url: https://grafana.com/api/dashboards/11074/revisions/9/download
             datasource: Prometheus 
           # cable-modem-stats:
           #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
