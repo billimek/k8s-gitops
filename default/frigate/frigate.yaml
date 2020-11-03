@@ -127,6 +127,19 @@ spec:
           width: 640
           take_frame: 1
           fps: 5
+          input_args:
+            - -avoid_negative_ts
+            - make_zero
+            - -fflags
+            - nobuffer
+            - -flags
+            - low_delay
+            - -strict
+            - experimental
+            - -fflags
+            - +genpts+discardcorrupt
+            - -use_wallclock_as_timestamps
+            - '1'
           # regions:
           #   - size: 352
           #     x_offset: 0
