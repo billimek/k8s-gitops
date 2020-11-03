@@ -126,7 +126,7 @@ spec:
           height: 352
           width: 640
           take_frame: 1
-          fps: 5
+          fps: 4
           # regions:
           #   - size: 352
           #     x_offset: 0
