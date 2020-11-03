@@ -39,7 +39,7 @@ spec:
       - key: "arm"
         operator: "Exists"
       extraArgs:
-        default-ssl-certificate: "kube-system/acme-crt-secret"
+        default-ssl-certificate: "cert-manager/acme-crt-secret"
       resources:
         requests:
           memory: 500Mi
