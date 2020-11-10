@@ -320,12 +320,12 @@ spec:
       enabled: false
     kubeControllerManager:
       enabled: true
-      endpoints:
-      - 10.2.0.30
+      # endpoints:
+      # - 10.2.0.30
     kubeScheduler:
       enabled: true
-      endpoints:
-      - 10.2.0.30
+      # endpoints:
+      # - 10.2.0.30
     kubeProxy:
       enabled: false
     prometheus-node-exporter:
