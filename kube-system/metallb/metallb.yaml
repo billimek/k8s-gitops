@@ -34,7 +34,7 @@ spec:
       image:
         registry: docker.io
         repository: metallb/controller
-        tag: v0.9.3
+        tag: v0.9.5
       tolerations:
       - key: "arm"
         operator: "Exists"
@@ -42,7 +42,7 @@ spec:
       image:
         registry: docker.io
         repository: metallb/speaker
-        tag: v0.9.3
+        tag: v0.9.5
       tolerations:
       - key: "arm"
         operator: "Exists"
