@@ -22,7 +22,7 @@ spec:
       replicaCount: 2
       config:
         custom-http-errors: 404,401,403,500,503
-        hsts-max-age: 31449600
+        hsts-max-age: "31449600"
         # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
         # global-auth-signin: "https://auth.$server_name/oauth2/start"
       use-forwarded-headers: "true"
