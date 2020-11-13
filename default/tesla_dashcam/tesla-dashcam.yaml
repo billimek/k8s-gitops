@@ -23,9 +23,9 @@ spec:
           value: America/New_York
         image: billimek/tesla_dashcam:0.1.16-intel-vaapi
         args: ["--delete_source", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
-        resources:
-          limits:
-            gpu.intel.com/i915: 1
+        # resources:
+        #   limits:
+        #     gpu.intel.com/i915: 1
         volumeMounts:
         - mountPath: /input
           name: media
