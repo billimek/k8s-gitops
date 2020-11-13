@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tesla-dashcam
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       name: tesla-dashcam
