@@ -226,7 +226,7 @@ spec:
         name: manager
         resources:
           limits:
-            memory: 100Mi
+            memory: 200Mi
           requests:
             cpu: 100m
             memory: 30Mi
