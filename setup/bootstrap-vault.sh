@@ -176,7 +176,6 @@ loadSecretsToVault() {
   ####################
   kvault "kube-system/kured/kured-helm-values.txt"
   kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
-  kvault "kube-system/vault/vault-helm-values.txt"
   kvault "logs/loki/loki-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"
   kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
@@ -184,7 +183,6 @@ loadSecretsToVault() {
   kvault "monitoring/uptimerobot-prometheus/uptimerobot-prometheus-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
-  kvault "default/home-assistant/postgresql-helm-values.txt"
   kvault "default/hubot/hubot-helm-values.txt"
   kvault "default/minio/minio-helm-values.txt"
   kvault "default/nzbget/nzbget-helm-values.txt"
