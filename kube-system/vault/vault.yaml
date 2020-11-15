@@ -35,11 +35,6 @@ spec:
           memory: 256Mi
       standalone:
         enabled: "false"
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: "nginx"
-          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
       ha:
         enabled: "true"
         replicas: 3
@@ -66,5 +61,3 @@ spec:
     ui:
       enabled: true
       serviceType: "ClusterIP"
-  valueFileSecrets:
-  - name: "vault-helm-values"
