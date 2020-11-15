@@ -1,3 +1,13 @@
+#################################################################################################################
+# Define the settings for the rook-ceph cluster with common settings for a production cluster.
+# All nodes with available raw devices will be used for the Ceph cluster. At least three nodes are required
+# in this example. See the documentation for more details on storage settings available.
+
+# For example, to create the cluster:
+#   kubectl create -f crds.yaml -f common.yaml -f operator.yaml
+#   kubectl create -f cluster.yaml
+#################################################################################################################
+
 apiVersion: ceph.rook.io/v1
 kind: CephCluster
 metadata:
@@ -9,7 +19,7 @@ spec:
     # v13 is mimic, v14 is nautilus, and v15 is octopus.
     # RECOMMENDATION: In production, use a specific version tag instead of the general v14 flag, which pulls the latest release and could result in different
     # versions running within the cluster. See tags available at https://hub.docker.com/r/ceph/ceph/tags/.
-    # If you want to be more precise, you can always use a timestamp tag such ceph/ceph:v15.2.4-20200630
+    # If you want to be more precise, you can always use a timestamp tag such ceph/ceph:v15.2.5-20200916
     # This tag might not contain a new Ceph version, just security fixes from the underlying operating system, which will reduce vulnerabilities
     image: ceph/ceph:v15.2.5
     # Whether to allow unsupported versions of Ceph. Currently `nautilus` and `octopus` are supported.
@@ -27,14 +37,16 @@ spec:
   skipUpgradeChecks: false
   # Whether or not continue if PGs are not clean during an upgrade
   continueUpgradeAfterChecksEvenIfNotHealthy: false
-  # set the amount of mons to be started
   mon:
+    # Set the number of mons to be started. Must be an odd number, and is generally recommended to be 3.
     count: 3
+    # The mons should be on unique nodes. For production, at least 3 nodes are recommended for this reason.
+    # Mons should only be allowed on the same node for test environments where data loss is acceptable.
     allowMultiplePerNode: false
   mgr:
     modules:
     # Several modules should not need to be included in this list. The "dashboard" and "monitoring" modules
-    # are already enabled by other settings in the cluster CR and the "rook" module is always enabled.
+    # are already enabled by other settings in the cluster CR.
     - name: pg_autoscaler
       enabled: true
   # enable the ceph dashboard for viewing cluster status
@@ -71,15 +83,18 @@ spec:
       #
       #public: public-conf --> NetworkAttachmentDefinition object name in Multus
       #cluster: cluster-conf --> NetworkAttachmentDefinition object name in Multus
+    # Provide internet protocol version. IPv6, IPv4 or empty string are valid options. Empty string would mean IPv4
+    #ipFamily: "IPv6"
   # enable the crash collector for ceph daemon crash collection
   crashCollector:
     disable: false
+  # automate [data cleanup process](https://github.com/rook/rook/blob/master/Documentation/ceph-teardown.md#delete-the-data-on-hosts) in cluster destruction.
   cleanupPolicy:
-    # cleanup should only be added to the cluster when the cluster is about to be deleted.
-    # After any field of the cleanup policy is set, Rook will stop configuring the cluster as if the cluster is about
-    # to be destroyed in order to prevent these settings from being deployed unintentionally.
-    # To signify that automatic deletion is desired, use the value "yes-really-destroy-data". Only this and an empty
-    # string are valid values for this field.
+    # Since cluster cleanup is destructive to data, confirmation is required.
+    # To destroy all Rook data on hosts during uninstall, confirmation must be set to "yes-really-destroy-data".
+    # This value should only be set when the cluster is about to be deleted. After the confirmation is set,
+    # Rook will immediately stop configuring the cluster and only wait for the delete command.
+    # If the empty string is set, Rook will not destroy any data on hosts during uninstall.
     confirmation: ""
     # sanitizeDisks represents settings for sanitizing OSD disks on cluster deletion
     sanitizeDisks:
@@ -94,6 +109,9 @@ spec:
       # iteration overwrite N times instead of the default (1)
       # takes an integer value
       iteration: 1
+    # allowUninstallWithVolumes defines how the uninstall should be performed
+    # If set to true, cephCluster deletion does not wait for the PVs to be deleted.
+    allowUninstallWithVolumes: false
   # To control where various services will be scheduled by kubernetes, use the placement configuration sections below.
   # The example under 'all' would have all services scheduled on kubernetes nodes labeled with 'role=storage-node' and
   # tolerate taints with a key of 'storage-node'.
@@ -127,8 +145,16 @@ spec:
 #    mon:
 #    osd:
 #    cleanup:
+#    prepareosd:
 # If no mgr annotations are set, prometheus scrape annotations will be set by default.
-#   mgr:
+#    mgr:
+  labels:
+#    all:
+#    mon:
+#    osd:
+#    cleanup:
+#    mgr:
+#    prepareosd:
   resources:
 # The requests and limits set here, allow the mgr pod to use half of one CPU core and 1 gigabyte of memory
 #    mgr:
@@ -144,18 +170,6 @@ spec:
 #    prepareosd:
 #    crashcollector:
 #    cleanup:
-    # api:
-    #   requests:
-    #       cpu: 25m
-    #       memory: 250Mi
-    #   limits:
-    #     memory: 512Mi
-    # mgr:
-    #   requests:
-    #       cpu: 50m
-    #       memory: 300Mi
-    #   limits:
-    #     memory: 512Mi
     mon:
       requests:
           cpu: 35m
@@ -168,12 +182,6 @@ spec:
         memory: "2048Mi"
       limits:
         memory: "4096Mi"
-    # rbdmirror:
-    #   requests:
-    #       cpu: 25m
-    #       memory: 250Mi
-    #   limits:
-    #     memory: 512Mi
   # The option to automatically remove OSDs that are out and are safe to destroy.
   removeOSDsIfOutAndSafeToRemove: false
 #  priorityClassNames:
@@ -186,6 +194,7 @@ spec:
     useAllDevices: true
     #deviceFilter:
     config:
+      # crushRoot: "custom-root" # specify a non-default root label for the CRUSH map
       # metadataDevice: "md0" # specify a non-rotational storage so ceph-volume will use it as block db device of bluestore.
       # databaseSizeMB: "1024" # uncomment if the disks are smaller than 100 GB
       # journalSizeMB: "1024"  # uncomment if the disks are 20 GB or smaller
