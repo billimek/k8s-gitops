@@ -85,8 +85,6 @@ spec:
       tolerations:
       - key: "arm"
         operator: "Exists"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
     promtail:
       # image:
       #   repository: grafana/promtail
@@ -95,6 +93,8 @@ spec:
         enabled: true
       tolerations:
       - key: "arm"
+        operator: "Exists"
+      - key: "node-role.kubernetes.io/master"
         operator: "Exists"
       extraScrapeConfigs:
       - job_name: syslog
