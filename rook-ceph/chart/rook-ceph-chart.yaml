@@ -30,6 +30,8 @@ spec:
       pluginTolerations:
         - key: "arm"
           operator: "Exists"
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
     resources:
       limits:
         cpu: 1000m
