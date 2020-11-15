@@ -15,9 +15,9 @@ memcached:
 additionalArgs:
 - --connect=ws://fluxcloud
 prometheus:
-  enabled: true
+  enabled: false
   serviceMonitor:
-    create: true
+    create: false
     interval: 30s
     scrapeTimeout: 10s
     namespace: flux

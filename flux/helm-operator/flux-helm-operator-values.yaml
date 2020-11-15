@@ -1,7 +1,7 @@
 # image:
 #   repository: docker.io/fluxcd/helm-operator
 #   tag: 1.2.0
-createCRD: true
+createCRD: false
 git:
   ssh:
     secretName: flux-git-deploy
@@ -10,9 +10,9 @@ statusUpdateInterval: "10m"
 helm:
   versions: "v3"
 prometheus:
-  enabled: true
+  enabled: false
   serviceMonitor:
-    create: true
+    create: false
     interval: 30s
     scrapeTimeout: 10s
     namespace: flux
