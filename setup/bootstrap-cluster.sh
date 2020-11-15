@@ -18,6 +18,8 @@ message() {
 installFlux() {
   message "installing flux"
   # install flux
+  kubectl apply -f "$REPO_ROOT"/flux/namespace.yaml
+  kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/v1.2.0/deploy/crds.yaml
   helm repo add fluxcd https://charts.fluxcd.io
   helm upgrade --install flux --values "$REPO_ROOT"/flux/flux/flux-values.yaml --namespace flux fluxcd/flux
   helm upgrade --install helm-operator --values "$REPO_ROOT"/flux/helm-operator/flux-helm-operator-values.yaml --namespace flux fluxcd/helm-operator
