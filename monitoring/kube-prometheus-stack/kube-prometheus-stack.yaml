@@ -334,6 +334,8 @@ spec:
         operator: "Exists"
       - key: "armhf"
         operator: "Exists"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
     prometheus:
       ingress:
         enabled: true
