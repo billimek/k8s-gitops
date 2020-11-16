@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: linuxserver/sonarr
-      tag: 3.0.4.1002-ls75
+      tag: 3.0.4.1003-ls76
     ingress:
       enabled: true
       annotations:
