@@ -26,6 +26,7 @@ spec:
     service:
       additionalServices:
       - enabled: true
+        nameSuffix: bittorrent
         type: LoadBalancer
         loadBalancerIP: 10.0.6.57
         port:
