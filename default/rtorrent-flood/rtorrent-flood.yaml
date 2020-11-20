@@ -23,10 +23,10 @@ spec:
     #   image:
     #     repository: billimek/rtorrent
     #     tag: latest
-    flood:
-      image:
-        repository: jesec/flood
-        tag: 4.1.1
+    # flood:
+    #   image:
+    #     repository: jesec/flood
+    #     tag: 4.1.1
     uid: 1001
     gid: 1001
     guiService:
