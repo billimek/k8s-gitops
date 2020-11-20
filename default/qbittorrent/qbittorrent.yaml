@@ -30,7 +30,7 @@ spec:
         type: LoadBalancer
         loadBalancerIP: 10.0.6.57
         port:
-          port: 50413
+          port: 6881
         externalTrafficPolicy: Local
     ingress:
       enabled: true
