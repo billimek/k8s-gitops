@@ -30,7 +30,10 @@ spec:
         type: LoadBalancer
         loadBalancerIP: 10.0.6.57
         port:
-          port: 6881
+          port: 50413
+          name: bittorrent
+          protocol: TCP
+          targetPort: 6881
         externalTrafficPolicy: Local
     ingress:
       enabled: true
