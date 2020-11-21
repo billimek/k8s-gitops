@@ -1,0 +1,154 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: flood
+  namespace: default
+  annotations:
+    fluxcd.io/ignore: "false"
+    fluxcd.io/automated: "false"
+    filter.fluxcd.io/chart-image: glob:0.9.*
+spec:
+  releaseName: flood
+  rollback:
+    enable: true
+  chart:
+    repository: https://k8s-at-home.com/charts/
+    name: flood
+    version: 1.0.0
+  values:
+    image:
+      repository: jesec/flood
+      tag: 4.1.2
+    env:
+      FLOOD_OPTION_RUNDIR: /config
+      FLOOD_OPTION_AUTH: "none"
+      FLOOD_OPTION_RTSOCKET: "/tmp/rtorrent.sock"
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+      hosts:
+      - host: f.eviljungle.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - "f.eviljungle.com"
+
+    persistence:
+      data:
+        enabled: true
+        existingClaim: nfs-media-downloads-pvc
+        accessMode: ReadWriteMany
+        size: "1Gi"
+      config:
+        enabled: true
+        size: 1Gi
+        storageClass: rook-ceph-block
+
+    probes:
+      liveness:
+        enabled: true
+        initialDelaySeconds: 30
+        failureThreshold: 5
+        timeoutSeconds: 10
+      readiness:
+        enabled: true
+        initialDelaySeconds: 30
+        failureThreshold: 5
+        timeoutSeconds: 10
+      startup:
+        enabled: true
+        initialDelaySeconds: 5
+        failureThreshold: 30
+        periodSeconds: 10
+
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
+
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 500m
+      limits:
+        memory: 1500Mi
+
+    additionalVolumeMounts:
+      - mountPath: /tmp
+        name: socket
+
+
+    additionalContainers:
+      - name: rtorrent
+        # image: billimek/alpine-rtorrent:0.9.8-1
+        image: billimek/rtorrent:latest
+        env:
+        - name: TZ
+        - name: PUID
+          value: "1001"
+        - name: PGID
+          value: "1001"
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: bt
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 49161
+          name: bt
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: bt
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            cpu: 50m
+            memory: 50Mi
+        startupProbe:
+          failureThreshold: 60
+          periodSeconds: 10
+          initialDelaySeconds: 5
+          successThreshold: 1
+          tcpSocket:
+            port: bt
+          timeoutSeconds: 1
+        tty: true
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /data
+          name: data
+        - mountPath: /session
+          name: data
+          subPath: .session
+        - mountPath: /socket
+          name: socket
+
+    additionalVolumes:
+      - emptyDir: {}
+        name: socket
+
+    service:
+      additionalServices:
+        - enabled: true
+          nameSuffix: bt
+          type: LoadBalancer
+          port:
+            port: 49161
+            name: bt
+            protocol: TCP
+            targetPort: bt
+          loadBalancerIP: 10.0.6.57
