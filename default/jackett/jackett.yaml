@@ -1,0 +1,62 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: jackett
+  namespace: default
+  annotations:
+    fluxcd.io/ignore: "false"
+    fluxcd.io/automated: "false"
+    filter.fluxcd.io/chart-image: glob:0.9.*
+spec:
+  releaseName: jackett
+  rollback:
+    enable: true
+  chart:
+    repository: https://k8s-at-home.com/charts/
+    name: jackett
+    version: 5.4.0
+  values:
+    image:
+      repository: linuxserver/jackett
+      tag: version-v0.16.2106
+
+    env:
+      TZ: "America/New_York"
+      PUID: 1001
+      PGID: 1001
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+      hosts:
+      - host: jackett.eviljungle.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - "jackett.eviljungle.com"
+
+    persistence:
+      config:
+        enabled: true
+        storageClass: "rook-ceph-block"
+        accessMode: ReadWriteOnce
+        size: "1Gi"
+      torrentblackhole:
+        enabled: true
+        emptyDir: false
+        mountPath: /downloads
+        existingClaim: "nfs-media-downloads-pvc"
+
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
+
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 500m
+      limits:
+        memory: 1500Mi
