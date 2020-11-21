@@ -6,6 +6,14 @@ Installs [blocky](https://github.com/0xERR0R/blocky): DNS proxy as ad-blocker fo
 
 * [blocky.yaml](blocky/blocky.yaml)
 
+# flood (with rtorrent sidecar)
+
+![](https://i.imgur.com/ZtMrsbm.png)
+
+torrent client
+
+* [flood.yaml](flood/flood.yaml)
+
 # frigate
 
 ![](https://i.imgur.com/hv7bh6m.png)
@@ -82,14 +90,6 @@ Usenet download client
 movie downloader
 
 * [radarr.yaml](radarr/radarr.yaml)
-
-# rtorrent-flood
-
-![](https://i.imgur.com/ZtMrsbm.png)
-
-torrent client
-
-* [rtorrent-flood.yaml](rtorrent-flood/rtorrent-flood.yaml)
 
 # ser2sock
 
