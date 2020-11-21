@@ -137,6 +137,9 @@ spec:
         - mountPath: /watch
           name: data
           subPath: watch
+        - mountPath: /download
+          name: data
+          subPath: torrents
         - mountPath: /socket
           name: socket
 
