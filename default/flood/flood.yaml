@@ -134,6 +134,9 @@ spec:
         - mountPath: /session
           name: data
           subPath: .session
+        - mountPath: /watch
+          name: data
+          subPath: watch
         - mountPath: /socket
           name: socket
 
