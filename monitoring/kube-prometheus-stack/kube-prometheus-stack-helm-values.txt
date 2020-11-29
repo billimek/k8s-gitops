@@ -1,7 +1,7 @@
 alertmanager:
   config:
     global:
-      slack_api_url: $SLACK_WEBHOOK_URL
+      slack_api_url: $DISCORD_ALERTMANAGER_WEBHOOK_URL
     receivers:
     - name: 'null'
     - name: 'slack-notifications'

@@ -1,6 +1,6 @@
 communications:
   slack:
-    enabled: true
+    enabled: false
     channel: 'notifications'
     token: '$BOTKUBE_SLACK_TOKEN'
     notiftype: short
@@ -10,3 +10,7 @@ communications:
     botid: '782247992648138773'
     channel: '782247131649933332'
     notiftype: short
+  webhook:
+    enabled: false
+    url: '$DISCORD_BOTKUBE_WEBHOOK_URL'
+
