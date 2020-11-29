@@ -14,13 +14,6 @@ memcached:
     operator: "Exists"
 additionalArgs:
 - --connect=ws://fluxcloud
-prometheus:
-  enabled: false
-  serviceMonitor:
-    create: false
-    interval: 30s
-    scrapeTimeout: 10s
-    namespace: flux
 syncGarbageCollection:
   enabled: true
   dry: false

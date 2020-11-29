@@ -17,3 +17,5 @@ spec:
   valuesFrom:
   - externalSourceRef:
       url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/flux/flux/flux-values.yaml
+  - externalSourceRef:
+      url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/flux/flux/flux-values-prom.yaml

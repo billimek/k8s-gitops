@@ -9,12 +9,5 @@ chartsSyncInterval: "10m"
 statusUpdateInterval: "10m"
 helm:
   versions: "v3"
-prometheus:
-  enabled: false
-  serviceMonitor:
-    create: false
-    interval: 30s
-    scrapeTimeout: 10s
-    namespace: flux
 dashboards:
   enabled: true

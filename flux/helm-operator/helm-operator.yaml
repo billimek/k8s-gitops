@@ -14,3 +14,5 @@ spec:
   valuesFrom:
   - externalSourceRef:
       url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/flux/helm-operator/flux-helm-operator-values.yaml
+  - externalSourceRef:
+      url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/flux/helm-operator/flux-helm-operator-values-prom.yaml
