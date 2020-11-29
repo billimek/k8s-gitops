@@ -32,6 +32,10 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
+      hosts: [minio.eviljungle.com]
+      tls:
+      - hosts:
+        - minio.eviljungle.com
     tolerations:
     - key: "arm"
       operator: "Exists"

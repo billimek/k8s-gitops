@@ -24,5 +24,17 @@ spec:
     ingress:
       enabled: true
       path: /oauth2
+      hosts: [auth.eviljungle.com]
+      tls:
+      - hosts:
+        - auth.eviljungle.com
+    extraArgs:
+      provider: oidc
+      oidc-issuer-url: https://billimek.auth0.com/
+      skip-provider-button:
+      pass-authorization-header:
+      email-domain: "*"
+      cookie-domain: .eviljungle.com
+      whitelist-domain: .eviljungle.com
   valueFileSecrets:
   - name: "oauth2-proxy-helm-values"

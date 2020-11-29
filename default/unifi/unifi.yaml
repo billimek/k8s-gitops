@@ -33,6 +33,10 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "nginx"
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      hosts: [unifi.eviljungle.com]
+      tls:
+      - hosts:
+        - unifi.eviljungle.com
     guiService:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.55
@@ -61,5 +65,3 @@ spec:
         cpu: 15m
       limits:
         memory: 750Mi
-  valueFileSecrets:
-  - name: "unifi-helm-values"
