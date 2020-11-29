@@ -1,5 +1,0 @@
-ingress:
-  hosts: [sonarr.$DOMAIN]
-  tls:
-  - hosts:
-    - sonarr.$DOMAIN

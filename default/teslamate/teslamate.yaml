@@ -28,6 +28,14 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
+      hosts:
+        - teslamate.eviljungle.com
+      tls:
+        - hosts:
+          - teslamate.eviljungle.com
+      annotations:
+        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
     tolerations:
     - key: "arm"
       operator: "Exists"

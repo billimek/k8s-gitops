@@ -24,6 +24,10 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+      hosts: [radarr.eviljungle.com]
+      tls:
+      - hosts:
+        - radarr.eviljungle.com
     timezone: "America/New_York"
     podAnnotations:
       backup.velero.io/backup-volumes: config
@@ -44,5 +48,3 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-  valueFileSecrets:
-  - name: "radarr-helm-values"

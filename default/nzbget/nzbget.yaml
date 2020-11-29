@@ -28,6 +28,10 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
+      hosts: [nzbget.eviljungle.com]
+      tls:
+      - hosts:
+        - nzbget.eviljungle.com
     timezone: "America/New_York"
     persistence:
       downloads:
@@ -50,5 +54,3 @@ spec:
         cpu: 25m
       limits:
         memory: 400Mi
-  valueFileSecrets:
-  - name: "nzbget-helm-values"
