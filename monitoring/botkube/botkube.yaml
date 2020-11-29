@@ -24,7 +24,7 @@ spec:
       settings:
         clustername: k8s
       resources:
-        - name: pod                # Name of the resources e.g pod, deployment, ingress, etc. (Resource name must be in singular form)
+        - name: v1/pods                # Name of the resources e.g pod, deployment, ingress, etc. (Resource name must be in singular form)
           namespaces:
             include:  
               - all
@@ -34,7 +34,7 @@ spec:
           events:                   # List of lifecycle events you want to receive, e.g create, update, delete, error OR all
             - create
             - delete
-        - name: service
+        - name: v1/services
           namespaces:
             include:  
               - all
@@ -44,7 +44,7 @@ spec:
             - create
             - delete
             - error
-        - name: deployment
+        - name: apps/v1/deployments
           namespaces:
             include:  
               - all
@@ -59,7 +59,7 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-        - name: statefulset
+        - name: apps/v1/statefulsets
           namespaces:
             include:  
               - all
@@ -74,7 +74,7 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-        - name: ingress
+        - name: networking.k8s.io/v1beta1/ingresses
           namespaces:
             include:  
               - all
@@ -84,7 +84,7 @@ spec:
             - create
             - delete
             - error
-        - name: node
+        - name: v1/nodes
           namespaces:
             include:  
               - all
@@ -94,7 +94,7 @@ spec:
             - create
             - delete
             - error
-        - name: namespace
+        - name: v1/namespaces
           namespaces:
             include:  
               - all
@@ -104,7 +104,7 @@ spec:
             - create
             - delete
             - error
-        - name: persistentvolume
+        - name: v1/persistentvolumes
           namespaces:
             include:  
               - all
@@ -114,7 +114,7 @@ spec:
             - create
             - delete
             - error
-        - name: persistentvolumeclaim
+        - name: v1/persistentvolumeclaims
           namespaces:
             include:  
               - all
@@ -124,7 +124,7 @@ spec:
             - create
             - delete
             - error
-        - name: secret
+        - name: v1/secrets
           namespaces:
             include:  
               - all
@@ -134,7 +134,7 @@ spec:
             - create
             - delete
             - error
-        - name: configmap
+        - name: v1/configmaps
           namespaces:
             include:  
               - all
@@ -143,7 +143,7 @@ spec:
           events:
             - delete
             - error
-        - name: daemonset
+        - name: apps/v1/daemonsets
           namespaces:
             include:  
               - all
@@ -158,7 +158,7 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-        - name: job
+        - name: batch/v1/jobs
           namespaces:
             include:  
               - all
@@ -175,7 +175,7 @@ spec:
             fields:
               - spec.template.spec.containers[*].image
               - status.conditions[*].type
-        - name: role
+        - name: rbac.authorization.k8s.io/v1/roles
           namespaces:
             include:  
               - all
@@ -185,7 +185,7 @@ spec:
             - create
             - delete
             - error
-        - name: rolebinding
+        - name: rbac.authorization.k8s.io/v1/rolebindings
           namespaces:
             include:  
               - all
@@ -195,7 +195,7 @@ spec:
             - create
             - delete
             - error
-        - name: clusterrole
+        - name: rbac.authorization.k8s.io/v1/clusterroles
           namespaces:
             include:
               - all
@@ -205,7 +205,7 @@ spec:
             - create
             - delete
             - error
-        - name: clusterrolebinding
+        - name: rbac.authorization.k8s.io/v1/clusterrolebindings
           namespaces:
             include:  
               - all
