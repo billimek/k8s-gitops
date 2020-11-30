@@ -1,20 +1,20 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: loki
   namespace: logs
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "false"
-    fluxcd.io/tag.loki: semver:~v1.
-    fluxcd.io/tag.promtail: semver:~v1.
 spec:
-  releaseName: loki
+  interval: 5m
   chart:
-    repository: https://grafana.github.io/loki/charts
-    name: loki-stack
-    version: 0.41.1
+    spec:
+      chart: loki
+      version: 0.41.1
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-loki-charts
+        namespace: flux-system
+      interval: 5m
   values:
     loki:
       # image:
