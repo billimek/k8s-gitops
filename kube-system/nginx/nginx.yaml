@@ -1,22 +1,20 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: ingress-nginx
   namespace: kube-system
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "false"
-    filter.fluxcd.io/chart-image: semver:~0.
 spec:
-  releaseName: ingress-nginx
-  helmVersion: v3
-  rollback:
-    enable: true
+  interval: 5m
   chart:
-    repository: https://kubernetes.github.io/ingress-nginx
-    name: ingress-nginx
-    version: 3.4.1
+    spec:
+      chart: ingress-nginx
+      version: 3.4.1
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx-charts
+        namespace: flux-system
+      interval: 5m
   values:
     controller:
       replicaCount: 2
