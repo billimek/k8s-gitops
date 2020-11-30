@@ -1,20 +1,21 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: frigate
   namespace: default
-  annotations:
-    fluxcd.io/automated: "false"
-    filter.fluxcd.io/chart-image: 'semver:0'
 spec:
-  releaseName: frigate
-  rollback:
-    enable: false
+  interval: 5m
   chart:
-    repository: https://k8s-at-home.com/charts/
-    name: frigate
-    version: 4.0.0
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: frigate
+      version: 4.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image:
       repository: blakeblackshear/frigate
@@ -158,5 +159,7 @@ spec:
       limits:
         memory: 2500Mi
         # gpu.intel.com/i915: 1
-  valueFileSecrets:
-  - name: "frigate-helm-values"
+  valuesFrom:
+  - kind: Secret
+    name: "frigate-helm-values"
+    optional: false
