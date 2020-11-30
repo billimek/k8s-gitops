@@ -1,21 +1,20 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: influxdb
   namespace: monitoring
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+)$'
 spec:
-  releaseName: influxdb
-  rollback:
-    enable: true
+  interval: 5m
   chart:
-    repository: https://helm.influxdata.com/
-    name: influxdb
-    version: 4.8.6
+    spec:
+      chart: influxdb
+      version: 4.8.6
+      sourceRef:
+        kind: HelmRepository
+        name: influxdata-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image:
       repository: "influxdb"
