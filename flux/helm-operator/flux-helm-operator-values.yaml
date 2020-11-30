@@ -1,13 +1,13 @@
-# image:
-#   repository: docker.io/fluxcd/helm-operator
-#   tag: 1.2.0
-createCRD: false
-git:
-  ssh:
-    secretName: flux-git-deploy
-chartsSyncInterval: "10m"
-statusUpdateInterval: "10m"
-helm:
-  versions: "v3"
-dashboards:
-  enabled: true
+# # image:
+# #   repository: docker.io/fluxcd/helm-operator
+# #   tag: 1.2.0
+# createCRD: false
+# git:
+#   ssh:
+#     secretName: flux-git-deploy
+# chartsSyncInterval: "10m"
+# statusUpdateInterval: "10m"
+# helm:
+#   versions: "v3"
+# dashboards:
+#   enabled: true
