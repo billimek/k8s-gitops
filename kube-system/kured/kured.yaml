@@ -22,8 +22,8 @@ spec:
       tag: 1.5.1
       pullPolicy: Always # the 1.5.1 tag was reused to fix a bug, forcing pull for this version only
     configuration:
-      startTime: "6:00"
-      endTime: "12:00"
+      startTime: "0:00"
+      endTime: "4:00"
       timeZone: "America/New_York"
     tolerations:
     - key: "arm"
