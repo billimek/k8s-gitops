@@ -1,20 +1,20 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: mcsv
   namespace: default
-  annotations:
-    fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: regex:^(1\.[0-9]+\.[0-9]+-adopt13)$
 spec:
-  releaseName: mcsv
-  rollback:
-    enable: true
+  interval: 5m
   chart:
-    repository: https://itzg.github.io/minecraft-server-charts/
-    name: minecraft
-    version: 2.0.11
+    spec:
+      chart: minecraft
+      version: 2.0.11
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image: itzg/minecraft-server
     imageTag: 1.8.0-adopt13
