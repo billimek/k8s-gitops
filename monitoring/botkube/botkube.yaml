@@ -26,7 +26,7 @@ spec:
       resources:
         - name: v1/pods                # Name of the resources e.g pod, deployment, ingress, etc. (Resource name must be in singular form)
           namespaces:
-            include:  
+            include:
               - all
             ignore:                 # List of namespaces to be ignored (omitempty), used only with include: all
               - rook-ceph                    # example : include [all], ignore [x,y,z] 
@@ -36,20 +36,16 @@ spec:
             - delete
         - name: v1/services
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              - 
           events:
             - create
             - delete
             - error
         - name: apps/v1/deployments
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - update
@@ -61,10 +57,8 @@ spec:
               - spec.template.spec.containers[*].image
         - name: apps/v1/statefulsets
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - update
@@ -76,67 +70,55 @@ spec:
               - spec.template.spec.containers[*].image
         - name: networking.k8s.io/v1beta1/ingresses
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
             - error
         - name: v1/nodes
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
             - error
         - name: v1/namespaces
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
             - error
         - name: v1/persistentvolumes
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
             - error
         - name: v1/persistentvolumeclaims
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
             - error
         - name: v1/secrets
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
             - error
         - name: v1/configmaps
           namespaces:
-            include:  
+            include:
               - all
             ignore:
               - rook-ceph
@@ -145,10 +127,8 @@ spec:
             - error
         - name: apps/v1/daemonsets
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
@@ -160,7 +140,7 @@ spec:
               - spec.template.spec.containers[*].image
         - name: batch/v1/jobs
           namespaces:
-            include:  
+            include:
               - all
             ignore:
               - rook-ceph
@@ -177,20 +157,16 @@ spec:
               - status.conditions[*].type
         - name: rbac.authorization.k8s.io/v1/roles
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
             - error
         - name: rbac.authorization.k8s.io/v1/rolebindings
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
@@ -199,18 +175,14 @@ spec:
           namespaces:
             include:
               - all
-            ignore:
-              - 
           events:
             - create
             - delete
             - error
         - name: rbac.authorization.k8s.io/v1/clusterrolebindings
           namespaces:
-            include:  
+            include:
               - all
-            ignore:
-              -
           events:
             - create
             - delete
