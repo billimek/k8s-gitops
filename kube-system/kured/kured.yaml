@@ -24,7 +24,7 @@ spec:
     configuration:
       startTime: "6:00"
       endTime: "12:00"
-      # timeZone: "America/New_York"
+      timeZone: "America/New_York"
     tolerations:
     - key: "arm"
       operator: "Exists"
