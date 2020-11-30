@@ -31,6 +31,9 @@ spec:
     - kind: HelmRelease
       namespace: 'default'
       name: '*'
+    - kind: helmreleases.helm.toolkit.fluxcd.io
+      namespace: 'default'
+      name: '*'
     - kind: HelmRelease
       namespace: 'logs'
       name: '*'
@@ -44,6 +47,9 @@ spec:
       namespace: 'rook-ceph'
       name: '*'
     - kind: HelmRelease
+      namespace: 'velero'
+      name: '*'
+    - kind: helmreleases.helm.toolkit.fluxcd.io
       namespace: 'velero'
       name: '*'
   suspend: false
