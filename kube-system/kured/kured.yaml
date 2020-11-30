@@ -1,23 +1,26 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: kured
   namespace: kube-system
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: semver:~1
 spec:
-  releaseName: kured
+  interval: 5m
   chart:
-    repository: https://weaveworks.github.io/kured
-    name: kured
-    version: 2.2.0
+    spec:
+      # renovate: registryUrl=https://weaveworks.github.io/kured
+      chart: kured
+      version: 2.2.2
+      sourceRef:
+        kind: HelmRepository
+        name: weaveworks-kured-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image:
       repository: raspbernetes/kured
       tag: 1.5.1
+      pullPolicy: Always # the 1.5.1 tag was reused to fix a bug, forcing pull for this version only
     configuration:
       startTime: "6:00"
       endTime: "12:00"
