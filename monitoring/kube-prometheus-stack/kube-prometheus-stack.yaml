@@ -1,21 +1,21 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
   namespace: monitoring
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "false"
-    fluxcd.io/tag.grafana: semver:~7
 spec:
-  releaseName: kube-prometheus-stack
-  rollback:
-    enable: true
+  interval: 5m
   chart:
-    repository: https://prometheus-community.github.io/helm-charts
-    name: kube-prometheus-stack
-    version: 9.4.10
+    spec:
+      chart: kube-prometheus-stack
+      version: 9.4.10
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community-charts
+        namespace: flux-system
+      interval: 5m
+
   values:
     # defaultRules:
     #   rules:
@@ -390,5 +390,6 @@ spec:
             name: thanos
             key: object-store.yaml
   valuesFrom:
-  - secretKeyRef:
-      name: kube-prometheus-stack-helm-values
+  - kind: Secret
+    name: "kube-prometheus-stack-helm-values"
+    optional: false
