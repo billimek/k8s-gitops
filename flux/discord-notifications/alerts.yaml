@@ -24,7 +24,25 @@ spec:
   providerRef:
     name: discord
   eventSeverity: error
-  eventSources:
     - kind: HelmRelease
+      namespace: 'cert-manager'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'default'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'logs'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'kube-system'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'monitoring'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'rook-ceph'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'velero'
       name: '*'
   suspend: false
