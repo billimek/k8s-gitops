@@ -1,20 +1,20 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: modem-stats
   namespace: monitoring
-  annotations:
-    fluxcd.io/ignore: "false"
 spec:
-  releaseName: modem-stats
-  helmVersion: v3
-  rollback:
-    enable: true
+  interval: 5m
   chart:
-    repository: https://k8s-at-home.com/charts/
-    name: modem-stats
-    version: 3.0.0
+    spec:
+      chart: modem-stats
+      version: 3.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image:
       repository: billimek/sb6183-for-influxdb
