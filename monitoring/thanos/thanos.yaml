@@ -1,21 +1,20 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: thanos
   namespace: monitoring
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "false"
-    filter.fluxcd.io/chart-image: 'regexp:^(1\.[0-9]+\.[0-9]+)$'
 spec:
-  releaseName: thanos
-  rollback:
-    enable: true
+  interval: 5m
   chart:
-    repository: https://kubernetes-charts.banzaicloud.com
-    name: thanos
-    version: 0.3.28
+    spec:
+      chart: thanos
+      version: 0.3.28
+      sourceRef:
+        kind: HelmRepository
+        name: banzaicloud-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image:
       repository: quay.io/thanos/thanos
@@ -54,5 +53,6 @@ spec:
           enable: false
         part_size: 0
   valuesFrom:
-  - secretKeyRef:
-      name: thanos-helm-values
+  - kind: Secret
+    name: "thanos-helm-values"
+    optional: false
