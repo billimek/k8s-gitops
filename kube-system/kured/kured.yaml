@@ -32,5 +32,7 @@ spec:
       operator: "Exists"
     metrics:
       create: true
-  valueFileSecrets:
-  - name: "kured-helm-values"
+  valuesFrom:
+  - kind: Secret
+    name: "kured-helm-values"
+    optional: false
