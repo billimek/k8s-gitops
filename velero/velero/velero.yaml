@@ -1,19 +1,22 @@
 
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: velero
   namespace: velero
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "false"
 spec:
-  releaseName: velero
+  interval: 5m
   chart:
-    repository: https://vmware-tanzu.github.io/helm-charts
-    name: velero
-    version: 2.12.13
+    spec:
+      # renovate: registryUrl=https://weaveworks.github.io/kured
+      chart: kured
+      version: 2.2.13
+      sourceRef:
+        kind: HelmRepository
+        name: vmware-tanzu-charts
+        namespace: flux-system
+      interval: 5m
   values:
     configuration:
       provider: aws
@@ -99,5 +102,7 @@ spec:
           ttl: "120h"
           includedNamespaces:
           - default
-  valueFileSecrets:
-  - name: "velero-helm-values"
+  valuesFrom:
+  - kind: Secret
+    name: "velero-helm-values"
+    optional: false
