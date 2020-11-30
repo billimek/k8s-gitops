@@ -23,7 +23,7 @@ metadata:
 spec:
   providerRef:
     name: discord
-  eventSeverity: error
+  eventSeverity: info
   eventSources:
     - kind: HelmRelease
       namespace: 'cert-manager'
@@ -43,13 +43,13 @@ spec:
     - kind: HelmRelease
       namespace: 'monitoring'
       name: '*'
+    - kind: helmreleases.helm.toolkit.fluxcd.io
+      namespace: 'monitoring'
+      name: '*'
     - kind: HelmRelease
       namespace: 'rook-ceph'
       name: '*'
     - kind: HelmRelease
-      namespace: 'velero'
-      name: '*'
-    - kind: helmreleases.helm.toolkit.fluxcd.io
       namespace: 'velero'
       name: '*'
   suspend: false
