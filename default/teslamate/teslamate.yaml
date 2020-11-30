@@ -1,20 +1,21 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: teslamate
   namespace: default
-  annotations:
-    fluxcd.io/ignore: "false"
-    fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: semver:~1.
-    filter.fluxcd.io/postgresql: semver:~11
 spec:
-  releaseName: teslamate
+  interval: 5m
   chart:
-    repository: https://k8s-at-home.com/charts/
-    name: teslamate
-    version: 3.0.1
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: teslamate
+      version: 3.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image:
       repository: teslamate/teslamate
@@ -73,5 +74,7 @@ spec:
           operator: "Exists"
         podAnnotations:
           backup.velero.io/backup-volumes: data
-  valueFileSecrets:
-  - name: "teslamate-helm-values"
+  valuesFrom:
+  - kind: Secret
+    name: "teslamate-helm-values"
+    optional: false
