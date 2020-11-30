@@ -14,8 +14,7 @@ Once a cluster is in-place, ensure that the `$KUBECONFIG` environment variable i
 
 This [script](bootstrap-cluster.sh) does several things:
 
-1. Installs flux
-1. Retrieves the new flux public key and saves it to the GitHub repo as a repo key (see [add-repo-key.sh](add-repo-key.sh))
+1. Installs flux2
 1. Bootstraps the vault-secret-operator with the auto-unwrap token
 1. Bootstraps cert-manager with letsencrypt information
 1. Bootstraps vault (see [bootstrap-vault.sh](bootstrap-vault.sh) for more detail)

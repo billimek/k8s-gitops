@@ -1,14 +1,9 @@
-# flux
+# flux2
 
-[Flux](https://github.com/fluxcd/flux) to automate cluster state using code residing in this repo
+[Flux2](https://github.com/fluxcd/flux2) to automate cluster state using code residing in this repo
 
-* [flux/flux.yaml](flux/flux.yaml)
-* [helm-operator/helm-operator.yaml](helm-operator/helm-operator.yaml)
+All of these operate in the `flux-system` namespace, but the files cannot be located in the `flux-system` directory because kustomize reasons.
 
-# fluxcloud
-
-![](https://i.imgur.com/yixxNm9.png)
-
-Send messages to slack for flux events
-
-* [fluxcloud/fluxcloud.yaml](fluxcloud/fluxcloud.yaml)
+* [discord-notifications/](discord-notifications/) - configure discord for notifications and alerts
+* [helm-chart-repositories/](helm-chart-repositories/) - configure all needed helm repositories for use by `HelmReleases`
+* [monitoring/](monitoring/) - configure `PodMonitors` to expose flux metrics to prometheus

@@ -4,7 +4,7 @@
 
 ![](https://i.imgur.com/9tvyWMp.png)
 
-Leverage [Flux](https://github.com/fluxcd/flux) to automate cluster state using code residing in this repo
+Leverage [Flux2](https://github.com/fluxcd/flux2) to automate cluster state using code residing in this repo
 
 ## Setup
 
