@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       # renovate: registryUrl=https://weaveworks.github.io/kured
-      chart: kured
+      chart: velero
       version: 2.2.13
       sourceRef:
         kind: HelmRepository
