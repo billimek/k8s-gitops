@@ -1,22 +1,21 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: nzbget
   namespace: default
-  annotations:
-    fluxcd.io/automated: "true"
-    filter.fluxcd.io/chart-image: regex:^(v[0-9]+\.[0-9]+-r[0-9]+-ls.*)$
-    # filter.fluxcd.io/chart-image: 'regexp:^(v[0-9]+\.[0-9]+-ls.*)$'
 spec:
-  releaseName: nzbget
-  helmVersion: v3
-  rollback:
-    enable: true
+  interval: 5m
   chart:
-    repository: https://k8s-at-home.com/charts/
-    name: nzbget
-    version: 4.0.0
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: nzbget
+      version: 4.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
   values:
     image:
       repository: linuxserver/nzbget
