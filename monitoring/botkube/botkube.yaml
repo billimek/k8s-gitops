@@ -139,23 +139,23 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-        - name: batch/v1/jobs
-          namespaces:
-            include:
-              - all
-            ignore:
-              - rook-ceph
-              - kube-system
-          events:
-            - create
-            - update
-            - delete
-            - error
-          updateSetting:
-            includeDiff: true
-            fields:
-              - spec.template.spec.containers[*].image
-              - status.conditions[*].type
+        # - name: batch/v1/jobs
+        #   namespaces:
+        #     include:
+        #       - all
+        #     ignore:
+        #       - rook-ceph
+        #       - kube-system
+        #   events:
+        #     - create
+        #     - update
+        #     - delete
+        #     - error
+        #   updateSetting:
+        #     includeDiff: true
+        #     fields:
+        #       - spec.template.spec.containers[*].image
+        #       - status.conditions[*].type
         - name: rbac.authorization.k8s.io/v1/roles
           namespaces:
             include:
