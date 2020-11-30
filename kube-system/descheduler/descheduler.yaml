@@ -4,7 +4,7 @@ metadata:
   name: descheduler
   namespace: kube-system
   annotations:
-    fluxcd.io/ignore: true
+    fluxcd.io/ignore: "true"
 spec:
   releaseName: descheduler
   rollback:
