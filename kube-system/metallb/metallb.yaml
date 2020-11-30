@@ -1,17 +1,20 @@
-apiVersion: helm.fluxcd.io/v1
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: metallb
   namespace: kube-system
-  annotations:
-    fluxcd.io/automated: "true"
 spec:
-  releaseName: metallb
-  helmVersion: v3
+  interval: 5m
   chart:
-    repository: https://charts.bitnami.com/bitnami
-    name: metallb
-    version: 0.1.24
+    spec:
+      chart: metallb
+      version: 0.1.24
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami-charts
+        namespace: flux-system
+      interval: 5m
   values:
     configInline:
       peers:
