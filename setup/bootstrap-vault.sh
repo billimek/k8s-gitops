@@ -167,8 +167,7 @@ EOF
 
 loadSecretsToVault() {
   message "writing secrets to vault"
-  # vault kv put secrets/flux/fluxcloud slack_url="$SLACK_WEBHOOK_URL"
-  vault kv put secrets/flux/fluxcloud slack_url="$DISCORD_FLUX_WEBHOOK_URL"
+  vault kv put secrets/flux-system/discord-webhook address="$DISCORD_FLUX_WEBHOOK_URL"
   vault kv put secrets/kube-system/nginx-basic-auth-jeff auth="$JEFF_AUTH"
   vault kv put secrets/cert-manager/cloudflare-api-key api-key="$CF_API_KEY"
 
@@ -184,7 +183,6 @@ loadSecretsToVault() {
   kvault "monitoring/uptimerobot-prometheus/uptimerobot-prometheus-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
-  kvault "default/hubot/hubot-helm-values.txt"
   kvault "default/minio/minio-helm-values.txt"
   kvault "default/plex/plex-helm-values.txt"
   kvault "default/rtorrent-flood/rtorrent-flood-helm-values.txt"
