@@ -31,9 +31,6 @@ spec:
     - kind: HelmRelease
       namespace: 'default'
       name: '*'
-    - kind: helmreleases.helm.toolkit.fluxcd.io
-      namespace: 'default'
-      name: '*'
     - kind: HelmRelease
       namespace: 'logs'
       name: '*'
@@ -41,9 +38,6 @@ spec:
       namespace: 'kube-system'
       name: '*'
     - kind: HelmRelease
-      namespace: 'monitoring'
-      name: '*'
-    - kind: helmreleases.helm.toolkit.fluxcd.io
       namespace: 'monitoring'
       name: '*'
     - kind: HelmRelease
