@@ -20,8 +20,8 @@ spec:
     version: 4.0.1
   values:
     image:
-      repository: spx01/blocky
-      tag: v0.10
+      repository: ghcr.io/0xerr0r/blocky
+      tag: v0.11
     replicas: 2
     timeZone: "America/New_York"
     config:

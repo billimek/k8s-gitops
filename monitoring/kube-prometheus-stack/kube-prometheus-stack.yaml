@@ -184,7 +184,7 @@ spec:
             url: https://grafana.com/api/dashboards/11055/revisions/2/download
             datasource: Prometheus
           blocky:
-            url: https://raw.githubusercontent.com/0xERR0R/blocky/master/docs/blocky-grafana.json
+            url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.11/docs/blocky-grafana.json
             datasource: Prometheus
           uptimerobot:
             url: https://raw.githubusercontent.com/lekpamartin/uptimerobot_exporter/master/dashboards/grafana.json
