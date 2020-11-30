@@ -114,5 +114,6 @@ spec:
         port: 1514
         loadBalancerIP: 10.0.6.51
   valuesFrom:
-  - secretKeyRef:
-      name: loki-helm-values
+  - kind: Secret
+    name: "loki-helm-values"
+    optional: false
