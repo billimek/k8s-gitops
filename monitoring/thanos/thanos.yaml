@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: quay.io/thanos/thanos
-      tag: v0.15.0
+      tag: v0.17.1
     query:
       replicaCount: 2
       replicaLabels:
