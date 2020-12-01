@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://grafana.github.io/loki/charts
       chart: loki-stack
-      version: 0.41.1
+      version: 0.41.2
       sourceRef:
         kind: HelmRepository
         name: grafana-loki-charts
