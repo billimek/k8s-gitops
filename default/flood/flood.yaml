@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: jesec/flood
-      tag: 4.1.2
+      tag: 4.2.0
     env:
       FLOOD_OPTION_RUNDIR: /config
       FLOOD_OPTION_AUTH: "none"
