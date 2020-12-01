@@ -15,7 +15,7 @@ jobs:
         fetch-depth: 1
 
     - name: Create HelmRelease annotations
-      run: ./hack/create-helmrelease-annotations.sh
+      run: ./.github/create-helmrelease-annotations.sh
 
     - name: Create pull request for HelmRelease annotations
       uses: peter-evans/create-pull-request@v3
@@ -28,5 +28,5 @@ jobs:
         author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
         commit-message: Create renovatebot helmrelease annotations
         body: |
-          Signed-off-by: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          Signed-off-by: Jeff Billimek <billimek@users.noreply.github.com>
         labels: renovate/helm-release-annotations
