@@ -49,6 +49,7 @@ spec:
     # tolerations:
     # - key: "arm"
     #   operator: "Exists"
+    enableHelmHooks: false
     metrics:
       enabled: true
       serviceMonitor:
