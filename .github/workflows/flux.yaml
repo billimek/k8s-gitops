@@ -1,29 +1,32 @@
 name: update-flux
+
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 * * * *"
+
 jobs:
-  update-components:
+  components:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
-      - name: Update component versions
+      - name: Check for updates
         id: update
         run: |
-          flux install --export > ./flux-system/gotk-components.yaml
+          flux install --arch=amd64 \
+            --export > ./flux-system/gotk-components.yaml
+
           VERSION="$(flux -v)"
           echo "::set-output name=flux_version::$VERSION"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
             token: ${{ secrets.GITHUB_TOKEN }}
-            commit-message: Update Flux components
             branch: update-flux
-            reviewers: billimek
-            title: Update Flux components
+            commit-message: Update to ${{ steps.update.outputs.flux_version }}
+            title: Update to ${{ steps.update.outputs.flux_version }}
             body: |
               ${{ steps.update.outputs.flux_version }}
