@@ -8,6 +8,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://grafana.github.io/loki/charts
       chart: loki-stack
       version: 0.41.1
       sourceRef:

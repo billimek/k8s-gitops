@@ -8,6 +8,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://helm.min.io/
       chart: minio
       version: 7.1.2
       sourceRef:
