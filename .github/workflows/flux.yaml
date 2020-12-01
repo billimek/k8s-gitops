@@ -12,7 +12,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Setup Flux CLI
-        uses: fluxcd/flux2/action@main
+        uses: billimek/flux2/action@isolate_flux_binary
       - name: Check for updates
         id: update
         run: |
