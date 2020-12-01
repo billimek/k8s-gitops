@@ -16,6 +16,7 @@ jobs:
         fetch-depth: 1
 
     - name: Create HelmRelease annotations
+      uses: mikefarah/yq@3.4.0
       run: ./.github/create-helmrelease-annotations.sh
 
     - name: Create pull request for HelmRelease annotations
