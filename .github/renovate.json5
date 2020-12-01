@@ -4,12 +4,12 @@
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard",
   "commitMessageSuffix": "[ci-skip]",
-  "commitBody": "Signed-off-by: Devin Buhl <onedr0p@users.noreply.github.com>",
+  "commitBody": "Signed-off-by: Jeff Billimek <billimek@users.noreply.github.com>",
   // do not notify on closed, unmerged PRs
   "suppressNotifications": ["prIgnoreNotification"],
   // do not rebase PRs
   "rebaseWhen": "conflicted",
-  "assignees": ["@onedr0p"],
+  "assignees": ["@billimek"],
   "helm-values": {
     "fileMatch": ["cluster/.+\\.yaml$"]
   },
