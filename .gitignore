@@ -20,3 +20,4 @@ master.key
 setup/cluster/*cluster.yml
 *.rkestate
 kubeconfig
+bin/
