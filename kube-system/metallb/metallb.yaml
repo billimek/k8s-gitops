@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
       chart: metallb
-      version: 0.1.24
+      version: 0.1.30
       sourceRef:
         kind: HelmRepository
         name: bitnami-charts
