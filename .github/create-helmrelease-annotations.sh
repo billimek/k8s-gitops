@@ -7,7 +7,7 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 export CLUSTER_ROOT=$(git rev-parse --show-toplevel)
 
-export helm_repositories="${CLUSTER_ROOT}/flux/helm-chart-repositories"
+export helm_repositories="${CLUSTER_ROOT}/flux-system-extra/helm-chart-repositories"
 
 for helm_release in $(find ${CLUSTER_ROOT} -name "*.yaml"); do
     # ignore flux-system namespace

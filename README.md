@@ -14,7 +14,7 @@ See [setup/README.md](setup/README.md) for more details.
 
 * [cert-manager](cert-manager/)
 * [default](default/)
-* [flux](flux/)
+* [flux-system-extra](flux-system-extra/)
 * [kube-system](kube-system/)
 * [logs](logs/)
 * [monitoring](monitoring/)
