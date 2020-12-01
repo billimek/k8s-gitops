@@ -68,7 +68,7 @@ spec:
         enabled: false
       volumePermissions:
         enabled: false
-      master:
+      primary:
         tolerations:
         - key: "arm"
           operator: "Exists"
