@@ -49,14 +49,14 @@ spec:
     # tolerations:
     # - key: "arm"
     #   operator: "Exists"
-    enableHelmHooks: false
+    # enableHelmHooks: false
     metrics:
       enabled: true
       serviceMonitor:
         enabled: true
-    snapshotsEnabled: false
+    snapshotsEnabled: true
     deployRestic: true
-    # installCRDs: false
+    installCRDs: true
     restic:
       podVolumePath: /var/lib/kubelet/pods
       privileged: false
