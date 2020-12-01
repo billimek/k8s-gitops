@@ -14,8 +14,12 @@ jobs:
         token: ${{ secrets.PAT }}
         fetch-depth: 1
 
+    - name: Install yq
+      run: |
+        sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64
+        sudo chmod +x /usr/local/bin/yq
+
     - name: Create HelmRelease annotations
-      uses: mikefarah/yq@3.4.0
       run: ./.github/create-helmrelease-annotations.sh
 
     - name: Create pull request for HelmRelease annotations
