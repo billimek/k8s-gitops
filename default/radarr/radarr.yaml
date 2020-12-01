@@ -18,8 +18,8 @@ spec:
       interval: 5m
   values:
     image:
-      repository: k8sathome/radarr
-      tag: v3.0.0.4204
+      repository: linuxserver/radarr
+      tag: 3.0.0.4216-ls3
     env:
       TZ: "America/New_York"
     ingress:
