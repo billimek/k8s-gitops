@@ -16,10 +16,10 @@ jobs:
       - name: Check for updates
         id: update
         run: |
-          flux install --arch=amd64 \
+          bin/flux install --arch=amd64 \
             --export > ./flux-system/gotk-components.yaml
 
-          VERSION="$(flux -v)"
+          VERSION="$(bin/flux -v)"
           echo "::set-output name=flux_version::$VERSION"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
