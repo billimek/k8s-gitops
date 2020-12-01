@@ -1,3 +1,6 @@
+---
+# GitOps Toolkit revision latest
+# Components: source-controller,kustomize-controller,helm-controller,notification-controller
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -2385,3 +2388,4 @@ spec:
       volumes:
       - emptyDir: {}
         name: temp
+---
