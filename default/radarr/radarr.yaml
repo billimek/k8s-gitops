@@ -18,8 +18,8 @@ spec:
       interval: 5m
   values:
     image:
-      repository: linuxserver/radarr
-      tag: 3.0.0.4216-ls3
+      repository: k8sathome/radarr
+      tag: v3.0.0.4204
     env:
       TZ: "America/New_York"
     ingress:
@@ -44,6 +44,10 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
     resources:
       requests:
         memory: 350Mi
