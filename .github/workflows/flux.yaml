@@ -16,6 +16,8 @@ jobs:
       - name: Check for updates
         id: update
         run: |
+          echo "PATH is: $PATH"
+          echo "GITHUB_PATH is: $GITHUB_PATH"
           flux install --arch=amd64 \
             --export > ./flux-system/gotk-components.yaml
 
