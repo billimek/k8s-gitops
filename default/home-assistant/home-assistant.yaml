@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: home-assistant
-      version: 2.7.0
+      version: 3.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -20,33 +20,52 @@ spec:
     image:
       repository: homeassistant/home-assistant
       tag: 0.118.4
-    persistence:
-      enabled: true
-      size: 10Gi
-      storageClass: "rook-ceph-block"
+    extraEnv:
+      TZ: "America/New_York"
+    hostNetwork: true
+    service:
+      type: LoadBalancer
+      loadBalancerIP: 10.0.6.56
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
       hosts:
-      - hass.eviljungle.com
+      - "hass.eviljungle.com"
       tls:
       - hosts:
-        - hass.eviljungle.com
-    service:
-      type: LoadBalancer
-      loadBalancerIP: 10.0.6.56
-    hostNetwork: true
+        - "hass.eviljungle.com"
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: "rook-ceph-block"
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
     tolerations:
     - key: "arm"
       operator: "Exists"
+    monitoring:
+      enabled: true
+      serviceMonitor:
+        enabled: true
     probes:
       liveness:
         enabled: false
       readiness:
         enabled: false
-    podAnnotations:
-      backup.velero.io/backup-volumes: config
+    resources:
+      limits:
+        memory: 2500Mi
+      requests:
+        cpu: 35m
+        memory: 2000Mi
+    postgresql:
+      enabled: true
+      postgresqlUsername: home-assistant
+      postgresqlDatabase: home-assistant
+      persistence:
+        enabled: true
+        storageClass: "rook-ceph-block"
     vscode:
       enabled: true
       image:
@@ -63,23 +82,6 @@ spec:
         tls:
         - hosts:
           - hass-vscode.eviljungle.com
-    resources:
-      limits:
-        memory: 2500Mi
-      requests:
-        cpu: 35m
-        memory: 2000Mi
-    monitoring:
-      enabled: false
-    postgresql:
-      enabled: true
-      global:
-        postgresql:
-          postgresqlUsername: home-assistant
-          postgresqlDatabase: home-assistant
-      persistence:
-        enabled: true
-        storageClass: "rook-ceph-block"
   valuesFrom:
   - kind: Secret
     name: "home-assistant-helm-values"

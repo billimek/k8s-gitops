@@ -1,9 +1,7 @@
 extraEnv:
   CAMERA_AUTH: $CAMERA_AUTH
 postgresql:
-  global:
-    postgresql:
-      postgresqlPassword: $HASS_DB_PASSWORD
+  postgresqlPassword: "${HASS_DB_PASSWORD}"
 vscode:
   password: $HASS_API_PASSWORD
   extraEnv:
