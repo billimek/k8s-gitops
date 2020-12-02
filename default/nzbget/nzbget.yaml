@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: nzbget
-      version: 4.0.1
+      version: 6.7.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -18,30 +18,37 @@ spec:
       interval: 5m
   values:
     image:
-      repository: linuxserver/nzbget
-      tag: v21.1-r2311-ls13
+      repository: k8sathome/nzbget
+      tag: v21.0
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.52
+    env:
+      TZ: "America/New_York"
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
-      hosts: [nzbget.eviljungle.com]
+      hosts:
+      - host: nzbget.eviljungle.com
+        paths:
+        - path: /
+          pathType: Prefix
       tls:
       - hosts:
-        - nzbget.eviljungle.com
-    timezone: "America/New_York"
+        - "nzbget.eviljungle.com"
     persistence:
-      downloads:
-        enabled: false
-      extraMounts:
-      - name: media
-        claimName: nfs-media-pvc
       config:
         enabled: true
         storageClass: "rook-ceph-block"
         size: 30Gi
+      media:
+        enabled: true
+        existingClaim: nfs-media-pvc
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
     podAnnotations:
       backup.velero.io/backup-volumes: config
     tolerations:
