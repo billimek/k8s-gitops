@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: zwave2mqtt
-      version: 4.0.0
+      version: 5.4.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -20,29 +20,47 @@ spec:
     image:
       repository: robertslando/zwave2mqtt
       tag: 4.1.0
-    timezone: "America/New_York"
-    device: "/dev/serial/by-id/usb-0658_0200-if00"
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - {key: "feature.node.kubernetes.io/custom-zwave", operator: In, values: ["true"]}
-    persistence:
-      enabled: true
-      storageClass: "rook-ceph-block"
+    env:
+      TZ: "America/New_York"
+      OZW_AUTO_UPDATE_CONFIG: true
+    securityContext:
+      privileged: true
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
         nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
         nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
-      hosts: [zwave2mqtt.eviljungle.com]
+      hosts:
+      - host: zwave2mqtt.eviljungle.com
+        paths:
+        - path: /
+          pathType: Prefix
       tls:
       - hosts:
-        - zwave2mqtt.eviljungle.com
+        - "zwave2mqtt.eviljungle.com"
+    persistence:
+      config:
+        enabled: true
+        mountPath: /usr/src/app/store
+        storageClass: "rook-ceph-block"
+        accessMode: ReadWriteOnce
+        size: "1Gi"
     podAnnotations:
       backup.velero.io/backup-volumes: config
+    additionalVolumeMounts:
+    - name: usb
+      mountPath: /dev/serial/by-id/usb-0658_0200-if00
+    additionalVolumes:
+    - name: usb
+      hostPath:
+        path: /dev/serial/by-id/usb-0658_0200-if00
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - {key: "feature.node.kubernetes.io/custom-zwave", operator: In, values: ["true"]}
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
