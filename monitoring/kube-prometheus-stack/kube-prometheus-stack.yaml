@@ -10,12 +10,13 @@ spec:
     spec:
       # renovate: registryUrl=https://prometheus-community.github.io/helm-charts
       chart: kube-prometheus-stack
-      version: 9.4.10
+      version: 12.3.0
       sourceRef:
         kind: HelmRepository
         name: prometheus-community-charts
         namespace: flux-system
       interval: 5m
+  timeout: 20m
   values:
     # defaultRules:
     #   rules:
@@ -33,9 +34,9 @@ spec:
       # prometheusConfigReloaderImage:
       #   repository: quay.io/coreos/prometheus-config-reloader
       #   tag: v0.39.0
-      configmapReloadImage:
-        repository: jimmidyson/configmap-reload
-        tag: v0.3.0
+      # configmapReloadImage:
+      #   repository: jimmidyson/configmap-reload
+      #   tag: v0.4.0
     alertmanager:
       alertmanagerSpec:
         storage:
@@ -62,6 +63,8 @@ spec:
         - hosts:
           - prom-alert.eviljungle.com
       config:
+        global:
+          resolve_timeout: 5m
         route:
           # group_by: ['alertname', 'job']
           # group_wait: 30s
@@ -370,6 +373,7 @@ spec:
         podMonitorSelectorNilUsesHelmValues: false
         retention: 6h
         enableAdminAPI: true
+        walCompression: true
         storageSpec:
           volumeClaimTemplate:
             spec:
