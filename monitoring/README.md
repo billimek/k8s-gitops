@@ -2,7 +2,7 @@
 
 https://www.botkube.io/
 
-![](https://i.imgur.com/yQ8sqtK.png)
+![](https://i.imgur.com/Z7JdN2a.png)
 
 * [botkube/botkube.yaml](botkube/botkube.yaml)
 
