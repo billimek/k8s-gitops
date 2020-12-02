@@ -45,9 +45,7 @@ spec:
     - key: "arm"
       operator: "Exists"
     monitoring:
-      enabled: true
-      serviceMonitor:
-        enabled: true
+      enabled: false
     probes:
       liveness:
         enabled: false
