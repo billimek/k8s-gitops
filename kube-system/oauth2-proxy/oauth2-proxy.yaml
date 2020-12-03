@@ -38,7 +38,7 @@ spec:
       pass-authorization-header:
       email-domain: "*"
       cookie-domain: "auth.eviljungle.com"
-      whitelist-domain: "auth.eviljungle.com"
+      whitelist-domain: ".eviljungle.com"
   valuesFrom:
   - kind: Secret
     name: "oauth2-proxy-helm-values"
