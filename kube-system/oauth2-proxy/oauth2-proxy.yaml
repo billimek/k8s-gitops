@@ -37,8 +37,8 @@ spec:
       skip-provider-button:
       pass-authorization-header:
       email-domain: "*"
-      cookie-domains: ".eviljungle.com"
-      cookie-domains: "nvr.eviljungle.com"
+      cookie-domain: ".eviljungle.com"
+      cookie-domain: "nvr.eviljungle.com"
       whitelist-domain: ".eviljungle.com"
       whitelist-domain: "nvr.eviljungle.com"
   valuesFrom:
