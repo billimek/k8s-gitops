@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     image:
-      repository: "quay.io/pusher/oauth2_proxy"
+      repository: "quay.io/oauth2-proxy/oauth2-proxy"
       tag: "v6.1.1"
     replicaCount: 2
     # tolerations:
@@ -37,8 +37,10 @@ spec:
       skip-provider-button:
       pass-authorization-header:
       email-domain: "*"
-      cookie-domainss: [".eviljungle.com"]
-      whitelist-domains: [".eviljungle.com"]
+      cookie-domains: ".eviljungle.com"
+      cookie-domains: "nvr.eviljungle.com"
+      whitelist-domain: ".eviljungle.com"
+      whitelist-domain: "nvr.eviljungle.com"
   valuesFrom:
   - kind: Secret
     name: "oauth2-proxy-helm-values"
