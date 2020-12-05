@@ -81,17 +81,16 @@
       "datasources": ["docker"],
       "versioning": "loose",
       "packageNames": ["plexinc/pms-docker"]
-    }
+    },
     // auto-updates
-    // {
-    //   "datasources": ["docker"],
-    //   "automerge": true,
-    //   "requiredStatusChecks": null,
-    //   "updateTypes": ["minor", "patch"],
-    //   "packageNames": [
-    //     "k8sathome/ombi",
-    //     "k8sathome/jackett"
-    //   ]
-    // }
+    {
+      "datasources": ["docker"],
+      "automerge": true,
+      "requiredStatusChecks": null,
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "homeassistant/home-assistant"
+      ]
+    }
   ]
 }
