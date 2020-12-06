@@ -87,6 +87,7 @@
       "datasources": ["docker"],
       "automerge": true,
       "requiredStatusChecks": null,
+      "schedule": "after 1am, before 5am",
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "homeassistant/home-assistant"
