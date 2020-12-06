@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 10.0.7.7
-    path: "/tank/data/nextcloud"
+    path: "/mnt/tank/data/nextcloud"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

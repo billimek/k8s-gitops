@@ -22,6 +22,6 @@ spec:
       tag: v3.1.0-k8s1.11
     nfs:
       server: "10.0.7.7"
-      path: "/tank/data/k8s-nfs"
+      path: "/mnt/tank/data/k8s-nfs"
     storageClass:
       defaultClass: false

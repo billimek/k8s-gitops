@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 10.0.7.7
-    path: "/tank/media/itunes/Audiobooks"
+    path: "/mnt/tank/media/itunes/Audiobooks"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
