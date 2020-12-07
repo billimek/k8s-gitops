@@ -43,6 +43,8 @@ spec:
     config:
       opentsdb:
         enabled: true
+      graphite:
+        enabled: true
     podAnnotations:
       backup.velero.io/backup-volumes: influxdb-data
     tolerations:
