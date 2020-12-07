@@ -41,7 +41,6 @@ prometheus:
     - job_name: 'node'
       static_configs:
       - targets:
-        - proxmox:9100
         - proxmox-b:9100
         - proxmox-c:9100
         - whitebridge:9100
@@ -57,7 +56,6 @@ prometheus:
       metrics_path: '/metrics'
       static_configs:
       - targets:
-        - proxmox:8081
         - proxmox-b:8081
         - proxmox-c:8081
         - k3s-pi4-c:8081
