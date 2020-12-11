@@ -90,7 +90,10 @@
       "schedule": "after 1am, before 5am",
       "updateTypes": ["minor", "patch"],
       "packageNames": [
-        "homeassistant/home-assistant"
+        "homeassistant/home-assistant",
+        "k8sathome/radarr",
+        "k8sathome/sonarr",
+        "k8sathome/nzbget"
       ]
     }
   ]
