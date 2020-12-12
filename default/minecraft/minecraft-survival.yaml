@@ -75,5 +75,5 @@ spec:
             - name: mcsv.eviljungle.com
               path: /
           tls:
-            hosts:
-              - mcsv.eviljungle.com
+          - hosts:
+            - mcsv.eviljungle.com
