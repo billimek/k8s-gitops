@@ -65,7 +65,6 @@ spec:
         port: 25575
         password: "mc-rcon"
         serviceType: LoadBalancer
-      downloadModpackUrl: https://dev.bukkit.org/projects/dynmap/files/latest
       dynmap:
         service:
           enabled: true
