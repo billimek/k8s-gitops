@@ -93,7 +93,8 @@
         "homeassistant/home-assistant",
         "k8sathome/radarr",
         "k8sathome/sonarr",
-        "k8sathome/nzbget"
+        "k8sathome/nzbget",
+        "plexinc/pms-docker"
       ]
     }
   ]
