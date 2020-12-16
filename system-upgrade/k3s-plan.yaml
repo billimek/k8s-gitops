@@ -14,6 +14,7 @@ spec:
       values:
       - "true"
     - {key: k3os.io/mode, operator: DoesNotExist}
+    - {key: k3s-upgrade, operator: NotIn, values: ["disabled", "false"]}
     - key: kubernetes.io/arch
       operator: In
       values:
@@ -21,7 +22,7 @@ spec:
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
-  channel: https://update.k3s.io/v1-release/channels/stable
+  channel: https://update.k3s.io/v1-release/channels/v1.19
 ---
 # Agent plan
 apiVersion: upgrade.cattle.io/v1
@@ -33,7 +34,7 @@ metadata:
     k3s-upgrade: agent
 spec:
   concurrency: 1
-  channel: https://update.k3s.io/v1-release/channels/stable
+  channel: https://update.k3s.io/v1-release/channels/v1.19
   nodeSelector:
     matchExpressions:
       # - {key: k3s-upgrade, operator: Exists}
