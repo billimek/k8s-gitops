@@ -36,10 +36,10 @@ spec:
         - mountPath: /output
           name: media
           subPath: Videos/tesla_dashcam/
-        securityContext:
-          fsGroup: 1001
-          runAsGroup: 1001
-          runAsUser: 1001
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
       volumes:
       - name: media
         persistentVolumeClaim:
