@@ -1455,7 +1455,7 @@ spec:
                   type: object
                 type: array
               interval:
-                description: The interval at which to reconcile the kustomization.
+                description: The interval at which to reconcile the Kustomization.
                 type: string
               kubeConfig:
                 description: The KubeConfig for reconciling the Kustomization on a remote cluster. When specified, KubeConfig takes precedence over ServiceAccountName.
@@ -1469,8 +1469,7 @@ spec:
                     type: object
                 type: object
               path:
-                description: Path to the directory containing the kustomization file.
-                pattern: ^\./
+                description: Path to the directory containing the kustomization.yaml file, or the set of plain YAMLs a kustomization.yaml should be generated for. Defaults to 'None', which translates to the root path of the SourceRef.
                 type: string
               prune:
                 description: Prune enables garbage collection.
@@ -1520,7 +1519,6 @@ spec:
                 type: string
             required:
             - interval
-            - path
             - prune
             - sourceRef
             type: object
@@ -2103,7 +2101,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/helm-controller:v0.4.3
+        image: ghcr.io/fluxcd/helm-controller:v0.4.4
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -2136,7 +2134,7 @@ spec:
       nodeSelector:
         kubernetes.io/arch: amd64
         kubernetes.io/os: linux
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 600
       volumes:
       - emptyDir: {}
         name: temp
@@ -2175,7 +2173,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/kustomize-controller:v0.5.1
+        image: ghcr.io/fluxcd/kustomize-controller:v0.5.2
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -2210,7 +2208,7 @@ spec:
         kubernetes.io/os: linux
       securityContext:
         fsGroup: 1337
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 60
       volumes:
       - emptyDir: {}
         name: temp
@@ -2326,7 +2324,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/fluxcd/source-controller:v0.5.4
+        image: ghcr.io/fluxcd/source-controller:v0.5.5
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
