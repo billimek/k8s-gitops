@@ -3,18 +3,21 @@ kind: Deployment
 metadata:
   name: tesla-dashcam
   labels:
-    app: tesla-dashcam
+    app.kubernetes.io/instance: tesla-dashcam
+    app.kubernetes.io/name: tesla-dashcam
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: tesla-dashcam
+      app.kubernetes.io/instance: tesla-dashcam
+      app.kubernetes.io/name: tesla-dashcam
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        name: tesla-dashcam
+        app.kubernetes.io/instance: tesla-dashcam
+        app.kubernetes.io/name: tesla-dashcam
     spec:
       containers:
       - name: tesla-dashcam
@@ -33,6 +36,10 @@ spec:
         - mountPath: /output
           name: media
           subPath: Videos/tesla_dashcam/
+        securityContext:
+          fsGroup: 1001
+          runAsGroup: 1001
+          runAsUser: 1001
       volumes:
       - name: media
         persistentVolumeClaim:
