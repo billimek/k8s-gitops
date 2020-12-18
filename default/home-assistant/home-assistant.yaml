@@ -64,8 +64,9 @@ spec:
           repository: codercom/code-server
           tag: 3.7.4
         workingDir: "/config"
-        env:
-          USER_DATA_DIR: "/config/.vscode"
+        args:
+          - --user-data-dir
+          - "/config/.vscode"
         ingress:
           enabled: true
           annotations:
