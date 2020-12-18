@@ -2,8 +2,8 @@ extraEnv:
   CAMERA_AUTH: $CAMERA_AUTH
 postgresql:
   postgresqlPassword: "${HASS_DB_PASSWORD}"
-vscode:
-  password: $HASS_API_PASSWORD
-  extraEnv:
-    HASS_SERVER: http://localhost:8123
-    HASS_TOKEN: $HASS_TOKEN
+addons:
+  codeserver:
+    env:
+      HASS_SERVER: http://localhost:8123
+      HASS_TOKEN: $HASS_TOKEN
