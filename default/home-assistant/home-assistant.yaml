@@ -42,6 +42,13 @@ spec:
     prometheus:
       serviceMonitor:
         enabled: false
+    probes:
+      liveness:
+        enabled: true
+      readiness:
+        enabled: true
+      startup:
+        enabled: true
     persistence:
       config:
         enabled: true
