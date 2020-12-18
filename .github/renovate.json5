@@ -5,9 +5,9 @@
   "dependencyDashboardTitle": "Renovate Dashboard",
   "commitMessageSuffix": "[ci-skip]",
   "commitBody": "Signed-off-by: Jeff Billimek <billimek@users.noreply.github.com>",
-  // do not notify on closed, unmerged PRs
+  // Do not notify on closed unmerged PRs
   "suppressNotifications": ["prIgnoreNotification"],
-  // do not rebase PRs
+  // Do not rebase PRs
   "rebaseWhen": "conflicted",
   "assignees": ["@billimek"],
   "helm-values": {
@@ -23,7 +23,13 @@
     }
   ],
   "packageRules": [
-    // labels
+    // Setup datasources
+    {
+      "datasources": ["helm"],
+      "commitMessageTopic": "Helm chart {{depName}}",
+      "separateMinorPatch": true
+    },
+    // Add labels according to package and update types
     {
       "datasources": ["docker"],
       "updateTypes": ["major"],
@@ -61,21 +67,10 @@
       "packageNames": ["blakeblackshear/frigate"]
     },
     // pin versions
-    {
-      "datasources": ["docker"],
-      "allowedVersions": "<4.3.0",
-      "packageNames": ["k8sathome/qbittorrent"]
-    },
-    // versioning
     // {
     //   "datasources": ["docker"],
-    //   "versioning": "nuget",
-    //   "packageNames": [
-    //     "k8sathome/radarr",
-    //     "k8sathome/sonarr",
-    //     "k8sathome/lidarr",
-    //     "k8sathome/bazarr"
-    //   ]
+    //   "allowedVersions": "<4.3.0",
+    //   "packageNames": ["k8sathome/qbittorrent"]
     // },
     {
       "datasources": ["docker"],
