@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: home-assistant
-      version: 4.0.0
+      version: 5.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -20,9 +20,10 @@ spec:
     image:
       repository: homeassistant/home-assistant
       tag: 2020.12.1
-    extraEnv:
+    env:
       TZ: "America/New_York"
     hostNetwork: true
+    dnsPolicy: ClusterFirstWithHostNet
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.56
@@ -31,32 +32,57 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "nginx"
       hosts:
-      - "hass.eviljungle.com"
+      - host: hass.eviljungle.com
+        paths:
+        - path: /
+          pathType: Prefix
       tls:
       - hosts:
         - "hass.eviljungle.com"
+    prometheus:
+      serviceMonitor:
+        enabled: false
     persistence:
-      enabled: true
-      size: 10Gi
-      storageClass: "rook-ceph-block"
+      config:
+        enabled: true
+        storageClass: "rook-ceph-block"
+        accessMode: ReadWriteOnce
+        size: "10Gi"
     podAnnotations:
       backup.velero.io/backup-volumes: config
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: codercom/code-server
+          tag: 3.7.4
+        workingDir: "/config"
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: "nginx"
+            nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+            nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+          hosts:
+          - host: hass-vscode.eviljungle.com
+            paths:
+            - path: /
+              pathType: Prefix
+          tls:
+          - hosts:
+            - hass-vscode.eviljungle.com
+        volumeMounts:
+        - name: config
+          mountPath: /config
     tolerations:
     - key: "arm"
       operator: "Exists"
-    monitoring:
-      enabled: false
-    probes:
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
     resources:
       limits:
         memory: 2500Mi
       requests:
-        cpu: 35m
-        memory: 2000Mi
+        cpu: 100m
+        memory: 1000Mi
     postgresql:
       enabled: true
       postgresqlUsername: home-assistant
@@ -64,22 +90,6 @@ spec:
       persistence:
         enabled: true
         storageClass: "rook-ceph-block"
-    vscode:
-      enabled: true
-      image:
-        repository: codercom/code-server
-        tag: 3.7.4
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: "nginx"
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
-        hosts:
-        - hass-vscode.eviljungle.com
-        tls:
-        - hosts:
-          - hass-vscode.eviljungle.com
   valuesFrom:
   - kind: Secret
     name: "home-assistant-helm-values"
