@@ -22,7 +22,7 @@ spec:
     csi:
       kubeletDirPath: /var/lib/kubelet
       cephcsi:
-        image: quay.io/cephcsi/cephcsi:v3.1.2
+        image: quay.io/cephcsi/cephcsi:v3.2.0
       registrar:
         image: raspbernetes/csi-node-driver-registrar:2.0.1
       provisioner:
