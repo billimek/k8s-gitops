@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
       chart: metallb
-      version: 1.1.0
+      version: 2.0.0
       sourceRef:
         kind: HelmRepository
         name: bitnami-charts
@@ -28,12 +28,8 @@ spec:
         addresses:
         -  10.0.6.0/24
         avoid-buggy-ips: true
-    prometheus:
+    prometheusRule:
       enabled: true
-      serviceMonitor:
-        enabled: true
-      prometheusRule:
-        enabled: true
     controller:
       image:
         registry: docker.io
@@ -42,11 +38,17 @@ spec:
       tolerations:
       - key: "arm"
         operator: "Exists"
+      prometheus:
+        serviceMonitor:
+          enabled: true
     speaker:
       image:
         registry: docker.io
         repository: metallb/speaker
         tag: v0.9.5
+      prometheus:
+        serviceMonitor:
+          enabled: true
       tolerations:
       - key: "arm"
         operator: "Exists"
