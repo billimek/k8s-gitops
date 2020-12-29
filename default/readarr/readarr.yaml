@@ -22,8 +22,8 @@ spec:
       tag: nightly-0.1.0.351
     env:
       TZ: "America/New_York"
-      PUID: 1001
-      PGID: 1001
+      # PUID: 1001
+      # PGID: 1001
     ingress:
       enabled: true
       annotations:
@@ -46,10 +46,10 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc
-    podSecurityContext:
-      runAsUser: 1001
-      runAsGroup: 1001
-      fsGroup: 1001
+    # podSecurityContext:
+    #   runAsUser: 1001
+    #   runAsGroup: 1001
+    #   fsGroup: 1001
     resources:
       requests:
         memory: 350Mi
