@@ -20,6 +20,7 @@ spec:
     image:
       repository: infracloudio/botkube
       tag: latest
+      pullPolicy: always
     serviceMonitor:
       enabled: true
     config:
