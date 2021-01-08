@@ -66,6 +66,11 @@
       "versionScheme": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
       "packageNames": ["blakeblackshear/frigate"]
     },
+    {
+      "datasources": ["docker"],
+      "versionScheme": "regex:^nightly-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<compatibility>.*)$",
+      "packageNames": ["hotio/readarr"]
+    },
     // pin versions
     // {
     //   "datasources": ["docker"],
