@@ -68,7 +68,7 @@
     },
     {
       "datasources": ["docker"],
-      "versionScheme": "regex:^nightly-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<patch>\\d+)$",
+      "versionScheme": "regex:^nightly-0\\.(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
       "packageNames": ["hotio/readarr"]
     },
     // pin versions
