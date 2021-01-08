@@ -27,7 +27,7 @@ spec:
         # image: billimek/tesla_dashcam:1.0.0
         image: billimek/tesla_dashcam:0.1.16-intel-vaapi-1
         imagePullPolicy: Always
-        args: ["--delete_source", "--gpu", "--gpu_type", "intel-qsv", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
+        args: ["--delete_source", "--gpu", "--gpu_type", "intel-vaapi", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
         resources:
           limits:
             gpu.intel.com/i915: 1
