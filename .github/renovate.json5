@@ -13,6 +13,13 @@
   "helm-values": {
     "fileMatch": ["./.+\\.yaml$"]
   },
+  "kubernetes": {
+    "fileMatch": ["\\.yaml$"],
+    "ignorePaths": [
+      "flux-system/",
+      ".github"
+    ],
+  },
   "regexManagers": [
     {
       "fileMatch": ["./.+\\.yaml$"],
@@ -27,6 +34,14 @@
     {
       "datasources": ["helm"],
       "commitMessageTopic": "Helm chart {{depName}}",
+      "separateMinorPatch": true
+    },
+    {
+      "datasources": ["docker"],
+      "commitMessageTopic": "Docker image {{depName}}",
+      "commitMessageExtra": "to {{#if isSingleVersion}}v{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}",
+      "updateTypes": ["major", "minor", "patch"],
+      "enabled": true,
       "separateMinorPatch": true
     },
     // Add labels according to package and update types
@@ -60,7 +75,7 @@
       "updateTypes": ["patch"],
       "labels": ["renovate/helm-release", "dependency/patch"]
     },
-    // interesting image tags
+    // Custom versions
     {
       "datasources": ["docker"],
       "versionScheme": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
@@ -71,12 +86,6 @@
       "versionScheme": "regex:^nightly-0\\.(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
       "packageNames": ["hotio/readarr"]
     },
-    // pin versions
-    // {
-    //   "datasources": ["docker"],
-    //   "allowedVersions": "<4.3.0",
-    //   "packageNames": ["k8sathome/qbittorrent"]
-    // },
     {
       "datasources": ["docker"],
       "versioning": "loose",
