@@ -26,7 +26,7 @@ spec:
           value: America/New_York
         # image: billimek/tesla_dashcam:1.0.0
         image: chrispazz/tesla_dashcam_vaapi:latest
-        imagePullPolocy: Always
+        imagePullPolicy: Always
         args: ["--delete_source", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
         resources:
           limits:
