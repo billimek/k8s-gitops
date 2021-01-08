@@ -156,5 +156,5 @@ spec:
             port: 49161
             name: bt
             protocol: TCP
-            targetPort: bt
+            # targetPort: bt
           loadBalancerIP: 10.0.6.57
