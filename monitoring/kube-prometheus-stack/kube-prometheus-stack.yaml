@@ -397,7 +397,7 @@ spec:
           annotations:
             backup.velero.io/backup-volumes: prometheus-kube-prometheus-stack-prometheus-db
         thanos:
-          image: quay.io/thanos/thanos:v0.15.0
+          image: quay.io/thanos/thanos:v0.17.2
           version: v0.15.0
           objectStorageConfig:
             name: thanos
