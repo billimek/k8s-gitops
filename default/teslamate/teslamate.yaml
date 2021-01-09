@@ -60,7 +60,7 @@ spec:
     postgresql:
       image:
         repository: postgres
-        tag: '11.10'
+        tag: '13.1'
       persistence:
         enabled: true
         storageClass: rook-ceph-block
