@@ -103,7 +103,8 @@
         "k8sathome/radarr",
         "k8sathome/sonarr",
         "k8sathome/nzbget",
-        "plexinc/pms-docker"
+        "plexinc/pms-docker",
+        "hotio/readarr"
       ]
     }
   ]
