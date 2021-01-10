@@ -59,7 +59,7 @@ spec:
     installCRDs: true
     restic:
       podVolumePath: /var/lib/kubelet/pods
-      privileged: true
+      privileged: false
       tolerations:
       - key: "arm"
         operator: "Exists"
