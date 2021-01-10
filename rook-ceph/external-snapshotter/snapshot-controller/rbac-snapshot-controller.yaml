@@ -9,7 +9,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: snapshot-controller
-  namespace: default # TODO: replace with the namespace you want for your controller, e.g. kube-system
+  namespace: rook-ceph # TODO: replace with the namespace you want for your controller, e.g. kube-system
 
 ---
 kind: ClusterRole
@@ -51,7 +51,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: snapshot-controller
-    namespace: default # TODO: replace with the namespace you want for your controller, e.g. kube-system
+    namespace: rook-ceph # TODO: replace with the namespace you want for your controller, e.g. kube-system
 roleRef:
   kind: ClusterRole
   # change the name also here if the ClusterRole gets renamed
@@ -62,7 +62,7 @@ roleRef:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: default # TODO: replace with the namespace you want for your controller, e.g. kube-system
+  namespace: rook-ceph # TODO: replace with the namespace you want for your controller, e.g. kube-system
   name: snapshot-controller-leaderelection
 rules:
 - apiGroups: ["coordination.k8s.io"]
@@ -74,11 +74,11 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: snapshot-controller-leaderelection
-  namespace: default # TODO: replace with the namespace you want for your controller, e.g. kube-system
+  namespace: rook-ceph # TODO: replace with the namespace you want for your controller, e.g. kube-system
 subjects:
   - kind: ServiceAccount
     name: snapshot-controller
-    namespace: default # TODO: replace with the namespace you want for your controller, e.g. kube-system
+    namespace: rook-ceph # TODO: replace with the namespace you want for your controller, e.g. kube-system
 roleRef:
   kind: Role
   name: snapshot-controller-leaderelection
