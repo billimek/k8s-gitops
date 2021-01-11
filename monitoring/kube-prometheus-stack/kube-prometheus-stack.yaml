@@ -37,6 +37,7 @@ spec:
       # configmapReloadImage:
       #   repository: jimmidyson/configmap-reload
       #   tag: v0.4.0
+      configReloaderCpu: 200m
     alertmanager:
       alertmanagerSpec:
         storage:
