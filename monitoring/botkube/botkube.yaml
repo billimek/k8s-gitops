@@ -27,14 +27,14 @@ spec:
       settings:
         clustername: k8s
       resources:
-        - name: v1/pods                # Name of the resources e.g pod, deployment, ingress, etc. (Resource name must be in singular form)
+        - name: v1/pods
           namespaces:
             include:
               - all
-            ignore:                 # List of namespaces to be ignored (omitempty), used only with include: all
-              - rook-ceph                    # example : include [all], ignore [x,y,z] 
+            ignore:
+              - rook-ceph
               - kube-system
-          events:                   # List of lifecycle events you want to receive, e.g create, update, delete, error OR all
+          events:
             - create
             - delete
         - name: v1/services
@@ -119,15 +119,15 @@ spec:
             - create
             - delete
             - error
-        - name: v1/configmaps
-          namespaces:
-            include:
-              - all
-            ignore:
-              - rook-ceph
-          events:
-            - delete
-            - error
+        # - name: v1/configmaps
+        #   namespaces:
+        #     include:
+        #       - all
+        #     ignore:
+        #       - rook-ceph
+        #   events:
+        #     - delete
+        #     - error
         - name: apps/v1/daemonsets
           namespaces:
             include:
