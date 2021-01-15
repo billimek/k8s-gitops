@@ -48,13 +48,6 @@ spec:
         size: "5Gi"
     podAnnotations:
       backup.velero.io/backup-volumes: data
-    resources:
-      requests:
-        memory: 250Mi
-        cpu: 500m
-      limits:
-        memory: 1500Mi
-        cpu: 2000m
     tolerations:
     - key: "arm"
       operator: "Exists"
