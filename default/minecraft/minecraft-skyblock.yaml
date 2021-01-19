@@ -66,7 +66,7 @@ spec:
       icon: https://static.planetminecraft.com/files/resource_media/screenshot/1818/636544733395786830-1525075410.png
       loadBalancerIP: 10.0.6.105
       rcon:
-        enabled: true
+        enabled: false
         port: 25575
         password: "mc-rcon"
         serviceType: LoadBalancer

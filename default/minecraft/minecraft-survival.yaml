@@ -66,7 +66,7 @@ spec:
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
       loadBalancerIP: 10.0.6.102
       rcon:
-        enabled: true
+        enabled: false
         port: 25575
         password: "mc-rcon"
         serviceType: LoadBalancer
