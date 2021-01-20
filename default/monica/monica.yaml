@@ -1,0 +1,70 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: monica
+  namespace: default
+spec:
+  releaseName: monica
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: monica
+      version: 2.4.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: monica
+      tag: 2.19.1-apache
+    env:
+      APP_URL: https://monica.eviljungle.com
+      APP_ENV: production
+      DB_HOST: monica-mariadb
+      DEFAULT_MAX_STORAGE_SIZE: 4096
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+      hosts:
+      - host: monica.eviljungle.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - monica.eviljungle.com
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
+    persistence:
+      config:
+        enabled: true
+        storageClass: "rook-ceph-block"
+        size: 2Gi
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
+    mariadb:
+      enabled: true
+      image:
+        registry: docker.io
+        repository: mariadb
+        tag: 10.5.8
+      primary:
+        persistence:
+          enabled: true
+          storageClass: "rook-ceph-block"
+      auth:
+        database: monica
+        username: monica
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
+  valuesFrom:
+  - kind: Secret
+    name: "monica-helm-values"
+    optional: false

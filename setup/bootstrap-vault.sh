@@ -184,6 +184,7 @@ loadSecretsToVault() {
   kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
   kvault "default/minio/minio-helm-values.txt"
+  kvault "default/monica/monica-helm-values.txt"
   kvault "default/plex/plex-helm-values.txt"
   kvault "default/rtorrent-flood/rtorrent-flood-helm-values.txt"
   kvault "default/teslamate/teslamate-helm-values.txt"
@@ -192,7 +193,9 @@ loadSecretsToVault() {
 
 loadSecretsToVault-oneoff() {
   message "writing secrets to vault"
-  kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
+  # kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
+  kvault "default/monica/monica-helm-values.txt"
+
 }
 
 FIRST_RUN=1
