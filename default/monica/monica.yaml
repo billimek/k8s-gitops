@@ -25,6 +25,8 @@ spec:
       APP_URL: https://monica.eviljungle.com
       APP_ENV: production
       DB_HOST: monica-mariadb
+      DB_DATABASE: monica
+      DB_USERNAME: monica
       DEFAULT_MAX_STORAGE_SIZE: 4096
     ingress:
       enabled: true
