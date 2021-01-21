@@ -5,7 +5,3 @@ mariadb:
   auth:
     password: $MONICA_DB_PASSWORD
     rootPassword: $MONICA_DB_ROOTPASSWORD
-  primary:
-    extraEnvVars:
-      - name: MYSQL_ROOT_PASSWORD
-        value: $MONICA_DB_ROOTPASSWORD"

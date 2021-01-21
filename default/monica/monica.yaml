@@ -52,22 +52,18 @@ spec:
       enabled: true
       image:
         registry: docker.io
-        repository: mariadb
-        tag: 10.5.8
+        repository: bitnami/mariadb
+        tag: 10.5.8-debian-10-r46
       primary:
         persistence:
           enabled: true
           storageClass: "rook-ceph-block"
-        podSecurityContext:
-          enabled: false
-        containerSecurityContext:
-          enabled: false
       auth:
         database: monica
         username: monica
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
+      # tolerations:
+      # - key: "arm"
+      #   operator: "Exists"
   valuesFrom:
   - kind: Secret
     name: "monica-helm-values"
