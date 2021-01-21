@@ -18,6 +18,9 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
+    image:
+      repository: velero/velero
+      tag: v1.5.3
     configuration:
       provider: aws
       backupStorageLocation:
