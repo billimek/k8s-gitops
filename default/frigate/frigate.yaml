@@ -122,19 +122,17 @@ spec:
                   - detect
                   # - rtmp
                 input_args:
-                  - -avoid_negative_ts
+                  - '-avoid_negative_ts'
                   - make_zero
-                  - -fflags
+                  - '-fflags'
                   - nobuffer
-                  - -flags
+                  - '-flags'
                   - low_delay
-                  - -strict
+                  - '-strict'
                   - experimental
-                  - -fflags
+                  - '-fflags'
                   - +genpts+discardcorrupt
-                  - -rw_timeout
-                  - '5000000'
-                  - -use_wallclock_as_timestamps
+                  - '-use_wallclock_as_timestamps'
                   - '1'
           snapshots:
             timestamp: false
