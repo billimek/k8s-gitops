@@ -36,15 +36,15 @@ spec:
           person:
             min_area: 2500
             max_area: 100000
-            threshold: 0.85
+            threshold: 0.6
           dog:
             min_area: 1000
             max_area: 10000
-            threshold: 0.85
+            threshold: 0.6
           cat:
             min_area: 1000
             max_area: 10000
-            threshold: 0.85
+            threshold: 0.6
       cameras:
         porch:
           ffmpeg:
@@ -53,6 +53,13 @@ spec:
                 roles:
                   - detect
                   # - rtmp
+            hwaccel_args:
+              - -hwaccel
+              - vaapi
+              - -hwaccel_device
+              - /dev/dri/renderD128
+              - -hwaccel_output_format
+              - yuv420p
           snapshots:
             timestamp: false
           height: 480
@@ -63,7 +70,7 @@ spec:
               person:
                 min_area: 1500
                 max_area: 100000
-                threshold: 0.95
+                threshold: 0.6
         front:
           ffmpeg:
             inputs:
@@ -105,7 +112,7 @@ spec:
               person:
                 min_area: 1000
                 max_area: 100000
-                threshold: 0.85
+                threshold: 0.6
         basement:
           ffmpeg:
             inputs:
@@ -113,6 +120,21 @@ spec:
                 roles:
                   - detect
                   # - rtmp
+            input_args:
+              - -avoid_negative_ts
+              - make_zero
+              - -fflags
+              - nobuffer
+              - -flags
+              - low_delay
+              - -strict
+              - experimental
+              - -fflags
+              - +genpts+discardcorrupt
+              - -rw_timeout
+              - '5000000'
+              - -use_wallclock_as_timestamps
+              - '1'
           snapshots:
             timestamp: false
           height: 352
@@ -141,7 +163,7 @@ spec:
         cpu: 750m
       limits:
         memory: 2500Mi
-        # gpu.intel.com/i915: 1
+        gpu.intel.com/i915: 1
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
