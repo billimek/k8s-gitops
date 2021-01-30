@@ -57,12 +57,16 @@ spec:
                       type: boolean
                     osdMaintenanceTimeout:
                       type: integer
+                    pgHealthCheckTimeout:
+                      type: integer
                     manageMachineDisruptionBudgets:
                       type: boolean
                 skipUpgradeChecks:
                   type: boolean
                 continueUpgradeAfterChecksEvenIfNotHealthy:
                   type: boolean
+                waitTimeoutForHealthyOSDInMinutes:
+                  type: integer
                 mon:
                   type: object
                   properties:
@@ -139,6 +143,8 @@ spec:
                           type: boolean
                         osdMaintenanceTimeout:
                           type: integer
+                        pgHealthCheckTimeout:
+                          type: integer
                         manageMachineDisruptionBudgets:
                           type: boolean
                     useAllNodes:
@@ -185,6 +191,8 @@ spec:
                               properties:
                                 name:
                                   type: string
+                                fullPath:
+                                  type: string
                                 config:
                                   type: object
                                   nullable: true
@@ -204,6 +212,19 @@ spec:
                       type: object
                       nullable: true
                       x-kubernetes-preserve-unknown-fields: true
+                    devices:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          fullPath:
+                            type: string
+                          config:
+                            type: object
+                            nullable: true
+                            x-kubernetes-preserve-unknown-fields: true
                     storageClassDeviceSets:
                       type: array
                       nullable: true
@@ -278,6 +299,10 @@ spec:
                         properties:
                           ip:
                             type: string
+                    externalMgrPrometheusPort:
+                      type: integer
+                      minimum: 0
+                      maximum: 65535
                 removeOSDsIfOutAndSafeToRemove:
                   type: boolean
                 external:
@@ -317,6 +342,13 @@ spec:
                           x-kubernetes-preserve-unknown-fields: true
                         tokenSecretName:
                           type: string
+                logCollector:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                    periodicity:
+                      type: string
                 annotations:
                   type: object
                   nullable: true
@@ -1164,6 +1196,16 @@ spec:
                       enum:
                         - image
                         - pool
+                    snapshotSchedules:
+                      type: array
+                      items:
+                        type: object
+                        nullable: true
+                        properties:
+                          interval:
+                            type: string
+                          startTime:
+                            type: string
                 statusCheck:
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
@@ -1289,9 +1331,7 @@ spec:
                 claimRef:
                   type: object
                   nullable: true
-                  items:
-                    type: object
-                    x-kubernetes-preserve-unknown-fields: true
+                  x-kubernetes-preserve-unknown-fields: true
             status:
               type: object
               x-kubernetes-preserve-unknown-fields: true
@@ -1336,6 +1376,8 @@ spec:
                   type: object
                   nullable: true
                   x-kubernetes-preserve-unknown-fields: true
+                objectBucketName:
+                  type: string
             status:
               type: object
               x-kubernetes-preserve-unknown-fields: true
