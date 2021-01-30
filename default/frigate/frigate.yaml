@@ -27,6 +27,14 @@ spec:
       mqtt:
         host: vernemq.default.svc
         topic_prefix: frigate
+      ffmpeg:
+        hwaccel_args:
+          - -hwaccel
+          - vaapi
+          - -hwaccel_device
+          - /dev/dri/renderD128
+          - -hwaccel_output_format
+          - yuv420p
       objects:
         track:
           - person
@@ -53,13 +61,6 @@ spec:
                 roles:
                   - detect
                   # - rtmp
-            hwaccel_args:
-              - -hwaccel
-              - vaapi
-              - -hwaccel_device
-              - /dev/dri/renderD128
-              - -hwaccel_output_format
-              - yuv420p
           snapshots:
             timestamp: false
           height: 480
