@@ -27,6 +27,7 @@ spec:
         tag: 1.33.0
     coral:
       enabled: true
+    timezone: "America/New_York"
     config: |
       mqtt:
         host: vernemq.default.svc
