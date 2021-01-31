@@ -59,31 +59,6 @@ spec:
             min_area: 1000
             max_area: 10000
             threshold: 0.6
-      clips:
-        enabled: true
-        pre_capture: 5
-        post_capture: 5
-        objects:
-          - person
-          - dog
-          - cat
-        retain:
-          default: 10
-      snapshots:
-        enabled: true
-        timestamp: true
-        # Optional: draw bounding box on the snapshots (default: shown below)
-        bounding_box: true
-        # Optional: crop the snapshot (default: shown below)
-        crop: False
-        # Optional: height to resize the snapshot to (default: original size)
-        # height: 175
-        # Optional: Camera override for retention settings (default: global values)
-        retain:
-          default: 10
-      record:
-        enabled: true
-        retain_days: 5
       cameras:
         porch:
           ffmpeg:
@@ -108,6 +83,20 @@ spec:
                 min_area: 1500
                 max_area: 100000
                 threshold: 0.6
+          clips:
+            enabled: true
+            objects:
+              - person
+              - dog
+              - cat
+          snapshots:
+            enabled: true
+            timestamp: true
+            bounding_box: true
+            crop: False
+          record:
+            enabled: true
+            retain_days: 5
         front:
           ffmpeg:
             inputs:
