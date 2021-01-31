@@ -184,50 +184,50 @@ spec:
           record:
             enabled: true
             retain_days: 5
-        # basement:
-        #   ffmpeg:
-        #     inputs:
-        #       # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/h264Preview_01_sub
-        #       - path: rtmp://basement/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
-        #         roles:
-        #           - detect
-        #       # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
-        #       - path: rtmp://basement/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
-        #         roles:
-        #           - rtmp
-        #           - clips
-        #           - record
-        #         input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
-        #         # input_args:
-        #         #   - '-avoid_negative_ts'
-        #         #   - make_zero
-        #         #   - '-fflags'
-        #         #   - nobuffer
-        #         #   - '-flags'
-        #         #   - low_delay
-        #         #   - '-strict'
-        #         #   - experimental
-        #         #   - '-fflags'
-        #         #   - +genpts+discardcorrupt
-        #         #   - '-use_wallclock_as_timestamps'
-        #         #   - '1'
-        #   height: 352
-        #   width: 640
-        #   fps: 4
-        #   clips:
-        #     enabled: true
-        #     objects:
-        #       - person
-        #       - dog
-        #       - cat
-        #   snapshots:
-        #     enabled: true
-        #     timestamp: False
-        #     bounding_box: true
-        #     crop: False
-        #   record:
-        #     enabled: true
-        #     retain_days: 5
+        basement:
+          ffmpeg:
+            inputs:
+              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/h264Preview_01_sub
+              - path: rtmp://basement/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+                roles:
+                  - detect
+              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+              - path: rtmp://basement/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+                roles:
+                  # - rtmp
+                  - clips
+                  - record
+                input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
+                # input_args:
+                #   - '-avoid_negative_ts'
+                #   - make_zero
+                #   - '-fflags'
+                #   - nobuffer
+                #   - '-flags'
+                #   - low_delay
+                #   - '-strict'
+                #   - experimental
+                #   - '-fflags'
+                #   - +genpts+discardcorrupt
+                #   - '-use_wallclock_as_timestamps'
+                #   - '1'
+          height: 352
+          width: 640
+          fps: 4
+          clips:
+            enabled: true
+            objects:
+              - person
+              - dog
+              - cat
+          snapshots:
+            enabled: true
+            timestamp: False
+            bounding_box: true
+            crop: False
+          record:
+            enabled: true
+            retain_days: 5
     ingress:
       enabled: true
       annotations:
