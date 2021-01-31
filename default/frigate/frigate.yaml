@@ -33,6 +33,8 @@ spec:
         topic_prefix: frigate
       database:
         path: /data/frigate.db
+      logger:
+        default: debug
       ffmpeg:
         hwaccel_args:
           - -hwaccel
@@ -66,7 +68,7 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
                   - clips
@@ -92,7 +94,7 @@ spec:
             bounding_box: True
             crop: False
           record:
-            enabled: False
+            enabled: True
             retain_days: 5
         # front:
         #   ffmpeg:
