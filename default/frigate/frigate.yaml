@@ -191,6 +191,19 @@ spec:
               - path: rtmp://basement/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
                   - detect
+                input_args:
+                  - '-avoid_negative_ts'
+                  - make_zero
+                  - '-fflags'
+                  - nobuffer
+                  - '-flags'
+                  - low_delay
+                  - '-strict'
+                  - experimental
+                  - '-fflags'
+                  - +genpts+discardcorrupt
+                  - '-use_wallclock_as_timestamps'
+                  - '1'
               # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
               - path: rtmp://basement/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
