@@ -71,8 +71,6 @@ spec:
                   - rtmp
                   - clips
                   - record
-          snapshots:
-            timestamp: false
           height: 480
           width: 704
           fps: 5
@@ -83,18 +81,18 @@ spec:
                 max_area: 100000
                 threshold: 0.6
           clips:
-            enabled: true
+            enabled: True
             objects:
               - person
               - dog
               - cat
           snapshots:
-            enabled: true
-            timestamp: true
-            bounding_box: true
+            enabled: True
+            timestamp: True
+            bounding_box: True
             crop: False
           record:
-            enabled: true
+            enabled: True
             retain_days: 5
         front:
           ffmpeg:
@@ -107,8 +105,6 @@ spec:
                   - rtmp
                   - clips
                   - record
-          snapshots:
-            timestamp: false
           height: 480
           width: 704
           fps: 5
@@ -137,8 +133,6 @@ spec:
                   - rtmp
                   - clips
                   - record
-          snapshots:
-            timestamp: false
           height: 480
           width: 704
           fps: 5
@@ -167,8 +161,6 @@ spec:
                   - rtmp
                   - clips
                   - record
-          snapshots:
-            timestamp: false
           height: 480
           width: 704
           fps: 5
@@ -219,8 +211,6 @@ spec:
         #         #   - +genpts+discardcorrupt
         #         #   - '-use_wallclock_as_timestamps'
         #         #   - '1'
-        #   snapshots:
-        #     timestamp: false
         #   height: 352
         #   width: 640
         #   fps: 4
@@ -273,10 +263,15 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: nfs-media-pvc
+      - name: cache
+        medium: Memory
+        sizeLimit: 1Gi
     extraVolumeMounts:
       - mountPath: /media
         name: media
         subPath: Videos
+      - mountPath: /tmp/cache
+        name: cache
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
