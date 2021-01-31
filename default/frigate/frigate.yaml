@@ -66,7 +66,6 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-                  # - rtmp
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
                 roles:
                   - rtmp
@@ -103,7 +102,11 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-                  # - rtmp
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+                roles:
+                  - rtmp
+                  - clips
+                  - record
           snapshots:
             timestamp: false
           height: 480
@@ -115,7 +118,11 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway:554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-                  # - rtmp
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+                roles:
+                  - rtmp
+                  - clips
+                  - record
           snapshots:
             timestamp: false
           height: 480
@@ -127,7 +134,11 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-                  # - rtmp
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+                roles:
+                  - rtmp
+                  - clips
+                  - record
           snapshots:
             timestamp: false
           height: 480
@@ -146,7 +157,11 @@ spec:
               - path: rtmp://basement/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
                   - detect
-                  # - rtmp
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+                roles:
+                  - rtmp
+                  - clips
+                  - record
                 input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
                 # input_args:
                 #   - '-avoid_negative_ts'
