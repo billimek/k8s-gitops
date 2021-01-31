@@ -92,7 +92,7 @@ spec:
             bounding_box: True
             crop: False
           record:
-            enabled: True
+            enabled: False
             retain_days: 5
         # front:
         #   ffmpeg:
