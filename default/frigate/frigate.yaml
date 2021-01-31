@@ -21,12 +21,18 @@ spec:
       repository: blakeblackshear/frigate
       tag: 0.8.0-amd64
     #   pullPolicy: Always
+    initContainer:
+      image:
+        repository: busybox
+        tag: 1.33.0
     coral:
       enabled: true
     config: |
       mqtt:
         host: vernemq.default.svc
         topic_prefix: frigate
+      database:
+        path: /data/frigate.db
       ffmpeg:
         hwaccel_args:
           - -hwaccel
@@ -165,6 +171,21 @@ spec:
       limits:
         memory: 2500Mi
         gpu.intel.com/i915: 1
+    probes:
+      startup:
+        enabled: true
+    persistence:
+      data:
+        enabled: true
+        storageClass: rook-ceph-block
+    extraVolumes:
+      - name: media
+        persistentVolumeClaim:
+          claimName: nfs-media-pvc
+    extraVolumeMounts:
+      - mountPath: /media
+        name: media
+        subPath: Videos/frigate
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
