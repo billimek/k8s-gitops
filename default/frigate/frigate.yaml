@@ -122,7 +122,7 @@ spec:
                 roles:
                   - detect
                   # - rtmp
-                input_args: input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
+                input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
                 # input_args:
                 #   - '-avoid_negative_ts'
                 #   - make_zero
