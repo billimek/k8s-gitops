@@ -88,7 +88,7 @@ spec:
               - cat
           snapshots:
             enabled: True
-            timestamp: True
+            timestamp: False
             bounding_box: True
             crop: False
           record:
@@ -116,7 +116,7 @@ spec:
               - cat
           snapshots:
             enabled: true
-            timestamp: true
+            timestamp: False
             bounding_box: true
             crop: False
           record:
@@ -144,7 +144,7 @@ spec:
               - cat
           snapshots:
             enabled: true
-            timestamp: true
+            timestamp: False
             bounding_box: true
             crop: False
           record:
@@ -178,7 +178,7 @@ spec:
               - cat
           snapshots:
             enabled: true
-            timestamp: true
+            timestamp: False
             bounding_box: true
             crop: False
           record:
@@ -222,7 +222,7 @@ spec:
         #       - cat
         #   snapshots:
         #     enabled: true
-        #     timestamp: true
+        #     timestamp: False
         #     bounding_box: true
         #     crop: False
         #   record:
@@ -259,16 +259,19 @@ spec:
       data:
         enabled: true
         storageClass: rook-ceph-block
+    shmSize: 2Gi
     extraVolumes:
       - name: media
         persistentVolumeClaim:
           claimName: nfs-media-pvc
+      - name: cache
+        medium: Memory
     extraVolumeMounts:
       - mountPath: /media
         name: media
         subPath: Videos
       - mountPath: /tmp/cache
-        name: dshm
+        name: cache
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
