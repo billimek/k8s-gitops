@@ -197,20 +197,20 @@ spec:
                   # - rtmp
                   - clips
                   - record
-                input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
-                # input_args:
-                #   - '-avoid_negative_ts'
-                #   - make_zero
-                #   - '-fflags'
-                #   - nobuffer
-                #   - '-flags'
-                #   - low_delay
-                #   - '-strict'
-                #   - experimental
-                #   - '-fflags'
-                #   - +genpts+discardcorrupt
-                #   - '-use_wallclock_as_timestamps'
-                #   - '1'
+                # input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
+                input_args:
+                  - '-avoid_negative_ts'
+                  - make_zero
+                  - '-fflags'
+                  - nobuffer
+                  - '-flags'
+                  - low_delay
+                  - '-strict'
+                  - experimental
+                  - '-fflags'
+                  - +genpts+discardcorrupt
+                  - '-use_wallclock_as_timestamps'
+                  - '1'
           height: 352
           width: 640
           fps: 4
@@ -228,6 +228,8 @@ spec:
           record:
             enabled: true
             retain_days: 5
+          rtmp:
+            enabled: False
     ingress:
       enabled: true
       annotations:
