@@ -265,6 +265,7 @@ spec:
         persistentVolumeClaim:
           claimName: nfs-media-pvc
       - name: cache
+        emptyDir: {}
         medium: Memory
     extraVolumeMounts:
       - mountPath: /media
