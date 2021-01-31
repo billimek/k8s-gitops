@@ -138,7 +138,7 @@ spec:
                 #   - '1'
           snapshots:
             timestamp: false
-          height: 360
+          height: 352
           width: 640
           fps: 4
     ingress:
