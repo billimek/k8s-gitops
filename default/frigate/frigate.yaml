@@ -263,15 +263,12 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: nfs-media-pvc
-      - name: cache
-        medium: Memory
-        sizeLimit: 1Gi
     extraVolumeMounts:
       - mountPath: /media
         name: media
         subPath: Videos
       - mountPath: /tmp/cache
-        name: cache
+        name: dshm
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
