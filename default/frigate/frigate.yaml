@@ -59,6 +59,31 @@ spec:
             min_area: 1000
             max_area: 10000
             threshold: 0.6
+      clips:
+        enabled: true
+        pre_capture: 5
+        post_capture: 5
+        objects:
+          - person
+          - dog
+          - cat
+        retain:
+          default: 10
+      snapshots:
+        enabled: true
+        timestamp: true
+        # Optional: draw bounding box on the snapshots (default: shown below)
+        bounding_box: true
+        # Optional: crop the snapshot (default: shown below)
+        crop: False
+        # Optional: height to resize the snapshot to (default: original size)
+        # height: 175
+        # Optional: Camera override for retention settings (default: global values)
+        retain:
+          default: 10
+      record:
+        enabled: true
+        retain_days: 5
       cameras:
         porch:
           ffmpeg:
@@ -67,6 +92,11 @@ spec:
                 roles:
                   - detect
                   # - rtmp
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif
+                roles:
+                  - rtmp
+                  - clips
+                  - record
           snapshots:
             timestamp: false
           height: 480
@@ -185,7 +215,7 @@ spec:
     extraVolumeMounts:
       - mountPath: /media
         name: media
-        subPath: Videos/frigate
+        subPath: Videos
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
