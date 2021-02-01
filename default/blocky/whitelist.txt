@@ -16,3 +16,5 @@ assets.bounceexchange.com
 api.bounceexchange.com
 events.bouncex.net
 media.xchat.xfinity.com
+files.slack.com
+slack.com
