@@ -10,16 +10,16 @@ spec:
     spec:
       # renovate: registryUrl=https://kubernetes-charts.banzaicloud.com
       chart: thanos
-      version: 0.3.31
+      version: 0.4.0
       sourceRef:
         kind: HelmRepository
         name: banzaicloud-charts
         namespace: flux-system
       interval: 5m
   values:
-    image:
-      repository: quay.io/thanos/thanos
-      tag: v0.15.0
+    # image:
+    #   repository: quay.io/thanos/thanos
+    #   tag: v0.15.0
     query:
       replicaCount: 2
       replicaLabels:
