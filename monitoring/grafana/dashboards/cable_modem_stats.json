@@ -1,48 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_CABLE_MODEM_STATS",
-      "label": "cable_modem_stats",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    },
-    {
-      "name": "DS_UPTIMEROBOT",
-      "label": "uptimerobot",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.2.1"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table-old",
-      "name": "Table (old)",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -55,7 +11,7 @@
         "type": "dashboard"
       },
       {
-        "datasource": "${DS_UPTIMEROBOT}",
+        "datasource": "uptimerobot",
         "enable": true,
         "hide": false,
         "iconColor": "rgba(255, 96, 96, 1)",
@@ -67,7 +23,7 @@
         "type": "tags"
       },
       {
-        "datasource": "${DS_UPTIMEROBOT}",
+        "datasource": "uptimerobot",
         "enable": true,
         "hide": false,
         "iconColor": "#629e51",
@@ -83,7 +39,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": null,
+  "id": 68,
   "links": [],
   "panels": [
     {
@@ -91,7 +47,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CABLE_MODEM_STATS}",
+      "datasource": "cable_modem_stats",
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
@@ -130,7 +86,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -242,7 +198,7 @@
           "label": "",
           "logBase": 1,
           "max": "7",
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -264,7 +220,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CABLE_MODEM_STATS}",
+      "datasource": "cable_modem_stats",
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
@@ -302,7 +258,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -370,8 +326,8 @@
           "format": "dB",
           "label": "",
           "logBase": 1,
-          "max": "42",
-          "min": "38",
+          "max": null,
+          "min": null,
           "show": true
         },
         {
@@ -393,7 +349,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CABLE_MODEM_STATS}",
+      "datasource": "cable_modem_stats",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -431,7 +387,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -598,7 +554,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CABLE_MODEM_STATS}",
+      "datasource": "cable_modem_stats",
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
@@ -636,7 +592,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -724,7 +680,7 @@
     },
     {
       "columns": [],
-      "datasource": "${DS_UPTIMEROBOT}",
+      "datasource": "uptimerobot",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -915,7 +871,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "cable modem stats",
-  "uid": "lvU1S9Hmz",
-  "version": 2
+  "title": "cable modem stats 2",
+  "uid": "56IzqwYMk",
+  "version": 1
 }
