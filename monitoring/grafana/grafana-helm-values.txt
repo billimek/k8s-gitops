@@ -1,3 +1,4 @@
+adminUser: jeff@billimek.com
 adminPassword: "$GRAFANA_PASSWORD"
 grafana.ini:
   auth.generic_oauth:
