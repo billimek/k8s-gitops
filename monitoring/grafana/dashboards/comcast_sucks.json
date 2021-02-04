@@ -1,6 +1,14 @@
 {
   "__inputs": [
     {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    },
+    {
       "name": "DS_SPEEDTESTS",
       "label": "speedtests",
       "description": "",
@@ -11,6 +19,14 @@
     {
       "name": "DS_COMCAST",
       "label": "comcast",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    },
+    {
+      "name": "DS_HOME_ASSISTANT",
+      "label": "home_assistant",
       "description": "",
       "type": "datasource",
       "pluginId": "influxdb",
@@ -38,7 +54,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "6.4.1"
+      "version": "7.2.1"
     },
     {
       "type": "panel",
@@ -53,6 +69,12 @@
       "version": "1.0.0"
     },
     {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
       "type": "panel",
       "id": "singlestat",
       "name": "Singlestat",
@@ -60,8 +82,8 @@
     },
     {
       "type": "panel",
-      "id": "table",
-      "name": "Table",
+      "id": "table-old",
+      "name": "Table (old)",
       "version": ""
     }
   ],
@@ -78,7 +100,7 @@
       },
       {
         "datasource": "${DS_UPTIMEROBOT}",
-        "enable": false,
+        "enable": true,
         "hide": false,
         "iconColor": "rgba(255, 96, 96, 1)",
         "limit": 100,
@@ -90,7 +112,7 @@
       },
       {
         "datasource": "${DS_UPTIMEROBOT}",
-        "enable": false,
+        "enable": true,
         "hide": false,
         "iconColor": "#629e51",
         "limit": 100,
@@ -117,7 +139,13 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "${DS_SPEEDTESTS}",
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "format": "bps",
       "gauge": {
         "maxValue": 100,
@@ -133,7 +161,7 @@
         "y": 0
       },
       "id": 2,
-      "interval": null,
+      "interval": "",
       "links": [],
       "mappingType": 1,
       "mappingTypes": [
@@ -149,7 +177,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -170,44 +197,13 @@
       "tableColumn": "",
       "targets": [
         {
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "speed_test_results",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "download"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": []
+          "expr": "speedtest_download_bytes*8",
+          "instant": false,
+          "refId": "A"
         }
       ],
       "thresholds": "100000000,150000000",
+      "timeFrom": "1h",
       "title": "Last Download Speed ⬇",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -229,7 +225,13 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "${DS_SPEEDTESTS}",
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "format": "bps",
       "gauge": {
         "maxValue": 100,
@@ -262,7 +264,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -283,44 +284,12 @@
       "tableColumn": "",
       "targets": [
         {
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "speed_test_results",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "upload"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": []
+          "expr": "speedtest_upload_bytes*8",
+          "refId": "A"
         }
       ],
       "thresholds": "12500000,17500000",
+      "timeFrom": "1h",
       "title": "Last Upload Speed ⬆",
       "transparent": true,
       "type": "singlestat",
@@ -343,7 +312,13 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(245, 54, 54, 0.9)"
       ],
-      "datasource": "${DS_SPEEDTESTS}",
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "format": "ms",
       "gauge": {
         "maxValue": 100,
@@ -376,7 +351,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -397,46 +371,12 @@
       "tableColumn": "",
       "targets": [
         {
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "speed_test_results",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT last(\"ping\") FROM \"speed_test_results\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "ping"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": []
+          "expr": "speedtest_latency_seconds",
+          "refId": "A"
         }
       ],
       "thresholds": "25,45",
+      "timeFrom": "1h",
       "title": "Last Ping ⏱",
       "transparent": true,
       "type": "singlestat",
@@ -490,7 +430,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_SPEEDTESTS}",
+      "datasource": "-- Mixed --",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -499,6 +446,7 @@
         "x": 0,
         "y": 3
       },
+      "hiddenSeries": false,
       "hideTimeOverride": false,
       "id": 1,
       "legend": {
@@ -515,10 +463,11 @@
       "links": [],
       "nullPointMode": "connected",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "paceLength": 10,
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -540,7 +489,16 @@
         {
           "alias": "Upload"
         },
-        {}
+        {
+          "alias": "Jitter",
+          "yaxis": 2
+        },
+        {
+          "alias": "Jitter",
+          "bars": false,
+          "fill": 0,
+          "lines": true
+        }
       ],
       "spaceLength": 10,
       "stack": false,
@@ -548,6 +506,7 @@
       "targets": [
         {
           "alias": "$col",
+          "datasource": "${DS_SPEEDTESTS}",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -610,6 +569,7 @@
         },
         {
           "alias": "$col",
+          "datasource": "${DS_SPEEDTESTS}",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -653,6 +613,7 @@
           "tags": []
         },
         {
+          "datasource": "${DS_SPEEDTESTS}",
           "groupBy": [
             {
               "params": [
@@ -688,6 +649,33 @@
             ]
           ],
           "tags": []
+        },
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "expr": "avg_over_time(speedtest_download_bytes[60m])*8",
+          "legendFormat": "Download",
+          "refId": "D"
+        },
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "expr": "avg_over_time(speedtest_upload_bytes[60m])*8",
+          "hide": false,
+          "legendFormat": "Upload",
+          "refId": "E"
+        },
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "expr": "avg_over_time(speedtest_latency_seconds[60m])",
+          "hide": false,
+          "legendFormat": "Ping",
+          "refId": "F"
+        },
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "expr": "avg_over_time(speedtest_jittter_seconds[60m])",
+          "hide": false,
+          "legendFormat": "Jitter",
+          "refId": "G"
         }
       ],
       "thresholds": [
@@ -746,7 +734,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_COMCAST}",
+      "datasource": "-- Mixed --",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -755,6 +750,7 @@
         "x": 0,
         "y": 10
       },
+      "hiddenSeries": false,
       "id": 5,
       "legend": {
         "avg": false,
@@ -770,10 +766,11 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "paceLength": 10,
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -784,6 +781,7 @@
       "targets": [
         {
           "alias": "data used",
+          "datasource": "${DS_COMCAST}",
           "dsType": "influxdb",
           "groupBy": [],
           "measurement": "comcast_data_usage",
@@ -802,6 +800,40 @@
             ]
           ],
           "tags": []
+        },
+        {
+          "alias": "data used",
+          "datasource": "${DS_HOME_ASSISTANT}",
+          "groupBy": [],
+          "measurement": "GB",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "total_usage"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "entity_id",
+              "operator": "=",
+              "value": "xfinity_usage"
+            }
+          ]
+        },
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "expr": "hass_sensor_unit_gb{entity=\"sensor.xfinity_usage\"}",
+          "hide": true,
+          "legendFormat": "data used",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -853,6 +885,13 @@
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -861,6 +900,7 @@
         "x": 0,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 9,
       "legend": {
         "alignAsTable": true,
@@ -878,10 +918,11 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "paceLength": 10,
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -982,6 +1023,13 @@
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -990,6 +1038,7 @@
         "x": 12,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 14,
       "legend": {
         "alignAsTable": true,
@@ -1007,10 +1056,11 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "paceLength": 10,
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1103,6 +1153,13 @@
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -1111,6 +1168,7 @@
         "x": 0,
         "y": 26
       },
+      "hiddenSeries": false,
       "id": 11,
       "legend": {
         "alignAsTable": true,
@@ -1128,10 +1186,11 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "paceLength": 10,
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1223,6 +1282,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -1231,6 +1297,7 @@
         "x": 12,
         "y": 26
       },
+      "hiddenSeries": false,
       "id": 13,
       "legend": {
         "alignAsTable": true,
@@ -1249,10 +1316,11 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "paceLength": 10,
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1417,6 +1485,12 @@
     {
       "columns": [],
       "datasource": "${DS_UPTIMEROBOT}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fontSize": "100%",
       "gridPos": {
         "h": 9,
@@ -1426,7 +1500,6 @@
       },
       "id": 7,
       "links": [],
-      "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
@@ -1437,6 +1510,7 @@
       "styles": [
         {
           "alias": "Timestamp",
+          "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "link": false,
           "pattern": "Time",
@@ -1444,6 +1518,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1473,6 +1548,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1597,11 +1673,11 @@
       "title": "Comcast Outages",
       "transform": "table",
       "transparent": true,
-      "type": "table"
+      "type": "table-old"
     }
   ],
   "refresh": "30m",
-  "schemaVersion": 20,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1639,5 +1715,5 @@
   "timezone": "browser",
   "title": "comcast sucks",
   "uid": "000000017",
-  "version": 4
+  "version": 16
 }

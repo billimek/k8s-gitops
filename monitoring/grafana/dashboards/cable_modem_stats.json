@@ -22,7 +22,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "6.4.1"
+      "version": "7.2.1"
     },
     {
       "type": "panel",
@@ -38,8 +38,8 @@
     },
     {
       "type": "panel",
-      "id": "table",
-      "name": "Table",
+      "id": "table-old",
+      "name": "Table (old)",
       "version": ""
     }
   ],
@@ -93,6 +93,13 @@
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -101,6 +108,7 @@
         "x": 0,
         "y": 0
       },
+      "hiddenSeries": false,
       "id": 9,
       "interval": "",
       "legend": {
@@ -119,9 +127,10 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -257,6 +266,13 @@
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -265,6 +281,7 @@
         "x": 0,
         "y": 9
       },
+      "hiddenSeries": false,
       "id": 14,
       "legend": {
         "alignAsTable": true,
@@ -282,9 +299,10 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -376,6 +394,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -384,6 +409,7 @@
         "x": 0,
         "y": 18
       },
+      "hiddenSeries": false,
       "id": 13,
       "legend": {
         "alignAsTable": true,
@@ -402,9 +428,10 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -573,6 +600,13 @@
       "dashes": false,
       "datasource": "${DS_CABLE_MODEM_STATS}",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
@@ -581,6 +615,7 @@
         "x": 0,
         "y": 27
       },
+      "hiddenSeries": false,
       "id": 11,
       "legend": {
         "alignAsTable": true,
@@ -598,9 +633,10 @@
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -689,6 +725,12 @@
     {
       "columns": [],
       "datasource": "${DS_UPTIMEROBOT}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fontSize": "100%",
       "gridPos": {
         "h": 9,
@@ -698,7 +740,6 @@
       },
       "id": 7,
       "links": [],
-      "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
@@ -709,6 +750,7 @@
       "styles": [
         {
           "alias": "Timestamp",
+          "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "link": false,
           "pattern": "Time",
@@ -716,6 +758,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -745,6 +788,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -831,11 +875,11 @@
       "title": "Comcast Outages",
       "transform": "table",
       "transparent": true,
-      "type": "table"
+      "type": "table-old"
     }
   ],
   "refresh": "30m",
-  "schemaVersion": 20,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [],
   "templating": {

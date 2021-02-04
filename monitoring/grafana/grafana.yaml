@@ -65,31 +65,29 @@ spec:
           folder: ''
           type: file
           disableDeletion: false
-          editable: true
+          allowUiUpdates: true
           options:
             path: /var/lib/grafana/dashboards/default
         - name: 'teslamate'
           orgId: 1
           folder: Teslamate
-          # folderUid: Nr4ofiDZk
           type: file
           disableDeletion: false
-          editable: true
           # updateIntervalSeconds: -1
           allowUiUpdates: true
           options:
             path: /var/lib/grafana/dashboards/teslamate
     dashboards:
       default:
-        flux-cluster:
-          url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/cluster.json
+        1-node-exporter:
+          url: https://grafana.com/api/dashboards/11074/revisions/9/download
+          datasource: Prometheus 
+        blocky:
+          url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.12/docs/blocky-grafana.json
           datasource: Prometheus
-        flux-control-plane:
-          url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/control-plane.json
-          datasource: Prometheus
-        nginx-dashboard:
-          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
-          datasource: Prometheus
+        cable-modem-stats:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/cable_modem_stats.json
+          datasource: influxdb
         # Ref: https://grafana.com/grafana/dashboards/2842
         ceph-cluster:
           gnetId: 2842
@@ -105,21 +103,36 @@ spec:
           gnetId: 5342
           revision: 5
           datasource: Prometheus
-        vernemq:
-          url: https://raw.githubusercontent.com/vernemq/vernemq/master/metrics_scripts/grafana/VerneMQ%20Node%20Metrics.json
+        comcast-sucks:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/comcast_sucks.json
+          datasource: influxdb
+        flux-cluster:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/v0.7.6/manifests/monitoring/grafana/dashboards/cluster.json
           datasource: Prometheus
-        velero:
-          url: https://grafana.com/api/dashboards/11055/revisions/2/download
+        flux-control-plane:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/v0.7.6/manifests/monitoring/grafana/dashboards/control-plane.json
           datasource: Prometheus
-        blocky:
-          url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.12/docs/blocky-grafana.json
+        frigate:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/frigate.json
+          datasource: influxdb
+        home-assistant:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/home_assistant.json
+          datasource: influxdb
+        internet-speed:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/internet_speed.json
+          datasource: influxdb
+        minio-overview:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/minio_overview.json
+          datasource: influxdb
+        nginx-dashboard:
+          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
           datasource: Prometheus
-        uptimerobot:
-          url: https://raw.githubusercontent.com/lekpamartin/uptimerobot_exporter/master/dashboards/grafana.json
+        node-exporter-full:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/node_exporter_full.json
           datasource: Prometheus
-        1-node-exporter:
-          url: https://grafana.com/api/dashboards/11074/revisions/9/download
-          datasource: Prometheus 
+        prometheus-exporter-summary:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
+          datasource: Prometheus
         TrueNAS:
           url: https://grafana.com/api/dashboards/12921/revisions/1/download
           datasource: TrueNAS
@@ -143,21 +156,21 @@ spec:
           gnetId: 11312
           revision: 8
           datasource: Prometheus
-        # cable-modem-stats:
-        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/cable_modem_stats.json
-        #   datasource: influxdb
-        # comcast-sucks:
-        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/comcast_sucks.json
-        #   datasource: influxdb
-        # home-assistant:
-        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/home_assistant.json
-        #   datasource: influxdb
-        # ups:
-        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/ups.json
-        #   datasource: influxdb
-        # netdata:
-        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/prometheus-operator/grafana-dashboards/netdata.json
-        #   datasource: Prometheus
+        ups:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
+          datasource: influxdb
+        uptimerobot:
+          url: https://raw.githubusercontent.com/lekpamartin/uptimerobot_exporter/master/dashboards/grafana.json
+          datasource: Prometheus
+        vernemq:
+          url: https://raw.githubusercontent.com/vernemq/vernemq/master/metrics_scripts/grafana/VerneMQ%20Node%20Metrics.json
+          datasource: Prometheus
+        velero:
+          url: https://grafana.com/api/dashboards/11055/revisions/2/download
+          datasource: Prometheus
+        windows-node:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/windows_node.json
+          datasource: influxdb
       teslamate:
         charge-level:
           url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.21.1/grafana/dashboards/charge-level.json
@@ -267,6 +280,8 @@ spec:
     grafana.ini:
       server:
         root_url: "https://grafana.eviljungle.com"
+      security:
+      admin_user: "jeff@billimek.com"
       paths:
         data: /var/lib/grafana/data
         logs: /var/log/grafana
@@ -279,7 +294,7 @@ spec:
       grafana_net:
         url: https://grafana.net
       auth.basic:
-        disable_login_form: true
+        disable_login_form: false
   valuesFrom:
   - kind: Secret
     name: "grafana-helm-values"

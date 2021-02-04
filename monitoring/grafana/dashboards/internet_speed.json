@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.0.3"
+      "version": "7.2.1"
     },
     {
       "type": "panel",
@@ -56,7 +56,8 @@
       "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "links": []
         },
         "overrides": []
       },
@@ -86,9 +87,10 @@
       "linewidth": 1,
       "nullPointMode": "connected",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -155,7 +157,8 @@
       "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "links": []
         },
         "overrides": []
       },
@@ -183,9 +186,10 @@
       "linewidth": 1,
       "nullPointMode": "connected",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -251,7 +255,8 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "links": []
         },
         "overrides": []
       },
@@ -279,9 +284,10 @@
       "linewidth": 2,
       "nullPointMode": "connected",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -350,7 +356,8 @@
       "decimals": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "links": []
         },
         "overrides": []
       },
@@ -381,10 +388,10 @@
       "links": [],
       "nullPointMode": "connected",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "6.6.2",
+      "pluginVersion": "7.2.1",
       "pointradius": 0.5,
       "points": false,
       "renderer": "flot",
@@ -442,7 +449,7 @@
       }
     }
   ],
-  "schemaVersion": 25,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -452,19 +459,7 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {
-    "refresh_intervals": [
-      "10s",
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m",
-      "1h",
-      "2h",
-      "1d"
-    ]
-  },
+  "timepicker": {},
   "timezone": "",
   "title": "Internet Speed",
   "uid": "MBmaYd9Wk",

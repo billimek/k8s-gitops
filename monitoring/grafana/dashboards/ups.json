@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "6.4.1"
+      "version": "7.2.1"
     },
     {
       "type": "panel",
@@ -55,6 +55,13 @@
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -63,24 +70,26 @@
         "x": 0,
         "y": 0
       },
+      "hiddenSeries": false,
       "id": 2,
       "legend": {
         "avg": false,
-        "current": false,
+        "current": true,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -91,7 +100,7 @@
       "targets": [
         {
           "alias": "$tag_host",
-          "expr": "netdata_nut_load_percentage_average",
+          "expr": "upsc_ups_load",
           "format": "time_series",
           "groupBy": [
             {
@@ -186,6 +195,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -194,24 +210,26 @@
         "x": 12,
         "y": 0
       },
+      "hiddenSeries": false,
       "id": 5,
       "legend": {
         "avg": false,
-        "current": false,
+        "current": true,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -222,7 +240,7 @@
       "targets": [
         {
           "alias": "$tag_host",
-          "expr": "netdata_nut_charge_percentage_average",
+          "expr": "upsc_battery_charge",
           "format": "time_series",
           "groupBy": [
             {
@@ -317,6 +335,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -325,24 +350,26 @@
         "x": 0,
         "y": 9
       },
+      "hiddenSeries": false,
       "id": 7,
       "legend": {
         "avg": false,
-        "current": false,
+        "current": true,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -353,7 +380,7 @@
       "targets": [
         {
           "alias": "$tag_host",
-          "expr": "netdata_nut_battery_voltage_Volts_average",
+          "expr": "upsc_battery_voltage",
           "format": "time_series",
           "groupBy": [
             {
@@ -447,6 +474,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": []
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -455,24 +489,26 @@
         "x": 12,
         "y": 9
       },
+      "hiddenSeries": false,
       "id": 6,
       "legend": {
         "avg": false,
-        "current": false,
+        "current": true,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
       "options": {
-        "dataLinks": []
+        "alertThreshold": true
       },
       "percentage": false,
+      "pluginVersion": "7.2.1",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -483,7 +519,7 @@
       "targets": [
         {
           "alias": "$tag_host",
-          "expr": "netdata_nut_output_voltage_Volts_average",
+          "expr": "upsc_output_voltage",
           "format": "time_series",
           "groupBy": [
             {
@@ -573,7 +609,7 @@
       }
     }
   ],
-  "schemaVersion": 20,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -611,5 +647,5 @@
   "timezone": "",
   "title": "UPS",
   "uid": "a4wzV2Mik",
-  "version": 1
+  "version": 2
 }
