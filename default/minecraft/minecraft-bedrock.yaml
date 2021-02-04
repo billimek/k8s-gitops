@@ -1,0 +1,41 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mcbr
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
+      chart: minecraft-bedrock
+      version: 1.1.9
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    persistence:
+      storageClass: "rook-ceph-block"
+      dataDir:
+        enabled: true
+        Size: 10Gi
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 500m
+      limits:
+        memory: 1000Mi
+    podAnnotations:
+      backup.velero.io/backup-volumes: datadir
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      difficulty: normal
+      gameMode: survival
+      levelName: world
+      serverName: "billimek minecraft (survival)"
+      serviceType: LoadBalancer
+      loadBalancerIP: 10.0.6.103
