@@ -96,19 +96,19 @@ spec:
     nodeExporter:
       serviceMonitor:
         relabelings:
-        - action: replace
-          regex: (.*)
-          replacement: $1
-          sourceLabels:
-          - __meta_kubernetes_pod_node_name
-          targetLabel: kubernetes_node
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          separator: ;
+          regex: ^(.*)$
           targetLabel: instance
+          targetLabel: nodename
+          replacement: $1
+          action: replace
     kubelet:
       serviceMonitor:
         metricRelabelings:
         - action: replace
           sourceLabels:
-          - __meta_kubernetes_pod_node_name
+          - node
           targetLabel: instance
     grafana:
       enabled: false
