@@ -281,7 +281,7 @@ spec:
       server:
         root_url: "https://grafana.eviljungle.com"
       security:
-      admin_user: "jeff@billimek.com"
+      admin_user: "jeff\@billimek.com"
       paths:
         data: /var/lib/grafana/data
         logs: /var/log/grafana
