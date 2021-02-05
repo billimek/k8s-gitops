@@ -1,34 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.2.1"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -47,8 +17,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": null,
-  "iteration": 1612446717879,
+  "id": 11,
+  "iteration": 1612477397681,
   "links": [],
   "panels": [
     {
@@ -56,7 +26,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -90,7 +60,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -101,14 +71,15 @@
       "targets": [
         {
           "expr": "100 - 100 * avg(irate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[30m])) by (instance)",
-          "hide": true,
+          "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "D"
         },
         {
           "expr": "100 - 100 * avg(irate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[30m])) by (instance) * on(instance) group_left(nodename) node_uname_info",
-          "hide": false,
+          "hide": true,
+          "interval": "",
           "legendFormat": "{{nodename}}",
           "refId": "F"
         }
@@ -160,7 +131,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -194,7 +165,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -205,13 +176,15 @@
       "targets": [
         {
           "expr": "node_load15{instance=~\"$node\"}",
-          "hide": true,
+          "hide": false,
+          "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "B"
         },
         {
           "expr": "node_load15{instance=~\"$node\"} * on(instance) group_left(nodename) node_uname_info",
-          "hide": false,
+          "hide": true,
+          "interval": "",
           "legendFormat": "{{nodename}}",
           "refId": "D"
         }
@@ -263,7 +236,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -299,7 +272,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -310,13 +283,13 @@
       "targets": [
         {
           "expr": "(1 - (node_memory_MemAvailable_bytes{instance=~\"$node\"} / (node_memory_MemTotal_bytes{instance=~\"$node\"})))* 100",
-          "hide": true,
+          "hide": false,
           "legendFormat": "{{instance}}",
           "refId": "C"
         },
         {
           "expr": "(1 - (node_memory_MemAvailable_bytes{instance=~\"$node\"} / (node_memory_MemTotal_bytes{instance=~\"$node\"})))* 100 * on(instance) group_left(nodename) node_uname_info",
-          "hide": false,
+          "hide": true,
           "interval": "",
           "legendFormat": "{{nodename}}",
           "refId": "A"
@@ -369,7 +342,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -403,7 +376,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -413,9 +386,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_hwmon_temp_celsius{instance=~\"$node\",sensor=\"temp1\",chip=\"platform_coretemp_0\"} * on(instance) group_left(nodename) node_uname_info",
+          "expr": "node_hwmon_temp_celsius{instance=~\"$node\",sensor=\"temp1\",chip=\"platform_coretemp_0\"}",
           "interval": "",
-          "legendFormat": "{{nodename}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -440,7 +413,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:857",
           "format": "celsius",
           "label": null,
           "logBase": 1,
@@ -449,7 +421,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:858",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -468,7 +439,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -502,7 +473,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -512,8 +483,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_filefd_allocated{instance=~\"$node\"} * on(instance) group_left(nodename) node_uname_info",
-          "legendFormat": "{{nodename}}",
+          "expr": "node_filefd_allocated{instance=~\"$node\"}",
+          "interval": "",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -564,7 +536,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -598,7 +570,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -608,10 +580,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_SUnreclaim_bytes{instance=~\"$node\"} * on(instance) group_left(nodename) node_uname_info",
+          "expr": "node_memory_SUnreclaim_bytes{instance=~\"$node\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{nodename}}",
+          "legendFormat": "{{instance}}",
           "refId": "B"
         }
       ],
@@ -665,9 +637,14 @@
     "list": [
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "current": {
+          "selected": true,
+          "text": "node-exporter",
+          "value": "node-exporter"
+        },
+        "datasource": "Prometheus",
         "definition": "label_values(node_uname_info, job)",
+        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "JOB",
@@ -687,9 +664,14 @@
       },
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "Prometheus",
         "definition": "label_values(node_uname_info{job=~\"$job\"}, nodename)",
+        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Host",
@@ -709,9 +691,14 @@
       },
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "Prometheus",
         "definition": "label_values(node_uname_info{nodename=~\"$hostname\"},instance)",
+        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "IP",
@@ -752,5 +739,5 @@
   "timezone": "",
   "title": "Prometheus Exporter Summary",
   "uid": "I7JgE68Zz",
-  "version": 18
+  "version": 1
 }
