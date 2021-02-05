@@ -100,13 +100,13 @@ spec:
           targetLabel: nodename
           targetLabel: instance
           action: replace
-    kubelet:
-      serviceMonitor:
-        metricRelabelings:
-        - action: replace
-          sourceLabels:
-          - __meta_kubernetes_pod_node_name
-          targetLabel: instance
+    # kubelet:
+    #   serviceMonitor:
+    #     metricRelabelings:
+    #     - action: replace
+    #       sourceLabels:
+    #       - node
+    #       targetLabel: instance
     grafana:
       enabled: false
     kubeEtcd:
