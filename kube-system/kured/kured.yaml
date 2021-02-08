@@ -20,7 +20,7 @@ spec:
     image:
       repository: raspbernetes/kured
       tag: 1.6.1
-      pullPolicy: Always # the 1.5.1 tag was reused to fix a bug, forcing pull for this version only
+    updateStrategy: RollingUpdate
     configuration:
       startTime: "0:00"
       endTime: "4:00"
