@@ -114,6 +114,11 @@ spec:
         type: LoadBalancer
         port: 1514
         loadBalancerIP: 10.0.6.51
+    grafana:
+      enabled: false
+      sidecar:
+        datasources:
+          enabled: false
   valuesFrom:
   - kind: Secret
     name: "loki-helm-values"
