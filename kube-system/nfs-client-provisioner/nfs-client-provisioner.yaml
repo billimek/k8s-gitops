@@ -8,12 +8,11 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://charts.helm.sh/stable
       chart: nfs-client-provisioner
-      version: 1.2.11
+      version: 3.0.0
       sourceRef:
         kind: HelmRepository
-        name: kubernetes-stable-charts
+        name: nfs-subdir-external-provisioner-charts
         namespace: flux-system
       interval: 5m
   values:
