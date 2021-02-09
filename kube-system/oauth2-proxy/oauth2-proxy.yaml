@@ -8,6 +8,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://oauth2-proxy.github.io/manifests
       chart: oauth2-proxy
       version: 3.2.6
       sourceRef:
