@@ -238,10 +238,10 @@ spec:
           access: proxy
           url: http://thanos-query-http:10902/
           isDefault: true
-        - name: loki
-          type: loki
-          access: proxy
-          url: http://loki.logs.svc.cluster.local:3100
+        # - name: loki
+        #   type: loki
+        #   access: proxy
+        #   url: http://loki.logs.svc.cluster.local:3100
         - name: influxdb
           type: influxdb
           access: proxy
@@ -294,7 +294,7 @@ spec:
       grafana_net:
         url: https://grafana.net
       auth.basic:
-        disable_login_form: false
+        disable_login_form: true
   valuesFrom:
   - kind: Secret
     name: "grafana-helm-values"
