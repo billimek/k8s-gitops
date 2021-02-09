@@ -1,68 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_HOME_ASSISTANT",
-      "label": "home_assistant",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    },
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    },
-    {
-      "name": "DS_LOKI",
-      "label": "loki",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "loki",
-      "pluginName": "Loki"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.2.1"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "logs",
-      "name": "Logs",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "loki",
-      "name": "Loki",
-      "version": "1.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -79,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": null,
+  "id": 4,
   "links": [],
   "panels": [
     {
@@ -87,7 +23,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "-- Mixed --",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -122,7 +58,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -133,7 +69,6 @@
       "targets": [
         {
           "alias": "speed (ms)",
-          "datasource": "${DS_HOME_ASSISTANT}",
           "groupBy": [
             {
               "params": [
@@ -177,11 +112,43 @@
           ]
         },
         {
-          "datasource": "${DS_PROMETHEUS}",
-          "expr": "hass_sensor_unit_ms{entity=\"sensor.frigate_coral_inference\"}",
+          "expr": "hass_sensor_unit_ms{entity=\"sensor.coral_inference_speed\"}",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
-          "legendFormat": "speed (ms)",
-          "refId": "B"
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
         }
       ],
       "thresholds": [],
@@ -227,7 +194,7 @@
       }
     },
     {
-      "datasource": "${DS_LOKI}",
+      "datasource": "loki",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -250,6 +217,7 @@
       "targets": [
         {
           "expr": "{app_kubernetes_io_name=\"frigate\"}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -264,7 +232,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_HOME_ASSISTANT}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -299,7 +267,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -309,53 +277,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "frigate_detection_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.detection_fps\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -405,7 +330,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_HOME_ASSISTANT}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -440,7 +365,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -450,151 +375,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "detection fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "basement_detection_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.basement_camera_fps\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "A"
         },
         {
-          "alias": "fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "basement_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.basement_detection_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "C"
         },
         {
-          "alias": "skipped fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "basement_skipped_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.basement_skipped_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -644,7 +440,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_HOME_ASSISTANT}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -661,7 +457,7 @@
         "y": 22
       },
       "hiddenSeries": false,
-      "id": 6,
+      "id": 16,
       "interval": "",
       "legend": {
         "avg": false,
@@ -679,7 +475,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -689,151 +485,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "detection fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "driveway_detection_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.driveway_camera_fps\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "A"
         },
         {
-          "alias": "fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "driveway_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.driveway_detection_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "C"
         },
         {
-          "alias": "skipped fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "driveway_skipped_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.driveway_skipped_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -883,7 +550,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_HOME_ASSISTANT}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -900,7 +567,7 @@
         "y": 22
       },
       "hiddenSeries": false,
-      "id": 7,
+      "id": 14,
       "interval": "",
       "legend": {
         "avg": false,
@@ -918,7 +585,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -928,151 +595,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "detection fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "front_detection_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_camera_fps\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "A"
         },
         {
-          "alias": "fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "front_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_detection_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "C"
         },
         {
-          "alias": "skipped fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "front_skipped_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_skipped_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -1122,7 +660,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_HOME_ASSISTANT}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1139,7 +677,7 @@
         "y": 30
       },
       "hiddenSeries": false,
-      "id": 8,
+      "id": 17,
       "interval": "",
       "legend": {
         "avg": false,
@@ -1157,7 +695,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1167,151 +705,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "detection fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "pool_detection_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.pool_camera_fps\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "A"
         },
         {
-          "alias": "fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "pool_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.pool_detection_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "C"
         },
         {
-          "alias": "skipped fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "pool_skipped_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.pool_skipped_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -1361,7 +770,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_HOME_ASSISTANT}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1378,7 +787,7 @@
         "y": 30
       },
       "hiddenSeries": false,
-      "id": 9,
+      "id": 15,
       "interval": "",
       "legend": {
         "avg": false,
@@ -1396,7 +805,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1406,151 +815,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "detection fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "porch_detection_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_camera_fps\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "A"
         },
         {
-          "alias": "fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "porch_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_detection_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "C"
         },
         {
-          "alias": "skipped fps",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "porch_skipped_fps"
-            }
-          ]
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_skipped_fps_2\"}",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -1600,7 +880,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_HOME_ASSISTANT}",
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1635,7 +915,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.3.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1645,49 +925,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "$tag_entity_id",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "entity_id"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "previous"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "FPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"value\") FROM \"FPS\" WHERE $timeFilter GROUP BY time($__interval), \"entity_id\" fill(previous)",
-          "rawQuery": false,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
+          "expr": "hass_sensor_unit_fps",
+          "interval": "",
+          "legendFormat": "{{friendly_name}}",
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -1763,5 +1004,5 @@
   "timezone": "",
   "title": "Frigate",
   "uid": "xQHj1f_Zk",
-  "version": 16
+  "version": 1
 }
