@@ -10,23 +10,28 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.helm.sh/stable
       chart: coredns
-      version: 1.13.8
+      version: 1.14.1
       sourceRef:
         kind: HelmRepository
-        name: kubernetes-stable-charts
+        name: coredns-charts
         namespace: flux-system
       interval: 5m
   values:
-    rbac:
-      create: true
-    replicaCount: 2
-    isClusterService: false
+    replicaCount: 3
     serviceType: LoadBalancer
+    prometheus:
+      service:
+        enabled: true
+      monitor:
+        enabled: true
     service:
       externalTrafficPolicy: Local
       loadBalancerIP: 10.0.6.99
       annotations:
         metallb.universe.tf/allow-shared-ip: coredns
+    rbac:
+      create: true
+    isClusterService: false
     servers:
     - zones:
       - zone: eviljungle.com.
@@ -66,8 +71,3 @@ spec:
          skyblock.eviljungle.com. IN A 10.0.6.105
          *.eviljungle.com. IN A   10.0.6.150
          eviljungle.com. IN A   10.0.7.1
-    prometheus:
-      service:
-        enabled: true
-      monitor:
-        enabled: true
