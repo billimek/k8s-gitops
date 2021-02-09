@@ -8,12 +8,11 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://charts.helm.sh/stable
       chart: oauth2-proxy
-      version: 3.2.5
+      version: 3.2.6
       sourceRef:
         kind: HelmRepository
-        name: kubernetes-stable-charts
+        name: oauth2-proxy-charts
         namespace: flux-system
       interval: 5m
   values:
