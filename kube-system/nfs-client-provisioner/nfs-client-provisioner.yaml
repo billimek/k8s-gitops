@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
       chart: nfs-subdir-external-provisioner
-      version: 3.0.0
+      version: 4.0.0
       sourceRef:
         kind: HelmRepository
         name: nfs-subdir-external-provisioner-charts
@@ -18,8 +18,8 @@ spec:
       interval: 5m
   values:
     image:
-      repository: quay.io/external_storage/nfs-client-provisioner
-      tag: v3.1.0-k8s1.11
+      repository: gcr.io/k8s-staging-sig-storage/nfs-subdir-external-provisioner
+      tag: v4.0.0
     nfs:
       server: "10.0.7.7"
       path: "/mnt/tank/data/k8s-nfs"
