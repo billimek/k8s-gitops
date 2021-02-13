@@ -282,6 +282,9 @@ spec:
           url: teslamate-postgresql.default.svc.cluster.local:5432
           database: teslamate
           user: teslamate
+          jsonData:
+            postgresVersion: 1100
+            sslmode: disable
         - name: TrueNAS
           type: influxdb
           access: proxy
