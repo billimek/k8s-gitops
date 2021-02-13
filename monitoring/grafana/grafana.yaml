@@ -229,6 +229,9 @@ spec:
       dashboards:
         enabled: true
         searchNamespace: ALL
+    deleteDatasources:
+      - name: TeslaMate
+        orgId: 1
     datasources:
       datasources.yaml:
         apiVersion: 1
@@ -276,15 +279,6 @@ spec:
           access: proxy
           url: http://influxdb:8086
           database: uptimerobot
-        - name: TeslaMate
-          type: postgres
-          access: proxy
-          url: teslamate-postgresql.default.svc.cluster.local:5432
-          database: teslamate
-          user: teslamate
-          jsonData:
-            postgresVersion: 1100
-            sslmode: disable
         - name: TrueNAS
           type: influxdb
           access: proxy
