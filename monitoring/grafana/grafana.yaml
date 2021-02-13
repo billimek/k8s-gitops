@@ -276,6 +276,12 @@ spec:
           access: proxy
           url: http://influxdb:8086
           database: uptimerobot
+        - name: TeslaMate
+          type: postgres
+          access: proxy
+          url: teslamate-postgresql.default.svc.cluster.local:5432
+          database: teslamate
+          user: teslamate
         - name: TrueNAS
           type: influxdb
           access: proxy

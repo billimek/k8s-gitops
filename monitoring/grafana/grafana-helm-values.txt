@@ -1,5 +1,10 @@
 adminUser: jeff@billimek.com
 adminPassword: "$GRAFANA_PASSWORD"
+datasources:
+  datasources.yaml:
+    datasources:
+    - name: TeslaMate
+      password: "$TESLAMATE_DB_PASSWORD"
 grafana.ini:
   auth.generic_oauth:
     enabled: true
