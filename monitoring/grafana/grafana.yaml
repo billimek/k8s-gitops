@@ -229,15 +229,12 @@ spec:
       dashboards:
         enabled: true
         searchNamespace: ALL
-    deleteDatasources:
-      - name: TeslaMate
-        orgId: 1
     datasources:
       datasources.yaml:
         apiVersion: 1
         # list of datasources that should be deleted from the database
         deleteDatasources:
-          - name: Loki
+          - name: TeslaMate
             orgId: 1
         datasources:
         - name: Prometheus
