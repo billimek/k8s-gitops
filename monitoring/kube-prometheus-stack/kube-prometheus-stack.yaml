@@ -97,7 +97,7 @@ spec:
       serviceMonitor:
         relabelings:
         - sourceLabels: [__meta_kubernetes_pod_node_name]
-          targetLabel: nodename
+          targetLabel: instance
           action: replace
     # kubelet:
     #   serviceMonitor:
