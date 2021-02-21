@@ -18,3 +18,5 @@ events.bouncex.net
 media.xchat.xfinity.com
 files.slack.com
 slack.com
+www.kqzyfj.com
+kqzyfj.com
