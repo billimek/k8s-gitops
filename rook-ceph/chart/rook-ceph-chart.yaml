@@ -30,7 +30,7 @@ spec:
       snapshotter:
         image: raspbernetes/csi-external-snapshotter:3.0.0
       attacher:
-        image: raspbernetes/csi-external-attacher:3.0.0
+        image: raspbernetes/csi-external-attacher:3.1.0
       resizer:
         image: raspbernetes/csi-external-resizer:1.0.0
       pluginTolerations:
