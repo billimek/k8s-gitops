@@ -32,7 +32,7 @@ spec:
       attacher:
         image: raspbernetes/csi-external-attacher:3.0.0
       resizer:
-        image: raspbernetes/csi-external-resizer:1.0.0
+        image: raspbernetes/csi-external-resizer:1.1.0
       pluginTolerations:
         - key: "arm"
           operator: "Exists"
