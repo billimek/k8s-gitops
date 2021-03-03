@@ -71,7 +71,7 @@ spec:
             includeDiff: true
             fields:
               - spec.template.spec.containers[*].image
-        - name: networking.k8s.io/v1beta1/ingresses
+        - name: networking.k8s.io/v1/ingresses
           namespaces:
             include:
               - all
