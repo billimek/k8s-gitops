@@ -13,10 +13,10 @@ spec:
   - host: frigate.eviljungle.com
     http:
       paths:
-      - backend:
+      - path: /.*/best\.jpg
+        backend:
           serviceName: frigate
           servicePort: http
-        path: /.*/best\.jpg
   tls:
   - hosts:
     - frigate.eviljungle.com
