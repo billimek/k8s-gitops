@@ -24,7 +24,7 @@ spec:
       cephcsi:
         image: quay.io/cephcsi/cephcsi:v3.2.0
       registrar:
-        image: raspbernetes/csi-node-driver-registrar:2.0.1
+        image: raspbernetes/csi-node-driver-registrar:2.1.0
       provisioner:
         image: raspbernetes/csi-external-provisioner:2.0.0
       snapshotter:
