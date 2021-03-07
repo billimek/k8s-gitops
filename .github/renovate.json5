@@ -1,15 +1,14 @@
 {
   "enabled": true,
   "timezone": "America/New_York",
+  "semanticCommits": "enabled",
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard",
-  "commitMessageSuffix": "[ci-skip]",
   "commitBody": "Signed-off-by: Jeff Billimek <billimek@users.noreply.github.com>",
   // Do not notify on closed unmerged PRs
   "suppressNotifications": ["prIgnoreNotification"],
   // Do not rebase PRs
   "rebaseWhen": "conflicted",
-  "assignees": ["@billimek"],
   "helm-values": {
     "fileMatch": ["./.+\\.yaml$"]
   },
@@ -39,7 +38,7 @@
     {
       "datasources": ["docker"],
       "commitMessageTopic": "Docker image {{depName}}",
-      "commitMessageExtra": "to {{#if isSingleVersion}}v{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}",
+      "commitMessageExtra": "to {{#if isSingleVersion}}{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}",
       "updateTypes": ["major", "minor", "patch"],
       "enabled": true,
       "separateMinorPatch": true
@@ -77,9 +76,14 @@
     },
     // Custom versions
     {
-      "datasources": ["docker"],
-      "versionScheme": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
-      "packageNames": ["blakeblackshear/frigate"]
+      "matchDatasources": ["docker"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
+      "matchPackageNames": ["blakeblackshear/frigate"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "versioning": "regex:^RELEASE\\.(?<major>\\d{4})-(?<minor>\\d{2})-(?<patch>\\d{2})",
+      "matchPackageNames": ["minio/minio"]
     },
     {
       "datasources": ["docker"],
@@ -90,6 +94,26 @@
       "datasources": ["docker"],
       "versioning": "loose",
       "packageNames": ["plexinc/pms-docker"]
+    },
+    // pin package versions
+    {
+      "matchDatasources": ["docker"],
+      "allowedVersions": "<13",
+      "matchPackageNames": [
+        "postgres"
+      ]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "allowedVersions": "<2",
+      "matchPackageNames": [
+        "influxdb",
+      ]
+    },
+    {
+       "matchDatasources": ["helm"],
+       "allowedVersions": "<2",
+       "matchPackageNames": ["metallb"]
     },
     // auto-updates
     {
