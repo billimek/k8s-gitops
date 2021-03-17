@@ -20,6 +20,7 @@ spec:
     image:
       repository: lloesche/valheim-server
       tag: latest
+      pullPolicy: Always
     env:
       SERVER_NAME: Billimek's Kubernetes Valheim
       WORLD_NAME: billimek
