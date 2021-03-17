@@ -21,10 +21,9 @@ spec:
       repository: lloesche/valheim-server
       tag: latest
     env:
-      SERVER_NAME: billimek
+      SERVER_NAME: Billimek's Kubernetes Valheim
       WORLD_NAME: billimek
-      # SERVER_PASS: secret
-      SERVER_PUBLIC: false
+      SERVER_PUBLIC: true
       TZ: America/New_York
       # DNS_1: 8.8.8.8
       # DNS_2: 8.8.4.4
