@@ -189,13 +189,14 @@ loadSecretsToVault() {
   kvault "default/plex/plex-helm-values.txt"
   kvault "default/rtorrent-flood/rtorrent-flood-helm-values.txt"
   kvault "default/teslamate/teslamate-helm-values.txt"
+  kvault "default/valheim/valheim-helm-values.txt"
   kvault "velero/velero/velero-helm-values.txt"
 }
 
 loadSecretsToVault-oneoff() {
   message "writing secrets to vault"
   # kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
-  kvault "monitoring/grafana/grafana-helm-values.txt"
+  kvault "default/valheim/valheim-helm-values.txt"
 
 }
 

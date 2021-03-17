@@ -1,0 +1,49 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: valheim
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: valheim
+      version: 3.0.3
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: lloesche/valheim-server
+      tag: latest
+
+
+    env:
+      SERVER_NAME: billimek
+      WORLD_NAME: billimek
+      # SERVER_PASS: secret
+      SERVER_PUBLIC: false
+      TZ: America/New_York
+      # DNS_1: 8.8.8.8
+      # DNS_2: 8.8.4.4
+    persistence:
+      config:
+        enabled: true
+        mountPath: /config
+        storageClass: "rook-ceph-block"
+    resources:
+      requests:
+        memory: 4096Mi
+        cpu: 250m
+      limits:
+        memory: 5120Mi
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
+  valuesFrom:
+  - kind: Secret
+    name: "valheim-helm-values"
+    optional: false
