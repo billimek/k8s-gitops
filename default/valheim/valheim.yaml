@@ -24,6 +24,8 @@ spec:
       SERVER_NAME: Billimek's Kubernetes Valheim
       WORLD_NAME: billimek
       SERVER_PUBLIC: true
+      SUPERVISOR_HTTP: true
+      STATUS_HTTP: true
       TZ: America/New_York
       # DNS_1: 8.8.8.8
       # DNS_2: 8.8.4.4
@@ -36,6 +38,25 @@ spec:
       type: LoadBalancer
       externalTrafficPolicy: Cluster
       loadBalancerIP: 10.0.6.58
+      annotations:
+        metallb.universe.tf/allow-shared-ip: valheim
+      additionalServices:
+      - enabled: true
+        nameSuffix: supervisor
+        type: LoadBalancer
+        loadBalancerIP: 10.0.6.58
+        port:
+          port: 9001
+          name: supervisor
+          protocol: TCP
+          targetPort: supervisor
+        annotations:
+          metallb.universe.tf/allow-shared-ip: valheim
+        additionalPorts:
+        - name: status
+          port: 80
+          protocol: TCP
+          targetPort: 80
     resources:
       requests:
         memory: 4096Mi
