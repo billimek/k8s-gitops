@@ -41,22 +41,22 @@ spec:
       annotations:
         metallb.universe.tf/allow-shared-ip: valheim
       additionalServices:
-      - enabled: true
-        nameSuffix: supervisor
-        type: LoadBalancer
-        loadBalancerIP: 10.0.6.58
-        port:
-          port: 9001
-          name: supervisor
-          protocol: TCP
-          targetPort: supervisor
-        annotations:
-          metallb.universe.tf/allow-shared-ip: valheim
-        additionalPorts:
-        - name: status
-          port: 80
-          protocol: TCP
-          targetPort: 80
+        - enabled: true
+          nameSuffix: supervisor
+          type: LoadBalancer
+          loadBalancerIP: 10.0.6.58
+          port:
+            port: 9001
+            name: supervisor
+            protocol: TCP
+            targetPort: supervisor
+          annotations:
+            metallb.universe.tf/allow-shared-ip: valheim
+          additionalPorts:
+          - name: status
+            port: 80
+            protocol: TCP
+            targetPort: 80
     resources:
       requests:
         memory: 4096Mi
