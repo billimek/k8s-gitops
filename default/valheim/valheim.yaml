@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: valheim
-      version: 3.0.3
+      version: 1.2.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -20,8 +20,6 @@ spec:
     image:
       repository: lloesche/valheim-server
       tag: latest
-
-
     env:
       SERVER_NAME: billimek
       WORLD_NAME: billimek
@@ -35,6 +33,10 @@ spec:
         enabled: true
         mountPath: /config
         storageClass: "rook-ceph-block"
+    service:
+      type: LoadBalancer
+      externalTrafficPolicy: Cluster
+      loadBalancerIP: 10.0.6.57
     resources:
       requests:
         memory: 4096Mi
