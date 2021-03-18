@@ -31,6 +31,13 @@ spec:
       VPCFG_Server_enabled: true
       VPCFG_Server_dataRate: 600
       VPCFG_Server_enforceMod: true
+      VPCFG_FireSource_enabled: true
+      VPCFG_Hud_enabled: true
+      VPCFG_Hud_showRequiredItems: true
+      VPCFG_Hud_experienceGainedNotifications: true
+      VPCFG_Hud_displayStaminaValue: true
+      VPCFG_Map_enabled: true
+      VPCFG_Map_shareMapProgression: true
       TZ: America/New_York
       # DNS_1: 8.8.8.8
       # DNS_2: 8.8.4.4
