@@ -27,6 +27,10 @@ spec:
       SERVER_PUBLIC: true
       SUPERVISOR_HTTP: true
       STATUS_HTTP: true
+      VALHEIM_PLUS: true
+      VPCFG_Server_enabled: true
+      VPCFG_Server_dataRate: 600
+      VPCFG_Server_enforceMod: true
       TZ: America/New_York
       # DNS_1: 8.8.8.8
       # DNS_2: 8.8.4.4
