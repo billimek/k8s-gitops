@@ -23,7 +23,7 @@ spec:
       pullPolicy: Always
     env:
       SERVER_NAME: Billimek's Kubernetes Valheim
-      WORLD_NAME: billimek
+      WORLD_NAME: enormthole
       SERVER_PUBLIC: true
       SUPERVISOR_HTTP: true
       STATUS_HTTP: true
