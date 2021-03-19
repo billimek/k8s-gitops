@@ -46,6 +46,7 @@ spec:
         enabled: true
         mountPath: /config
         storageClass: "rook-ceph-block"
+        size: 5Gi
     service:
       type: LoadBalancer
       externalTrafficPolicy: Cluster
