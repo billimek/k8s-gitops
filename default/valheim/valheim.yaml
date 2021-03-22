@@ -73,9 +73,9 @@ spec:
     resources:
       requests:
         memory: 4096Mi
-        cpu: 250m
+        cpu: 500m
       limits:
-        memory: 5120Mi
+        memory: 8192Mi
     podAnnotations:
       backup.velero.io/backup-volumes: config
   valuesFrom:
