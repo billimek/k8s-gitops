@@ -20,3 +20,4 @@ files.slack.com
 slack.com
 www.kqzyfj.com
 kqzyfj.com
+cdn.heapanalytics.com
