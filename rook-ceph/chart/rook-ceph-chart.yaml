@@ -21,6 +21,7 @@ spec:
       enabled: false
     csi:
       kubeletDirPath: /var/lib/kubelet
+      enableGrpcMetrics: true
       cephcsi:
         image: quay.io/cephcsi/cephcsi:v3.2.0
       registrar:
