@@ -58,7 +58,5 @@ spec:
     # image: rancher/k3s-upgrade:v1.17.4-k3s1
     image: rancher/k3s-upgrade
     args: ["prepare", "k3s-server"]
-  drain:
-    force: true
   upgrade:
     image: rancher/k3s-upgrade
