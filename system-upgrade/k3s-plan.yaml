@@ -20,6 +20,9 @@ spec:
       values:
       - "amd64"
   serviceAccountName: system-upgrade
+  tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
   upgrade:
     image: rancher/k3s-upgrade
   channel: https://update.k3s.io/v1-release/channels/v1.19
