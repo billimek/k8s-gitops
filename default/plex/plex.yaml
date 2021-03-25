@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: plexinc/pms-docker
-      tag: 1.22.0.4163-d8c4875dd
+      tag: 1.22.1.4228-724c56e62
     podAnnotations:
       backup.velero.io/backup-volumes: config
     ingress:
