@@ -283,6 +283,7 @@ spec:
           claimName: nfs-media-pvc
       - name: cache
         emptyDir:
+          enabled: true
           medium: Memory
     extraVolumeMounts:
       - mountPath: /media
