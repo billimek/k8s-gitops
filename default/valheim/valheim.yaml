@@ -29,7 +29,7 @@ spec:
       STATUS_HTTP: true
       VALHEIM_PLUS: true
       VPCFG_Server_enabled: true
-      VPCFG_Server_enforceMod: false
+      VPCFG_Server_enforceMod: true
       VPCFG_FireSource_enabled: true
       VPCFG_FireSource_fires: true
       VPCFG_Hud_enabled: true
