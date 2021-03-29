@@ -6,9 +6,18 @@ https://www.botkube.io/
 
 * [botkube/botkube.yaml](botkube/botkube.yaml)
 
+# grafana
+
+![](https://i.imgur.com/hzBFkEE.png)
+
+[Grafana](https://github.com/grafana/grafana) is a metrics and logging dashboard
+
+* [grafana/grafana.yaml](grafana/grafana.yaml)
+* [grafana/dashboards/](grafana/dashboards/)
+
 # influxdb
 
-Metrics collection database
+[influxdb](https://github.com/influxdata/influxdb) is a metrics collection database
 
 * [influxdb/influxdb.yaml](influxdb/influxdb.yaml)
 
@@ -20,16 +29,15 @@ Collect cable modem statistics for reporting
 
 * [modem-stats/modem-stats.yaml](modem-stats/modem-stats.yaml)
 
-# prometheus-operator
+# kube-prometheus-stack
 
-![](https://i.imgur.com/xFOepF3.png)
+![](https://i.imgur.com/VwDwdpQ.png)
 
-![](https://i.imgur.com/hTo49Uo.png)
+[kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) installs Prometheus Operator, required CRDs, and a default altering ruleset.
 
-Metrics and observability collection and dashboard software - also installs grafana
-
-* [prometheus-operator/prometheus-operator.yaml](prometheus-operator/prometheus-operator.yaml)
-* [prometheus-operator/prometheus-operator-helm-values.yaml](prometheus-operator/prometheus-operator-helm-values.yaml)
+* [kube-prometheus-stack/kube-prometheus-stack.yaml](kube-prometheus-stack/kube-prometheus-stack.yaml)
+* [kube-prometheus-stack/prometheus-rules/](kube-prometheus-stack/prometheus-rules/)
+* [kube-prometheus-stack/crds/](kube-prometheus-stack/crds/)
 
 # speedtest-prometheus
 
@@ -41,7 +49,7 @@ ISP speed test results collector
 
 # thanos
 
-![](https://i.imgur.com/IeWqEIB.png)
+![](https://i.imgur.com/6c5jubC.png)
 
 [Thanos](https://github.com/thanos-io/thanos) is a highly available Prometheus setup with long term storage capabilities.
 

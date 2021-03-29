@@ -4,10 +4,10 @@
 [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/7PbmHRK)    [![GitHub stars](https://img.shields.io/github/stars/billimek/k8s-gitops?color=green&style=flat-square)](https://github.com/billimek/k8s-gitops/stargazers)    [![GitHub last commit](https://img.shields.io/github/last-commit/billimek/k8s-gitops?color=purple&style=flat-square)](https://github.com/billimek/k8s-gitops/commits/main)
 
 ## :book:&nbsp; Overview
-![](https://i.postimg.cc/Jm9wJ6Fg/image.png)
+![](https://i.imgur.com/7w7F5T8.png)
 
-![](https://i.imgur.com/QcJ1Tx8.png)
-![](https://i.imgur.com/Z7JdN2a.png)
+![](https://i.imgur.com/fjFnpKq.png)
+![](https://i.imgur.com/g17Czsl.png)
 
 Leverage [Flux2](https://github.com/fluxcd/flux2) to automate cluster state using code residing in this repo
 
