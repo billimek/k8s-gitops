@@ -64,10 +64,10 @@ spec:
       tolerations:
         - key: arm
           operator: Exists
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
     master:
       replicaCount: 1
       tolerations:
-        - key: "node-role.kubernetes.io/master"
-          operator: "Exists"
         - key: arm
           operator: Exists
