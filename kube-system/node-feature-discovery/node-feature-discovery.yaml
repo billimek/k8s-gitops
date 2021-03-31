@@ -68,8 +68,6 @@ spec:
       replicaCount: 1
       tolerations:
         - key: "node-role.kubernetes.io/master"
-          operator: "Equal"
-          value: ""
-          effect: "NoSchedule"
+          operator: "Exists"
         - key: arm
           operator: Exists
