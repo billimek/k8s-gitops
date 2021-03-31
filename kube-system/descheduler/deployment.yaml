@@ -34,7 +34,7 @@ spec:
             - "--v"
             - "3"
             - "--descheduling-interval"
-            - "2m"
+            - "1m"
       serviceAccountName: descheduler-sa
       volumes:
       - name: policy-volume
