@@ -79,17 +79,17 @@ spec:
         schedule: "0 6 * * *"
         template:
           ttl: "120h"
-      mc-skyblock-minecraft-hourly:
-        schedule: "0 * * * *"
+      mcbr-minecraft-bedrock-hourly:
+        schedule: "0 */6 * * *"
         template:
           labelSelector:
             matchLabels:
-              app: mc-skyblock-minecraft
+              app: mcbr-minecraft-bedrock
           ttl: "120h"
           includedNamespaces:
           - default
       mcsv-minecraft-hourly:
-        schedule: "0 * * * *"
+        schedule: "0 */6 * * *"
         template:
           labelSelector:
             matchLabels:
@@ -98,7 +98,7 @@ spec:
           includedNamespaces:
           - default
       mc-minecraft-hourly:
-        schedule: "0 * * * *"
+        schedule: "0 */6 * * *"
         template:
           labelSelector:
             matchLabels:
