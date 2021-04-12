@@ -57,7 +57,7 @@ spec:
       image:
         registry: docker.io
         repository: bitnami/mariadb
-        tag: 10.5.8-debian-10-r46
+        tag: 10.5.9-debian-10-r46
       primary:
         persistence:
           enabled: true
