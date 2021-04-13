@@ -25,7 +25,7 @@ spec:
       TZ: "America/New York"
       LISTENER_PORT: 10000
       BAUD_RATE: 115200
-      SERIAL_DEVICE: "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0"
+      SERIAL_DEVICE: "/dev/ttyUSB0"
     tolerations:
     - key: "arm"
       operator: "Exists"
