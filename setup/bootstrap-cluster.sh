@@ -33,6 +33,7 @@ installFlux() {
     --owner=billimek \
     --repository=k8s-gitops \
     --branch master \
+    --private=false \
     --personal
 
   FLUX_INSTALLED=$?
