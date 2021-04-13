@@ -29,7 +29,7 @@ spec:
     securityContext:
       runAsUser: 0
       capabilities:
-        add: ["CAP_FOWNER"]
+        add: ["FOWNER"]
     tolerations:
     - key: "arm"
       operator: "Exists"
