@@ -26,8 +26,8 @@ spec:
       LISTENER_PORT: 10000
       BAUD_RATE: 115200
       SERIAL_DEVICE: "/dev/ttyUSB0"
-      PUID: "1001"
-      PGID: "1001"
+      # PUID: "1001"
+      # PGID: "1001"
     securityContext:
       privileged: true
     tolerations:
