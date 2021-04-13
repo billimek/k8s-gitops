@@ -28,6 +28,8 @@ spec:
       SERIAL_DEVICE: "/dev/ttyUSB0"
       PUID: "1001"
       PGID: "1001"
+    securityContext:
+      privileged: true
     tolerations:
     - key: "arm"
       operator: "Exists"
