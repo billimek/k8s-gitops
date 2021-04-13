@@ -23,10 +23,11 @@ spec:
     worker:
       config: |-
         core:
-            sources:
-            - custom
-            - pci
-            - usb
+          sleepInterval: 60s
+          sources:
+          - custom
+          - pci
+          - usb
         sources:
           usb:
             deviceClassWhitelist:
