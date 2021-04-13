@@ -28,6 +28,8 @@ spec:
       SERIAL_DEVICE: "/dev/ttyUSB0"
     securityContext:
       runAsUser: 0
+      capabilities:
+        add: ["CAP_FOWNER"]
     tolerations:
     - key: "arm"
       operator: "Exists"
