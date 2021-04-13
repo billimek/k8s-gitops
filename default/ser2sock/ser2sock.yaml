@@ -37,7 +37,7 @@ spec:
                 - {key: "feature.node.kubernetes.io/custom-alarmdecoder", operator: In, values: ["true"]}
     additionalVolumeMounts:
       - name: usb
-        mountPath: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
+        mountPath: /dev/ttyUSB0
     additionalVolumes:
       - name: usb
         hostPath:
