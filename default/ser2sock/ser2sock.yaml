@@ -27,8 +27,7 @@ spec:
       BAUD_RATE: 115200
       SERIAL_DEVICE: "/dev/ttyUSB0"
     securityContext:
-      allowedHostPaths:
-        - pathPrefix: "/dev"
+      runAsUser: 0
     tolerations:
     - key: "arm"
       operator: "Exists"
