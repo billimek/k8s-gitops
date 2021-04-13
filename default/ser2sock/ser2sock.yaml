@@ -27,9 +27,7 @@ spec:
       BAUD_RATE: 115200
       SERIAL_DEVICE: "/dev/ttyUSB0"
     securityContext:
-      runAsUser: 0
-      capabilities:
-        add: ["FOWNER"]
+      privileged: true
     tolerations:
     - key: "arm"
       operator: "Exists"
