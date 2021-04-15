@@ -90,6 +90,16 @@ spec:
         initialDelaySeconds: 60
       readinessProbe:
         initialDelaySeconds: 60
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - loki
+            topologyKey: "kubernetes.io/hostname"
     promtail:
       # image:
       #   repository: grafana/promtail
