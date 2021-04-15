@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: plex
-      version: 2.3.3
+      version: 4.2.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -20,50 +20,84 @@ spec:
     image:
       repository: plexinc/pms-docker
       tag: 1.22.2.4282-a97b03fad
-    podAnnotations:
-      backup.velero.io/backup-volumes: config
+    env:
+      TZ: "America/New_York"
+    podSecurityContext:
+      supplementalGroups:
+      - 44
+      - 109
+      - 100
+    service:
+      enabled: true
+      type: LoadBalancer
+      loadBalancerIP: 10.0.6.53
+      externalTrafficPolicy: Local
+      annotations:
+        metallb.universe.tf/allow-shared-ip: plex
+      port:
+        port: 32400
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
-      hosts: [plex.eviljungle.com]
+      hosts:
+      - host: "plex.eviljungle.com"
+        paths:
+        - path: /
+          pathType: Prefix
       tls:
       - hosts:
-        - plex.eviljungle.com
-    timezone: "America/New_York"
-    plexUid: 1001
-    plexGid: 1001
-    serviceTCP:
-      type: LoadBalancer
-      loadBalancerIP: 10.0.6.53
-      externalTrafficPolicy: Local
-      annotations:
-        metallb.universe.tf/allow-shared-ip: plex
-    serviceUDP:
-      type: LoadBalancer
-      loadBalancerIP: 10.0.6.53
-      externalTrafficPolicy: Local
-      annotations:
-        metallb.universe.tf/allow-shared-ip: plex
+        - "plex.eviljungle.com"
     persistence:
+      config:
+        enabled: true
+        existingClaim: plex-config
       transcode:
         enabled: true
-        claimName: nfs-data-pvc
-        subPath: plex
-      data:
+        emptyDir:
+          enabled: true
+          medium: "Memory"
+      tmp:
         enabled: true
+        emptyDir:
+          enabled: true
+          medium: "Memory"
+    additionalVolumes:
+    - name: nfs-media-pvc
+      persistentVolumeClaim:
         claimName: nfs-media-pvc
-      config:
-        storageClass: "rook-ceph-block"
-        accessMode: ReadWriteOnce
-        size: 21Gi
+    additionalVolumeMounts:
+    - name: nfs-nas-media
+      mountPath: /data
+      readOnly: false
+    podAnnotations:
+      backup.velero.io/backup-volumes: config
     resources:
+      requests:
+        gpu.intel.com/i915: 1
+        cpu: 1000m
+        memory: 1500Mi
       limits:
         gpu.intel.com/i915: 1
         memory: 4900Mi
-      requests:
-        cpu: 35m
-        memory: 1500Mi
+    addons:
+      promtail:
+        enabled: true
+        image:
+          repository: grafana/promtail
+          tag: 2.2.1
+        loki: http://loki.logs.svc.cluster.local:3100/loki/api/v1/push
+        logs:
+        - name: promtail/plex
+          path: "/config/Library/Application Support/Plex Media Server/Logs/*.log"
+        - name: promtail/plex/plugins
+          path: "/config/Library/Application Support/Plex Media Server/Logs/PMS Plugin Logs/*.log"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        securityContext:
+          runAsUser: 0
   valuesFrom:
   - kind: Secret
     name: "plex-helm-values"
