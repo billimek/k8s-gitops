@@ -24,10 +24,10 @@ spec:
       TZ: "America/New_York"
     securityContext:
       privileged: true
-    # service:
-    #   additionalPorts:
-    #   - name: websocket
-    #     port: 3000
+    service:
+      additionalPorts:
+      - name: websocket
+        port: 3000
     ingress:
       enabled: true
       annotations:
