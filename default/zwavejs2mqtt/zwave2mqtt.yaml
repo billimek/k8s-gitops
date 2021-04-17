@@ -29,7 +29,7 @@ spec:
     #   - name: websocket
     #     port: 3000
     ingress:
-      enabled: false
+      enabled: true
       annotations:
         kubernetes.io/ingress.class: "nginx"
         nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
