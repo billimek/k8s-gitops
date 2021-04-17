@@ -161,10 +161,10 @@ Rules-engine for automations
 
 * [verenmq.yaml](verenmq/verenmq.yaml)
 
-# zwave2mqtt
+# zwavejs2mqtt
 
-![](https://i.imgur.com/p0hlTFG.png)
+![](https://i.imgur.com/Odhu4gJ.png)
 
-[zwave2mqtt](https://github.com/OpenZWave/Zwave2Mqtt) for controlling zwave devices from a connected zwave controller and publishing over MQTT
+[zwavejs2mqtt](https://github.com/zwave-js/zwavejs2mqtt) for controlling z-wave devices from a connected zwave controller and publishing over MQTT or websocket
 
-* [zwave2mqtt.yaml](zwave2mqtt/zwave2mqtt.yaml)
+* [zwavejs2mqtt.yaml](zwavejs2mqtt/zwavejs2mqtt.yaml)
