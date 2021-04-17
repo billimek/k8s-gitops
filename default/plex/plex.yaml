@@ -65,11 +65,11 @@ spec:
           enabled: true
           medium: "Memory"
     additionalVolumes:
-    - name: nfs-data-pvc
+    - name: nfs-media-pvc
       persistentVolumeClaim:
-        claimName: nfs-data-pvc
+        claimName: nfs-media-pvc
     additionalVolumeMounts:
-    - name: nfs-data-pvc
+    - name: nfs-media-pvc
       mountPath: /data
       readOnly: false
     podAnnotations:
