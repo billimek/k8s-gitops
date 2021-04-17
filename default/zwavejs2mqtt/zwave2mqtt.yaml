@@ -24,6 +24,10 @@ spec:
       TZ: "America/New_York"
     securityContext:
       privileged: true
+    # service:
+    #   additionalPorts:
+    #   - name: websocket
+    #     port: 3000
     ingress:
       enabled: false
       annotations:
@@ -31,13 +35,13 @@ spec:
         nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
         nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
       hosts:
-      - host: "zwave2mqtt.eviljungle.com"
+      - host: "z.eviljungle.com"
         paths:
         - path: /
           pathType: Prefix
       tls:
       - hosts:
-        - "zwave2mqtt.eviljungle.com"
+        - "z.eviljungle.com"
     persistence:
       config:
         enabled: true
