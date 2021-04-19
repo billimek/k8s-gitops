@@ -41,7 +41,10 @@
       "commitMessageExtra": "to {{#if isSingleVersion}}{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}",
       "updateTypes": ["major", "minor", "patch"],
       "enabled": true,
-      "separateMinorPatch": true
+      "separateMinorPatch": true,
+      "excludePackagePrefixes": [
+        "k8s.gcr.io/sig-storage"
+      ]
     },
     // Add labels according to package and update types
     {
@@ -108,12 +111,6 @@
       "allowedVersions": "<2",
       "matchPackageNames": [
         "influxdb"
-      ]
-    },
-    {
-      "matchDatasources": ["docker"],
-      "excludePackagePrefixes": [
-        "k8s.gcr.io/sig-storage"
       ]
     },
     {
