@@ -42,9 +42,7 @@
       "updateTypes": ["major", "minor", "patch"],
       "enabled": true,
       "separateMinorPatch": true,
-      "excludePackagePrefixes": [
-        "k8s.gcr.io/sig-storage"
-      ]
+      "ignoreDeps": ["k8s.gcr.io/sig-storage/csi-snapshotter", "k8s.gcr.io/sig-storage/csi-resizer", "k8s.gcr.io/sig-storage/csi-provisioner", "k8s.gcr.io/sig-storage/csi-node-driver-registrar", "k8s.gcr.io/sig-storage/csi-attacher"]
     },
     // Add labels according to package and update types
     {
