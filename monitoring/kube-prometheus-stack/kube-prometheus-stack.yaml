@@ -176,6 +176,16 @@ spec:
           objectStorageConfig:
             name: thanos
             key: object-store.yaml
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - blocky
+              topologyKey: "kubernetes.io/hostname"
   valuesFrom:
   - kind: Secret
     name: "kube-prometheus-stack-helm-values"
