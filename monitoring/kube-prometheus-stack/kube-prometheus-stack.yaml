@@ -181,10 +181,10 @@ spec:
             requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
-                - key: app.kubernetes.io/name
+                - key: app
                   operator: In
                   values:
-                  - blocky
+                  - prometheus
               topologyKey: "kubernetes.io/hostname"
   valuesFrom:
   - kind: Secret
