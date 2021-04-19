@@ -107,13 +107,19 @@
       "matchDatasources": ["docker"],
       "allowedVersions": "<2",
       "matchPackageNames": [
-        "influxdb",
+        "influxdb"
       ]
     },
     {
-       "matchDatasources": ["helm"],
-       "allowedVersions": "<2",
-       "matchPackageNames": ["metallb"]
+      "matchDatasources": ["docker"],
+      "excludePackagePrefixes": [
+        "k8s.gcr.io/sig-storage"
+      ]
+    },
+    {
+      "matchDatasources": ["helm"],
+      "allowedVersions": "<2",
+      "matchPackageNames": ["metallb"]
     },
     // auto-updates
     {
