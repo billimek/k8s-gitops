@@ -27,7 +27,7 @@ spec:
       registrar:
         image: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.0.1
       provisioner:
-        image: k8s.gcr.io/sig-storage/csi-provisioner:v2.0.4
+        image: k8s.gcr.io/sig-storage/csi-provisioner:v2.1.2
       snapshotter:
         image: k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.2
       attacher:
