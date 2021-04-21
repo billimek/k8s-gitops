@@ -436,7 +436,7 @@
               "type": "fill"
             }
           ],
-          "hide": true,
+          "hide": false,
           "interval": "",
           "legendFormat": "Download",
           "orderByTime": "ASC",
@@ -1760,5 +1760,5 @@
   "timezone": "browser",
   "title": "comcast sucks",
   "uid": "000000017",
-  "version": 3
+  "version": 4
 }
