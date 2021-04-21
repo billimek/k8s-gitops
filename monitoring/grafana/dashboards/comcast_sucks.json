@@ -47,7 +47,6 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [
             {
               "id": 0,
@@ -57,7 +56,6 @@
               "value": "null"
             }
           ],
-          "nullValueMode": "connected",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -101,12 +99,14 @@
           "fields": "",
           "values": false
         },
+        "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
-          "expr": "speedtest_download_bytes*8",
+          "exemplar": true,
+          "expr": "speedtest_download_bits_per_second",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -121,7 +121,6 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [
             {
               "id": 0,
@@ -131,7 +130,6 @@
               "value": "null"
             }
           ],
-          "nullValueMode": "connected",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -175,12 +173,14 @@
           "fields": "",
           "values": false
         },
+        "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
-          "expr": "speedtest_upload_bytes*8",
+          "exemplar": true,
+          "expr": "speedtest_upload_bits_per_second",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -196,7 +196,6 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [
             {
               "id": 0,
@@ -206,7 +205,6 @@
               "value": "null"
             }
           ],
-          "nullValueMode": "connected",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -250,12 +248,14 @@
           "fields": "",
           "values": false
         },
+        "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
-          "expr": "speedtest_latency_seconds",
+          "exemplar": true,
+          "expr": "speedtest_ping_latency_milliseconds",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -309,7 +309,6 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -343,7 +342,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -381,149 +380,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "$col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "linear"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "speed_test_results",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "download"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "Download"
-                ],
-                "type": "alias"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "upload"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "Upload"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "$col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "linear"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "speed_test_results",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "ping"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "Ping"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "linear"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": true,
-          "measurement": "speed_test_results",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "download"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
+          "exemplar": true,
           "expr": "avg_over_time(speedtest_download_bytes[60m])*8",
           "groupBy": [
             {
@@ -539,6 +396,8 @@
               "type": "fill"
             }
           ],
+          "hide": false,
+          "interval": "",
           "legendFormat": "Download",
           "orderByTime": "ASC",
           "policy": "default",
@@ -561,6 +420,47 @@
           "tags": []
         },
         {
+          "exemplar": true,
+          "expr": "avg_over_time(speedtest_download_bits_per_second[60m])",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": true,
+          "interval": "",
+          "legendFormat": "Download",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "H",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "exemplar": true,
           "expr": "avg_over_time(speedtest_upload_bytes[60m])*8",
           "groupBy": [
             {
@@ -577,6 +477,7 @@
             }
           ],
           "hide": false,
+          "interval": "",
           "legendFormat": "Upload",
           "orderByTime": "ASC",
           "policy": "default",
@@ -599,6 +500,47 @@
           "tags": []
         },
         {
+          "exemplar": true,
+          "expr": "avg_over_time(speedtest_upload_bits_per_second[60m])",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Upload",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "exemplar": true,
           "expr": "avg_over_time(speedtest_latency_seconds[60m])",
           "groupBy": [
             {
@@ -615,6 +557,7 @@
             }
           ],
           "hide": false,
+          "interval": "",
           "legendFormat": "Ping",
           "orderByTime": "ASC",
           "policy": "default",
@@ -637,6 +580,47 @@
           "tags": []
         },
         {
+          "exemplar": true,
+          "expr": "avg_over_time(speedtest_ping_latency_milliseconds[60m])",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Ping",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "exemplar": true,
           "expr": "avg_over_time(speedtest_jittter_seconds[60m])",
           "groupBy": [
             {
@@ -653,10 +637,51 @@
             }
           ],
           "hide": false,
+          "interval": "",
           "legendFormat": "Jitter",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "exemplar": true,
+          "expr": "avg_over_time(speedtest_jitter_latency_milliseconds[60m])",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Jitter",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
           "resultFormat": "time_series",
           "select": [
             [
@@ -681,7 +706,8 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 25000000
+          "value": 25000000,
+          "visible": true
         }
       ],
       "timeFrom": null,
@@ -734,7 +760,6 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -767,7 +792,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -913,7 +938,6 @@
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -948,7 +972,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1051,7 +1075,6 @@
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -1086,7 +1109,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1181,7 +1204,6 @@
       "decimals": 1,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -1216,7 +1238,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1310,7 +1332,6 @@
       "datasource": "cable_modem_stats",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -1346,7 +1367,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1512,9 +1533,7 @@
       "columns": [],
       "datasource": "uptimerobot",
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "fontSize": "100%",
@@ -1703,7 +1722,7 @@
     }
   ],
   "refresh": "30m",
-  "schemaVersion": 26,
+  "schemaVersion": 27,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1741,5 +1760,5 @@
   "timezone": "browser",
   "title": "comcast sucks",
   "uid": "000000017",
-  "version": 2
+  "version": 3
 }

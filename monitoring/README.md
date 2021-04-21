@@ -39,13 +39,13 @@ Collect cable modem statistics for reporting
 * [kube-prometheus-stack/prometheus-rules/](kube-prometheus-stack/prometheus-rules/)
 * [kube-prometheus-stack/crds/](kube-prometheus-stack/crds/)
 
-# speedtest-prometheus
+# speedtest-exporter
 
 ![](https://i.imgur.com/avohPk6.png)
 
 ISP speed test results collector
 
-* [speedtest--prometheus/speedtest-prometheus.yaml](speedtest-prometheus/speedtest-prometheus.yaml)
+* [speedtest-exporter/speedtest-exporter.yaml](speedtest-exporter/speedtest-exporter.yaml)
 
 # thanos
 
