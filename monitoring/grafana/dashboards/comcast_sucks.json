@@ -268,6 +268,7 @@
     },
     {
       "alert": {
+        "alertRuleTags": {},
         "conditions": [
           {
             "evaluator": {
@@ -281,7 +282,7 @@
             },
             "query": {
               "params": [
-                "C",
+                "H",
                 "5m",
                 "now"
               ]
@@ -1760,5 +1761,5 @@
   "timezone": "browser",
   "title": "comcast sucks",
   "uid": "000000017",
-  "version": 4
+  "version": 5
 }
