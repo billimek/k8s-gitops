@@ -61,8 +61,8 @@ spec:
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts: [prom-alert.eviljungle.com]
         paths:
-        - /
-          pathType: ImplementationSpecific
+          - "/"
+            pathType: ImplementationSpecific
         tls:
         - hosts:
           - prom-alert.eviljungle.com
@@ -140,7 +140,7 @@ spec:
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts: [prom-server.eviljungle.com]
         paths:
-        - /
+        - "/"
           pathType: ImplementationSpecific
         tls:
         - hosts:
