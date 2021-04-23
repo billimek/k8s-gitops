@@ -60,6 +60,9 @@ spec:
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts: [prom-alert.eviljungle.com]
+        paths:
+        - path: /
+          pathType: Prefix
         tls:
         - hosts:
           - prom-alert.eviljungle.com
@@ -136,6 +139,9 @@ spec:
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts: [prom-server.eviljungle.com]
+        paths:
+        - path: /
+          pathType: Prefix
         tls:
         - hosts:
           - prom-server.eviljungle.com
