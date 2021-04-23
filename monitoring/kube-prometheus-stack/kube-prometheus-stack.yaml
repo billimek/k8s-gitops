@@ -62,7 +62,7 @@ spec:
         hosts:
         - prom-alert.eviljungle.com
         tls:
-          hosts:
+        - hosts:
           - prom-alert.eviljungle.com
       config:
         global:
@@ -139,7 +139,7 @@ spec:
         hosts:
         - prom-server.eviljungle.com
         tls:
-          hosts:
+        - hosts:
           - prom-server.eviljungle.com
       prometheusSpec:
         # image:
