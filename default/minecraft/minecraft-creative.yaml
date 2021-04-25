@@ -76,7 +76,6 @@ spec:
           service:
             enabled: true
             type: ClusterIP
-            externalTrafficPolicy: Cluster
             port: 8123
           ingress:
             enabled: true
