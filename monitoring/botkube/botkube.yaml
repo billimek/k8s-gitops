@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: infracloudio/botkube
-      tag: v0.12.0
+      tag: v0.12.1
       pullPolicy: Always
     serviceMonitor:
       enabled: true
