@@ -55,6 +55,7 @@ spec:
             backup.velero.io/backup-volumes: alertmanager-kube-prometheus-stack-alertmanager-db
       ingress:
         enabled: true
+        pathType: Prefix
         annotations:
           kubernetes.io/ingress.class: "nginx"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
@@ -132,6 +133,7 @@ spec:
     prometheus:
       ingress:
         enabled: true
+        pathType: Prefix
         annotations:
           kubernetes.io/ingress.class: "nginx"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
