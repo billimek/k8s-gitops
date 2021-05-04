@@ -24,7 +24,7 @@ spec:
     initContainer:
       image:
         repository: busybox
-        tag: 1.33.0
+        tag: 1.33.1
     coral:
       enabled: true
     timezone: "America/New_York"
