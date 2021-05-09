@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.rook.io/release
       chart: rook-ceph
-      version: v1.6.1
+      version: v1.6.2
       sourceRef:
         kind: HelmRepository
         name: rook-ceph-charts
@@ -22,18 +22,6 @@ spec:
     csi:
       kubeletDirPath: /var/lib/kubelet
       enableGrpcMetrics: true
-      # cephcsi:
-      #   image: quay.io/cephcsi/cephcsi:v3.3.0
-      # registrar:
-      #   image: k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.0.1
-      # provisioner:
-      #   image: k8s.gcr.io/sig-storage/csi-provisioner:v2.0.4
-      # snapshotter:
-      #   image: k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.2
-      # attacher:
-      #   image: k8s.gcr.io/sig-storage/csi-attacher:v3.0.2
-      # resizer:
-      #   image: k8s.gcr.io/sig-storage/csi-resizer:v1.0.1
       pluginTolerations:
         - key: "arm"
           operator: "Exists"
