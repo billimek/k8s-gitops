@@ -42,13 +42,23 @@ spec:
         default-ssl-certificate: "cert-manager/acme-crt-secret"
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
+          podAffinityTerm:
+            labelSelector:
               matchExpressions:
               - key: app.kubernetes.io/name
                 operator: In
                 values:
                 - ingress-nginx
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - ingress-nginx
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - controller
+            topologyKey: kubernetes.io/hostname
+
       resources:
         requests:
           memory: 500Mi
