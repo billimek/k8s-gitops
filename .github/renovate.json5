@@ -32,17 +32,14 @@
     // Setup datasources
     {
       "datasources": ["helm"],
-      "commitMessageTopic": "Helm chart {{depName}}",
-      "separateMinorPatch": true
+      "commitMessageTopic": "Helm chart {{depName}}"
     },
     {
       "datasources": ["docker"],
       "commitMessageTopic": "Docker image {{depName}}",
       "commitMessageExtra": "to {{#if isSingleVersion}}{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}",
       "updateTypes": ["major", "minor", "patch"],
-      "enabled": true,
-      "separateMinorPatch": true,
-      "ignoreDeps": ["k8s.gcr.io/sig-storage/csi-snapshotter", "k8s.gcr.io/sig-storage/csi-resizer", "k8s.gcr.io/sig-storage/csi-provisioner", "k8s.gcr.io/sig-storage/csi-node-driver-registrar", "k8s.gcr.io/sig-storage/csi-attacher"]
+      "enabled": true
     },
     // Add labels according to package and update types
     {
