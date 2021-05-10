@@ -72,9 +72,12 @@ spec:
         tag: '11.11'
       postgresqlUsername: teslamate
       postgresqlDatabase: teslamate
+      postgresqlDataDir: "/data/pgdata"
       persistence:
         enabled: true
         storageClass: "rook-ceph-block"
+        size: 8Gi
+        mountPath: "/data/"
       shmVolume:
         enabled: false
       volumePermissions:
