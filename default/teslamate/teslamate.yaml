@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: teslamate
-      version: 3.7.0
+      version: 4.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -20,22 +20,28 @@ spec:
     image:
       repository: teslamate/teslamate
       tag: 1.22.0
-    timeZone: "America/New_York"
-    mqtt:
-      enabled: true
-      host: vernemq
-      username: mqtt
+    env:
+      TZ: "America/New_York"
+      DATABASE_USER: "teslamate"
+      DATABASE_NAME: "teslamate"
+      DATABASE_HOST: teslamate-postgresql
+      DISABLE_MQTT: "false"
+      MQTT_HOST: "vernemq"
+      MQTT_USERNAME: "mqtt"
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: nginx
+        kubernetes.io/ingress.class: "nginx"
         nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
         nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
       hosts:
-        - teslamate.eviljungle.com
+      - host: "teslamate.eviljungle.com"
+        paths:
+        - path: /
+          pathType: Prefix
       tls:
-        - hosts:
-          - teslamate.eviljungle.com
+      - hosts:
+        - "teslamate.eviljungle.com"
     tolerations:
     - key: "arm"
       operator: "Exists"
@@ -47,22 +53,28 @@ spec:
         memory: 500Mi
     probes:
       liveness:
-        failureThreshold: 15
-        periodSeconds: 10
+        spec:
+          periodSeconds: 10
+          failureThreshold: 15
       readiness:
-        failureThreshold: 15
-        periodSeconds: 10
+        spec:
+          failureThreshold: 15
+          periodSeconds: 10
       startup:
-        initialDelaySeconds: 15
-        failureThreshold: 30
-        periodSeconds: 10
+        spec:
+          initialDelaySeconds: 15
+          failureThreshold: 30
+          periodSeconds: 10
     postgresql:
+      enabled: true
       image:
         repository: postgres
         tag: '11.11'
+      postgresqlUsername: teslamate
+      postgresqlDatabase: teslamate
       persistence:
         enabled: true
-        storageClass: rook-ceph-block
+        storageClass: "rook-ceph-block"
       shmVolume:
         enabled: false
       volumePermissions:
