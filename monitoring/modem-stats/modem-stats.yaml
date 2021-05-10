@@ -20,12 +20,17 @@ spec:
     image:
       repository: billimek/sb6183-for-influxdb
       tag: latest
-    debug: true
-    config:
-      delay: 600
-      influxdb:
-        host: influxdb
-        port: 8086
-        database: cable_modem_stats
-      modem:
-        url: http://192.168.100.1/RgConnect.asp
+    config: |
+      [GENERAL]
+      Delay = 600
+      Output = True
+      [INFLUXDB]
+      Address = influxdb
+      Port = 8086
+      Database = cable_modem_stats
+      Username =
+      Password =
+      Verify_SSL = False
+      [MODEM]
+      URL = http://192.168.100.1/RgConnect.asp
+
