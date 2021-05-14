@@ -69,7 +69,7 @@ spec:
       enabled: true
       image:
         repository: postgres
-        tag: '11.11'
+        tag: '12.7'
       postgresqlUsername: teslamate
       postgresqlDatabase: teslamate
       postgresqlDataDir: "/data/pgdata"
