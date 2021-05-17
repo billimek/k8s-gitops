@@ -3,3 +3,7 @@ kind: Kustomization
 resources:
 - ./gotk-components.yaml
 - ./gotk-sync.yaml
+images:
+- name: ghcr.io/fluxcd/kustomize-controller
+  newName: ghcr.io/fluxcd/kustomize-controller
+  newTag: kustomize-v4-rc-de0310e7
