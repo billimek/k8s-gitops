@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: external-nvr
@@ -9,9 +9,13 @@ spec:
   - host: nvr.eviljungle.com
     http:
       paths:
-      - backend:
-          serviceName: external-nvr
-          servicePort: 81
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: external-nvr
+            port:
+              name: external-nvr
   tls:
   - hosts:
     - nvr.eviljungle.com
