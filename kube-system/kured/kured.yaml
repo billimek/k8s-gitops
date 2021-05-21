@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://weaveworks.github.io/kured
       chart: kured
-      version: 2.4.3
+      version: 2.6.0
       sourceRef:
         kind: HelmRepository
         name: weaveworks-kured-charts
@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: raspbernetes/kured
-      tag: 1.6.1
+      tag: 1.7.0
     updateStrategy: RollingUpdate
     configuration:
       startTime: "0:00"
