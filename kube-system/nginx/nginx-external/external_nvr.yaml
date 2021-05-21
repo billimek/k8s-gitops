@@ -15,7 +15,7 @@ spec:
           service:
             name: external-nvr
             port:
-              name: external-nvr
+              number: 81
   tls:
   - hosts:
     - nvr.eviljungle.com

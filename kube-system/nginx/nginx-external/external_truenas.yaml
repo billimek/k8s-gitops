@@ -19,7 +19,7 @@ spec:
           service:
             name: external-truenas
             port:
-              name: external-truenas
+              number: 443
   tls:
   - hosts:
     - truenas.eviljungle.com   
