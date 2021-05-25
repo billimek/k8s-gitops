@@ -37,7 +37,7 @@ spec:
       gameMode: survival
       ops: "2535432067443552"
       levelName: world
-      serverName: "\u00a79Lovely \u00a7c\u00a7lSMP"
+      serverName: "\u00a79Lovely \u00a7c\u00a7lSMP\u00a7c\u00a7l\u00a7k!"
       cheats: true
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.103
