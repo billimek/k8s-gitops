@@ -38,6 +38,6 @@ spec:
       ops: "2535432067443552"
       levelName: world
       serverName: "\u00a79Lovely \u00a7c\u00a7lSMP"
-      cheats: false
+      cheats: true
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.103
