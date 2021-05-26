@@ -39,9 +39,9 @@ spec:
         limits:
           memory: 256Mi
       standalone:
-        enabled: "false"
+        enabled: false
       ha:
-        enabled: "true"
+        enabled: true
         replicas: 3
         raft:
           enabled: true
