@@ -17,6 +17,10 @@ spec:
         namespace: flux-system
       interval: 5m
   timeout: 20m
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
   values:
     # defaultRules:
     #   rules:
