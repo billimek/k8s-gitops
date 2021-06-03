@@ -125,10 +125,14 @@ env | grep -E 'VAULT_SECRETS_OPERATOR_NAMESPACE|VAULT_SECRET_NAME|SA_JWT_TOKEN|S
 vault auth enable kubernetes
 
 # Tell Vault how to communicate with the Kubernetes cluster
+
+NOTE: We are disabling "ISS Validation" to work-around [this issue](https://github.com/ricoberger/vault-secrets-operator/issues/104) (also see [this issue](https://github.com/external-secrets/kubernetes-external-secrets/issues/721) for some more context)
+
 vault write auth/kubernetes/config \
   token_reviewer_jwt="$SA_JWT_TOKEN" \
   kubernetes_host="$K8S_HOST" \
-  kubernetes_ca_cert="$SA_CA_CRT"
+  kubernetes_ca_cert="$SA_CA_CRT" \
+  disable_iss_validation=true
 
 # Create a role named, 'vault-secrets-operator' to map Kubernetes Service Account to Vault policies and default token TTL
 vault write auth/kubernetes/role/vault-secrets-operator \
