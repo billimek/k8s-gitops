@@ -206,6 +206,12 @@ spec:
         states:
           url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.23.3/grafana/dashboards/states.json
           # datasource: TeslaMate
+        statistics:
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.23.3/grafana/dashboards/statistics.json
+          # datasource: TeslaMate
+        timeline:
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.23.3/grafana/dashboards/timeline.json
+          # datasource: TeslaMate
         trip:
           url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.23.3/grafana/dashboards/trip.json
           # datasource: TeslaMate
