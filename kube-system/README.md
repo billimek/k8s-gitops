@@ -126,8 +126,6 @@ vault auth enable kubernetes
 
 # Tell Vault how to communicate with the Kubernetes cluster
 
-NOTE: We are disabling "ISS Validation" to work-around [this issue](https://github.com/ricoberger/vault-secrets-operator/issues/104) (also see [this issue](https://github.com/external-secrets/kubernetes-external-secrets/issues/721) for some more context)
-
 vault write auth/kubernetes/config \
   token_reviewer_jwt="$SA_JWT_TOKEN" \
   kubernetes_host="$K8S_HOST" \
@@ -141,3 +139,5 @@ vault write auth/kubernetes/role/vault-secrets-operator \
   policies=vault-secrets-operator \
   ttl=24h
 ```
+
+**NOTE: We are disabling "ISS Validation" to work-around [this issue](https://github.com/ricoberger/vault-secrets-operator/issues/104) (also see [this issue](https://github.com/external-secrets/kubernetes-external-secrets/issues/721) for some more context)**
