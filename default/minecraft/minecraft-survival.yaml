@@ -96,3 +96,5 @@ spec:
             type: LoadBalancer
             port: 19132
             loadBalancerIP: 10.0.6.104
+          ingress:
+            enabled: false
