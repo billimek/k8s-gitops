@@ -8,51 +8,50 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://kubernetes-charts.banzaicloud.com
+      # renovate: registryUrl=https://charts.bitnami.com/bitnami
       chart: thanos
-      version: 0.4.3
+      version: 3.17.8
       sourceRef:
         kind: HelmRepository
-        name: banzaicloud-charts
+        name: bitnami-charts
         namespace: flux-system
       interval: 5m
   values:
-    # image:
-    #   repository: quay.io/thanos/thanos
-    #   tag: v0.15.0
     query:
+      enabled: true
       replicaCount: 2
       replicaLabels:
         - replica
+      dnsDiscovery:
+        sidecarsService: kube-prometheus-prometheus-thanos
+        sidecarsNamespace: monitoring
       http:
         ingress:
           enabled: true
           annotations:
-            kubernetes.io/ingress.class: "nginx"
+            kubernetes.io/ingress.class: nginx
             nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
             nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
             nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
-          hosts: ["thanos.eviljungle.com"]
+          hosts:
+            - "thanos.eviljungle.com"
           tls:
-          - hosts: ["thanos.eviljungle.com"]
-    compact:
-      retentionResolution1h: 5y
-    objstore:
-      type: S3
-      config:
-        bucket: "thanos"
-        endpoint: "minio.default.svc:9000"
-        region: ""
-        insecure: true
-        signature_version2: false
-        put_user_metadata: {}
-        http_config:
-          idle_conn_timeout: 0s
-          response_header_timeout: 0s
-          insecure_skip_verify: false
-        trace:
-          enable: false
-        part_size: 0
+            - hosts:
+              - thanos.eviljungle.com
+    queryFrontend:
+      enabled: true
+    bucketweb:
+      enabled: true
+    compactor:
+      enabled: true
+    storegateway:
+      enabled: true
+    ruler:
+      enabled: false
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
   valuesFrom:
   - kind: Secret
     name: "thanos-helm-values"
