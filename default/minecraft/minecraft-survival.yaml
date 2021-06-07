@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     image: itzg/minecraft-server
-    imageTag: 1.8.0-adopt13
+    imageTag: 2021.15.0-java16
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
