@@ -88,3 +88,11 @@ spec:
             tls:
             - hosts:
               - mcsv.eviljungle.com
+        - name: geyser
+          containerPort: 19132
+          protocol: UDP
+          service:
+            enabled: true
+            type: LoadBalancer
+            port: 19132
+            loadBalancerIP: 10.0.6.104
