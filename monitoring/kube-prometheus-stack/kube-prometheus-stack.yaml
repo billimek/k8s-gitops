@@ -182,8 +182,8 @@ spec:
           image: quay.io/thanos/thanos:v0.21.1
           version: v0.21.1
           objectStorageConfig:
-            name: thanos
-            key: object-store.yaml
+            name: thanos-objstore-secret
+            key: objstore.yml
         affinity:
           podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
