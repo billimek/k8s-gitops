@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 4,
+  "id": 18,
   "links": [],
   "panels": [
     {
@@ -23,10 +23,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -58,7 +57,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -68,50 +67,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "speed (ms)",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "previous"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": true,
-          "measurement": "ms",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "entity_id",
-              "operator": "=",
-              "value": "frigate_coral_inference"
-            }
-          ]
-        },
-        {
+          "exemplar": true,
           "expr": "hass_sensor_unit_ms{entity=\"sensor.coral_inference_speed\"}",
           "groupBy": [
             {
@@ -129,7 +85,7 @@
           ],
           "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
+          "legendFormat": "speed (ms)",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "B",
@@ -172,6 +128,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:322",
           "format": "ms",
           "label": null,
           "logBase": 1,
@@ -180,6 +137,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:323",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -196,9 +154,7 @@
     {
       "datasource": "loki",
       "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
+        "defaults": {},
         "overrides": []
       },
       "gridPos": {
@@ -209,6 +165,7 @@
       },
       "id": 13,
       "options": {
+        "dedupStrategy": "none",
         "showLabels": false,
         "showTime": true,
         "sortOrder": "Descending",
@@ -217,7 +174,6 @@
       "targets": [
         {
           "expr": "{app_kubernetes_io_name=\"frigate\"}",
-          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -232,10 +188,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -267,7 +222,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -277,9 +232,10 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.detection_fps\"}",
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -304,6 +260,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:533",
           "format": "short",
           "label": "fps",
           "logBase": 1,
@@ -312,6 +269,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:534",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -330,10 +288,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -365,7 +322,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -375,22 +332,27 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.basement_camera_fps\"}",
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
+          "legendFormat": "",
           "refId": "A"
         },
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.basement_detection_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "C"
+          "legendFormat": "",
+          "refId": "B"
         },
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.basement_skipped_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "D"
+          "legendFormat": "",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -414,6 +376,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:714",
           "format": "short",
           "label": "fps",
           "logBase": 1,
@@ -422,6 +385,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:715",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -440,10 +404,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -457,7 +420,7 @@
         "y": 22
       },
       "hiddenSeries": false,
-      "id": 16,
+      "id": 14,
       "interval": "",
       "legend": {
         "avg": false,
@@ -475,7 +438,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -485,22 +448,27 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.driveway_camera_fps\"}",
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
+          "legendFormat": "",
           "refId": "A"
         },
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.driveway_detection_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "C"
+          "legendFormat": "",
+          "refId": "B"
         },
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.driveway_skipped_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "D"
+          "legendFormat": "",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -524,6 +492,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:714",
           "format": "short",
           "label": "fps",
           "logBase": 1,
@@ -532,6 +501,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:715",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -550,10 +520,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -567,7 +536,7 @@
         "y": 22
       },
       "hiddenSeries": false,
-      "id": 14,
+      "id": 15,
       "interval": "",
       "legend": {
         "avg": false,
@@ -585,7 +554,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -595,132 +564,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_camera_fps\"}",
-          "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "A"
-        },
-        {
-          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_detection_fps_2\"}",
-          "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "C"
-        },
-        {
-          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_skipped_fps_2\"}",
-          "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "D"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "front",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "fps",
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 30
-      },
-      "hiddenSeries": false,
-      "id": 17,
-      "interval": "",
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.3.5",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.pool_camera_fps\"}",
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
+          "legendFormat": "",
           "refId": "A"
         },
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.pool_detection_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "C"
+          "legendFormat": "",
+          "refId": "B"
         },
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps{entity=\"sensor.pool_skipped_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "D"
+          "legendFormat": "",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -744,6 +608,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:714",
           "format": "short",
           "label": "fps",
           "logBase": 1,
@@ -752,6 +617,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:715",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -770,10 +636,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -783,11 +648,11 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 30
       },
       "hiddenSeries": false,
-      "id": 15,
+      "id": 16,
       "interval": "",
       "legend": {
         "avg": false,
@@ -805,7 +670,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -815,22 +680,143 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_camera_fps\"}",
+          "exemplar": true,
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_camera_fps\"}",
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
+          "legendFormat": "",
           "refId": "A"
         },
         {
-          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_detection_fps_2\"}",
+          "exemplar": true,
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_detection_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "C"
+          "legendFormat": "",
+          "refId": "B"
         },
         {
-          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_skipped_fps_2\"}",
+          "exemplar": true,
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.front_skipped_fps_2\"}",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{friendly_name}}",
-          "refId": "D"
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "front",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:714",
+          "format": "short",
+          "label": "fps",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "$$hashKey": "object:715",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "hiddenSeries": false,
+      "id": 17,
+      "interval": "",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.5",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_camera_fps\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_detection_fps_2\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "hass_sensor_unit_fps{entity=\"sensor.porch_skipped_fps_2\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -854,6 +840,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:714",
           "format": "short",
           "label": "fps",
           "logBase": 1,
@@ -862,6 +849,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:715",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -880,10 +868,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "links": []
         },
         "overrides": []
@@ -915,7 +902,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.5.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -925,6 +912,7 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "hass_sensor_unit_fps",
           "interval": "",
           "legendFormat": "{{friendly_name}}",
@@ -952,6 +940,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:895",
           "format": "short",
           "label": "fps",
           "logBase": 1,
@@ -960,6 +949,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:896",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -974,7 +964,7 @@
       }
     }
   ],
-  "schemaVersion": 26,
+  "schemaVersion": 27,
   "style": "dark",
   "tags": [
     "frigate",
