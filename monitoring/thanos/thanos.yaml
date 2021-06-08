@@ -46,6 +46,7 @@ spec:
       enabled: true
       persistence:
         enabled: true
+        size: 20Gi
     ruler:
       enabled: false
     metrics:
