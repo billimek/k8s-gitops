@@ -40,8 +40,12 @@ spec:
       enabled: true
     compactor:
       enabled: true
+      persistence:
+        enabled: false
     storegateway:
       enabled: true
+      persistence:
+        enabled: false
     ruler:
       enabled: false
     metrics:
