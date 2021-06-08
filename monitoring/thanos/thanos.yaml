@@ -44,6 +44,8 @@ spec:
         enabled: false
     storegateway:
       enabled: true
+      extraFlags:
+        - "--min-time=1w"
       persistence:
         enabled: false
     ruler:
