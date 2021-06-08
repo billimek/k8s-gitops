@@ -42,6 +42,8 @@ spec:
       #   repository: jimmidyson/configmap-reload
       #   tag: v0.4.0
       configReloaderCpu: 200m
+      admissionWebhooks:
+        enabled: false
     alertmanager:
       alertmanagerSpec:
         storage:
