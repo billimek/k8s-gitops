@@ -39,14 +39,14 @@ spec:
     controller:
       image:
         repository: quay.io/metallb/controller
-        tag: v10.0.1
+        tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
     speaker:
       image:
         repository: quay.io/metallb/speaker
-        tag: v10.0.1
+        tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
