@@ -38,16 +38,14 @@ spec:
         enabled: true
     controller:
       image:
-        registry: docker.io
-        repository: metallb/controller
+        repository: quay.io/metallb/controller
         tag: v10.0.1
       tolerations:
       - key: "arm"
         operator: "Exists"
     speaker:
       image:
-        registry: docker.io
-        repository: metallb/speaker
+        repository: quay.io/metallb/speaker
         tag: v10.0.1
       tolerations:
       - key: "arm"
