@@ -107,10 +107,10 @@ spec:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/comcast_sucks.json
           # datasource: influxdb
         flux-cluster:
-          url: https://raw.githubusercontent.com/fluxcd/flux2/v0.7.6/manifests/monitoring/grafana/dashboards/cluster.json
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/grafana/dashboards/cluster.json
           datasource: Prometheus
         flux-control-plane:
-          url: https://raw.githubusercontent.com/fluxcd/flux2/v0.7.6/manifests/monitoring/grafana/dashboards/control-plane.json
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/grafana/dashboards/control-plane.json
           datasource: Prometheus
         frigate:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/frigate.json
