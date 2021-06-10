@@ -50,7 +50,7 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: TRUE
-      FABRIC_INSTALLER_URL: https://github.com/FabricMC/fabric/releases/download/0.34.10%2B1.17/fabric-api-0.34.10+1.17.jar
+      FABRIC_INSTALLER_URL: https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.7.3/fabric-installer-0.7.3.jar
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
