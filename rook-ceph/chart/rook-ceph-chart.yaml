@@ -22,6 +22,7 @@ spec:
     csi:
       kubeletDirPath: /var/lib/kubelet
       enableGrpcMetrics: true
+      enableCSIHostNetwork: true
       pluginTolerations:
         - key: "arm"
           operator: "Exists"
