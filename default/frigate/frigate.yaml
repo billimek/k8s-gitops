@@ -246,53 +246,53 @@ spec:
             retain_days: 5
           rtmp:
             enabled: false
-        wyze-1:
-          ffmpeg:
-            inputs:
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@nvr.local:81/wyze1
-                roles:
-                  - detect
-                  - rtmp
-                  - clips
-                  - record
-                input_args:
-                  - -avoid_negative_ts
-                  - make_zero
-                  - -flags
-                  - low_delay
-                  - -strict
-                  - experimental
-                  - -fflags
-                  - +genpts+discardcorrupt
-                  - -rtsp_transport
-                  - tcp
-                  - -stimeout
-                  - "5000000"
-                  - -use_wallclock_as_timestamps
-                  - "1"
-          height: 1080
-          width: 1920
-          fps: 15
-          objects:
-            filters:
-              bird:
-                min_area: 1000
-                # max_area: 100000
-                threshold: 0.60
-          clips:
-            enabled: true
-            objects:
-              - bird
-              - dog
-              - cat
-          snapshots:
-            enabled: true
-            timestamp: False
-            bounding_box: true
-            crop: False
-          record:
-            enabled: false
-            retain_days: 5
+        # wyze-1:
+        #   ffmpeg:
+        #     inputs:
+        #       - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@nvr.local:81/wyze1
+        #         roles:
+        #           - detect
+        #           - rtmp
+        #           - clips
+        #           - record
+        #         input_args:
+        #           - -avoid_negative_ts
+        #           - make_zero
+        #           - -flags
+        #           - low_delay
+        #           - -strict
+        #           - experimental
+        #           - -fflags
+        #           - +genpts+discardcorrupt
+        #           - -rtsp_transport
+        #           - tcp
+        #           - -stimeout
+        #           - "5000000"
+        #           - -use_wallclock_as_timestamps
+        #           - "1"
+        #   height: 1080
+        #   width: 1920
+        #   fps: 15
+        #   objects:
+        #     filters:
+        #       bird:
+        #         min_area: 1000
+        #         # max_area: 100000
+        #         threshold: 0.60
+        #   clips:
+        #     enabled: true
+        #     objects:
+        #       - bird
+        #       - dog
+        #       - cat
+        #   snapshots:
+        #     enabled: true
+        #     timestamp: False
+        #     bounding_box: true
+        #     crop: False
+        #   record:
+        #     enabled: false
+        #     retain_days: 5
     ingress:
       enabled: true
       annotations:
