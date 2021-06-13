@@ -270,9 +270,9 @@ spec:
                   - "5000000"
                   - -use_wallclock_as_timestamps
                   - "1"
-          height: 720
-          width: 1280
-          fps: 5
+          height: 1080
+          width: 1920
+          fps: 15
           objects:
             filters:
               bird:
