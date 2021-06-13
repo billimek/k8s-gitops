@@ -47,6 +47,7 @@ spec:
           - person
           - dog
           - cat
+          - bird
         filters:
           person:
             min_area: 2500
