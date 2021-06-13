@@ -245,6 +245,38 @@ spec:
             retain_days: 5
           rtmp:
             enabled: false
+        wyze-1:
+          ffmpeg:
+            inputs:
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1:8554/unicast
+                roles:
+                  - detect
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1:8554/unicast
+                roles:
+                  - rtmp
+                  - clips
+                  - record
+          height: 1080
+          width: 1920
+          fps: 5
+          objects:
+            filters:
+              bird:
+                min_area: 1000
+                max_area: 100000
+                threshold: 0.6
+          clips:
+            enabled: true
+            objects:
+              - bird
+          snapshots:
+            enabled: true
+            timestamp: False
+            bounding_box: true
+            crop: False
+          record:
+            enabled: false
+            retain_days: 5
     ingress:
       enabled: true
       annotations:
