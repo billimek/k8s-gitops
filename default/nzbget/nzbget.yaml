@@ -26,7 +26,7 @@ spec:
     env:
       TZ: "America/New_York"
     ingress:
-      master:
+      main:
         enabled: true
         annotations:
           kubernetes.io/ingress.class: "nginx"
