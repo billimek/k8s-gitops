@@ -264,12 +264,15 @@ spec:
             filters:
               bird:
                 min_area: 1000
-                max_area: 100000
-                threshold: 0.6
+                # max_area: 100000
+                threshold: 0.75
+                min_score: 0.60
           clips:
             enabled: true
             objects:
               - bird
+              - dog
+              - cat
           snapshots:
             enabled: true
             timestamp: False
