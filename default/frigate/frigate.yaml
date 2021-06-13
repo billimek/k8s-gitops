@@ -249,11 +249,9 @@ spec:
         wyze-1:
           ffmpeg:
             inputs:
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1:8554/unicast
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@nvr.local:81/wyze1
                 roles:
                   - detect
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1:8554/unicast
-                roles:
                   - rtmp
                   - clips
                   - record
@@ -265,8 +263,7 @@ spec:
               bird:
                 min_area: 1000
                 # max_area: 100000
-                threshold: 0.75
-                min_score: 0.60
+                threshold: 0.60
           clips:
             enabled: true
             objects:
