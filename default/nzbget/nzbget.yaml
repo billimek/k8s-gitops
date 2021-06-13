@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: nzbget
-      version: 10.1.0
+      version: 11.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -26,17 +26,18 @@ spec:
     env:
       TZ: "America/New_York"
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-      hosts:
-      - host: nzbget.eviljungle.com
-        paths:
-        - path: /
-          pathType: Prefix
-      tls:
-      - hosts:
-        - "nzbget.eviljungle.com"
+      master:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "nginx"
+        hosts:
+        - host: nzbget.eviljungle.com
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - "nzbget.eviljungle.com"
     persistence:
       config:
         enabled: true
