@@ -39,7 +39,7 @@ spec:
     controller:
       image:
         repository: quay.io/metallb/controller
-        tag: v0.10.1
+        tag: v0.10.2
       tolerations:
       - key: "arm"
         operator: "Exists"
