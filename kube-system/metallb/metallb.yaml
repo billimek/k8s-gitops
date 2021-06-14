@@ -46,7 +46,7 @@ spec:
     speaker:
       image:
         repository: quay.io/metallb/speaker
-        tag: v0.10.1
+        tag: v0.10.2
       tolerations:
       - key: "arm"
         operator: "Exists"
