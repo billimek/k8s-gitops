@@ -37,16 +37,16 @@ spec:
       prometheusRule:
         enabled: true
     controller:
-      image:
-        repository: quay.io/metallb/controller
-        tag: v0.10.1
+      # image:
+      #   repository: quay.io/metallb/controller
+      #   tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
     speaker:
-      image:
-        repository: quay.io/metallb/speaker
-        tag: v0.10.1
+      # image:
+      #   repository: quay.io/metallb/speaker
+      #   tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
