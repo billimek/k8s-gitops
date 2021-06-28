@@ -17,6 +17,10 @@ spec:
         name: vmware-tanzu-charts
         namespace: flux-system
       interval: 5m
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
   values:
     image:
       repository: velero/velero
