@@ -25,6 +25,7 @@ spec:
       startTime: "0:00"
       endTime: "4:00"
       timeZone: "America/New_York"
+      rebootCommand: "/usr/bin/systemctl reboot"
     tolerations:
     - key: "arm"
       operator: "Exists"

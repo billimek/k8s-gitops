@@ -1,2 +1,2 @@
-extraArgs:	
-  slack-hook-url: "$DISCORD_KURED_WEBHOOK_URL"
+configuration:	
+  notifyUrl: "$DISCORD_KURED_WEBHOOK_URL"
