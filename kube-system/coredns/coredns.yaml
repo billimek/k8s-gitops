@@ -29,6 +29,19 @@ spec:
       loadBalancerIP: 10.0.6.99
       annotations:
         metallb.universe.tf/allow-shared-ip: coredns
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - coredns
+          topologyKey: "kubernetes.io/hostname"
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     rbac:
       create: true
     isClusterService: false
