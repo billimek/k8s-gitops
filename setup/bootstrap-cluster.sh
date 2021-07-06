@@ -34,8 +34,8 @@ installFlux() {
     --repository=k8s-gitops \
     --branch master \
     --private=false \
-    --validation=none \
-    --personal
+    --personal \
+    --network-policy=false
 
   FLUX_INSTALLED=$?
   if [ $FLUX_INSTALLED != 0 ]; then 
