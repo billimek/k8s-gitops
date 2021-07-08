@@ -25,6 +25,7 @@ spec:
       image:
         repository: busybox
         tag: 1.33.1
+    extraSecretForEnvFrom: frigate-envs
     coral:
       enabled: true
     timezone: "America/New_York"
