@@ -21,7 +21,7 @@ spec:
     recreatePods: true
     service:
       type: LoadBalancer
-      # loadBalancerIP: 10.0.6.50
+      loadBalancerIP: 10.0.6.49
     tolerations:
         - key: "arm"
           operator: "Exists"
@@ -38,7 +38,6 @@ spec:
     emqxConfig:
       EMQX_ALLOW_ANONYMOUS: "true"
     #   EMQX_ACL_NOMATCH: "deny"
-    #   EMQX_ADMIN_PASSWORD: "${EMQX_ADMIN_PASSWORD}"
     emqxLoadedPlugins: >
       {emqx_management, true}.
       {emqx_recon, true}.
@@ -47,7 +46,7 @@ spec:
       {emqx_telemetry, false}.
       {emqx_rule_engine, true}.
       {emqx_bridge_mqtt, false}.
-      {emqx_auth_mnesia, false}.
+      {emqx_auth_mnesia, true}.
     ingress:
       dashboard:
         enabled: true
