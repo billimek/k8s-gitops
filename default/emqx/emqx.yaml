@@ -23,8 +23,8 @@ spec:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.49
     tolerations:
-        - key: "arm"
-          operator: "Exists"
+      - key: "arm"
+        operator: "Exists"
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -38,8 +38,8 @@ spec:
     emqxConfig:
       EMQX_ALLOW_ANONYMOUS: "false"
     #   EMQX_ACL_NOMATCH: "deny"
-    # emqxAclConfig: |
-    #   {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}. {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}. {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}. {allow, all}.
+    emqxAclConfig: |
+      {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}. {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}. {allow, all, subscribe, ["$SYS/#", {eq, "#"}]}. {allow, all}.
     emqxLoadedPlugins: >
       {emqx_management, true}.
       {emqx_recon, true}.
@@ -49,6 +49,7 @@ spec:
       {emqx_rule_engine, true}.
       {emqx_bridge_mqtt, false}.
       {emqx_auth_mnesia, true}.
+      {emqx_prometheus, true}.
     ingress:
       dashboard:
         enabled: true
