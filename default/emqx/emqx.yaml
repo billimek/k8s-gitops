@@ -36,7 +36,7 @@ spec:
               - emqx
           topologyKey: "kubernetes.io/hostname"
     emqxConfig:
-      EMQX_ALLOW_ANONYMOUS: "false"
+      EMQX_ALLOW_ANONYMOUS: "true"
     #   EMQX_ACL_NOMATCH: "deny"
 
     emqxAclConfig: >
