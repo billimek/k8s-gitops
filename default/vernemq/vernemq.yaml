@@ -25,7 +25,7 @@ spec:
       create: true
     service:
       type: LoadBalancer
-      loadBalancerIP: 10.0.6.50
+      loadBalancerIP: 10.0.6.48
       ws:
         enabled: true
     statefulset:
