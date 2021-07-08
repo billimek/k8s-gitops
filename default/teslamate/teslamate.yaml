@@ -26,7 +26,7 @@ spec:
       DATABASE_NAME: "teslamate"
       DATABASE_HOST: teslamate-postgresql
       DISABLE_MQTT: "false"
-      MQTT_HOST: "vernemq"
+      MQTT_HOST: "emqx"
       MQTT_USERNAME: "mqtt"
     ingress:
       enabled: true

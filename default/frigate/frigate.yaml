@@ -30,7 +30,7 @@ spec:
     timezone: "America/New_York"
     config: |
       mqtt:
-        host: vernemq.default.svc
+        host: emqx.default.svc
         topic_prefix: frigate
       database:
         path: /data/frigate.db
