@@ -25,7 +25,7 @@ spec:
       image:
         repository: busybox
         tag: 1.33.1
-    # extraSecretForEnvFrom: frigate-envs
+    extraSecretForEnvFrom: frigate-envs
     coral:
       enabled: true
     timezone: "America/New_York"
@@ -33,7 +33,7 @@ spec:
       mqtt:
         host: emqx.default.svc
         topic_prefix: frigate
-        # user: mqtt
+        user: mqtt
       database:
         path: /data/frigate.db
       ffmpeg:
