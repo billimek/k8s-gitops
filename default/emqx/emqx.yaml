@@ -36,8 +36,10 @@ spec:
               - emqx
           topologyKey: "kubernetes.io/hostname"
     emqxConfig:
-      EMQX_ALLOW_ANONYMOUS: "true"
+      EMQX_ALLOW_ANONYMOUS: "false"
     #   EMQX_ACL_NOMATCH: "deny"
+    # emqxAclConfig: |
+    #   {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}. {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}. {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}. {allow, all}.
     emqxLoadedPlugins: >
       {emqx_management, true}.
       {emqx_recon, true}.
