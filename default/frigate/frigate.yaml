@@ -35,6 +35,7 @@ spec:
         host: emqx.default.svc
         topic_prefix: frigate
         user: mqtt
+        password: '{FRIGATE_MQTT_PASSWORD}'
       database:
         path: /data/frigate.db
       ffmpeg:
