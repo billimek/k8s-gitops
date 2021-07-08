@@ -59,6 +59,6 @@ spec:
         path: /
         hosts:
         - emqx.eviljungle.com
-        tls: []
+        tls:
         - hosts:
           - emqx.eviljungle.com
