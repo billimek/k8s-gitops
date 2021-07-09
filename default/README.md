@@ -6,6 +6,13 @@ Installs [blocky](https://github.com/0xERR0R/blocky): DNS proxy as ad-blocker fo
 
 * [blocky.yaml](blocky/blocky.yaml)
 
+# emqx
+
+![](https://i.imgur.com/uNxxBGX.png)
+
+[emqx](github.com/emqx/emqx) is a clustered MQTT broker
+
+* [emqx.yaml](emqx/emqx.yaml)
 # flood (with rtorrent sidecar)
 
 ![](https://i.imgur.com/ZtMrsbm.png)
@@ -153,13 +160,6 @@ Rules-engine for automations
 
 * [valheim.yaml](valheim/valheim.yaml)
 
-# verenmq
-
-![](https://i.imgur.com/VQ5AZIV.png)
-
-[verenmq](https://github.com/vernemq/vernemq) is a clustered MQTT broker
-
-* [verenmq.yaml](verenmq/verenmq.yaml)
 
 # zwavejs2mqtt
 
