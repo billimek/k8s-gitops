@@ -14,7 +14,7 @@ spec:
     - kind: Kustomization
       name: '*'
   exclusionList:
-    - "lookup github\.com"
+    - "lookup github"
   suspend: false
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta1
