@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: teslamate/teslamate
-      tag: 1.23.4
+      tag: 1.23.6
     env:
       TZ: "America/New_York"
       DATABASE_USER: "teslamate"
