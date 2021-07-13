@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: ser2sock
-      version: 3.4.0
+      version: 4.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -37,13 +37,13 @@ spec:
           nodeSelectorTerms:
             - matchExpressions:
                 - {key: "feature.node.kubernetes.io/custom-alarmdecoder", operator: In, values: ["true"]}
-    additionalVolumeMounts:
-      - name: usb
+    persistence:
+      usb:
+        enabled: true
+        type: hostPath
         mountPath: /dev/ttyUSB0
-    additionalVolumes:
-      - name: usb
-        hostPath:
-          path: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
+        hostPath: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
+        # hostPathType: CharDevice
     resources:
       requests:
         memory: 50Mi
