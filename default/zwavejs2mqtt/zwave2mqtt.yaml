@@ -26,7 +26,8 @@ spec:
       privileged: true
     service:
       websocket:
-        port:
+        enabled: true
+        ports:
           port: 3000
     ingress:
       main:
