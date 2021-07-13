@@ -60,7 +60,7 @@ spec:
         enabled: true
         type: LoadBalancer
         loadBalancerIP: 10.0.6.58
-        port:
+        ports:
           supervisor:
             enabled: true
             port: 9001
@@ -70,7 +70,7 @@ spec:
           metallb.universe.tf/allow-shared-ip: valheim
       status:
         enabled: true
-        port:
+        ports:
           status:
           enabled: true
           port: 80
