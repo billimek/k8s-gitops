@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: teslamate
-      version: 4.0.1
+      version: 5.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -29,19 +29,20 @@ spec:
       MQTT_HOST: "emqx"
       MQTT_USERNAME: "mqtt"
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
-      hosts:
-      - host: "teslamate.eviljungle.com"
-        paths:
-        - path: /
-          pathType: Prefix
-      tls:
-      - hosts:
-        - "teslamate.eviljungle.com"
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        hosts:
+        - host: "teslamate.eviljungle.com"
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+        - hosts:
+          - "teslamate.eviljungle.com"
     tolerations:
     - key: "arm"
       operator: "Exists"
