@@ -25,10 +25,9 @@ spec:
     securityContext:
       privileged: true
     service:
-      websocket:
-        enabled: true
+      main:
         ports:
-          websocket:
+          websockets:
             enabled: true
             port: 3000
     ingress:
