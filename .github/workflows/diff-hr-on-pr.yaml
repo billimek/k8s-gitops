@@ -1,6 +1,7 @@
 name: Create diff on updated HelmReleases
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - master
