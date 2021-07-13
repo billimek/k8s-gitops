@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: valheim
-      version: 2.4.0
+      version: 3.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -50,28 +50,32 @@ spec:
         storageClass: "rook-ceph-block"
         size: 5Gi
     service:
-      type: LoadBalancer
-      externalTrafficPolicy: Cluster
-      loadBalancerIP: 10.0.6.58
-      annotations:
-        metallb.universe.tf/allow-shared-ip: valheim
-      additionalServices:
-        - enabled: true
-          nameSuffix: supervisor
-          type: LoadBalancer
-          loadBalancerIP: 10.0.6.58
-          port:
+      main:
+        type: LoadBalancer
+        externalTrafficPolicy: Cluster
+        loadBalancerIP: 10.0.6.58
+        annotations:
+          metallb.universe.tf/allow-shared-ip: valheim
+      supervisor:
+        enabled: true
+        type: LoadBalancer
+        loadBalancerIP: 10.0.6.58
+        port:
+          supervisor:
+            enabled: true
             port: 9001
-            name: supervisor
             protocol: TCP
-            # targetPort: supervisor
-          annotations:
-            metallb.universe.tf/allow-shared-ip: valheim
-          additionalPorts:
-          - name: status
-            port: 80
-            protocol: TCP
-            targetPort: 80
+            targetPort: 9001
+        annotations:
+          metallb.universe.tf/allow-shared-ip: valheim
+      status:
+        enabled: true
+        port:
+          status:
+          enabled: true
+          port: 80
+          protocol: TCP
+          targetPort: 80
     resources:
       requests:
         memory: 4096Mi
