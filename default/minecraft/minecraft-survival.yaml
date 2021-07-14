@@ -49,7 +49,7 @@ spec:
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
-      ENABLE_AUTOPAUSE: TRUE
+      ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "274,74354,8631,28140"
     minecraftServer:
       eula: "TRUE"
