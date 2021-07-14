@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: minecraft-proxy
+  name: mc-proxy
   namespace: default
 spec:
   interval: 5m
@@ -19,7 +19,7 @@ spec:
   values:
     image: itzg/bungeecord
     imageTag: 2021.4.0-java11
-
+    nameOverride: mc-proxy
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
