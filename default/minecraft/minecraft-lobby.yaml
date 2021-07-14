@@ -36,7 +36,7 @@ spec:
       forceReDownload: true
       difficulty: peaceful
       maxTickTime: -1
-      serviceType: clusterIP
+      serviceType: ClusterIP
       gameMode: adventure
       motd: "\u00a7feviljungle\u00a7 - \u00a7a\u00a7llobby\u00a7"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
