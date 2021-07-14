@@ -31,7 +31,8 @@ spec:
     minecraftProxy:
       type: BUNGEECORD
       # A list of .jar URLs to download into the plugins folder.
-      plugins: []
+      # plugins: []
+      serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.106
       externalTrafficPolicy: Local
       # externalIPs:
