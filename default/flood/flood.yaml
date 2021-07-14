@@ -152,11 +152,11 @@ spec:
     service:
       bt:
         enabled: true
-        # nameSuffix: bt
         type: LoadBalancer
         loadBalancerIP: 10.0.6.57
         ports:
-          port: 49161
-          name: bt
-          protocol: TCP
-          targetPort: 49161
+          bt:
+            enabled: true
+            port: 49161
+            protocol: TCP
+            targetPort: 49161
