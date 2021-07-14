@@ -103,8 +103,8 @@ spec:
             port: bt
           timeoutSeconds: 1
         ports:
-        - containerPort: 49161
-          name: bt
+        - name: bt
+          containerPort: 49161
           protocol: TCP
         readinessProbe:
           failureThreshold: 3
@@ -145,9 +145,9 @@ spec:
         - mountPath: /socket
           name: socket
 
-    additionalVolumes:
-      - emptyDir: {}
-        name: socket
+    # additionalVolumes:
+    #   - emptyDir: {}
+    #     name: socket
 
     service:
       additionalServices:
