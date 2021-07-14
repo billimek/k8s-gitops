@@ -48,6 +48,8 @@ spec:
       periodSeconds: 10
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
+    serviceAnnotations:
+      mc-router.itzg.me/externalServerName: "mcsv.eviljungle.com"
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "274,74354,8631,28140"

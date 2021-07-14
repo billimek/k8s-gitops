@@ -48,6 +48,8 @@ spec:
       periodSeconds: 10
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
+    serviceAnnotations:
+      mc-router.itzg.me/defaultServer: "eviljungle.com"
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
     minecraftServer:
