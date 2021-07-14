@@ -32,7 +32,7 @@ metadata:
   name: mc-router
 spec:
   type: LoadBalancer
-  LoadBalancerIP: 10.0.6.105
+  loadBalancerIP: 10.0.6.105
   ports:
   - targetPort: web
     name: web
