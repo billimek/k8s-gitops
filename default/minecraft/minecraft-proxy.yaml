@@ -1,0 +1,91 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: minecraft-proxy
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
+      chart: minecraft-proxy
+      version: 2.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-proxy
+        namespace: flux-system
+      interval: 5m
+  values:
+    image: itzg/bungeecord
+    imageTag: 2021.4.0-java11
+
+    persistence:
+      storageClass: "rook-ceph-block"
+      dataDir:
+        enabled: true
+        Size: 1Gi
+    podAnnotations:
+          backup.velero.io/backup-volumes: datadir
+
+    minecraftProxy:
+      type: BUNGEECORD
+      # A list of .jar URLs to download into the plugins folder.
+      plugins: []
+      loadBalancerIP: 10.0.6.106
+      externalTrafficPolicy: Local
+      # externalIPs:
+      # This can be set to the contents of your config file (only works with yaml currently)
+      # config: |
+      #  player_limit: -1
+      #  ip_forward: false
+      #  permissions:
+      #    default:
+      #    - bungeecord.command.server
+      #    - bungeecord.command.list
+      #    admin:
+      #    - bungeecord.command.alert
+      #    - bungeecord.command.end
+      #    - bungeecord.command.ip
+      #    - bungeecord.command.reload
+      #  timeout: 30000
+      #  log_pings: true
+      #  log_commands: false
+      #  online_mode: true
+      #  servers:
+      #    lobby:
+      #      motd: '&1Just another BungeeCord - Forced Host'
+      #      address: localhost:25565
+      #      restricted: false
+      #  listeners:
+      #  - query_port: 25577
+      #    motd: '&1Another Bungee server'
+      #    priorities:
+      #    - lobby
+      #    bind_local_address: true
+      #    tab_list: GLOBAL_PING
+      #    query_enabled: false
+      #    host: 0.0.0.0:25577
+      #    forced_hosts:
+      #      pvp.md-5.net: pvp
+      #    max_players: 1
+      #    tab_size: 60
+      #    ping_passthrough: false
+      #    force_default_server: false
+      #    proxy_protocol: false
+      #  disabled_commands:
+      #  - disabledcommandhere
+      #  network_compression_threshold: 256
+      #  groups:
+      #    md_5:
+      #    - admin
+      #  connection_throttle: 4000
+      #  connection_throttle_limit: 3
+      #  stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
+      #  forge_support: false
+      #  inject_commands: false
+      rcon:
+        enabled: false
+        port: 25575
+        password: "mc-rcon"
+        serviceType: LoadBalancer
