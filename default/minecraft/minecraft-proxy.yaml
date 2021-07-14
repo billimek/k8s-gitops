@@ -29,7 +29,7 @@ spec:
           backup.velero.io/backup-volumes: datadir
 
     minecraftProxy:
-      type: BUNGEECORD
+      type: WATERFALL
       # A list of .jar URLs to download into the plugins folder.
       # plugins: []
       serviceType: LoadBalancer
@@ -55,8 +55,8 @@ spec:
         online_mode: true
         servers:
           lobby:
-            motd: '&1Just another BungeeCord - Forced Host'
-            address: localhost:25565
+            motd: '&1eviljungle lobby'
+            address: mc-lobby-minecraft:25565
             restricted: false
         listeners:
         - query_port: 25577
@@ -87,6 +87,3 @@ spec:
       #  inject_commands: false
       rcon:
         enabled: false
-        port: 25575
-        password: "mc-rcon"
-        serviceType: LoadBalancer
