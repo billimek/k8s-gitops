@@ -62,7 +62,7 @@ spec:
             address: mc-minecraft:25565
             restricted: false
           survival:
-            motd: '\u00A79Father's Day \u00A7c\u00A7lSMP\u00A7c\u00A7l\u00A7k\!'
+            motd: '\u00A79Fathers Day \u00A7c\u00A7lSMP\u00A7c\u00A7l\u00A7k\!'
             address: mcsv-minecraft:25565
             restricted: false
         listeners:
