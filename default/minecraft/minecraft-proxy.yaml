@@ -57,6 +57,14 @@ spec:
             motd: '&1eviljungle lobby'
             address: mc-lobby-minecraft:25565
             restricted: false
+          creative:
+            motd: '\u00A7a\u00A7lcreative server\u00A7r'
+            address: mc-minecraft:25565
+            restricted: false
+          survival:
+            motd: '\u00A79Father's Day \u00A7c\u00A7lSMP\u00A7c\u00A7l\u00A7k\!'
+            address: mcsv-minecraft:25565
+            restricted: false
         listeners:
         - query_port: 25577
           motd: '&1eviljungle hub'
