@@ -67,18 +67,18 @@ spec:
             restricted: false
         listeners:
         - query_port: 25577
-          motd: '&1eviljungle hub'
+          motd: '\u00a7feviljungle\u00a7 - \u00a7a\u00a7llobby\u00a7'
           priorities:
           - lobby
           bind_local_address: true
           tab_list: GLOBAL_PING
           query_enabled: true
           host: 0.0.0.0:25577
+        ping_passthrough: true
       #    forced_hosts:
       #      pvp.md-5.net: pvp
       #    max_players: 1
       #    tab_size: 60
-      #    ping_passthrough: false
       #    force_default_server: false
       #    proxy_protocol: false
       #  disabled_commands:
