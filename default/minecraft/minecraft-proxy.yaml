@@ -58,16 +58,16 @@ spec:
             address: mc-lobby-minecraft:25565
             restricted: false
           creative:
-            motd: '\u00A7a\u00A7lcreative server\u00A7r'
+            motd: 'creative server'
             address: mc-minecraft:25565
             restricted: false
           survival:
-            motd: '\u00A79Fathers Day \u00A7c\u00A7lSMP\u00A7c\u00A7l\u00A7k\!'
+            motd: 'Fathers Day SMP'
             address: mcsv-minecraft:25565
             restricted: false
         listeners:
         - query_port: 25577
-          motd: '\u00a7feviljungle\u00a7 - \u00a7a\u00a7llobby\u00a7'
+          motd: '&1eviljungle lobby'
           priorities:
           - lobby
           bind_local_address: true
