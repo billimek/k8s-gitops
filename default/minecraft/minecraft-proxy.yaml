@@ -67,7 +67,7 @@ spec:
             restricted: false
         listeners:
         - query_port: 25577
-          motd: '&1eviljungle lobby'
+          motd: '&3eviljungle &6&Llobby'
           priorities:
           - lobby
           bind_local_address: true
