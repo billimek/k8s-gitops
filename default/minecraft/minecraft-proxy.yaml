@@ -19,15 +19,8 @@ spec:
   values:
     image: itzg/bungeecord
     imageTag: 2021.4.0-java11
-    persistence:
-      storageClass: "rook-ceph-block"
-      dataDir:
-        enabled: true
-        Size: 1Gi
-    podAnnotations:
-          backup.velero.io/backup-volumes: datadir
     securityContext:
-      # Security context settings
+      # Security context settings - need to use root or else there will be problems due to the underlying image trying to do some things as root already
       runAsUser: 0
       runAsGroup: 0
       fsGroup: 0
@@ -63,7 +56,7 @@ spec:
             restricted: false
         listeners:
         - query_port: 25577
-          motd: '&1eviljungle lobby'
+          motd: '&1eviljungle hub'
           priorities:
           - lobby
           bind_local_address: true
@@ -88,5 +81,3 @@ spec:
       #  stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
       #  forge_support: false
       #  inject_commands: false
-      rcon:
-        enabled: false
