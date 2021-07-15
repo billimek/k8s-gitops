@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: mc-proxy
+  name: waterfall
   namespace: default
 spec:
   interval: 5m
@@ -19,7 +19,6 @@ spec:
   values:
     image: itzg/bungeecord
     imageTag: 2021.4.0-java11
-    nameOverride: mc-proxy
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
@@ -27,7 +26,11 @@ spec:
         Size: 1Gi
     podAnnotations:
           backup.velero.io/backup-volumes: datadir
-
+    securityContext:
+      # Security context settings
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
     minecraftProxy:
       type: WATERFALL
       # A list of .jar URLs to download into the plugins folder.
