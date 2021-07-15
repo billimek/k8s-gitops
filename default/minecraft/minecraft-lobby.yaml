@@ -28,7 +28,7 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: TRUE
-      SPIGET_RESOURCES: "6245,91347"
+      SPIGET_RESOURCES: "9089,8631,28140"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
