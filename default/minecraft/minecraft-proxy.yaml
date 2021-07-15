@@ -24,6 +24,9 @@ spec:
       runAsUser: 0
       runAsGroup: 0
       fsGroup: 0
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     minecraftProxy:
       type: WATERFALL
       # A list of .jar URLs to download into the plugins folder.
