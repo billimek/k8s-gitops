@@ -34,6 +34,7 @@ spec:
       type: PAPER
       paperDownloadUrl: https://papermc.io/api/v1/paper/1.17.1/latest/download
       forceReDownload: true
+      onlineMode: false
       difficulty: peaceful
       maxTickTime: -1
       serviceType: ClusterIP
