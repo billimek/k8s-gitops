@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: hotio/readarr
-      tag: nightly-0.1.0.883
+      tag: nightly-0.1.0.885
     env:
       TZ: "America/New_York"
       # PUID: 1001
