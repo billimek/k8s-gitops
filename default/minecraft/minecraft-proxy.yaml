@@ -66,9 +66,13 @@ spec:
             address: mc-minecraft:25565
             restricted: false
           survival:
-            motd: 'Fathers Day SMP'
+            motd: 'Private Survival SMP'
             address: mcsv-minecraft:25565
             restricted: true
+          survival2:
+            motd: 'Public Survival HARDCORE SMP'
+            address: mcsv2-minecraft:25565
+            restricted: false
         listeners:
         - query_port: 25577
           motd: '&3eviljungle &6&Llobby'
