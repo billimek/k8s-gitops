@@ -1,0 +1,77 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mcsv2
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
+      chart: minecraft
+      version: 3.4.2
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image: itzg/minecraft-server
+    imageTag: 2021.15.0-java16
+    persistence:
+      storageClass: "rook-ceph-block"
+      dataDir:
+        enabled: true
+        Size: 10Gi
+    resources:
+      requests:
+        memory: 4096Mi
+        cpu: 250m
+      limits:
+        memory: 5120Mi
+    startupProbe:
+      enabled: true
+    podAnnotations:
+      backup.velero.io/backup-volumes: datadir
+    extraEnv:
+      ENABLE_AUTOPAUSE: FALSE
+      SPIGET_RESOURCES: "274,74354,8631,28140"
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      type: PAPER
+      paperDownloadUrl: https://papermc.io/api/v1/paper/1.17.1/latest/download
+      forceReDownload: true
+      jvmOpts: "-Xms4G -Xmx4G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true"
+      memory: 4096M
+      difficulty: normal
+      hardcore: true
+      maxTickTime: -1
+      serviceType: ClusterIP
+      gameMode: survival
+      motd: "\u00A76\u00A7lpublic survival\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP HARDCORE\u00A7r\n"
+      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
+      rcon:
+        enabled: false
+        port: 25575
+        password: "mc-rcon"
+        serviceType: LoadBalancer
+      extraPorts:
+        - name: map
+          containerPort: 8123
+          service:
+            enabled: true
+            type: ClusterIP
+            port: 8123
+          ingress:
+            enabled: true
+            annotations:
+              kubernetes.io/ingress.class: nginx
+              nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+            hosts:
+              - name: mcsv2-map.eviljungle.com
+                path: /
+            tls:
+            - hosts:
+              - mcsv2.eviljungle.com
