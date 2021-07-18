@@ -93,7 +93,7 @@ spec:
           includedNamespaces:
           - default
       mcsv-minecraft-hourly:
-        schedule: "0 */6 * * *"
+        schedule: "0 * * * *"
         template:
           labelSelector:
             matchLabels:
