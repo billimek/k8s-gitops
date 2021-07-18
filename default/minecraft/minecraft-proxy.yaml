@@ -47,11 +47,16 @@ spec:
           default:
           - bungeecord.command.server
           - bungeecord.command.list
+          - alert.trigger
           admin:
           - bungeecord.command.alert
           - bungeecord.command.end
           - bungeecord.command.ip
           - bungeecord.command.reload
+          - alert.receive
+          - alert.receive.firstjoin
+          - alert.command.toggle
+          - alert.command.reload
           family:
           - bungeecord.server.survival
         timeout: 30000
