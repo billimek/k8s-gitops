@@ -48,6 +48,8 @@ spec:
           - bungeecord.command.end
           - bungeecord.command.ip
           - bungeecord.command.reload
+          family:
+          - bungeecord.server.survival
         timeout: 30000
         log_pings: true
         log_commands: false
@@ -64,7 +66,7 @@ spec:
           survival:
             motd: 'Fathers Day SMP'
             address: mcsv-minecraft:25565
-            restricted: false
+            restricted: true
         listeners:
         - query_port: 25577
           motd: '&3eviljungle &6&Llobby'
@@ -78,6 +80,11 @@ spec:
         groups:
           billimek:
           - admin
+          - family
+          AnsleyElla:
+          - family
+          BrinleyHarper:
+          - family
       #    forced_hosts:
       #      pvp.md-5.net: pvp
       #    max_players: 1
