@@ -56,6 +56,8 @@ spec:
     - https://github.com/panodata/grafana-map-panel/releases/download/0.15.0/grafana-map-panel-0.15.0.zip;grafana-worldmap-panel-ng
     serviceMonitor:
       enabled: true
+    serviceAccount:
+      autoMount: true
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
