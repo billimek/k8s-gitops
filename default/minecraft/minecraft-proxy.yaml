@@ -77,7 +77,7 @@ spec:
             address: mcsv-minecraft:25565
             restricted: true
           survival2:
-            motd: 'Public Survival HARDCORE SMP'
+            motd: 'Public Survival EZ-mode SMP'
             address: mcsv2-minecraft:25565
             restricted: false
         listeners:
