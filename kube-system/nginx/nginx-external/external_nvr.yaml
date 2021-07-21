@@ -29,4 +29,4 @@ spec:
   - name: http
     port: 81
   type: ExternalName
-  externalName: 10.0.7.13
+  externalName: nvr.local
