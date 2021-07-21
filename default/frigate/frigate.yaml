@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://blakeblackshear.github.io/blakeshome-charts/
       chart: frigate
-      version: 5.0.1
+      version: 5.0.2
       sourceRef:
         kind: HelmRepository
         name: blakeshome-charts
