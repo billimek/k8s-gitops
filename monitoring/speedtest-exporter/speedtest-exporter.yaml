@@ -26,6 +26,6 @@ spec:
     prometheus:
       podMonitor:
         enabled: true
-        interval: 6h
+        interval: 1h
         scrapeTimeout: 1m
         additionalLabels: {}
