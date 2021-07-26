@@ -50,7 +50,7 @@ prometheus:
       bearer_token: '$PROM_HASS_TOKEN'
       scheme: http
       static_configs:
-      - targets: 
+      - targets:
         - home-assistant.default.svc:8123
     - job_name: 'upsc-exporter'
       metrics_path: '/metrics'

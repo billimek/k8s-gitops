@@ -30,4 +30,3 @@
 1. shut-down (scale to 0) workloads that need to be restored - see [scale.sh](scale.sh)
 1. restore-from-backup necessary workloads - see [backup.sh](backup.sh)
 1. scale-up workloads from step 1
-

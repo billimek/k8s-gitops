@@ -13,7 +13,7 @@
 In order to restore a given workload, the follow steps should work:
 
 1. A backup should already be created either via:
-   * a global backup (e.g. a scheduled backup), 
+   * a global backup (e.g. a scheduled backup),
    * or via a backup created using a label selector (that's present on the deployment, pv, & pvc) for the application, e.g. `velero backup create test-minecraft --selector "app=mc-test-minecraft" --wait`
 1. <Do whatever action results in the active data getting lost (e.g. `kubectl delete hr mc-test`)>
 1. Delete the unwanted new data & associate Deployment/StatefulSet/Daemonset, e.g. `kubectl delete deployment mc-test-minecraft && kubectl delete pvc mc-test-minecraft-datadir`

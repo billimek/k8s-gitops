@@ -13,4 +13,3 @@ communications:
   webhook:
     enabled: false
     url: '$DISCORD_BOTKUBE_WEBHOOK_URL'
-

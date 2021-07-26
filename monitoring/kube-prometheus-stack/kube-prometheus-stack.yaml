@@ -196,7 +196,7 @@ spec:
                   values:
                   - prometheus
               topologyKey: "kubernetes.io/hostname"
-      thanosService: 
+      thanosService:
         enabled: true
   valuesFrom:
   - kind: Secret

@@ -33,4 +33,3 @@ spec:
       Verify_SSL = False
       [MODEM]
       URL = http://192.168.100.1/RgConnect.asp
-

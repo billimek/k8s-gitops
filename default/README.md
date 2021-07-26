@@ -44,7 +44,7 @@ Installs [goldilocks](https://github.com/FairwindsOps/goldilocks): to help with 
 ![](https://i.imgur.com/04TtJFw.png)
 
 * [home-assistant.yaml](home-assistant/home-assistant.yaml)
-* Home Assistant configuration & settings are persisted to a [configuration repo](https://github.com/billimek/home-assistant-config) 
+* Home Assistant configuration & settings are persisted to a [configuration repo](https://github.com/billimek/home-assistant-config)
 
 # minecraft
 

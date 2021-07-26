@@ -83,7 +83,7 @@ spec:
       default:
         1-node-exporter:
           url: https://grafana.com/api/dashboards/11074/revisions/9/download
-          datasource: Prometheus 
+          datasource: Prometheus
         blocky:
           url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.13/docs/blocky-grafana.json
           datasource: Prometheus

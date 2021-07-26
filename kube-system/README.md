@@ -71,7 +71,7 @@ Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-
 
 # reloader
 
-[reloader](https://github.com/stakater/Reloader): A Kubernetes controller to watch changes in ConfigMap and Secrets and do rolling upgrades on Pods with their associated Deployment, StatefulSet, DaemonSet and DeploymentConfig 
+[reloader](https://github.com/stakater/Reloader): A Kubernetes controller to watch changes in ConfigMap and Secrets and do rolling upgrades on Pods with their associated Deployment, StatefulSet, DaemonSet and DeploymentConfig
 
 * [reloader/](reloader/reloader.yaml)
 

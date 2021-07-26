@@ -20,7 +20,7 @@ installFlux() {
   message "installing fluxv2"
   flux check --pre > /dev/null
   FLUX_PRE=$?
-  if [ $FLUX_PRE != 0 ]; then 
+  if [ $FLUX_PRE != 0 ]; then
     echo -e "flux prereqs not met:\n"
     flux check --pre
     exit 1
@@ -38,7 +38,7 @@ installFlux() {
     --network-policy=false
 
   FLUX_INSTALLED=$?
-  if [ $FLUX_INSTALLED != 0 ]; then 
+  if [ $FLUX_INSTALLED != 0 ]; then
     echo -e "flux did not install correctly, aborting!"
     exit 1
   fi

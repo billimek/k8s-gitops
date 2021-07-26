@@ -22,7 +22,7 @@ spec:
               number: 443
   tls:
   - hosts:
-    - truenas.eviljungle.com   
+    - truenas.eviljungle.com
 ---
 apiVersion: v1
 kind: Service

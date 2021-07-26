@@ -18,7 +18,7 @@ spec:
       expr: upsc_battery_runtime/60 < 5
       for: 30s
       labels:
-        severity: critical       
+        severity: critical
     - alert: UPS10MinutesRemain
       annotations:
         description: UPS almost depleted
