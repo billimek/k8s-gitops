@@ -1,23 +1,28 @@
-# Binaries for programs and plugins
-*.exe
-*.dll
-*.so
-*.dylib
 
-# Test binary, build with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-# Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
-.glide/
-
+# Editors
+.vscode/
+# Trash
+.DS_Store
+Thumbs.db
+# Binaries
+bin
+/flux
+*.iso
+# Temp folders
+.temp*
+.private/
+.logs/
+.task/
+# Ansible
+xanmanning.k3s*
+# Sops
+.decrypted~*
+# Kubernetes
+kubeconfig
+# Other
+report.html
 .env
 auth
 master.key
 *.snap
 setup/cluster/*cluster.yml
-*.rkestate
-kubeconfig
-bin/
