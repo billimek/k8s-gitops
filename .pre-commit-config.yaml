@@ -2,13 +2,13 @@
 
 fail_fast: false
 repos:
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.26.1
-    hooks:
-      - args:
-          - --config-file
-          - .github/lint/.yamllint.yaml
-        id: yamllint
+  # - repo: https://github.com/adrienverge/yamllint
+  #   rev: v1.26.1
+  #   hooks:
+  #     - args:
+  #         - --config-file
+  #         - .github/lint/.yamllint.yaml
+  #       id: yamllint
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
@@ -28,10 +28,10 @@ repos:
     rev: v2.0.3
     hooks:
       - id: forbid-secrets
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.28.1
-    hooks:
-      - id: markdownlint
-        args:
-          - --config
-          - ".github/lint/.markdownlint.yaml"
+  # - repo: https://github.com/igorshubovych/markdownlint-cli
+  #   rev: v0.28.1
+  #   hooks:
+  #     - id: markdownlint
+  #       args:
+  #         - --config
+  #         - ".github/lint/.markdownlint.yaml"
