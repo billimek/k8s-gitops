@@ -48,6 +48,9 @@ spec:
           - bungeecord.command.server
           - bungeecord.command.list
           - alert.trigger
+          - slashserver.lobby
+          - slashserver.survival
+          - slashserver.survival2
           admin:
           - bungeecord.command.alert
           - bungeecord.command.end
