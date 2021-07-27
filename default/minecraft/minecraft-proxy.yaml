@@ -30,7 +30,7 @@ spec:
     podAnnotations:
       configmap.reloader.stakater.com/reload: "waterfall-minecraft-proxy-config"
     extraEnv:
-      SPIGET_PLUGINS: "78915,89687"
+      SPIGET_PLUGINS: "78915,75"
     minecraftProxy:
       type: WATERFALL
       # A list of .jar URLs to download into the plugins folder.
