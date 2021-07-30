@@ -49,6 +49,10 @@ spec:
         cpu: 100m
       limits:
         memory: 500Mi
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
     podAnnotations:
       backup.velero.io/backup-volumes: config
     tolerations:

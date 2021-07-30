@@ -47,6 +47,10 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
     resources:
       requests:
         memory: 350Mi
