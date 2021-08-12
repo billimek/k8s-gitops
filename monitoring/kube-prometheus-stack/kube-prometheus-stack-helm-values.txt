@@ -43,7 +43,6 @@ prometheus:
       - targets:
         - proxmox-b:9100
         - proxmox-c:9100
-        - whitebridge:9100
     - job_name: 'home-assistant'
       scrape_interval: 60s
       metrics_path: '/api/prometheus'

@@ -196,8 +196,7 @@ loadSecretsToVault() {
 
 loadSecretsToVault-oneoff() {
   message "writing secrets to vault"
-  # kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
-  kvault "default/frigate/frigate-helm-values.txt"
+  kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
 
 }
 
