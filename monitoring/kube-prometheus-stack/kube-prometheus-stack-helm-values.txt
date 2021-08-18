@@ -37,13 +37,13 @@ prometheus:
       honor_labels: true
       static_configs:
       - targets:
-        - nvr.eviljungle.com:9182
+        - nvr.home:9182
     - job_name: 'node'
       static_configs:
       - targets:
-        - proxmox-b:9100
-        - proxmox-c:9100
-        - opnsense:9100
+        - proxmox-b.home:9100
+        - proxmox-c.home:9100
+        - opnsense.home:9100
     - job_name: 'home-assistant'
       scrape_interval: 60s
       metrics_path: '/api/prometheus'
@@ -56,7 +56,7 @@ prometheus:
       metrics_path: '/metrics'
       static_configs:
       - targets:
-        - proxmox-b:8081
-        - proxmox-c:8081
-        - k3s-pi4-c:8081
-        - pi3-b:8081
+        - proxmox-b.home:8081
+        - proxmox-c.home:8081
+        - k3s-pi4-c.home:8081
+        - pi3-b.home:8081
