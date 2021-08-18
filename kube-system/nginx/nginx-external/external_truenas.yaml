@@ -33,4 +33,4 @@ spec:
   - name: https
     port: 443
   type: ExternalName
-  externalName: proxmox.local
+  externalName: truenas.eviljungle.com
