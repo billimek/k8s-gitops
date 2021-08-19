@@ -63,10 +63,10 @@ spec:
         porch:
           ffmpeg:
             inputs:
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch.eviljungle.com:554/cam/realmonitor?channel=1&subtype=1
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch.eviljungle.com:554/cam/realmonitor?channel=1&subtype=0
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
                   - clips
@@ -98,10 +98,10 @@ spec:
         front:
           ffmpeg:
             inputs:
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front.eviljungle.com:554/cam/realmonitor?channel=1&subtype=1
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front.eviljungle.com:554/cam/realmonitor?channel=1&subtype=0
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
                   - clips
@@ -126,10 +126,10 @@ spec:
         driveway:
           ffmpeg:
             inputs:
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway.eviljungle.com:554/cam/realmonitor?channel=1&subtype=1
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway.eviljungle.com:554/cam/realmonitor?channel=1&subtype=0
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
                   - clips
@@ -154,10 +154,10 @@ spec:
         pool:
           ffmpeg:
             inputs:
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool.eviljungle.com:554/cam/realmonitor?channel=1&subtype=1
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool554/cam/realmonitor?channel=1&subtype=1
                 roles:
                   - detect
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool.eviljungle.com:554/cam/realmonitor?channel=1&subtype=0
+              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
                   - clips
@@ -188,7 +188,7 @@ spec:
         basement:
           ffmpeg:
             inputs:
-              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement.eviljungle.com:554/h264Preview_01_sub
+              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement554/h264Preview_01_sub
               - path: rtmp://basement/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
                   - detect
@@ -205,7 +205,7 @@ spec:
                   - +genpts+discardcorrupt
                   - '-use_wallclock_as_timestamps'
                   - '1'
-              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement.eviljungle.com:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
               - path: rtmp://basement/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
                   # - rtmp
@@ -247,7 +247,7 @@ spec:
         # wyze-1:
         #   ffmpeg:
         #     inputs:
-        #       - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1.eviljungle.com:8554/unicast
+        #       - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1:8554/unicast
         #         roles:
         #           - detect
         #           - rtmp
