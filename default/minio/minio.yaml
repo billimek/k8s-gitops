@@ -40,6 +40,16 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - minio
+          topologyKey: "kubernetes.io/hostname"
     resources:
       requests:
         memory: 350Mi
