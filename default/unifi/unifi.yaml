@@ -31,7 +31,7 @@ spec:
         enabled: true
         image:
           repository: grafana/promtail
-          tag: 2.2.1
+          tag: 2.3.0
           pullPolicy: IfNotPresent
         loki:
           url: http://loki.logs.svc.cluster.local:3100/loki/api/v1/push
