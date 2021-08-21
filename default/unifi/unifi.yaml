@@ -19,15 +19,15 @@ spec:
   values:
     image:
       repository: jacobalberty/unifi
-      tag: "6.0"
+      tag: v6.2.26
     persistence:
       data:
         enabled: true
         size: 20Gi
         storageClass: rook-ceph-block
         accessMode: ReadWriteOnce
-    timezone: "America/New_York"
-    runAsRoot: false
+    env:
+      TZ: "America/New_York"
     logging:
       promtail:
         enabled: true
@@ -54,9 +54,9 @@ spec:
     service:
       main:
         type: LoadBalancer
+        loadBalancerIP: 10.0.6.55
         annotations:
           metallb.universe.tf/allow-shared-ip: unifi
-        loadBalancerIP: 10.0.6.55
         externalTrafficPolicy: Local
     podAnnotations:
       backup.velero.io/backup-volumes: unifi-data
