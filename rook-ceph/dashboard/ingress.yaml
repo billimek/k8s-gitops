@@ -19,6 +19,7 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
           service:
             name: rook-ceph-mgr-dashboard
