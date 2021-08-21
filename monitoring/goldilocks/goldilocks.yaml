@@ -29,5 +29,5 @@ spec:
         hosts:
           - host: goldilocks.eviljungle.com
         tls:
-          hosts:
+          - hosts:
             - goldilocks.eviljungle.com
