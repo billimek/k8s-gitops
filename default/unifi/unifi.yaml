@@ -54,10 +54,29 @@ spec:
     service:
       main:
         type: LoadBalancer
-        loadBalancerIP: 10.0.6.55
         annotations:
           metallb.universe.tf/allow-shared-ip: unifi
+        loadBalancerIP: 10.0.6.55
         externalTrafficPolicy: Local
+      stun:
+        enabled: false
+      syslog:
+        enabled: false
+      discovery:
+        enabled: false
+      udp:
+        stun:
+          enabled: true
+          port: 3478
+          protocol: UDP
+        syslog:
+          enabled: true
+          port: 5514
+          protocol: UDP
+        discovery:
+          enabled: true
+          port: 10001
+          protocol: UDP
     podAnnotations:
       backup.velero.io/backup-volumes: unifi-data
     resources:
