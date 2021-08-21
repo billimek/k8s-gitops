@@ -25,6 +25,7 @@ spec:
         enabled: true
         size: 20Gi
         storageClass: rook-ceph-block
+        accessMode: ReadWriteOnce
     timezone: "America/New_York"
     runAsRoot: false
     logging:
