@@ -28,6 +28,7 @@ spec:
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts:
           - host: goldilocks.eviljungle.com
+            paths: []
         tls:
           - hosts:
             - goldilocks.eviljungle.com
