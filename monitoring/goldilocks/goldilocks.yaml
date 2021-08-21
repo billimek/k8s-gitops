@@ -19,6 +19,7 @@ spec:
   values:
     dashboard:
       enabled: true
+      replicaCount: 1
       ingress:
         enabled: false
         # annotations:
