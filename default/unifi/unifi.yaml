@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: unifi
-      version: 2.0.4
+      version: 4.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -21,11 +21,13 @@ spec:
       repository: jacobalberty/unifi
       tag: "6.0"
     persistence:
-      enabled: true
-      size: 20Gi
-      storageClass: rook-ceph-block
-    timezone: "America/New_York"
-    runAsRoot: false
+      data:
+        enabled: true
+        size: 20Gi
+        storageClass: rook-ceph-block
+        accessMode: ReadWriteOnce
+    env:
+      TZ: "America/New_York"
     logging:
       promtail:
         enabled: true
@@ -36,34 +38,53 @@ spec:
         loki:
           url: http://loki.logs.svc.cluster.local:3100/loki/api/v1/push
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      hosts: [unifi.eviljungle.com]
-      tls:
-      - hosts:
-        - unifi.eviljungle.com
-    guiService:
-      type: LoadBalancer
-      loadBalancerIP: 10.0.6.55
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
-    controllerService:
-      type: LoadBalancer
-      loadBalancerIP: 10.0.6.55
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
-    stunService:
-      type: LoadBalancer
-      loadBalancerIP: 10.0.6.55
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
-    discoveryService:
-      type: LoadBalancer
-      loadBalancerIP: 10.0.6.55
-      annotations:
-        metallb.universe.tf/allow-shared-ip: unifi
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        hosts:
+          - host: "unifi.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "unifi.eviljungle.com"
+    service:
+      main:
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/allow-shared-ip: unifi
+        loadBalancerIP: 10.0.6.55
+        externalTrafficPolicy: Local
+        ports:
+          stun:
+            enabled: false
+          syslog:
+            enabled: false
+          discovery:
+            enabled: false
+      udp:
+        enabled: true
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/allow-shared-ip: unifi
+        loadBalancerIP: 10.0.6.55
+        externalTrafficPolicy: Local
+        ports:
+          stun:
+            enabled: true
+            port: 3478
+            protocol: UDP
+          syslog:
+            enabled: true
+            port: 5514
+            protocol: UDP
+          discovery:
+            enabled: true
+            port: 10001
+            protocol: UDP
     podAnnotations:
       backup.velero.io/backup-volumes: unifi-data
     resources:
