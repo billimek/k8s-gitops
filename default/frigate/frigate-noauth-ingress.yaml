@@ -15,8 +15,10 @@ spec:
       paths:
       - path: /.*/best\.jpg
         backend:
-          serviceName: frigate
-          servicePort: http
+          service:
+            name: frigate
+            port:
+              number: 80
   tls:
   - hosts:
     - frigate.eviljungle.com
