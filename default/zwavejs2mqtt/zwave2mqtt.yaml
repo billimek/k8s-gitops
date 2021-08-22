@@ -24,6 +24,12 @@ spec:
       TZ: "America/New_York"
     securityContext:
       privileged: true
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
     service:
       main:
         ports:

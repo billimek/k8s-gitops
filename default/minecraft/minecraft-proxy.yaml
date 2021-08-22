@@ -24,6 +24,12 @@ spec:
       runAsUser: 0
       runAsGroup: 0
       fsGroup: 0
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
     tolerations:
     - key: "arm"
       operator: "Exists"

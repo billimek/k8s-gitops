@@ -295,10 +295,10 @@ spec:
                 - {key: "feature.node.kubernetes.io/custom-coral-tpu", operator: In, values: ["true"]}
     resources:
       requests:
-        memory: 1000Mi
+        memory: 2000Mi
         cpu: 750m
       limits:
-        memory: 2500Mi
+        memory: 2000Mi
         gpu.intel.com/i915: 1
     probes:
       startup:

@@ -27,10 +27,10 @@ spec:
         Size: 10Gi
     resources:
       requests:
-        memory: 4096Mi
+        memory: 6Gi
         cpu: 250m
       limits:
-        memory: 5120Mi
+        memory: 6Gi
     startupProbe:
       enabled: true
     podAnnotations:

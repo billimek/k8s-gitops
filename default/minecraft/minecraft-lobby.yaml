@@ -24,6 +24,12 @@ spec:
       dataDir:
         enabled: true
         Size: 5Gi
+    resources:
+      requests:
+        memory: 2Gi
+        cpu: 250m
+      limits:
+        memory: 2Gi
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
     extraEnv:

@@ -79,10 +79,10 @@ spec:
 
     resources:
       requests:
-        memory: 250Mi
-        cpu: 500m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 1500Mi
+        memory: 340Mi
 
 
     additionalContainers:
@@ -118,7 +118,7 @@ spec:
             memory: 1Gi
           requests:
             cpu: 50m
-            memory: 50Mi
+            memory: 200Mi
         startupProbe:
           failureThreshold: 60
           periodSeconds: 10
