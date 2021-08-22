@@ -34,9 +34,9 @@ spec:
           cache_location: /data/loki/index_cache
           resync_interval: 5s
           shared_store: s3
-      # compactor:
-      #   working_directory: /data/loki/boltdb-shipper-compactor
-      #   shared_store: s3
+      compactor:
+        working_directory: /data/loki/boltdb-shipper-compactor
+        shared_store: s3
     serviceMonitor:
       enabled: true
     tolerations:
