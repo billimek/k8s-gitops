@@ -19,7 +19,7 @@ spec:
           service:
             name: external-minio
             port:
-              number: 443
+              number: 9000
   tls:
   - hosts:
     - minio.eviljungle.com
