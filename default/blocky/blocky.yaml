@@ -20,9 +20,9 @@ spec:
     image:
       repository: ghcr.io/0xerr0r/blocky
       tag: v0.15
-    replicas: 3
-    strategy:
-      type: RollingUpdate
+    controller:
+      replicas: 3
+      strategy: RollingUpdate
     env:
       TZ: "America/New_York"
     service:
