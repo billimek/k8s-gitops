@@ -83,18 +83,19 @@ spec:
     config: |
       upstream:
         externalResolvers:
-        - tcp+udp:8.8.8.8
-        - tcp+udp:8.8.4.4
-        - tcp+udp:1.1.1.1
-        - tcp-tls:1.0.0.1:853
-        - https://cloudflare-dns.com/dns-query
+        - tcp+udp:10.0.7.1
+        # - tcp+udp:8.8.8.8
+        # - tcp+udp:8.8.4.4
+        # - tcp+udp:1.1.1.1
+        # - tcp-tls:1.0.0.1:853
+        # - https://cloudflare-dns.com/dns-query
       conditional:
         mapping:
-          local: tcp+udp:10.0.7.1
-          home: tcp+udp:10.0.7.1
+          # local: tcp+udp:10.0.7.1
+          # home: tcp+udp:10.0.7.1
           status.eviljungle.com: tcp+udp:1.1.1.1
           cloud.eviljungle.com: tcp+udp:8.8.8.8
-          eviljungle.com: tcp+udp:10.0.6.99
+          # eviljungle.com: tcp+udp:10.0.6.99
       blocking:
         blackLists:
           ads:
