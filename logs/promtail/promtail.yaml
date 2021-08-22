@@ -39,7 +39,7 @@ spec:
                 target_label: 'hostname'
           - job_name: syslog
             syslog:
-              listen_address: 0.0.0.0:1514
+              listen_address: 0.0.0.0:{{ .Values.extraPorts.syslog.containerPort }}
               label_structured_data: true
               labels:
                 job: "syslog"
@@ -57,6 +57,7 @@ spec:
           type: LoadBalancer
           port: 1514
           loadBalancerIP: 10.0.6.51
+          externalTrafficPolicy: Local
     extraVolumes:
       - name: journal
         hostPath:
