@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: raspbernetes/node-feature-discovery
-      tag: "v0.8.1"
+      tag: "v0.9.0"
     worker:
       config: |-
         core:
