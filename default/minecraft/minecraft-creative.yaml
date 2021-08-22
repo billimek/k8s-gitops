@@ -30,7 +30,7 @@ spec:
         memory: 6Gi
         cpu: 250m
       limits:
-        memory: 6Gi
+        memory: 7Gi
     livenessProbe:
       initialDelaySeconds: 30
       periodSeconds: 5
