@@ -91,6 +91,7 @@ spec:
       conditional:
         mapping:
           local: tcp+udp:10.0.7.1
+          home: tcp+udp:10.0.7.1
           status.eviljungle.com: tcp+udp:1.1.1.1
           cloud.eviljungle.com: tcp+udp:8.8.8.8
           eviljungle.com: tcp+udp:10.0.6.99
