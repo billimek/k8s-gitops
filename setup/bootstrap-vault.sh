@@ -185,7 +185,6 @@ loadSecretsToVault() {
   kvault "default/emqx/emqx-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
-  kvault "default/minio/minio-helm-values.txt"
   kvault "default/monica/monica-helm-values.txt"
   kvault "default/plex/plex-helm-values.txt"
   kvault "default/rtorrent-flood/rtorrent-flood-helm-values.txt"
