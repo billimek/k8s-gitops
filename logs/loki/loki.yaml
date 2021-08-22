@@ -19,12 +19,24 @@ spec:
   values:
     replicas: 3
     config:
+      schema_config:
+        configs:
+        - from: "2020-10-24"
+          store: boltdb-shipper
+          object_store: s3
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
       storage_config:
         boltdb_shipper:
           active_index_directory: /data/loki/index
           cache_location: /data/loki/index_cache
           resync_interval: 5s
           shared_store: s3
+      # compactor:
+      #   working_directory: /data/loki/boltdb-shipper-compactor
+      #   shared_store: s3
     serviceMonitor:
       enabled: true
     tolerations:
