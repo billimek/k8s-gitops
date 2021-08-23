@@ -25,3 +25,7 @@ spec:
     kind: GitRepository
     name: flux-system
   validation: none
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-gpg
