@@ -26,6 +26,8 @@ spec:
     #     operator: "Exists"
     ingress:
       enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
       path: /oauth2
       hosts: [auth.eviljungle.com]
       tls:
