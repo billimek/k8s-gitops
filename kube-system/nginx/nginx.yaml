@@ -28,6 +28,8 @@ spec:
       service:
         loadBalancerIP: 10.0.6.150
         externalTrafficPolicy: Local
+      ingressClassResource:
+        default: true
       metrics:
         enabled: true
         serviceMonitor:
