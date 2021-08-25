@@ -29,4 +29,4 @@ spec:
   - name: minio
     port: 9000
   type: ExternalName
-  externalName: 10.0.7.7
+  externalName: truenas
