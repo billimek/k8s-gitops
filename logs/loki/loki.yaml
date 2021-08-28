@@ -42,13 +42,13 @@ spec:
         min_join_backoff: 1s
       schema_config:
         configs:
-        - from: "2020-05-15"
+        - from: "2020-10-24"
           store: boltdb-shipper
           object_store: s3
           schema: v11
           index:
             prefix: index_
-            period: 168h
+            period: 24h
       storage_config:
         boltdb_shipper:
           active_index_directory: /loki/index
