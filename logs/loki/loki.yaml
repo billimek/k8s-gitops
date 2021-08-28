@@ -17,7 +17,7 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    replicas: 1
+    replicas: 3
     config:
       distributor:
         ring:
