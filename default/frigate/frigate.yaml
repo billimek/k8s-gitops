@@ -188,8 +188,8 @@ spec:
         basement:
           ffmpeg:
             inputs:
-              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/h264Preview_01_sub
-              - path: rtmp://basement/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement-cam:554/h264Preview_01_sub
+              - path: rtmp://basement-cam/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
                   - detect
                 input_args:
@@ -205,8 +205,8 @@ spec:
                   - +genpts+discardcorrupt
                   - '-use_wallclock_as_timestamps'
                   - '1'
-              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
-              - path: rtmp://basement/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+              # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement-cam:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+              - path: rtmp://basement-cam/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
                   # - rtmp
                   - clips
