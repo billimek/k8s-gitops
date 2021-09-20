@@ -56,8 +56,12 @@ spec:
         externalTrafficPolicy: Local
         annotations:
           metallb.universe.tf/allow-shared-ip: blocky
-    prometheus:
+    metrics:
+      enabled: true
       serviceMonitor:
+        interval: 30s
+        scrapeTimeout: 10s
+      prometheusRule:
         enabled: true
     podAnnotations:
       configmap.reloader.stakater.com/reload: "blocky-config"
