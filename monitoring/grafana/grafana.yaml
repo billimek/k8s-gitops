@@ -39,7 +39,7 @@ spec:
       GF_DISABLE_SANITIZE_HTML: true
       GF_PANELS_DISABLE_SANITIZE_HTML: true
       GF_LOG_FILTERS: rendering:debug
-      GF_PLUGIN_ALLOW_LOADING_UNSIGNED_PLUGINS: "panodata-map-panel"
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: "panodata-map-panel"
     ingress:
       enabled: true
       annotations:
