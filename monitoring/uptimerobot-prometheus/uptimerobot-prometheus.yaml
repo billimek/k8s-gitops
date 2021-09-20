@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: uptimerobot-prometheus
-      version: 5.0.0
+      version: 6.0.1
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -23,8 +23,12 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-    prometheus:
+    metrics:
+      enabled: true
       serviceMonitor:
+        interval: 3m
+        scrapeTimeout: 1m
+      prometheusRule:
         enabled: true
   valuesFrom:
   - kind: Secret
