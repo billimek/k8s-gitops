@@ -23,8 +23,12 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-    prometheus:
+    metrics:
+      enabled: true
       serviceMonitor:
+        interval: 3m
+        scrapeTimeout: 1m
+      prometheusRule:
         enabled: true
   valuesFrom:
   - kind: Secret
