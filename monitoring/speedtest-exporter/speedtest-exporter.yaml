@@ -23,9 +23,14 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-    prometheus:
-      podMonitor:
-        enabled: true
-        interval: 1h
+    metrics:
+      enabled: true
+      serviceMonitor:
+        interval: 60m
         scrapeTimeout: 1m
-        additionalLabels: {}
+      prometheusRule:
+        enabled: true
+        downloadLimit: 200
+        uploadLimit: 25
+        pingLimit: 30
+        jitterLimit: 35
