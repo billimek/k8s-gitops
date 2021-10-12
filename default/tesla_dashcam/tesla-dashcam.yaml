@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tesla-dashcam
+  namespace: default
   labels:
     app.kubernetes.io/instance: tesla-dashcam
     app.kubernetes.io/name: tesla-dashcam
