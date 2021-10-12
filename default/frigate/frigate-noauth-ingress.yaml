@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/instance: frigate
     app.kubernetes.io/name: frigate
   name: frigate-noauth
+  namespace: default
 spec:
   rules:
   - host: frigate.eviljungle.com
