@@ -12,7 +12,7 @@ spec:
     name: flux-system
   url: ssh://git@github.com/billimek/k8s-gitops
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: flux-system
@@ -24,7 +24,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  validation: none
   decryption:
     provider: sops
     secretRef:
