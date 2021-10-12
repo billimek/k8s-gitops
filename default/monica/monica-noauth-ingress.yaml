@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/instance: monica
     app.kubernetes.io/name: monica
   name: monica-noauth
+  namespace: default
 spec:
   rules:
   - host: monica.eviljungle.com
