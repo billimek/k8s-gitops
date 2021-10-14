@@ -51,4 +51,4 @@ spec:
   dnsNames:
   - eviljungle.com
   - '*.eviljungle.com'
-  - '*.nd.eviljungle.com'
+  - '*.t.eviljungle.com'
