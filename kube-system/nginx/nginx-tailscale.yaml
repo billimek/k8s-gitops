@@ -20,9 +20,7 @@ spec:
     controller:
       replicaCount: 1
       service:
-        # type: ClusterIP
-        loadBalancerIP: 10.0.6.151
-        externalTrafficPolicy: Local
+        type: ClusterIP
       ingressClassResource:
         name: nginx-tailscale
         enabled: true
