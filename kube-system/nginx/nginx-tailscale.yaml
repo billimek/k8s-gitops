@@ -19,7 +19,6 @@ spec:
   values:
     controller:
       replicaCount: 1
-      use-forwarded-headers: "true"
       service:
         loadBalancerIP: 10.0.6.151
         externalTrafficPolicy: Local
@@ -27,46 +26,9 @@ spec:
         name: nginx-tailscale
         enabled: true
         default: false
-      metrics:
-        enabled: false
-        serviceMonitor:
-          enabled: false
-          namespace: kube-system
-        prometheusRule:
-          enabled: false
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
-      extraArgs:
-        default-ssl-certificate: "cert-manager/acme-crt-secret"
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                - ingress-nginx-tailscale
-              - key: app.kubernetes.io/instance
-                operator: In
-                values:
-                - ingress-nginx
-              - key: app.kubernetes.io/component
-                operator: In
-                values:
-                - controller
-            topologyKey: "kubernetes.io/hostname"
-      # extraVolumes:
-      #   - name: tailscale-state
-      #     persistentVolumeClaim:
-      #       claimName: tailscale-nginx-ingress-state
-      resources:
-        requests:
-          memory: 500Mi
-          cpu: 25m
-        limits:
-          memory: 600Mi
+        controllerValue: "k8s.io/ingress-nginx-tailscale"
+      # extraArgs:
+      #   default-ssl-certificate: "cert-manager/acme-crt-secret"
       extraContainers:
         - name: tailscaled
           image: billimek/ts:latest
