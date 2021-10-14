@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: external-truenas-tailscale
+  namespace: default
+  annotations:
+    # kubernetes.io/ingress.class: nginx-tailscale
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx-tailscale
+  rules:
+  - host: truenas.t.eviljungle.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: external-truenas
+            port:
+              number: 443
+  tls:
+  - hosts:
+    - truenas.t.eviljungle.com
