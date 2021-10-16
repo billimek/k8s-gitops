@@ -29,7 +29,7 @@ spec:
         interval: 3m
         scrapeTimeout: 1m
       prometheusRule:
-        enabled: true
+        enabled: false
   valuesFrom:
   - kind: Secret
     name: "uptimerobot-prometheus-helm-values"
