@@ -29,7 +29,7 @@ spec:
         interval: 60m
         scrapeTimeout: 1m
       prometheusRule:
-        enabled: true
+        enabled: false
         downloadLimit: 200
         uploadLimit: 25
         pingLimit: 30
