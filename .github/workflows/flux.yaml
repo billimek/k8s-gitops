@@ -12,13 +12,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Setup Flux CLI
-        uses: billimek/flux2/action@isolate_flux_binary
+        uses: fluxcd/flux2/action@main
       - name: Update Flux components
         id: update
         run: |
-          UGLY_VERSION="$(bin/flux -v)"
+          UGLY_VERSION="$(flux -v)"
           VERSION="v${UGLY_VERSION#*flux version }"
-          bin/flux install --version="${VERSION}" \
+          flux install --version="${VERSION}" \
+            --components-extra=image-reflector-controller,image-automation-controller \
             --network-policy=false \
             --export > ./flux-system/gotk-components.yaml
           echo "::set-output name=flux_version::$VERSION"
