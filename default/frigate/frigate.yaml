@@ -263,39 +263,39 @@ spec:
           rtmp:
             enabled: false
 
-        wyze-1:
-          ffmpeg:
-            inputs:
-              - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1:8554/unicast
-                roles:
-                  - detect
-                  - rtmp
-                  - clips
-                  - record
-          detect:
-            height: 1080
-            width: 1920
-            fps: 15
-          objects:
-            filters:
-              bird:
-                min_area: 1000
-                # max_area: 100000
-                threshold: 0.60
-          clips:
-            enabled: true
-            objects:
-              - bird
-              - dog
-              - cat
-          snapshots:
-            enabled: true
-            timestamp: False
-            bounding_box: true
-            crop: False
-          record:
-            enabled: true
-            retain_days: 5
+        # wyze-1:
+        #   ffmpeg:
+        #     inputs:
+        #       - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@wyze-1:8554/unicast
+        #         roles:
+        #           - detect
+        #           - rtmp
+        #           - clips
+        #           - record
+        #   detect:
+        #     height: 1080
+        #     width: 1920
+        #     fps: 15
+        #   objects:
+        #     filters:
+        #       bird:
+        #         min_area: 1000
+        #         # max_area: 100000
+        #         threshold: 0.60
+        #   clips:
+        #     enabled: true
+        #     objects:
+        #       - bird
+        #       - dog
+        #       - cat
+        #   snapshots:
+        #     enabled: true
+        #     timestamp: False
+        #     bounding_box: true
+        #     crop: False
+        #   record:
+        #     enabled: true
+        #     retain_days: 5
     ingress:
       enabled: true
       annotations:
