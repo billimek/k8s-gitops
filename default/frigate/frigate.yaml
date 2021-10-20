@@ -78,7 +78,6 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
-                  - clips
                   - record
           detect:
             height: 480
@@ -91,21 +90,21 @@ spec:
                 max_area: 100000
                 threshold: 0.75
                 min_score: 0.60
-          clips:
-            enabled: True
-            objects:
-              - person
-              - dog
-              - cat
           snapshots:
             enabled: True
             timestamp: False
             bounding_box: True
             crop: False
           record:
-            enabled: false
-            retain_days: 5
-
+            enabled: true
+            retain_days: 0
+            events:
+              retain:
+                default: 14
+                objects:
+                  - person
+                  - dog
+                  - cat
         front:
           ffmpeg:
             inputs:
@@ -121,20 +120,21 @@ spec:
             height: 480
             width: 704
             fps: 5
-          clips:
-            enabled: true
-            objects:
-              - person
-              - dog
-              - cat
           snapshots:
             enabled: true
             timestamp: False
             bounding_box: true
             crop: False
           record:
-            enabled: false
-            retain_days: 5
+            enabled: true
+            retain_days: 0
+            events:
+              retain:
+                default: 14
+                objects:
+                  - person
+                  - dog
+                  - cat
 
         driveway:
           ffmpeg:
@@ -151,20 +151,21 @@ spec:
             height: 480
             width: 704
             fps: 5
-          clips:
-            enabled: true
-            objects:
-              - person
-              - dog
-              - cat
           snapshots:
             enabled: true
             timestamp: False
             bounding_box: true
             crop: False
           record:
-            enabled: false
-            retain_days: 5
+            enabled: true
+            retain_days: 0
+            events:
+              retain:
+                default: 14
+                objects:
+                  - person
+                  - dog
+                  - cat
 
         pool:
           ffmpeg:
@@ -187,20 +188,21 @@ spec:
                 min_area: 1000
                 max_area: 100000
                 threshold: 0.6
-          clips:
-            enabled: true
-            objects:
-              - person
-              - dog
-              - cat
           snapshots:
             enabled: true
             timestamp: False
             bounding_box: true
             crop: False
           record:
-            enabled: false
-            retain_days: 5
+            enabled: true
+            retain_days: 0
+            events:
+              retain:
+                default: 14
+                objects:
+                  - person
+                  - dog
+                  - cat
 
         basement:
           ffmpeg:
@@ -246,20 +248,21 @@ spec:
             height: 352
             width: 640
             fps: 4
-          clips:
-            enabled: true
-            objects:
-              - person
-              - dog
-              - cat
           snapshots:
             enabled: true
             timestamp: False
             bounding_box: true
             crop: False
           record:
-            enabled: false
-            retain_days: 5
+            enabled: true
+            retain_days: 0
+            events:
+              retain:
+                default: 14
+                objects:
+                  - person
+                  - dog
+                  - cat
           rtmp:
             enabled: false
 
@@ -296,6 +299,14 @@ spec:
         #   record:
         #     enabled: true
         #     retain_days: 5
+        #     events:
+        #       retain:
+        #         default: 14
+        #         objects:
+        #           - bird
+        #           - dog
+        #           - cat
+
     ingress:
       enabled: true
       annotations:
