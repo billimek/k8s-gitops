@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: blakeblackshear/frigate
-      tag: 0.8.4-amd64
+      tag: 0.9.2-amd64
     coral:
       enabled: true
     env:
@@ -30,8 +30,15 @@ spec:
         topic_prefix: frigate
         user: mqtt
         password: '{FRIGATE_MQTT_PASSWORD}'
+
       database:
         path: /data/frigate.db
+
+      detectors:
+        coral:
+          type: edgetpu
+          device: usb
+
       ffmpeg:
         hwaccel_args:
           - -hwaccel
@@ -40,6 +47,7 @@ spec:
           - /dev/dri/renderD128
           - -hwaccel_output_format
           - yuv420p
+
       objects:
         track:
           - person
@@ -59,6 +67,7 @@ spec:
             min_area: 1000
             max_area: 10000
             threshold: 0.7
+
       cameras:
         porch:
           ffmpeg:
@@ -71,9 +80,10 @@ spec:
                   - rtmp
                   - clips
                   - record
-          height: 480
-          width: 704
-          fps: 5
+          detect:
+            height: 480
+            width: 704
+            fps: 5
           objects:
             filters:
               person:
@@ -95,6 +105,7 @@ spec:
           record:
             enabled: false
             retain_days: 5
+
         front:
           ffmpeg:
             inputs:
@@ -106,9 +117,10 @@ spec:
                   - rtmp
                   - clips
                   - record
-          height: 480
-          width: 704
-          fps: 5
+          detect:
+            height: 480
+            width: 704
+            fps: 5
           clips:
             enabled: true
             objects:
@@ -123,6 +135,7 @@ spec:
           record:
             enabled: false
             retain_days: 5
+
         driveway:
           ffmpeg:
             inputs:
@@ -134,9 +147,10 @@ spec:
                   - rtmp
                   - clips
                   - record
-          height: 480
-          width: 704
-          fps: 5
+          detect:
+            height: 480
+            width: 704
+            fps: 5
           clips:
             enabled: true
             objects:
@@ -151,6 +165,7 @@ spec:
           record:
             enabled: false
             retain_days: 5
+
         pool:
           ffmpeg:
             inputs:
@@ -162,9 +177,10 @@ spec:
                   - rtmp
                   - clips
                   - record
-          height: 480
-          width: 704
-          fps: 5
+          detect:
+            height: 480
+            width: 704
+            fps: 5
           objects:
             filters:
               person:
@@ -185,6 +201,7 @@ spec:
           record:
             enabled: false
             retain_days: 5
+
         basement:
           ffmpeg:
             inputs:
@@ -225,9 +242,10 @@ spec:
                   - +genpts+discardcorrupt
                   - '-use_wallclock_as_timestamps'
                   - '1'
-          height: 352
-          width: 640
-          fps: 4
+          detect:
+            height: 352
+            width: 640
+            fps: 4
           clips:
             enabled: true
             objects:
@@ -244,6 +262,7 @@ spec:
             retain_days: 5
           rtmp:
             enabled: false
+
         # wyze-1:
         #   ffmpeg:
         #     inputs:
@@ -253,9 +272,10 @@ spec:
         #           - rtmp
         #           - clips
         #           - record
-        #   height: 1080
-        #   width: 1920
-        #   fps: 15
+        #   detect:
+        #     height: 1080
+        #     width: 1920
+        #     fps: 15
         #   objects:
         #     filters:
         #       bird:
