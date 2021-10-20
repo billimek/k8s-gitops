@@ -101,10 +101,10 @@ spec:
             events:
               retain:
                 default: 14
-                objects:
-                  - person
-                  - dog
-                  - cat
+              objects:
+                - person
+                - dog
+                - cat
         front:
           ffmpeg:
             inputs:
@@ -131,10 +131,10 @@ spec:
             events:
               retain:
                 default: 14
-                objects:
-                  - person
-                  - dog
-                  - cat
+              objects:
+                - person
+                - dog
+                - cat
 
         driveway:
           ffmpeg:
@@ -162,10 +162,10 @@ spec:
             events:
               retain:
                 default: 14
-                objects:
-                  - person
-                  - dog
-                  - cat
+              objects:
+                - person
+                - dog
+                - cat
 
         pool:
           ffmpeg:
@@ -199,10 +199,10 @@ spec:
             events:
               retain:
                 default: 14
-                objects:
-                  - person
-                  - dog
-                  - cat
+              objects:
+                - person
+                - dog
+                - cat
 
         basement:
           ffmpeg:
@@ -259,10 +259,10 @@ spec:
             events:
               retain:
                 default: 14
-                objects:
-                  - person
-                  - dog
-                  - cat
+              objects:
+                - person
+                - dog
+                - cat
           rtmp:
             enabled: false
 
@@ -302,10 +302,10 @@ spec:
         #     events:
         #       retain:
         #         default: 14
-        #         objects:
-        #           - bird
-        #           - dog
-        #           - cat
+      #         objects:
+      #           - bird
+      #           - dog
+      #           - cat
 
     ingress:
       enabled: true
