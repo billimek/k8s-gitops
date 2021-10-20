@@ -114,7 +114,6 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
-                  - clips
                   - record
           detect:
             height: 480
@@ -145,7 +144,6 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway:554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
-                  - clips
                   - record
           detect:
             height: 480
@@ -176,7 +174,6 @@ spec:
               - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=0
                 roles:
                   - rtmp
-                  - clips
                   - record
           detect:
             height: 480
@@ -227,8 +224,7 @@ spec:
               # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement-cam:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
               - path: rtmp://basement-cam/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                 roles:
-                  # - rtmp
-                  - clips
+                  - rtmp
                   - record
                 # input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
                 input_args:
@@ -273,7 +269,6 @@ spec:
         #         roles:
         #           - detect
         #           - rtmp
-        #           - clips
         #           - record
         #   detect:
         #     height: 1080
@@ -285,12 +280,6 @@ spec:
         #         min_area: 1000
         #         # max_area: 100000
         #         threshold: 0.60
-        #   clips:
-        #     enabled: true
-        #     objects:
-        #       - bird
-        #       - dog
-        #       - cat
         #   snapshots:
         #     enabled: true
         #     timestamp: False
