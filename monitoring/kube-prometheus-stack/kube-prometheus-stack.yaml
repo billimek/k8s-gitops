@@ -116,6 +116,7 @@ spec:
     #       targetLabel: instance
     grafana:
       enabled: false
+      forceDeployDashboards: true
     kubeEtcd:
       enabled: false
     kubeControllerManager:
