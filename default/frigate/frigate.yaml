@@ -101,10 +101,7 @@ spec:
             events:
               retain:
                 default: 14
-              objects:
-                - person
-                - dog
-                - cat
+
         front:
           ffmpeg:
             inputs:
@@ -130,10 +127,6 @@ spec:
             events:
               retain:
                 default: 14
-              objects:
-                - person
-                - dog
-                - cat
 
         driveway:
           ffmpeg:
@@ -160,10 +153,6 @@ spec:
             events:
               retain:
                 default: 14
-              objects:
-                - person
-                - dog
-                - cat
 
         pool:
           ffmpeg:
@@ -196,10 +185,6 @@ spec:
             events:
               retain:
                 default: 14
-              objects:
-                - person
-                - dog
-                - cat
 
         basement:
           ffmpeg:
@@ -255,10 +240,6 @@ spec:
             events:
               retain:
                 default: 14
-              objects:
-                - person
-                - dog
-                - cat
           rtmp:
             enabled: false
 
@@ -315,8 +296,9 @@ spec:
                 - {key: "feature.node.kubernetes.io/custom-coral-tpu", operator: In, values: ["true"]}
     resources:
       requests:
-        memory: 2000Mi
+        memory: 1000Mi
         cpu: 750m
+        gpu.intel.com/i915: 1
       limits:
         memory: 2000Mi
         gpu.intel.com/i915: 1
