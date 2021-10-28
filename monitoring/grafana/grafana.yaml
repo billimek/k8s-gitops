@@ -17,9 +17,9 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    # image:
-    #   repository: grafana/grafana
-    #   tag: 7.0.4
+    image:
+      repository: grafana/grafana
+      tag: 7.5.11
     # tolerations:
     # - key: "arm"
     #   operator: "Exists"
