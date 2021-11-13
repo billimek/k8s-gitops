@@ -4,7 +4,6 @@ metadata:
   name: external-truenas-tailscale
   namespace: default
   annotations:
-    # kubernetes.io/ingress.class: nginx-tailscale
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   ingressClassName: nginx-tailscale
