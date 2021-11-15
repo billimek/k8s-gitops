@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: grafana/grafana
-      tag: 7.5.11
+      tag: 8.2.4
     # tolerations:
     # - key: "arm"
     #   operator: "Exists"
