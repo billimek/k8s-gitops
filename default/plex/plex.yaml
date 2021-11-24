@@ -57,8 +57,9 @@ spec:
         size: 20Gi
       transcode:
         enabled: true
-        type: emptyDir
-        medium: Memory
+        existingClaim: nfs-media-pvc
+        subPath: Videos/transcode/
+        readOnly: false
       tmp:
         enabled: true
         type: emptyDir
