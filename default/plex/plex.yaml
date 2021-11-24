@@ -56,7 +56,7 @@ spec:
         accessMode: ReadWriteOnce
         size: 20Gi
       transcode:
-        enabled: true
+        enabled: false
         existingClaim: nfs-media-pvc
         subPath: Videos/transcode/
         readOnly: false
