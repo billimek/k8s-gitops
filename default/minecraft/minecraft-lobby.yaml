@@ -39,7 +39,7 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: PAPER
-      paperDownloadUrl: https://papermc.io/api/v1/paper/1.17.1/latest/download
+      paperDownloadUrl: https://papermc.io/api/v1/paper/1.18/latest/download
       forceReDownload: true
       onlineMode: false
       difficulty: peaceful
