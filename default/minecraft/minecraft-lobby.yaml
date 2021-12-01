@@ -39,7 +39,6 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: PAPER
-      # paperDownloadUrl: https://papermc.io/api/v2/projects/paper/versions/1.18/builds/10/downloads/paper-1.18-10.jar
       forceReDownload: true
       onlineMode: false
       difficulty: peaceful
