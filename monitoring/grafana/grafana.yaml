@@ -126,6 +126,10 @@ spec:
           gnetId: 13665
           revision: 1
           datasource: Prometheus
+        loki:
+          gnetId: 13407
+          revision: 1
+          datasource: Prometheus
         minio-overview:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/minio_overview.json
           datasource: Prometheus
