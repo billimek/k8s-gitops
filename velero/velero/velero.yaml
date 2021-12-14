@@ -78,6 +78,7 @@ spec:
           cpu: 15m
         limits:
           memory: 3000Mi
+          cpu: null
     schedules:
       daily-backup:
         schedule: "0 6 * * *"
