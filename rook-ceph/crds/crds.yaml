@@ -33,7 +33,7 @@ spec:
             metadata:
               type: object
             spec:
-              description: PoolSpec represents the spec of ceph pool
+              description: NamedBlockPoolSpec allows a block pool to be created with a non-default name. This is more specific than the NamedPoolSpec so we get schema validation on the allowed pool names that can be specified.
               properties:
                 compressionMode:
                   description: 'DEPRECATED: use Parameters instead, e.g., Parameters["compression_mode"] = "force" The inline compression mode in Bluestore OSD to set to (options are: none, passive, aggressive, force) Do NOT set a default value for kubebuilder as this will override the Parameters'
@@ -113,6 +113,12 @@ spec:
                         type: object
                       type: array
                   type: object
+                name:
+                  description: The desired name of the pool if different from the CephBlockPool CR name.
+                  enum:
+                    - device_health_metrics
+                    - .nfs
+                  type: string
                 parameters:
                   additionalProperties:
                     type: string
@@ -338,6 +344,283 @@ spec:
                       nullable: true
                       type: array
                   type: object
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          required:
+            - metadata
+            - spec
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.5.1-0.20210420220833-f284e2e8098c
+  creationTimestamp: null
+  name: cephbucketnotifications.ceph.rook.io
+spec:
+  group: ceph.rook.io
+  names:
+    kind: CephBucketNotification
+    listKind: CephBucketNotificationList
+    plural: cephbucketnotifications
+    singular: cephbucketnotification
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          description: CephBucketNotification represents a Bucket Notifications
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: BucketNotificationSpec represent the spec of a Bucket Notification
+              properties:
+                events:
+                  description: List of events that should trigger the notification
+                  items:
+                    description: BucketNotificationSpec represent the event type of the bucket notification
+                    enum:
+                      - s3:ObjectCreated:*
+                      - s3:ObjectCreated:Put
+                      - s3:ObjectCreated:Post
+                      - s3:ObjectCreated:Copy
+                      - s3:ObjectCreated:CompleteMultipartUpload
+                      - s3:ObjectRemoved:*
+                      - s3:ObjectRemoved:Delete
+                      - s3:ObjectRemoved:DeleteMarkerCreated
+                    type: string
+                  type: array
+                filter:
+                  description: Spec of notification filter
+                  properties:
+                    keyFilters:
+                      description: Filters based on the object's key
+                      items:
+                        description: NotificationKeyFilterRule represent a single key rule in the Notification Filter spec
+                        properties:
+                          name:
+                            description: Name of the filter - prefix/suffix/regex
+                            enum:
+                              - prefix
+                              - suffix
+                              - regex
+                            type: string
+                          value:
+                            description: Value to filter on
+                            type: string
+                        required:
+                          - name
+                          - value
+                        type: object
+                      type: array
+                    metadataFilters:
+                      description: Filters based on the object's metadata
+                      items:
+                        description: NotificationFilterRule represent a single rule in the Notification Filter spec
+                        properties:
+                          name:
+                            description: Name of the metadata or tag
+                            minLength: 1
+                            type: string
+                          value:
+                            description: Value to filter on
+                            type: string
+                        required:
+                          - name
+                          - value
+                        type: object
+                      type: array
+                    tagFilters:
+                      description: Filters based on the object's tags
+                      items:
+                        description: NotificationFilterRule represent a single rule in the Notification Filter spec
+                        properties:
+                          name:
+                            description: Name of the metadata or tag
+                            minLength: 1
+                            type: string
+                          value:
+                            description: Value to filter on
+                            type: string
+                        required:
+                          - name
+                          - value
+                        type: object
+                      type: array
+                  type: object
+                topic:
+                  description: The name of the topic associated with this notification
+                  minLength: 1
+                  type: string
+              required:
+                - topic
+              type: object
+            status:
+              description: Status represents the status of an object
+              properties:
+                phase:
+                  type: string
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          required:
+            - metadata
+            - spec
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.5.1-0.20210420220833-f284e2e8098c
+  creationTimestamp: null
+  name: cephbuckettopics.ceph.rook.io
+spec:
+  group: ceph.rook.io
+  names:
+    kind: CephBucketTopic
+    listKind: CephBucketTopicList
+    plural: cephbuckettopics
+    singular: cephbuckettopic
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          description: CephBucketTopic represents a Ceph Object Topic for Bucket Notifications
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: BucketTopicSpec represent the spec of a Bucket Topic
+              properties:
+                endpoint:
+                  description: Contains the endpoint spec of the topic
+                  properties:
+                    amqp:
+                      description: Spec of AMQP endpoint
+                      properties:
+                        ackLevel:
+                          default: broker
+                          description: The ack level required for this topic (none/broker/routeable)
+                          enum:
+                            - none
+                            - broker
+                            - routeable
+                          type: string
+                        disableVerifySSL:
+                          description: Indicate whether the server certificate is validated by the client or not
+                          type: boolean
+                        exchange:
+                          description: Name of the exchange that is used to route messages based on topics
+                          minLength: 1
+                          type: string
+                        uri:
+                          description: The URI of the AMQP endpoint to push notification to
+                          minLength: 1
+                          type: string
+                      required:
+                        - exchange
+                        - uri
+                      type: object
+                    http:
+                      description: Spec of HTTP endpoint
+                      properties:
+                        disableVerifySSL:
+                          description: Indicate whether the server certificate is validated by the client or not
+                          type: boolean
+                        uri:
+                          description: The URI of the HTTP endpoint to push notification to
+                          minLength: 1
+                          type: string
+                      required:
+                        - uri
+                      type: object
+                    kafka:
+                      description: Spec of Kafka endpoint
+                      properties:
+                        ackLevel:
+                          default: broker
+                          description: The ack level required for this topic (none/broker)
+                          enum:
+                            - none
+                            - broker
+                          type: string
+                        disableVerifySSL:
+                          description: Indicate whether the server certificate is validated by the client or not
+                          type: boolean
+                        uri:
+                          description: The URI of the Kafka endpoint to push notification to
+                          minLength: 1
+                          type: string
+                        useSSL:
+                          description: Indicate whether to use SSL when communicating with the broker
+                          type: boolean
+                      required:
+                        - uri
+                      type: object
+                  type: object
+                objectStoreName:
+                  description: The name of the object store on which to define the topic
+                  minLength: 1
+                  type: string
+                objectStoreNamespace:
+                  description: The namespace of the object store on which to define the topic
+                  minLength: 1
+                  type: string
+                opaqueData:
+                  description: Data which is sent in each event
+                  type: string
+                persistent:
+                  description: Indication whether notifications to this endpoint are persistent or not
+                  type: boolean
+              required:
+                - endpoint
+                - objectStoreName
+                - objectStoreNamespace
+              type: object
+            status:
+              description: BucketTopicStatus represents the Status of a CephBucketTopic
+              properties:
+                ARN:
+                  description: The ARN of the topic generated by the RGW
+                  nullable: true
+                  type: string
+                phase:
+                  type: string
               type: object
               x-kubernetes-preserve-unknown-fields: true
           required:
@@ -740,7 +1023,7 @@ spec:
                                   - port
                                 type: object
                               terminationGracePeriodSeconds:
-                                description: Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
+                                description: Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is a beta field and requires enabling ProbeTerminationGracePeriod feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -870,7 +1153,23 @@ spec:
                                           type: string
                                         type: array
                                       dataSource:
-                                        description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source.'
+                                        description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source. If the AnyVolumeDataSource feature gate is enabled, this field will always have the same contents as the DataSourceRef field.'
+                                        properties:
+                                          apiGroup:
+                                            description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+                                            type: string
+                                          kind:
+                                            description: Kind is the type of resource being referenced
+                                            type: string
+                                          name:
+                                            description: Name is the name of resource being referenced
+                                            type: string
+                                        required:
+                                          - kind
+                                          - name
+                                        type: object
+                                      dataSourceRef:
+                                        description: 'Specifies the object from which to populate the volume with data, if a non-empty volume is desired. This may be any local object from a non-empty API group (non core object) or a PersistentVolumeClaim object. When this field is specified, volume binding will only succeed if the type of the specified object matches some installed volume populator or dynamic provisioner. This field will replace the functionality of the DataSource field and as such if both fields are non-empty, they must have the same value. For backwards compatibility, both fields (DataSource and DataSourceRef) will be set to the same value automatically if one of them is empty and the other is non-empty. There are two important differences between DataSource and DataSourceRef: * While DataSource only allows two specific types of objects, DataSourceRef   allows any non-core object, as well as PersistentVolumeClaim objects. * While DataSource ignores disallowed values (dropping them), DataSourceRef   preserves all values, and generates an error if a disallowed value is   specified. (Alpha) Using this field requires the AnyVolumeDataSource feature gate to be enabled.'
                                         properties:
                                           apiGroup:
                                             description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
@@ -1041,7 +1340,23 @@ spec:
                                 type: string
                               type: array
                             dataSource:
-                              description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source.'
+                              description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source. If the AnyVolumeDataSource feature gate is enabled, this field will always have the same contents as the DataSourceRef field.'
+                              properties:
+                                apiGroup:
+                                  description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+                                  type: string
+                                kind:
+                                  description: Kind is the type of resource being referenced
+                                  type: string
+                                name:
+                                  description: Name is the name of resource being referenced
+                                  type: string
+                              required:
+                                - kind
+                                - name
+                              type: object
+                            dataSourceRef:
+                              description: 'Specifies the object from which to populate the volume with data, if a non-empty volume is desired. This may be any local object from a non-empty API group (non core object) or a PersistentVolumeClaim object. When this field is specified, volume binding will only succeed if the type of the specified object matches some installed volume populator or dynamic provisioner. This field will replace the functionality of the DataSource field and as such if both fields are non-empty, they must have the same value. For backwards compatibility, both fields (DataSource and DataSourceRef) will be set to the same value automatically if one of them is empty and the other is non-empty. There are two important differences between DataSource and DataSourceRef: * While DataSource only allows two specific types of objects, DataSourceRef   allows any non-core object, as well as PersistentVolumeClaim objects. * While DataSource ignores disallowed values (dropping them), DataSourceRef   preserves all values, and generates an error if a disallowed value is   specified. (Alpha) Using this field requires the AnyVolumeDataSource feature gate to be enabled.'
                               properties:
                                 apiGroup:
                                   description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
@@ -1425,7 +1740,7 @@ spec:
                                           type: object
                                       type: object
                                     namespaceSelector:
-                                      description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                      description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                       properties:
                                         matchExpressions:
                                           description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -1510,7 +1825,7 @@ spec:
                                       type: object
                                   type: object
                                 namespaceSelector:
-                                  description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                  description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                   properties:
                                     matchExpressions:
                                       description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -1594,7 +1909,7 @@ spec:
                                           type: object
                                       type: object
                                     namespaceSelector:
-                                      description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                      description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                       properties:
                                         matchExpressions:
                                           description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -1679,7 +1994,7 @@ spec:
                                       type: object
                                   type: object
                                 namespaceSelector:
-                                  description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                  description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                   properties:
                                     matchExpressions:
                                       description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -1999,7 +2314,23 @@ spec:
                                         type: string
                                       type: array
                                     dataSource:
-                                      description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source.'
+                                      description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source. If the AnyVolumeDataSource feature gate is enabled, this field will always have the same contents as the DataSourceRef field.'
+                                      properties:
+                                        apiGroup:
+                                          description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+                                          type: string
+                                        kind:
+                                          description: Kind is the type of resource being referenced
+                                          type: string
+                                        name:
+                                          description: Name is the name of resource being referenced
+                                          type: string
+                                      required:
+                                        - kind
+                                        - name
+                                      type: object
+                                    dataSourceRef:
+                                      description: 'Specifies the object from which to populate the volume with data, if a non-empty volume is desired. This may be any local object from a non-empty API group (non core object) or a PersistentVolumeClaim object. When this field is specified, volume binding will only succeed if the type of the specified object matches some installed volume populator or dynamic provisioner. This field will replace the functionality of the DataSource field and as such if both fields are non-empty, they must have the same value. For backwards compatibility, both fields (DataSource and DataSourceRef) will be set to the same value automatically if one of them is empty and the other is non-empty. There are two important differences between DataSource and DataSourceRef: * While DataSource only allows two specific types of objects, DataSourceRef   allows any non-core object, as well as PersistentVolumeClaim objects. * While DataSource ignores disallowed values (dropping them), DataSourceRef   preserves all values, and generates an error if a disallowed value is   specified. (Alpha) Using this field requires the AnyVolumeDataSource feature gate to be enabled.'
                                       properties:
                                         apiGroup:
                                           description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
@@ -2319,7 +2650,7 @@ spec:
                                                   type: object
                                               type: object
                                             namespaceSelector:
-                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                               properties:
                                                 matchExpressions:
                                                   description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -2404,7 +2735,7 @@ spec:
                                               type: object
                                           type: object
                                         namespaceSelector:
-                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                           properties:
                                             matchExpressions:
                                               description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -2488,7 +2819,7 @@ spec:
                                                   type: object
                                               type: object
                                             namespaceSelector:
-                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                               properties:
                                                 matchExpressions:
                                                   description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -2573,7 +2904,7 @@ spec:
                                               type: object
                                           type: object
                                         namespaceSelector:
-                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                           properties:
                                             matchExpressions:
                                               description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -2859,7 +3190,7 @@ spec:
                                                   type: object
                                               type: object
                                             namespaceSelector:
-                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                               properties:
                                                 matchExpressions:
                                                   description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -2944,7 +3275,7 @@ spec:
                                               type: object
                                           type: object
                                         namespaceSelector:
-                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                           properties:
                                             matchExpressions:
                                               description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -3028,7 +3359,7 @@ spec:
                                                   type: object
                                               type: object
                                             namespaceSelector:
-                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                              description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                               properties:
                                                 matchExpressions:
                                                   description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -3113,7 +3444,7 @@ spec:
                                               type: object
                                           type: object
                                         namespaceSelector:
-                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                          description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                           properties:
                                             matchExpressions:
                                               description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -3305,7 +3636,23 @@ spec:
                                         type: string
                                       type: array
                                     dataSource:
-                                      description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source.'
+                                      description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source. If the AnyVolumeDataSource feature gate is enabled, this field will always have the same contents as the DataSourceRef field.'
+                                      properties:
+                                        apiGroup:
+                                          description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+                                          type: string
+                                        kind:
+                                          description: Kind is the type of resource being referenced
+                                          type: string
+                                        name:
+                                          description: Name is the name of resource being referenced
+                                          type: string
+                                      required:
+                                        - kind
+                                        - name
+                                      type: object
+                                    dataSourceRef:
+                                      description: 'Specifies the object from which to populate the volume with data, if a non-empty volume is desired. This may be any local object from a non-empty API group (non core object) or a PersistentVolumeClaim object. When this field is specified, volume binding will only succeed if the type of the specified object matches some installed volume populator or dynamic provisioner. This field will replace the functionality of the DataSource field and as such if both fields are non-empty, they must have the same value. For backwards compatibility, both fields (DataSource and DataSourceRef) will be set to the same value automatically if one of them is empty and the other is non-empty. There are two important differences between DataSource and DataSourceRef: * While DataSource only allows two specific types of objects, DataSourceRef   allows any non-core object, as well as PersistentVolumeClaim objects. * While DataSource ignores disallowed values (dropping them), DataSourceRef   preserves all values, and generates an error if a disallowed value is   specified. (Alpha) Using this field requires the AnyVolumeDataSource feature gate to be enabled.'
                                       properties:
                                         apiGroup:
                                           description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
@@ -3486,7 +3833,23 @@ spec:
                                   type: string
                                 type: array
                               dataSource:
-                                description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source.'
+                                description: 'This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source. If the AnyVolumeDataSource feature gate is enabled, this field will always have the same contents as the DataSourceRef field.'
+                                properties:
+                                  apiGroup:
+                                    description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
+                                    type: string
+                                  kind:
+                                    description: Kind is the type of resource being referenced
+                                    type: string
+                                  name:
+                                    description: Name is the name of resource being referenced
+                                    type: string
+                                required:
+                                  - kind
+                                  - name
+                                type: object
+                              dataSourceRef:
+                                description: 'Specifies the object from which to populate the volume with data, if a non-empty volume is desired. This may be any local object from a non-empty API group (non core object) or a PersistentVolumeClaim object. When this field is specified, volume binding will only succeed if the type of the specified object matches some installed volume populator or dynamic provisioner. This field will replace the functionality of the DataSource field and as such if both fields are non-empty, they must have the same value. For backwards compatibility, both fields (DataSource and DataSourceRef) will be set to the same value automatically if one of them is empty and the other is non-empty. There are two important differences between DataSource and DataSourceRef: * While DataSource only allows two specific types of objects, DataSourceRef   allows any non-core object, as well as PersistentVolumeClaim objects. * While DataSource ignores disallowed values (dropping them), DataSourceRef   preserves all values, and generates an error if a disallowed value is   specified. (Alpha) Using this field requires the AnyVolumeDataSource feature gate to be enabled.'
                                 properties:
                                   apiGroup:
                                     description: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
@@ -3985,7 +4348,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -4070,7 +4433,7 @@ spec:
                                     type: object
                                 type: object
                               namespaceSelector:
-                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                 properties:
                                   matchExpressions:
                                     description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -4154,7 +4517,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -4239,7 +4602,7 @@ spec:
                                     type: object
                                 type: object
                               namespaceSelector:
-                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                 properties:
                                   matchExpressions:
                                     description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -4448,9 +4811,9 @@ spec:
               description: FilesystemSpec represents the spec of a file system
               properties:
                 dataPools:
-                  description: The data pool settings
+                  description: The data pool settings, with optional predefined pool name.
                   items:
-                    description: PoolSpec represents the spec of ceph pool
+                    description: NamedPoolSpec represents the named ceph pool spec
                     properties:
                       compressionMode:
                         description: 'DEPRECATED: use Parameters instead, e.g., Parameters["compression_mode"] = "force" The inline compression mode in Bluestore OSD to set to (options are: none, passive, aggressive, force) Do NOT set a default value for kubebuilder as this will override the Parameters'
@@ -4530,6 +4893,9 @@ spec:
                               type: object
                             type: array
                         type: object
+                      name:
+                        description: Name of the pool
+                        type: string
                       parameters:
                         additionalProperties:
                           type: string
@@ -4967,7 +5333,7 @@ spec:
                                             type: object
                                         type: object
                                       namespaceSelector:
-                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                         properties:
                                           matchExpressions:
                                             description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -5052,7 +5418,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -5136,7 +5502,7 @@ spec:
                                             type: object
                                         type: object
                                       namespaceSelector:
-                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                         properties:
                                           matchExpressions:
                                             description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -5221,7 +5587,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -5647,176 +6013,11 @@ spec:
                   nullable: true
                   properties:
                     namespace:
-                      description: Namespace is the RADOS namespace where NFS client recovery data is stored.
+                      description: The namespace inside the Ceph pool (set by 'pool') where shared NFS-Ganesha config is stored. This setting is required for Ceph v15 and ignored for Ceph v16. As of Ceph Pacific v16+, this is internally set to the name of the CephNFS.
                       type: string
                     pool:
-                      description: Pool used to represent the Ganesha's pool name in version older than 16.2.7 As of Ceph Pacific 16.2.7, NFS Ganesha's pool name is hardcoded to ".nfs", so this setting will be ignored.
+                      description: The Ceph pool used store the shared configuration for NFS-Ganesha daemons. This setting is required for Ceph v15 and ignored for Ceph v16. As of Ceph Pacific 16.2.7+, this is internally hardcoded to ".nfs".
                       type: string
-                    poolConfig:
-                      description: PoolConfig is the RADOS pool where Ganesha data is stored.
-                      nullable: true
-                      properties:
-                        compressionMode:
-                          description: 'DEPRECATED: use Parameters instead, e.g., Parameters["compression_mode"] = "force" The inline compression mode in Bluestore OSD to set to (options are: none, passive, aggressive, force) Do NOT set a default value for kubebuilder as this will override the Parameters'
-                          enum:
-                            - none
-                            - passive
-                            - aggressive
-                            - force
-                            - ""
-                          nullable: true
-                          type: string
-                        crushRoot:
-                          description: The root of the crush hierarchy utilized by the pool
-                          nullable: true
-                          type: string
-                        deviceClass:
-                          description: The device class the OSD should set to for use in the pool
-                          nullable: true
-                          type: string
-                        enableRBDStats:
-                          description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
-                          type: boolean
-                        erasureCoded:
-                          description: The erasure code settings
-                          properties:
-                            algorithm:
-                              description: The algorithm for erasure coding
-                              type: string
-                            codingChunks:
-                              description: Number of coding chunks per object in an erasure coded storage pool (required for erasure-coded pool type). This is the number of OSDs that can be lost simultaneously before data cannot be recovered.
-                              minimum: 0
-                              type: integer
-                            dataChunks:
-                              description: Number of data chunks per object in an erasure coded storage pool (required for erasure-coded pool type). The number of chunks required to recover an object when any single OSD is lost is the same as dataChunks so be aware that the larger the number of data chunks, the higher the cost of recovery.
-                              minimum: 0
-                              type: integer
-                          required:
-                            - codingChunks
-                            - dataChunks
-                          type: object
-                        failureDomain:
-                          description: 'The failure domain: osd/host/(region or zone if available) - technically also any type in the crush map'
-                          type: string
-                        mirroring:
-                          description: The mirroring settings
-                          properties:
-                            enabled:
-                              description: Enabled whether this pool is mirrored or not
-                              type: boolean
-                            mode:
-                              description: 'Mode is the mirroring mode: either pool or image'
-                              type: string
-                            peers:
-                              description: Peers represents the peers spec
-                              nullable: true
-                              properties:
-                                secretNames:
-                                  description: SecretNames represents the Kubernetes Secret names to add rbd-mirror or cephfs-mirror peers
-                                  items:
-                                    type: string
-                                  type: array
-                              type: object
-                            snapshotSchedules:
-                              description: SnapshotSchedules is the scheduling of snapshot for mirrored images/pools
-                              items:
-                                description: SnapshotScheduleSpec represents the snapshot scheduling settings of a mirrored pool
-                                properties:
-                                  interval:
-                                    description: Interval represent the periodicity of the snapshot.
-                                    type: string
-                                  path:
-                                    description: Path is the path to snapshot, only valid for CephFS
-                                    type: string
-                                  startTime:
-                                    description: StartTime indicates when to start the snapshot
-                                    type: string
-                                type: object
-                              type: array
-                          type: object
-                        parameters:
-                          additionalProperties:
-                            type: string
-                          description: Parameters is a list of properties to enable on a given pool
-                          nullable: true
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                        quotas:
-                          description: The quota settings
-                          nullable: true
-                          properties:
-                            maxBytes:
-                              description: MaxBytes represents the quota in bytes Deprecated in favor of MaxSize
-                              format: int64
-                              type: integer
-                            maxObjects:
-                              description: MaxObjects represents the quota in objects
-                              format: int64
-                              type: integer
-                            maxSize:
-                              description: MaxSize represents the quota in bytes as a string
-                              pattern: ^[0-9]+[\.]?[0-9]*([KMGTPE]i|[kMGTPE])?$
-                              type: string
-                          type: object
-                        replicated:
-                          description: The replication settings
-                          properties:
-                            hybridStorage:
-                              description: HybridStorage represents hybrid storage tier settings
-                              nullable: true
-                              properties:
-                                primaryDeviceClass:
-                                  description: PrimaryDeviceClass represents high performance tier (for example SSD or NVME) for Primary OSD
-                                  minLength: 1
-                                  type: string
-                                secondaryDeviceClass:
-                                  description: SecondaryDeviceClass represents low performance tier (for example HDDs) for remaining OSDs
-                                  minLength: 1
-                                  type: string
-                              required:
-                                - primaryDeviceClass
-                                - secondaryDeviceClass
-                              type: object
-                            replicasPerFailureDomain:
-                              description: ReplicasPerFailureDomain the number of replica in the specified failure domain
-                              minimum: 1
-                              type: integer
-                            requireSafeReplicaSize:
-                              description: RequireSafeReplicaSize if false allows you to set replica 1
-                              type: boolean
-                            size:
-                              description: Size - Number of copies per object in a replicated storage pool, including the object itself (required for replicated pool type)
-                              minimum: 0
-                              type: integer
-                            subFailureDomain:
-                              description: SubFailureDomain the name of the sub-failure domain
-                              type: string
-                            targetSizeRatio:
-                              description: TargetSizeRatio gives a hint (%) to Ceph in terms of expected consumption of the total cluster capacity
-                              type: number
-                          required:
-                            - size
-                          type: object
-                        statusCheck:
-                          description: The mirroring statusCheck
-                          properties:
-                            mirror:
-                              description: HealthCheckSpec represents the health check of an object store bucket
-                              nullable: true
-                              properties:
-                                disabled:
-                                  type: boolean
-                                interval:
-                                  description: Interval is the internal in second or minute for the health check to run like 60s for 60 seconds
-                                  type: string
-                                timeout:
-                                  type: string
-                              type: object
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                      type: object
-                  required:
-                    - namespace
                   type: object
                 server:
                   description: Server is the Ganesha Server specification
@@ -6006,7 +6207,7 @@ spec:
                                             type: object
                                         type: object
                                       namespaceSelector:
-                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                         properties:
                                           matchExpressions:
                                             description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -6091,7 +6292,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -6175,7 +6376,7 @@ spec:
                                             type: object
                                         type: object
                                       namespaceSelector:
-                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                         properties:
                                           matchExpressions:
                                             description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -6260,7 +6461,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -6470,6 +6671,7 @@ spec:
                   description: PullSpec represents the pulling specification of a Ceph Object Storage Gateway Realm
                   properties:
                     endpoint:
+                      pattern: ^https*://
                       type: string
                   required:
                     - endpoint
@@ -6929,7 +7131,7 @@ spec:
                                             type: object
                                         type: object
                                       namespaceSelector:
-                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                         properties:
                                           matchExpressions:
                                             description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -7014,7 +7216,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -7098,7 +7300,7 @@ spec:
                                             type: object
                                         type: object
                                       namespaceSelector:
-                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                        description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                         properties:
                                           matchExpressions:
                                             description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -7183,7 +7385,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -7456,7 +7658,7 @@ spec:
                                 - port
                               type: object
                             terminationGracePeriodSeconds:
-                              description: Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
+                              description: Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is a beta field and requires enabling ProbeTerminationGracePeriod feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds is used if unset.
                               format: int64
                               type: integer
                             timeoutSeconds:
@@ -7552,7 +7754,7 @@ spec:
                                 - port
                               type: object
                             terminationGracePeriodSeconds:
-                              description: Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate.
+                              description: Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is a beta field and requires enabling ProbeTerminationGracePeriod feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds is used if unset.
                               format: int64
                               type: integer
                             timeoutSeconds:
@@ -8633,7 +8835,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -8718,7 +8920,7 @@ spec:
                                     type: object
                                 type: object
                               namespaceSelector:
-                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                 properties:
                                   matchExpressions:
                                     description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -8802,7 +9004,7 @@ spec:
                                         type: object
                                     type: object
                                   namespaceSelector:
-                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                    description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                     properties:
                                       matchExpressions:
                                         description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -8887,7 +9089,7 @@ spec:
                                     type: object
                                 type: object
                               namespaceSelector:
-                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+                                description: A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means "this pod's namespace". An empty selector ({}) matches all namespaces. This field is beta-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
                                 properties:
                                   matchExpressions:
                                     description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -9169,70 +9371,3 @@ spec:
               x-kubernetes-preserve-unknown-fields: true
       subresources:
         status: {}
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.5.1-0.20210420220833-f284e2e8098c
-  creationTimestamp: null
-  name: volumes.rook.io
-spec:
-  group: rook.io
-  names:
-    kind: Volume
-    listKind: VolumeList
-    plural: volumes
-    shortNames:
-      - rv
-    singular: volume
-  scope: Namespaced
-  versions:
-    - name: v1alpha2
-      schema:
-        openAPIV3Schema:
-          properties:
-            apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-              type: string
-            attachments:
-              items:
-                properties:
-                  clusterName:
-                    type: string
-                  mountDir:
-                    type: string
-                  node:
-                    type: string
-                  podName:
-                    type: string
-                  podNamespace:
-                    type: string
-                  readOnly:
-                    type: boolean
-                required:
-                  - clusterName
-                  - mountDir
-                  - node
-                  - podName
-                  - podNamespace
-                  - readOnly
-                type: object
-              type: array
-            kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-              type: string
-            metadata:
-              type: object
-          required:
-            - attachments
-            - metadata
-          type: object
-      served: true
-      storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
