@@ -25,8 +25,8 @@ spec:
         env:
         - name: TZ
           value: America/New_York
-        image: billimek/tesla_dashcam:0.1.20
-        # image: billimek/tesla_dashcam:0.1.20-intel-vaapi
+        # image: billimek/tesla_dashcam:0.1.20
+        image: billimek/tesla_dashcam:0.1.20-intel-vaapi
         imagePullPolicy: Always
         # args: ["--delete_source", "--gpu", "--gpu_type", "vaapi", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
         args: ["--delete_source", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
