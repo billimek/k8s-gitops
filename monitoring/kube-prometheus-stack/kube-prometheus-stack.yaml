@@ -186,7 +186,7 @@ spec:
           annotations:
             backup.velero.io/backup-volumes: prometheus-kube-prometheus-stack-prometheus-db
         thanos:
-          image: quay.io/thanos/thanos:v0.23.1
+          image: quay.io/thanos/thanos:v0.24.0
           version: v0.21.1
           objectStorageConfig:
             name: thanos-objstore-secret
