@@ -82,7 +82,7 @@ spec:
         memory: 50Mi
         cpu: 50m
       limits:
-        memory: 340Mi
+        memory: 640Mi
 
 
     additionalContainers:
