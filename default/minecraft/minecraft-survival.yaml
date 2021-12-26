@@ -53,7 +53,7 @@ spec:
       mc-router.itzg.me/externalServerName: "mcsv.eviljungle.com"
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
-      SPIGET_RESOURCES: "274,74354,8631,28140"
+      SPIGET_RESOURCES: "74354,8631,28140"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
