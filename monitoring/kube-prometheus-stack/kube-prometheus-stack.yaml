@@ -118,6 +118,13 @@ spec:
               sourceLabels:
                 - __meta_kubernetes_pod_node_name
               targetLabel: kubernetes_node
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
+      - key: "armhf"
+        operator: "Exists"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
     grafana:
       enabled: false
       forceDeployDashboards: true
@@ -167,14 +174,6 @@ spec:
         enabled: true
         port: 2381
         targetPort: 2381
-    prometheus-node-exporter:
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
-      - key: "armhf"
-        operator: "Exists"
-      - key: "node-role.kubernetes.io/master"
-        operator: "Exists"
     prometheus:
       ingress:
         enabled: true
