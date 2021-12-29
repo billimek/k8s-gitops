@@ -106,33 +106,67 @@ spec:
         pagerduty-custom.tmpl: |-
           {{- define "pagerduty.custom.description" -}}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}{{- end -}}
     nodeExporter:
-      serviceMonitor:
-        relabelings:
-        - sourceLabels: [__meta_kubernetes_pod_node_name]
-          targetLabel: instance
-          action: replace
-    # kubelet:
-    #   serviceMonitor:
-    #     metricRelabelings:
-    #     - action: replace
-    #       sourceLabels:
-    #       - node
-    #       targetLabel: instance
+      enabled: true
+    prometheus-node-exporter:
+      prometheus:
+        monitor:
+          enabled: true
+          relabelings:
+            - action: replace
+              regex: (.*)
+              replacement: $1
+              sourceLabels:
+                - __meta_kubernetes_pod_node_name
+              targetLabel: kubernetes_node
     grafana:
       enabled: false
       forceDeployDashboards: true
-    kubeEtcd:
-      enabled: false
+    kubelet:
+      enabled: true
+      serviceMonitor:
+        metricRelabelings:
+          - action: replace
+            sourceLabels:
+              - node
+            targetLabel: instance
+    kubeApiServer:
+      enabled: true
     kubeControllerManager:
-      enabled: false
-      # endpoints:
-      # - 10.2.0.30
+      enabled: true
+      endpoints:
+        - 10.2.0.30
+      service:
+        enabled: true
+        port: 10257
+        targetPort: 10257
+      serviceMonitor:
+        enabled: true
+        https: true
+        insecureSkipVerify: true
     kubeScheduler:
-      enabled: false
-      # endpoints:
-      # - 10.2.0.30
+      enabled: true
+      endpoints:
+        - 10.2.0.30
+      service:
+        enabled: true
+        port: 10259
+        targetPort: 10259
+      serviceMonitor:
+        enabled: true
+        https: true
+        insecureSkipVerify: true
     kubeProxy:
-      enabled: false
+      enabled: true
+      endpoints:
+        - 10.2.0.30
+    kubeEtcd:
+      enabled: true
+      endpoints:
+        - 10.2.0.30
+      service:
+        enabled: true
+        port: 2381
+        targetPort: 2381
     prometheus-node-exporter:
       tolerations:
       - key: "arm"
@@ -186,8 +220,8 @@ spec:
           annotations:
             backup.velero.io/backup-volumes: prometheus-kube-prometheus-stack-prometheus-db
         thanos:
-          image: quay.io/thanos/thanos:v0.23.1
-          version: v0.21.1
+          image: quay.io/thanos/thanos:v0.24.0
+          version: v0.24.0
           objectStorageConfig:
             name: thanos-objstore-secret
             key: objstore.yml
@@ -203,6 +237,8 @@ spec:
         #       topologyKey: "kubernetes.io/hostname"
         podAntiAffinity: "hard"
       thanosService:
+        enabled: true
+      thanosServiceMonitor:
         enabled: true
   valuesFrom:
   - kind: Secret
