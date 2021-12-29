@@ -22,17 +22,6 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-    # defaultRules:
-    #   rules:
-    #     kubeApiserverAvailability: true
-    #     kubeApiserver: true
-    server:
-      resources:
-        requests:
-          memory: 1500Mi
-          cpu: 25m
-        limits:
-          memory: 2000Mi
     prometheusOperator:
       createCustomResource: true
       # prometheusConfigReloaderImage:
@@ -224,6 +213,12 @@ spec:
           objectStorageConfig:
             name: thanos-objstore-secret
             key: objstore.yml
+        resources:
+          requests:
+            memory: 2000Mi
+            cpu: 250m
+          limits:
+            memory: 4000Mi
         # affinity:
         #   podAntiAffinity:
         #     requiredDuringSchedulingIgnoredDuringExecution:
