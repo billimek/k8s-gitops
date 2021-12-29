@@ -22,9 +22,9 @@ spec:
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.50
-    tolerations:
-      - key: "arm"
-        operator: "Exists"
+    # tolerations:
+    #   - key: "arm"
+    #     operator: "Exists"
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
