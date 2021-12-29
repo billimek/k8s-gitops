@@ -323,6 +323,8 @@ spec:
         subPath: Videos
       - mountPath: /tmp/cache
         name: cache
+    podAnnotations:
+      backup.velero.io/backup-volumes: data
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
