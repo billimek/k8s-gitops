@@ -10,18 +10,75 @@ spec:
     spec:
       # renovate: registryUrl=https://blakeblackshear.github.io/blakeshome-charts/
       chart: frigate
-      version: 6.0.1
+      version: 6.2.0
       sourceRef:
         kind: HelmRepository
-        name: blakeshome-charts
+        name: k8s-at-home-charts
         namespace: flux-system
       interval: 5m
   values:
     image:
       repository: blakeblackshear/frigate
       tag: 0.9.4-amd64
-    coral:
-      enabled: true
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        hosts:
+          - host: "frigate.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "frigate.eviljungle.com"
+    securityContext:
+      privileged: true
+    persistence:
+      data:
+        enabled: true
+        storageClass: rook-ceph-block
+        mountPath: /data
+      media:
+        enabled: true
+        existingClaim: nfs-media-pvc
+        mountPath: /media
+        subPath: Videos
+      usb:
+        enabled: true
+        type: hostPath
+        hostPath: /dev/bus/usb
+      cache:
+        enabled: true
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 2Gi
+        # mountPath: /dev/shm
+        mountPath: /tmp/cache
+    podAnnotations:
+      backup.velero.io/backup-volumes: data
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/custom-coral-tpu
+                  operator: In
+                  values:
+                    - "true"
+    resources:
+      requests:
+        memory: 1000Mi
+        cpu: 750m
+        gpu.intel.com/i915: 1
+      limits:
+        memory: 2000Mi
+        gpu.intel.com/i915: 1
     env:
       TZ: "America/New_York"
     config: |
@@ -276,55 +333,6 @@ spec:
       #           - bird
       #           - dog
       #           - cat
-
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
-        nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
-      hosts: [frigate.eviljungle.com]
-      tls:
-      - hosts:
-        - frigate.eviljungle.com
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - {key: "feature.node.kubernetes.io/custom-coral-tpu", operator: In, values: ["true"]}
-    resources:
-      requests:
-        memory: 1000Mi
-        cpu: 750m
-        gpu.intel.com/i915: 1
-      limits:
-        memory: 2000Mi
-        gpu.intel.com/i915: 1
-    probes:
-      startup:
-        enabled: true
-    persistence:
-      data:
-        enabled: true
-        storageClass: rook-ceph-block
-    shmSize: 2Gi
-    extraVolumes:
-      - name: media
-        persistentVolumeClaim:
-          claimName: nfs-media-pvc
-      - name: cache
-        emptyDir:
-          medium: Memory
-    extraVolumeMounts:
-      - mountPath: /media
-        name: media
-        subPath: Videos
-      - mountPath: /tmp/cache
-        name: cache
-    podAnnotations:
-      backup.velero.io/backup-volumes: data
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
