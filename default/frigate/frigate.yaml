@@ -8,7 +8,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://blakeblackshear.github.io/blakeshome-charts/
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: frigate
       version: 6.2.0
       sourceRef:
