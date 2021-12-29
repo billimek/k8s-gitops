@@ -139,7 +139,7 @@ spec:
     kubeApiServer:
       enabled: true
     kubeControllerManager:
-      enabled: true
+      enabled: false
       endpoints:
         - 10.2.0.30
       service:
@@ -151,7 +151,7 @@ spec:
         https: true
         insecureSkipVerify: true
     kubeScheduler:
-      enabled: true
+      enabled: false
       endpoints:
         - 10.2.0.30
       service:
@@ -163,11 +163,11 @@ spec:
         https: true
         insecureSkipVerify: true
     kubeProxy:
-      enabled: true
+      enabled: false
       endpoints:
         - 10.2.0.30
     kubeEtcd:
-      enabled: true
+      enabled: false
       endpoints:
         - 10.2.0.30
       service:
