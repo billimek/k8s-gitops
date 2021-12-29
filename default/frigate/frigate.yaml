@@ -43,6 +43,8 @@ spec:
       data:
         enabled: true
         storageClass: rook-ceph-block
+        accessMode: ReadWriteOnce
+        size: 10Gi
         mountPath: /data
       media:
         enabled: true
