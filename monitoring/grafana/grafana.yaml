@@ -19,10 +19,10 @@ spec:
   values:
     image:
       repository: grafana/grafana
-      tag: 7.5.12
-    # tolerations:
-    # - key: "arm"
-    #   operator: "Exists"
+      tag: 8.3.3
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     deploymentStrategy:
       type: Recreate
     podAnnotations:
@@ -55,7 +55,6 @@ spec:
     - grafana-clock-panel
     - vonage-status-panel
     - grafana-worldmap-panel
-    - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-map-panel
     serviceMonitor:
       enabled: true
     serviceAccount:
@@ -295,9 +294,10 @@ spec:
           url: teslamate-postgresql.default.svc.cluster.local:5432
           database: teslamate
           user: teslamate
-          password: "$TESLAMATE_DB_PASSWORD"
+          secureJsonData:
+            password: "$TESLAMATE_DB_PASSWORD"
           jsonData:
-            postgresVersion: 1100
+            postgresVersion: 1000
             sslmode: disable
         - name: TrueNAS
           type: influxdb
