@@ -39,7 +39,7 @@ spec:
       GF_DISABLE_SANITIZE_HTML: true
       GF_PANELS_DISABLE_SANITIZE_HTML: true
       GF_LOG_FILTERS: rendering:debug
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: "panodata-map-panel,natel-discrete-panel,pr0ps-trackmap-panel"
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: "panodata-map-panel,natel-discrete-panel,pr0ps-trackmap-panel,grafana-worldmap-panel-ng,grafana-map-panel"
     ingress:
       enabled: true
       annotations:
@@ -54,7 +54,7 @@ spec:
     - grafana-piechart-panel
     - grafana-clock-panel
     - vonage-status-panel
-    - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-map-panel
+    - https://github.com/panodata/grafana-map-panel/releases/download/0.15.0/grafana-map-panel-0.15.0.zip;grafana-worldmap-panel-ng
     serviceMonitor:
       enabled: true
     serviceAccount:
