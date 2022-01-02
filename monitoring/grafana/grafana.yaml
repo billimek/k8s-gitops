@@ -54,7 +54,6 @@ spec:
     - grafana-piechart-panel
     - grafana-clock-panel
     - vonage-status-panel
-    - grafana-worldmap-panel
     - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-map-panel
     serviceMonitor:
       enabled: true
