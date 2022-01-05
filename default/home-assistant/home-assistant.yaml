@@ -99,11 +99,27 @@ spec:
         memory: 1000Mi
     postgresql:
       enabled: true
+      image:
+        repository: postgres
+        tag: '14.1'
       postgresqlUsername: home-assistant
       postgresqlDatabase: home-assistant
+      postgresqlDataDir: "/data/pgdata"
       persistence:
         enabled: true
         storageClass: "rook-ceph-block"
+        size: 8Gi
+        mountPath: "/data/"
+      shmVolume:
+        enabled: false
+      volumePermissions:
+        enabled: false
+      primary:
+        tolerations:
+        - key: "arm"
+          operator: "Exists"
+        podAnnotations:
+          backup.velero.io/backup-volumes: data
   valuesFrom:
   - kind: Secret
     name: "home-assistant-helm-values"
