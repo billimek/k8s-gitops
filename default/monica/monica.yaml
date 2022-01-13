@@ -61,14 +61,16 @@ spec:
         memory: 250Mi
     mariadb:
       enabled: true
-      image:
-        registry: docker.io
-        repository: bitnami/mariadb
-        tag: 10.6.5-debian-10-r46
+      # image:
+      #   registry: docker.io
+      #   repository: bitnami/mariadb
+      #   tag: 10.6.5-debian-10-r46
       primary:
         persistence:
           enabled: true
           storageClass: "rook-ceph-block"
+        podAnnotations:
+          backup.velero.io/backup-volumes: data
       auth:
         database: monica
         username: monica
