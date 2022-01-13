@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: monica
-      tag: 3.5.0-apache
+      tag: 3.6.1-apache
     env:
       APP_URL: https://monica.eviljungle.com
       APP_ENV: production
