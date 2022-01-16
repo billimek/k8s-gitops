@@ -27,13 +27,12 @@ spec:
     nodeFeatureRule:
       createCRD: true
     worker:
-      config: |-
+      config:
         core:
-          sleepInterval: 60s
           sources:
-          - custom
-          - pci
-          - usb
+            - custom
+            - pci
+            - usb
         sources:
           usb:
             deviceClassWhitelist:
