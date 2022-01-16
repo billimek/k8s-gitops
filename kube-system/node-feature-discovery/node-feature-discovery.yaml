@@ -10,29 +10,24 @@ spec:
     spec:
       # renovate: registryUrl=https://kubernetes-sigs.github.io/node-feature-discovery/charts
       chart: node-feature-discovery
-      version: 0.10.0
+      version: 0.9.0
       sourceRef:
         kind: HelmRepository
         name: kubernetes-sigs-nfd-charts
         namespace: flux-system
       interval: 5m
-  install:
-    crds: CreateReplace
-  upgrade:
-    crds: CreateReplace
   values:
     image:
       repository: raspbernetes/node-feature-discovery
       tag: "v0.9.0"
-    nodeFeatureRule:
-      createCRD: true
     worker:
-      config:
+      config: |-
         core:
+          sleepInterval: 60s
           sources:
-            - custom
-            - pci
-            - usb
+          - custom
+          - pci
+          - usb
         sources:
           usb:
             deviceClassWhitelist:
