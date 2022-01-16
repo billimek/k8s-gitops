@@ -16,10 +16,16 @@ spec:
         name: kubernetes-sigs-nfd-charts
         namespace: flux-system
       interval: 5m
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
   values:
     image:
       repository: raspbernetes/node-feature-discovery
       tag: "v0.9.0"
+    nodeFeatureRule:
+      createCRD: true
     worker:
       config: |-
         core:
