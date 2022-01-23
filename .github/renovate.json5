@@ -156,7 +156,7 @@
       "additionalBranchPrefix": "",
       "separateMinorPatch": true
     },
-    // auto-updates
+    // auto-updates - daily
     {
       "datasources": ["docker"],
       "automerge": true,
@@ -168,12 +168,22 @@
         "ghcr.io/k8s-at-home/radarr",
         "ghcr.io/k8s-at-home/sonarr",
         "ghcr.io/k8s-at-home/nzbget",
-        "ghcr.io/k8s-at-home/prowlarr",
-        "ghcr.io/k8s-at-home/readarr",
         "plexinc/pms-docker",
         "hotio/readarr",
         "nodered/node-red",
         "zwavejs/zwavejs2mqtt"
+      ]
+    },
+    // auto-updates - weekly
+    {
+      "datasources": ["docker"],
+      "automerge": true,
+      "requiredStatusChecks": null,
+      "schedule": ["before 3am on Monday"],
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "ghcr.io/k8s-at-home/prowlarr",
+        "ghcr.io/k8s-at-home/readarr"
       ]
     },
     {
