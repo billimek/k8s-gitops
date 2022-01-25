@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: grafana/grafana
-      tag: 7.5.13
+      tag: 8.3.4
     tolerations:
     - key: "arm"
       operator: "Exists"
@@ -49,12 +49,10 @@ spec:
       - hosts:
         - grafana.eviljungle.com
     plugins:
-    - natel-discrete-panel
     - pr0ps-trackmap-panel
-    - grafana-piechart-panel
     - grafana-clock-panel
     - vonage-status-panel
-    - https://github.com/panodata/grafana-map-panel/releases/download/0.15.0/grafana-map-panel-0.15.0.zip;grafana-worldmap-panel-ng
+    - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-worldmap-panel-ng
     serviceMonitor:
       enabled: true
     serviceAccount:
@@ -179,60 +177,60 @@ spec:
           datasource: Prometheus
       teslamate:
         charge-level:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/charge-level.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/charge-level.json
           # datasource: TeslaMate
         charges:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/charges.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/charges.json
           # datasource: TeslaMate
         charging-stats:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/charging-stats.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/charging-stats.json
           # datasource: TeslaMate
         drive-stats:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/drive-stats.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/drive-stats.json
           # datasource: TeslaMate
         drives:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/drives.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/drives.json
           # datasource: TeslaMate
         efficiency:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/efficiency.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/efficiency.json
           # datasource: TeslaMate
         locations:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/locations.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/locations.json
           # datasource: TeslaMate
         mileage:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/mileage.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/mileage.json
           # datasource: TeslaMate
         overview:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/overview.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/overview.json
           # datasource: TeslaMate
         projected-range:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/projected-range.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/projected-range.json
           # datasource: TeslaMate
         states:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/states.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/states.json
           # datasource: TeslaMate
         statistics:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/statistics.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/statistics.json
           # datasource: TeslaMate
         timeline:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/timeline.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/timeline.json
           # datasource: TeslaMate
         trip:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/trip.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/trip.json
           # datasource: TeslaMate
         updates:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/updates.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/updates.json
           # datasource: TeslaMate
         vampire-drain:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/vampire-drain.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/vampire-drain.json
           # datasource: TeslaMate
         visited:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/visited.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/visited.json
           # datasource: TeslaMate
         charge-details:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/internal/charge-details.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/internal/charge-details.json
         drive-details:
-          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.25.0/grafana/dashboards/internal/drive-details.json
+          url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.0/grafana/dashboards/internal/drive-details.json
     sidecar:
       datasources:
         enabled: true
