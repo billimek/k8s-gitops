@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
       chart: minecraft
-      version: 3.7.2
+      version: 3.6.6
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
@@ -37,7 +37,7 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
-      SPIGET_RESOURCES: "274,74354,8631,28140,86449"
+      SPIGET_RESOURCES: "74354,8631,28140,86449"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
