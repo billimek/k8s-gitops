@@ -53,10 +53,10 @@ spec:
       fsGroup: 1001
     resources:
       requests:
-        memory: 350Mi
+        memory: 750Mi
         cpu: 25m
       limits:
-        memory: 1000Mi
+        memory: 2000Mi
     tolerations:
     - key: "arm"
       operator: "Exists"
