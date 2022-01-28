@@ -43,7 +43,7 @@ spec:
       config:
         enabled: true
         storageClass: "rook-ceph-block"
-        size: 2Gi
+        size: 5Gi
       media:
         enabled: true
         existingClaim: nfs-media-pvc
