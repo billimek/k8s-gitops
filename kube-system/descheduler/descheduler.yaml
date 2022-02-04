@@ -8,6 +8,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://kubernetes-sigs.github.io/descheduler
       chart: descheduler
       version: 0.23.0
       sourceRef:
