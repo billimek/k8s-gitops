@@ -221,7 +221,7 @@ spec:
           # datasource: TeslaMate
         updates:
           url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.1/grafana/dashboards/updates.json
-          # datasource: TeslaMate
+          datasource: TeslaMate
         vampire-drain:
           url: https://raw.githubusercontent.com/adriankumpf/teslamate/v1.26.1/grafana/dashboards/vampire-drain.json
           # datasource: TeslaMate
