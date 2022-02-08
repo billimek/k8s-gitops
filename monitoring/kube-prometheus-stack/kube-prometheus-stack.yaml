@@ -78,6 +78,9 @@ spec:
             - match:
                 alertname: Watchdog
               receiver: 'null'
+            - match:
+                alertname: InfoInhibitor
+              receiver: 'null'
             - receiver: 'pagerduty'
               match:
                 severity: critical
