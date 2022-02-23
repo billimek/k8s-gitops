@@ -53,6 +53,7 @@ spec:
     - pr0ps-trackmap-panel
     - grafana-clock-panel
     - vonage-status-panel
+    - grafana-piechart-panel
     - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-worldmap-panel-ng
     serviceMonitor:
       enabled: true
@@ -85,7 +86,7 @@ spec:
           url: https://grafana.com/api/dashboards/11074/revisions/9/download
           datasource: Prometheus
         blocky:
-          url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.16/docs/blocky-grafana.json
+          url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.18/docs/blocky-grafana.json
           datasource: Prometheus
         cable-modem-stats:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/cable_modem_stats.json
