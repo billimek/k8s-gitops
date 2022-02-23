@@ -40,6 +40,7 @@ spec:
       # GF_PANELS_DISABLE_SANITIZE_HTML: true
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_LOG_FILTERS: rendering:debug
+      VAR_BLOCKY_URL: "http://blocky.default.svc.cluster.local:4000"
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: "natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel"
     ingress:
       enabled: true
