@@ -19,7 +19,7 @@ jobs:
     outputs:
       files: "${{ steps.extract.outputs.files }}"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -49,11 +49,11 @@ jobs:
           setup-tools: |
             helmv3
             yq
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ env.conf_live_branch }}
           path: live
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: pr
       - id: diff
