@@ -21,14 +21,6 @@ https://www.botkube.io/
 
 * [influxdb/influxdb.yaml](influxdb/influxdb.yaml)
 
-# modem-stats
-
-![](https://i.imgur.com/muHDysr.png)
-
-Collect cable modem statistics for reporting
-
-* [modem-stats/modem-stats.yaml](modem-stats/modem-stats.yaml)
-
 # kube-prometheus-stack
 
 ![](https://i.imgur.com/VwDwdpQ.png)
