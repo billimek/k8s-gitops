@@ -109,6 +109,9 @@ spec:
                 - /dev/dri/renderD128
                 - -hwaccel_output_format
                 - yuv420p
+              # output_args:
+              #   detect: "-vf fps=fps=5,vpp_qsv=w=1280:h=720:format=nv12,hwdownload,format=nv12,format=yuv420p -an -f rawvideo pipe:"
+
 
             objects:
               track:
@@ -129,6 +132,20 @@ spec:
                   min_area: 1000
                   max_area: 10000
                   threshold: 0.7
+
+            record:
+              enabled: true
+              retain:
+                days: 7
+              events:
+                retain:
+                  default: 14
+
+            snapshots:
+              enabled: True
+              timestamp: False
+              bounding_box: True
+              crop: False
 
             cameras:
               porch:
@@ -152,17 +169,6 @@ spec:
                       max_area: 100000
                       threshold: 0.75
                       min_score: 0.60
-                snapshots:
-                  enabled: True
-                  timestamp: False
-                  bounding_box: True
-                  crop: False
-                record:
-                  enabled: true
-                  retain_days: 0
-                  events:
-                    retain:
-                      default: 14
 
               front:
                 ffmpeg:
@@ -178,17 +184,6 @@ spec:
                   height: 480
                   width: 704
                   fps: 5
-                snapshots:
-                  enabled: true
-                  timestamp: False
-                  bounding_box: true
-                  crop: False
-                record:
-                  enabled: true
-                  retain_days: 0
-                  events:
-                    retain:
-                      default: 14
 
               driveway:
                 ffmpeg:
@@ -204,17 +199,6 @@ spec:
                   height: 480
                   width: 704
                   fps: 5
-                snapshots:
-                  enabled: true
-                  timestamp: False
-                  bounding_box: true
-                  crop: False
-                record:
-                  enabled: true
-                  retain_days: 0
-                  events:
-                    retain:
-                      default: 14
 
               pool:
                 ffmpeg:
@@ -236,17 +220,6 @@ spec:
                       min_area: 1000
                       max_area: 100000
                       threshold: 0.6
-                snapshots:
-                  enabled: true
-                  timestamp: False
-                  bounding_box: true
-                  crop: False
-                record:
-                  enabled: true
-                  retain_days: 0
-                  events:
-                    retain:
-                      default: 14
 
               basement:
                 ffmpeg:
@@ -294,17 +267,6 @@ spec:
                 motion:
                   mask:
                     - 0,352,151,352,148,249,0,254
-                snapshots:
-                  enabled: true
-                  timestamp: False
-                  bounding_box: true
-                  crop: False
-                record:
-                  enabled: true
-                  retain_days: 0
-                  events:
-                    retain:
-                      default: 14
                 rtmp:
                   enabled: false
   valuesFrom:
