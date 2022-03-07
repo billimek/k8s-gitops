@@ -109,8 +109,6 @@ spec:
                 - /dev/dri/renderD128
                 - -hwaccel_output_format
                 - yuv420p
-              output_args:
-                detect: -f rawvideo -vf hwdownload,format=nv12 -pix_fmt yuv420p
 
             objects:
               track:
