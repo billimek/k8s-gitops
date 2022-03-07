@@ -109,9 +109,8 @@ spec:
                 - /dev/dri/renderD128
                 - -hwaccel_output_format
                 - yuv420p
-              # output_args:
-              #   detect: "-vf fps=fps=5,vpp_qsv=w=1280:h=720:format=nv12,hwdownload,format=nv12,format=yuv420p -an -f rawvideo pipe:"
-
+              output_args:
+                detect: "-vf fps=fps=5,vpp_qsv=w=1280:h=720:format=nv12,hwdownload,format=nv12,format=yuv420p -an -f rawvideo pipe:"
 
             objects:
               track:
