@@ -291,10 +291,9 @@ spec:
                   height: 352
                   width: 640
                   fps: 4
-                objects:
-                  filters:
-                    object_0:
-                      mask: 0,352,157,352
+                motion:
+                  mask:
+                    - 0,352,151,352,148,249,0,254
                 snapshots:
                   enabled: true
                   timestamp: False
