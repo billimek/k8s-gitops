@@ -89,9 +89,6 @@ spec:
         blocky:
           url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.18/docs/blocky-grafana.json
           datasource: Prometheus
-        cable-modem-stats:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/cable_modem_stats.json
-          # datasource: cable_modem_stats
         # Ref: https://grafana.com/grafana/dashboards/2842
         ceph-cluster:
           gnetId: 2842
@@ -264,11 +261,6 @@ spec:
           access: proxy
           url: http://influxdb:8086
           database: telegraf
-        - name: cable_modem_stats
-          type: influxdb
-          access: proxy
-          url: http://influxdb:8086
-          database: cable_modem_stats
         - name: comcast
           type: influxdb
           access: proxy
