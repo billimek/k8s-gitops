@@ -36,3 +36,6 @@ spec:
             - requiredDuringSchedulingIgnoredDuringExecution
         RemovePodsViolatingInterPodAntiAffinity:
           enabled: true
+        LowNodeUtilization:
+          enabled: false
+
