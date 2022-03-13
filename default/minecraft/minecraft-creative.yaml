@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     image: itzg/minecraft-server
-    imageTag: java17
+    imageTag: 2022.4.1-java17
     strategyType: Recreate
     persistence:
       storageClass: "rook-ceph-block"
@@ -51,6 +51,7 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
+      MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.4/EssentialsX-2.19.4.jar"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"

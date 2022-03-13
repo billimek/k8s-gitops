@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     image: itzg/minecraft-server
-    imageTag: java17
+    imageTag: 2022.4.1-java17
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
@@ -35,6 +35,7 @@ spec:
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "8631,28140,6245,14754"
+      MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.4/EssentialsX-2.19.4.jar"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
