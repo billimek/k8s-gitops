@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     image: itzg/minecraft-server
-    imageTag: java17
+    imageTag: 2022.4.1-java17
     strategyType: Recreate
     persistence:
       storageClass: "rook-ceph-block"
@@ -53,7 +53,7 @@ spec:
       mc-router.itzg.me/externalServerName: "mcsv.eviljungle.com"
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
-      SPIGET_RESOURCES: "9089,74354,8631,28140"
+      SPIGET_RESOURCES: "74354,8631,28140"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
