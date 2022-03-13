@@ -151,8 +151,8 @@ spec:
                   # output_args:
                   #   record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v h264_qsv -global_quality 30 -c:a copy
                   #   detect: -vf fps=fps=5,vpp_qsv=w=704:h=480:format=nv12,hwdownload,format=nv12,format=yuv420p -an -f rawvideo
-                  # input_args: -rtsp_transport tcp -avoid_negative_ts make_zero -fflags nobuffer -flags low_delay -strict experimental
-                  # hwaccel_args: -hwaccel qsv -c:v hevc_qsv
+                  input_args: -rtsp_transport tcp -avoid_negative_ts make_zero -fflags nobuffer -flags low_delay -strict experimental
+                  hwaccel_args: -hwaccel qsv -c:v hevc_qsv
                   inputs:
                     # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
                     #   roles:
