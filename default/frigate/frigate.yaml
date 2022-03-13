@@ -103,6 +103,7 @@ spec:
 
             ffmpeg:
               hwaccel_args: -hwaccel qsv -c:v hevc_qsv -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format yuv420p
+              input_args: -rtsp_transport tcp -avoid_negative_ts make_zero -fflags nobuffer -flags low_delay -strict experimental
               output_args:
                 # record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -c:a aac
                 record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v h264_qsv -global_quality 30 -c:a copy
