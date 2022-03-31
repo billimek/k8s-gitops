@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: jacobalberty/unifi
-      tag: v7.0.23
+      tag: v7.0.25
     persistence:
       data:
         enabled: true
