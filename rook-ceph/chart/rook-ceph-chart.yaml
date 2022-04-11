@@ -30,7 +30,7 @@ spec:
           operator: "Exists"
     resources:
       limits:
-        cpu: 1000m
+        cpu: 500m
         memory: 256Mi
       requests:
         cpu: 100m
