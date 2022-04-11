@@ -45,8 +45,8 @@ spec:
     storegateway:
       enabled: true
       persistence:
-        enabled: false
-        size: 30Gi
+        enabled: true
+        size: 40Gi
     ruler:
       enabled: false
     metrics:
