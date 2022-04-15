@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/k8s-at-home/radarr
-      tag: v4.0.5.5981
+      tag: v4.1.0.6175
     env:
       TZ: "America/New_York"
     ingress:
