@@ -1,4 +1,75 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_UPTIMEROBOT",
+      "label": "uptimerobot",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    },
+    {
+      "name": "DS_INFLUXDB",
+      "label": "influxdb",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.4.6"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph (old)",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -17,7 +88,7 @@
         "type": "dashboard"
       },
       {
-        "datasource": "influxdb",
+        "datasource": "${DS_INFLUXDB}",
         "enable": true,
         "hide": false,
         "iconColor": "rgba(255, 96, 96, 1)",
@@ -29,7 +100,7 @@
         "type": "tags"
       },
       {
-        "datasource": "influxdb",
+        "datasource": "${DS_INFLUXDB}",
         "enable": true,
         "hide": false,
         "iconColor": "#629e51",
@@ -45,14 +116,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 16,
+  "id": null,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -113,7 +184,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.3",
+      "pluginVersion": "8.4.6",
       "targets": [
         {
           "exemplar": true,
@@ -130,7 +201,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -190,7 +261,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.3",
+      "pluginVersion": "8.4.6",
       "targets": [
         {
           "exemplar": true,
@@ -208,7 +279,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -268,7 +339,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.3",
+      "pluginVersion": "8.4.6",
       "targets": [
         {
           "exemplar": true,
@@ -322,7 +393,7 @@
       },
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -799,7 +870,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -835,7 +906,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "8.4.3",
+      "pluginVersion": "8.4.6",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -966,7 +1037,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "P27EA561D1816969D"
+        "uid": "${DS_UPTIMEROBOT}"
       },
       "fieldConfig": {
         "defaults": {
@@ -974,6 +1045,7 @@
             "mode": "thresholds"
           },
           "custom": {
+            "align": "auto",
             "displayMode": "auto"
           },
           "decimals": 2,
@@ -1053,12 +1125,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.4.3",
+      "pluginVersion": "8.4.6",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P27EA561D1816969D"
+            "uid": "${DS_UPTIMEROBOT}"
           },
           "groupBy": [
             {
@@ -1100,7 +1172,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P27EA561D1816969D"
+            "uid": "${DS_UPTIMEROBOT}"
           },
           "groupBy": [],
           "hide": false,
@@ -1138,7 +1210,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "P27EA561D1816969D"
+            "uid": "${DS_UPTIMEROBOT}"
           },
           "groupBy": [],
           "hide": true,
@@ -1195,8 +1267,8 @@
     "list": []
   },
   "time": {
-    "from": "now-7d",
-    "to": "now"
+    "from": "now/M",
+    "to": "now/M"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -1226,6 +1298,6 @@
   "timezone": "browser",
   "title": "comcast sucks",
   "uid": "000000017",
-  "version": 12,
+  "version": 17,
   "weekStart": ""
 }
