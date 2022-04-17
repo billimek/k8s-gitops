@@ -119,10 +119,6 @@ spec:
         home-assistant:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/home_assistant.json
           datasource: home_assistant
-        internet-speed:
-          gnetId: 13665
-          revision: 1
-          datasource: Prometheus
         loki:
           gnetId: 13407
           revision: 1
