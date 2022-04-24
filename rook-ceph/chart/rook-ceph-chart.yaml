@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.rook.io/release
       chart: rook-ceph
-      version: v1.8.9
+      version: v1.9.1
       sourceRef:
         kind: HelmRepository
         name: rook-ceph-charts
@@ -30,7 +30,6 @@ spec:
           operator: "Exists"
     resources:
       limits:
-        cpu: 500m
         memory: 1Gi
       requests:
         cpu: 100m
