@@ -93,7 +93,7 @@ spec:
       operator: "Exists"
     resources:
       limits:
-        memory: 2500Mi
+        memory: 3000Mi
       requests:
         cpu: 100m
         memory: 1000Mi
