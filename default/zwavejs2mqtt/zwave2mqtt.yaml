@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: zwavejs/zwavejs2mqtt
-      tag: 6.7.4
+      tag: 6.8.0
     env:
       TZ: "America/New_York"
     securityContext:
