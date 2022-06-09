@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: raspbernetes/kured
-      tag: 1.9.2
+      tag: 1.10.0
     updateStrategy: RollingUpdate
     configuration:
       startTime: "0:00"
