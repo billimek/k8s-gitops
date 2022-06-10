@@ -40,7 +40,7 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: PAPER
-      paperDownloadUrl: https://files.eim.one/paper-1.19-experimental-3.jar
+      paperDownloadUrl: https://files.eim.one/paper-1.19-experimental-4.jar
       forceReDownload: true
       onlineMode: false
       difficulty: peaceful
