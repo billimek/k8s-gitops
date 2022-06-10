@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     image: itzg/minecraft-server
-    imageTag: 2022.4.1-java17
+    imageTag: 2022.8.0-java17
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
@@ -40,6 +40,7 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: PAPER
+      paperDownloadUrl: https://files.eim.one/paper-1.19-experimental-3.jar
       forceReDownload: true
       onlineMode: false
       difficulty: peaceful
