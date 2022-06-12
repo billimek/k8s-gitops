@@ -40,7 +40,6 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: PAPER
-      paperDownloadUrl: https://kennytv.eu/paper-1.19-experimental-5.jar
       forceReDownload: true
       onlineMode: false
       difficulty: peaceful
