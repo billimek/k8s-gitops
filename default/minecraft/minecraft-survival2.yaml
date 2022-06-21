@@ -37,8 +37,9 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
-      SPIGET_RESOURCES: "74354,8631,28140,86449"
-      MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.4/EssentialsX-2.19.4.jar"
+      SPIGET_RESOURCES: "74354,8631,28140"
+        # MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.4/EssentialsX-2.19.4.jar"
+      MODS: "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.19.5-dev+21-ff80338.jar"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
