@@ -102,6 +102,15 @@ spec:
           ttl: "120h"
           includedNamespaces:
           - default
+      mcsv2-minecraft-hourly:
+        schedule: "0 * * * *"
+        template:
+          labelSelector:
+            matchLabels:
+              app: mcsv2-minecraft
+          ttl: "120h"
+          includedNamespaces:
+            - default
       mc-minecraft-hourly:
         schedule: "0 */6 * * *"
         template:
