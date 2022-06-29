@@ -44,7 +44,7 @@ jobs:
         file: ${{ fromJson(needs.changes.outputs.files) }}
       fail-fast: false
     steps:
-      - uses: yokawasa/action-setup-kube-tools@v0.8.1
+      - uses: yokawasa/action-setup-kube-tools@v0.8.2
         with:
           setup-tools: |
             helmv3
