@@ -42,6 +42,7 @@ spec:
       MODS: "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.19.5-dev+29-09dc49a.jar"
       REMOVE_OLD_MODS: "TRUE"
       REMOVE_OLD_MODS_INCLUDE: "EssentialsX*.jar"
+      REMOVE_OLD_MODS_DEPTH: "1"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
