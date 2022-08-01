@@ -72,7 +72,7 @@ spec:
         repository: postgres
         tag: '13.4'
       auth:
-        #enablePostgresUser: false
+        enablePostgresUser: false
         username: teslamate
         database: teslamate
       postgresqlDataDir: "/data/pgdata"
