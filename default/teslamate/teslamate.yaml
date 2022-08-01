@@ -71,8 +71,9 @@ spec:
       image:
         repository: postgres
         tag: '13.4'
-      postgresqlUsername: teslamate
-      postgresqlDatabase: teslamate
+      auth:
+        username: teslamate
+        database: teslamate
       postgresqlDataDir: "/data/pgdata"
       shmVolume:
         enabled: false
