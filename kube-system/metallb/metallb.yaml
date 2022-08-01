@@ -21,6 +21,7 @@ spec:
       enabled: true
     prometheus:
       namespace: monitoring
+      serviceAccount: kube-prometheus-stack-prometheus
       podMonitor:
         enabled: true
       prometheusRule:
