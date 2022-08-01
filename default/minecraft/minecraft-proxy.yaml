@@ -17,8 +17,9 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    image: itzg/bungeecord
-    imageTag: 2022.3.0
+    image:
+      repository: itzg/bungeecord
+      tag: 2022.3.0
     securityContext:
       # Security context settings - need to use root or else there will be problems due to the underlying image trying to do some things as root already
       runAsUser: 0

@@ -17,8 +17,9 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    image: itzg/minecraft-server
-    imageTag: 2022.4.1-java17
+    image:
+      repository: itzg/minecraft-server
+      tag: 2022.4.1-java17
     strategyType: Recreate
     persistence:
       storageClass: "rook-ceph-block"

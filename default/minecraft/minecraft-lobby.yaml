@@ -17,8 +17,9 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    image: itzg/minecraft-server
-    imageTag: 2022.8.0-java17
+    image:
+      repository: itzg/minecraft-server
+      tag: 2022.8.0-java17
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
