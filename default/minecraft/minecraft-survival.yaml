@@ -55,7 +55,7 @@ spec:
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "74354,8631,28140"
-      MODS: "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.19.5-dev+32-908189a.jar"
+      MODS: "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.19.5-dev+33-0375771.jar"
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
