@@ -1,53 +1,53 @@
----
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
-metadata:
-  name: ingress-nginx-tailscale
-  namespace: kube-system
-spec:
-  interval: 5m
-  chart:
-    spec:
-      # renovate: registryUrl=https://kubernetes.github.io/ingress-nginx
-      chart: ingress-nginx
-      version: 4.2.0
-      sourceRef:
-        kind: HelmRepository
-        name: ingress-nginx-charts
-        namespace: flux-system
-      interval: 5m
-  values:
-    controller:
-      replicaCount: 1
-      service:
-        type: ClusterIP
-      ingressClassResource:
-        name: nginx-tailscale
-        enabled: true
-        default: false
-        controllerValue: "k8s.io/ingress-nginx-tailscale"
-      extraArgs:
-        default-ssl-certificate: "cert-manager/acme-crt-secret"
-      extraContainers:
-        - name: tailscaled
-          image: billimek/ts:latest
-          imagePullPolicy: Always
-          # volumeMounts:
-          #   - name: tailscale-state
-          #     mountPath: /tailscale
-          env:
-            # Store the state in a k8s secret
-          - name: KUBE_SECRET
-            value: tailscale
-          - name: USERSPACE
-            value: "false"
-          - name: AUTH_KEY
-            valueFrom:
-              secretKeyRef:
-                name: tailscale-auth
-                key: AUTH_KEY
-                optional: true
-          securityContext:
-            capabilities:
-              add:
-              - NET_ADMIN
+# ---
+# apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# kind: HelmRelease
+# metadata:
+#   name: ingress-nginx-tailscale
+#   namespace: kube-system
+# spec:
+#   interval: 5m
+#   chart:
+#     spec:
+#       # renovate: registryUrl=https://kubernetes.github.io/ingress-nginx
+#       chart: ingress-nginx
+#       version: 4.2.0
+#       sourceRef:
+#         kind: HelmRepository
+#         name: ingress-nginx-charts
+#         namespace: flux-system
+#       interval: 5m
+#   values:
+#     controller:
+#       replicaCount: 1
+#       service:
+#         type: ClusterIP
+#       ingressClassResource:
+#         name: nginx-tailscale
+#         enabled: true
+#         default: false
+#         controllerValue: "k8s.io/ingress-nginx-tailscale"
+#       extraArgs:
+#         default-ssl-certificate: "cert-manager/acme-crt-secret"
+#       extraContainers:
+#         - name: tailscaled
+#           image: billimek/ts:latest
+#           imagePullPolicy: Always
+#           # volumeMounts:
+#           #   - name: tailscale-state
+#           #     mountPath: /tailscale
+#           env:
+#             # Store the state in a k8s secret
+#           - name: KUBE_SECRET
+#             value: tailscale
+#           - name: USERSPACE
+#             value: "false"
+#           - name: AUTH_KEY
+#             valueFrom:
+#               secretKeyRef:
+#                 name: tailscale-auth
+#                 key: AUTH_KEY
+#                 optional: true
+#           securityContext:
+#             capabilities:
+#               add:
+#               - NET_ADMIN
