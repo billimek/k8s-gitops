@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: home-assistant
-      version: 12.2.0
+      version: 13.4.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -102,19 +102,21 @@ spec:
       image:
         repository: postgres
         tag: '14.1'
-      postgresqlUsername: home-assistant
-      postgresqlDatabase: home-assistant
+      auth:
+        enablePostgresUser: false
+        username: home-assistant
+        database: home-assistant
       postgresqlDataDir: "/data/pgdata"
-      persistence:
-        enabled: true
-        storageClass: "rook-ceph-block"
-        size: 8Gi
-        mountPath: "/data/"
       shmVolume:
         enabled: false
       volumePermissions:
         enabled: false
       primary:
+        persistence:
+          enabled: true
+          storageClass: "rook-ceph-block"
+          size: 8Gi
+          mountPath: "/data/"
         tolerations:
         - key: "arm"
           operator: "Exists"

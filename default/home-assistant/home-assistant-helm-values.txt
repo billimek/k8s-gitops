@@ -1,7 +1,9 @@
 extraEnv:
   CAMERA_AUTH: $CAMERA_AUTH
 postgresql:
-  postgresqlPassword: "${HASS_DB_PASSWORD}"
+  auth:
+    postgresqlPassword: "${HASS_DB_ADMIN_PASSWORD}"
+    password: "${HASS_DB_PASSWORD}"
 addons:
   codeserver:
     env:
