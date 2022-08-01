@@ -17,36 +17,19 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    configInline:
-      peers:
-      - peer-address: 10.0.7.1
-        peer-asn: 64512
-        my-asn: 64512
-      address-pools:
-      - name: bgp
-        protocol: bgp
-        addresses:
-        -  10.0.6.0/24
-        avoid-buggy-ips: true
-    prometheusRule:
+    crds:
       enabled: true
     prometheus:
-      enabled: true
-      serviceMonitor:
+      namespace: monitoring
+      podMonitor:
         enabled: true
       prometheusRule:
         enabled: true
     controller:
-      # image:
-      #   repository: quay.io/metallb/controller
-      #   tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
     speaker:
-      # image:
-      #   repository: quay.io/metallb/speaker
-      #   tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
