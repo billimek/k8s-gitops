@@ -27,6 +27,7 @@ spec:
       TZ: "America/New_York"
     service:
       main:
+        enabled: true
         ports:
           http:
             port: 4000
