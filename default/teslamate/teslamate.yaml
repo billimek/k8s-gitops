@@ -74,16 +74,16 @@ spec:
       postgresqlUsername: teslamate
       postgresqlDatabase: teslamate
       postgresqlDataDir: "/data/pgdata"
-      persistence:
-        enabled: true
-        storageClass: "rook-ceph-block"
-        size: 8Gi
-        mountPath: "/data/"
       shmVolume:
         enabled: false
       volumePermissions:
         enabled: false
       primary:
+        persistence:
+          enabled: true
+          storageClass: "rook-ceph-block"
+          size: 8Gi
+          mountPath: "/data/"
         tolerations:
         - key: "arm"
           operator: "Exists"
