@@ -10,43 +10,27 @@ spec:
     spec:
       # renovate: registryUrl=https://metallb.github.io/metallb
       chart: metallb
-      version: 0.12.1
+      version: 0.13.4
       sourceRef:
         kind: HelmRepository
         name: metallb-charts
         namespace: flux-system
       interval: 5m
   values:
-    configInline:
-      peers:
-      - peer-address: 10.0.7.1
-        peer-asn: 64512
-        my-asn: 64512
-      address-pools:
-      - name: bgp
-        protocol: bgp
-        addresses:
-        -  10.0.6.0/24
-        avoid-buggy-ips: true
-    prometheusRule:
+    crds:
       enabled: true
     prometheus:
-      enabled: true
-      serviceMonitor:
+      namespace: monitoring
+      serviceAccount: kube-prometheus-stack-prometheus
+      podMonitor:
         enabled: true
       prometheusRule:
         enabled: true
     controller:
-      # image:
-      #   repository: quay.io/metallb/controller
-      #   tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
     speaker:
-      # image:
-      #   repository: quay.io/metallb/speaker
-      #   tag: v0.10.1
       tolerations:
       - key: "arm"
         operator: "Exists"
