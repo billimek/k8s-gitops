@@ -86,7 +86,7 @@ spec:
         memory: 1000Mi
     config: |
       upstream:
-        externalResolvers:
+        default:
         - tcp+udp:10.0.7.1
         # - tcp+udp:8.8.8.8
         # - tcp+udp:8.8.4.4
