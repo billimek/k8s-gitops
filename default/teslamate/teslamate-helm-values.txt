@@ -5,3 +5,4 @@ env:
 postgresql:
   auth:
     password: $TESLAMATE_DB_PASSWORD
+    postgresPassword: $TESLAMATE_DB_ADMIN_PASSWORD
