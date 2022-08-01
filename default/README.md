@@ -152,15 +152,6 @@ Rules-engine for automations
 
 * [unifi.yaml](unifi/unifi.yaml)
 
-# valheim
-
-![](https://i.imgur.com/R1Jvrsr.jpg)
-
-[Valheim](https://github.com/lloesche/valheim-server-docker) game server
-
-* [valheim.yaml](valheim/valheim.yaml)
-
-
 # zwavejs2mqtt
 
 ![](https://i.imgur.com/Odhu4gJ.png)
