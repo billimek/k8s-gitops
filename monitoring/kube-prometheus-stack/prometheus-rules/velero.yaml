@@ -12,7 +12,7 @@ spec:
       annotations:
         message: Velero backup {{ $labels.schedule }} has {{ $value | humanizePercentage }} partially failed backups.
       expr: |-
-        velero_backup_partial_failure_total{schedule!=""} / velero_backup_attempt_total{schedule!=""} > 0.25
+        velero_backup_partial_failure_total{schedule!=""} / velero_backup_attempt_total{schedule!=""} > 0.99
       for: 15m
       labels:
         severity: warning
