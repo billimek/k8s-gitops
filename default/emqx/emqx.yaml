@@ -16,15 +16,24 @@ spec:
         name: emqx-charts
         namespace: flux-system
       interval: 5m
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
   values:
+    image:
+      repository: public.ecr.aws/emqx/emqx
     replicaCount: 3
     recreatePods: true
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.50
-    # tolerations:
-    #   - key: "arm"
-    #     operator: "Exists"
+    tolerations:
+      - key: "arm"
+        operator: "Exists"
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
