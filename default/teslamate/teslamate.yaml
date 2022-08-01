@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: teslamate
-      version: 6.7.2
+      version: 7.1.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -71,19 +71,20 @@ spec:
       image:
         repository: postgres
         tag: '13.4'
-      postgresqlUsername: teslamate
-      postgresqlDatabase: teslamate
+      auth:
+        username: teslamate
+        database: teslamate
       postgresqlDataDir: "/data/pgdata"
-      persistence:
-        enabled: true
-        storageClass: "rook-ceph-block"
-        size: 8Gi
-        mountPath: "/data/"
       shmVolume:
         enabled: false
       volumePermissions:
         enabled: false
       primary:
+        persistence:
+          enabled: true
+          storageClass: "rook-ceph-block"
+          size: 8Gi
+          mountPath: "/data/"
         tolerations:
         - key: "arm"
           operator: "Exists"
