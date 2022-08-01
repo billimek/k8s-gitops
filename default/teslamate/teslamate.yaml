@@ -75,6 +75,7 @@ spec:
         enablePostgresUser: false
         username: teslamate
         database: teslamate
+        existingSecret: teslamate-postgresql
       postgresqlDataDir: "/data/pgdata"
       shmVolume:
         enabled: false
