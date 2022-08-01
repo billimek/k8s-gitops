@@ -103,6 +103,7 @@ spec:
         repository: postgres
         tag: '14.1'
       auth:
+        enablePostgresUser: false
         username: home-assistant
         database: home-assistant
       postgresqlDataDir: "/data/pgdata"
