@@ -90,7 +90,6 @@ spec:
         # image: billimek/alpine-rtorrent:0.9.8-1
         image: billimek/rtorrent:latest
         env:
-        - name: TZ
         - name: PUID
           value: "1001"
         - name: PGID
