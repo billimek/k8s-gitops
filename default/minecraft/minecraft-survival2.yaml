@@ -39,7 +39,7 @@ spec:
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "74354,8631,28140"
-        # MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.4/EssentialsX-2.19.4.jar"
+        MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.6/EssentialsX-2.19.6.jar"
         #REMOVE_OLD_MODS: "TRUE"
         #REMOVE_OLD_MODS_INCLUDE: "EssentialsX*.jar"
         #REMOVE_OLD_MODS_DEPTH: "1"
