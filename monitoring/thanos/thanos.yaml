@@ -16,6 +16,9 @@ spec:
         name: bitnami-charts
         namespace: flux-system
       interval: 5m
+      timeout: 600
+      rollback:
+        enable: true
   values:
     query:
       enabled: true
