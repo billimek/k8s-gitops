@@ -6,7 +6,7 @@ metadata:
   namespace: monitoring
 spec:
   interval: 5m
-  timeout: 600
+  timeout: 10m
   chart:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
