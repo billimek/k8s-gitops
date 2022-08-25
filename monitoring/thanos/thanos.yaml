@@ -6,6 +6,9 @@ metadata:
   namespace: monitoring
 spec:
   interval: 5m
+  timeout: 600
+  rollback:
+    enable: true
   chart:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
@@ -16,7 +19,6 @@ spec:
         name: bitnami-charts
         namespace: flux-system
       interval: 5m
-      timeout: 600
   values:
     query:
       enabled: true
