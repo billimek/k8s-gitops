@@ -7,8 +7,6 @@ metadata:
 spec:
   interval: 5m
   timeout: 600
-  rollback:
-    enable: true
   chart:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
