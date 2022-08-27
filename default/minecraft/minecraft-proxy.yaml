@@ -83,9 +83,9 @@ spec:
             address: mc-minecraft:25565
             restricted: false
           survival:
-            motd: 'Private Survival SMP'
+            motd: 'Walker Survival SMP'
             address: mcsv-minecraft:25565
-            restricted: true
+            restricted: false
           survival2:
             motd: 'Public Survival EZ-mode SMP'
             address: mcsv2-minecraft:25565
