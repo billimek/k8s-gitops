@@ -51,7 +51,7 @@ spec:
     podAnnotations:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
-      MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.6/EssentialsX-2.19.6.jar"
+      MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar"
       ENABLE_AUTOPAUSE: TRUE
     minecraftServer:
       eula: "TRUE"
