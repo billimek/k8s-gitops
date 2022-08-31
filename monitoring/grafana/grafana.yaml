@@ -49,7 +49,7 @@ spec:
         - grafana.eviljungle.com
     plugins:
     - pr0ps-trackmap-panel
-    - grafana-clock-panel
+    - natel-plotly-panel
     - vonage-status-panel
     - grafana-piechart-panel
     - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-worldmap-panel-ng
