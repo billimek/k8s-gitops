@@ -54,7 +54,7 @@ spec:
       mc-router.itzg.me/externalServerName: "mcsv.eviljungle.com"
     extraEnv:
       MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar"
-      ENABLE_AUTOPAUSE: TRUE
+      ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "74354,8631,28140"
     minecraftServer:
       eula: "TRUE"

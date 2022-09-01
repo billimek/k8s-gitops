@@ -52,7 +52,7 @@ spec:
       backup.velero.io/backup-volumes: datadir
     extraEnv:
       MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar"
-      ENABLE_AUTOPAUSE: TRUE
+      ENABLE_AUTOPAUSE: FALSE
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"
