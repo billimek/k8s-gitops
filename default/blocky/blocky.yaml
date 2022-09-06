@@ -21,7 +21,7 @@ spec:
       repository: ghcr.io/0xerr0r/blocky
       tag: v0.19
     controller:
-      replicas: 1
+      replicas: 4
       strategy: RollingUpdate
     env:
       TZ: "America/New_York"
@@ -107,7 +107,7 @@ spec:
             - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
             - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
             - http://sysctl.org/cameleon/hosts
-            - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txta
+            - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
             - https://raw.githubusercontent.com/kboghdady/youTube_ads_4_pi-hole/master/youtubelist.txt
           kids:
           - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts
