@@ -21,7 +21,7 @@ spec:
       repository: ghcr.io/0xerr0r/blocky
       tag: v0.19
     controller:
-      replicas: 4
+      replicas: 1
       strategy: RollingUpdate
     env:
       TZ: "America/New_York"
@@ -104,17 +104,17 @@ spec:
       blocking:
         blackLists:
           ads:
-          - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-          - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-          - http://sysctl.org/cameleon/hosts
-          - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+            - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+            - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+            - http://sysctl.org/cameleon/hosts
+            - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txta
+            - https://raw.githubusercontent.com/kboghdady/youTube_ads_4_pi-hole/master/youtubelist.txt
           kids:
           - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts
           none:
         whiteLists:
           ads:
-          - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
-          - https://raw.githubusercontent.com/billimek/k8s-gitops/master/default/blocky/whitelist.txt
+            - https://raw.githubusercontent.com/billimek/k8s-gitops/master/default/blocky/whitelist.txt
         clientGroupsBlock:
           default:
             - ads
@@ -128,6 +128,7 @@ spec:
             - kids
           "*Jens-Air*":
             - none
+        blockType: zeroIp
       clientLookup:
         upstream: tcp+udp:10.0.7.1
       prometheus:
