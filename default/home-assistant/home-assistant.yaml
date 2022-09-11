@@ -122,6 +122,11 @@ spec:
           operator: "Exists"
         podAnnotations:
           backup.velero.io/backup-volumes: data
+      resources:
+        limits:
+          memory: 4000Mi
+        requests:
+          memory: 2000Mi
   valuesFrom:
   - kind: Secret
     name: "home-assistant-helm-values"
