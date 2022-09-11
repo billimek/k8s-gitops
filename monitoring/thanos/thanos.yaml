@@ -48,6 +48,11 @@ spec:
       persistence:
         enabled: true
         size: 40Gi
+      resources:
+        requests:
+          memory: 5Gi
+        limits:
+          memory: 7Gi
     ruler:
       enabled: false
     metrics:
