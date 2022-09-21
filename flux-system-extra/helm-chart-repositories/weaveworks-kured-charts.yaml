@@ -6,5 +6,5 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  url: https://weaveworks.github.io/kured
+  url: https://kubereboot.github.io/charts
   timeout: 3m
