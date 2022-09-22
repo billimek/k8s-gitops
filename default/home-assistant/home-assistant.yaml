@@ -115,7 +115,7 @@ spec:
         persistence:
           enabled: true
           storageClass: "rook-ceph-block"
-          size: 8Gi
+          size: 10Gi
           mountPath: "/data/"
         tolerations:
         - key: "arm"
