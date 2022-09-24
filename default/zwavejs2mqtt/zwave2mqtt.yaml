@@ -18,8 +18,8 @@ spec:
       interval: 5m
   values:
     image:
-      repository: zwavejs/zwavejs2mqtt
-      tag: 7.2.0
+      repository: ghcr.io/zwave-js/zwave-js-ui
+      tag: 8.0.0
     env:
       TZ: "America/New_York"
     securityContext:
