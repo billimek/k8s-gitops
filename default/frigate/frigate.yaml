@@ -274,7 +274,11 @@ spec:
                   fps: 4
                 motion:
                   mask:
-                    - 0,352,151,352,148,249,0,254
+                    - 0,352,151,352,153,242,0,243
+                objects:
+                  filters:
+                    person:
+                      mask: 0,352,151,352,153,242,0,243
                 rtmp:
                   enabled: false
   valuesFrom:
