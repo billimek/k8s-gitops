@@ -8,7 +8,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://weaveworks.github.io/kured
+      # renovate: registryUrl=https://kubereboot.github.io/charts
       chart: kured
       version: 3.0.1
       sourceRef:
