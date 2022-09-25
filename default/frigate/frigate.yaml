@@ -18,8 +18,8 @@ spec:
       interval: 5m
   values:
     image:
-      repository: blakeblackshear/frigate
-      tag: 0.10.1-amd64
+      repository: docker.io/blakeblackshear/frigate
+      tag: 0.11.0
     ingress:
       main:
         enabled: true
@@ -102,6 +102,10 @@ spec:
                 device: usb
 
             ffmpeg:
+              global_args:
+                - -hide_banner
+                - -loglevel
+                - warning
               hwaccel_args:
                 - -hwaccel
                 - vaapi
@@ -110,7 +114,8 @@ spec:
                 - -hwaccel_output_format
                 - yuv420p
               output_args:
-                record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -c:a aac
+                record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -c:a aac -ar 44100
+                rtmp: -c:v copy -f flv -ar 44100 -c:a aac
 
             objects:
               track:
@@ -120,7 +125,7 @@ spec:
                 - bird
               filters:
                 person:
-                  min_area: 2500
+                  min_area: 3000
                   max_area: 100000
                   threshold: 0.75
                 dog:
@@ -136,15 +141,19 @@ spec:
               enabled: true
               retain:
                 days: 7
+                mode: all
               events:
                 retain:
                   default: 14
+                  mode: active_objects
 
             snapshots:
-              enabled: True
-              timestamp: False
-              bounding_box: True
-              crop: False
+              enabled: true
+              timestamp: false
+              bounding_box: true
+              crop: false
+              retain:
+                default: 7
 
             cameras:
               porch:
