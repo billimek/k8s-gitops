@@ -1,5 +1,5 @@
 ---
-name: Diff Helm Releases on Pull Requests
+name: "Helm Release Differ"
 
 on: # yamllint disable-line rule:truthy
   pull_request:
@@ -9,108 +9,75 @@ on: # yamllint disable-line rule:truthy
       - "**.yaml"
 
 env:
-  conf_live_branch: master
-  conf_ignore_known_labels_containing_versions: true
+  # Currently no way to detect automatically
+  DEFAULT_BRANCH: master
 
 jobs:
-  changes:
-    name: Detect changes
-    runs-on: ubuntu-20.04
-    outputs:
-      files: "${{ steps.extract.outputs.files }}"
+  detect-file-changes:
+    name: Detect File Changes
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Filter Helm Releases
+        uses: dorny/paths-filter@v2
         id: filter
         with:
           list-files: shell
           filters: |
             changed:
-              - '**'
-      - id: extract
+              - '**/*.yaml'
+      - name: Extract HelmReleases
+        id: extract
         run: |
           filtered=$(grep -zl "kind: HelmRelease.*registryUrl=" ${{ steps.filter.outputs.changed_files }} \
             | jq -nR '[inputs | select(length>0)]')
-          echo ::set-output name=files::${filtered}
+    outputs:
+      yaml_files: ${{ steps.extract.outputs.files }}
 
-  helm-release-diff:
-    name: Template Helm Releases
-    runs-on: ubuntu-20.04
-    if: ${{ needs.changes.outputs.files != '' }}
-    needs:
-      - changes
+
+  helm-release-differ:
+    name: Helm Release Differ
+    runs-on: ubuntu-latest
+    needs: detect-file-changes
     strategy:
       matrix:
-        file: ${{ fromJson(needs.changes.outputs.files) }}
-      fail-fast: false
+        file: ${{ fromJSON(needs.detect-file-changes.outputs.yaml_files) }}
     steps:
-      - uses: yokawasa/action-setup-kube-tools@v0.8.2
-        with:
-          setup-tools: |
-            helmv3
-            yq
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ env.conf_live_branch }}
-          path: live
-      - uses: actions/checkout@v3
-        with:
-          path: pr
-      - id: diff
-        run: |
-          hr_live_url=$(sed -nr 's|.*registryUrl=(.+)$|\1|p' live/${{ matrix.file }})
-          hr_live_chart=$(yq e .spec.chart.spec.chart live/${{ matrix.file }})
-          hr_live_version=$(yq e .spec.chart.spec.version live/${{ matrix.file }})
-          hr_live_values=$(yq e .spec.values live/${{ matrix.file }})
-          hr_pr_url=$(sed -nr 's|.*registryUrl=(.+)$|\1|p' pr/${{ matrix.file }})
-          hr_pr_chart=$(yq e .spec.chart.spec.chart pr/${{ matrix.file }})
-          hr_pr_version=$(yq e .spec.chart.spec.version pr/${{ matrix.file }})
-          hr_pr_values=$(yq e .spec.values pr/${{ matrix.file }})
-          helm repo add live "$hr_live_url"
-          helm repo add pr "$hr_pr_url"
-          resources_live=$(echo "$hr_live_values" | \
-            helm template "$hr_live_chart" \
-            live/"$hr_live_chart" \
-            --version "$hr_live_version" -f - || true)
-          echo "$resources_live"
-          echo "#####################################################"
-          resources_pr=$(echo "$hr_pr_values" | \
-            helm template "$hr_pr_chart" \
-            pr/"$hr_pr_chart" \
-            --version "$hr_pr_version" -f -)
-          echo "$resources_pr"
-          echo "#####################################################"
-          if [ "$conf_ignore_known_labels_containing_versions" = "true" ]; then
-            labels='.metadata.labels."helm.sh/chart"'
-            labels+=',.metadata.labels.chart'
-            labels+=',.metadata.labels."app.kubernetes.io/version"'
-            labels+=',.spec.template.metadata.labels."helm.sh/chart"'
-            labels+=',.spec.template.metadata.labels.chart'
-            labels+=',.spec.template.metadata.labels."app.kubernetes.io/version"'
-            resources_live=$(echo "$resources_live" | yq e "del($labels)" -)
-            resources_pr=$(echo "$resources_pr" | yq e "del($labels)" -)
-          fi
-          diff=$((diff -u <(echo "$resources_live") <(echo "$resources_pr") || true) | tail +3)
-          echo "$diff"
-          message="Path: \`${{ matrix.file }}\`"
-          if [ "$hr_live_chart" != "$hr_pr_chart" ]; then
-            message="$message"$'\n'"Chart: \`$hr_live_chart\` -> \`$hr_pr_chart\`"
-          fi
-          if [ "$hr_live_version" != "$hr_pr_version" ]; then
-            message="$message"$'\n'"Version: \`$hr_live_version\` -> \`$hr_pr_version\`"
-          fi
-          if [ "$hr_live_url" != "$hr_pr_url" ]; then
-            message="$message"$'\n'"Repo: \`$hr_live_url\` -> \`$hr_pr_url\`"
-          fi
-          message="$message"$'\n'$'\n'
-          if [ -z "$diff" ]; then
-            message="$message"'```'$'\n'"No changes in detected in resources"$'\n''```'
-          else
-            message="$message"'```diff'$'\n'"$diff"$'\n''```'
-          fi
-          echo "::set-output name=message::$(echo "$message" | jq --raw-input --slurp)"
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - uses: peter-evans/create-or-update-comment@v2
+      - name: Checkout default branch
+        uses: actions/checkout@v3
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: "${{ fromJSON(steps.diff.outputs.message) }}"
+          ref: "${{ env.DEFAULT_BRANCH }}"
+          path: default
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: latest
+
+      - name: Helm Release Differ
+        id: diff
+        run: |
+          diff=$(.github/scripts/helm-release-differ.sh --source-file "default/${{ matrix.file }}" --target-file "${{ matrix.file }}" --remove-common-labels)
+          echo "${diff}"
+          diff="${diff//'%'/'%25'}"
+          diff="${diff//$'\n'/'%0A'}"
+          diff="${diff//$'\r'/'%0D'}"
+          echo "::set-output name=diff::$(echo ${diff})"
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: find-comment
+        with:
+          issue-number: "${{ github.event.pull_request.number }}"
+          body-includes: "${{ matrix.file }}"
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: "${{ steps.find-comment.outputs.comment-id }}"
+          issue-number: "${{ github.event.pull_request.number }}"
+          body: "${{ steps.diff.outputs.diff }}"
+          edit-mode: replace
