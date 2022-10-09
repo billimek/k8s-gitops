@@ -32,6 +32,7 @@ jobs:
         run: |
           filtered=$(grep -zl "kind: HelmRelease.*registryUrl=" ${{ steps.filter.outputs.changed_files }} \
             | jq -nR '[inputs | select(length>0)]')
+          echo ::set-output name=files::${filtered}
     outputs:
       yaml_files: ${{ steps.extract.outputs.files }}
 
