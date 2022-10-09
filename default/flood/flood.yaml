@@ -88,7 +88,7 @@ spec:
     additionalContainers:
       - name: rtorrent
         # image: billimek/alpine-rtorrent:0.9.8-1
-        image: billimek/rtorrent:latest
+        image: billimek/rtorrent:latest@sha256:9369e406e27bcc7025cbb9412617bf4e484c1f66f2f6fa66d8278d2fc63e3b8d
         env:
         - name: PUID
           value: "1001"
