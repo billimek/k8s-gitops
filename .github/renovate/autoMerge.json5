@@ -1,0 +1,63 @@
+{
+  packageRules: [
+    // auto-updates - daily
+    {
+      "datasources": ["docker"],
+      "automerge": true,
+      automergeType: "branch",
+      "requiredStatusChecks": null,
+      "schedule": "after 1am and before 5am",
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "homeassistant/home-assistant",
+        "ghcr.io/k8s-at-home/radarr",
+        "ghcr.io/k8s-at-home/sonarr",
+        "ghcr.io/k8s-at-home/nzbget",
+        "plexinc/pms-docker",
+        "nodered/node-red",
+        "zwavejs/zwavejs2mqtt"
+      ]
+    },
+    // auto-updates - weekly
+    {
+      "datasources": ["docker"],
+      "automerge": true,
+      automergeType: "branch",
+      "requiredStatusChecks": null,
+      "schedule": ["before 3am on Monday"],
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "ghcr.io/k8s-at-home/prowlarr",
+        "ghcr.io/k8s-at-home/readarr"
+      ]
+    },
+    {
+      "datasources": ["helm"],
+      "automerge": true,
+      "requiredStatusChecks": null,
+      "schedule": "after 1am and before 5am",
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "grafana",
+        "thanos"
+      ]
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "automerge": true,
+      "automergeType": "branch",
+      "requiredStatusChecks": null,
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      description: "Auto merge container digests",
+      matchDatasources: ["docker"],
+      automerge: false,
+      automergeType: "branch",
+      requiredStatusChecks: null,
+      matchUpdateTypes: ["digest"],
+      matchPackagePattern: ["ghcr.io/k8s-at-home", "ghcr.io/onedr0p"],
+    },
+  ],
+}
+

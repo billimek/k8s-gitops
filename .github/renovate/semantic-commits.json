@@ -1,0 +1,45 @@
+{
+    "extends": [
+      ":semanticCommits"
+    ],
+    "packageRules": [
+      {
+        "matchUpdateTypes": ["major"],
+        "semanticCommitType": "feat",
+        "commitMessagePrefix": "{{semanticCommitType}}({{semanticCommitScope}})!:"
+      },
+      {
+        "matchUpdateTypes": ["minor"],
+        "semanticCommitType": "feat"
+      },
+      {
+        "matchUpdateTypes": ["patch"],
+        "semanticCommitType": "fix"
+      },
+      {
+        "matchDatasources": ["docker"],
+        "semanticCommitScope": "docker-image"
+      },
+      {
+        "matchDatasources": ["helm"],
+        "semanticCommitScope": "helm-chart"
+      },
+      {
+        "matchDatasources": ["terraform-provider"],
+        "semanticCommitScope": "terraform-provider"
+      },
+      {
+        "matchDatasources": ["galaxy-collection"],
+        "semanticCommitScope": "ansible-collection"
+      },
+      {
+        "matchDatasources": ["galaxy-role"],
+        "semanticCommitScope": "ansible-role"
+      },
+      {
+        "matchManagers": ["github-actions"],
+        "semanticCommitType": "ci",
+        "semanticCommitScope": "github-action"
+      }
+    ]
+  }

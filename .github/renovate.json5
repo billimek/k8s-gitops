@@ -1,7 +1,29 @@
 {
+  "extends": [
+    "config:base",
+    "docker:enableMajor",
+    ":disableRateLimiting",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":enablePreCommit",
+    ":automergeDigest",
+    ":automergeBranchPush",
+    "docker:pinDigests",
+    "github>billimek/home-ops//.github/renovate/allowedVersions.json5",
+    "github>billimek/home-ops//.github/renovate/autoMerge.json5",
+    "github>billimek/home-ops//.github/renovate/disabledDatasources.json5",
+    "github>billimek/home-ops//.github/renovate/groups.json5",
+  ],
   "enabled": true,
   "timezone": "America/New_York",
   "semanticCommits": "enabled",
+  "platform": "github",
+  // "username": "billimek",
+  "gitAuthor": "Jeff Billimek <billimek@users.noreply.github.com>",
+  "repositories": ["billimek/k8s-gitops"],
+  "onboarding": false,
+  "requireConfig": "optional",
+  "commitBodyTable": true,
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard",
   "commitBody": "Signed-off-by: Jeff Billimek <billimek@users.noreply.github.com>",
@@ -13,6 +35,9 @@
   "commitMessageExtra": "to {{newVersion}}",
   "commitMessageSuffix": "",
   "helm-values": {
+    "fileMatch": ["./.+\\.yaml$"]
+  },
+  "flux": {
     "fileMatch": ["./.+\\.yaml$"]
   },
   "kubernetes": {
@@ -31,6 +56,17 @@
       "datasourceTemplate": "helm"
     }
   ],
+  // "regexManagers": [
+  //   {
+  //     "description": ["Process various dependencies in YAML files"],
+  //     "fileMatch": [".+\\.ya?ml$"],
+  //     "matchStrings": [
+  //       "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*=?))?( versionTemplate=(?<versionTemplate>.*=?))?\\n.*: ?(\"?(?<currentValue>[^\"\\n]+=?)\"?)"
+  //     ],
+  //     "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+  //     "extractVersionTemplate": "{{#if versionTemplate}}{{{versionTemplate}}}{{else}}{{/if}}"
+  //   }
+  // ],
   "packageRules": [
     // Setup datasources
     {
@@ -92,8 +128,8 @@
     // Custom versions
     {
       "matchDatasources": ["docker"],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
-      "matchPackageNames": ["blakeblackshear/frigate"]
+      "matchPackageNames": ["blakeblackshear/frigate"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
     },
     {
       "matchDatasources": ["docker"],
@@ -110,92 +146,10 @@
       "versioning": "loose",
       "packageNames": ["plexinc/pms-docker"]
     },
-    // pin package versions
     {
       "matchDatasources": ["docker"],
-      "allowedVersions": "<13",
-      "matchPackageNames": [
-        "postgres",
-        "docker.io/library/postgres"
-      ]
+      "matchPackageNames": ["docker.io/timberio/vector"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
     },
-    {
-      "matchDatasources": ["docker"],
-      "allowedVersions": "<2",
-      "matchPackageNames": [
-        "influxdb"
-      ]
-    },
-    {
-      "matchDatasources": ["helm"],
-      "allowedVersions": "<2",
-      "matchPackageNames": ["metallb"]
-    },
-    // group packages
-    {
-      "matchDatasources": ["helm", "docker"],
-      "matchPackagePatterns": ["^rook.ceph"],
-      "groupName": "rook-ceph-suite",
-      "additionalBranchPrefix": "",
-      "separateMinorPatch": true
-    },
-    {
-      "matchDatasources": ["github-releases", "docker"],
-      "matchPackagePatterns": [
-        "external-snapshotter",
-        "snapshot-controller"
-      ],
-      "groupName": "external-snapshotter-suite",
-      "additionalBranchPrefix": "",
-      "separateMinorPatch": true
-    },
-    {
-      "matchDatasources": ["github-tags", "docker"],
-      "matchPackagePatterns": ["rancher/system-upgrade-controller"],
-      "groupName": "system-upgrade-controller-suite",
-      "additionalBranchPrefix": "",
-      "separateMinorPatch": true
-    },
-    // auto-updates - daily
-    {
-      "datasources": ["docker"],
-      "automerge": true,
-      "requiredStatusChecks": null,
-      "schedule": "after 1am and before 5am",
-      "updateTypes": ["minor", "patch"],
-      "packageNames": [
-        "homeassistant/home-assistant",
-        "ghcr.io/k8s-at-home/radarr",
-        "ghcr.io/k8s-at-home/sonarr",
-        "ghcr.io/k8s-at-home/nzbget",
-        "plexinc/pms-docker",
-        "hotio/readarr",
-        "nodered/node-red",
-        "zwavejs/zwavejs2mqtt"
-      ]
-    },
-    // auto-updates - weekly
-    {
-      "datasources": ["docker"],
-      "automerge": true,
-      "requiredStatusChecks": null,
-      "schedule": ["before 3am on Monday"],
-      "updateTypes": ["minor", "patch"],
-      "packageNames": [
-        "ghcr.io/k8s-at-home/prowlarr",
-        "ghcr.io/k8s-at-home/readarr"
-      ]
-    },
-    {
-      "datasources": ["helm"],
-      "automerge": true,
-      "requiredStatusChecks": null,
-      "schedule": "after 1am and before 5am",
-      "updateTypes": ["minor", "patch"],
-      "packageNames": [
-        // "grafana",
-        "thanos"
-      ]
-    }
-  ]
+  ],
 }
