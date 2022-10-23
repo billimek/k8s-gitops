@@ -25,11 +25,11 @@ spec:
         env:
         - name: TZ
           value: America/New_York
-        # image: billimek/tesla_dashcam:0.1.20
-        image: billimek/tesla_dashcam:0.1.20-intel-vaapi@sha256:ca9f10e47997615b8a5a37837763fc121ec65933e94f20e3faaebe9a5f6727cb
+        # image: billimek/tesla_dashcam:0.1.20-intel-vaapi@sha256:ca9f10e47997615b8a5a37837763fc121ec65933e94f20e3faaebe9a5f6727cb
+        image: billimek/tesla_dashcam:0.1.21-2
         imagePullPolicy: Always
-        # args: ["--delete_source", "--gpu", "--gpu_type", "vaapi", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
-        args: ["--delete_source", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
+        args: ["--delete_source", "--gpu", "--gpu_type", "qsv", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
+        # args: ["--delete_source", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
         # resources:
         #   limits:
         #     gpu.intel.com/i915: 1
