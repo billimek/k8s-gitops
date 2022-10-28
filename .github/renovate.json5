@@ -8,7 +8,7 @@
     ":enablePreCommit",
     ":automergeDigest",
     ":automergeBranchPush",
-    "docker:pinDigests",
+    // "docker:pinDigests",
     "github>billimek/k8s-gitops//.github/renovate/allowedVersions.json5",
     "github>billimek/k8s-gitops//.github/renovate/autoMerge.json5",
     "github>billimek/k8s-gitops//.github/renovate/disabledDatasources.json5",
