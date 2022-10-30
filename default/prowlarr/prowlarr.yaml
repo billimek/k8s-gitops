@@ -18,8 +18,8 @@ spec:
       interval: 5m
   values:
     image:
-      repository: ghcr.io/k8s-at-home/prowlarr
-      tag: v0.4.0.1802
+      repository: docker pull ghcr.io/onedr0p/prowlarr-develop
+      tag: 0.4.7.2016
     env:
       TZ: "America/New_York"
     ingress:
