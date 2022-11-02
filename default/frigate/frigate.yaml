@@ -280,6 +280,29 @@ spec:
                       mask: 0,352,151,352,153,242,0,243
                 rtmp:
                   enabled: false
+
+              doorbell:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=0&authbasic=64
+                      roles:
+                        - detect
+                    - path: rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=01&authbasic=64
+                      roles:
+                        - rtmp
+                        - record
+                detect:
+                  height: 576
+                  width: 720
+                  fps: 5
+                objects:
+                  filters:
+                    person:
+                      min_area: 1500
+                      max_area: 100000
+                      threshold: 0.75
+                      min_score: 0.60
+
   valuesFrom:
   - kind: Secret
     name: "frigate-helm-values"
