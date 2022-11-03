@@ -17,6 +17,8 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
+    rbac:
+      pspEnabled: false
     tolerations:
     - key: "arm"
       operator: "Exists"
