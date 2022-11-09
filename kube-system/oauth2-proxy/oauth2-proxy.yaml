@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://oauth2-proxy.github.io/manifests
       chart: oauth2-proxy
-      version: 6.3.0
+      version: 6.3.1
       sourceRef:
         kind: HelmRepository
         name: oauth2-proxy-charts
