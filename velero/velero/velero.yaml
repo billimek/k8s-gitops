@@ -42,7 +42,7 @@ spec:
       resticTimeout: 6h
     initContainers:
     - name: velero-plugin-for-aws
-      image: velero/velero-plugin-for-aws:v1.5.1@sha256:6e1817b6ad95c41182b24f2b373b1d9e6625c5e861b4d395e2dcde4bb9e2d547
+      image: velero/velero-plugin-for-aws:v1.5.2@sha256:bf1afac0fd6e8c269be4d059c99b7142d1501629782e97a920607185bb48b5e9
       imagePullPolicy: IfNotPresent
       volumeMounts:
       - mountPath: /target
