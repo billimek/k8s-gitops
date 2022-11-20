@@ -284,10 +284,10 @@ spec:
               doorbell:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=0&authbasic=64
+                    - path: rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=01&authbasic=64
                       roles:
                         - detect
-                    - path: rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=01&authbasic=64
+                    - path: rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=0&authbasic=64
                       roles:
                         - rtmp
                         - record
