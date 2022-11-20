@@ -82,6 +82,7 @@ spec:
         gpu.intel.com/i915: 1
     env:
       TZ: "America/New_York"
+      LIBVA_DRIVER_NAME: "i965"
     configmap:
       config:
         enabled: true
