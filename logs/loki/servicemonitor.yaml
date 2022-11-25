@@ -1,20 +1,20 @@
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: &app loki
-  namespace: monitoring
-  labels: &labels
-    app.kubernetes.io/component: read
-    app.kubernetes.io/instance: *app
-    app.kubernetes.io/name: *app
-spec:
-  selector:
-    matchLabels:
-      <<: *labels
-  endpoints:
-    - port: "3100"
-      scheme: http
-      path: /metrics
-      interval: 2m
-      scrapeTimeout: 30s
+# ---
+# apiVersion: monitoring.coreos.com/v1
+# kind: ServiceMonitor
+# metadata:
+#   name: &app loki
+#   namespace: monitoring
+#   labels: &labels
+#     app.kubernetes.io/component: read
+#     app.kubernetes.io/instance: *app
+#     app.kubernetes.io/name: *app
+# spec:
+#   selector:
+#     matchLabels:
+#       <<: *labels
+#   endpoints:
+#     - port: "3100"
+#       scheme: http
+#       path: /metrics
+#       interval: 2m
+#       scrapeTimeout: 30s
