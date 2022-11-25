@@ -1,9 +1,13 @@
-config:
-  storage_config:
-    aws:
-      bucketnames: loki
+loki:
+  storage:
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+    type: s3
+    s3:
       endpoint: truenas.home:9000
-      access_key_id: "${MINIO_ACCESS_KEY}"
-      secret_access_key: "${MINIO_SECRET_KEY}"
-      s3forcepathstyle: true
+      secretAccessKey: "${MINIO_ACCESS_KEY}"
+      accessKeyId: "${MINIO_SECRET_KEY}"
+      s3ForcePathStyle: true
       insecure: true

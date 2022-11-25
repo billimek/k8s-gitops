@@ -1,0 +1,202 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: loki.rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: loki.rules
+      rules:
+        - alert: LokiRequestErrors
+          annotations:
+            message: "{{ $labels.job }} {{ $labels.route }} is experiencing {{ $value | humanizePercentage }} errors."
+          expr: |
+            100 * sum(rate(loki_request_duration_seconds_count{status_code=~"5.."}[1m])) by (namespace, job, route)
+              /
+            sum(rate(loki_request_duration_seconds_count[1m])) by (namespace, job, route)
+              > 10
+          for: 15m
+          labels:
+            severity: critical
+        - alert: LokiRequestPanics
+          annotations:
+            message: "{{ $labels.job }} is experiencing {{ $value | humanizePercentage }} increase of panics."
+          expr: |
+            sum(increase(loki_panic_total[10m])) by (namespace, job)
+              > 0
+          labels:
+            severity: critical
+        - alert: LokiRequestLatency
+          annotations:
+            message: "{{ $labels.job }} {{ $labels.route }} is experiencing {{ $value }}s 99th percentile latency."
+          expr: |
+            namespace_job_route:loki_request_duration_seconds:99quantile{route!~"(?i).*tail.*"}
+              > 1
+          for: 15m
+          labels:
+            severity: critical
+        - expr: |
+            histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, job))
+          record: job:loki_request_duration_seconds:99quantile
+        - expr: |
+            histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, job))
+          record: job:loki_request_duration_seconds:50quantile
+        - expr: |
+            sum(rate(loki_request_duration_seconds_sum[1m])) by (job)
+              /
+            sum(rate(loki_request_duration_seconds_count[1m])) by (job)
+          record: job:loki_request_duration_seconds:avg
+        - expr: |
+            sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, job)
+          record: job:loki_request_duration_seconds_bucket:sum_rate
+        - expr: |
+            sum(rate(loki_request_duration_seconds_sum[1m])) by (job)
+          record: job:loki_request_duration_seconds_sum:sum_rate
+        - expr: |
+            sum(rate(loki_request_duration_seconds_count[1m])) by (job)
+          record: job:loki_request_duration_seconds_count:sum_rate
+        - expr: |
+            histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, job, route))
+          record: job_route:loki_request_duration_seconds:99quantile
+        - expr: |
+            histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, job, route))
+          record: job_route:loki_request_duration_seconds:50quantile
+        - expr: |
+            sum(rate(loki_request_duration_seconds_sum[1m])) by (job, route)
+              /
+            sum(rate(loki_request_duration_seconds_count[1m])) by (job, route)
+          record: job_route:loki_request_duration_seconds:avg
+        - expr: |
+            sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, job, route)
+          record: job_route:loki_request_duration_seconds_bucket:sum_rate
+        - expr: |
+            sum(rate(loki_request_duration_seconds_sum[1m])) by (job, route)
+          record: job_route:loki_request_duration_seconds_sum:sum_rate
+        - expr: |
+            sum(rate(loki_request_duration_seconds_count[1m])) by (job, route)
+          record: job_route:loki_request_duration_seconds_count:sum_rate
+        - expr: |
+            histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, namespace, job, route))
+          record: namespace_job_route:loki_request_duration_seconds:99quantile
+        - expr: |
+            histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, namespace, job, route))
+          record: namespace_job_route:loki_request_duration_seconds:50quantile
+        - expr: |
+            sum(rate(loki_request_duration_seconds_sum[1m])) by (namespace, job, route)
+              /
+            sum(rate(loki_request_duration_seconds_count[1m])) by (namespace, job, route)
+          record: namespace_job_route:loki_request_duration_seconds:avg
+        - expr: |
+            sum(rate(loki_request_duration_seconds_bucket[1m]))
+            by (le, namespace, job, route)
+          record: namespace_job_route:loki_request_duration_seconds_bucket:sum_rate
+        - expr: |
+            sum(rate(loki_request_duration_seconds_sum[1m]))
+            by (namespace, job, route)
+          record: namespace_job_route:loki_request_duration_seconds_sum:sum_rate
+        - expr: |
+            sum(rate(loki_request_duration_seconds_count[1m]))
+            by (namespace, job, route)
+          record: namespace_job_route:loki_request_duration_seconds_count:sum_rate
+    #
+    # SMART Failures
+    #
+    - name: smart-failure
+      rules:
+        - alert: SmartFailures
+          expr: |
+            sum by (hostname) (count_over_time({hostname=~".+"} | json | _SYSTEMD_UNIT = "smartmontools.service" !~ "(?i)previous self-test completed without error" !~ "(?i)Prefailure" |~ "(?i)(error|fail)"[2m])) > 0
+          for: 2m
+          labels:
+            severity: critical
+            category: logs
+          annotations:
+            summary: "SMART has reported failures on host {{ $labels.hostname }}"
+    #
+    # zwavejs2mqtt
+    #
+    - name: zwavejs2mqtt
+      rules:
+        - alert: ZwaveUnableToReachMQTT
+          expr: |
+            sum(count_over_time({app="zwavejs2mqtt"} |~ "(?i)error while connecting mqtt"[2m])) > 0
+          for: 2m
+          labels:
+            severity: critical
+            category: logs
+          annotations:
+            summary: "Zwavejs2mqtt is unable to reach MQTT"
+    #
+    # frigate
+    #
+    - name: frigate
+      rules:
+        - alert: FrigateUnableToReachMQTT
+          expr: |
+            sum(count_over_time({app="frigate"} |~ "(?i)unable to connect to mqtt server"[2m])) > 0
+          for: 2m
+          labels:
+            severity: critical
+            category: logs
+          annotations:
+            summary: "Frigate is unable to reach MQTT"
+    #
+    # *arr
+    #
+    - name: arr
+      rules:
+        - alert: ArrDatabaseIsLocked
+          expr: |
+            sum by (app) (count_over_time({app=~".*arr"} |~ "(?i)database is locked"[2m])) > 0
+          for: 2m
+          labels:
+            severity: critical
+            category: logs
+          annotations:
+            summary: "{{ $labels.app }} is experiencing locked database issues"
+        - alert: ArrDatabaseIsMalformed
+          expr: |
+            sum by (app) (count_over_time({app=~".*arr"} |~ "(?i)database disk image is malformed"[2m])) > 0
+          for: 2m
+          labels:
+            severity: critical
+            category: logs
+          annotations:
+            summary: "{{ $labels.app }} is experiencing malformed database disk image issues"
+    #
+    # home-assistant
+    #
+    - name: home-assistant
+      rules:
+        - alert: HomeAssistantUnableToReachPostgresql
+          expr: |
+            sum by (app) (count_over_time({app="home-assistant"} |~ "(?i)error in database connectivity"[2m])) > 0
+          for: 2m
+          labels:
+            severity: critical
+            category: logs
+          annotations:
+            summary: "Home Assistant is unable to connect to postgresql"
+    #
+    # node-red
+    #
+    - name: node-red
+      rules:
+        - alert: NodeRedUnableToReachHomeAssistant
+          expr: |
+            sum by (app) (count_over_time({app="node-red"} |~ "(?i)home assistant.*connecting to undefined"[2m])) > 0
+          for: 2m
+          labels:
+            severity: critical
+            category: logs
+          annotations:
+            summary: "Node-Red is unable to connect to Home Assistant"
