@@ -10,74 +10,188 @@ spec:
     spec:
       # renovate: registryUrl=https://grafana.github.io/helm-charts
       chart: loki
-      version: 2.16.0
+      version: 3.4.2
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
         namespace: flux-system
       interval: 5m
   values:
-    replicas: 3
-    config:
-      distributor:
-        ring:
-          kvstore:
-            store: memberlist
-      ingester:
-        lifecycler:
+    loki:
+      structuredConfig:
+        auth_enabled: false
+
+        server:
+          log_level: info
+          http_listen_port: 3100
+          grpc_listen_port: 9095
+
+        memberlist:
+          join_members: ["loki-memberlist"]
+
+        limits_config:
+          retention_period: 60d
+          enforce_metric_name: false
+          reject_old_samples: true
+          reject_old_samples_max_age: 168h
+          max_cache_freshness_per_query: 10m
+          split_queries_by_interval: 15m
+          ingestion_rate_mb: 8
+          ingestion_burst_size_mb: 16
+
+        schema_config:
+          configs:
+            - from: "2021-08-01"
+              store: boltdb-shipper
+              object_store: s3
+              schema: v11
+              index:
+                prefix: loki_index_
+                period: 24h
+
+        common:
+          path_prefix: /var/loki
+          replication_factor: 3
+          storage:
+            s3:
+              s3: null
+              insecure: true
+              s3forcepathstyle: true
           ring:
             kvstore:
               store: memberlist
-            replication_factor: 1
-          final_sleep: 0s
-        chunk_idle_period: 5m
-        chunk_retain_period: 30s
-      memberlist:
-        abort_if_cluster_join_fails: false
-        bind_port: 7946
-        join_members:
-        - loki-headless.logs.svc.cluster.local:7946
-        max_join_backoff: 1m
-        max_join_retries: 10
-        min_join_backoff: 1s
-      schema_config:
-        configs:
-        - from: "2020-10-24"
-          store: boltdb-shipper
-          object_store: s3
-          schema: v11
-          index:
-            prefix: index_
-            period: 24h
-      storage_config:
-        boltdb_shipper:
-          active_index_directory: /data/loki/index
-          cache_location: /data/loki/index_cache
+
+        ruler:
+          enable_api: true
+          enable_alertmanager_v2: true
+          alertmanager_url: http://kube-prometheus-stack-alertmanager:9093
+          storage:
+            type: local
+            local:
+              directory: /rules
+          rule_path: /tmp/scratch
+          ring:
+            kvstore:
+              store: memberlist
+
+        distributor:
+          ring:
+            kvstore:
+              store: memberlist
+
+        compactor:
+          working_directory: /var/loki/boltdb-shipper-compactor
           shared_store: s3
-      limits_config:
-        enforce_metric_name: false
-        reject_old_samples: true
-        reject_old_samples_max_age: 168h
-        retention_period: 1490h
-      compactor:
-        working_directory: /data/compactor
-        shared_store: s3
-        compaction_interval: 5m
-    serviceMonitor:
+          compaction_interval: 10m
+          retention_enabled: true
+          retention_delete_delay: 2h
+          retention_delete_worker_count: 150
+
+        ingester:
+          max_chunk_age: 1h
+          lifecycler:
+            ring:
+              kvstore:
+                store: memberlist
+
+        analytics:
+          reporting_enabled: false
+
+    gateway:
       enabled: true
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: app
-              operator: In
-              values:
-              - loki
-          topologyKey: "kubernetes.io/hostname"
+      replicas: 3
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.gatewaySelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
+      ingress:
+        enabled: true
+        ingressClassName: "nginx"
+        hosts:
+          - host: "loki.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    write:
+      replicas: 3
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.writeSelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
+      persistence:
+        size: 10Gi
+        storageClass: rook-ceph-block
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
+
+    read:
+      replicas: 3
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.readSelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
+      extraVolumeMounts:
+        - name: loki-rules
+          mountPath: /rules/fake
+        - name: loki-rules-tmp
+          mountPath: /tmp/scratch
+        - name: loki-tmp
+          mountPath: /tmp/loki-tmp
+      extraVolumes:
+        - name: loki-rules
+          emptyDir: {}
+        - name: loki-rules-tmp
+          emptyDir: {}
+        - name: loki-tmp
+          emptyDir: {}
+      persistence:
+        size: 10Gi
+        storageClass: rook-ceph-block
+      tolerations:
+      - key: "arm"
+        operator: "Exists"
+
+    monitoring:
+      dashboards:
+        enabled: true
+        annotations:
+          kustomize.toolkit.fluxcd.io/substitute: disabled
+          grafana_folder: Loki
+        labels:
+          grafana_dashboard: "true"
+      rules:
+        enabled: true
+      serviceMonitor:
+        enabled: true
+      selfMonitoring:
+        enabled: false
+        lokiCanary:
+          enabled: false
+        grafanaAgent:
+          installOperator: false
+    test:
+      enabled: false
+
   valuesFrom:
   - kind: Secret
     name: "loki-helm-values"
