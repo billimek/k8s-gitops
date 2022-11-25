@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: &app loki
-  namespace: monitoring
+  namespace: logs
   labels: &labels
     app.kubernetes.io/component: read
     app.kubernetes.io/instance: *app
