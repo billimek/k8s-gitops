@@ -25,7 +25,7 @@ spec:
       operator: "Exists"
     config:
       clients:
-        - url: http://loki:3100/loki/api/v1/push
+        - url: http://loki-gateway.logs.svc.cluster.local:80
       snippets:
         extraScrapeConfigs: |
           - job_name: journal
