@@ -253,7 +253,7 @@ spec:
         - name: loki
           type: loki
           access: proxy
-          url: http://loki.logs.svc.cluster.local:3100
+          url: http://loki-gateway.logs.svc.cluster.local:80
         - name: influxdb
           type: influxdb
           access: proxy
