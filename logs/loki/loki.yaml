@@ -182,7 +182,7 @@ spec:
       rules:
         enabled: true
       serviceMonitor:
-        enabled: true
+        enabled: false
       selfMonitoring:
         enabled: false
         lokiCanary:
