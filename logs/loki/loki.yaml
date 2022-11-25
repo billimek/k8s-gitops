@@ -119,7 +119,7 @@ spec:
                 pathType: Prefix
         tls:
           - hosts:
-              - *host
+              - "loki.eviljungle.com"
 
     write:
       replicas: 3
