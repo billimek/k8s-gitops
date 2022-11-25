@@ -19,6 +19,7 @@ spec:
   values:
     crds:
       enabled: false
+    pspEnable: false
     csi:
       kubeletDirPath: /var/lib/kubelet
       enableGrpcMetrics: true
