@@ -18,6 +18,7 @@ spec:
       interval: 5m
   values:
     server:
+      updateStrategyType: "RollingUpdate"
       dataStorage:
         enabled: true
         storageClass: "rook-ceph-block"
