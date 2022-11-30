@@ -22,9 +22,6 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-    image:
-      repository: velero/velero
-      tag: v1.10.0
     configuration:
       provider: aws
       backupStorageLocation:
