@@ -39,6 +39,4 @@ See [setup](setup/README.md) for more detail about setup & bootstrapping a new c
 
 ## :handshake:&nbsp; Community
 
-There is a really great community of like-minded folks doing similar efforts who have shared their clusters over at [awesome-home-kubernetes](https://github.com/k8s-at-home/awesome-home-kubernetes)
-
-There is also an active the k8s@home [Discord](https://discord.gg/7PbmHRK) for this community and great discussion.
+There is a k8s@home [Discord](https://discord.gg/7PbmHRK) for this community.
