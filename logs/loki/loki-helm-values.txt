@@ -1,16 +1,13 @@
 loki:
-  structuredConfig:
-    common:
-      storage:
-        bucketNames:
-          chunks: chunks
-          ruler: ruler
-          admin: admin
-        type: s3
-        s3:
-          bucketnames: loki
-          endpoint: truenas.home:9000
-          secretAccessKey: "${MINIO_ACCESS_KEY}"
-          accessKeyId: "${MINIO_SECRET_KEY}"
-          s3ForcePathStyle: true
-          insecure: true
+  storage:
+    bucketNames:
+      chunks: chunks
+      ruler: ruler
+      admin: admin
+    type: s3
+    s3:
+      endpoint: truenas.home:9000
+      accessKeyId: "${MINIO_ACCESS_KEY}"
+      secretAccessKey: "${MINIO_SECRET_KEY}"
+      s3ForcePathStyle: true
+      insecure: true
