@@ -26,7 +26,7 @@ spec:
   timeout: 20m
   values:
     image:
-      repository: public.ecr.aws/emqx/emqx
+      repository: emqx/emqx
     replicaCount: 3
     recreatePods: true
     service:
