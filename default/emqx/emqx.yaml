@@ -23,6 +23,7 @@ spec:
   upgrade:
     remediation:
       retries: 5
+  timeout: 20m
   values:
     image:
       repository: public.ecr.aws/emqx/emqx
