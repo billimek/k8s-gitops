@@ -18,7 +18,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: rook-direct-mount
-          image: rook/ceph:master@sha256:09e9c3d11d6d9aa44b5db1cc15028e6ca532fc4fa54122d852b38520c364e099
+          image: rook/ceph:master@sha256:69bf8beaee842b695017948c913cbb3541dad9cb58c4bd1265cb5fbc0739ce3a
           command: ["/bin/bash"]
           args: ["-m", "-c", "/usr/local/bin/toolbox.sh"]
           imagePullPolicy: IfNotPresent
