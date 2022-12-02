@@ -1,7 +1,0 @@
-env:
-  APP_KEY: $MONICA_APP_KEY
-  DB_PASSWORD: $MONICA_DB_PASSWORD
-mariadb:
-  auth:
-    password: $MONICA_DB_PASSWORD
-    rootPassword: $MONICA_DB_ROOTPASSWORD

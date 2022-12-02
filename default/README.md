@@ -66,12 +66,6 @@ S3-compatible bucket storage service
 
 * [minio.yaml](minio/minio.yaml)
 
-# monica
-
-[Monica](https://github.com/monicahq/monica) is an opensource Source personal CRM.
-
-* [monica.yaml](monica/monica.yaml)
-
 # node-red
 
 ![](https://i.imgur.com/ABTbYw1.png)
