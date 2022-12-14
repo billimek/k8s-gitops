@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: plexinc/pms-docker
-      tag: 1.29.2.6364-6d72b0cf6
+      tag: 1.30.0.6486-629d58034
     env:
       TZ: "America/New_York"
     podSecurityContext:
