@@ -123,6 +123,9 @@ spec:
           "*nsley*":
             - ads
             - kids
+          "*eye-phone*":
+            - ads
+            - kids
           "*rinley*":
             - ads
             - kids
