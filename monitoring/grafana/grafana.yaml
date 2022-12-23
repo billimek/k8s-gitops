@@ -36,7 +36,7 @@ spec:
     env:
       GF_EXPLORE_ENABLED: true
       # GF_DISABLE_SANITIZE_HTML: true
-      # GF_PANELS_DISABLE_SANITIZE_HTML: true
+      GF_PANELS_DISABLE_SANITIZE_HTML: true
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_LOG_FILTERS: rendering:debug
       VAR_BLOCKY_URL: "http://blocky.default.svc.cluster.local:4000"
