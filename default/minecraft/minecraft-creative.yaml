@@ -25,7 +25,7 @@ spec:
       storageClass: "rook-ceph-block"
       dataDir:
         enabled: true
-        Size: 10Gi
+        Size: 15Gi
     resources:
       requests:
         memory: 6Gi
