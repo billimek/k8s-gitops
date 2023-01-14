@@ -10,9 +10,9 @@
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "homeassistant/home-assistant",
-        "ghcr.io/k8s-at-home/radarr",
-        "ghcr.io/k8s-at-home/sonarr",
-        "ghcr.io/k8s-at-home/nzbget",
+        "ghcr.io/onedr0p/radarr",
+        "ghcr.io/onedr0p/sonarr",
+        "ghcr.io/onedr0p/nzbget",
         "plexinc/pms-docker",
         "nodered/node-red",
         "zwavejs/zwavejs2mqtt"
@@ -27,8 +27,8 @@
       "schedule": ["before 3am on Monday"],
       "updateTypes": ["minor", "patch"],
       "packageNames": [
-        "ghcr.io/k8s-at-home/prowlarr",
-        "ghcr.io/k8s-at-home/readarr"
+        "ghcr.io/onedr0p/prowlarr-develop",
+        "ghcr.io/onedr0p/readarr-develop"
       ]
     },
     {
