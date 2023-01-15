@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.2.6
+    controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   name: clusterpullsecrets.ops.alexellis.io
 spec:
@@ -14,26 +14,27 @@ spec:
     singular: clusterpullsecret
   scope: Cluster
   versions:
-  - name: v1
-    served: true
-    storage: true
-    subresources: {}
-    additionalPrinterColumns:
+  - additionalPrinterColumns:
     - jsonPath: .spec.secretRef.name
       name: SecretName
       type: string
     - jsonPath: .spec.secretRef.namespace
       name: SecretNamespace
       type: string
+    name: v1
     schema:
       openAPIV3Schema:
         description: ClusterPullSecret is the Schema for the clusterpullsecrets API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
@@ -41,17 +42,27 @@ spec:
             description: ClusterPullSecretSpec defines the desired state of ClusterPullSecret
             properties:
               secretRef:
+                description: ObjectMeta contains enough information to locate the
+                  referenced Kubernetes resource object in any namespace.
                 properties:
                   name:
+                    description: Name of the referent.
                     type: string
                   namespace:
+                    description: Namespace of the referent, when not specified it
+                      acts as LocalObjectReference.
                     type: string
+                required:
+                - name
                 type: object
             type: object
           status:
             description: ClusterPullSecretStatus defines the observed state of ClusterPullSecret
             type: object
         type: object
+    served: true
+    storage: true
+    subresources: {}
 status:
   acceptedNames:
     kind: ""
@@ -69,15 +80,11 @@ rules:
   - ""
   resources:
   - configmaps
-  resourceNames:
-  - 8bdecb1a.alexellis.io
   verbs:
   - get
   - create
   - update
   - patch
----
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -85,41 +92,86 @@ metadata:
   creationTimestamp: null
   name: registry-creds-registry-creds-role
 rules:
-  - apiGroups:
-      - ""
-    resources:
-      - namespaces
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - ""
-    resources:
-      - secrets
-    verbs:
-      - create
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - ""
-    resources:
-      - serviceaccounts
-    verbs:
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - ops.alexellis.io
-    resources:
-      - clusterpullsecrets
-    verbs:
-      - get
-      - list
-      - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ops.alexellis.io
+  resources:
+  - clusterpullsecrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ops.alexellis.io
+  resources:
+  - clusterpullsecrets/status
+  verbs:
+  - get
+  - patch
+  - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
