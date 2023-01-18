@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-FROM mcr.microsoft.com/vscode/devcontainers/universal:linux@sha256:dfb3e45a91bf4d3be5b01f0c1fba2cd80d41c1cef311f9fa0ce7362e74078baf as builder
+FROM mcr.microsoft.com/vscode/devcontainers/universal:linux@sha256:69347816325cd533990d5d821063ec1fee3b34676007cc3e1214edc8f5f9251f as builder
 USER root
 WORKDIR /app
 COPY . ./
@@ -12,7 +12,7 @@ RUN mkdir -p binaries && \
   tar xzf ${TSFILE} --strip-components=1 -C binaries
 COPY . ./
 
-FROM mcr.microsoft.com/vscode/devcontainers/universal:linux@sha256:dfb3e45a91bf4d3be5b01f0c1fba2cd80d41c1cef311f9fa0ce7362e74078baf
+FROM mcr.microsoft.com/vscode/devcontainers/universal:linux@sha256:69347816325cd533990d5d821063ec1fee3b34676007cc3e1214edc8f5f9251f
 USER root
 
 RUN apt-get update && apt-get install -y curl gpg dnsutils
