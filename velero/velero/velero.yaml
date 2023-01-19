@@ -61,7 +61,7 @@ spec:
     snapshotsEnabled: true
     deployRestic: true
     upgradeCRDs: false
-    restic:
+    nodeAgent:
       podVolumePath: /var/lib/kubelet/pods
       privileged: false
       tolerations:
