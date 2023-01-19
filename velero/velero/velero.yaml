@@ -59,7 +59,7 @@ spec:
       serviceMonitor:
         enabled: true
     snapshotsEnabled: true
-    deployRestic: true
+    deployNodeAgent: true
     upgradeCRDs: false
     nodeAgent:
       podVolumePath: /var/lib/kubelet/pods
