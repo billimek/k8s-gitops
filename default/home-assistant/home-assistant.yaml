@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: homeassistant/home-assistant
-      tag: 2023.1.5
+      tag: 2023.1.6
     env:
       TZ: "America/New_York"
     hostNetwork: true
