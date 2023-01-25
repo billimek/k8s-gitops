@@ -121,7 +121,7 @@ spec:
           "*rinley*":
             - ads
             - kids
-          "Jens-*":
+          "Jens*":
             - none
         blockType: zeroIp
       clientLookup:
