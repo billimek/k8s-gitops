@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: "./external-secrets"
+  path: "./external-secrets/things/chart"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -28,7 +28,7 @@ metadata:
 spec:
   dependsOn:
     - name: external-secrets
-  path: ./external-secrets/1password
+  path: ./external-secrets/things/1password
   prune: true
   sourceRef:
     kind: GitRepository
