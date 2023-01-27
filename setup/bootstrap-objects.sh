@@ -30,6 +30,9 @@ installManualObjects(){
   ##########
   kubectl -n kube-system create secret generic kms-vault --from-literal=account.json="$(echo $VAULT_KMS_ACCOUNT_JSON | base64 --decode)"
   kubectl -n kube-system create secret docker-registry registry-creds-secret --namespace kube-system --docker-username=$DOCKER_USERNAME --docker-password=$DOCKER_TOKEN --docker-email=$EMAIL
+  kubectl -n kube-system create secret generic op-credentials --from-literal=1password-credentials.json="$(echo $OP_CREDENTIALS_JSON | base64 --decode)"
+  kubectl -n kube-system create secret generic onepassword-token --from-literal=token="$(echo $OP_ACCESS_TOKEN)"
+
 
   ###################
   # nginx
