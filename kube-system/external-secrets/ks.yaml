@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: "../kube-system/external-secrets"
+  path: "./kube-system/external-secrets"
   prune: true
   sourceRef:
     kind: GitRepository
