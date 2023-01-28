@@ -67,6 +67,26 @@ spec:
       config:
         global:
           resolve_timeout: 5m
+        receivers:
+        - name: 'null'
+        - name: 'slack-notifications'
+          slack_configs:
+            - channel: '#notifications'
+              icon_url: https://avatars3.githubusercontent.com/u/3380462
+              username: 'Alertmanager'
+              send_resolved: true
+              title: |-
+                [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
+              text: >-
+                {{ range .Alerts -}}
+                  *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
+                {{ if ne .Annotations.summary ""}}*Summary:* {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}*Message:* {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}*Description:* {{ .Annotations.description }}{{ end }}
+
+                *Details:*
+                  {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+                  {{ end }}
+                {{ end }}
         route:
           # group_by: ['alertname', 'job']
           # group_wait: 30s
@@ -180,9 +200,29 @@ spec:
         - hosts:
           - prom-server.eviljungle.com
       prometheusSpec:
-        # image:
-        #   repository: quay.io/prometheus/prometheus
-        #   tag: v2.20.0
+        additionalScrapeConfigs:
+        - job_name: 'wmi-exporter-scrape'
+          metrics_path: '/metrics'
+          params:
+            format: [prometheus]
+          honor_labels: true
+          static_configs:
+          - targets:
+            - nvr.home:9182
+        - job_name: 'node'
+          static_configs:
+          - targets:
+            - proxmox-b.home:9100
+            - proxmox-c.home:9100
+            - opnsense.home:9100
+        - job_name: 'upsc-exporter'
+          metrics_path: '/metrics'
+          static_configs:
+          - targets:
+            - proxmox-b.home:8081
+            - proxmox-c.home:8081
+            - k3s-pi4-c.home:8081
+            - pi3-b.home:8081
         replicas: 2
         replicaExternalLabelName: "replica"
         ruleSelector: {}
