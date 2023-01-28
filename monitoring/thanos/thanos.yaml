@@ -65,6 +65,7 @@ spec:
       enabled: true
       serviceMonitor:
         enabled: true
+  valuesFrom:
   - targetPath: objstoreConfig.config.access_key
     kind: Secret
     name: thanos-secret
