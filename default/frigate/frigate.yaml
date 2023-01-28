@@ -305,6 +305,15 @@ spec:
                       min_score: 0.60
 
   valuesFrom:
-  - kind: Secret
-    name: "frigate-helm-values"
-    optional: false
+    - targetPath: env.FRIGATE_RTSP_PASSWORD
+      kind: Secret
+      name: frigate-secret
+      valuesKey: RTSP_PASSWORD
+    - targetPath: env.FRIGATE_MQTT_PASSWORD
+      kind: Secret
+      name: frigate-secret
+      valuesKey: EMQX_MQTT_USER_PASSWORD
+    - targetPath: env.FRIGATE_AMCREST_ADMIN_PASSWORD
+      kind: Secret
+      name: frigate-secret
+      valuesKey: AMCREST_ADMIN_PASSWORD
