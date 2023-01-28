@@ -187,7 +187,7 @@ loadSecretsToVault() {
   # kvault "default/home-assistant/home-assistant-helm-values.txt"
   # kvault "default/plex/plex-helm-values.txt"
   # kvault "default/teslamate/teslamate-helm-values.txt"
-  kvault "velero/velero/velero-helm-values.txt"
+  # kvault "velero/velero/velero-helm-values.txt"
 }
 
 loadSecretsToVault-oneoff() {
