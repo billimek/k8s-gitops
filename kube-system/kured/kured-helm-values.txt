@@ -1,2 +1,0 @@
-configuration:
-  notifyUrl: "$DISCORD_KURED_WEBHOOK_URL"

@@ -8,19 +8,37 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://kubereboot.github.io/charts
       chart: kured
       version: 4.2.0
       sourceRef:
         kind: HelmRepository
-        name: weaveworks-kured-charts
+        name: kubereboot-charts
         namespace: flux-system
-      interval: 5m
+      interval: 10m
+  install:
+    timeout: 10m
+    replace: true
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      remediateLastFailure: true
+      retries: 3
+      strategy: rollback
+    cleanupOnFail: true
+    crds: CreateReplace
+  test:
+    enable: true
+  rollback:
+    recreate: true
+    force: true
+    cleanupOnFail: true
+  uninstall:
+    keepHistory: false
+  maxHistory: 3
   values:
-    image:
-      repository: ghcr.io/kubereboot/kured
-      tag: 1.12.0
-    updateStrategy: RollingUpdate
     configuration:
       startTime: "0:00"
       endTime: "4:00"
@@ -33,7 +51,10 @@ spec:
       operator: "Exists"
     metrics:
       create: true
+    service:
+      create: true
   valuesFrom:
-  - kind: Secret
-    name: "kured-helm-values"
-    optional: false
+  - targetPath: configuration.notifyUrl
+    kind: Secret
+    name: kured-secret
+    valuesKey: DISCORD_KURED_WEBHOOK_URL
