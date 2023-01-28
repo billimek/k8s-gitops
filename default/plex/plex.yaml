@@ -98,6 +98,7 @@ spec:
         securityContext:
           runAsUser: 0
   valuesFrom:
-  - kind: Secret
-    name: "plex-helm-values"
-    optional: false
+  - targetPath: claimToken
+    kind: Secret
+    name: plex-secret
+    valuesKey: PLEX_CLAIM_TOKEN
