@@ -18,6 +18,12 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
+    objstoreConfig: |-
+      type: s3
+      config:
+        bucket: thanos
+        endpoint: truenas.home:9000
+        insecure: true
     query:
       enabled: true
       replicaCount: 2
@@ -59,7 +65,11 @@ spec:
       enabled: true
       serviceMonitor:
         enabled: true
-  valuesFrom:
-  - kind: Secret
-    name: "thanos-helm-values"
-    optional: false
+  - targetPath: objstoreConfig.config.access_key
+    kind: Secret
+    name: thanos-secret
+    valuesKey: MINIO_ACCESS_KEY
+  - targetPath: objstoreConfig.config.secret_key
+    kind: Secret
+    name: thanos-secret
+    valuesKey: MINIO_SECRET_KEY
