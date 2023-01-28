@@ -18,7 +18,7 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    objstoreConfig: |-
+    objstoreConfig:
       type: s3
       config:
         bucket: thanos
