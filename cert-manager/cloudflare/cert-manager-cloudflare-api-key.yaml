@@ -1,10 +1,18 @@
-apiVersion: ricoberger.de/v1alpha1
-kind: VaultSecret
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
 metadata:
   name: cloudflare-api-key
   namespace: cert-manager
 spec:
-  keys:
-    - api-key
-  path: secrets/cert-manager/cloudflare-api-key
-  type: Opaque
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: cloudflare-api-key
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        # admin_password, user_2_password
+        key: cloudflare
