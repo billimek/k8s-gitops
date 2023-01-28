@@ -80,10 +80,6 @@ spec:
         tls:
         - hosts:
           - emqx.eviljungle.com
-  valuesFrom:
-  - kind: Secret
-    name: "emqx-helm-values"
-    optional: false
 
   valuesFrom:
     - targetPath: emqxConfig.EMQX_DASHBOARD__DEFAULT_PASSWORD
