@@ -8,6 +8,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://kubereboot.github.io/charts
       chart: kured
       version: 4.2.0
       sourceRef:
