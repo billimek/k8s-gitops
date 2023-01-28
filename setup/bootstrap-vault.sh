@@ -175,7 +175,7 @@ loadSecretsToVault() {
   # helm chart values
   ####################
   # kvault "kube-system/kured/kured-helm-values.txt"
-  kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
+  # kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
   kvault "logs/loki/loki-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"
   kvault "monitoring/grafana/grafana-helm-values.txt"
@@ -186,7 +186,6 @@ loadSecretsToVault() {
   # kvault "default/frigate/frigate-helm-values.txt"
   # kvault "default/home-assistant/home-assistant-helm-values.txt"
   # kvault "default/plex/plex-helm-values.txt"
-  kvault "default/rtorrent-flood/rtorrent-flood-helm-values.txt"
   # kvault "default/teslamate/teslamate-helm-values.txt"
   kvault "velero/velero/velero-helm-values.txt"
 }

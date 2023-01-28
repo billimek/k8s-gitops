@@ -52,6 +52,15 @@ spec:
               - oauth2-proxy
           topologyKey: "kubernetes.io/hostname"
   valuesFrom:
-  - kind: Secret
-    name: "oauth2-proxy-helm-values"
-    optional: false
+  - targetPath: config.clientID
+    kind: Secret
+    name: oauth2-proxy-secret
+    valuesKey: AUTH0_CLIENT_ID
+  - targetPath: config.clientID
+    kind: Secret
+    name: oauth2-proxy-secret
+    valuesKey: AUTH0_CLIENT_SECRET
+  - targetPath: config.cookieSecret
+    kind: Secret
+    name: oauth2-proxy-secret
+    valuesKey: OAUTH2_PROXY_COOKIE_SECRET
