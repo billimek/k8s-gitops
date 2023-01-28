@@ -41,6 +41,8 @@ spec:
       GF_LOG_FILTERS: rendering:debug
       VAR_BLOCKY_URL: "http://blocky.default.svc.cluster.local:4000"
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: "natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel"
+    envFromSecrets:
+      - name: grafana-secret
     ingress:
       enabled: true
       annotations:
@@ -313,6 +315,15 @@ spec:
         url: https://grafana.net
       auth.basic:
         disable_login_form: true
-  valuesFrom:
-  - kind: Secret
-    name: "grafana-helm-values"
+      auth.generic_oauth:
+        enabled: true
+        allow_sign_up: true
+        team_ids:
+        allowed_organizations:
+        name: Auth0
+        client_id: # Set by env vars
+        client_secret: # Set by env vars
+        scopes: openid profile email
+        auth_url: https://billimek.auth0.com/authorize
+        token_url: https://billimek.auth0.com/oauth/token
+        api_url: https://billimek.auth0.com/userinfo
