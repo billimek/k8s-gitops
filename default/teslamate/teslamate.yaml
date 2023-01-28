@@ -92,6 +92,23 @@ spec:
         podAnnotations:
           backup.velero.io/backup-volumes: data
   valuesFrom:
-  - kind: Secret
-    name: "teslamate-helm-values"
-    optional: false
+  - targetPath: env.DATABASE_PASS
+    kind: Secret
+    name: teslamate-secret
+    valuesKey: TESLAMATE_DB_PASSWORD
+  - targetPath: env.MQTT_PASSWORD
+    kind: Secret
+    name: teslamate-secret
+    valuesKey: MQTT_PASSWORD
+  - targetPath: env.ENCRYPTION_KEY
+    kind: Secret
+    name: teslamate-secret
+    valuesKey: TESLAMATE_ENCRYPTION_KEY
+  - targetPath: postgresql.auth.password
+    kind: Secret
+    name: teslamate-secret
+    valuesKey: TESLAMATE_DB_PASSWORD
+  - targetPath: postgresql.auth.postgresPassword
+    kind: Secret
+    name: teslamate-secret
+    valuesKey: TESLAMATE_DB_ADMIN_PASSWORD
