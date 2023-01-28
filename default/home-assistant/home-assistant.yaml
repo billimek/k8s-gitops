@@ -71,6 +71,8 @@ spec:
           - "/config/.vscode"
           - --auth
           - "none"
+        env:
+          HASS_SERVER: http://localhost:8123
         ingress:
           enabled: true
           annotations:
@@ -128,6 +130,19 @@ spec:
         requests:
           memory: 2000Mi
   valuesFrom:
-  - kind: Secret
-    name: "home-assistant-helm-values"
-    optional: false
+  - targetPath: extraEnv.CAMERA_AUTH
+    kind: Secret
+    name: home-assistant-secret
+    valuesKey: CAMERA_AUTH
+  - targetPath: postgresql.auth.postgresqlPassword
+    kind: Secret
+    name: home-assistant-secret
+    valuesKey: HASS_DB_ADMIN_PASSWORD
+  - targetPath: postgresql.auth.password
+    kind: Secret
+    name: home-assistant-secret
+    valuesKey: HASS_DB_PASSWORD
+  - targetPath: addons.codeserver.env.HASS_TOKEN
+    kind: Secret
+    name: home-assistant-secret
+    valuesKey: HASS_TOKEN
