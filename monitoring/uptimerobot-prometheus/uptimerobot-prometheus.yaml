@@ -31,6 +31,7 @@ spec:
       prometheusRule:
         enabled: false
   valuesFrom:
-  - kind: Secret
-    name: "uptimerobot-prometheus-helm-values"
-    optional: false
+  - targetPath: uptimerobotApiKey
+    kind: Secret
+    name: uptimerobot-secret
+    valuesKey: UPTIMEROBOT_APIKEY
