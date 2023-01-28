@@ -167,7 +167,7 @@ EOF
 
 loadSecretsToVault() {
   message "writing secrets to vault"
-  vault kv put secrets/flux-system/discord-webhook address="$DISCORD_FLUX_WEBHOOK_URL"
+  # vault kv put secrets/flux-system/discord-webhook address="$DISCORD_FLUX_WEBHOOK_URL"
   vault kv put secrets/kube-system/nginx-basic-auth-jeff auth="$JEFF_AUTH"
   vault kv put secrets/cert-manager/cloudflare-api-key api-key="$CF_API_KEY"
 
