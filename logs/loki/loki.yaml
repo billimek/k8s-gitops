@@ -19,6 +19,16 @@ spec:
   timeout: 20m
   values:
     loki:
+      storage:
+        bucketNames:
+          chunks: chunks
+          ruler: ruler
+          admin: admin
+        type: s3
+        s3:
+          endpoint: truenas.home:9000
+          s3ForcePathStyle: true
+          insecure: true
       structuredConfig:
         auth_enabled: false
 
@@ -194,6 +204,12 @@ spec:
       enabled: false
 
   valuesFrom:
-  - kind: Secret
-    name: "loki-helm-values"
-    optional: false
+  - targetPath: loki.storage.s3.accessKeyId
+    kind: Secret
+    name: loki-secret
+    valuesKey: MINIO_ACCESS_KEY
+  - targetPath: loki.storage.s3.secretAccessKey
+    kind: Secret
+    name: loki-secret
+    valuesKey: MINIO_SECRET_KEY
+

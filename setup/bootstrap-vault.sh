@@ -176,7 +176,7 @@ loadSecretsToVault() {
   ####################
   # kvault "kube-system/kured/kured-helm-values.txt"
   # kvault "kube-system/oauth2-proxy/oauth2-proxy-helm-values.txt"
-  kvault "logs/loki/loki-helm-values.txt"
+  # kvault "logs/loki/loki-helm-values.txt"
   kvault "monitoring/botkube/botkube-helm-values.txt"
   kvault "monitoring/grafana/grafana-helm-values.txt"
   kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
