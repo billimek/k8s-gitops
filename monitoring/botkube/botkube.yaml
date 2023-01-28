@@ -23,6 +23,16 @@ spec:
       pullPolicy: Always
     serviceMonitor:
       enabled: true
+    communications:
+      slack:
+        enabled: false
+      discord:
+        enabled: true
+        botid: '782247992648138773'
+        channel: '782247131649933332'
+        notiftype: short
+      webhook:
+        enabled: false
     config:
       settings:
         clustername: k8s
@@ -191,6 +201,11 @@ spec:
             - delete
             - error
   valuesFrom:
-  - kind: Secret
-    name: "botkube-helm-values"
-    optional: false
+  - targetPath: communications.discord.token
+    kind: Secret
+    name: botkube-secret
+    valuesKey: BOTKUBE_DISCORD_TOKEN
+  - targetPath: communications.webhook.url
+    kind: Secret
+    name: botkube-secret
+    valuesKey: DISCORD_BOTKUBE_WEBHOOK_URL
