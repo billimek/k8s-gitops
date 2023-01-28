@@ -37,6 +37,8 @@ spec:
         config:
           region: us-east-1
       resticTimeout: 6h
+      credentials:
+        name: velero-secret
     initContainers:
     - name: velero-plugin-for-aws
       image: velero/velero-plugin-for-aws:v1.6.0@sha256:04b19ab31ab2c1bc56de1b18dcfc268bdfce32b0edf313869781ded2320beed0
@@ -117,7 +119,3 @@ spec:
           ttl: "120h"
           includedNamespaces:
           - default
-  valuesFrom:
-  - kind: Secret
-    name: "velero-helm-values"
-    optional: false
