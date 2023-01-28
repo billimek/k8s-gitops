@@ -2,9 +2,8 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: cloudflare-api-key-secret
+  name: cloudflare-api-key
   namespace: cert-manager
-spec:
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -14,5 +13,4 @@ spec:
     creationPolicy: Owner
   dataFrom:
     - extract:
-        # admin_password, user_2_password
         key: cloudflare
