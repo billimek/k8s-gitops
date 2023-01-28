@@ -49,6 +49,8 @@ spec:
       EMQX_ALLOW_ANONYMOUS: "false"
       EMQX_LOADED_MODULES: "emqx_mod_presence,emqx_mod_acl_internal,emqx_mod_topic_metrics"
       EMQX_LOADED_PLUGINS: "emqx_management,emqx_recon,emqx_retainer,emqx_dashboard,emqx_rule_engine,emqx_auth_mnesia,emqx_prometheus"
+      EMQX_AUTH__MNESIA__PASSWORD_HASH: plain
+      EMQX_AUTH__USER__1__USERNAME: mqtt
     #   EMQX_ACL_NOMATCH: "deny"
 
     emqxAclConfig: >
@@ -82,3 +84,13 @@ spec:
   - kind: Secret
     name: "emqx-helm-values"
     optional: false
+
+  valuesFrom:
+    - targetPath: emqxConfig.EMQX_DASHBOARD__DEFAULT_PASSWORD
+      kind: Secret
+      name: emqx-secret
+      valuesKey: admin_password
+    - targetPath: emqxConfig.EMQX_AUTH__USER__1__PASSWORD
+      kind: Secret
+      name: emqx-secret
+      valuesKey: user_1_password

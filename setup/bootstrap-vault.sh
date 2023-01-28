@@ -182,7 +182,7 @@ loadSecretsToVault() {
   kvault "monitoring/kube-prometheus-stack/kube-prometheus-stack-helm-values.txt"
   kvault "monitoring/thanos/thanos-helm-values.txt"
   kvault "monitoring/uptimerobot-prometheus/uptimerobot-prometheus-helm-values.txt"
-  kvault "default/emqx/emqx-helm-values.txt"
+  # kvault "default/emqx/emqx-helm-values.txt"
   kvault "default/frigate/frigate-helm-values.txt"
   kvault "default/home-assistant/home-assistant-helm-values.txt"
   kvault "default/monica/monica-helm-values.txt"
