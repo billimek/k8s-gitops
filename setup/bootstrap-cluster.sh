@@ -9,6 +9,7 @@ need() {
 need "kubectl"
 need "helm"
 need "flux"
+need "op"
 
 message() {
   echo -e "\n######################################################################"
@@ -17,7 +18,20 @@ message() {
 }
 
 installFlux() {
-  message "installing fluxv2"
+
+
+  op whoami > /dev/null 2>&1
+  OP_SIGNEDIN=$?
+  if [ $OP_SIGNEDIN != 0 ]; then
+    echo -e "1password (op CLI) is not signed-in, aborting!"
+    exit 1
+  fi
+
+  message "fetching secrets from 1Password vault"
+  GITHUB_TOKEN=$(op read "op://kubernetes/github PAT for flux/password")
+
+
+  message "installing flux"
   flux check --pre > /dev/null
   FLUX_PRE=$?
   if [ $FLUX_PRE != 0 ]; then
@@ -26,7 +40,7 @@ installFlux() {
     exit 1
   fi
   if [ -z "$GITHUB_TOKEN" ]; then
-    echo "GITHUB_TOKEN is not set! Check $REPO_ROOT/setup/.env"
+    echo "GITHUB_TOKEN is not set! Check $REPO_ROOT/setup/.env or 1Password settings"
     exit 1
   fi
   flux bootstrap github \
@@ -46,7 +60,6 @@ installFlux() {
 
 installFlux
 "$REPO_ROOT"/setup/bootstrap-objects.sh
-"$REPO_ROOT"/setup/bootstrap-vault.sh
 
 message "all done!"
 kubectl get nodes -o=wide

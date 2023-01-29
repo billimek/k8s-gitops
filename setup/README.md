@@ -15,23 +15,14 @@ Once a cluster is in-place, ensure that the `$KUBECONFIG` environment variable i
 This [script](bootstrap-cluster.sh) does several things:
 
 1. Installs flux2
-1. Bootstraps the vault-secret-operator with the auto-unwrap token
-1. Bootstraps cert-manager with letsencrypt information
-1. Bootstraps vault (see [bootstrap-vault.sh](bootstrap-vault.sh) for more detail)
-   * Initializes vault if it has not already been initialized
-   * Unseals vault
-   * Configures vault to accept requests from vault-secrets-operator
-   * Writes all secrets (held locally in the `.env` file) to vault for vault-secrets-operator to act on
+1. Stages the 1Password connect credentials into secrets for later use
+1. Stages the Docker registry access information into secrets for later use
 
 ## cluster maintenance
 
-After initial bootstrapping, it will be necessary to run scripts to apply manual changes that can't be natively handled via Flux.  This is for yaml files that need `envsubst` prior to application to the cluster.  This is also for updates to values stored in **vault**.
-
 ### `.env` file
 
-There are references to the `.env` file in the below scripts. This file is automatically sourced in order to populate secrets and sensitive information used in the scripts at runtime. This file is also prevented from commits via `.gitignore`.
-
-A sample [.env.sample](.env.sample) file is provided as reference. To use this, `cp .env.sample .env` and make the necessary modifications for the secrets for your particular configuration.
+<deprecateed>
 
 ### objects
 
@@ -41,13 +32,9 @@ To apply necessary changes to kubernetes native objects, run [bootstrap-objects.
 ./bootstrap-objects.sh
 ```
 
-### vault updates
+### secrets updates
 
-To apply new additions or updates to vault, run [bootstrap-vault.sh](bootstrap-vault.sh):
-
-```shell
-./bootstrap-vault.sh
-```
+Leverages a 1Paswsword vault to persist secrets that are read dynamically via [external-secrets](https://external-secrets.io) & [1Password connect](https://github.com/1Password/connect)
 
 ### backup & restore
 
