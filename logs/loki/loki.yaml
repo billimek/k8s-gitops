@@ -164,25 +164,6 @@ spec:
                   matchLabels:
                     {{- include "loki.readSelectorLabels" . | nindent 12 }}
                 topologyKey: kubernetes.io/hostname
-      extraVolumeMounts:
-        - name: loki-rules-tmp
-          mountPath: /tmp/scratch
-        - name: loki-tmp
-          mountPath: /tmp/loki-tmp
-        - name: loki-rules-generated
-          mountPath: /rules
-        - name: loki-rules
-          mountPath: /var/loki/rules
-      extraVolumes:
-        - name: loki-rules-tmp
-          emptyDir: {}
-        - name: loki-tmp
-          emptyDir: {}
-        - name: loki-rules
-          configMap:
-            name: loki-alertinggroups
-        - name: loki-rules-generated
-          emptyDir: {}
 
       persistence:
         size: 10Gi
