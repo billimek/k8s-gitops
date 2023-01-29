@@ -5,8 +5,7 @@ metadata:
   name: thanos
   namespace: monitoring
 spec:
-  interval: 5m
-  timeout: 10m
+  interval: 15m
   chart:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
@@ -16,12 +15,24 @@ spec:
         kind: HelmRepository
         name: bitnami-charts
         namespace: flux-system
-      interval: 5m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     objstoreConfig:
       type: s3
       config:
         insecure: true
+    queryFrontend:
+      enabled: false
     query:
       enabled: true
       replicaCount: 3
@@ -40,8 +51,6 @@ spec:
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         tls: true
-    queryFrontend:
-      enabled: false
     bucketweb:
       enabled: true
       replicaCount: 3
@@ -53,38 +62,68 @@ spec:
       retentionResolution5m: 14d
       retentionResolution1h: 30d
       persistence:
-        enabled: false
+        enabled: true
+        storageClass: rook-ceph-block
+        size: 20Gi
     storegateway:
       enabled: true
       replicaCount: 3
       podAntiAffinityPreset: hard
       persistence:
         enabled: true
-        size: 40Gi
+        storageClass: rook-ceph-block
+        size: 20Gi
     ruler:
-      enabled: false
+      enabled: true
+      replicaCount: 3
+      podAntiAffinityPreset: hard
+      dnsDiscovery:
+        enabled: true
+      alertmanagers: ["http://kube-prometheus-stack-alertmanager.monitoring:9093"]
+      # Breaks any metric that has an existing "cluster" label on a metric
+      # clusterName: home # must match with kube-prometheus-stack value `.prometheus.prometheusSpec.externalLabels.cluster`
+      extraFlags: ["--web.prefix-header=X-Forwarded-Prefix"]
+      config: |-
+        groups:
+          - name: "PrometheusWatcher"
+            rules:
+              - alert: "PrometheusDown"
+                expr: absent(up{job="kube-prometheus-stack-prometheus"})
+      ingress:
+        enabled: true
+        hostname: thanos-ruler.eviljungle.com
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        tls: true
+      persistence:
+        enabled: true
+        storageClass: rook-ceph-block
+        size: 20Gi
     metrics:
       enabled: true
       serviceMonitor:
         enabled: true
   valuesFrom:
-  - targetPath: objstoreConfig.config.bucket
-    kind: ConfigMap
-    name: thanos-bucket
-    valuesKey: BUCKET_NAME
-  - targetPath: objstoreConfig.config.endpoint
-    kind: ConfigMap
-    name: thanos-bucket
-    valuesKey: BUCKET_HOST
-  - targetPath: objstoreConfig.config.region
-    kind: ConfigMap
-    name: thanos-bucket
-    valuesKey: BUCKET_REGION
-  - targetPath: objstoreConfig.config.access_key
-    kind: Secret
-    name: thanos-bucket
-    valuesKey: AWS_ACCESS_KEY_ID
-  - targetPath: objstoreConfig.config.secret_key
-    kind: Secret
-    name: thanos-bucket
-    valuesKey: AWS_SECRET_ACCESS_KEY
+    - targetPath: objstoreConfig.config.bucket
+      kind: ConfigMap
+      name: thanos-bucket
+      valuesKey: BUCKET_NAME
+    - targetPath: objstoreConfig.config.endpoint
+      kind: ConfigMap
+      name: thanos-bucket
+      valuesKey: BUCKET_HOST
+    - targetPath: objstoreConfig.config.region
+      kind: ConfigMap
+      name: thanos-bucket
+      valuesKey: BUCKET_REGION
+    - targetPath: objstoreConfig.config.access_key
+      kind: Secret
+      name: thanos-bucket
+      valuesKey: AWS_ACCESS_KEY_ID
+    - targetPath: objstoreConfig.config.secret_key
+      kind: Secret
+      name: thanos-bucket
+      valuesKey: AWS_SECRET_ACCESS_KEY
