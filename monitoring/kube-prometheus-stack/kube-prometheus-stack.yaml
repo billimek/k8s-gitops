@@ -68,10 +68,10 @@ spec:
             - receiver: "null" # quote
               matchers:
                 - alertname =~ "InfoInhibitor"
-            - receiver: 'pagerduty'
-              matchers:
-                - severity = "critical"
-              continue: true
+            # - receiver: 'pagerduty'
+            #   matchers:
+            #     - severity = "critical"
+            #   continue: true
             - receiver: 'slack-notifications'
         inhibit_rules:
           - source_matchers:
