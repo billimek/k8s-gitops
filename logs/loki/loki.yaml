@@ -5,7 +5,7 @@ metadata:
   name: loki
   namespace: logs
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
       # renovate: registryUrl=https://grafana.github.io/helm-charts
@@ -15,8 +15,6 @@ spec:
         kind: HelmRepository
         name: grafana-charts
         namespace: flux-system
-      interval: 5m
-  timeout: 20m
   maxHistory: 3
   install:
     createNamespace: true
@@ -164,13 +162,28 @@ spec:
                   matchLabels:
                     {{- include "loki.readSelectorLabels" . | nindent 12 }}
                 topologyKey: kubernetes.io/hostname
-
       persistence:
         size: 10Gi
         storageClass: rook-ceph-block
       tolerations:
       - key: "arm"
         operator: "Exists"
+
+    backend:
+      replicas: 3
+      persistence:
+        storageClass: rook-ceph-block
+      extraVolumeMounts:
+        - name: rules
+          mountPath: /rules/fake
+        - name: scratch
+          mountPath: /tmp/scratch
+      extraVolumes:
+        - name: rules
+          configMap:
+            name: loki-alerting-rules
+        - name: scratch
+          emptyDir: {}
 
     monitoring:
       dashboards:
