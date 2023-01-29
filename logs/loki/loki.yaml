@@ -174,14 +174,15 @@ spec:
       persistence:
         storageClass: rook-ceph-block
       extraVolumeMounts:
-        # - name: rules
-        #   mountPath: /rules/fake
+        - name: rules
+          mountPath: /rules/fake
         - name: scratch
           mountPath: /tmp/scratch
       extraVolumes:
-        # - name: rules
-        #   configMap:
-        #     name: loki-alerting-rules
+        - name: rules
+          emptyDir: {}
+          # configMap:
+          #   name: loki-alerting-rules
         - name: scratch
           emptyDir: {}
 
