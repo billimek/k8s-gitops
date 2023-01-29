@@ -1,0 +1,9 @@
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: loki-bucket
+  namespace: logs
+spec:
+  bucketName: loki
+  storageClassName: ceph-bucket

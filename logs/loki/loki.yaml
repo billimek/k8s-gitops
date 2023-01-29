@@ -10,25 +10,26 @@ spec:
     spec:
       # renovate: registryUrl=https://grafana.github.io/helm-charts
       chart: loki
-      version: 3.6.1
+      version: 4.4.2
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
         namespace: flux-system
       interval: 5m
   timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     loki:
-      storage:
-        bucketNames:
-          chunks: chunks
-          ruler: ruler
-          admin: admin
-        type: s3
-        s3:
-          endpoint: truenas.home:9000
-          s3ForcePathStyle: true
-          insecure: true
       structuredConfig:
         auth_enabled: false
 
@@ -49,6 +50,8 @@ spec:
           split_queries_by_interval: 15m
           ingestion_rate_mb: 8
           ingestion_burst_size_mb: 16
+          shard_streams:
+            enabled: true
 
         schema_config:
           configs:
@@ -204,12 +207,19 @@ spec:
       enabled: false
 
   valuesFrom:
-  - targetPath: loki.storage.s3.accessKeyId
+  - targetPath: loki.structuredConfig.common.storage.s3.bucketnames
+    kind: ConfigMap
+    name: loki-bucket
+    valuesKey: BUCKET_NAME
+  - targetPath: loki.structuredConfig.common.storage.s3.endpoint
+    kind: ConfigMap
+    name: loki-bucket
+    valuesKey: BUCKET_HOST
+  - targetPath: loki.structuredConfig.common.storage.s3.access_key_id
     kind: Secret
-    name: loki-secret
-    valuesKey: MINIO_ACCESS_KEY
-  - targetPath: loki.storage.s3.secretAccessKey
+    name: loki-bucket
+    valuesKey: AWS_ACCESS_KEY_ID
+  - targetPath: loki.structuredConfig.common.storage.s3.secret_access_key
     kind: Secret
-    name: loki-secret
-    valuesKey: MINIO_SECRET_KEY
-
+    name: loki-bucket
+    valuesKey: AWS_SECRET_ACCESS_KEY
