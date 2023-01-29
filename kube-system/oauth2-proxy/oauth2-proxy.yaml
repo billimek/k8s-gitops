@@ -56,7 +56,7 @@ spec:
     kind: Secret
     name: oauth2-proxy-secret
     valuesKey: AUTH0_CLIENT_ID
-  - targetPath: config.clientID
+  - targetPath: config.clientSecret
     kind: Secret
     name: oauth2-proxy-secret
     valuesKey: AUTH0_CLIENT_SECRET
