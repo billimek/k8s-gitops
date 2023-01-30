@@ -38,6 +38,8 @@ spec:
           region: us-east-1
       resticTimeout: 6h
       credentials:
+        useSecret: true
+        name: null
         existingSecret: velero-secret
     initContainers:
     - name: velero-plugin-for-aws
