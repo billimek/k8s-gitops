@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/readarr-develop
-      tag: 0.1.1.1526
+      tag: 0.1.2.1532
     env:
       TZ: "America/New_York"
       # PUID: 1001
