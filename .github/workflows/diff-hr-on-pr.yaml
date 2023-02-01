@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
         with:
           ref: "${{ github.event.repository.default_branch }}"
-          path: default
+          path: default_branch
 
       - name: Setup Homebrew
         uses: Homebrew/actions/setup-homebrew@master
@@ -57,12 +57,8 @@ jobs:
       - name: Diff
         id: diff
         run: |
-          ls -al ./.github/scripts/helmReleaseDiff.mjs
-          ls -al "default/${{ matrix.file }}"
-          ls -al "${{ matrix.file }}"
-          ls -al
           diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
-            --current-release "default/${{ matrix.file }}" \
+            --current-release "default_branch/${{ matrix.file }}" \
             --incoming-release "${{ matrix.file }}" \
             --kubernetes-dir ${{ env.KUBERNETES_DIR }})
           echo "diff<<EOF" >> "${GITHUB_OUTPUT}"
