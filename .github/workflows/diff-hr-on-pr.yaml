@@ -27,6 +27,7 @@ jobs:
           json: true
           files: |
             **/*.yaml
+          files_ignore: .github/**
 
       - id: set-matrix
         run: echo "matrix={\"file\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "${GITHUB_OUTPUT}"
