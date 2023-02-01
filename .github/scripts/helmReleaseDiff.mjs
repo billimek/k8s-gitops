@@ -18,12 +18,13 @@ const dyff      = await which('dyff')
 const helm      = await which('helm')
 const kustomize = await which('kustomize')
 
-async function helmRelease(releaseFile) {
+async function helmRelease(releaseFile, releaseName) {
   const helmRelease = await fs.readFile(releaseFile, 'utf8')
   const doc = YAML.parseAllDocuments(helmRelease).map((item) => item.toJS())
   const release = doc.filter((item) =>
     item.apiVersion === 'helm.toolkit.fluxcd.io/v2beta1'
       && item.kind === 'HelmRelease'
+        && item.metadata.name === releaseName
   )
   return release[0]
 }
@@ -39,20 +40,6 @@ async function helmRepositoryUrl(kubernetesDir, releaseName) {
     {
       return doc[0].spec.url
     }
-  }
-}
-
-async function matchBuild(releaseBaseDir, releaseName) {
-  const files = await globby([`${releaseBaseDir}/*.yaml`])
-  for await (const file of files) {
-    const contents = await fs.readFile(file, 'utf8')
-    const docs = YAML.parseAllDocuments(contents).map((item) => item.toJS())
-    const release = docs.filter((item) =>
-    item.apiVersion === 'helm.toolkit.fluxcd.io/v2beta1'
-      && item.kind === 'HelmRelease'
-        && item.metadata.name === releaseName
-  )
-    return release[0]
   }
 }
 
@@ -84,8 +71,7 @@ async function helmTemplate (releaseName, registryName, chartName, chartVersion,
 }
 
 // Generate current template from Helm values
-const currentRelease = await helmRelease(CurrentRelease)
-const currentBuild = await matchBuild(path.dirname(CurrentRelease), currentRelease.metadata.name)
+const currentBuild = await helmRelease(CurrentRelease, currentRelease.metadata.name)
 const currentRepositoryUrl = await helmRepositoryUrl(KubernetesDir, currentBuild.spec.chart.spec.sourceRef.name)
 await helmRepoAdd(currentBuild.spec.chart.spec.sourceRef.name, currentRepositoryUrl)
 const currentManifests = await helmTemplate(
@@ -97,8 +83,7 @@ const currentManifests = await helmTemplate(
 )
 
 // Generate incoming template from Helm values
-const incomingRelease = await helmRelease(IncomingRelease)
-const incomingBuild = await matchBuild(path.dirname(IncomingRelease), incomingRelease.metadata.name)
+const incomingBuild = await helmRelease(IncomingRelease, incomingRelease.metadata.name)
 const incomingRepositoryUrl = await helmRepositoryUrl(KubernetesDir, incomingBuild.spec.chart.spec.sourceRef.name)
 await helmRepoAdd(incomingBuild.spec.chart.spec.sourceRef.name, incomingRepositoryUrl)
 const incomingManifests = await helmTemplate(
