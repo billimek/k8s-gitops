@@ -57,9 +57,6 @@ jobs:
       - name: Diff
         id: diff
         run: |
-          ls -al
-          ls -al ./.github/scripts/helmReleaseDiff.mjs
-          ls -al "${{ matrix.file }}"
           diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
             --current-release "default_branch/${{ matrix.file }}" \
             --incoming-release "${{ matrix.file }}" \
