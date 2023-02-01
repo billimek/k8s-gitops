@@ -7,7 +7,7 @@ on:
     paths: ["**.yaml"]
 
 env:
-  KUBERNETES_DIR: ./
+  KUBERNETES_DIR: flux-system-extra
 
 jobs:
   changed-files:
