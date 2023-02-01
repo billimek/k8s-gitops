@@ -7,7 +7,7 @@ on:
     paths: ["**.yaml"]
 
 env:
-  KUBERNETES_DIR: flux-system-extra
+  KUBERNETES_DIR: ./
 
 jobs:
   changed-files:
@@ -57,6 +57,10 @@ jobs:
       - name: Diff
         id: diff
         run: |
+          ls -al ./.github/scripts/helmReleaseDiff.mjs
+          ls -al "default/${{ matrix.file }}"
+          ls -al "${{ matrix.file }}"
+          ls -al
           diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
             --current-release "default/${{ matrix.file }}" \
             --incoming-release "${{ matrix.file }}" \
