@@ -33,7 +33,7 @@ async function helmRepositoryUrl(kubernetesDir, releaseName) {
   for await (const file of files) {
     const contents = await fs.readFile(file, 'utf8')
     const doc = YAML.parseAllDocuments(contents).map((item) => item.toJS())
-    if ('apiVersion' in doc[0] && doc[0].apiVersion === 'source.toolkit.fluxcd.io/v1beta2'
+    if (doc.length > 0 && 'apiVersion' in doc[0] && doc[0].apiVersion === 'source.toolkit.fluxcd.io/v1beta2'
         && 'kind' in doc[0] && doc[0].kind === 'HelmRepository'
         && 'metadata' in doc[0] && 'name' in doc[0].metadata && doc[0].metadata.name === releaseName)
     {
