@@ -14,6 +14,7 @@ const CurrentRelease  = argv['current-release']
 const IncomingRelease = argv['incoming-release']
 const KubernetesDir   = argv['kubernetes-dir']
 
+const diff_tool = await which('diff')
 const dyff      = await which('dyff')
 const helm      = await which('helm')
 const kustomize = await which('kustomize')
@@ -108,4 +109,7 @@ const incomingManifests = await helmTemplate(
 
 // Print diff using dyff
 const diff = await $`${dyff} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
+// Or, print diff using diff (for colors in the codeblock)
+// const diff = await $`${diff_tool} -u ${currentManifests} ${incomingManifests} || :`
+
 echo(diff.stdout.trim())
