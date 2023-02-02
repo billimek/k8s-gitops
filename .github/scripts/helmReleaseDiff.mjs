@@ -83,33 +83,36 @@ async function helmTemplate (releaseName, registryName, chartName, chartVersion,
 
 // Generate current template from Helm values
 const currentRelease = await helmRelease(CurrentRelease)
-const currentBuild = await helmBuild(CurrentRelease, currentRelease.metadata.name)
-const currentRepositoryUrl = await helmRepositoryUrl(KubernetesDir, currentBuild.spec.chart.spec.sourceRef.name)
-await helmRepoAdd(currentBuild.spec.chart.spec.sourceRef.name, currentRepositoryUrl)
-const currentManifests = await helmTemplate(
-  currentBuild.metadata.name,
-  currentBuild.spec.chart.spec.sourceRef.name,
-  currentBuild.spec.chart.spec.chart,
-  currentBuild.spec.chart.spec.version,
-  currentBuild.spec.values
-)
+if(currentRelease)
+{
+  const currentBuild = await helmBuild(CurrentRelease, currentRelease.metadata.name)
+  const currentRepositoryUrl = await helmRepositoryUrl(KubernetesDir, currentBuild.spec.chart.spec.sourceRef.name)
+  await helmRepoAdd(currentBuild.spec.chart.spec.sourceRef.name, currentRepositoryUrl)
+  const currentManifests = await helmTemplate(
+    currentBuild.metadata.name,
+    currentBuild.spec.chart.spec.sourceRef.name,
+    currentBuild.spec.chart.spec.chart,
+    currentBuild.spec.chart.spec.version,
+    currentBuild.spec.values
+  )
 
-// Generate incoming template from Helm values
-const incomingRelease = await helmRelease(IncomingRelease)
-const incomingBuild = await helmBuild(IncomingRelease, incomingRelease.metadata.name)
-const incomingRepositoryUrl = await helmRepositoryUrl(KubernetesDir, incomingBuild.spec.chart.spec.sourceRef.name)
-await helmRepoAdd(incomingBuild.spec.chart.spec.sourceRef.name, incomingRepositoryUrl)
-const incomingManifests = await helmTemplate(
-  incomingBuild.metadata.name,
-  incomingBuild.spec.chart.spec.sourceRef.name,
-  incomingBuild.spec.chart.spec.chart,
-  incomingBuild.spec.chart.spec.version,
-  incomingBuild.spec.values
-)
+  // Generate incoming template from Helm values
+  const incomingRelease = await helmRelease(IncomingRelease)
+  const incomingBuild = await helmBuild(IncomingRelease, incomingRelease.metadata.name)
+  const incomingRepositoryUrl = await helmRepositoryUrl(KubernetesDir, incomingBuild.spec.chart.spec.sourceRef.name)
+  await helmRepoAdd(incomingBuild.spec.chart.spec.sourceRef.name, incomingRepositoryUrl)
+  const incomingManifests = await helmTemplate(
+    incomingBuild.metadata.name,
+    incomingBuild.spec.chart.spec.sourceRef.name,
+    incomingBuild.spec.chart.spec.chart,
+    incomingBuild.spec.chart.spec.version,
+    incomingBuild.spec.values
+  )
 
-// Print diff using dyff
-const diff = await $`${dyff} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
-// Or, print diff using diff (for colors in the codeblock)
-// const diff = await $`${diff_tool} -u ${currentManifests} ${incomingManifests} || :`
+  // Print diff using dyff
+  const diff = await $`${dyff} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
+  // Or, print diff using diff (for colors in the codeblock)
+  // const diff = await $`${diff_tool} -u ${currentManifests} ${incomingManifests} || :`
 
-echo(diff.stdout.trim())
+  echo(diff.stdout.trim())
+}
