@@ -107,5 +107,5 @@ const incomingManifests = await helmTemplate(
 )
 
 // Print diff using dyff
-const diff = await $`${dyff} --color=on --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
+const diff = await $`${dyff} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
 echo(diff.stdout.trim())
