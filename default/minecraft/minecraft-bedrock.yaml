@@ -71,7 +71,7 @@ metadata:
   name: minecraft-bedrock
   namespace: default
 spec:
-  sourcePVC: mc-bedrock-minecraft-datadir
+  sourcePVC: mcbr-minecraft-bedrock-datadir
   trigger:
     schedule: "0 * * * *"
   restic:
