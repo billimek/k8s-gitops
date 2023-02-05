@@ -28,11 +28,12 @@ metadata:
   name: home-assistant
   namespace: default
 spec:
-  sourcePVC: home-assistant-config
+  sourcePVC: home-assistant
   trigger:
     schedule: "0 0 * * *"
   restic:
     copyMethod: Snapshot
+    repository: home-assistant-config
     pruneIntervalDays: 10
     repository: home-assistant-restic-secret
     cacheCapacity: 2Gi
@@ -53,6 +54,7 @@ spec:
     schedule: "0 0 * * *"
   restic:
     copyMethod: Snapshot
+    repository: home-assistant-db
     pruneIntervalDays: 10
     repository: home-assistant-restic-secret
     cacheCapacity: 2Gi
