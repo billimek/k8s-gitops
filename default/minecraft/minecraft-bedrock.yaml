@@ -41,3 +41,46 @@ spec:
       cheats: true
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.103
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: minecraft-bedrock-restic
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: minecraft-bedrock-restic-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/minecraft-bedrock'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
+        AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
+  dataFrom:
+    - extract:
+        key: minio
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: minecraft-bedrock
+  namespace: default
+spec:
+  sourcePVC: mc-bedrock-minecraft-datadir
+  trigger:
+    schedule: "0 * * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: minecraft-bedrock-restic-secret
+    cacheCapacity: 2Gi
+    volumeSnapshotClassName: csi-rbdplugin-snapclass
+    storageClassName: rook-ceph-block
+    retain:
+      daily: 10
+      within: 3d
