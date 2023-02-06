@@ -30,7 +30,7 @@ metadata:
 spec:
   sourcePVC: home-assistant
   trigger:
-    schedule: "0 0 * * *"
+    schedule: "0 6 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
@@ -73,7 +73,7 @@ metadata:
 spec:
   sourcePVC: data-home-assistant-postgresql-0
   trigger:
-    schedule: "0 0 * * *"
+    schedule: "0 6 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10

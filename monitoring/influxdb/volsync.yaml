@@ -30,7 +30,7 @@ metadata:
 spec:
   sourcePVC: influxdb-data-influxdb-0
   trigger:
-    schedule: "0 0 * * *"
+    schedule: "0 6 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
