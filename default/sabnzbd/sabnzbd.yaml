@@ -93,10 +93,6 @@ spec:
       incomplete:
         enabled: true
         type: emptyDir
-      downloads:
-        enabled: true
-        existingClaim: nfs-media-pvc
-        mountPath: /downloads
     resources:
       requests:
         cpu: 50m
