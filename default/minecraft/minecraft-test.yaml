@@ -1,0 +1,116 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mc-test
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
+      chart: minecraft
+      version: 4.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: itzg/minecraft-server
+      tag: 2023.1.0-java17
+    strategyType: Recreate
+    persistence:
+      storageClass: "rook-ceph-block"
+      dataDir:
+        enabled: true
+        Size: 15Gi
+    resources:
+      requests:
+        memory: 6Gi
+        cpu: 250m
+      limits:
+        memory: 7Gi
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 5
+      failureThreshold: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    readinessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 5
+      failureThreshold: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    startupProbe:
+      enabled: true
+      failureThreshold: 30
+      periodSeconds: 10
+    extraEnv:
+      MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar"
+      ENABLE_AUTOPAUSE: FALSE
+      SPIGET_RESOURCES: "102931"
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      type: PAPER
+      forceReDownload: true
+      jvmOpts: "-Xms6G -Xmx6G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true"
+      memory: 6144M
+      difficulty: normal
+      maxTickTime: -1
+      serviceType: LoadBalancer
+      gameMode: creative
+      motd: "\u00a7feviljungle\u00a7 - \u00a7a\u00a7lvolsync test\u00a7"
+      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
+      # loadBalancerIP: 10.0.6.101
+      rcon:
+        enabled: false
+        port: 25575
+        password: "mc-rcon"
+        serviceType: LoadBalancer
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: minecraft-test-restic
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: minecraft-test-restic-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/minecraft-test'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
+        AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
+  dataFrom:
+    - extract:
+        key: minio
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: minecraft-test
+  namespace: default
+spec:
+  sourcePVC: mc-test-minecraft-datadir
+  trigger:
+    schedule: "0 * * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: minecraft-test-restic-secret
+    cacheCapacity: 2Gi
+    volumeSnapshotClassName: csi-rbdplugin-snapclass
+    storageClassName: rook-ceph-block
+    retain:
+      daily: 10
+      within: 3d
