@@ -98,7 +98,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: minecraft-test
+  name: mc-test
   namespace: default
 spec:
   sourcePVC: mc-test-minecraft-datadir
