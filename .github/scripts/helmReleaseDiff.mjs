@@ -110,9 +110,9 @@ if(currentRelease)
   )
 
   // Print diff using dyff
-  const diff = await $`${dyff} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
+  // const diff = await $`${dyff} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
   // Or, print diff using diff (for colors in the codeblock)
-  // const diff = await $`${diff_tool} -u ${currentManifests} ${incomingManifests} || :`
+  const diff = await $`${diff_tool} -u ${currentManifests} ${incomingManifests} || :`
 
   echo(diff.stdout.trim())
 }
