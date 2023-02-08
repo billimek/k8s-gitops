@@ -32,7 +32,7 @@ spec:
             message: "{{ $labels.job }} {{ $labels.route }} is experiencing {{ $value }}s 99th percentile latency."
           expr: |
             namespace_job_route:loki_request_duration_seconds:99quantile{route!~"(?i).*tail.*"}
-              > 1
+              > 5
           for: 15m
           labels:
             severity: critical
