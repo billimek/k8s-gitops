@@ -45,19 +45,19 @@ spec:
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: minecraft-bedrock-restic
+  name: mcbr-restic
   namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: minecraft-bedrock-restic-secret
+    name: mcbr-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/minecraft-bedrock'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/mcbr'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
@@ -68,7 +68,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: minecraft-bedrock
+  name: mcbr
   namespace: default
 spec:
   sourcePVC: mcbr-minecraft-bedrock-datadir
@@ -77,7 +77,7 @@ spec:
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: minecraft-bedrock-restic-secret
+    repository: mcbr-restic-secret
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
