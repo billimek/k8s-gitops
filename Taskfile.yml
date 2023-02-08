@@ -1,0 +1,14 @@
+---
+version: "3"
+
+vars:
+  CLUSTER_DIR: "{{.ROOT_DIR}}"
+
+includes:
+  vs: .github/taskfiles/Tasks.yml
+
+tasks:
+
+  default:
+    silent: true
+    cmds: ["task -l"]
