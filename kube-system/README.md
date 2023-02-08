@@ -84,3 +84,15 @@ Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-
 [reloader](https://github.com/stakater/Reloader): A Kubernetes controller to watch changes in ConfigMap and Secrets and do rolling upgrades on Pods with their associated Deployment, StatefulSet, DaemonSet and DeploymentConfig
 
 * [reloader/](reloader/reloader.yaml)
+
+# snapshot-controller
+
+[snapshot-controller](https://github.com/kubernetes-csi/external-snapshotter): Sidecar container that watches Kubernetes Snapshot CRD objects and triggers CreateSnapshot/DeleteSnapshot against a CSI endpoint.  Used in conjunction with volsync.
+
+* [snapshot-controller/](snapshot-controller)
+
+# volsync
+
+[volsync](https://github.com/backube/volsync): Asynchronous data replication for Kubernetes volumes.  Leveraging storage CSI snapshotting and restic, this enables the backing-up of persistent volumes to an S3 bucket.
+
+* [volsync/](volsync/volsync.yaml)
