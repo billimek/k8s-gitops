@@ -109,9 +109,6 @@ spec:
         tolerations:
         - key: "arm"
           operator: "Exists"
-        podMetadata:
-          annotations:
-            backup.velero.io/backup-volumes: alertmanager-kube-prometheus-stack-alertmanager-db
 
     grafana:
       enabled: false
@@ -270,9 +267,6 @@ spec:
         # tolerations:
         # - key: "arm"
         #   operator: "Exists"
-        podMetadata:
-          annotations:
-            backup.velero.io/backup-volumes: prometheus-kube-prometheus-stack-prometheus-db
 
     nodeExporter:
       enabled: true

@@ -48,8 +48,6 @@ spec:
       enabled: true
       failureThreshold: 30
       periodSeconds: 10
-    podAnnotations:
-      backup.velero.io/backup-volumes: datadir
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "mcsv.eviljungle.com"
     extraEnv:

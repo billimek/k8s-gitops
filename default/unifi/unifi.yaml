@@ -76,8 +76,6 @@ spec:
             enabled: true
             port: 10001
             protocol: UDP
-    podAnnotations:
-      backup.velero.io/backup-volumes: data
     resources:
       requests:
         memory: 750Mi
