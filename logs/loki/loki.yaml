@@ -195,7 +195,7 @@ spec:
         labels:
           grafana_dashboard: "true"
       rules:
-        enabled: true
+        enabled: false
       serviceMonitor:
         enabled: true
       selfMonitoring:
