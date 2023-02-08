@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: volsync-rules
-  namespace: kube-system
+  namespace: monitoring
 spec:
   groups:
     - name: volsync.rules
