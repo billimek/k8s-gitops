@@ -15,6 +15,11 @@ spec:
       name: '*'
   exclusionList:
     - "error.*lookup github\\.com"
+    - "error.*lookup raw\\.githubusercontent\\.com"
+    - "dial.*tcp.*timeout"
+    - "waiting.*socket"
+    - "snapshot-controller configured"
+    - "snapshot-validation-webhook configured"
   suspend: false
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta1
