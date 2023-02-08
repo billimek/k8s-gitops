@@ -12,7 +12,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: wipe
-          image: alpine:3.17.0
+          image: alpine:3.17.1
           command: ["/bin/bash", "-c", "cd /config; find . -delete"]
           volumeMounts:
             - name: config
