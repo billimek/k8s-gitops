@@ -49,6 +49,8 @@ spec:
                 - delete
                 - error
               namespaces:
+                include:
+                  - ".*"
                 exclude:
                   - rook-ceph
                   - kube-system
