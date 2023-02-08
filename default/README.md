@@ -75,14 +75,6 @@ Rules-engine for automations
 * [node-red.yaml](node-red/node-red.yaml)
 * Node-Red configuration is persisted to a [configuration repo](https://github.com/billimek/node-red-config)
 
-# nzbget
-
-![](https://i.imgur.com/2KQbi2w.png)
-
-[Nzbget](https://github.com/nzbget/nzbget) is an efficient usenet downloading client.
-
-* [nzbget.yaml](nzbget/nzbget.yaml)
-
 # plex
 
 ![](https://i.imgur.com/nDyS9OA.jpg)
@@ -106,6 +98,14 @@ Rules-engine for automations
 [Readarr](https://github.com/Readarr/Readarr) is an ebook/audiobook organizer
 
 * [readarr.yaml](readarr/readarr.yaml)
+
+# sabnzbd
+
+![](https://i.imgur.com/wMZUuM1.png)
+
+[Sabnzbd](https://github.com/sabnzbd/sabnzbd) is an efficient usenet downloading client (nzbget is now abandoned).
+
+* [sabnzbd.yaml](nzbget/sabnzbd.yaml)
 
 # ser2sock
 
