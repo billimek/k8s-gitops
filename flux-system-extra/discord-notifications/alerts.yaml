@@ -20,6 +20,8 @@ spec:
     - "waiting.*socket"
     - "snapshot-controller configured"
     - "snapshot-validation-webhook configured"
+    - "Health check passed in"
+    - "Dependencies do not meet ready condition, retrying in 30s"
   suspend: false
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta1
