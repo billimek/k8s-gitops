@@ -49,6 +49,10 @@ spec:
             protocol: TCP
             targetPort: *port-bt
         externalTrafficPolicy: Local
+      flood:
+        ports:
+          http:
+            port: 8080
     ingress:
       main:
         enabled: true
@@ -79,6 +83,8 @@ spec:
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  port: flood
         tls:
           - hosts:
               - *host
