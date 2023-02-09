@@ -63,8 +63,8 @@ jobs:
           diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
             --current-release "default_branch/${{ matrix.file }}" \
             --incoming-release "${{ matrix.file }}" \
-            --kubernetes-dir ${{ env.KUBERNETES_DIR }}) \
-            --diff-tool "diff"
+            --kubernetes-dir ${{ env.KUBERNETES_DIR }} \
+            --diff-tool "diff")
           echo "diff<<EOF" >> "${GITHUB_OUTPUT}"
           echo "${diff}" >> "${GITHUB_OUTPUT}"
           echo "EOF" >> "${GITHUB_OUTPUT}"
@@ -97,8 +97,8 @@ jobs:
           diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
             --current-release "default_branch/${{ matrix.file }}" \
             --incoming-release "${{ matrix.file }}" \
-            --kubernetes-dir ${{ env.KUBERNETES_DIR }}) \
-            --diff-tool "dyff"
+            --kubernetes-dir ${{ env.KUBERNETES_DIR }} \
+            --diff-tool "dyff")
           echo "diff<<EOF" >> "${GITHUB_OUTPUT}"
           echo "${diff}" >> "${GITHUB_OUTPUT}"
           echo "EOF" >> "${GITHUB_OUTPUT}"
