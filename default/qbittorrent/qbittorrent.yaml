@@ -115,10 +115,12 @@ spec:
             tls:
               - hosts:
                   - *host
+        ports:
+          - name: flood
+            containerPort: 8080
+            protocol: TCP
         env:
           - { name: TZ, value: "America/New_York" }
-          - { name: HOME, value: "/config" }
-          - { name: FLOOD_OPTION_AUTH, value: "none" }
         volumeMounts:
           - { name: config, mountPath: /config }
           - { name: media, mountPath: /media }
