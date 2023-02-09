@@ -75,7 +75,7 @@ jobs:
         id: find-comment
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body-includes: ${{ matrix.file }}
+          body-includes: "Helm Release Diff: ${{ matrix.file }}"
 
       - name: Create or update comment
         if: ${{ always() && steps.diff.outputs.diff != '' }}
@@ -84,7 +84,7 @@ jobs:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Helm Release: `${{ matrix.file }}`
+            Helm Release Diff: `${{ matrix.file }}`
 
             ```
             ${{ steps.diff.outputs.diff }}
@@ -109,7 +109,7 @@ jobs:
         id: find-comment-dyff
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body-includes: ${{ matrix.file }}
+          body-includes: "Helm Release Dyff: ${{ matrix.file }}"
 
       - name: Create or update comment
         if: ${{ always() && steps.dyff.outputs.diff != '' }}
@@ -118,7 +118,7 @@ jobs:
           comment-id: ${{ steps.find-comment-dyff.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Helm Release: `${{ matrix.file }}`
+            Helm Release Dyff: `${{ matrix.file }}`
 
             ```
             ${{ steps.dyff.outputs.diff }}
