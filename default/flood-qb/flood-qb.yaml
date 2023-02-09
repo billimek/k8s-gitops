@@ -75,9 +75,7 @@ spec:
     resources:
       requests:
         cpu: 10m
-        memory: 250Mi
+        memory: 50Mi
       limits:
-        memory: 2Gi
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
+        memory: 1Gi
+
