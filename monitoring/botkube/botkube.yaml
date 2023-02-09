@@ -36,7 +36,6 @@ spec:
                   - k8s-all-events
                   - k8s-err-events
                   - k8s-err-with-logs-events
-                  - k8s-create-events
           notification:
             type: short
     serviceMonitor:
@@ -75,6 +74,7 @@ spec:
       k8s-all-events:
         kubernetes:
           enabled: true
+          message: "^(?!.*volsync).*"
           resources:
             - type: v1/pods
             - type: v1/services
