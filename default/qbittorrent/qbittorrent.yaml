@@ -66,6 +66,22 @@ spec:
         tls:
           - hosts:
               - *host
+      flood:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: |
+            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        hosts:
+          - host: &host flood.eviljungle.com
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
     podSecurityContext:
       runAsUser: 1001
       runAsGroup: 1001
@@ -98,23 +114,6 @@ spec:
       flood:
         image: jesec/flood:4.7.0
         imagePullPolicy: IfNotPresent
-        ingress:
-          main:
-            enabled: true
-            ingressClassName: nginx
-            annotations:
-              nginx.ingress.kubernetes.io/whitelist-source-range: |
-                10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-              nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-              nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
-            hosts:
-              - host: &host flood.eviljungle.com
-                paths:
-                  - path: /
-                    pathType: Prefix
-            tls:
-              - hosts:
-                  - *host
         ports:
           - name: flood
             containerPort: 8080
