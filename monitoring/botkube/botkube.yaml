@@ -74,7 +74,8 @@ spec:
       k8s-all-events:
         kubernetes:
           enabled: true
-          message: "^(?!.*volsync).*"
+          event:
+            message: "^(?!.*volsync).*"
           resources:
             - type: v1/pods
             - type: v1/services
