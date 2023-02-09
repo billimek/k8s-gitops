@@ -40,7 +40,7 @@ spec:
       main:
         ports:
           http:
-            port: *port
+            port: 80
     ingress:
       main:
         enabled: true
