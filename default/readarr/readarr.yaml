@@ -37,8 +37,6 @@ spec:
         tls:
         - hosts:
           - "readarr.eviljungle.com"
-    podAnnotations:
-      backup.velero.io/backup-volumes: config
     persistence:
       config:
         enabled: true

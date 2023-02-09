@@ -15,6 +15,13 @@ spec:
       name: '*'
   exclusionList:
     - "error.*lookup github\\.com"
+    - "error.*lookup raw\\.githubusercontent\\.com"
+    - "dial.*tcp.*timeout"
+    - "waiting.*socket"
+    - "snapshot-controller configured"
+    - "snapshot-validation-webhook configured"
+    - "Health check passed in"
+    - "Dependencies do not meet ready condition, retrying in 30s"
   suspend: false
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta1
@@ -44,8 +51,5 @@ spec:
       name: '*'
     - kind: HelmRelease
       namespace: 'rook-ceph'
-      name: '*'
-    - kind: HelmRelease
-      namespace: 'velero'
       name: '*'
   suspend: false

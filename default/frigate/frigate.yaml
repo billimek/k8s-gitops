@@ -61,8 +61,6 @@ spec:
         sizeLimit: 2Gi
         # mountPath: /dev/shm
         mountPath: /tmp/cache
-    podAnnotations:
-      backup.velero.io/backup-volumes: data
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:

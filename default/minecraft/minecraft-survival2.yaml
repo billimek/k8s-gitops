@@ -34,8 +34,6 @@ spec:
         memory: 6Gi
     startupProbe:
       enabled: true
-    podAnnotations:
-      backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "74354,28140,102931"

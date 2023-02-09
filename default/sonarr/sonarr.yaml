@@ -35,8 +35,6 @@ spec:
         tls:
         - hosts:
           - "sonarr.eviljungle.com"
-    podAnnotations:
-      backup.velero.io/backup-volumes: config
     persistence:
       config:
         enabled: true

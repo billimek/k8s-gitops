@@ -28,8 +28,6 @@ spec:
         cpu: 100m
       limits:
         memory: 250Mi
-    podAnnotations:
-      backup.velero.io/backup-volumes: datadir
     minecraftServer:
       eula: "TRUE"
       version: "LATEST"

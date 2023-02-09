@@ -96,13 +96,7 @@ spec:
       blocking:
         blackLists:
           ads:
-            - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-            - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-            - http://sysctl.org/cameleon/hosts
-            - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
-            - https://raw.githubusercontent.com/kboghdady/youTube_ads_4_pi-hole/master/youtubelist.txt
-          kids:
-          - https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts
+            - https://o0.pages.dev/Lite/hosts.txt
           none:
         whiteLists:
           ads:
@@ -110,17 +104,6 @@ spec:
         clientGroupsBlock:
           default:
             - ads
-          10.0.2.1/24:
-            - ads
-          "*nsley*":
-            - ads
-            - kids
-          "*eye-phone*":
-            - ads
-            - kids
-          "*rinley*":
-            - ads
-            - kids
           "Jens*":
             - none
         blockType: zeroIp

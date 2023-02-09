@@ -29,7 +29,6 @@ See [setup](setup/README.md) for more detail about setup & bootstrapping a new c
 * [monitoring](monitoring/)
 * [rook-ceph](rook-ceph/)
 * [system-upgrade](system-upgrade/)
-* [velero](velero/)
 
 ## :robot:&nbsp; Automation
 

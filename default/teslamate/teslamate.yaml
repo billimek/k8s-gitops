@@ -89,8 +89,6 @@ spec:
         tolerations:
         - key: "arm"
           operator: "Exists"
-        podAnnotations:
-          backup.velero.io/backup-volumes: data
   valuesFrom:
   - targetPath: env.DATABASE_PASS
     kind: Secret

@@ -25,7 +25,6 @@ spec:
     deploymentStrategy:
       type: Recreate
     podAnnotations:
-      backup.velero.io/backup-volumes: storage
       configmap.reloader.stakater.com/reload: "grafana"
     persistence:
       enabled: true
@@ -168,9 +167,6 @@ spec:
           datasource: Prometheus
         uptimerobot:
           url: https://raw.githubusercontent.com/lekpamartin/uptimerobot_exporter/master/dashboards/grafana.json
-          datasource: Prometheus
-        velero:
-          url: https://grafana.com/api/dashboards/11055/revisions/2/download
           datasource: Prometheus
         windows-node:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/windows_node.json

@@ -31,8 +31,6 @@ spec:
         cpu: 250m
       limits:
         memory: 2Gi
-    podAnnotations:
-      backup.velero.io/backup-volumes: datadir
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       SPIGET_RESOURCES: "28140,6245,14754,102931"

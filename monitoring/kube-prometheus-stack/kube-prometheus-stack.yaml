@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://prometheus-community.github.io/helm-charts
       chart: kube-prometheus-stack
-      version: 44.4.0
+      version: 44.4.1
       sourceRef:
         kind: HelmRepository
         name: prometheus-community-charts
@@ -109,9 +109,6 @@ spec:
         tolerations:
         - key: "arm"
           operator: "Exists"
-        podMetadata:
-          annotations:
-            backup.velero.io/backup-volumes: alertmanager-kube-prometheus-stack-alertmanager-db
 
     grafana:
       enabled: false
@@ -270,9 +267,6 @@ spec:
         # tolerations:
         # - key: "arm"
         #   operator: "Exists"
-        podMetadata:
-          annotations:
-            backup.velero.io/backup-volumes: prometheus-kube-prometheus-stack-prometheus-db
 
     nodeExporter:
       enabled: true

@@ -38,4 +38,4 @@ Leverages a 1Paswsword vault to persist secrets that are read dynamically via [e
 
 ### backup & restore
 
-`velero` is used as the backup mechanism.  However, as an alternative for situations where it is, unfortunately, necessary to backup & restore a persistent volume (e.g. completely removing a chart that leverages a persistent volume), the [`backup.sh`](backup.sh) and [`restore.sh`](restore.sh) scripts may be used.  Examine to scripts to learn more.
+`volsync` is used as the backup mechanism.  See the `Taskfile.yml` at the root of the repo for a scripted way to manually backup and restore workloads.
