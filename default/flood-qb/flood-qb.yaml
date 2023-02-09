@@ -34,8 +34,7 @@ spec:
       FLOOD_OPTION_AUTH:  "none"
       FLOOD_OPTION_QBURL: "http://qbittorrent.default.svc.cluster.local:80"
       FLOOD_OPTION_RUNDIR: "/config"
-      FLOOD_OPTION_QBUSER: "dummy"
-      FLOOD_OPTION_QBPASS: "dummy2"
+      FLOOD_OPTION_QBUSER: "admin"
     service:
       main:
         ports:
@@ -78,4 +77,8 @@ spec:
         memory: 50Mi
       limits:
         memory: 1Gi
-
+  valuesFrom:
+    - targetPath: env.FLOOD_OPTION_QBPASS
+      kind: Secret
+      name: flood-qb-secret
+      valuesKey: FLOOD_OPTION_QBPASS
