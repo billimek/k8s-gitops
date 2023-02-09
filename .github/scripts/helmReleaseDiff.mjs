@@ -3,21 +3,21 @@ $.verbose = false
 
 /**
  * * helmReleaseDiff.mjs
- * * Runs `helm template` with your Helm values and then runs `dyff` across Flux HelmRelease manifests
+ * * Runs `helm template` with your Helm values and then runs a diff tool across Flux HelmRelease manifests
  * @param --current-release   The source Flux HelmRelease to compare against the target
  * @param --incoming-release  The target Flux HelmRelease to compare against the source
  * @param --kubernetes-dir    The directory containing your Flux manifests including the HelmRepository manifests
+ * @param --diff-tool         The tool to use for diffing (`diff` or `dyff`)
  * * Limitations:
  * * Does not work with multiple HelmRelease maninfests in the same YAML document
  */
 const CurrentRelease  = argv['current-release']
 const IncomingRelease = argv['incoming-release']
 const KubernetesDir   = argv['kubernetes-dir']
+const diffTool        = argv['diff-tool']
 
-const diff_tool = await which('diff')
-const dyff      = await which('dyff')
 const helm      = await which('helm')
-const kustomize = await which('kustomize')
+// const kustomize = await which('kustomize')
 
 async function helmRelease(releaseFile) {
   const helmRelease = await fs.readFile(releaseFile, 'utf8')
@@ -109,12 +109,16 @@ if(currentRelease)
     incomingBuild.spec.values
   )
 
-  // Print diff using dyff
-  const dyff_out = await $`${dyff} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
-  // Or, print diff using diff (for colors in the codeblock)
-  const diff_out = await $`${diff_tool} -u ${currentManifests} ${incomingManifests} || :`
-
-  echo(diff_out.stdout.trim())
-  echo("---")
-  echo(dyff_out.stdout.trim())
+  if (diffTool === 'diff')
+  {
+    const diff_tool = await which('diff')
+    const diff_out = await $`${diff_tool} -u ${currentManifests} ${incomingManifests} || :`
+    echo(diff_out.stdout.trim())
+  }
+  else if (diffTool === 'dyff')
+  {
+    const dyff_tool = await which('dyff')
+    const diff_out = await $`${dyff_tool} --color=off --truecolor=off between --omit-header --ignore-order-changes --detect-kubernetes=true --output=human ${currentManifests} ${incomingManifests}`
+    echo(diff_out.stdout.trim())
+  }
 }
