@@ -75,7 +75,7 @@ spec:
         kubernetes:
           enabled: true
           event:
-            message: "^(?!.*volsync).*"
+            message: "^(?!.*volsync).*" # show everything except for messages with "volsync" in the text
           resources:
             - type: v1/pods
             - type: v1/services
@@ -106,9 +106,13 @@ spec:
       k8s-err-events:
         kubernetes:
           enabled: true
+          event:
+            message: "^(?!.*volsync).*" # show everything except for messages with "volsync" in the text
       k8s-err-with-logs-events:
         kubernetes:
           enabled: true
+          event:
+            message: "^(?!.*volsync).*" # show everything except for messages with "volsync" in the text
   valuesFrom:
   - targetPath: communications.default-group.discord.token
     kind: Secret
