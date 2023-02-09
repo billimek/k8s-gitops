@@ -19,14 +19,32 @@ spec:
     settings:
       clusterName: k8s
       configWatcher: true
-    existingCommunicationsSecretName: botkube-secret
+    communications:
+      default-group:
+        discord:
+          enabled: true
+          channels:
+            default:
+              notification:
+                disabled: false
+              bindings:
+                executors:
+                  - kubectl-read-only
+                sources:
+                  - crds
+                  - k8s-recommendation-events
+                  - k8s-all-events
+                  - k8s-err-events
+                  - k8s-err-with-logs-events
+                  - k8s-create-events
+          notification:
+            type: short
     serviceMonitor:
       enabled: true
     executors:
       kubectl-read-only:
         kubectl:
           enabled: true
-
     actions:
       'describe-created-resource':
         enabled: true
@@ -66,3 +84,16 @@ spec:
       k8s-err-with-logs-events:
         kubernetes:
           enabled: true
+  valuesFrom:
+  - targetPath: communications.default-group.discord.token
+    kind: Secret
+    name: botkube-secret
+    valuesKey: DISCORD_TOKEN
+  - targetPath: communications.default-group.discord.botID
+    kind: Secret
+    name: botkube-secret
+    valuesKey: DISCORD_BOT_ID
+  - targetPath: communications.default-group.discord.channels.default.id
+    kind: Secret
+    name: botkube-secret
+    valuesKey: DISCORD_CHANNEL_ID
