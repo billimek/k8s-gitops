@@ -165,6 +165,12 @@ spec:
       persistence:
         size: 10Gi
         storageClass: rook-ceph-block
+      extraVolumeMounts:
+        - name: rules
+          mountPath: /rules
+      extraVolumes:
+        - name: rules
+          emptyDir: {}
       tolerations:
       - key: "arm"
         operator: "Exists"
