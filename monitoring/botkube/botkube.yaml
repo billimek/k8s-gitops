@@ -75,9 +75,33 @@ spec:
       k8s-all-events:
         kubernetes:
           enabled: true
+          resources:
+            - type: v1/pods
+            - type: v1/services
+            - type: networking.k8s.io/v1/ingresses
+            - type: v1/nodes
+            - type: v1/namespaces
+            - type: v1/configmaps
+            - type: rbac.authorization.k8s.io/v1/roles
+            - type: rbac.authorization.k8s.io/v1/rolebindings
+            - type: rbac.authorization.k8s.io/v1/clusterrolebindings
+            - type: rbac.authorization.k8s.io/v1/clusterroles
+            - type: apps/v1/daemonsets
+            - type: apps/v1/deployments
+            - type: apps/v1/statefulsets
       k8s-create-events:
         kubernetes:
           enabled: true
+          resources:
+            - type: v1/pods
+            - type: v1/services
+            - type: networking.k8s.io/v1/ingresses
+            - type: v1/nodes
+            - type: v1/namespaces
+            - type: v1/configmaps
+            - type: apps/v1/deployments
+            - type: apps/v1/statefulsets
+            - type: apps/v1/daemonsets
       k8s-err-events:
         kubernetes:
           enabled: true
