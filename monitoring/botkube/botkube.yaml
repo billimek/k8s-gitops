@@ -26,9 +26,7 @@ spec:
       kubectl-read-only:
         kubectl:
           enabled: true
-      helm:
-        botkube/helm:
-          enabled: true
+
     actions:
       'describe-created-resource':
         enabled: true
