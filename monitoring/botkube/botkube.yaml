@@ -26,7 +26,7 @@ spec:
       kubectl-read-only:
         kubectl:
           enabled: true
-      'helm':
+      helm:
         botkube/helm:
           enabled: true
     actions:
@@ -38,6 +38,7 @@ spec:
       crds:
         displayName: CRDS
         kubernetes:
+          enabled: true
           namespaces:
             include:
               - all
@@ -52,3 +53,18 @@ spec:
             - name: notification.toolkit.fluxcd.io/v1beta1/alerts
             - name: monitoring.coreos.com/v1/podmonitors
             - name: monitoring.coreos.com/v1/servicemonitors
+      k8s-recommendation-events:
+        kubernetes:
+          enabled: true
+      k8s-all-events:
+        kubernetes:
+          enabled: true
+      k8s-create-events:
+        kubernetes:
+          enabled: true
+      k8s-err-events:
+        kubernetes:
+          enabled: true
+      k8s-err-with-logs-events:
+        kubernetes:
+          enabled: true
