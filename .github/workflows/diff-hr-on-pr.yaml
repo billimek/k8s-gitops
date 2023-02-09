@@ -86,7 +86,7 @@ jobs:
           body: |
             Helm Release Diff: `${{ matrix.file }}`
 
-            ```
+            ```diff
             ${{ steps.diff.outputs.diff }}
             ```
           edit-mode: replace
