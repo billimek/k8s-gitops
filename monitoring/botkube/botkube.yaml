@@ -16,10 +16,6 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    image:
-      registry: ghcr.io
-      repository: kubeshop/botkube
-      tag: v9.99.9-dev
     settings:
       clusterName: k8s
       configWatcher: true
@@ -37,9 +33,9 @@ spec:
                 sources:
                   - crds
                   - k8s-recommendation-events
-                  - k8s-all-events
-                  - k8s-err-events
-                  - k8s-err-with-logs-events
+                  # - k8s-all-events
+                  # - k8s-err-events
+                  # - k8s-err-with-logs-events
           notification:
             type: short
     serviceMonitor:
