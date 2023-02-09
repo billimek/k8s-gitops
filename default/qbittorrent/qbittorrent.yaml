@@ -51,7 +51,7 @@ spec:
         externalTrafficPolicy: Local
       flood:
         ports:
-          http:
+          flood:
             port: 8080
     ingress:
       main:
