@@ -88,12 +88,12 @@ spec:
   - targetPath: communications.default-group.discord.token
     kind: Secret
     name: botkube-secret
-    valuesKey: DISCORD_TOKEN
+    valuesKey: BOTKUBE_DISCORD_TOKEN
   - targetPath: communications.default-group.discord.botID
     kind: Secret
     name: botkube-secret
-    valuesKey: DISCORD_BOT_ID
+    valuesKey: BOTKUBE_DISCORD_BOT_ID
   - targetPath: communications.default-group.discord.channels.default.id
     kind: Secret
     name: botkube-secret
-    valuesKey: DISCORD_CHANNEL_ID
+    valuesKey: BOTKUBE_DISCORD_CHANNEL_ID
