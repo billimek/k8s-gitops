@@ -38,7 +38,8 @@ spec:
     customConfig:
       data_dir: /vector-data-dir
       api:
-        enabled: false
+        enabled: true
+        address: 0.0.0.0:8686
       sources:
         journal_logs:
           type: vector
@@ -50,6 +51,10 @@ spec:
           version: "2"
         vector_metrics:
           type: internal_metrics
+        opnsense_source:
+          type: syslog
+          address: 0.0.0.0:5140
+          mode: udp
       transforms:
         kubernetes_logs_remap:
           type: remap
@@ -58,6 +63,38 @@ spec:
           source: |
             # Standardize 'app' index
             .custom_app_name = .pod_labels."app.kubernetes.io/name" || .pod_labels.app || .pod_labels."k8s-app" || "unknown"
+        opnsense_remap:
+          type: remap
+          inputs:
+            - opnsense_source
+          source: |
+            msg = parse_csv!(string!(.message))
+            # Only parse IPv4 / IPv6
+            if msg[8] == "4" || msg[8] == "6" {
+              .filter_interface = msg[4]
+              .filter_direction = msg[7]
+              .filter_action = msg[6]
+              .filter_ip_version = msg[8]
+              .filter_protocol = msg[16]
+              .filter_source_ip = msg[18]
+              .filter_destination_ip = msg[19]
+              if (msg[16] == "icmp" || msg[16] == "igmp" || msg[16] == "gre") {
+                .filter_data = msg[20]
+              } else {
+                .filter_source_port = msg[20]
+                .filter_destination_port = msg[21]
+                .filter_data_length = msg[22]
+                if msg[8] == "4" && msg[16] == "tcp" {
+                  .filter_tcp_flags = msg[23]
+                }
+              }
+            }
+        opnsense_route:
+          type: route
+          inputs:
+            - opnsense_remap
+          route:
+            pass_action: .filter_action == "pass"
       sinks:
         loki_journal:
           type: loki
@@ -98,6 +135,18 @@ spec:
           inputs:
             - vector_metrics
           address: 0.0.0.0:9090
+        opnsense:
+          type: loki
+          batch:
+            max_bytes: 2049000
+          encoding:
+            codec: json
+          endpoint: http://loki-gateway.log.ssvc.cluster.local:80
+          inputs:
+            - opnsense_route._unmatched
+          labels:
+            hostname: opnsense
+          out_of_order_action: accept
     service:
       enabled: true
       type: LoadBalancer
