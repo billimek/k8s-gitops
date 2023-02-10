@@ -60,7 +60,7 @@ spec:
           type: syslog
           mode: "udp"
           max_length: 102_400
-        syslog:
+        syslog_logs:
           address: 0.0.0.0:1514
           type: syslog
           mode: "udp"
@@ -114,7 +114,7 @@ spec:
         syslog_remap:
           type: "remap"
           inputs:
-            - "syslog"
+            - "syslog_logs"
           source: |-
             structured = parse_syslog!(.message)
             . = merge(., structured)
