@@ -57,7 +57,7 @@ spec:
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_SECURITY_COOKIE_SAMESITE: grafana
-      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: true
+      # GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: true
       GF_SERVER_ROOT_URL: https://grafana.eviljungle.com
       VAR_BLOCKY_URL: "http://blocky.default.svc.cluster.local:4000"
     envFromSecrets:
@@ -351,6 +351,13 @@ spec:
       auth.generic_oauth.group_mapping:
         role_attribute_path: |
           contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
-      security:
-        admin_user: "$__env{GF_SECURITY_ADMIN_USER}"
-        admin_password: "$__env{GF_SECURITY_ADMIN_PASSWORD}"
+
+  valuesFrom:
+  - targetPath: adminUser
+    kind: Secret
+    name: grafana-secret
+    valuesKey: GRAFANA_ADMIN_EMAIL
+  - targetPath: adminPassword
+    kind: Secret
+    name: grafana-secret
+    valuesKey: GRAFANA_ADMIN_PASSWORD
