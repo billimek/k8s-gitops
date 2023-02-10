@@ -46,7 +46,7 @@ spec:
           enabled: true
     actions:
       'describe-created-resource':
-        enabled: true
+        enabled: false
       'show-logs-on-error':
         enabled: true
     sources:
@@ -74,12 +74,12 @@ spec:
       k8s-all-events:
         kubernetes:
           enabled: true
-          event:
-            message:
-              include:
-                - ".*" # match all event messages...
-              exclude:
-                - ".*volsync.*" # ...except those containing 'volsync'
+          # event:
+          #   message:
+          #     include:
+          #       - ".*" # match all event messages...
+          #     exclude:
+          #       - ".*volsync.*" # ...except those containing 'volsync'
           resources:
             - type: v1/pods
             - type: v1/services
@@ -110,22 +110,22 @@ spec:
       k8s-err-events:
         kubernetes:
           enabled: true
-          event:
-            message:
-              include:
-                - ".*" # match all event messages...
-              exclude:
-                - ".*volsync.*" # ...except those containing 'volsync'
+          # event:
+          #   message:
+          #     include:
+          #       - ".*" # match all event messages...
+          #     exclude:
+          #       - ".*volsync.*" # ...except those containing 'volsync'
 
       k8s-err-with-logs-events:
         kubernetes:
           enabled: true
-          event:
-            message:
-              include:
-                - ".*" # match all event messages...
-              exclude:
-                - ".*volsync.*" # ...except those containing 'volsync'
+          # event:
+          #   message:
+          #     include:
+          #       - ".*" # match all event messages...
+          #     exclude:
+          #       - ".*volsync.*" # ...except those containing 'volsync'
 
   valuesFrom:
   - targetPath: communications.default-group.discord.token
