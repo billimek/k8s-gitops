@@ -351,4 +351,6 @@ spec:
       auth.generic_oauth.group_mapping:
         role_attribute_path: |
           contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
-
+      security:
+        admin_user: "$__env{GF_SECURITY_ADMIN_USER}"
+        admin_password: "$__env{GF_SECURITY_ADMIN_PASSWORD}"
