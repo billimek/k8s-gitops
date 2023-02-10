@@ -171,10 +171,10 @@ spec:
           # remove_timestamp: true
           encoding:
             codec: json
-          # labels:
-          #   hostname: unifi
-          #   app: >-
-          #     {{`"{{ appname }}"`}}
+          labels:
+            hostname: unifi
+            app: >-
+              {{`"{{ appname }}"`}}
     service:
       enabled: true
       type: LoadBalancer
