@@ -60,11 +60,6 @@ spec:
           type: syslog
           mode: "udp"
           max_length: 102_400
-        syslog_logs:
-          address: 0.0.0.0:1514
-          type: syslog
-          mode: "udp"
-          max_length: 102_400
       transforms:
         kubernetes_logs_remap:
           type: remap
@@ -111,13 +106,6 @@ spec:
             - "unifi_logs"
           source: |-
             .timestamp=null
-        syslog_remap:
-          type: "remap"
-          inputs:
-            - "syslog_logs"
-          source: |-
-            structured = parse_syslog!(.message)
-            . = merge(., structured)
       sinks:
         loki_journal:
           type: loki
@@ -184,21 +172,6 @@ spec:
             codec: json
           labels:
             hostname: unifi
-            app: >-
-              {{`"{{ appname }}"`}}
-        loki_syslog:
-          type: loki
-          inputs:
-            - syslog_remap
-          endpoint: http://loki-gateway.logs.svc.cluster.local:80
-          batch:
-            max_bytes: 1048576
-          out_of_order_action: rewrite_timestamp
-          remove_label_fields: true
-          remove_timestamp: true
-          encoding:
-            codec: json
-          labels:
             app: >-
               {{`"{{ appname }}"`}}
     service:
