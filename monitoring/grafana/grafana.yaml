@@ -33,13 +33,22 @@ spec:
       accessModes:
       - ReadWriteOnce
     env:
+      GF_ANALYTICS_CHECK_FOR_UPDATES: false
+      GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
       GF_EXPLORE_ENABLED: true
-      # GF_DISABLE_SANITIZE_HTML: true
-      GF_PANELS_DISABLE_SANITIZE_HTML: true
-      GF_SECURITY_ALLOW_EMBEDDING: true
+      GF_GRAFANA_NET_URL: https://grafana.net
       GF_LOG_FILTERS: rendering:debug
+      GF_LOG_MODE: console
+      GF_PANELS_DISABLE_SANITIZE_HTML: true
+      GF_PATHS_DATA: /var/lib/grafana/data
+      GF_PATHS_LOGS: /var/log/grafana
+      GF_PATHS_PLUGINS: /var/lib/grafana/plugins
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
+      GF_SECURITY_ALLOW_EMBEDDING: true
+      GF_SECURITY_COOKIE_SAMESITE: grafana
+      GF_SERVER_ROOT_URL: https://grafana.eviljungle.com
       VAR_BLOCKY_URL: "http://blocky.default.svc.cluster.local:4000"
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: "natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel"
     envFromSecrets:
       - name: grafana-secret
     ingress:
@@ -83,36 +92,43 @@ spec:
             path: /var/lib/grafana/dashboards/teslamate
     dashboards:
       default:
+        # Ref: https://grafana.com/grafana/dashboards/11074-node-exporter-for-prometheus-dashboard-en-v20201010/
         1-node-exporter:
           url: https://grafana.com/api/dashboards/11074/revisions/9/download
           datasource: Prometheus
         blocky:
-          url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.18/docs/blocky-grafana.json
+          url: https://raw.githubusercontent.com/0xERR0R/blocky/v0.20/docs/blocky-grafana.json
           datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/2842
-        ceph-cluster:
-          gnetId: 2842
-          revision: 14
-          datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/5336
-        ceph-osd:
-          gnetId: 5336
-          revision: 5
-          datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/5342
+        # Ref: https://grafana.com/grafana/dashboards/5342-ceph-pools/
         ceph-pools:
           gnetId: 5342
-          revision: 5
+          revision: 9
+          datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/5336-ceph-osd-single/
+        ceph-osd:
+          gnetId: 5336
+          revision: 9
+          datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/2842-ceph-cluster/
+        ceph-cluster:
+          gnetId: 2842
+          revision: 16
+          datasource: Prometheus
+        cert-manager:
+          url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
           datasource: Prometheus
         comcast-sucks:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/comcast_sucks.json
           # datasource: influxdb
         flux-cluster:
-          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/grafana/dashboards/cluster.json
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/cluster.json
           datasource: Prometheus
         flux-control-plane:
-          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/grafana/dashboards/control-plane.json
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/control-plane.json
           datasource: Prometheus
+        flux-logs:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/logs.json
+          datasource: Loki
         frigate:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/frigate.json
           datasource: Prometheus
@@ -123,15 +139,16 @@ spec:
           gnetId: 13407
           revision: 1
           datasource: Prometheus
-        minio-overview:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/minio_overview.json
-          datasource: Prometheus
         nginx-dashboard:
           url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
           datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
           gnetId: 1860
-          revision: 23
+          revision: 29
+          datasource: Prometheus
+        opnsense:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
           datasource: Prometheus
         prometheus-exporter-summary:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
@@ -139,28 +156,29 @@ spec:
         speedtest-exporter:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
           datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/12921-truenas/
         TrueNAS:
           url: https://grafana.com/api/dashboards/12921/revisions/1/download
           datasource: TrueNAS
         # Ref: https://grafana.com/grafana/dashboards/11315
         unifi-client-insights:
           gnetId: 11315
-          revision: 8
+          revision: 9
           datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/11311
         unifi-network-sites:
           gnetId: 11311
-          revision: 4
+          revision: 5
           datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/11314
         unifi-uap-insights:
           gnetId: 11314
-          revision: 9
+          revision: 10
           datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/11312
         unifi-usw-insights:
           gnetId: 11312
-          revision: 8
+          revision: 9
           datasource: Prometheus
         ups:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
@@ -170,6 +188,11 @@ spec:
           datasource: Prometheus
         windows-node:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/windows_node.json
+          datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/7845-zfs/
+        zfs:
+          gnetId: 7845
+          revision: 4
           datasource: Prometheus
       teslamate:
         charge-level:
@@ -238,61 +261,68 @@ spec:
     datasources:
       datasources.yaml:
         apiVersion: 1
-        # list of datasources that should be deleted from the database
         deleteDatasources:
           - name: Loki
             orgId: 1
+          - name: Alertmanager
+            orgId: 1
         datasources:
-        - name: Prometheus
-          type: prometheus
-          access: proxy
-          url: http://thanos-query:9090/
-          isDefault: true
-        - name: loki
-          type: loki
-          access: proxy
-          url: http://loki-gateway.logs.svc.cluster.local:80
-        - name: influxdb
-          type: influxdb
-          access: proxy
-          url: http://influxdb:8086
-          database: telegraf
-        - name: comcast
-          type: influxdb
-          access: proxy
-          url: http://influxdb:8086
-          database: comcast
-        - name: home_assistant
-          type: influxdb
-          access: proxy
-          url: http://influxdb:8086
-          database: home_assistant
-        - name: speedtests
-          type: influxdb
-          access: proxy
-          url: http://influxdb:8086
-          database: speedtests
-        - name: uptimerobot
-          type: influxdb
-          access: proxy
-          url: http://influxdb:8086
-          database: uptimerobot
-        - name: TeslaMate
-          type: postgres
-          access: proxy
-          url: teslamate-postgresql.default.svc.cluster.local:5432
-          database: teslamate
-          user: teslamate
-          secureJsonData:
-            password: "$TESLAMATE_DB_PASSWORD"
-          jsonData:
-            postgresVersion: 1000
-            sslmode: disable
-        - name: TrueNAS
-          type: influxdb
-          access: proxy
-          url: http://influxdb:8086
-          database: graphitedb
+          - name: Prometheus
+            type: prometheus
+            access: proxy
+            url: http://thanos-query.monitoring.svc.cluster.local:9090
+            isDefault: true
+          - name: Loki
+            type: loki
+            access: proxy
+            url: http://loki-gateway.logs.svc.cluster.local:80
+          - name: Alertmanager
+            type: alertmanager
+            access: proxy
+            url: http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+            jsonData:
+              implementation: prometheus
+          - name: influxdb
+            type: influxdb
+            access: proxy
+            url: http://influxdb:8086
+            database: telegraf
+          - name: comcast
+            type: influxdb
+            access: proxy
+            url: http://influxdb:8086
+            database: comcast
+          - name: home_assistant
+            type: influxdb
+            access: proxy
+            url: http://influxdb:8086
+            database: home_assistant
+          - name: speedtests
+            type: influxdb
+            access: proxy
+            url: http://influxdb:8086
+            database: speedtests
+          - name: uptimerobot
+            type: influxdb
+            access: proxy
+            url: http://influxdb:8086
+            database: uptimerobot
+          - name: TeslaMate
+            type: postgres
+            access: proxy
+            url: teslamate-postgresql.default.svc.cluster.local:5432
+            database: teslamate
+            user: teslamate
+            secureJsonData:
+              password: "$TESLAMATE_DB_PASSWORD"
+            jsonData:
+              postgresVersion: 1000
+              sslmode: disable
+          - name: TrueNAS
+            type: influxdb
+            access: proxy
+            url: http://influxdb:8086
+            database: graphitedb
     grafana.ini:
       server:
         root_url: "https://grafana.eviljungle.com"
