@@ -353,14 +353,14 @@ spec:
           contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
 
   valuesFrom:
-  - targetPath: adminUser
-    kind: Secret
-    name: grafana-secret
-    valuesKey: GRAFANA_ADMIN_EMAIL
-  - targetPath: adminPassword
-    kind: Secret
-    name: grafana-secret
-    valuesKey: GRAFANA_ADMIN_PASSWORD
+  # - targetPath: adminUser
+  #   kind: Secret
+  #   name: grafana-secret
+  #   valuesKey: GRAFANA_ADMIN_EMAIL
+  # - targetPath: adminPassword
+  #   kind: Secret
+  #   name: grafana-secret
+  #   valuesKey: GRAFANA_ADMIN_PASSWORD
   - targetPath: env.GF_AUTH_GENERIC_OAUTH_CLIENT_ID
     kind: Secret
     name: grafana-secret
