@@ -1,0 +1,118 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: vector-aggregator
+  namespace: logs
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: vector
+      version: 0.19.0
+      sourceRef:
+        kind: HelmRepository
+        name: vector-charts
+        namespace: flux-system
+  dependsOn:
+    - name: loki
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    image:
+      repository: timberio/vector
+      tag: 0.27.0-debian
+    role: Stateless-Aggregator
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
+    customConfig:
+      data_dir: /vector-data-dir
+      api:
+        enabled: false
+      sources:
+        journal_logs:
+          type: vector
+          address: 0.0.0.0:6000
+          version: "2"
+        kubernetes_logs:
+          type: vector
+          address: 0.0.0.0:6010
+          version: "2"
+        vector_metrics:
+          type: internal_metrics
+      transforms:
+        kubernetes_logs_remap:
+          type: remap
+          inputs:
+            - kubernetes_logs
+          source: |
+            # Standardize 'app' index
+            .custom_app_name = .pod_labels."app.kubernetes.io/name" || .pod_labels.app || .pod_labels."k8s-app" || "unknown"
+      sinks:
+        loki_journal:
+          type: loki
+          inputs:
+            - journal_logs
+          endpoint: http://loki-gateway:80
+          encoding:
+            codec: json
+          batch:
+            max_bytes: 2049000
+          out_of_order_action: accept
+          remove_label_fields: true
+          remove_timestamp: true
+          labels:
+            hostname: >-
+              {{`{{ host }}`}}
+        loki_kubernetes:
+          type: loki
+          inputs:
+            - kubernetes_logs_remap
+          endpoint: http://loki-gateway:80
+          encoding:
+            codec: json
+          batch:
+            max_bytes: 2049000
+          out_of_order_action: accept
+          remove_label_fields: true
+          remove_timestamp: true
+          labels:
+            app: >-
+              {{`{{ custom_app_name }}`}}
+            namespace: >-
+              {{`{{ kubernetes.pod_namespace }}`}}
+            node: >-
+              {{`{{ kubernetes.pod_node_name }}`}}
+        prom_exporter:
+          type: prometheus_exporter
+          inputs:
+            - vector_metrics
+          address: 0.0.0.0:9090
+    service:
+      enabled: true
+      type: LoadBalancer
+      loadBalancerIP: 10.0.6.54
+      annotations:
+        metallb.universe.tf/allow-shared-ip: vector
+    podMonitor:
+      enabled: true
+  postRenderers:
+    - kustomize:
+        patchesJson6902:
+          - target:
+              kind: Service
+              name: vector-aggregator
+            patch:
+              - op: replace
+                path: /spec/externalTrafficPolicy
+                value: Local
