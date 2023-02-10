@@ -316,13 +316,13 @@ spec:
             url: http://influxdb:8086
             database: graphitedb
     grafana.ini:
-      security:
-        admin_user: jeff@billimek.com
       paths:
         data: /var/lib/grafana/data
         logs: /var/log/grafana
         plugins: /var/lib/grafana/plugins
         provisioning: /etc/grafana/provisioning
+      auth: 
+        oauth_skip_org_role_update_sync: false
       auth.basic:
         disable_login_form: false
       auth.generic_oauth:
@@ -340,3 +340,4 @@ spec:
       auth.generic_oauth.group_mapping:
         role_attribute_path: |
           contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
+
