@@ -20,6 +20,7 @@ spec:
     createNamespace: true
     remediation:
       retries: 3
+    timeout: 15m
   upgrade:
     cleanupOnFail: true
     remediation:
@@ -50,10 +51,6 @@ spec:
       GF_LOG_FILTERS: rendering:debug
       GF_LOG_MODE: console
       GF_PANELS_DISABLE_SANITIZE_HTML: true
-      GF_PATHS_DATA: /var/lib/grafana/data
-      GF_PATHS_LOGS: /var/log/grafana
-      GF_PATHS_PLUGINS: /var/lib/grafana/plugins
-      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_SECURITY_COOKIE_SAMESITE: grafana
@@ -327,6 +324,9 @@ spec:
             url: http://influxdb:8086
             database: graphitedb
     grafana.ini:
+      database:
+        wal: true
+        cache_mode: shared
       paths:
         data: /var/lib/grafana/data
         logs: /var/log/grafana
