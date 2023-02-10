@@ -141,7 +141,7 @@ spec:
             max_bytes: 2049000
           encoding:
             codec: json
-          endpoint: http://loki-gateway.log.ssvc.cluster.local:80
+          endpoint: http://loki-gateway.log.svc.cluster.local:80
           inputs:
             - opnsense_route._unmatched
           labels:
