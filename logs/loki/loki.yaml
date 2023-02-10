@@ -111,7 +111,7 @@ spec:
 
     gateway:
       enabled: true
-      replicas: 1
+      replicas: 3
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -134,7 +134,7 @@ spec:
               - "loki.eviljungle.com"
 
     write:
-      replicas: 1
+      replicas: 3
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -152,7 +152,7 @@ spec:
         operator: "Exists"
 
     read:
-      replicas: 1
+      replicas: 3
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -176,7 +176,7 @@ spec:
         operator: "Exists"
 
     backend:
-      replicas: 1
+      replicas: 3
       persistence:
         storageClass: rook-ceph-block
       extraVolumeMounts:
