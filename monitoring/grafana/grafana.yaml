@@ -153,9 +153,9 @@ spec:
         prometheus-exporter-summary:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
           datasource: Prometheus
-        speedtest-exporter:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
-          datasource: Prometheus
+        # speedtest-exporter:
+        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
+        #   datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/12921-truenas/
         TrueNAS:
           url: https://grafana.com/api/dashboards/12921/revisions/1/download
