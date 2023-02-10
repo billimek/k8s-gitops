@@ -46,7 +46,7 @@ spec:
           enabled: true
     actions:
       'describe-created-resource':
-        enabled: true
+        enabled: false
       'show-logs-on-error':
         enabled: true
     sources:
