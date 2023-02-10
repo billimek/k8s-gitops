@@ -27,6 +27,9 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    image:
+      repository: grafana/grafana
+      tag: "9.1.8"
     rbac:
       pspEnabled: false
     tolerations:
