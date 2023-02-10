@@ -55,6 +55,11 @@ spec:
           type: syslog
           address: 0.0.0.0:5140
           mode: udp
+        unifi_logs:
+          address: 0.0.0.0:6100
+          type: syslog
+          mode: "udp"
+          max_length: 102_400
       transforms:
         kubernetes_logs_remap:
           type: remap
@@ -95,6 +100,12 @@ spec:
             - opnsense_remap
           route:
             pass_action: .filter_action == "pass"
+        unifi_logs_xform:
+          type: "remap"
+          inputs:
+            - "unifi_logs"
+          source: |-
+            .timestamp=null
       sinks:
         loki_journal:
           type: loki
@@ -147,6 +158,22 @@ spec:
           labels:
             hostname: opnsense
           out_of_order_action: accept
+        loki_unifi:
+          type: loki
+          inputs:
+            - unifi_logs_xform
+          endpoint: http://loki-gateway.logs.svc.cluster.local:80
+          batch:
+            max_bytes: 1048576
+          out_of_order_action: rewrite_timestamp
+          remove_label_fields: true
+          remove_timestamp: true
+          encoding:
+            codec: json
+          labels:
+            hostname: unifi
+            app: >-
+              {{`"{{ appname }}"`}}
     service:
       enabled: true
       type: LoadBalancer
