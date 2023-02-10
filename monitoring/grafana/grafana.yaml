@@ -316,21 +316,15 @@ spec:
             url: http://influxdb:8086
             database: graphitedb
     grafana.ini:
-      server:
-        root_url: "https://grafana.eviljungle.com"
-      # security:
-      #   admin_user: jeff@billimek.com
+      security:
+        admin_user: jeff@billimek.com
       paths:
         data: /var/lib/grafana/data
         logs: /var/log/grafana
         plugins: /var/lib/grafana/plugins
         provisioning: /etc/grafana/provisioning
-      analytics:
-        check_for_updates: false
-      log:
-        mode: console
-      grafana_net:
-        url: https://grafana.net
+      database:
+        wal: true
       auth.basic:
         disable_login_form: true
       auth.generic_oauth:
@@ -345,3 +339,6 @@ spec:
         auth_url: https://billimek.auth0.com/authorize
         token_url: https://billimek.auth0.com/oauth/token
         api_url: https://billimek.auth0.com/userinfo
+      auth.generic_oauth.group_mapping:
+        role_attribute_path: |
+          contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
