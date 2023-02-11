@@ -1,7 +1,0 @@
-{
-    "name": "Tailscale-enabled Codespace",
-    "dockerFile": "Dockerfile",
-    "context": "..",
-    "runArgs": [ "--cap-add=NET_ADMIN", "--cap-add=NET_RAW", "--device=/dev/net/tun" ],
-    "postStartCommand": "/etc/init.d/tailscaled start",
-}
