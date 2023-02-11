@@ -161,36 +161,36 @@ spec:
         opnsense:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
           datasource: Prometheus
-        prometheus-exporter-summary:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
-          datasource: Prometheus
-        # speedtest-exporter:
-        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
+        # prometheus-exporter-summary:
+        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
         #   datasource: Prometheus
+        speedtest-exporter:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
+          datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/12921-truenas/
         TrueNAS:
           url: https://grafana.com/api/dashboards/12921/revisions/1/download
           datasource: TrueNAS
-        # Ref: https://grafana.com/grafana/dashboards/11315
-        unifi-client-insights:
-          gnetId: 11315
-          revision: 9
-          datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/11311
-        unifi-network-sites:
-          gnetId: 11311
-          revision: 5
-          datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/11314
-        unifi-uap-insights:
-          gnetId: 11314
-          revision: 10
-          datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/11312
-        unifi-usw-insights:
-          gnetId: 11312
-          revision: 9
-          datasource: Prometheus
+        # # Ref: https://grafana.com/grafana/dashboards/11315
+        # unifi-client-insights:
+        #   gnetId: 11315
+        #   revision: 9
+        #   datasource: Prometheus
+        # # Ref: https://grafana.com/grafana/dashboards/11311
+        # unifi-network-sites:
+        #   gnetId: 11311
+        #   revision: 5
+        #   datasource: Prometheus
+        # # Ref: https://grafana.com/grafana/dashboards/11314
+        # unifi-uap-insights:
+        #   gnetId: 11314
+        #   revision: 10
+        #   datasource: Prometheus
+        # # Ref: https://grafana.com/grafana/dashboards/11312
+        # unifi-usw-insights:
+        #   gnetId: 11312
+        #   revision: 9
+        #   datasource: Prometheus
         ups:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
           datasource: Prometheus
@@ -199,11 +199,6 @@ spec:
           datasource: Prometheus
         windows-node:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/windows_node.json
-          datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/7845-zfs/
-        zfs:
-          gnetId: 7845
-          revision: 4
           datasource: Prometheus
       teslamate:
         charge-level:
