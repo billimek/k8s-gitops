@@ -8,16 +8,17 @@ spec:
   dependsOn:
     - name: external-secrets
     - name: volsync
-  path: ./default/sonarr
+  path: "./default/sonarr"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: sonarr
       namespace: default
-  interval: 30m
+  interval: 10m
   retryInterval: 1m
   timeout: 3m
