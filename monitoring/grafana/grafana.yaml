@@ -44,12 +44,6 @@ spec:
       type: Recreate
     podAnnotations:
       configmap.reloader.stakater.com/reload: "grafana"
-    persistence:
-      enabled: false
-      storageClassName: "rook-ceph-block"
-      size: 10Gi
-      accessModes:
-      - ReadWriteOnce
     env:
       GF_ANALYTICS_CHECK_FOR_UPDATES: false
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
