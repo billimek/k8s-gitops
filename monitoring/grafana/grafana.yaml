@@ -349,25 +349,3 @@ spec:
         role_attribute_path: |
           contains("https://billimek.com/groups"[*], 'Admin') && 'Admin' || contains("https://billimek.com/groups"[*], 'Editor') && 'Editor' || 'Viewer'
 
-
-  valuesFrom:
-  # - targetPath: adminUser
-  #   kind: Secret
-  #   name: grafana-secret
-  #   valuesKey: GRAFANA_ADMIN_EMAIL
-  # - targetPath: adminPassword
-  #   kind: Secret
-  #   name: grafana-secret
-  #   valuesKey: GRAFANA_ADMIN_PASSWORD
-  - targetPath: env.GF_AUTH_GENERIC_OAUTH_CLIENT_ID
-    kind: Secret
-    name: grafana-secret
-    valuesKey: AUTH0_GRAFANA_CLIENT_ID
-  - targetPath: env.GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
-    kind: Secret
-    name: grafana-secret
-    valuesKey: AUTH0_GRAFANA_CLIENT_SECRET
-  - targetPath: env.TESLAMATE_DB_PASSWORD
-    kind: Secret
-    name: grafana-secret
-    valuesKey: TESLAMATE_DB_PASSWORD
