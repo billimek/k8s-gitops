@@ -16,9 +16,9 @@ spec:
     storageClass: rook-ceph-block
   superuserSecret:
     name: cloudnative-pg-secret
-  bootstrap:
-    recovery:
-      source: &previous-cluster postgres-backup
+  # bootstrap:
+  #   recovery:
+  #     source: postgres-backup
   postgresql:
     parameters:
       max_connections: "300"
@@ -43,7 +43,7 @@ spec:
           key: aws-secret-access-key
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
-    - name: *previous-cluster
+    - name: postgres-backup
       barmanObjectStore:
         wal:
           compression: bzip2
