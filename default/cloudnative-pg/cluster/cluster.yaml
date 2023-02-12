@@ -31,6 +31,9 @@ spec:
       cpu: "1"
     limits:
       memory: "1Gi"
+  tolerations:
+  - key: "arm"
+    operator: "Exists"
   backup:
     retentionPolicy: 30d
     barmanObjectStore:
