@@ -16,9 +16,9 @@ spec:
     storageClass: rook-ceph-block
   superuserSecret:
     name: cloudnative-pg-secret
-  # bootstrap:
-  #   recovery:
-  #     source: postgres-backup
+  bootstrap:
+    recovery:
+      source: postgres-backup
   postgresql:
     parameters:
       max_connections: "300"
