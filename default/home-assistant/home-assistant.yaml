@@ -20,8 +20,17 @@ spec:
     image:
       repository: homeassistant/home-assistant
       tag: 2023.2.3
+    init-db:
+      image: ghcr.io/onedr0p/postgres-initdb:14.7
+      imagePullPolicy: IfNotPresent
+      envFrom:
+        - secretRef:
+            name: home-assistant-secret
     env:
       TZ: "America/New_York"
+    envFrom:
+      - secretRef:
+          name: home-assistant-secret
     hostNetwork: true
     dnsPolicy: ClusterFirstWithHostNet
     service:
@@ -97,48 +106,3 @@ spec:
       requests:
         cpu: 100m
         memory: 1000Mi
-    postgresql:
-      enabled: true
-      image:
-        repository: postgres
-        tag: '14.1'
-      auth:
-        enablePostgresUser: false
-        username: home-assistant
-        database: home-assistant
-      postgresqlDataDir: "/data/pgdata"
-      shmVolume:
-        enabled: false
-      volumePermissions:
-        enabled: false
-      primary:
-        persistence:
-          enabled: true
-          storageClass: "rook-ceph-block"
-          size: 10Gi
-          mountPath: "/data/"
-        tolerations:
-        - key: "arm"
-          operator: "Exists"
-      resources:
-        limits:
-          memory: 4000Mi
-        requests:
-          memory: 2000Mi
-  valuesFrom:
-  - targetPath: extraEnv.CAMERA_AUTH
-    kind: Secret
-    name: home-assistant-secret
-    valuesKey: CAMERA_AUTH
-  - targetPath: postgresql.auth.postgresqlPassword
-    kind: Secret
-    name: home-assistant-secret
-    valuesKey: HASS_DB_ADMIN_PASSWORD
-  - targetPath: postgresql.auth.password
-    kind: Secret
-    name: home-assistant-secret
-    valuesKey: HASS_DB_PASSWORD
-  - targetPath: addons.codeserver.env.HASS_TOKEN
-    kind: Secret
-    name: home-assistant-secret
-    valuesKey: HASS_TOKEN
