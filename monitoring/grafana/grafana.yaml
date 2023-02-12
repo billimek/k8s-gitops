@@ -28,6 +28,13 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    extraInitContainers:
+      - name: init-db
+        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: grafana-secret
     rbac:
       pspEnabled: false
     tolerations:
@@ -38,7 +45,7 @@ spec:
     podAnnotations:
       configmap.reloader.stakater.com/reload: "grafana"
     persistence:
-      enabled: true
+      enabled: false
       storageClassName: "rook-ceph-block"
       size: 10Gi
       accessModes:
@@ -126,6 +133,9 @@ spec:
           datasource: Prometheus
         cert-manager:
           url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
+          datasource: Prometheus
+        cloudnative-pg:
+          url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/grafana-dashboard.json
           datasource: Prometheus
         flux-cluster:
           url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/cluster.json
