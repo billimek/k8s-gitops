@@ -20,12 +20,13 @@ spec:
     image:
       repository: homeassistant/home-assistant
       tag: 2023.2.3
-    init-db:
-      image: ghcr.io/onedr0p/postgres-initdb:14.7
-      imagePullPolicy: IfNotPresent
-      envFrom:
-        - secretRef:
-            name: home-assistant-secret
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: home-assistant-secret
     env:
       TZ: "America/New_York"
     envFrom:
