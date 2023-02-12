@@ -8,11 +8,11 @@ metadata:
     kyverno.io/ignore: "true"
 spec:
   # how bad is it to have 1 replica?
-  instances: 1
+  instances: 3
   imageName: ghcr.io/cloudnative-pg/postgresql:14.7
   primaryUpdateStrategy: unsupervised
   storage:
-    size: 20Gi
+    size: 10Gi
     storageClass: rook-ceph-block
   superuserSecret:
     name: cloudnative-pg-secret
@@ -25,6 +25,12 @@ spec:
       shared_buffers: 512MB
   monitoring:
     enablePodMonitor: true
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "1"
+    limits:
+      memory: "1Gi"
   backup:
     retentionPolicy: 30d
     barmanObjectStore:
