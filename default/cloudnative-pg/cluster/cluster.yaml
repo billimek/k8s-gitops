@@ -17,8 +17,14 @@ spec:
   superuserSecret:
     name: cloudnative-pg-secret
   bootstrap:
-    recovery:
-      source: postgres-backup
+    # recovery:
+    #   source: postgres-backup
+    import:
+      type: microservice
+      databases:
+        - teslamate
+      source:
+        externalCluster: teslamate
   postgresql:
     parameters:
       max_connections: "300"
@@ -67,3 +73,11 @@ spec:
           secretAccessKey:
             name: cloudnative-pg-secret
             key: aws-secret-access-key
+    - name: teslamate
+      connectionParameters:
+        host: teslamate-postgresql
+        user: teslamate
+        dbname: teslamate
+      password:
+        name: teslamate-secret
+        key: TESLAMATE_DB_PASSWORD
