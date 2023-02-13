@@ -5,29 +5,45 @@ metadata:
   name: teslamate
   namespace: default
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: teslamate
-      version: 7.1.2
+      chart: app-template
+      version: 1.3.1
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+      interval: 15m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        envFrom:
+          - secretRef:
+              name: teslamate-secret
     image:
       repository: teslamate/teslamate
       tag: 1.27.2
     env:
       TZ: "America/New_York"
-      DATABASE_USER: "teslamate"
-      DATABASE_NAME: "teslamate"
-      DATABASE_HOST: teslamate-postgresql
       DISABLE_MQTT: "false"
       MQTT_HOST: "emqx"
       MQTT_USERNAME: "mqtt"
+    envFrom:
+      - secretRef:
+          name: teslamate-secret
     ingress:
       main:
         enabled: true
@@ -35,14 +51,14 @@ spec:
           kubernetes.io/ingress.class: "nginx"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        ingressClassName: "nginx"
         hosts:
-        - host: "teslamate.eviljungle.com"
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: "teslamate.eviljungle.com"
+            paths:
+              - path: /
         tls:
-        - hosts:
-          - "teslamate.eviljungle.com"
+          - hosts:
+              - teslamate.eviljungle.com
     tolerations:
     - key: "arm"
       operator: "Exists"
@@ -52,61 +68,3 @@ spec:
         cpu: 50m
       limits:
         memory: 500Mi
-    probes:
-      liveness:
-        spec:
-          periodSeconds: 10
-          failureThreshold: 15
-      readiness:
-        spec:
-          failureThreshold: 15
-          periodSeconds: 10
-      startup:
-        spec:
-          initialDelaySeconds: 15
-          failureThreshold: 30
-          periodSeconds: 10
-    postgresql:
-      enabled: true
-      image:
-        repository: postgres
-        tag: '13.4'
-      auth:
-        enablePostgresUser: false
-        username: teslamate
-        database: teslamate
-      postgresqlDataDir: "/data/pgdata"
-      shmVolume:
-        enabled: false
-      volumePermissions:
-        enabled: false
-      primary:
-        persistence:
-          enabled: true
-          storageClass: "rook-ceph-block"
-          size: 8Gi
-          mountPath: "/data/"
-        tolerations:
-        - key: "arm"
-          operator: "Exists"
-  valuesFrom:
-  - targetPath: env.DATABASE_PASS
-    kind: Secret
-    name: teslamate-secret
-    valuesKey: TESLAMATE_DB_PASSWORD
-  - targetPath: env.MQTT_PASSWORD
-    kind: Secret
-    name: teslamate-secret
-    valuesKey: MQTT_PASSWORD
-  - targetPath: env.ENCRYPTION_KEY
-    kind: Secret
-    name: teslamate-secret
-    valuesKey: TESLAMATE_ENCRYPTION_KEY
-  - targetPath: postgresql.auth.password
-    kind: Secret
-    name: teslamate-secret
-    valuesKey: TESLAMATE_DB_PASSWORD
-  - targetPath: postgresql.auth.postgresPassword
-    kind: Secret
-    name: teslamate-secret
-    valuesKey: TESLAMATE_DB_ADMIN_PASSWORD
