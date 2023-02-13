@@ -5,3 +5,4 @@ resources:
   - ./cluster.yaml
   - ./scheduledbackup.yaml
   - ./prometheusrule.yaml
+  - ./service.yaml
