@@ -30,7 +30,7 @@ spec:
       memory: "512Mi"
       cpu: "1"
     limits:
-      memory: "1Gi"
+      memory: "4Gi"
   affinity:
     tolerations:
     - key: "arm"
