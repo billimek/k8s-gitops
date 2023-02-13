@@ -44,6 +44,12 @@ spec:
     envFrom:
       - secretRef:
           name: teslamate-secret
+    service:
+      main:
+        type: ClusterIP
+        ports:
+          http:
+            port: 4000
     ingress:
       main:
         enabled: true
