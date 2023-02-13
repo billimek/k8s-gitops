@@ -168,7 +168,7 @@ tasks:
               "containers": [
                 {
                   "name": "debug",
-                  "image": "alpine:rolling",
+                  "image": "alpine:latest",
                   "command": [
                     "/bin/bash"
                   ],
