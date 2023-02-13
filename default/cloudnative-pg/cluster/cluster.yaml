@@ -19,12 +19,13 @@ spec:
   bootstrap:
     # recovery:
     #   source: postgres-backup
-    import:
-      type: microservice
-      databases:
-        - teslamate
-      source:
-        externalCluster: teslamate
+    initdb:
+      import:
+        type: microservice
+        databases:
+          - teslamate
+        source:
+          externalCluster: teslamate
   postgresql:
     parameters:
       max_connections: "300"
