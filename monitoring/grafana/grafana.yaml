@@ -308,7 +308,7 @@ spec:
           - name: TeslaMate
             type: postgres
             access: proxy
-            url: teslamate-postgresql.default.svc.cluster.local:5432
+            url: postgres-rw.default.svc.cluster.local:5432
             database: teslamate
             user: teslamate
             secureJsonData:
