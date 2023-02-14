@@ -161,9 +161,9 @@ spec:
         opnsense:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
           datasource: Prometheus
-        # prometheus-exporter-summary:
-        #   url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
-        #   datasource: Prometheus
+        prometheus-exporter-summary:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
+          datasource: Prometheus
         speedtest-exporter:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
           datasource: Prometheus
