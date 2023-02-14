@@ -5,17 +5,27 @@ metadata:
   name: home-assistant
   namespace: default
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: home-assistant
-      version: 13.4.2
+      chart: app-template
+      version: 1.3.1
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+      interval: 15m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     image:
       repository: homeassistant/home-assistant
@@ -38,22 +48,20 @@ spec:
       main:
         type: LoadBalancer
         loadBalancerIP: 10.0.6.56
+        ports:
+          http:
+            port: 8123
     ingress:
       main:
         enabled: true
-        annotations:
-          kubernetes.io/ingress.class: "nginx"
+        ingressClassName: "nginx"
         hosts:
-        - host: hass.eviljungle.com
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: "hass.eviljungle.com"
+            paths:
+              - path: /
         tls:
-        - hosts:
-          - "hass.eviljungle.com"
-    prometheus:
-      serviceMonitor:
-        enabled: false
+          - hosts:
+              - hass.eviljungle.com
     probes:
       liveness:
         enabled: false
@@ -67,6 +75,22 @@ spec:
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
         size: "10Gi"
+      hass-gcp-sa-json:
+        enabled: true
+        type: secret
+        name: home-assistant-gcp-sa-secret
+        subPath:
+          - path: home-assistant-4d8d1f2ca10f.json
+            mountPath: /config/home-assistant-4d8d1f2ca10f.json
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512M
+      limits:
+        memory: 2048M
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
     addons:
       codeserver:
         enabled: true
@@ -80,30 +104,22 @@ spec:
           - --auth
           - "none"
         env:
+          TZ: America/New_York
           HASS_SERVER: http://localhost:8123
         ingress:
           enabled: true
+          ingressClassName: nginx
           annotations:
-            kubernetes.io/ingress.class: "nginx"
             nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
             nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
           hosts:
-          - host: hass-vscode.eviljungle.com
-            paths:
-            - path: /
-              pathType: Prefix
+            - host: hass-vcode.eviljungle.com
+              paths:
+                - path: /
+                  pathType: Prefix
           tls:
-          - hosts:
-            - hass-vscode.eviljungle.com
+            - hosts:
+                - hass-vcode.eviljungle.com
         volumeMounts:
         - name: config
           mountPath: /config
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
-    resources:
-      limits:
-        memory: 3000Mi
-      requests:
-        cpu: 100m
-        memory: 1000Mi
