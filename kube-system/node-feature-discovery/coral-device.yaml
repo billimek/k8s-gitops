@@ -13,9 +13,3 @@ spec:
         - feature: usb.device
           matchExpressions:
             vendor: { op: In, value: ["1a6e", "18d1"] }
-
-
-            - name: "coral-tpu"
-              matchOn:
-                - usbId:
-                    vendor: ["1a6e", "18d1"]
