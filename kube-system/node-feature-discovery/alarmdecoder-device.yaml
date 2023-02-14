@@ -2,11 +2,11 @@
 apiVersion: nfd.k8s-sigs.io/v1alpha1
 kind: NodeFeatureRule
 metadata:
-  name: aeotec-zwave-device
+  name: alarmdecoder-device
 spec:
   rules:
-    - # Aeotec Z-Stick Gen5+
-      name: aeotec.zwave
+    - # NuTech Alarmdecoder
+      name: nutech.alarmdecoder
       labels:
         nutech.feature.node.kubernetes.io/alarmdecoder: "true"
       matchFeatures:
