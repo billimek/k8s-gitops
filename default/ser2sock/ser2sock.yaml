@@ -36,7 +36,7 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - {key: "feature.node.kubernetes.io/custom-alarmdecoder", operator: In, values: ["true"]}
+                - {key: "nutech.feature.node.kubernetes.io/alarmdecoder", operator: In, values: ["true"]}
     persistence:
       usb:
         enabled: true
