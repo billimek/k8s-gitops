@@ -110,7 +110,7 @@ metadata:
 spec:
   sourcePVC: mcsv2-minecraft-datadir
   trigger:
-    schedule: "0 * * * *"
+    schedule: "0 6 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
