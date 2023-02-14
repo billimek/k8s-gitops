@@ -81,9 +81,9 @@ spec:
         enabled: true
         type: secret
         name: home-assistant-gcp-sa-secret
-        subPath:
-          - path: home-assistant-4d8d1f2ca10f.json
-            mountPath: /config/home-assistant-4d8d1f2ca10f.json
+        subPath: home-assistant-4d8d1f2ca10f.json
+        mountPath: /config/home-assistant-4d8d1f2ca10f.json
+        readOnly: true
     resources:
       requests:
         cpu: 100m
