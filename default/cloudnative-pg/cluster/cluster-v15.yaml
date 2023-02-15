@@ -84,4 +84,4 @@ spec:
         sslmode: require
       password:
         name: cloudnative-pg-secret
-        key: POSTGRES_SUPER_PASS
+        key: password
