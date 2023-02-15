@@ -9,7 +9,7 @@ metadata:
 spec:
   # how bad is it to have 1 replica?
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:14.7
+  imageName: ghcr.io/cloudnative-pg/postgresql:15.2
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
