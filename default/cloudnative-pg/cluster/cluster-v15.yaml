@@ -78,7 +78,7 @@ spec:
     #         key: aws-secret-access-key
     - name: cluster-pg14
       connectionParameters:
-        host: postgres-ro.database.svc.cluster.local
+        host: postgres-ro.default.svc.cluster.local
         user: postgres
         dbname: postgres
         sslmode: require
