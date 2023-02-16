@@ -53,12 +53,14 @@ spec:
       sinks:
         loki_journal:
           type: vector
+          compression: true
           inputs:
             - journal_logs
           address: vector-aggregator:6000
           version: "2"
         loki_kubernetes:
           type: vector
+          compression: true
           inputs:
             - kubernetes_logs
           address: vector-aggregator:6010
