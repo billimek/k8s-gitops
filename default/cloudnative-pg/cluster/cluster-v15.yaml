@@ -16,18 +16,6 @@ spec:
     storageClass: rook-ceph-block
   superuserSecret:
     name: cloudnative-pg-secret
-  bootstrap:
-    recovery:
-      source: postgres-backup
-    # initdb:
-    #   import:
-    #     type: monolith
-    #     databases:
-    #       - "*"
-    #     roles:
-    #       - "*"
-    #     source:
-    #       externalCluster: cluster-pg14
   postgresql:
     parameters:
       max_connections: "300"
@@ -60,8 +48,25 @@ spec:
         secretAccessKey:
           name: cloudnative-pg-secret
           key: aws-secret-access-key
-  # Note: externalClusters is needed when recovering from an existing cnpg cluster
+
+  bootstrap:
+    # use this to recover a net-new cluster from a backup
+    recovery:
+      source: postgres-backup
+
+    # # use this to 'migrate' from an existing cnpg cluster (e.g. "cluster-pg14") to the new cluster
+    # initdb:
+    #   import:
+    #     type: monolith
+    #     databases:
+    #       - "*"
+    #     roles:
+    #       - "*"
+    #     source:
+    #       externalCluster: cluster-pg14
+
   externalClusters:
+    # this represents the s3 backup to restore from. *nota-bene: the backup must be the same major version of the target cluster
     - name: postgres-backup
       barmanObjectStore:
         wal:
@@ -76,6 +81,8 @@ spec:
           secretAccessKey:
             name: cloudnative-pg-secret
             key: aws-secret-access-key
+
+    # # this represents an existing cnpg cluster to migrate from (e.g. upgrading from postgres v14 to postgres v15)
     # - name: cluster-pg14
     #   connectionParameters:
     #     host: postgres-rw.default.svc.cluster.local
