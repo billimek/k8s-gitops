@@ -64,7 +64,7 @@ spec:
       persistence:
         enabled: true
         storageClass: rook-ceph-block
-        size: 20Gi
+        size: 30Gi
     storegateway:
       enabled: true
       replicaCount: 3
