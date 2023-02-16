@@ -32,9 +32,14 @@ spec:
           paths:
           - path: /
             pathType: Prefix
+        - host: shows.eviljungle.com
+          paths:
+          - path: /
+            pathType: Prefix
         tls:
         - hosts:
           - "sonarr.eviljungle.com"
+          - "shows.eviljungle.com"
     persistence:
       config:
         enabled: true

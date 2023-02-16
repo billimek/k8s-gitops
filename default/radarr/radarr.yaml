@@ -32,9 +32,14 @@ spec:
           paths:
           - path: /
             pathType: Prefix
+        - host: movies.eviljungle.com
+          paths:
+          - path: /
+            pathType: Prefix
         tls:
         - hosts:
           - "radarr.eviljungle.com"
+          - "movies.eviljungle.com"
     persistence:
       config:
         enabled: true
