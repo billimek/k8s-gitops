@@ -5,7 +5,7 @@ metadata:
   name: descheduler
   namespace: kube-system
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
       # renovate: registryUrl=https://kubernetes-sigs.github.io/descheduler
@@ -15,9 +15,17 @@ spec:
         kind: HelmRepository
         name: kubernetes-sigs-descheduler-charts
         namespace: flux-system
-      interval: 5m
+  maxHistory: 3
   install:
     createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     kind: Deployment
     tolerations:
@@ -34,8 +42,30 @@ spec:
           params:
             nodeAffinityType:
             - requiredDuringSchedulingIgnoredDuringExecution
+        RemovePodsViolatingTopologySpreadConstraint:
+          enabled: true
+          params:
+            includeSoftConstraints: true
         RemovePodsViolatingInterPodAntiAffinity:
           enabled: true
+          params:
+            nodeFit: true
         LowNodeUtilization:
           enabled: false
-
+        RemoveFailedPods:
+          enabled: true
+          params:
+            failedPods:
+              includingInitContainers: true
+              excludeOwnerKinds: ["Job"]
+              minPodLifetimeSeconds: 3600
+        RemovePodsHavingTooManyRestarts:
+          enabled: true
+          params:
+            podsHavingTooManyRestarts:
+              podRestartThreshold: 100
+              includingInitContainers: true
+    service:
+      enabled: true
+    serviceMonitor:
+      enabled: true
