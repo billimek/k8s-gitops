@@ -110,7 +110,7 @@ spec:
             enabled: true
             port: 8554
 
-    configmap:
+    configMaps:
       config:
         enabled: true
         data:
