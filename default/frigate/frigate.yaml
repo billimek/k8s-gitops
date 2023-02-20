@@ -58,6 +58,13 @@ spec:
         accessMode: ReadWriteOnce
         size: 10Gi
         mountPath: /data
+      config-file:
+        enabled: true
+        type: configMap
+        name: frigate-config
+        subPath: config.yaml
+        mountPath: /config/config.yml
+        readOnly: true
       media:
         enabled: true
         existingClaim: nfs-media-pvc
