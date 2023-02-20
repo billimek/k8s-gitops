@@ -154,7 +154,7 @@ tasks:
     env: *task-vars
 
   mount:
-    desc: Mount a PersistentVolumeClaim to a pod temporarily
+    desc: Mount a PersistentVolumeClaim to a pod temporarily (ex. task vs:mount claim=plex [namespace=default])
     interactive: true
     vars:
       claim: '{{ or .claim (fail "PersistentVolumeClaim `claim` is required") }}'
@@ -170,7 +170,7 @@ tasks:
                   "name": "debug",
                   "image": "alpine:latest",
                   "command": [
-                    "/bin/bash"
+                    "/bin/sh"
                   ],
                   "stdin": true,
                   "stdinOnce": true,
