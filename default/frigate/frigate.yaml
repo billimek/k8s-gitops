@@ -101,6 +101,15 @@ spec:
       - secretRef:
           name: frigate-secret
 
+    service:
+      main:
+        ports:
+          http:
+            port: &port 5000
+          rtsp:
+            enabled: true
+            port: 8554
+
     configmap:
       config:
         enabled: true
