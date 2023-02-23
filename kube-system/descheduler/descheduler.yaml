@@ -35,6 +35,7 @@ spec:
     - key: "arm"
       operator: "Exists"
     deschedulerPolicy:
+      evictLocalStoragePods: true
       strategies:
         RemoveDuplicates:
           enabled: true
@@ -45,7 +46,6 @@ spec:
           params:
             nodeAffinityType:
             - requiredDuringSchedulingIgnoredDuringExecution
-            nodeFit: false
         RemovePodsViolatingTopologySpreadConstraint:
           enabled: true
           params:
