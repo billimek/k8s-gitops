@@ -8,7 +8,7 @@ metadata:
     kyverno.io/ignore: "true"
 spec:
   # how bad is it to have 1 replica?
-  instances: 1
+  instances: 3
   imageName: ghcr.io/cloudnative-pg/postgresql:15.2
   primaryUpdateStrategy: unsupervised
   storage:
