@@ -30,7 +30,7 @@ spec:
     kind: Deployment
     deschedulingInterval: 1m
     cmdOptions:
-      v: 5
+      v: 3
     tolerations:
     - key: "arm"
       operator: "Exists"
