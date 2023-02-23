@@ -28,6 +28,9 @@ spec:
     keepHistory: false
   values:
     kind: Deployment
+    deschedulingInterval: 1m
+    cmdOptions:
+      v: 5
     tolerations:
     - key: "arm"
       operator: "Exists"
@@ -42,6 +45,7 @@ spec:
           params:
             nodeAffinityType:
             - requiredDuringSchedulingIgnoredDuringExecution
+            nodeFit: false
         RemovePodsViolatingTopologySpreadConstraint:
           enabled: true
           params:
