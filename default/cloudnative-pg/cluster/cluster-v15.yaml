@@ -7,7 +7,8 @@ metadata:
   annotations:
     kyverno.io/ignore: "true"
 spec:
-  # how bad is it to have 1 replica?
+  # using only 1 replica: very difficult to drain the node where postgres is running
+  # using more than 1 replica: write amplification issues when leveraging replicated storage (e.g. ceph)
   instances: 2
   imageName: ghcr.io/cloudnative-pg/postgresql:15.2
   primaryUpdateStrategy: unsupervised
