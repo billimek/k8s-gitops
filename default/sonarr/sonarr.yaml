@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/sonarr
-      tag: 3.0.10.1566
+      tag: 3.0.10.1567
     env:
       TZ: "America/New_York"
     ingress:
