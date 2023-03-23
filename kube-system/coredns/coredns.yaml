@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://coredns.github.io/helm
       chart: coredns
-      version: 1.19.9
+      version: 1.19.10
       sourceRef:
         kind: HelmRepository
         name: coredns-charts
