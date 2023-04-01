@@ -31,6 +31,10 @@ spec:
   values:
     cleanPrometheusOperatorObjectNames: true
 
+    defaultRules:
+      disabled:
+        HostHighCpuLoad: true
+
     alertmanager:
       config:
         global:
