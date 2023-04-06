@@ -21,7 +21,7 @@ jobs:
             --export > ./flux-system/gotk-components.yaml
           echo "::set-output name=flux_version::$VERSION"
       - name: Create pull request for Flux update
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: "flux/update-${{ steps.update.outputs.flux_version }}"

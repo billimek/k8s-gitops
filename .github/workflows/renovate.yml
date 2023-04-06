@@ -25,7 +25,7 @@ jobs:
         cluster-path: "./"
 
     - name: Create pull request for HelmRelease annotations
-      uses: peter-evans/create-pull-request@v4
+      uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: helm-release-annotations
