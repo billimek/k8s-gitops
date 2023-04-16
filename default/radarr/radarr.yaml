@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/radarr
-      tag: 4.3.2.6857
+      tag: 4.4.4.7068
     env:
       TZ: "America/New_York"
     ingress:
