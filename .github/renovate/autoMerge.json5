@@ -15,7 +15,7 @@
         "ghcr.io/onedr0p/nzbget",
         "plexinc/pms-docker",
         "nodered/node-red",
-        "zwavejs/zwavejs2mqtt"
+        "ghcr.io/zwave-js/zwave-js-ui"
       ]
     },
     // auto-updates - weekly
