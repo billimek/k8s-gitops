@@ -22,8 +22,6 @@ spec:
       tag: 0.1.4.1596
     env:
       TZ: "America/New_York"
-      # PUID: 1001
-      # PGID: 1001
     ingress:
       main:
         enabled: true
