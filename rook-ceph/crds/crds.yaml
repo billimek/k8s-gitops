@@ -863,6 +863,10 @@ spec:
         - jsonPath: .spec.external.enable
           name: External
           type: boolean
+        - description: Ceph FSID
+          jsonPath: .status.ceph.fsid
+          name: FSID
+          type: string
       name: v1
       schema:
         openAPIV3Schema:
@@ -1861,6 +1865,14 @@ spec:
                       maximum: 65535
                       minimum: 0
                       type: integer
+                    interval:
+                      description: Interval determines prometheus scrape interval
+                      type: string
+                    port:
+                      description: Port is the prometheus server port
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
                   type: object
                 network:
                   description: Network related configuration
@@ -1906,6 +1918,9 @@ spec:
                     multiClusterService:
                       description: Enable multiClusterService to export the Services between peer clusters
                       properties:
+                        clusterID:
+                          description: 'ClusterID uniquely identifies a cluster. It is used as a prefix to nslookup exported services. For example: <clusterid>.<svc>.<ns>.svc.clusterset.local'
+                          type: string
                         enabled:
                           description: Enable multiClusterService to export the mon and OSD services to peer cluster. Ensure that peer clusters are connected using an MCS API compatible application, like Globalnet Submariner.
                           type: boolean
@@ -2546,6 +2561,18 @@ spec:
                   description: Security represents security settings
                   nullable: true
                   properties:
+                    keyRotation:
+                      description: KeyRotation defines options for Key Rotation.
+                      nullable: true
+                      properties:
+                        enabled:
+                          default: false
+                          description: Enabled represents whether the key rotation is enabled.
+                          type: boolean
+                        schedule:
+                          description: Schedule represents the cron schedule for key rotation.
+                          type: string
+                      type: object
                     kms:
                       description: KeyManagementService is the main Key Management option
                       nullable: true
@@ -10958,6 +10985,10 @@ spec:
                       nullable: true
                       type: object
                       x-kubernetes-preserve-unknown-fields: true
+                    hostNetwork:
+                      description: Whether host networking is enabled for the Ganesha server. If not set, the network settings from the cluster CR will be applied.
+                      nullable: true
+                      type: boolean
                     labels:
                       additionalProperties:
                         type: string
@@ -11919,6 +11950,11 @@ spec:
                       description: The name of the secret that stores custom ca-bundle with root and intermediate certificates.
                       nullable: true
                       type: string
+                    dashboardEnabled:
+                      description: Whether rgw dashboard is enabled for the rgw daemon. If not set, the rgw dashboard will be enabled.
+                      nullable: true
+                      type: boolean
+                      x-kubernetes-preserve-unknown-fields: true
                     externalRgwEndpoints:
                       description: ExternalRgwEndpoints points to external RGW endpoint(s). Multiple endpoints can be given, but for stability of ObjectBucketClaims, we highly recommend that users give only a single external RGW endpoint that is a load balancer that sends requests to the multiple RGWs.
                       items:
@@ -12978,6 +13014,18 @@ spec:
                   description: Security represents security settings
                   nullable: true
                   properties:
+                    keyRotation:
+                      description: KeyRotation defines options for Key Rotation.
+                      nullable: true
+                      properties:
+                        enabled:
+                          default: false
+                          description: Enabled represents whether the key rotation is enabled.
+                          type: boolean
+                        schedule:
+                          description: Schedule represents the cron schedule for key rotation.
+                          type: string
+                      type: object
                     kms:
                       description: KeyManagementService is the main Key Management option
                       nullable: true
