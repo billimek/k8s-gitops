@@ -38,10 +38,6 @@ spec:
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
-    moverSecurityContext:
-      runAsUser: 1001
-      runAsGroup: 1001
-      fsGroup: 1001
     retain:
       daily: 10
       within: 3d
