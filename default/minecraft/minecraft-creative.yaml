@@ -51,6 +51,7 @@ spec:
     extraEnv:
       MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar"
       ENABLE_AUTOPAUSE: FALSE
+      ONLINE_MODE: FALSE
       SPIGET_RESOURCES: "102931"
     minecraftServer:
       eula: "TRUE"

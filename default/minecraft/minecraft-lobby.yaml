@@ -33,6 +33,7 @@ spec:
         memory: 2Gi
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
+      ONLINE_MODE: FALSE
       SPIGET_RESOURCES: "28140,6245,14754,102931"
       MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.19.7/EssentialsX-2.19.7.jar, https://cdn.modrinth.com/data/Lu3KuzdV/versions/mvLpRWww/CoreProtect-21.3.jar"
     minecraftServer:
