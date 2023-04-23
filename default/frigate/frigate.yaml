@@ -137,7 +137,9 @@ spec:
 
             ffmpeg:
               global_args: ["-hide_banner", "-loglevel", "warning"]
-              hwaccel_args: ["-hwaccel", "vaapi", "-hwaccel_device", "/dev/dri/renderD128", "-hwaccel_output_format", "yuv420p"]
+              hwaccel_args: 
+                hwaccel_args: preset-vaapi
+                # ["-hwaccel", "vaapi", "-hwaccel_device", "/dev/dri/renderD128", "-hwaccel_output_format", "yuv420p"]
               output_args:
                 record: preset-record-generic-audio-aac
 
@@ -183,16 +185,18 @@ spec:
                 porch_detect:
                   - rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
                 porch_record:
-                  rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0
+                  - rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0
 
             cameras:
               porch:
                 ffmpeg:
                   inputs:
                     - path: rtsp://127.0.0.1:8554/porch_detect
+                      input_args: preset-rtsp-restream
                       roles:
                         - detect
                     - path: rtsp://127.0.0.1:8554/porch_record
+                      input_args: preset-rtsp-restream
                       roles:
                         - record
                 detect:
