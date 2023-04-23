@@ -40,7 +40,7 @@ spec:
       version: "LATEST"
       type: PAPER
       forceReDownload: true
-      onlineMode: false
+      onlineMode: "FALSE"
       difficulty: peaceful
       maxTickTime: -1
       serviceType: ClusterIP
