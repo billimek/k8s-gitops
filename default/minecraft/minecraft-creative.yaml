@@ -63,6 +63,8 @@ spec:
       maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: creative
+      onlineMode: false
+      worldSaveName: 'world-20160823'
       motd: "\u00a7feviljungle\u00a7 - \u00a7a\u00a7lcreative\u00a7"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
       loadBalancerIP: 10.0.6.101
