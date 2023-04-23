@@ -28,8 +28,8 @@ spec:
   values:
 
     image:
-      repository: docker.io/blakeblackshear/frigate
-      tag: 0.11.1
+      repository: ghcr.io/blakeblackshear/frigate
+      tag: 0.12.0
 
     ingress:
       main:
@@ -136,20 +136,10 @@ spec:
                 device: usb
 
             ffmpeg:
-              global_args:
-                - -hide_banner
-                - -loglevel
-                - warning
-              hwaccel_args:
-                - -hwaccel
-                - vaapi
-                - -hwaccel_device
-                - /dev/dri/renderD128
-                - -hwaccel_output_format
-                - yuv420p
+              global_args: ["-hide_banner", "-loglevel", "warning"]
+              hwaccel_args: ["-hwaccel", "vaapi", "-hwaccel_device", "/dev/dri/renderD128", "-hwaccel_output_format", "yuv420p"]
               output_args:
-                record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -c:a aac -ar 44100
-                rtmp: -c:v copy -f flv -ar 44100 -c:a aac
+                record: preset-record-generic-audio-aac
 
             objects:
               track:
@@ -188,16 +178,22 @@ spec:
               retain:
                 default: 7
 
+            go2rtc:
+              streams:
+                porch_detect:
+                  - rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
+                porch_record:
+                  rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0
+
             cameras:
               porch:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=1
+                    - path: rtsp://127.0.0.1:8554/porch_detect
                       roles:
                         - detect
-                    - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@porch:554/cam/realmonitor?channel=1&subtype=0
+                    - path: rtsp://127.0.0.1:8554/porch_record
                       roles:
-                        - rtmp
                         - record
                 detect:
                   height: 480
@@ -219,7 +215,6 @@ spec:
                         - detect
                     - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@front:554/cam/realmonitor?channel=1&subtype=0
                       roles:
-                        - rtmp
                         - record
                 detect:
                   height: 480
@@ -234,7 +229,6 @@ spec:
                         - detect
                     - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@driveway:554/cam/realmonitor?channel=1&subtype=0
                       roles:
-                        - rtmp
                         - record
                 detect:
                   height: 480
@@ -249,7 +243,6 @@ spec:
                         - detect
                     - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=0
                       roles:
-                        - rtmp
                         - record
                 detect:
                   height: 480
@@ -285,7 +278,6 @@ spec:
                     # - path: rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement-cam:554/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                     - path: rtmp://basement-cam/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                       roles:
-                        - rtmp
                         - record
                       # input_args: -avoid_negative_ts make_zero -fflags +genpts+discardcorrupt -use_wallclock_as_timestamps 1
                       input_args:
@@ -312,8 +304,6 @@ spec:
                   filters:
                     person:
                       mask: 0,352,151,352,153,242,0,243
-                rtmp:
-                  enabled: false
 
               doorbell:
                 ffmpeg:
@@ -323,7 +313,6 @@ spec:
                         - detect
                     - path: rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=0&authbasic=64
                       roles:
-                        - rtmp
                         - record
                 detect:
                   height: 576
