@@ -99,6 +99,7 @@ spec:
         size: 20Gi
         storageClass: rook-ceph-block
         accessMode: ReadWriteOnce
+        mountPath: /unifi
 
     resources:
       requests:
