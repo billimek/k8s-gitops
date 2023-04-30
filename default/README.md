@@ -1,11 +1,3 @@
-# blocky
-
-![](https://i.imgur.com/EeoHuZa.png)
-
-Installs [blocky](https://github.com/0xERR0R/blocky): DNS proxy as ad-blocker for local network
-
-* [blocky.yaml](blocky/blocky.yaml)
-
 # emqx
 
 ![](https://i.imgur.com/uNxxBGX.png)
