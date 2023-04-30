@@ -32,6 +32,9 @@ spec:
 
     env:
       TZ: "America/New_York"
+      PLEX_UID: "1000"
+      PLEX_GID: "1000"
+      CHANGE_CONFIG_DIR_OWNERSHIP: false
     envFrom:
       - secretRef:
           name: plex-secret
