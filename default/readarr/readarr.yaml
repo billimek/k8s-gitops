@@ -5,36 +5,53 @@ metadata:
   name: readarr
   namespace: default
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: readarr
-      version: 6.4.2
+      chart: app-template
+      version: 1.4.0
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     image:
       repository: ghcr.io/onedr0p/readarr-develop
       tag: 0.1.4.1596
+
     env:
       TZ: "America/New_York"
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8787
+
     ingress:
       main:
         enabled: true
-        annotations:
-          kubernetes.io/ingress.class: "nginx"
+        ingressClassName: nginx
         hosts:
-        - host: readarr.eviljungle.com
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: readarr.eviljungle.com
+            paths:
+              - path: /
+                pathType: Prefix
         tls:
-        - hosts:
-          - "readarr.eviljungle.com"
+          - hosts:
+              - readarr.eviljungle.com
+
     persistence:
       config:
         enabled: true
@@ -43,16 +60,19 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc
+
     podSecurityContext:
       runAsUser: 1001
       runAsGroup: 1001
       fsGroup: 1001
+
     resources:
       requests:
         memory: 750Mi
         cpu: 25m
       limits:
         memory: 2000Mi
+
     tolerations:
     - key: "arm"
       operator: "Exists"
