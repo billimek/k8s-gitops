@@ -30,22 +30,40 @@ spec:
       repository: tenstartups/ser2sock
       tag: armhf
       imagePullPolicy: Always
+
     env:
       TZ: "America/New York"
       LISTENER_PORT: 10000
       BAUD_RATE: 115200
       SERIAL_DEVICE: "/dev/ttyUSB0"
+
+    service:
+      main:
+        ports:
+          http:
+            enabled: false
+          server:
+            enabled: true
+            protocol: TCP
+            port: 10000
+
     securityContext:
       privileged: true
+
     tolerations:
     - key: "arm"
       operator: "Exists"
+
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - {key: "nutech.feature.node.kubernetes.io/alarmdecoder", operator: In, values: ["true"]}
+                - key: nutech.feature.node.kubernetes.io/alarmdecoder
+                  operator: In
+                  values:
+                    - "true"
+
     persistence:
       usb:
         enabled: true
@@ -53,6 +71,7 @@ spec:
         mountPath: /dev/ttyUSB0
         hostPath: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
         # hostPathType: CharDevice
+
     resources:
       requests:
         memory: 50Mi
