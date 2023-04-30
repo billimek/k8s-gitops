@@ -39,9 +39,9 @@ spec:
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
     moverSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 999
+      runAsGroup: 999
+      fsGroup: 999
     retain:
       daily: 10
       within: 3d
