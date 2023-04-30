@@ -8,8 +8,7 @@ spec:
   interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: uptimerobot-prometheus
+      chart: app-template
       version: 1.4.0
       sourceRef:
         kind: HelmRepository
@@ -41,6 +40,25 @@ spec:
         scrapeTimeout: 1m
       prometheusRule:
         enabled: false
+
+    service:
+      main:
+        ports:
+          http:
+            enabled: false
+          metrics:
+            enabled: true
+            protocol: TCP
+            port: 9798
+    serviceMonitor:
+      main:
+        enabled: true
+        endpoints:
+          - port: metrics
+            path: /metrics
+            interval: 63m
+            scrapeTimeout: 1m
+
   valuesFrom:
   - targetPath: uptimerobotApiKey
     kind: Secret
