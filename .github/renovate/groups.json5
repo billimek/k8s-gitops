@@ -1,6 +1,16 @@
 {
   packageRules: [
     {
+      "description": "1Password Group",
+      "groupName": "1Password",
+      "matchPackagePatterns": ["1password"],
+      "matchDatasources": ["docker"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
+    },
+    {
       "matchDatasources": ["github-tags", "docker"],
       "matchPackagePatterns": ["rancher/system-upgrade-controller"],
       "groupName": "system-upgrade-controller-suite",
@@ -8,20 +18,24 @@
       "separateMinorPatch": true
     },
     {
-      description: "Rook-Ceph image and chart",
-      groupName: "Rook Ceph",
-      matchPackagePatterns: ["rook.ceph"],
-      matchDatasources: ["docker", "helm"],
-      group: { commitMessageTopic: "{{{groupName}}} group" },
-      separateMinorPatch: true,
+      "description": "Rook-Ceph Group",
+      "groupName": "Rook-Ceph",
+      "matchPackagePatterns": ["rook.ceph"],
+      "matchDatasources": ["helm"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
     },
     {
-      description: "External Snapshotter image and kustomization",
-      groupName: "External Snapshotter",
-      matchPackagePatterns: ["external-snapshotter", "snapshot-controller"],
-      matchDatasources: ["docker", "github-releases"],
-      group: { commitMessageTopic: "{{{groupName}}} group" },
-      separateMinorPatch: true,
+      "description": "External Snapshotter Group",
+      "groupName": "External Snapshotter",
+      "matchPackageNames": ["snapshot-controller", "snapshot-validation-webhook"],
+      "matchDatasources": ["helm"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
     },
     {
       description: "Thanos image and chart - versions do not match",
