@@ -35,12 +35,6 @@ spec:
       operator: "Exists"
     metrics:
       enabled: true
-      serviceMonitor:
-        interval: 3m
-        scrapeTimeout: 1m
-      prometheusRule:
-        enabled: false
-
     service:
       main:
         ports:
@@ -49,18 +43,17 @@ spec:
           metrics:
             enabled: true
             protocol: TCP
-            port: 9798
+            port: 9705
     serviceMonitor:
       main:
         enabled: true
         endpoints:
           - port: metrics
             path: /metrics
-            interval: 63m
+            interval: 3m
             scrapeTimeout: 1m
-
   valuesFrom:
   - targetPath: uptimerobotApiKey
     kind: Secret
     name: uptimerobot-secret
-    valuesKey: UPTIMEROBOT_APIKEY
+    valuesKey: UPTIMEROBOT_API_KEY
