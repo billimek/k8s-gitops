@@ -5,13 +5,6 @@
 [emqx](github.com/emqx/emqx) is a clustered MQTT broker
 
 * [emqx.yaml](emqx/emqx.yaml)
-# flood (with rtorrent sidecar)
-
-![](https://i.imgur.com/ZtMrsbm.png)
-
-torrent client
-
-* [flood.yaml](flood/flood.yaml)
 
 # frigate
 
