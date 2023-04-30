@@ -9,13 +9,13 @@
     //     "docker.io/library/postgres"
     //   ]
     // },
-    // {
-    //   "matchDatasources": ["docker"],
-    //   "allowedVersions": "<2",
-    //   "matchPackageNames": [
-    //     "influxdb"
-    //   ]
-    // },
+    {
+      "matchDatasources": ["docker"],
+      "allowedVersions": "<2",
+      "matchPackageNames": [
+        "influxdb"
+      ]
+    },
     // {
     //   "matchDatasources": ["helm"],
     //   "allowedVersions": "<2",
