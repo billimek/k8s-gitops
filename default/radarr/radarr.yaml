@@ -80,8 +80,3 @@ spec:
     tolerations:
     - key: "arm"
       operator: "Exists"
-    prometheus:
-      podMonitor:
-        enabled: true
-        interval: 10m
-        scrapeTimeout: 2s

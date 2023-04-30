@@ -5,41 +5,58 @@ metadata:
   name: sonarr
   namespace: default
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: sonarr
-      version: 16.3.2
+      chart: app-template
+      version: 1.4.0
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     image:
       repository: ghcr.io/onedr0p/sonarr
       tag: 3.0.10.1567
+
     env:
       TZ: "America/New_York"
+      SONARR__INSTANCE_NAME: Sonarr
+      SONARR__PORT: 8989
+      SONARR__APPLICATION_URL: "https://shows.eviljungle.com"
+      SONARR__LOG_LEVEL: info
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8989
+
     ingress:
       main:
         enabled: true
-        annotations:
-          kubernetes.io/ingress.class: "nginx"
+        ingressClassName: 'nginx'
         hosts:
-        - host: sonarr.eviljungle.com
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: shows.eviljungle.com
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: shows.eviljungle.com
+            paths:
+              - path: /
+                pathType: Prefix
         tls:
-        - hosts:
-          - "sonarr.eviljungle.com"
-          - "shows.eviljungle.com"
+          - hosts:
+            - "sonarr.eviljungle.com"
+            - "shows.eviljungle.com"
+
     persistence:
       config:
         enabled: true
@@ -48,21 +65,19 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc
+
     podSecurityContext:
       runAsUser: 1001
       runAsGroup: 1001
       fsGroup: 1001
+
     resources:
       requests:
         memory: 350Mi
         cpu: 25m
       limits:
         memory: 500Mi
+
     tolerations:
     - key: "arm"
       operator: "Exists"
-    prometheus:
-      podMonitor:
-        enabled: true
-        interval: 10m
-        scrapeTimeout: 2m
