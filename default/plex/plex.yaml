@@ -32,9 +32,9 @@ spec:
 
     env:
       TZ: "America/New_York"
-      PLEX_UID: "1000"
-      PLEX_GID: "1000"
-      # CHANGE_CONFIG_DIR_OWNERSHIP: false
+      # PLEX_UID: "1000"
+      # PLEX_GID: "1000"
+      CHANGE_CONFIG_DIR_OWNERSHIP: false
     envFrom:
       - secretRef:
           name: plex-secret
@@ -64,8 +64,8 @@ spec:
               - "plex.eviljungle.com"
 
     podSecurityContext:
-      # runAsUser: 1000
-      # runAsGroup: 1000
+      runAsUser: 1000
+      runAsGroup: 1000
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
       supplementalGroups: [44, 109, 10000]
