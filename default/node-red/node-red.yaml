@@ -7,39 +7,66 @@ metadata:
 spec:
   interval: 5m
   chart:
+spec:
+  interval: 15m
+  chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: node-red
-      version: 10.3.2
+      chart: app-template
+      version: 1.4.0
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     image:
       repository: nodered/node-red
       tag: 3.0.2-18-minimal
+
     env:
       TZ: "America/New_York"
       FLOWS: "flows.json"
       NODE_RED_ENABLE_PROJECTS: "true"
       NODE_RED_ENABLE_SAFE_MODE: "false"
+
+    service:
+      main:
+        ports:
+          http:
+            port: 1880
+
     ingress:
       main:
         enabled: true
+        ingressClassName: "nginx"
         annotations:
-          kubernetes.io/ingress.class: "nginx"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts:
-        - host: node-red.eviljungle.com
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: node-red.eviljungle.com
+            paths:
+              - path: /
+                pathType: Prefix
         tls:
-        - hosts:
-          - "node-red.eviljungle.com"
+          - hosts:
+              - node-red.eviljungle.com
+
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+
     persistence:
       data:
         enabled: true
@@ -47,9 +74,11 @@ spec:
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
         size: "5Gi"
+
     tolerations:
     - key: "arm"
       operator: "Exists"
+
     resources:
       requests:
         memory: 350Mi
