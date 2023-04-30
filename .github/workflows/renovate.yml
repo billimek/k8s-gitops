@@ -9,7 +9,7 @@ jobs:
   helm-releases:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
       with:
         token: ${{ secrets.PAT }}
         fetch-depth: 1
@@ -20,12 +20,12 @@ jobs:
         sudo chmod +x /usr/local/bin/yq
 
     - name: Renovate Helm Releases
-      uses: k8s-at-home/renovate-helm-releases@v1
+      uses: k8s-at-home/renovate-helm-releases@c465468aea461abd747f8cd72ec14031f8d1ed7b # v1
       with:
         cluster-path: "./"
 
     - name: Create pull request for HelmRelease annotations
-      uses: peter-evans/create-pull-request@v5
+      uses: peter-evans/create-pull-request@5b4a9f6a9e2af26e5f02351490b90d01eb8ec1e5 # v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: helm-release-annotations
