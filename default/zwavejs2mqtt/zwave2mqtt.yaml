@@ -95,7 +95,7 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: google.feature.node.kubernetes.io/coral
+                - key: aeotec.feature.node.kubernetes.io/zwave
                   operator: In
                   values:
                     - "true"
