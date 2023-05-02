@@ -129,7 +129,7 @@ spec:
     copyMethod: Snapshot
     pruneIntervalDays: 10
     repository: mc-restic-secret
-    cacheCapacity: 15Gi
+    cacheCapacity: 20Gi
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
     moverSecurityContext:
