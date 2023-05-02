@@ -12,7 +12,7 @@
         "homeassistant/home-assistant",
         "ghcr.io/onedr0p/radarr",
         "ghcr.io/onedr0p/sonarr",
-        "ghcr.io/onedr0p/nzbget",
+        "ghcr.io/onedr0p/sabnzbd",
         "plexinc/pms-docker",
         "nodered/node-red",
         "ghcr.io/zwave-js/zwave-js-ui"
