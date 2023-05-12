@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://repos.emqx.io/charts
       chart: emqx
-      version: 5.0.24
+      version: 5.0.25
       sourceRef:
         kind: HelmRepository
         name: emqx-charts
