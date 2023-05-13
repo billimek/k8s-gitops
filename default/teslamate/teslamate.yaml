@@ -29,7 +29,7 @@ spec:
   values:
     initContainers:
       init-db:
-        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        image: ghcr.io/onedr0p/postgres-initdb:14.8
         envFrom:
           - secretRef:
               name: teslamate-secret
