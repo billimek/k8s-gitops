@@ -72,7 +72,7 @@ spec:
         enabled: true
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
-        size: 35Gi
+        size: 45Gi
       transcode:
         enabled: false
         existingClaim: nfs-media-pvc

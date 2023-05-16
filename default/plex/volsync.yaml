@@ -35,7 +35,7 @@ spec:
     copyMethod: Snapshot
     pruneIntervalDays: 10
     repository: plex-restic-secret
-    cacheCapacity: 35Gi
+    cacheCapacity: 45Gi
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
     moverSecurityContext:
