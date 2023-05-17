@@ -48,14 +48,13 @@ spec:
         enabled: true
         ingressClassName: 'nginx'
         hosts:
-          - host: shows.eviljungle.com
+          - host: sonarr.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
             - "sonarr.eviljungle.com"
-            - "shows.eviljungle.com"
 
     persistence:
       config:
