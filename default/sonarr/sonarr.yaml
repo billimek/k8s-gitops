@@ -34,7 +34,7 @@ spec:
       TZ: "America/New_York"
       SONARR__INSTANCE_NAME: Sonarr
       SONARR__PORT: 8989
-      # SONARR__APPLICATION_URL: "https://shows.eviljungle.com"
+      SONARR__APPLICATION_URL: "https://shows.eviljungle.com"
       SONARR__LOG_LEVEL: info
 
     service:
@@ -48,13 +48,13 @@ spec:
         enabled: true
         ingressClassName: 'nginx'
         hosts:
-          - host: sonarr.eviljungle.com
+          - host: shows.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-            - "sonarr.eviljungle.com"
+            - "shows.eviljungle.com"
 
     persistence:
       config:
