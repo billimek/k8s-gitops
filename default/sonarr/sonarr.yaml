@@ -34,7 +34,7 @@ spec:
       TZ: "America/New_York"
       SONARR__INSTANCE_NAME: Sonarr
       SONARR__PORT: 8989
-      SONARR__APPLICATION_URL: "https://shows.eviljungle.com"
+      # SONARR__APPLICATION_URL: "https://shows.eviljungle.com"
       SONARR__LOG_LEVEL: info
 
     service:
