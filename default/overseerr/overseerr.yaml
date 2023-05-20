@@ -58,12 +58,13 @@ spec:
         enabled: true
         storageClass: "rook-ceph-block"
         size: 1Gi
+        mountPath: /app/config
 
-    # podSecurityContext:
-    #   runAsUser: 1001
-    #   runAsGroup: 1001
-    #   fsGroup: 1001
-    #   fsGroupChangePolicy: OnRootMismatch
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
+      fsGroupChangePolicy: OnRootMismatch
 
     resources:
       requests:
