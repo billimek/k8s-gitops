@@ -1,0 +1,77 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: oevrseerr
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    image:
+      repository: ghcr.io/sct/overseerr
+      tag: 1.32.5
+
+    env:
+      TZ: "America/New_York"
+      LOG_LEVEL: info
+
+    service:
+      main:
+        ports:
+          http:
+            port: 5055
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: 'nginx'
+        hosts:
+          - host: overseerr.eviljungle.com
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+            - "oevrseerr.eviljungle.com"
+
+    persistence:
+      config:
+        enabled: true
+        storageClass: "rook-ceph-block"
+        size: 1Gi
+
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
+      fsGroupChangePolicy: OnRootMismatch
+
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 10m
+      limits:
+        memory: 500Mi
+
+    tolerations:
+    - key: "arm"
+      operator: "Exists"
