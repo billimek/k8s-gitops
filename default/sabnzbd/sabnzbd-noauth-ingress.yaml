@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  labels:
+    app.kubernetes.io/instance: sabnzbd
+    app.kubernetes.io/name: sabnzbd
+  name: sabnzbd-noauth
+  namespace: default
+spec:
+  rules:
+  - host: sabnzbd.eviljungle.com
+    http:
+      paths:
+      - path: /.*/api
+        pathType: Prefix
+        backend:
+          service:
+            name: sabnzbd
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - sabnzbd.eviljungle.com
