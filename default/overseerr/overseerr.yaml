@@ -45,13 +45,13 @@ spec:
         enabled: true
         ingressClassName: 'nginx'
         hosts:
-          - host: overseerr.eviljungle.com
+          - host: request.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-            - "overseerr.eviljungle.com"
+            - "ovrequesterseerr.eviljungle.com"
 
     persistence:
       config:
