@@ -47,6 +47,7 @@ spec:
         ports:
           http:
             port: *port
+            protocol: HTTPS
     probes:
       liveness: &probes
         enabled: true
