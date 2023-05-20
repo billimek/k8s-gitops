@@ -15,7 +15,8 @@
         "ghcr.io/onedr0p/sabnzbd",
         "plexinc/pms-docker",
         "nodered/node-red",
-        "ghcr.io/zwave-js/zwave-js-ui"
+        "ghcr.io/zwave-js/zwave-js-ui",
+        "codercom/code-server"
       ]
     },
     // auto-updates - weekly
