@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: oevrseerr
+  name: overseerr
   namespace: default
 spec:
   interval: 15m
@@ -51,7 +51,7 @@ spec:
                 pathType: Prefix
         tls:
           - hosts:
-            - "oevrseerr.eviljungle.com"
+            - "overseerr.eviljungle.com"
 
     persistence:
       config:
