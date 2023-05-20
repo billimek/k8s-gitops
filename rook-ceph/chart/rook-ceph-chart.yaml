@@ -37,4 +37,4 @@ spec:
         cpu: 100m
         memory: 500Mi
     monitoring:
-      enabled: true
+      enabled: false
