@@ -29,7 +29,8 @@
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "ghcr.io/onedr0p/prowlarr-develop",
-        "ghcr.io/onedr0p/readarr-develop"
+        "ghcr.io/onedr0p/readarr-develop",
+        "ghcr.io/advplyr/audiobookshelf"
       ]
     },
     {
@@ -40,7 +41,9 @@
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "grafana",
-        "thanos"
+        "thanos",
+        "reloader",
+        "kube-prometheus-stack"
       ]
     },
     {
