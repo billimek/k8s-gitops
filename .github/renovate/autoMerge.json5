@@ -9,7 +9,9 @@
       "schedule": "after 1am and before 5am",
       "updateTypes": ["minor", "patch"],
       "packageNames": [
+        "ghcr.io/advplyr/audiobookshelf",
         "homeassistant/home-assistant",
+        "ghcr.io/onedr0p/qbittorrent",
         "ghcr.io/onedr0p/radarr",
         "ghcr.io/onedr0p/sonarr",
         "ghcr.io/onedr0p/sabnzbd",
@@ -29,8 +31,7 @@
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "ghcr.io/onedr0p/prowlarr-develop",
-        "ghcr.io/onedr0p/readarr-develop",
-        "ghcr.io/advplyr/audiobookshelf"
+        "ghcr.io/onedr0p/readarr-develop"
       ]
     },
     {
