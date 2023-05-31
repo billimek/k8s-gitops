@@ -70,7 +70,7 @@ spec:
         tag: 2.24.0
       extraEnvs:
         - { name: TEMPLATE_NAME, value: orient }
-        - { name: SHOW_DETAILS, value: "true" }
+        - { name: SHOW_DETAILS, value: "false" }
       resources:
         requests:
           memory: 250Mi
