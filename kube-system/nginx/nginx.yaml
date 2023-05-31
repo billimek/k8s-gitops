@@ -20,10 +20,16 @@ spec:
     controller:
       replicaCount: 2
       config:
-        custom-http-errors: 404,401,403,500,503
-        hsts-max-age: "31449600"
-        # global-auth-url: "http://oauth2-proxy.kube-system.svc.cluster.local/oauth2/auth"
-        # global-auth-signin: "https://auth.$server_name/oauth2/start"
+        client-body-buffer-size: 100M
+        client-body-timeout: 120
+        client-header-timeout: 120
+        enable-brotli: "true"
+        enable-real-ip: "true"
+        hsts-max-age: 31449600
+        keep-alive-requests: 10000
+        keep-alive: 120
+        proxy-body-size: 0
+        proxy-buffer-size: 16k
       use-forwarded-headers: "true"
       service:
         loadBalancerIP: 10.0.6.150
@@ -42,36 +48,29 @@ spec:
         operator: "Exists"
       extraArgs:
         default-ssl-certificate: "cert-manager/acme-crt-secret"
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                - ingress-nginx
-              - key: app.kubernetes.io/instance
-                operator: In
-                values:
-                - ingress-nginx
-              - key: app.kubernetes.io/component
-                operator: In
-                values:
-                - controller
-            topologyKey: "kubernetes.io/hostname"
-
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: ingress-nginx
+              app.kubernetes.io/component: controller
       resources:
         requests:
           memory: 500Mi
           cpu: 25m
         limits:
           memory: 600Mi
+
     defaultBackend:
       enabled: true
       image:
-        repository: billimek/custom-error-pages
-        tag: 0.4.4
+        repository: ghcr.io/tarampampam/error-pages
+        tag: 2.24.0
+      extraEnvs:
+        - { name: TEMPLATE_NAME, value: orient }
+        - { name: SHOW_DETAILS, value: "true" }
       resources:
         requests:
           memory: 250Mi
