@@ -5,17 +5,26 @@ metadata:
   name: metallb
   namespace: kube-system
 spec:
-  interval: 5m
+  interval: 30m
   chart:
     spec:
-      # renovate: registryUrl=https://metallb.github.io/metallb
       chart: metallb
       version: 0.13.10
       sourceRef:
         kind: HelmRepository
         name: metallb-charts
         namespace: flux-system
-      interval: 5m
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     crds:
       enabled: true
