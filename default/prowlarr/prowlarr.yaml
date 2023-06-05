@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/prowlarr-develop
-      tag: 1.5.1.3422
+      tag: 1.5.2.3484
 
     env:
       TZ: "America/New_York"
