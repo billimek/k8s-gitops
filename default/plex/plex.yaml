@@ -27,13 +27,11 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: plexinc/pms-docker
-      tag: 1.32.3.7162-b0a36929b
+      repository: ghcr.io/onedr0p/plex
+      tag: 1.32.3.7162-b0a36929b@sha256:7b7017f94b1054d46b80243dce9be8483aa1c162852b87c7782bbbfe5ec74a68
 
     env:
       TZ: "America/New_York"
-      PLEX_UID: "1000"
-      PLEX_GID: "1000"
     envFrom:
       - secretRef:
           name: plex-secret
@@ -63,6 +61,8 @@ spec:
               - "plex.eviljungle.com"
 
     podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
       supplementalGroups: [44, 109, 10000]
@@ -74,10 +74,8 @@ spec:
         accessMode: ReadWriteOnce
         size: 45Gi
       transcode:
-        enabled: false
-        existingClaim: nfs-media-pvc
-        subPath: Videos/transcode/
-        readOnly: false
+        enabled: true
+        type: emptyDir
       tmp:
         enabled: true
         type: emptyDir
@@ -87,6 +85,9 @@ spec:
         existingClaim: nfs-media-pvc
         mountPath: /data
         readOnly: false
+
+    nodeSelector:
+      intel.feature.node.kubernetes.io/gpu: "true"
 
     resources:
       requests:
