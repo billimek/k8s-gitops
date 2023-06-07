@@ -56,11 +56,15 @@ spec:
     serviceAnnotations:
       mc-router.itzg.me/externalServerName: "mcsv.eviljungle.com"
     extraEnv:
-      MODS: "https://github.com/EssentialsX/Essentials/releases/download/2.20.0/EssentialsX-2.20.0.jar, https://cdn.modrinth.com/data/Lu3KuzdV/versions/mvLpRWww/CoreProtect-21.3.jar"
       ENABLE_AUTOPAUSE: FALSE
-      ONLINE_MODE: FALSE
-      SPIGET_RESOURCES: "74354,28140,102931"
     minecraftServer:
+      spigetResources:
+        - 28140
+        - 74354
+        - 102931
+      modUrls:
+        - https://github.com/EssentialsX/Essentials/releases/download/2.20.0/EssentialsX-2.20.0.jar
+        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/mvLpRWww/CoreProtect-21.3.jar
       eula: "TRUE"
       version: "LATEST"
       type: PAPER
