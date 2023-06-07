@@ -26,6 +26,11 @@ spec:
       dataDir:
         enabled: true
         Size: 10Gi
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      fsGroup: 1000
     resources:
       requests:
         memory: 6Gi
