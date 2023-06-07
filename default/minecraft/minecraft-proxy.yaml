@@ -20,11 +20,11 @@ spec:
     image:
       repository: itzg/bungeecord
       tag: 2022.4.1
-    securityContext:
-      # Security context settings - need to use root or else there will be problems due to the underlying image trying to do some things as root already
-      runAsUser: 0
-      runAsGroup: 0
-      fsGroup: 0
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      fsGroup: 1000
     resources:
       requests:
         memory: 250Mi
