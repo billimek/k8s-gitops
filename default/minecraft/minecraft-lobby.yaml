@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
       chart: minecraft
-      version: 4.7.4
+      version: 4.8.0
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
@@ -25,6 +25,11 @@ spec:
       dataDir:
         enabled: true
         Size: 5Gi
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      fsGroup: 1000
     resources:
       requests:
         memory: 2Gi
