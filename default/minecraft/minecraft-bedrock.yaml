@@ -5,7 +5,7 @@ metadata:
   name: mcbr
   namespace: default
 spec:
-  suspect: true
+  suspend: true
   interval: 5m
   chart:
     spec:
