@@ -5,6 +5,7 @@ metadata:
   name: mc
   namespace: default
 spec:
+  suspend: true
   interval: 5m
   chart:
     spec:
