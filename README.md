@@ -25,6 +25,7 @@ See [setup](setup/README.md) for more detail about setup & bootstrapping a new c
 * [kube-system](kube-system/)
 * [logs](logs/)
 * [monitoring](monitoring/)
+* [networking](networking/)
 * [rook-ceph](rook-ceph/)
 * [system-upgrade](system-upgrade/)
 
