@@ -83,7 +83,7 @@ spec:
             address: mc-minecraft:25565
             restricted: false
           survival:
-            motd: 'Walker Survival SMP'
+            motd: 'Survival SMP'
             address: mcsv-minecraft:25565
             restricted: false
           survival2:
