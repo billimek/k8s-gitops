@@ -48,7 +48,7 @@ spec:
       loadBalancerIP: 10.0.6.106
       externalTrafficPolicy: Local
       # This can be set to the contents of your config file (only works with yaml currently)
-      configFilePath: /server/velocity.toml
+      configFilePath: velocity.toml
       config: |-
         config-version = "1.0"
         bind = "0.0.0.0:25577"
