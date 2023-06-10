@@ -37,91 +37,33 @@ spec:
     podAnnotations:
       configmap.reloader.stakater.com/reload: "waterfall-minecraft-proxy-config"
     extraEnv:
-      SPIGET_PLUGINS: "78915,75"
+      #SPIGET_PLUGINS: "78915,75"
+      PLUGINS: "https://cdn.modrinth.com/data/axTqSWQA/versions/tj8xmw88/Advanced-Portals-0.9.2.jar,"
     minecraftProxy:
-      type: WATERFALL
+      type: VELOCITY
+      velocityVersion: latest
       # A list of .jar URLs to download into the plugins folder.
       # plugins: []
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.106
       externalTrafficPolicy: Local
-      # externalIPs:
       # This can be set to the contents of your config file (only works with yaml currently)
-      config: |
-        player_limit: -1
-        ip_forward: true
-        permissions:
-          default:
-          - bungeecord.command.server
-          - bungeecord.command.list
-          - alert.trigger
-          - slashserver.lobby
-          - slashserver.survival
-          - slashserver.survival2
-          admin:
-          - bungeecord.command.alert
-          - bungeecord.command.end
-          - bungeecord.command.ip
-          - bungeecord.command.reload
-          - alert.receive
-          - alert.receive.firstjoin
-          - alert.command.toggle
-          - alert.command.reload
-          family:
-          - bungeecord.server.survival
-        timeout: 30000
-        log_pings: true
-        log_commands: false
-        online_mode: true
-        servers:
-          lobby:
-            motd: '&1eviljungle lobby'
-            address: mc-lobby-minecraft:25565
-            restricted: false
-          creative:
-            motd: 'creative server'
-            address: mc-minecraft:25565
-            restricted: false
-          survival:
-            motd: 'Survival SMP'
-            address: mcsv-minecraft:25565
-            restricted: false
-          survival2:
-            motd: 'Public Survival EZ-mode SMP'
-            address: mcsv2-minecraft:25565
-            restricted: false
-        listeners:
-        - query_port: 25577
-          motd: '&3eviljungle &6&Llobby'
-          priorities:
-          - lobby
-          bind_local_address: true
-          tab_list: GLOBAL_PING
-          query_enabled: true
-          host: 0.0.0.0:25577
-        ping_passthrough: true
-        groups:
-          billimek:
-          - admin
-          - family
-          AnsleyElla:
-          - family
-          BrinleyHarper:
-          - family
-      #    forced_hosts:
-      #      pvp.md-5.net: pvp
-      #    max_players: 1
-      #    tab_size: 60
-      #    force_default_server: false
-      #    proxy_protocol: false
-      #  disabled_commands:
-      #  - disabledcommandhere
-      #  network_compression_threshold: 256
-      #  groups:
-      #    md_5:
-      #    - admin
-      #  connection_throttle: 4000
-      #  connection_throttle_limit: 3
-      #  stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
-      #  forge_support: false
-      #  inject_commands: false
+      configFilePath: /server/velocity.toml
+      config: |-
+        config-version = "1.0"
+        bind = "0.0.0.0:25577"
+        motd: "&3eviljungle &6&Llobby"
+        show-max-players = 500
+        player-info-forwarding-mode: "modern"
+        [servers]
+        # Configure your servers here. Each key represents the server's name, and the value
+        # represents the IP address of the server to connect to.
+        lobby = "mc-lobby-minecraft:25565"
+        creative = "mc-minecraft:25565"
+        survival = "mcsv-minecraft:25565"
+        survival2 = "mcsv2-minecraft:25565"
+        # In what order we should try servers when a player logs in or is kicked from a server.
+        try = [
+          "lobby"
+        ]
+
