@@ -54,7 +54,7 @@ spec:
         bind = "0.0.0.0:25577"
         motd = "&3eviljungle &6&Llobby"
         show-max-players = 500
-        player-info-forwarding-mode: "modern"
+        player-info-forwarding-mode = "modern"
         [servers]
         # Configure your servers here. Each key represents the server's name, and the value
         # represents the IP address of the server to connect to.
