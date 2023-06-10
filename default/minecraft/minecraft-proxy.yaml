@@ -52,7 +52,7 @@ spec:
       config: |-
         config-version = "1.0"
         bind = "0.0.0.0:25577"
-        motd: "&3eviljungle &6&Llobby"
+        motd = "&3eviljungle &6&Llobby"
         show-max-players = 500
         player-info-forwarding-mode: "modern"
         [servers]
