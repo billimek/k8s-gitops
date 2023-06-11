@@ -76,7 +76,7 @@ spec:
       maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: survival
-      pvp: false
+      pvp: "false"
       onlineMode: "FALSE"
       #worldSaveName: 'trails-20230610-13'
       worldSaveName: "4287426845256712239-20230610"
