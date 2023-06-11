@@ -78,7 +78,7 @@ spec:
       gameMode: survival
       onlineMode: "FALSE"
       #worldSaveName: 'trails-20230610-13'
-      worldSaveName: "6841401455424705842-20230610"
+      worldSaveName: "6841401455424705842-20230610-1"
       levelSeed: "6841401455424705842"
       motd: "mcsv.eviljungle.com\n\u00A76\u00A7lSMPl\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP\u00A7r\n"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
