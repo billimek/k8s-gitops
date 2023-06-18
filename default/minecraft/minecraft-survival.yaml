@@ -78,6 +78,7 @@ spec:
       gameMode: survival
       pvp: false
       onlineMode: false
+      maxWorldSize: 5999968
       #worldSaveName: 'trails-20230610-13'
       worldSaveName: "4287426845256712239-20230610"
       levelSeed: "4287426845256712239"
