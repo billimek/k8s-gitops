@@ -2,10 +2,7 @@
 ![Kubernetes](https://i.imgur.com/p1RzXjQ.png)
 
 ## :book:&nbsp; Overview
-![](https://i.imgur.com/7w7F5T8.png)
-
-![](https://i.imgur.com/fjFnpKq.png)
-![](https://i.imgur.com/g17Czsl.png)
+![](https://i.imgur.com/KHFP4uR.png)
 
 Leverage [Flux2](https://github.com/fluxcd/flux2) to automate cluster state using code residing in this repo
 
