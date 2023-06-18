@@ -90,37 +90,3 @@ jobs:
             ${{ steps.diff.outputs.diff }}
             ```
           edit-mode: replace
-
-      - name: Dyff
-        id: dyff
-        run: |
-          diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
-            --current-release "default_branch/${{ matrix.file }}" \
-            --incoming-release "${{ matrix.file }}" \
-            --kubernetes-dir ${{ env.KUBERNETES_DIR }} \
-            --diff-tool "dyff")
-          echo "diff<<EOF" >> "${GITHUB_OUTPUT}"
-          echo "${diff}" >> "${GITHUB_OUTPUT}"
-          echo "EOF" >> "${GITHUB_OUTPUT}"
-
-      - name: Find Comment
-        if: ${{ always() && steps.dyff.outputs.diff != '' }}
-        uses: peter-evans/find-comment@a54c31d7fa095754bfef525c0c8e5e5674c4b4b1 # v2.4.0
-        id: find-comment-dyff
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body-includes: "Helm Release Dyff: ${{ matrix.file }}"
-
-      - name: Create or update comment
-        if: ${{ always() && steps.dyff.outputs.diff != '' }}
-        uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa # v3.0.2
-        with:
-          comment-id: ${{ steps.find-comment-dyff.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Helm Release Dyff: `${{ matrix.file }}`
-
-            ```
-            ${{ steps.dyff.outputs.diff }}
-            ```
-          edit-mode: replace
