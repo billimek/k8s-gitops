@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
       chart: minecraft
-      version: 4.8.0
+      version: 4.9.0
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
@@ -61,7 +61,8 @@ spec:
       maxTickTime: -1
       serviceType: ClusterIP
       gameMode: survival
-      onlineMode: "FALSE"
+      onlineMode: false
+      maxWorldSize: 5999968
       worldSaveName: 'world-20220621-mangrove-island'
       motd: "\u00A76\u00A7lpublic survival\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP HARDCORE\u00A7r\n"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
