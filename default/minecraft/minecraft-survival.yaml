@@ -65,7 +65,7 @@ spec:
       modUrls:
         - https://github.com/EssentialsX/Essentials/releases/download/2.20.0/EssentialsX-2.20.0.jar
         - https://cdn.modrinth.com/data/Lu3KuzdV/versions/mvLpRWww/CoreProtect-21.3.jar
-      eula: "TRUE"
+      eula: true
       version: "LATEST"
       type: PAPER
       forceReDownload: true
@@ -76,8 +76,8 @@ spec:
       maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: survival
-      pvp: "false"
-      onlineMode: "FALSE"
+      pvp: false
+      onlineMode: false
       #worldSaveName: 'trails-20230610-13'
       worldSaveName: "4287426845256712239-20230610"
       levelSeed: "4287426845256712239"

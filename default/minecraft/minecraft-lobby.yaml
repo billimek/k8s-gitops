@@ -47,11 +47,11 @@ spec:
       modUrls:
         - https://github.com/EssentialsX/Essentials/releases/download/2.20.0/EssentialsX-2.20.0.jar
         - https://cdn.modrinth.com/data/Lu3KuzdV/versions/mvLpRWww/CoreProtect-21.3.jar
-      eula: "TRUE"
+      eula: true
       version: "LATEST"
       type: PAPER
       forceReDownload: true
-      onlineMode: "FALSE"
+      onlineMode: false
       difficulty: peaceful
       maxTickTime: -1
       serviceType: ClusterIP

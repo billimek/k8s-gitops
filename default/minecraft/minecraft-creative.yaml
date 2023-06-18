@@ -61,7 +61,7 @@ spec:
         - https://github.com/EssentialsX/Essentials/releases/download/2.20.0/EssentialsX-2.20.0.jar
       spigetResources:
         - 102931
-      eula: "TRUE"
+      eula: true
       version: "LATEST"
       type: PAPER
       forceReDownload: true
@@ -71,7 +71,7 @@ spec:
       maxTickTime: -1
       serviceType: LoadBalancer
       gameMode: creative
-      onlineMode: "FALSE"
+      onlineMode: false
       worldSaveName: 'world-20160823'
       motd: "\u00a7feviljungle\u00a7 - \u00a7a\u00a7lcreative\u00a7"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
