@@ -56,9 +56,6 @@ spec:
       main:
         enabled: true
         ingressClassName: nginx
-        annotations:
-          external-dns.alpha.kubernetes.io/target: ingress.devbu.io
-          hajimari.io/icon: mdi:video-input-antenna
         hosts:
           - host: &host "eviljungle.com"
             paths:
@@ -80,4 +77,3 @@ spec:
         memory: 10Mi
       limits:
         memory: 50Mi
-
