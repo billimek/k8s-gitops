@@ -30,6 +30,9 @@ spec:
         keep-alive: 120
         proxy-body-size: 0
         proxy-buffer-size: 16k
+        large-client-header-buffers: "8 32k"
+        http2-max-field-size: "8k"
+        http2-max-header-size: "32k"
       use-forwarded-headers: "true"
       service:
         loadBalancerIP: 10.0.6.150
