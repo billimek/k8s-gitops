@@ -43,6 +43,7 @@ spec:
     config:
       opentsdb:
         enabled: true
+        bind-address: ":4242"
       graphite:
         enabled: true
         database: graphitedb
