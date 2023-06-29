@@ -34,8 +34,8 @@ spec:
       - hosts:
         - auth.eviljungle.com
     extraArgs:
-      provider: oidc
-      oidc-issuer-url: https://billimek.auth0.com/
+      provider: azure
+      oidc-issuer-url: https://login.microsoftonline.com/96403cd5-9fa2-4276-8dce-43bf9c30beb2/v2.0
       skip-provider-button:
       pass-authorization-header:
       email-domain: "*"
@@ -52,14 +52,26 @@ spec:
               - oauth2-proxy
           topologyKey: "kubernetes.io/hostname"
   valuesFrom:
+  # - targetPath: config.clientID
+  #   kind: Secret
+  #   name: oauth2-proxy-secret
+  #   valuesKey: AUTH0_CLIENT_ID
+  # - targetPath: config.clientSecret
+  #   kind: Secret
+  #   name: oauth2-proxy-secret
+  #   valuesKey: AUTH0_CLIENT_SECRET
   - targetPath: config.clientID
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: AUTH0_CLIENT_ID
+    valuesKey: AZURE_CLIENT_ID
   - targetPath: config.clientSecret
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: AUTH0_CLIENT_SECRET
+    valuesKey: AZURE_CLIENT_SECRET
+  - targetPath: config.azureTenant
+    kind: Secret
+    name: oauth2-proxy-secret
+    valuesKey: AZURE_TENANT_ID
   - targetPath: config.cookieSecret
     kind: Secret
     name: oauth2-proxy-secret
