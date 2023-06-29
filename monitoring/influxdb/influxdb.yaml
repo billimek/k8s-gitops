@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://helm.influxdata.com/
       chart: influxdb
-      version: 4.12.1
+      version: 4.12.3
       sourceRef:
         kind: HelmRepository
         name: influxdata-charts
@@ -43,6 +43,7 @@ spec:
     config:
       opentsdb:
         enabled: true
+        bind-address: ":4242"
       graphite:
         enabled: true
         database: graphitedb
