@@ -326,20 +326,15 @@ spec:
         oauth_skip_org_role_update_sync: false
       auth.basic:
         disable_login_form: true
-      auth.generic_oauth:
+      auth.azuread:
         enabled: true
-        allow_sign_up: true
+        allow_sign_up: false
+        auto_login: false
         team_ids:
         allowed_organizations:
-        name: Auth0
+        name: Azure AD
         client_id: # Set by env vars
         client_secret: # Set by env vars
         scopes: openid profile email
-        auth_url: https://billimek.auth0.com/authorize
-        token_url: https://billimek.auth0.com/oauth/token
-        api_url: https://billimek.auth0.com/userinfo
-      # ref: https://blog.dahanne.net/2020/04/15/integrating-auth0-oidc-oauth-2-with-authorization-groups-and-roles/
-      auth.generic_oauth.group_mapping:
-        role_attribute_path: |
-          contains("https://billimek.com/groups"[*], 'Admin') && 'Admin' || contains("https://billimek.com/groups"[*], 'Editor') && 'Editor' || 'Viewer'
-
+        auth_url: # Set by env vars
+        token_url: # Set by env vars
