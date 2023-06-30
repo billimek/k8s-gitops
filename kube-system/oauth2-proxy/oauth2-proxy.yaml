@@ -62,7 +62,7 @@ spec:
     kind: Secret
     name: oauth2-proxy-secret
     valuesKey: PASSAGE_API_KEY
-  - targetPath: config.oidc-issuer-url
+  - targetPath: extraArgs.oidc-issuer-url
     kind: Secret
     name: oauth2-proxy-secret
     valuesKey: PASSAGE_ISSUER_URL
