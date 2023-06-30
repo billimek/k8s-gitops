@@ -31,8 +31,7 @@ spec:
       - hosts:
         - auth.eviljungle.com
     extraArgs:
-      provider: azure
-      oidc-issuer-url: https://login.microsoftonline.com/96403cd5-9fa2-4276-8dce-43bf9c30beb2/v2.0
+      provider: oidc
       skip-provider-button:
       pass-authorization-header:
       email-domain: "*"
@@ -62,7 +61,11 @@ spec:
   - targetPath: config.clientSecret
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: PASSAGE_CLIENT_SECRET
+    valuesKey: PASSAGE_API_KEY
+  - targetPath: config.oidc-issuer-url
+    kind: Secret
+    name: oauth2-proxy-secret
+    valuesKey: PASSAGE_ISSUER_URL
   # - targetPath: config.azureTenant
   #   kind: Secret
   #   name: oauth2-proxy-secret
