@@ -58,15 +58,15 @@ spec:
   - targetPath: config.clientID
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: AZURE_CLIENT_ID
+    valuesKey: PASSAGE_CLIENT_ID
   - targetPath: config.clientSecret
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: AZURE_CLIENT_SECRET
-  - targetPath: config.azureTenant
-    kind: Secret
-    name: oauth2-proxy-secret
-    valuesKey: AZURE_TENANT_ID
+    valuesKey: PASSAGE_CLIENT_SECRET
+  # - targetPath: config.azureTenant
+  #   kind: Secret
+  #   name: oauth2-proxy-secret
+  #   valuesKey: AZURE_TENANT_ID
   - targetPath: config.cookieSecret
     kind: Secret
     name: oauth2-proxy-secret
