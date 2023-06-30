@@ -31,12 +31,24 @@ spec:
       - hosts:
         - auth.eviljungle.com
     extraArgs:
-      provider: oidc
+      provider: azure
       skip-provider-button:
       pass-authorization-header:
       email-domain: "*"
       cookie-domain: .eviljungle.com
       whitelist-domain: .eviljungle.com
+    sessionStorage:
+      type: redis
+    redis:
+      enabled: true
+      master:
+        tolerations:
+          - key: "arm"
+            operator: "Exists"
+      replica:
+        tolerations:
+          - key: "arm"
+            operator: "Exists"
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -51,19 +63,19 @@ spec:
   - targetPath: config.clientID
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: PASSAGE_CLIENT_ID
+    valuesKey: AZURE_CLIENT_ID
   - targetPath: config.clientSecret
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: PASSAGE_API_KEY
+    valuesKey: AZURE_CLIENT_SECRET
+  - targetPath: config.azureTenant
+    kind: Secret
+    name: oauth2-proxy-secret
+    valuesKey: AZURE_TENANT_ID
   - targetPath: extraArgs.oidc-issuer-url
     kind: Secret
     name: oauth2-proxy-secret
-    valuesKey: PASSAGE_ISSUER_URL
-  # - targetPath: config.azureTenant
-  #   kind: Secret
-  #   name: oauth2-proxy-secret
-  #   valuesKey: AZURE_TENANT_ID
+    valuesKey: AZURE_ISSUER_URL
   - targetPath: config.cookieSecret
     kind: Secret
     name: oauth2-proxy-secret
