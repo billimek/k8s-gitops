@@ -322,6 +322,8 @@ spec:
             url: http://influxdb:8086
             database: graphitedb
     grafana.ini:
+      auth:
+        oauth_allow_insecure_email_lookup: true
       auth.basic:
         disable_login_form: false
       auth.azuread:
