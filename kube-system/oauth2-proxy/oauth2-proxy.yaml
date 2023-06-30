@@ -8,7 +8,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://oauth2-proxy.github.io/manifests
       chart: oauth2-proxy
       version: 6.13.1
       sourceRef:
@@ -26,8 +25,6 @@ spec:
         operator: "Exists"
     ingress:
       enabled: true
-      # annotations:
-      #   kubernetes.io/ingress.class: nginx
       path: /oauth2
       hosts: [auth.eviljungle.com]
       tls:
@@ -58,14 +55,6 @@ spec:
               - oauth2-proxy
           topologyKey: "kubernetes.io/hostname"
   valuesFrom:
-  # - targetPath: config.clientID
-  #   kind: Secret
-  #   name: oauth2-proxy-secret
-  #   valuesKey: AUTH0_CLIENT_ID
-  # - targetPath: config.clientSecret
-  #   kind: Secret
-  #   name: oauth2-proxy-secret
-  #   valuesKey: AUTH0_CLIENT_SECRET
   - targetPath: config.clientID
     kind: Secret
     name: oauth2-proxy-secret
