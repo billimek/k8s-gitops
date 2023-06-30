@@ -328,7 +328,7 @@ spec:
         disable_login_form: true
       auth.azuread:
         enabled: true
-        allow_sign_up: false
+        allow_sign_up: true
         auto_login: false
         team_ids:
         allowed_organizations:
