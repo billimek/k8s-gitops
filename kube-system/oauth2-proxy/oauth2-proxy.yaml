@@ -38,12 +38,6 @@ spec:
       email-domain: "*"
       cookie-domain: .eviljungle.com
       whitelist-domain: .eviljungle.com
-
-    sessionStorage:
-      type: redis
-    redis:
-      enabled: true
-
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
