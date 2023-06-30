@@ -323,9 +323,9 @@ spec:
             database: graphitedb
     grafana.ini:
       auth:
-        oauth_allow_insecure_email_lookup: true
+        oauth_allow_insecure_email_lookup: false
       auth.basic:
-        disable_login_form: false
+        disable_login_form: true
       auth.azuread:
         enabled: true
         allow_sign_up: true
