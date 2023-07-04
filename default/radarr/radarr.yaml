@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/radarr
-      tag: 4.5.2.7388
+      tag: 4.6.4.7568
 
     env:
       TZ: "America/New_York"
