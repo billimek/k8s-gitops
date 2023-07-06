@@ -24,6 +24,7 @@ spec:
     - "Health check passed in"
     - "Dependencies do not meet ready condition, retrying in 30s"
     - "read: connection timed out"
+    - "GitRepository/flux-system/flux-system configured"
   suspend: false
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta1
