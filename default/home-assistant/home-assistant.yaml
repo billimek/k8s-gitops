@@ -30,7 +30,7 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: homeassistant/home-assistant
+      repository: ghcr.io/home-assistant/home-assistant
       tag: 2023.6.3
     initContainers:
       init-db:
