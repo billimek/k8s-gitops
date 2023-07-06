@@ -10,7 +10,7 @@
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "ghcr.io/advplyr/audiobookshelf",
-        "homeassistant/home-assistant",
+        "ghcr.io/home-assistant/home-assistant",
         "ghcr.io/onedr0p/qbittorrent",
         "ghcr.io/onedr0p/radarr",
         "ghcr.io/onedr0p/sonarr",
