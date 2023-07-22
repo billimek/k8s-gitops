@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://prometheus-community.github.io/helm-charts
       chart: kube-prometheus-stack
-      version: 47.6.1
+      version: 48.1.2
       sourceRef:
         kind: HelmRepository
         name: prometheus-community-charts
@@ -18,17 +18,19 @@ spec:
   maxHistory: 3
   install:
     createNamespace: true
-    crds: CreateReplace
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
-    crds: CreateReplace
     remediation:
       retries: 3
   uninstall:
     keepHistory: false
   values:
+
+    crds:
+      enabled: true
+
     cleanPrometheusOperatorObjectNames: true
 
     defaultRules:
