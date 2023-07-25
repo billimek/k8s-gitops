@@ -41,14 +41,6 @@ spec:
       type: redis
     redis:
       enabled: true
-      master:
-        tolerations:
-          - key: "arm"
-            operator: "Exists"
-      replica:
-        tolerations:
-          - key: "arm"
-            operator: "Exists"
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
