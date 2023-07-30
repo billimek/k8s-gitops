@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: tenstartups/ser2sock
-      tag: armhf
+      tag: latest
       imagePullPolicy: Always
 
     env:
@@ -49,10 +49,6 @@ spec:
 
     securityContext:
       privileged: true
-
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
 
     affinity:
       nodeAffinity:
