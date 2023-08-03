@@ -8,14 +8,6 @@ spec:
   groups:
     - name: volsync.rules
       rules:
-        - alert: VolSyncComponentAbsent
-          annotations:
-            summary: VolSync component has disappeared from Prometheus target discovery.
-          expr: |
-            absent(up{job="volsync-metrics"})
-          for: 15m
-          labels:
-            severity: critical
         - alert: VolSyncVolumeOutOfSync
           annotations:
             summary: >-
