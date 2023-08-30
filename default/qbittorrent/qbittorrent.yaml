@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/qbittorrent
-      tag: 4.5.4
+      tag: 4.5.5
     env:
       TZ: America/New_York
       QBITTORRENT__PORT: &port 80
