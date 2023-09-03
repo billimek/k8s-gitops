@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
       chart: minecraft-bedrock
-      version: 2.1.0
+      version: 2.1.2
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
