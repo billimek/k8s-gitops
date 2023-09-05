@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: node-problem-detector
-      version: 2.3.6
+      version: 2.3.7
       sourceRef:
         kind: HelmRepository
         name: deliveryhero-charts
