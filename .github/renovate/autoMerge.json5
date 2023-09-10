@@ -9,7 +9,6 @@
       "schedule": "after 1am and before 5am",
       "updateTypes": ["minor", "patch"],
       "packageNames": [
-        "ghcr.io/advplyr/audiobookshelf",
         "ghcr.io/home-assistant/home-assistant",
         "ghcr.io/onedr0p/qbittorrent",
         "ghcr.io/onedr0p/radarr",
