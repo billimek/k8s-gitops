@@ -35,4 +35,4 @@ spec:
   - name: https
     port: 443
   type: ExternalName
-  externalName: truenas
+  externalName: truenas.home
