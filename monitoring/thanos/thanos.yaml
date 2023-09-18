@@ -28,7 +28,7 @@ spec:
     keepHistory: false
   values:
     objstoreConfig:
-      type: s3
+      type: "S3"
       config:
         insecure: true
     queryFrontend:
