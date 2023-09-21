@@ -141,7 +141,7 @@
     {
       "datasources": ["docker"],
       "versioning": "loose",
-      "packageNames": ["plexinc/pms-docker"]
+      "packageNames": ["ghcr.io/onedr0p/plex"]
     },
     {
       "matchDatasources": ["docker"],
