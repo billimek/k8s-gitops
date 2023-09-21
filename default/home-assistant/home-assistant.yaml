@@ -34,7 +34,7 @@ spec:
       tag: 2023.9.2
     initContainers:
       init-db:
-        image: ghcr.io/onedr0p/postgres-initdb:14.8
+        image: ghcr.io/onedr0p/postgres-initdb:14.9
         imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
