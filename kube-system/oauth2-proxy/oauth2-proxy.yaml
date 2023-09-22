@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: "quay.io/oauth2-proxy/oauth2-proxy"
-      tag: "v7.5.0"
+      tag: "v7.5.1"
     replicaCount: 2
     tolerations:
       - key: "arm"
