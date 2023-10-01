@@ -16,8 +16,8 @@ spec:
       data:
         RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/audiobookshelf'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
-        AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
+        AWS_ACCESS_KEY_ID: '{{ .KEY_ID }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .APPLICATION_KEY }}'
   dataFrom:
     - extract:
         key: minio
