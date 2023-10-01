@@ -20,7 +20,7 @@ spec:
         AWS_SECRET_ACCESS_KEY: '{{ .APPLICATION_KEY }}'
   dataFrom:
     - extract:
-        key: minio
+        key: b2
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
