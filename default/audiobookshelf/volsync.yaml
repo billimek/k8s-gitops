@@ -14,7 +14,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/audiobookshelf'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}:audiobookshelf'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .KEY_ID }}'
         AWS_SECRET_ACCESS_KEY: '{{ .APPLICATION_KEY }}'
