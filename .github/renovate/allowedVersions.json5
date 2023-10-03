@@ -16,10 +16,10 @@
         "influxdb"
       ]
     },
-    // {
-    //   "matchDatasources": ["helm"],
-    //   "allowedVersions": "<2",
-    //   "matchPackageNames": ["metallb"]
-    // },
+    {
+      "matchDatasources": ["helm"],
+      "allowedVersions": "<2",
+      "matchPackageNames": ["app-template"]
+    },
   ],
 }
