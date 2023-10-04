@@ -52,12 +52,6 @@ spec:
         size: 5Gi
         mountPath: /config
 
-    podSecurityContext:
-      runAsUser: 1001
-      runAsGroup: 1001
-      fsGroup: 1001
-      fsGroupChangePolicy: OnRootMismatch
-
     resources:
       requests:
         memory: 100Mi
