@@ -58,3 +58,18 @@ spec:
         cpu: 50m
       # limits:
       #   memory: 500Mi
+
+    probes:
+      liveness: &probes
+        enabled: true
+        custom: true
+        spec:
+          tcpSocket:
+            port: 7777
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+      readiness: *probes
+      startup:
+        enabled: false
