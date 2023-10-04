@@ -54,7 +54,7 @@ spec:
         enabled: true
         storageClass: "rook-ceph-block"
         size: 5Gi
-        mountPath: /config
+        mountPath: /root/.local/share/Terraria/Worlds
 
     resources:
       requests:
@@ -70,4 +70,5 @@ spec:
         enabled: true
       startup:
         enabled: true
-        initialDelaySeconds: 360
+        spec:
+          initialDelaySeconds: 360
