@@ -15,6 +15,7 @@ spec:
         name: bjw-s
         namespace: flux-system
   maxHistory: 2
+  timeout: 10m
   install:
     createNamespace: true
     remediation:
@@ -34,7 +35,6 @@ spec:
     env:
       TZ: "America/New_York"
       TERRARIA_WORLDSEED: "gamechanger"
-      TERRARIA_WORLDS: "/config/worlds"
       TERRARIA_USECONFIGFILE: "no"
 
     envFrom:
@@ -65,10 +65,10 @@ spec:
 
     probes:
       liveness:
-        enabled: false
+        enabled: true
       readiness:
-        enabled: false
+        enabled: true
       startup:
-        enabled: false
+        enabled: true
         spec:
           initialDelaySeconds: 360
