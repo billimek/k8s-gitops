@@ -1,0 +1,43 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: terraria-restic
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: terraria-restic-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}:terraria'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
+        B2_ACCOUNT_ID: '{{ .KEY_ID }}'
+        B2_ACCOUNT_KEY: '{{ .APPLICATION_KEY }}'
+  dataFrom:
+    - extract:
+        key: b2
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: terraria
+  namespace: default
+spec:
+  sourcePVC: terraria-config
+  trigger:
+    schedule: "0 6 * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: terraria-restic-secret
+    cacheCapacity: 19Gi
+    volumeSnapshotClassName: csi-rbdplugin-snapclass
+    storageClassName: rook-ceph-block
+    retain:
+      daily: 10
+      within: 3d
