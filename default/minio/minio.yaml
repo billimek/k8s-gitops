@@ -25,8 +25,6 @@ spec:
       retries: 3
   uninstall:
   values:
-    global:
-      nameOverride: *app
     image:
       repository: quay.io/minio/minio
       tag: RELEASE.2023-09-27T15-22-50Z
