@@ -72,6 +72,10 @@ spec:
         enabled: true
         primary: true
         ingressClassName: 'nginx'
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 100.64.0.0/10"
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts:
           - host: minio.eviljungle.com
             paths:
@@ -85,6 +89,8 @@ spec:
       s3:
         enabled: true
         ingressClassName: 'nginx'
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 100.64.0.0/10"
         hosts:
           - host: s3.eviljungle.com
             paths:
