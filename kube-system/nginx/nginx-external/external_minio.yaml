@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: minio.eviljungle.com
+  - host: minio-nas.eviljungle.com
     http:
       paths:
       - path: /
@@ -19,7 +19,7 @@ spec:
               number: 9000
   tls:
   - hosts:
-    - minio.eviljungle.com
+    - minio-nas.eviljungle.com
 ---
 apiVersion: v1
 kind: Service

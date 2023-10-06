@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-minio
+  namespace: default
+spec:
+  storageClassName: minio
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 10.0.7.7
+    path: "/mnt/ssdtank/s3"
+  mountOptions:
+  - nfsvers=3
+  - tcp
+  - intr
+  - hard
+  - noatime
+  - nodiratime
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-minio
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: minio
+  resources:
+    requests:
+      storage: 1Mi
