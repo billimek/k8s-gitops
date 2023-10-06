@@ -40,7 +40,7 @@ spec:
         compression: bzip2
         maxParallel: 8
       destinationPath: s3://postgresql/
-      endpointURL: http://truenas.home:9000
+      endpointURL: http://minio.default:9000
       serverName: postgres-v15
       s3Credentials:
         accessKeyId:
@@ -74,7 +74,7 @@ spec:
           compression: bzip2
           maxParallel: 8
         destinationPath: s3://postgresql/
-        endpointURL: http://truenas.home:9000
+        endpointURL: http://minio.default:9000
         s3Credentials:
           accessKeyId:
             name: cloudnative-pg-secret
