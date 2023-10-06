@@ -64,7 +64,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: minio-nfs
+        existingClaim: nfs-minio
         mountPath: /data
 
     ingress:
