@@ -14,13 +14,13 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}:terraria'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/terraria'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
-        B2_ACCOUNT_ID: '{{ .KEY_ID }}'
-        B2_ACCOUNT_KEY: '{{ .APPLICATION_KEY }}'
+        AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
   dataFrom:
     - extract:
-        key: b2
+        key: minio
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
