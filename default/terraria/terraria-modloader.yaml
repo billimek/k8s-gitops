@@ -43,7 +43,7 @@ spec:
       # 2838188064: "Basic Automated (Vein) Mining" (https://steamcommunity.com/sharedfiles/filedetails/?id=2838188064)
       # 2669644269: "Boss Checklist" (https://steamcommunity.com/sharedfiles/filedetails/?id=2669644269)
       TMOD_AUTODOWNLOAD: "2992680615,2619954303,2838188064,2669644269"
-      TMOD_ENABLEMODS: "2992680615,2619954303,2838188064,2669644269"
+      TMOD_ENABLEDMODS: "2992680615,2619954303,2838188064,2669644269"
 
     envFrom:
       - secretRef:
