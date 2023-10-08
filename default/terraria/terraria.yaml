@@ -36,6 +36,7 @@ spec:
       TZ: "America/New_York"
       TERRARIA_WORLDSEED: "gamechanger"
       TERRARIA_USECONFIGFILE: "no"
+      TERRARIA_MOTD: "Welcome to the eviljungle terraria vanilla (no mods) server!"
 
     envFrom:
       - secretRef:
