@@ -110,7 +110,7 @@ spec:
     copyMethod: Snapshot
     pruneIntervalDays: 10
     repository: terraria-restic-secret
-    cacheCapacity: 19Gi
+    cacheCapacity: 10Gi
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
     retain:
