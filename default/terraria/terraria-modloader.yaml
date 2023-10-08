@@ -33,9 +33,9 @@ spec:
 
     env:
       TZ: "America/New_York"
-      TERRARIA_WORLDSEED: "modloader-gamechanger"
-      TERRARIA_USECONFIGFILE: "no"
-      TERRARIA_MOTD: "Welcome to the eviljungle terraria tmodloader server!"
+      TMOD_WORLDSEED: "modloader-gamechanger"
+      TMOD_USECONFIGFILE: "no"
+      TMOD_MOTD: "Welcome to the eviljungle terraria tModLoader server!"
       TMOD_WORLDNAME: "tmodloader"
       # mods:
       # 2992680615: "Biome Titles" (https://steamcommunity.com/sharedfiles/filedetails/?id=2992680615)
