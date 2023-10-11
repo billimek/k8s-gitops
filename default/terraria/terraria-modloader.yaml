@@ -33,7 +33,7 @@ spec:
 
     env:
       TZ: "America/New_York"
-      TMOD_WORLDSEED: "modloader-gamechanger"
+      TMOD_WORLDSEED: "celebrationmk10"
       TMOD_USECONFIGFILE: "no"
       TMOD_MOTD: "Welcome to the eviljungle terraria tModLoader server!"
       TMOD_WORLDNAME: "tmodloader"
