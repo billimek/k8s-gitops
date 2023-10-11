@@ -53,7 +53,7 @@ spec:
       main:
         ports:
           http:
-            port: 7778
+            port: 7777
         type: LoadBalancer
         loadBalancerIP: 10.0.6.59
 
