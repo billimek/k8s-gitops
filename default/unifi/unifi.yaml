@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: jacobalberty/unifi
-      tag: v7.5.174
+      tag: v7.5.176
 
     env:
       TZ: "America/New_York"
