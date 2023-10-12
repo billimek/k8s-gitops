@@ -77,7 +77,7 @@ metadata:
 spec:
   sourcePVC: mcbr-minecraft-bedrock-datadir
   trigger:
-    schedule: "0 * * * *"
+    schedule: "0 6 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
