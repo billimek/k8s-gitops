@@ -42,8 +42,10 @@ spec:
       # 2619954303: "Recipe Browser" (https://steamcommunity.com/sharedfiles/filedetails/?id=2619954303)
       # 2838188064: "Basic Automated (Vein) Mining" (https://steamcommunity.com/sharedfiles/filedetails/?id=2838188064)
       # 2669644269: "Boss Checklist" (https://steamcommunity.com/sharedfiles/filedetails/?id=2669644269)
-      TMOD_AUTODOWNLOAD: "2992680615,2619954303,2838188064,2669644269"
-      TMOD_ENABLEDMODS: "2992680615,2619954303,2838188064,2669644269"
+      # 2908170107: "absoluteAquarian Utilities" (https://steamcommunity.com/workshop/filedetails/?id=2908170107)
+      # 2563309347: "Magic Storage" (https://steamcommunity.com/sharedfiles/filedetails/?id=2563309347)
+      TMOD_AUTODOWNLOAD: "2992680615,2619954303,2838188064,2669644269,2908170107,2563309347"
+      TMOD_ENABLEDMODS: "2992680615,2619954303,2838188064,2669644269,2908170107,2563309347"
 
     envFrom:
       - secretRef:
