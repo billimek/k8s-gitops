@@ -29,7 +29,7 @@ spec:
   values:
     image:
       repository: jacobsmile/tmodloader1.4
-      tag: v2023.09.2.6
+      tag: v2023.09.2.9
 
     env:
       TZ: "America/New_York"
