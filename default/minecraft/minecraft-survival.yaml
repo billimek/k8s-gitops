@@ -63,8 +63,8 @@ spec:
         - 74354
         - 102931
       modUrls:
-        - https://github.com/EssentialsX/Essentials/releases/download/2.20.0/EssentialsX-2.20.0.jar
-        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/mvLpRWww/CoreProtect-21.3.jar
+        - https://github.com/EssentialsX/Essentials/releases/download/2.20.1/EssentialsX-2.20.1.jar
+        - https://www.patreon.com/file?h=89830486&i=15920178
       eula: true
       version: "LATEST"
       type: PAPER
