@@ -26,7 +26,7 @@ spec:
   resources:
     requests:
       memory: "512Mi"
-      cpu: "1"
+      cpu: "250m"
     limits:
       memory: "4Gi"
   affinity:
