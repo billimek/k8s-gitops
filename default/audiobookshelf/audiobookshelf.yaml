@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/advplyr/audiobookshelf
-      tag: 2.4.4
+      tag: 2.5.0
 
     env:
       TZ: "America/New_York"
