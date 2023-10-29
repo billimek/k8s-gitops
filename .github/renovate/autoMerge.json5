@@ -10,7 +10,6 @@
       "updateTypes": ["minor", "patch"],
       "packageNames": [
         "ghcr.io/home-assistant/home-assistant",
-        "ghcr.io/onedr0p/qbittorrent",
         "ghcr.io/onedr0p/radarr",
         "ghcr.io/onedr0p/sonarr",
         "ghcr.io/onedr0p/sabnzbd",
