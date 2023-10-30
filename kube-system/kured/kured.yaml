@@ -45,7 +45,6 @@ spec:
       endTime: "4:00"
       timeZone: "America/New_York"
       rebootCommand: "/usr/bin/systemctl reboot"
-      rebootSentinelCommand: "/bin/sh -c \"[[ \"$(readlink /run/booted-system/{initrd,kernel,kernel-modules})\" != \"$(readlink /run/current-system/{initrd,kernel,kernel-modules})\" ]]\""
       blockingPodSelector:
         app.kubernetes.io/created-by: "volsync"
     tolerations:
