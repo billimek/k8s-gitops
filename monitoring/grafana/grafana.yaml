@@ -10,7 +10,7 @@ spec:
     spec:
       # renovate: registryUrl=https://grafana.github.io/helm-charts
       chart: grafana
-      version: 7.0.1
+      version: 7.0.3
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
