@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
-      tag: 2023.10.1-java17
+      tag: 2023.11.0-java17
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
