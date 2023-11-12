@@ -34,8 +34,8 @@ spec:
           - secretRef:
               name: teslamate-secret
     image:
-      repository: teslamate/teslamate
-      tag: 1.27.3
+      repository: jsightler/teslamate
+      tag: "20231029"
     env:
       TZ: "America/New_York"
       DISABLE_MQTT: "false"
