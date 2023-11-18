@@ -38,6 +38,9 @@ spec:
         enabled: true
         type: secret
         name: espresense-companion-config
+        subPath: config.yaml
+        mountPath: /config/config.yaml
+        readOnly: true
     service:
       main:
         type: ClusterIP
