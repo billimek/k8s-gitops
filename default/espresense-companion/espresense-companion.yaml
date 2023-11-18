@@ -28,7 +28,7 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: espresense-companion/espresense-companion
+      repository: espresense/espresense-companion
       tag: "0.4.8"
     env:
       TZ: "America/New_York"
