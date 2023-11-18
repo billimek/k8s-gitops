@@ -6,6 +6,15 @@
 
 * [emqx.yaml](emqx/emqx.yaml)
 
+# espresense-companion
+
+![](https://i.imgur.com/nULmfEo.png)
+
+[espresense-companion](https://github.com/ESPresense/ESPresense-companion) is a soluation that solves indoor positions with mqtt data received from multiple [ESPresense](https://github.com/ESPresense/ESPresense) stations
+
+* [espresense-companion.yaml](espresense-companion/espresense-companion.yaml)
+
+
 # frigate
 
 ![](https://i.imgur.com/hv7bh6m.png)
