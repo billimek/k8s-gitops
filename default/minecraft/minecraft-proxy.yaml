@@ -19,7 +19,7 @@ spec:
   values:
     image:
       repository: itzg/bungeecord
-      tag: 2022.4.1
+      tag: 2023.11.0
     podSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
