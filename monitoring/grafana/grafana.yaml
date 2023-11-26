@@ -201,11 +201,20 @@ spec:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/windows_node.json
           datasource: Prometheus
       teslamate:
+        battery-health-lfp:
+          url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/battery-health-lfp.json
+          # datasource: TeslaMate
+        battery-health:
+          url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/battery-health.json
+          # datasource: TeslaMate
         charge-level:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/charge-level.json
           # datasource: TeslaMate
         charges:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/charges.json
+          # datasource: TeslaMate
+        charging-stats-lfp:
+          url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/charging-stats-lfp.json
           # datasource: TeslaMate
         charging-stats:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/charging-stats.json
@@ -224,6 +233,9 @@ spec:
           # datasource: TeslaMate
         mileage:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/mileage.json
+          # datasource: TeslaMate
+        overview-lfp:
+          url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/overview-lfp.json
           # datasource: TeslaMate
         overview:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/overview.json
