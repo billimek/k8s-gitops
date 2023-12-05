@@ -27,8 +27,8 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: jacobalberty/unifi
-      tag: v7.5.176
+      repository: buckaroogeek/unifi
+      tag: v7.5.187
 
     env:
       TZ: "America/New_York"
