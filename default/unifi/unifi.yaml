@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: buckaroogeek/unifi
-      tag: v7.5.187
+      tag: v8.0.24
 
     env:
       TZ: "America/New_York"
