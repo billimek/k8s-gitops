@@ -1,10 +1,10 @@
 {
-  packageRules: [
+  "packageRules": [
     // auto-updates - daily
     {
       "datasources": ["docker"],
       "automerge": true,
-      automergeType: "branch",
+      "automergeType": "branch",
       "requiredStatusChecks": null,
       "schedule": "after 1am and before 5am",
       "updateTypes": ["minor", "patch"],
@@ -23,7 +23,7 @@
     {
       "datasources": ["docker"],
       "automerge": true,
-      automergeType: "branch",
+      "automergeType": "branch",
       "requiredStatusChecks": null,
       "schedule": ["before 3am on Monday"],
       "updateTypes": ["minor", "patch"],
@@ -54,14 +54,13 @@
       "matchUpdateTypes": ["minor", "patch"]
     },
     {
-      description: "Auto merge container digests",
-      matchDatasources: ["docker"],
-      automerge: false,
-      automergeType: "branch",
-      requiredStatusChecks: null,
-      matchUpdateTypes: ["digest"],
-      matchPackagePattern: ["ghcr.io/onedr0p"],
-    },
-  ],
+      "description": "Auto merge container digests",
+      "matchDatasources": ["docker"],
+      "automerge": false,
+      "automergeType": "branch",
+      "requiredStatusChecks": null,
+      "matchUpdateTypes": ["digest"],
+      "matchPackagePattern": ["ghcr.io/onedr0p", "quay.io/invidious/invidious"]
+    }
+  ]
 }
-
