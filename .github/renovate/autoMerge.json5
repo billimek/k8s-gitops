@@ -9,6 +9,7 @@
       "schedule": "after 1am and before 5am",
       "updateTypes": ["minor", "patch"],
       "packageNames": [
+        "espresense/espresense-companion",
         "ghcr.io/home-assistant/home-assistant",
         "ghcr.io/onedr0p/radarr",
         "ghcr.io/onedr0p/sonarr",
@@ -56,7 +57,7 @@
     {
       "description": "Auto merge container digests",
       "matchDatasources": ["docker"],
-      "automerge": false,
+      "automerge": true,
       "automergeType": "branch",
       "requiredStatusChecks": null,
       "matchUpdateTypes": ["digest"],
