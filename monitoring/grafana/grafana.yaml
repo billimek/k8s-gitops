@@ -345,8 +345,4 @@ spec:
         team_ids:
         allowed_organizations:
         name: Azure AD
-        client_id: # Set by env vars
-        client_secret: # Set by env vars
         scopes: openid profile email
-        auth_url: # Set by env vars
-        token_url: # Set by env vars
