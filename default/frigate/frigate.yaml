@@ -79,17 +79,10 @@ spec:
         medium: Memory
         sizeLimit: 2Gi
         mountPath: /dev/shm
-        # mountPath: /tmp/cache
 
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: google.feature.node.kubernetes.io/coral
-                  operator: In
-                  values:
-                    - "true"
+    nodeSelector:
+      google.feature.node.kubernetes.io/coral: "true"
+      intel.feature.node.kubernetes.io/gpu: "true"
 
     resources:
       requests:
@@ -115,6 +108,39 @@ spec:
           rtsp:
             enabled: true
             port: 8554
+
+    probes:
+      liveness: &probe
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /api/version
+            port: *port
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+      readiness:
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /api/version
+            port: *port
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+      startup:
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /api/version
+            port: *port
+          failureThreshold: 30
+          periodSeconds: 10
 
     configMaps:
       config:
