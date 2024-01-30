@@ -320,39 +320,47 @@ spec:
                 ffmpeg:
                   inputs:
                     - path: rtsp://127.0.0.1:8554/basement_detect
-                      input_args: preset-rtsp-restream
+                      # input_args: preset-rtsp-restream
                       roles:
                         - detect
-                      # input_args:
-                      #   - '-avoid_negative_ts'
-                      #   - make_zero
-                      #   - '-fflags'
-                      #   - nobuffer
-                      #   - '-flags'
-                      #   - low_delay
-                      #   - '-strict'
-                      #   - experimental
-                      #   - '-fflags'
-                      #   - +genpts+discardcorrupt
-                      #   - '-use_wallclock_as_timestamps'
-                      #   - '1'
+                      input_args:
+                        - '-rtsp_transport'
+                        - 'tcp'
+                        - 'TIMEOUT_PARAM'
+                        - '5000000'
+                        - '-avoid_negative_ts'
+                        - make_zero
+                        - '-fflags'
+                        - nobuffer
+                        - '-flags'
+                        - low_delay
+                        - '-strict'
+                        - experimental
+                        - '-fflags'
+                        - +genpts+discardcorrupt
+                        - '-use_wallclock_as_timestamps'
+                        - '1'
                     - path: rtsp://127.0.0.1:8554/basement_record
-                      input_args: preset-rtsp-restream
+                      # input_args: preset-rtsp-restream
                       roles:
                         - record
-                      # input_args:
-                      #   - '-avoid_negative_ts'
-                      #   - make_zero
-                      #   - '-fflags'
-                      #   - nobuffer
-                      #   - '-flags'
-                      #   - low_delay
-                      #   - '-strict'
-                      #   - experimental
-                      #   - '-fflags'
-                      #   - +genpts+discardcorrupt
-                      #   - '-use_wallclock_as_timestamps'
-                      #   - '1'
+                      input_args:
+                        - '-rtsp_transport'
+                        - 'tcp'
+                        - 'TIMEOUT_PARAM'
+                        - '5000000'
+                        - '-avoid_negative_ts'
+                        - make_zero
+                        - '-fflags'
+                        - nobuffer
+                        - '-flags'
+                        - low_delay
+                        - '-strict'
+                        - experimental
+                        - '-fflags'
+                        - +genpts+discardcorrupt
+                        - '-use_wallclock_as_timestamps'
+                        - '1'
                 detect:
                   height: 352
                   width: 640
