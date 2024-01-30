@@ -336,7 +336,8 @@ spec:
                       #   - +genpts+discardcorrupt
                       #   - '-use_wallclock_as_timestamps'
                       #   - '1'
-                    - path: rtmp://basement-cam/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
+                    - path: rtsp://127.0.0.1:8554/basement_record
+                      input_args: preset-rtsp-restream
                       roles:
                         - record
                       # input_args:
