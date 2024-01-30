@@ -223,7 +223,7 @@ spec:
                   - rtsp://view:{FRIGATE_RTSP_PASSWORD}@pool:554/cam/realmonitor?channel=1&subtype=0
                 basement_detect:
                   # - rtmp://basement-cam/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
-                  - "ffmpeg:http://basement-cam/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=view&password={FRIGATE_RTSP_PASSWORD}""
+                  - "ffmpeg:http://basement-cam/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user=view&password={FRIGATE_RTSP_PASSWORD}"
                 basement_record:
                   # - rtmp://basement-cam/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
                   - "ffmpeg:http://basement-cam/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=view&password={FRIGATE_RTSP_PASSWORD}#video=copy#audio=copy#audio=opus"
