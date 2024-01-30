@@ -161,6 +161,10 @@ spec:
                 type: edgetpu
                 device: usb
 
+            birdseye:
+              enabled: True
+              mode: continuous
+
             ffmpeg:
               hwaccel_args: preset-vaapi
               output_args:
