@@ -285,7 +285,7 @@ spec:
                       input_args: preset-rtsp-restream
                       roles:
                         - detect
-                    - path: rtsp://127.0.0.1:8554/drive_record
+                    - path: rtsp://127.0.0.1:8554/driveway_record
                       input_args: preset-rtsp-restream
                       roles:
                         - record
