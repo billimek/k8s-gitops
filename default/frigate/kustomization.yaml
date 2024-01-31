@@ -9,6 +9,6 @@ resources:
 configMapGenerator:
   - name: frigate-configmap
     files:
-      - config.yml=./config.yml
+      - config.yml=./config/config.yml
 generatorOptions:
   disableNameSuffixHash: true
