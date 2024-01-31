@@ -52,6 +52,12 @@ spec:
       privileged: true
 
     persistence:
+      config:
+        enabled: true
+        storageClass: rook-ceph-block
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        mountPath: /config
       data:
         enabled: true
         storageClass: rook-ceph-block
@@ -62,7 +68,7 @@ spec:
         enabled: true
         type: configMap
         name: frigate-config
-        mountPath: /config
+        mountPath: /config/config.yml
         readOnly: true
       media:
         enabled: true
