@@ -60,7 +60,7 @@ spec:
       config-file:
         enabled: true
         type: configMap
-        name: frigate-config
+        name: frigate-config-file
         mountPath: /config/config.yml
         readOnly: true
       media:
@@ -142,7 +142,7 @@ spec:
           periodSeconds: 10
 
     configMaps:
-      config:
+      config-file:
         enabled: true
         data:
           config.yml: |

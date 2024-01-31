@@ -28,7 +28,7 @@ metadata:
   name: frigate
   namespace: default
 spec:
-  sourcePVC: frigate-data
+  sourcePVC: frigate-config
   trigger:
     schedule: "0 6 * * *"
   restic:
