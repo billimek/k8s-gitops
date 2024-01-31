@@ -57,7 +57,7 @@ spec:
         storageClass: rook-ceph-block
         accessMode: ReadWriteOnce
         size: 10Gi
-        mountPath: /config
+        # mountPath: /config
       data:
         enabled: true
         storageClass: rook-ceph-block
