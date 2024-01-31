@@ -29,7 +29,7 @@ spec:
 
     image:
       repository: ghcr.io/blakeblackshear/frigate
-      tag: 0.12.1
+      tag: 0.13.0
 
     ingress:
       main:
