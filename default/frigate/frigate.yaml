@@ -57,18 +57,10 @@ spec:
         storageClass: rook-ceph-block
         accessMode: ReadWriteOnce
         size: 10Gi
-        # mountPath: /config
-      data:
-        enabled: true
-        storageClass: rook-ceph-block
-        accessMode: ReadWriteOnce
-        size: 10Gi
-        mountPath: /data
       config-file:
         enabled: true
         type: configMap
         name: frigate-config
-        subPath: config.yaml
         mountPath: /config/config.yml
         readOnly: true
       media:
