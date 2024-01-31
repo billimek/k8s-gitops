@@ -102,6 +102,22 @@ data:
           - rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=0&authbasic=64
           - "ffmpeg:doorbell_record#audio=aac"
 
+    ui:
+      live_mode: mse
+
+    telemetry:
+      network_interfaces:
+        - eth
+        - enp
+        - eno
+        - ens
+        - wl
+        - lo
+      stats:
+        amd_gpu_stats: false
+        intel_gpu_stats: true
+        network_bandwidth: true
+
     cameras:
       porch:
         ffmpeg:
