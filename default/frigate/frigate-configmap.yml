@@ -90,12 +90,8 @@ data:
           - "ffmpeg:pool_record#audio=aac"
         basement_detect:
           - rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement-cam:554/h264Preview_01_sub
-        #   # - rtmp://basement-cam/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
-          # - "ffmpeg:http://basement-cam/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=view&password={FRIGATE_RTSP_PASSWORD}"
         basement_record:
           - rtsp://view:{FRIGATE_RTSP_PASSWORD}@basement-cam:554/h264Preview_01_main
-        #   - rtmp://basement-cam/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
-          - "ffmpeg:http://basement-cam/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=view&password={FRIGATE_RTSP_PASSWORD}#video=copy"
         doorbell_detect:
           - rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=01&authbasic=64
         doorbell_record:
@@ -104,19 +100,6 @@ data:
 
     ui:
       live_mode: mse
-
-    telemetry:
-      network_interfaces:
-        - eth
-        - enp
-        - eno
-        - ens
-        - wl
-        - lo
-      stats:
-        amd_gpu_stats: false
-        intel_gpu_stats: true
-        network_bandwidth: true
 
     cameras:
       porch:
@@ -207,42 +190,14 @@ data:
       basement:
         ffmpeg:
           inputs:
-            # - path: rtmp://basement-cam/bcs/channel0_sub.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
             - path: rtsp://127.0.0.1:8554/basement_detect
               input_args: preset-rtsp-restream
               roles:
                 - detect
-              # input_args:
-              #   - '-avoid_negative_ts'
-              #   - make_zero
-              #   - '-fflags'
-              #   - nobuffer
-              #   - '-flags'
-              #   - low_delay
-              #   - '-strict'
-              #   - experimental
-              #   - '-fflags'
-              #   - +genpts+discardcorrupt
-              #   - '-use_wallclock_as_timestamps'
-              #   - '1'
-            # - path: rtmp://basement-cam/bcs/channel0_main.bcs?channel=0&stream=0&user=view&password={FRIGATE_RTSP_PASSWORD}
             - path: rtsp://127.0.0.1:8554/basement_record
               input_args: preset-rtsp-restream
               roles:
                 - record
-              # input_args:
-              #   - '-avoid_negative_ts'
-              #   - make_zero
-              #   - '-fflags'
-              #   - nobuffer
-              #   - '-flags'
-              #   - low_delay
-              #   - '-strict'
-              #   - experimental
-              #   - '-fflags'
-              #   - +genpts+discardcorrupt
-              #   - '-use_wallclock_as_timestamps'
-              #   - '1'
         detect:
           height: 352
           width: 640
