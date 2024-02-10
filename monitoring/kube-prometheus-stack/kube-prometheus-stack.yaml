@@ -248,14 +248,6 @@ spec:
             memory: 5000Mi
 
         additionalScrapeConfigs:
-        - job_name: 'wmi-exporter-scrape'
-          metrics_path: '/metrics'
-          params:
-            format: [prometheus]
-          honor_labels: true
-          static_configs:
-          - targets:
-            - nvr.home:9182
         - job_name: 'node'
           static_configs:
           - targets:
@@ -268,11 +260,6 @@ spec:
           - targets:
             - proxmox-b.home:8081
             - proxmox-c.home:8081
-            # - k3s-pi4-c.home:8081
-            # - pi3-b.home:8081
-        # tolerations:
-        # - key: "arm"
-        #   operator: "Exists"
 
     nodeExporter:
       enabled: true
