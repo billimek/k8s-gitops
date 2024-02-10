@@ -36,6 +36,7 @@ spec:
     defaultRules:
       disabled:
         HostHighCpuLoad: true
+        NodeSystemSaturation: true
 
     alertmanager:
       config:
