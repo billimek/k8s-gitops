@@ -29,6 +29,8 @@ spec:
       cpu: "250m"
     limits:
       memory: "4Gi"
+  nodeMaintenanceWindow:
+    reusePVC: false
   affinity:
     tolerations:
     - key: "arm"
