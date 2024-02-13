@@ -25,7 +25,7 @@ spec:
       serviceAccount: snapshot-controller
       containers:
         - name: snapshot-controller
-          image: registry.k8s.io/sig-storage/snapshot-controller:v7.0.0@sha256:2084f69694f0fae24d1a3039e02102beaef3ae912c10e59094449196a63ffb7e
+          image: registry.k8s.io/sig-storage/snapshot-controller:v7.0.1@sha256:87a44fa28a10d00968be71deec75883ed6d48132779f798572f2fb49d3b30d95
           args:
             - "--v=5"
             - "--leader-election=false"
