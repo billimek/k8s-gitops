@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/plex
-      tag: 1.32.8.7639-fb6452ebf 
+      tag: 1.40.0.7998-c29d4c0c8 
 
     env:
       TZ: "America/New_York"
