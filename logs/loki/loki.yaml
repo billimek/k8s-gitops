@@ -56,7 +56,6 @@ spec:
             enabled: true
         query_scheduler:
           max_outstanding_requests_per_tenant: 4096
-          max_outstanding_tenant: 4096
         frontend:
           max_outstanding_per_tenant: 4096
         querier:
