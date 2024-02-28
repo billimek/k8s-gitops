@@ -1,0 +1,13 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: zfs
+spec:
+  staticConfigs:
+    - targets:
+        - nas-lan:9002
+  metricsPath: /metrics
+  scrape_interval: 10m
+  scrape_timeout: 5s
+  honor_timestamps: true

@@ -248,20 +248,6 @@ spec:
           limits:
             memory: 5000Mi
 
-        additionalScrapeConfigs:
-        - job_name: 'node'
-          static_configs:
-          - targets:
-            - proxmox-b.home:9100
-            - proxmox-c.home:9100
-            - opnsense.home:9100
-        - job_name: 'upsc-exporter'
-          metrics_path: '/metrics'
-          static_configs:
-          - targets:
-            - proxmox-b.home:8081
-            - proxmox-c.home:8081
-
     nodeExporter:
       enabled: true
 

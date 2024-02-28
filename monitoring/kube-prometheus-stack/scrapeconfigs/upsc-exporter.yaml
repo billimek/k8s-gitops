@@ -1,0 +1,14 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: upsc-exporter
+spec:
+  staticConfigs:
+    - targets:
+      - proxmox-b.home:8081
+      - proxmox-c.home:8081
+  metricsPath: /metrics
+  scrape_interval: 2m
+  scrape_timeout: 10s
+  honor_timestamps: true

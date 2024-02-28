@@ -1,0 +1,16 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: node-exporter
+spec:
+  staticConfigs:
+    - targets:
+        - proxmox-b.home:9100
+        - proxmox-c.home:9100
+        - opnsense.home:9100
+        - nas-lan.home:9001
+  metricsPath: /metrics
+  scrape_interval: 2m
+  scrape_timeout: 10s
+  honor_timestamps: true
