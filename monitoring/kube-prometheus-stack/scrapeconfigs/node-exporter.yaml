@@ -14,4 +14,3 @@ spec:
   metricsPath: /metrics
   scrape_interval: 2m
   scrape_timeout: 10s
-  honor_timestamps: true
