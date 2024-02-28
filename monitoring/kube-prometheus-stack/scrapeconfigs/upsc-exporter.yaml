@@ -3,6 +3,7 @@ apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
   name: upsc-exporter
+  namespace: monitoring
 spec:
   staticConfigs:
     - targets:

@@ -3,6 +3,7 @@ apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
   name: zfs
+  namespace: monitoring
 spec:
   staticConfigs:
     - targets:
