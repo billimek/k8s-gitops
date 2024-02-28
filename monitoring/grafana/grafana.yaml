@@ -146,6 +146,11 @@ spec:
         home-assistant:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/home_assistant.json
           datasource: home_assistant
+        # Ref: https://grafana.com/grafana/dashboards/13177-ipmi-for-prometheus/
+        ipmi:
+          gnetId: 13177
+          revision: 2
+          datasource: Prometheus
         loki:
           gnetId: 13407
           revision: 1
@@ -163,6 +168,11 @@ spec:
           datasource: Prometheus
         prometheus-exporter-summary:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
+          datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/20204-smart-hdd/
+        smart-hdd:
+          gnetId: 20204
+          revision: 1
           datasource: Prometheus
         speedtest-exporter:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
@@ -199,6 +209,11 @@ spec:
           datasource: Prometheus
         windows-node:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/windows_node.json
+          datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/3170-zfs/
+        zfs:
+          gnetId: 3170
+          revision: 3
           datasource: Prometheus
       teslamate:
         battery-health-lfp:

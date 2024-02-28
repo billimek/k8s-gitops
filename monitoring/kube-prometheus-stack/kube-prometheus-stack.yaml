@@ -249,6 +249,11 @@ spec:
             memory: 5000Mi
 
         additionalScrapeConfigs:
+        - job_name: 'ipmi'
+          metrics_path: '/metrics'
+          static_configs:
+          - targets:
+            - nas-lan:9004
         - job_name: 'node'
           static_configs:
           - targets:
@@ -256,6 +261,11 @@ spec:
             - proxmox-c.home:9100
             - opnsense.home:9100
             - nas-lan.home:9001
+        - job_name: 'smartctl'
+          metrics_path: '/metrics'
+          static_configs:
+          - targets:
+            - nas-lan:9003
         - job_name: 'upsc-exporter'
           metrics_path: '/metrics'
           static_configs:
