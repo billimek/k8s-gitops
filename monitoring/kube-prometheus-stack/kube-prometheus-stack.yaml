@@ -251,8 +251,6 @@ spec:
         additionalScrapeConfigs:
         - job_name: 'ipmi'
           metrics_path: '/metrics'
-          scrape_interval: 10m
-          scrape_timeout: 5s
           static_configs:
           - targets:
             - nas-lan.home:9004
@@ -265,8 +263,6 @@ spec:
             - nas-lan.home:9001
         - job_name: 'smartctl'
           metrics_path: '/metrics'
-          scrape_interval: 10m
-          scrape_timeout: 5s
           static_configs:
           - targets:
             - nas-lan.home:9003
@@ -278,12 +274,9 @@ spec:
             - proxmox-c.home:8081
         - job_name: 'zfs'
           metrics_path: '/metrics'
-          scrape_interval: 10m
-          scrape_timeout: 5s
           static_configs:
           - targets:
             - nas-lan.home:9002
-
 
     nodeExporter:
       enabled: true
