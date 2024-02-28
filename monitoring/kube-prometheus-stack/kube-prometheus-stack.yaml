@@ -257,8 +257,6 @@ spec:
           - targets:
             - nas-lan.home:9004
         - job_name: 'node'
-          scrape_interval: 2m
-          scrape_timeout: 10s
           static_configs:
           - targets:
             - proxmox-b.home:9100
