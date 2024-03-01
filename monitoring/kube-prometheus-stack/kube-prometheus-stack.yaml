@@ -253,19 +253,19 @@ spec:
           metrics_path: '/metrics'
           static_configs:
           - targets:
-            - nas-lan.home:9004
+            - nas-lan.home:9104
         - job_name: 'node'
           static_configs:
           - targets:
             - proxmox-b.home:9100
             - proxmox-c.home:9100
             - opnsense.home:9100
-            - nas-lan.home:9001
+            - nas-lan.home:9100
         - job_name: 'smartctl'
           metrics_path: '/metrics'
           static_configs:
           - targets:
-            - nas-lan.home:9003
+            - nas-lan.home:9103
         - job_name: 'upsc-exporter'
           metrics_path: '/metrics'
           static_configs:
@@ -276,7 +276,7 @@ spec:
           metrics_path: '/metrics'
           static_configs:
           - targets:
-            - nas-lan.home:9002
+            - nas-lan.home:9102
 
     nodeExporter:
       enabled: true
