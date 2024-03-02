@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: itzg/minecraft-server
-      tag: 2024.2.2-java17
+      tag: 2024.3.0-java17
     strategyType: Recreate
     persistence:
       storageClass: "rook-ceph-block"
