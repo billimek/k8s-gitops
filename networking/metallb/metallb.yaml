@@ -28,7 +28,6 @@ spec:
   values:
     crds:
       enabled: true
-      validationFailurePolicy: Ignore
     prometheus:
       namespace: monitoring
       serviceAccount: kube-prometheus-stack-prometheus
