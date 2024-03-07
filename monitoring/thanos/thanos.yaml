@@ -76,7 +76,7 @@ spec:
         tls: true
     storegateway:
       enabled: true
-      replicaCount: 3
+      replicaCount: 1
       podAntiAffinityPreset: hard
       persistence:
         enabled: true
@@ -84,7 +84,7 @@ spec:
         size: 20Gi
     ruler:
       enabled: true
-      replicaCount: 3
+      replicaCount: 1
       podAntiAffinityPreset: hard
       dnsDiscovery:
         enabled: true
