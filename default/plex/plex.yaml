@@ -72,7 +72,7 @@ spec:
         enabled: true
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
-        size: 45Gi
+        size: 55Gi
       transcode:
         enabled: true
         type: emptyDir
