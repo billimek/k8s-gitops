@@ -55,36 +55,36 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: "eviljungle.com"
+          - host: eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
-          - host: "www.eviljungle.com"
+          - host: www.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "eviljungle.com"
-              - "www.eviljungle.com"
+              - eviljungle.com
+              - www.eviljungle.com
       tailscale:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "t.eviljungle.com"
+          - host: eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
-          - host: "www.t.eviljungle.com"
+          - host: www.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "t.eviljungle.com"
-              - "www.t.eviljungle.com"
+              - eviljungle.com
+              - www.eviljungle.com
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname

@@ -8,11 +8,8 @@ metadata:
   #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 100.64.0.0/10"
 spec:
   ingressClassName: nginx-tailscale
-  tls:
-  - hosts:
-    - rook.t.eviljungle.com
   rules:
-  - host: rook.t.eviljungle.com
+  - host: &host rook.eviljungle.com
     http:
       paths:
       - path: /
@@ -22,3 +19,6 @@ spec:
             name: rook-ceph-mgr-dashboard
             port:
               number: 7000
+  tls:
+  - hosts:
+    - *host

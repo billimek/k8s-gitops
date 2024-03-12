@@ -46,15 +46,15 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: 'nginx-tailscale'
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: shows.t.eviljungle.com
+          - host: &host shows.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-            - "shows.t.eviljungle.com"
+            - *host
 
     persistence:
       config:

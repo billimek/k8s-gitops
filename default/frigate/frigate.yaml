@@ -79,13 +79,9 @@ spec:
     ingress:
       main:
         enabled: true
-        className: 'nginx-tailscale'
-        # annotations:
-        #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
-        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        className: nginx-tailscale
         hosts:
-          - host: "frigate.t.eviljungle.com"
+          - host: &host frigate.eviljungle.com
             paths:
               - path: /
                 service:
@@ -93,7 +89,7 @@ spec:
                   port: http
         tls:
           - hosts:
-              - "frigate.t.eviljungle.com"
+              - *host
 
     persistence:
       config:

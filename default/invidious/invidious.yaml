@@ -59,9 +59,9 @@ spec:
     ingress:
       main:
         enabled: true
-        className: 'nginx-tailscale'
+        className: nginx-tailscale
         hosts:
-          - host: "i.t.eviljungle.com"
+          - host: &host i.eviljungle.com
             paths:
               - path: /
                 service:
@@ -69,4 +69,4 @@ spec:
                   port: http
         tls:
           - hosts:
-              - "i.t.eviljungle.com"
+              - *host

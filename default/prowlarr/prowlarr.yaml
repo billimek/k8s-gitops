@@ -63,13 +63,13 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "prowlarr.t.eviljungle.com"
+          - host: &host prowlarr.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "prowlarr.t.eviljungle.com"
+              - *host
 
     podSecurityContext:
       runAsUser: 1001

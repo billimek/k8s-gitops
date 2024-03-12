@@ -56,25 +56,27 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "nginx"
+        # ensure that external DNS (cloudflare) has an entry for this directed to the router
+        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
+        ingressClassName: nginx
         hosts:
-          - host: "hass.eviljungle.com"
+          - host: &host hass.eviljungle.com
             paths:
               - path: /
         tls:
           - hosts:
-              - hass.eviljungle.com
+              - *host
       tailscale:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "hass.t.eviljungle.com"
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "hass.t.eviljungle.com"
+              - *host
     probes:
       liveness:
         enabled: false
@@ -122,17 +124,14 @@ spec:
         ingress:
           enabled: true
           ingressClassName: nginx-tailscale
-          # annotations:
-          #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-          #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
           hosts:
-            - host: hass-vscode.t.eviljungle.com
+            - host: hass-vscode.eviljungle.com
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - hosts:
-                - hass-vscode.t.eviljungle.com
+                - hass-vscode.eviljungle.com
         volumeMounts:
         - name: config
           mountPath: /config

@@ -71,13 +71,9 @@ spec:
       main:
         enabled: true
         primary: true
-        ingressClassName: 'nginx-tailscale'
-        # annotations:
-        #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 100.64.0.0/10"
-        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: minio.t.eviljungle.com
+          - host: &host minio.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
@@ -85,14 +81,12 @@ spec:
                   port: *console-port
         tls:
           - hosts:
-            - "minio.t.eviljungle.com"
+            - *host
       s3:
         enabled: true
-        ingressClassName: 'nginx-tailscale'
-        # annotations:
-        #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 100.64.0.0/10"
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: s3.t.eviljungle.com
+          - host: &s3host s3.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
@@ -100,7 +94,7 @@ spec:
                   port: *api-port
         tls:
           - hosts:
-            - "s3.t.eviljungle.com"
+            - *s3host
 
     serviceMonitor:
       main:

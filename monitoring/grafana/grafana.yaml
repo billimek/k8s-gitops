@@ -62,10 +62,10 @@ spec:
     ingress:
       enabled: true
       ingressClassName: nginx-tailscale
-      hosts: [grafana.t.eviljungle.com]
+      hosts: [grafana.eviljungle.com]
       tls:
       - hosts:
-        - grafana.t.eviljungle.com
+        - grafana.eviljungle.com
     plugins:
     - pr0ps-trackmap-panel
     - natel-plotly-panel

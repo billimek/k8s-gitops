@@ -50,26 +50,28 @@ spec:
     ingress:
       main:
         enabled: true
+        # ensure that external DNS (cloudflare) has an entry for this directed to the router
+        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         ingressClassName: nginx
         hosts:
-          - host: "plex.eviljungle.com"
+          - host: &host plex.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "plex.eviljungle.com"
+              - *host
       tailscale:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "plex.t.eviljungle.com"
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "plex.t.eviljungle.com"
+              - *host
 
     podSecurityContext:
       runAsUser: 1000

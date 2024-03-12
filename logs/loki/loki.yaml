@@ -132,16 +132,7 @@ spec:
                     {{- include "loki.gatewaySelectorLabels" . | nindent 12 }}
                 topologyKey: kubernetes.io/hostname
       ingress:
-        enabled: true
-        ingressClassName: "nginx-tailscale"
-        hosts:
-          - host: "loki.t.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-        tls:
-          - hosts:
-              - "loki.t.eviljungle.com"
+        enabled: false
 
     write:
       replicas: 3

@@ -95,15 +95,11 @@ spec:
         enabled: true
         pathType: Prefix
         ingressClassName: nginx-tailscale
-        # annotations:
-        #   kubernetes.io/ingress.class: "nginx"
-        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts:
-        - prom-alert.t.eviljungle.com
+        - prom-alert.eviljungle.com
         tls:
         - hosts:
-          - prom-alert.t.eviljungle.com
+          - prom-alert.eviljungle.com
       alertmanagerSpec:
         replicas: 1
         podAntiAffinity: hard
@@ -205,15 +201,11 @@ spec:
         enabled: true
         pathType: Prefix
         ingressClassName: nginx-tailscale
-        # annotations:
-        #   kubernetes.io/ingress.class: "nginx"
-        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts:
-        - prom-server.t.eviljungle.com
+        - prom-server.eviljungle.com
         tls:
         - hosts:
-          - prom-server.t.eviljungle.com
+          - prom-server.eviljungle.com
       thanosService:
         enabled: true
       thanosServiceMonitor:

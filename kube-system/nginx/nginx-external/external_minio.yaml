@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx-tailscale
   rules:
-  - host: minio-nas.t.eviljungle.com
+  - host: &host minio-nas.eviljungle.com
     http:
       paths:
       - path: /
@@ -18,7 +18,7 @@ spec:
               number: 9000
   tls:
   - hosts:
-    - minio-nas.t.eviljungle.com
+    - *host
 ---
 apiVersion: v1
 kind: Service

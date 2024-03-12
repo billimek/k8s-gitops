@@ -46,15 +46,15 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: 'nginx-tailscale'
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: audiobookshelf.t.eviljungle.com
+          - host: &host audiobookshelf.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-            - "audiobookshelf.t.eviljungle.com"
+            - *host
 
     persistence:
       config:

@@ -45,20 +45,20 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: 'nginx-tailscale'
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: radarr.t.eviljungle.com
+          - host: radarr.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
-          - host: movies.t.eviljungle.com
+          - host: movies.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-            - "radarr.t.eviljungle.com"
-            - "movies.t.eviljungle.com"
+            - "radarr.eviljungle.com"
+            - "movies.eviljungle.com"
 
     persistence:
       config:

@@ -43,26 +43,28 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: 'nginx'
+        # ensure that external DNS (cloudflare) has an entry for this directed to the router
+        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
+        ingressClassName: nginx
         hosts:
-          - host: request.eviljungle.com
+          - host: &host request.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-            - "request.eviljungle.com"
+            - *host
       tailscale:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "request.t.eviljungle.com"
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "request.t.eviljungle.com"
+              - *host
 
     persistence:
       config:

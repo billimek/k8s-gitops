@@ -53,11 +53,8 @@ spec:
       main:
         enabled: true
         ingressClassName: nginx-tailscale
-        # annotations:
-        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts:
-          - host: &host q.t.eviljungle.com
+          - host: &host q.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix

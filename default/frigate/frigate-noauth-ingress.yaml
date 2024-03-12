@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: frigate.eviljungle.com
+  - host: &host frigate-api.eviljungle.com
     http:
       paths:
       - path: /.*/api/events
@@ -23,4 +23,4 @@ spec:
               number: 80
   tls:
   - hosts:
-    - frigate.eviljungle.com
+    - *host
