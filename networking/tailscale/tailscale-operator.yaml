@@ -22,5 +22,5 @@ spec:
       mode: "true"
   valuesFrom:
   - kind: Secret
-    name: "tailscale-secret"
+    name: "tailscale-operator-helm-values"
     optional: false
