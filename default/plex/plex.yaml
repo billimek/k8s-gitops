@@ -59,6 +59,17 @@ spec:
         tls:
           - hosts:
               - "plex.eviljungle.com"
+      tailscale:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+          - host: "plex.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "plex.eviljungle.com"
 
     podSecurityContext:
       runAsUser: 1000
