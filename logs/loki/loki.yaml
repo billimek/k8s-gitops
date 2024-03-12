@@ -133,15 +133,15 @@ spec:
                 topologyKey: kubernetes.io/hostname
       ingress:
         enabled: true
-        ingressClassName: "nginx"
+        ingressClassName: "nginx-tailscale"
         hosts:
-          - host: "loki.eviljungle.com"
+          - host: "loki.t.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "loki.eviljungle.com"
+              - "loki.t.eviljungle.com"
 
     write:
       replicas: 3
