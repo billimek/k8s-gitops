@@ -1,53 +1,107 @@
-# ---
-# apiVersion: helm.toolkit.fluxcd.io/v2beta1
-# kind: HelmRelease
-# metadata:
-#   name: ingress-nginx-tailscale
-#   namespace: kube-system
-# spec:
-#   interval: 5m
-#   chart:
-#     spec:
-#       # renovate: registryUrl=https://kubernetes.github.io/ingress-nginx
-#       chart: ingress-nginx
-#       version: 4.2.0
-#       sourceRef:
-#         kind: HelmRepository
-#         name: ingress-nginx-charts
-#         namespace: flux-system
-#       interval: 5m
-#   values:
-#     controller:
-#       replicaCount: 1
-#       service:
-#         type: ClusterIP
-#       ingressClassResource:
-#         name: nginx-tailscale
-#         enabled: true
-#         default: false
-#         controllerValue: "k8s.io/ingress-nginx-tailscale"
-#       extraArgs:
-#         default-ssl-certificate: "cert-manager/acme-crt-secret"
-#       extraContainers:
-#         - name: tailscaled
-#           image: billimek/ts:latest
-#           imagePullPolicy: Always
-#           # volumeMounts:
-#           #   - name: tailscale-state
-#           #     mountPath: /tailscale
-#           env:
-#             # Store the state in a k8s secret
-#           - name: KUBE_SECRET
-#             value: tailscale
-#           - name: USERSPACE
-#             value: "false"
-#           - name: AUTH_KEY
-#             valueFrom:
-#               secretKeyRef:
-#                 name: tailscale-auth
-#                 key: AUTH_KEY
-#                 optional: true
-#           securityContext:
-#             capabilities:
-#               add:
-#               - NET_ADMIN
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ingress-nginx-tailscale
+  namespace: kube-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ingress-nginx
+      version: 4.10.0
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    controller:
+      replicaCount: 2
+
+      allowSnippetAnnotations: true
+      enableAnnotationValidations: true
+
+      updateStrategy:
+        type: RollingUpdate
+
+      service:
+        enabled: true
+        type: LoadBalancer
+        loadBalancerClass: tailscale
+        externalTrafficPolicy: Local
+
+      publishService:
+        enabled: true
+
+      ingressClassResource:
+        name: external-tailscale
+        default: false
+        controllerValue: k8s.io/ingress-nginx-tailscale
+
+      admissionWebhooks:
+        objectSelector:
+          matchExpressions:
+            - key: ingress-class
+              operator: In
+              values:
+                - external-tailscale
+
+      config:
+        client-header-timeout: 120
+        client-body-buffer-size: 100M
+        client-body-timeout: 120
+        enable-brotli: "true"
+        enable-ocsp: "true"
+        enable-real-ip: "true"
+        hide-headers: Server,X-Powered-By
+        hsts-max-age: 31449600
+        keep-alive: 120
+        keep-alive-requests: 10000
+        log-format-escape-json: "true"
+        proxy-body-size: 0
+        proxy-buffer-size: "16k"
+        ssl-protocols: "TLSv1.3 TLSv1.2"
+        use-forwarded-headers: "true"
+
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: kube-system
+          namespaceSelector:
+            any: true
+
+      extraArgs:
+        default-ssl-certificate: "cert-manager/acme-crt-secret"
+
+      topologySpreadConstraints:
+        - maxSkew: 2
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: ingress-nginx-tailscale
+              app.kubernetes.io/component: controller
+
+      resources:
+        requests:
+          cpu: 25m
+          memory: 500Mi
+        limits:
+          memory: 600Mi
+
+    defaultBackend:
+      enabled: true
+      image:
+        repository: ghcr.io/tarampampam/error-pages
+        tag: 2.26.0
+      extraEnvs:
+        - { name: TEMPLATE_NAME, value: orient }
+        - { name: SHOW_DETAILS, value: "false" }
+      resources:
+        requests:
+          memory: 250Mi
+          cpu: 25m
+        limits:
+          memory: 350Mi
