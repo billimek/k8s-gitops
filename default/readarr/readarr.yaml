@@ -42,15 +42,15 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: readarr.eviljungle.com
+          - host: readarr.t.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - readarr.eviljungle.com
+              - readarr.t.eviljungle.com
 
     persistence:
       config:

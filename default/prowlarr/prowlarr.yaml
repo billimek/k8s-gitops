@@ -61,15 +61,15 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-tailscale
         hosts:
-          - host: "prowlarr.eviljungle.com"
+          - host: "prowlarr.t.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "prowlarr.eviljungle.com"
+              - "prowlarr.t.eviljungle.com"
 
     podSecurityContext:
       runAsUser: 1001

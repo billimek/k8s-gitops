@@ -56,13 +56,13 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "request.eviljungle.com"
+          - host: "request.t.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "request.eviljungle.com"
+              - "request.t.eviljungle.com"
 
     persistence:
       config:

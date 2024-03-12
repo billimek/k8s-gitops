@@ -68,13 +68,13 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "hass.eviljungle.com"
+          - host: "hass.t.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "hass.eviljungle.com"
+              - "hass.t.eviljungle.com"
     probes:
       liveness:
         enabled: false
@@ -121,18 +121,18 @@ spec:
           HASS_SERVER: http://localhost:8123
         ingress:
           enabled: true
-          ingressClassName: nginx
-          annotations:
-            nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-            nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+          ingressClassName: nginx-tailscale
+          # annotations:
+          #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+          #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
           hosts:
-            - host: hass-vscode.eviljungle.com
+            - host: hass-vscode.t.eviljungle.com
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - hosts:
-                - hass-vscode.eviljungle.com
+                - hass-vscode.t.eviljungle.com
         volumeMounts:
         - name: config
           mountPath: /config

@@ -3,11 +3,10 @@ kind: Ingress
 metadata:
   name: external-minio
   namespace: default
-  annotations:
-    kubernetes.io/ingress.class: nginx
 spec:
+  ingressClassName: nginx-tailscale
   rules:
-  - host: minio-nas.eviljungle.com
+  - host: minio-nas.t.eviljungle.com
     http:
       paths:
       - path: /
@@ -19,7 +18,7 @@ spec:
               number: 9000
   tls:
   - hosts:
-    - minio-nas.eviljungle.com
+    - minio-nas.t.eviljungle.com
 ---
 apiVersion: v1
 kind: Service
@@ -31,4 +30,4 @@ spec:
   - name: minio
     port: 9000
   type: ExternalName
-  externalName: truenas
+  externalName: nas.home

@@ -53,17 +53,17 @@ spec:
     ingress:
       main:
         enabled: true
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
-        ingressClassName: "nginx"
+        # annotations:
+        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        ingressClassName: "nginx-tailscale"
         hosts:
-          - host: "teslamate.eviljungle.com"
+          - host: "teslamate.t.eviljungle.com"
             paths:
               - path: /
         tls:
           - hosts:
-              - teslamate.eviljungle.com
+              - teslamate.t.eviljungle.com
     tolerations:
     - key: "arm"
       operator: "Exists"

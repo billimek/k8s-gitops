@@ -63,13 +63,13 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - host: "plex.eviljungle.com"
+          - host: "plex.t.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - "plex.eviljungle.com"
+              - "plex.t.eviljungle.com"
 
     podSecurityContext:
       runAsUser: 1000

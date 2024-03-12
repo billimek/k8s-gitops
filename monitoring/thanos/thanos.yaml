@@ -44,12 +44,13 @@ spec:
         sidecarsNamespace: monitoring
       ingress:
         enabled: true
-        hostname: thanos.eviljungle.com
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        hostname: thanos.t.eviljungle.com
+        ingressClassName: nginx-tailscale
+        # annotations:
+        #   kubernetes.io/ingress.class: nginx
+        #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         tls: true
     bucketweb:
       enabled: true
@@ -67,12 +68,13 @@ spec:
         size: 100Gi
       ingress:
         enabled: true
-        hostname: thanos-compactor.eviljungle.com
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
+        ingressClassName: nginx-tailscale
+        hostname: thanos-compactor.t.eviljungle.com
+        # annotations:
+        #   kubernetes.io/ingress.class: nginx
+        #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+        #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
+        #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         tls: true
     storegateway:
       enabled: true

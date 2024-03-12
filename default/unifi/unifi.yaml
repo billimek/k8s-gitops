@@ -44,14 +44,14 @@ spec:
         enabled: true
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        ingressClassName: "nginx"
+        ingressClassName: "nginx-tailscale"
         hosts:
-          - host: "unifi.eviljungle.com"
+          - host: "unifi.t.eviljungle.com"
             paths:
               - path: /
         tls:
           - hosts:
-              - "unifi.eviljungle.com"
+              - "unifi.t.eviljungle.com"
 
     service:
       main:

@@ -61,12 +61,11 @@ spec:
       - name: grafana-secret
     ingress:
       enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-      hosts: [grafana.eviljungle.com]
+      ingressClassName: nginx-tailscale
+      hosts: [grafana.t.eviljungle.com]
       tls:
       - hosts:
-        - grafana.eviljungle.com
+        - grafana.t.eviljungle.com
     plugins:
     - pr0ps-trackmap-panel
     - natel-plotly-panel
