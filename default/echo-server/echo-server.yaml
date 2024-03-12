@@ -57,13 +57,18 @@ spec:
         enabled: true
         ingressClassName: nginx
         hosts:
-          - host: &host "eviljungle.com"
+          - host: "eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+          - host: "www.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
-              - *host
+              - "eviljungle.com"
+              - "www.eviljungle.com"
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
