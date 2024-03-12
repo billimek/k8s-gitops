@@ -20,7 +20,3 @@ spec:
       hostname: "tailscale-operator"
     apiServerProxyConfig:
       mode: "true"
-  valuesFrom:
-  - kind: Secret
-    name: "tailscale-operator-helm-values"
-    optional: false
