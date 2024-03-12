@@ -88,11 +88,11 @@ spec:
             - "minio.t.eviljungle.com"
       s3:
         enabled: true
-        ingressClassName: 'nginx'
-        annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 100.64.0.0/10"
+        ingressClassName: 'nginx-tailscale'
+        # annotations:
+        #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 100.64.0.0/10"
         hosts:
-          - host: s3.eviljungle.com
+          - host: s3.t.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix
@@ -100,7 +100,7 @@ spec:
                   port: *api-port
         tls:
           - hosts:
-            - "s3.eviljungle.com"
+            - "s3.t.eviljungle.com"
 
     serviceMonitor:
       main:
