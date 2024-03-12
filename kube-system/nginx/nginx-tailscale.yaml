@@ -27,6 +27,8 @@ spec:
 
       service:
         enabled: true
+        annotations:
+          tailscale.com/hostname: "nginx-tailscale"
         type: LoadBalancer
         loadBalancerClass: tailscale
         externalTrafficPolicy: Local
@@ -35,7 +37,7 @@ spec:
         enabled: true
 
       ingressClassResource:
-        name: external-tailscale
+        name: nginx-tailscale
         default: false
         controllerValue: k8s.io/ingress-nginx-tailscale
 
@@ -45,7 +47,7 @@ spec:
             - key: ingress-class
               operator: In
               values:
-                - external-tailscale
+                - nginx-tailscale
 
       config:
         client-header-timeout: 120
