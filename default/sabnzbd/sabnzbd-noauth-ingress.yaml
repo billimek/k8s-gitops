@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
   labels:
     app.kubernetes.io/instance: sabnzbd
@@ -10,6 +10,7 @@ metadata:
   name: sabnzbd-noauth
   namespace: default
 spec:
+  ingressClassName: nginx
   rules:
   - host: sabnzbd.eviljungle.com
     http:

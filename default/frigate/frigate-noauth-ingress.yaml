@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: "true"
   labels:
     app.kubernetes.io/instance: frigate
@@ -10,6 +9,7 @@ metadata:
   name: frigate-noauth
   namespace: default
 spec:
+  ingressClassName: nginx
   rules:
   - host: frigate.eviljungle.com
     http:

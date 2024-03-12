@@ -85,7 +85,7 @@ spec:
         #   nginx.ingress.kubernetes.io/auth-url: "https://auth.eviljungle.com/oauth2/auth"
         #   nginx.ingress.kubernetes.io/auth-signin: https://auth.eviljungle.com/oauth2/start
         hosts:
-          - host: &host "frigate.t.eviljungle.com"
+          - host: "frigate.t.eviljungle.com"
             paths:
               - path: /
                 service:
@@ -93,7 +93,7 @@ spec:
                   port: http
         tls:
           - hosts:
-              - *host
+              - "frigate.t.eviljungle.com"
 
     persistence:
       config:
