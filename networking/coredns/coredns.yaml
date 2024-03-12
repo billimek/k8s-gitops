@@ -80,6 +80,7 @@ spec:
        contents: |
          eviljungle.com.   IN SOA etta.ns.cloudflare.com. dns.cloudflare.com. 2020100600 10000 2400 604800 3600
          mc.eviljungle.com. IN A   10.0.6.106
-         *.t.eviljungle.com. IN A 100.108.157.55
-         *.eviljungle.com. IN A   10.0.6.150
+         *.t.eviljungle.com. IN CNAME nginx-tailscale.drake-eel.ts.net
+         *.eviljungle.com. IN CNAME nginx-tailscale.drake-eel.ts.net
+         # *.eviljungle.com. IN A   10.0.6.150
          eviljungle.com. IN A   10.0.7.1
