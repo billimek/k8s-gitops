@@ -64,6 +64,17 @@ spec:
         tls:
           - hosts:
               - hass.eviljungle.com
+      tailscale:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+          - host: "hass.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "hass.eviljungle.com"
     probes:
       liveness:
         enabled: false

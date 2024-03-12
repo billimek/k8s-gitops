@@ -51,7 +51,18 @@ spec:
                 pathType: Prefix
         tls:
           - hosts:
-            - "ovrequesterseerr.eviljungle.com"
+            - "request.eviljungle.com"
+      tailscale:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+          - host: "request.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "request.eviljungle.com"
 
     persistence:
       config:
