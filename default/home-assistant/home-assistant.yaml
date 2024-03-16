@@ -48,6 +48,7 @@ spec:
       - secretRef:
           name: home-assistant-secret
 
+    # required for mDNS and other host network features
     hostNetwork: true
 
     dnsPolicy: ClusterFirstWithHostNet
@@ -92,11 +93,6 @@ spec:
         enabled: false
       startup:
         enabled: true
-
-    # securityContext:
-    #   allowPrivilegeEscalation: false
-    #   readOnlyRootFilesystem: true
-    #   capabilities: { drop: ["ALL"] }
 
     podSecurityContext:
       runAsUser: 1000
