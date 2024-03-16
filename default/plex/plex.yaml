@@ -32,6 +32,8 @@ spec:
 
     env:
       TZ: "America/New_York"
+      PLEX_ADVERTISE_URL: https://10.0.6.53:32400,https://plex.eviljungle.com:443
+      PLEX_NO_AUTH_NETWORKS: "172.17.0.0/16,10.0.2.0/24,10.0.7.0/24,10.0.3.0/24"
     envFrom:
       - secretRef:
           name: plex-secret
@@ -74,11 +76,12 @@ spec:
               - *host
 
     podSecurityContext:
+      runAsNonRoot: true
       runAsUser: 1000
       runAsGroup: 1000
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
-      supplementalGroups: [44, 109, 10000]
+      supplementalGroups: [44, 109, 303, 10000]
 
     persistence:
       config:
@@ -86,6 +89,14 @@ spec:
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
         size: 55Gi
+      # Separate PVC for cache to avoid backing up cache files
+      cache:
+        enabled: true
+        storageClass: "rook-ceph-block"
+        accessMode: ReadWriteOnce
+        size: 30Gi
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Cache
       transcode:
         enabled: true
         type: emptyDir
@@ -93,6 +104,11 @@ spec:
         enabled: true
         type: emptyDir
         medium: Memory
+      logs:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Logs
       nfs-media-pvc:
         enabled: true
         existingClaim: nfs-media-pvc
