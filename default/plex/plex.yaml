@@ -95,8 +95,7 @@ spec:
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
         size: 30Gi
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server/Cache
+        mountPath: /config/Library/Application Support/Plex Media Server/Cache
       transcode:
         enabled: true
         type: emptyDir
@@ -107,8 +106,7 @@ spec:
       logs:
         enabled: true
         type: emptyDir
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server/Logs
+        mountPath: /config/Library/Application Support/Plex Media Server/Logs
       nfs-media-pvc:
         enabled: true
         existingClaim: nfs-media-pvc
