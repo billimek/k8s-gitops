@@ -32,6 +32,7 @@ spec:
     image:
       repository: ghcr.io/home-assistant/home-assistant
       tag: 2024.3.1
+
     initContainers:
       init-db:
         image: ghcr.io/onedr0p/postgres-initdb:14.8
@@ -39,13 +40,18 @@ spec:
         envFrom:
           - secretRef:
               name: home-assistant-secret
+
     env:
       TZ: "America/New_York"
+
     envFrom:
       - secretRef:
           name: home-assistant-secret
-    hostNetwork: true
+
+    # hostNetwork: true
+
     dnsPolicy: ClusterFirstWithHostNet
+
     service:
       main:
         type: LoadBalancer
@@ -53,6 +59,7 @@ spec:
         ports:
           http:
             port: 8123
+
     ingress:
       main:
         enabled: true
@@ -77,6 +84,7 @@ spec:
         tls:
           - hosts:
               - *host
+
     probes:
       liveness:
         enabled: false
@@ -84,6 +92,19 @@ spec:
         enabled: false
       startup:
         enabled: true
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities: { drop: ["ALL"] }
+
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+
     persistence:
       config:
         enabled: true
@@ -97,15 +118,14 @@ spec:
         subPath: home-assistant-4d8d1f2ca10f.json
         mountPath: /config/home-assistant-4d8d1f2ca10f.json
         readOnly: true
+
     resources:
       requests:
         cpu: 100m
         memory: 512M
       limits:
         memory: 2048M
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
+
     addons:
       codeserver:
         enabled: true
@@ -115,6 +135,8 @@ spec:
         workingDir: "/config"
         args:
           - --user-data-dir
+          - "/config/.vscode"
+          - --extensions-dir
           - "/config/.vscode"
           - --auth
           - "none"
