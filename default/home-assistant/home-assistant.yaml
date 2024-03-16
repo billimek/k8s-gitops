@@ -143,6 +143,12 @@ spec:
         env:
           TZ: America/New_York
           HASS_SERVER: http://localhost:8123
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
+          fsGroupChangePolicy: "OnRootMismatch"
         ingress:
           enabled: true
           ingressClassName: nginx-tailscale
