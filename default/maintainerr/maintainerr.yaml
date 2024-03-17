@@ -57,6 +57,7 @@ spec:
         enabled: true
         storageClass: "rook-ceph-block"
         size: 1Gi
+        mountPath: /opt/data
 
     securityContext:
       allowPrivilegeEscalation: false
