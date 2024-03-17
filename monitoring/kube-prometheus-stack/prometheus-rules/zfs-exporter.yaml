@@ -1,0 +1,53 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: zfs-exporter-rules
+  namespace: monitoring
+spec:
+  groups:
+    # https://github.com/samber/awesome-prometheus-alerts/blob/master/_data/rules.yml
+    - name: zfs-exporter.rules
+      rules:
+        - alert: HostOutOfMemory
+          expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Host out of memory (instance {{ $labels.instance }})"
+            description: "Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        - alert: ZFS pool out of space
+          expr: 'zfs_pool_free_bytes * 100 / zfs_pool_size_bytes < 10 and ON (instance, device, mountpoint) zfs_pool_readonly == 0'
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Host out of memory (instance {{ $labels.instance }})"
+            description: Disk is almost full (< 10% left)
+        - alert: ZFS pool unhealthy
+          expr: 'zfs_pool_health > 0'
+          labels:
+            severity: critical
+            comments: |
+              0: ONLINE
+              1: DEGRADED
+              2: FAULTED
+              3: OFFLINE
+              4: UNAVAIL
+              5: REMOVED
+              6: SUSPENDED
+          annotations:
+            summary: "ZFS pool unhealthy"
+            description: ZFS pool state is {{ $value }}. See comments for more information.
+        - alert: ZFS collector failed
+          expr: 'zfs_scrape_collector_success != 1'
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "ZFS collector failed"
+            description: ZFS collector for {{ $labels.instance }} has failed to collect information

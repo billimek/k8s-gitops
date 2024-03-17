@@ -179,3 +179,11 @@ spec:
       annotations:
         summary: "Host Network Transmit Errors (instance {{ $labels.instance }})"
         description: "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last five minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+    - alert: ZfsOfflinePool
+      expr: 'node_zfs_zpool_state{state!="online"} > 0'
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: ZFS offline pool (instance {{ $labels.instance }})
+        description: "A ZFS zpool is in a unexpected state: {{ $labels.state }}.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

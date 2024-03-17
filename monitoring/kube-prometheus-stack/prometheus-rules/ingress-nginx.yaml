@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ingress-nginx-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: ingress-nginx.rules
+      rules:
+        - alert: NginxLatencyHigh
+          expr: histogram_quantile(0.99, sum(rate(nginx_http_request_duration_seconds_bucket[2m])) by (host, node)) > 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Nginx latency high (instance {{ $labels.instance }})
+            description: "Nginx p99 latency is higher than 3 seconds\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
