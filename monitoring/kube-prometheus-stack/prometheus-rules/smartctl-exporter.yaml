@@ -5,7 +5,7 @@ metadata:
   labels:
     prometheus: k8s
     role: alert-rules
-  name: zfs-exporter-rules
+  name: smartctl-exporter-rules
   namespace: monitoring
 spec:
   groups:
