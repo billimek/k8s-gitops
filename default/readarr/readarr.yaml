@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/readarr-develop
-      tag: 0.3.18.2411
+      tag: 0.3.20.2452
 
     env:
       TZ: "America/New_York"
