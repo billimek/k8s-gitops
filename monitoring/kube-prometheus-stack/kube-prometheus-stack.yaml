@@ -117,6 +117,10 @@ spec:
     grafana:
       enabled: false
       forceDeployDashboards: true
+      sidecar:
+        dashboards:
+          annotations:
+            grafana_folder: Kubernetes
 
     kubelet:
       enabled: true
