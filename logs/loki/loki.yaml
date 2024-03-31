@@ -39,19 +39,18 @@ spec:
         memberlist:
           join_members: ["loki-memberlist"]
 
-
         limits_config:
-          retention_period: 60d
+          retention_period: 30d
           enforce_metric_name: false
           reject_old_samples: true
           reject_old_samples_max_age: 168h
           max_cache_freshness_per_query: 10m
           split_queries_by_interval: 1h
           max_query_parallelism: 100
-          ingestion_rate_mb: 50
+          ingestion_rate_mb: 64
           ingestion_burst_size_mb: 1000
-          per_stream_rate_limit: 5MB
-          per_stream_rate_limit_burst: 20MB
+          per_stream_rate_limit: 64M
+          per_stream_rate_limit_burst: 128M
           shard_streams:
             enabled: true
         query_scheduler:
@@ -73,7 +72,7 @@ spec:
 
         common:
           path_prefix: /var/loki
-          replication_factor: 3
+          replication_factor: 2
           storage:
             s3:
               s3: null
@@ -121,7 +120,7 @@ spec:
 
     gateway:
       enabled: true
-      replicas: 3
+      replicas: 2
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -135,7 +134,7 @@ spec:
         enabled: false
 
     write:
-      replicas: 3
+      replicas: 2
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -148,12 +147,9 @@ spec:
       persistence:
         size: 10Gi
         storageClass: rook-ceph-block
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
 
     read:
-      replicas: 3
+      replicas: 2
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -172,12 +168,9 @@ spec:
       extraVolumes:
         - name: rules
           emptyDir: {}
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
 
     backend:
-      replicas: 3
+      replicas: 2
       persistence:
         storageClass: rook-ceph-block
       extraVolumeMounts:
@@ -187,7 +180,6 @@ spec:
           mountPath: /tmp/scratch
       extraVolumes:
         - name: rules
-          # emptyDir: {}
           configMap:
             name: loki-alerting-rules
         - name: scratch
