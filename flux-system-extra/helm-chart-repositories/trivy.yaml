@@ -6,5 +6,6 @@ metadata:
   name: trivy
   namespace: flux-system
 spec:
+  type: oci
   interval: 2h
   url: oci://ghcr.io/aquasecurity/helm-charts/trivy-operator
