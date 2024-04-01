@@ -23,6 +23,7 @@ spec:
       builtInTrivyServer: true
       vulnerabilityScannerScanOnlyCurrentRevisions: true
       configAuditScannerScanOnlyCurrentRevisions: true
+      metricsVulnIdEnabled: true
 
     trivy:
       ignoreUnfixed: true
