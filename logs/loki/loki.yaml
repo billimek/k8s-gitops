@@ -27,16 +27,21 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    deploymentMode: SimpleScalable
+
     loki:
+      ingester:
+        chunk_encoding: snappy
+
       schemaConfig:
-          configs:
-            - from: "2024-04-01"
-              store: tsdb
-              object_store: s3
-              schema: v13
-              index:
-                prefix: loki_index_
-                period: 24h
+        configs:
+          - from: "2024-04-01"
+            store: tsdb
+            object_store: s3
+            schema: v13
+            index:
+              prefix: loki_index_
+              period: 24h
 
       storage:
         type: s3
@@ -51,11 +56,9 @@ spec:
           log_level: info
           http_listen_port: 3100
           grpc_listen_port: 9095
+
           grpc_server_max_recv_msg_size: 8388608
           grpc_server_max_send_msg_size: 8388608
-
-        memberlist:
-          join_members: ["loki-memberlist"]
 
         limits_config:
           ingestion_burst_size_mb: 128
@@ -76,117 +79,84 @@ spec:
         frontend:
           max_outstanding_per_tenant: 4096
 
-        common:
-          path_prefix: /var/loki
-          replication_factor: 2
-          ring:
-            kvstore:
-              store: memberlist
-
         ruler:
           enable_api: true
           enable_alertmanager_v2: true
-          alertmanager_url: http://kube-prometheus-stack-alertmanager:9093
+          alertmanager_url: http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
           storage:
             type: local
             local:
               directory: /rules
-          rule_path: /tmp/scratch
-          ring:
-            kvstore:
-              store: memberlist
-
-        distributor:
-          ring:
-            kvstore:
-              store: memberlist
-
-        ingester:
-          max_chunk_age: 1h
-          lifecycler:
-            ring:
-              kvstore:
-                store: memberlist
+          rule_path: /rules
 
         analytics:
           reporting_enabled: false
 
+      podAnnotations:
+        secret.reloader.stakater.com/reload: loki-secret
+
     gateway:
+      replicas: 3
       enabled: true
-      replicas: 2
       ingress:
         enabled: false
 
     write:
-      replicas: 2
+      replicas: 3
       persistence:
         size: 10Gi
         storageClass: rook-ceph-block
 
     read:
-      replicas: 2
-      persistence:
-        size: 10Gi
-        storageClass: rook-ceph-block
-      extraVolumeMounts:
-        - name: rules
-          mountPath: /rules
-      extraVolumes:
-        - name: rules
-          emptyDir: {}
+      replicas: 3
 
     backend:
-      replicas: 2
+      replicas: 3
       persistence:
         storageClass: rook-ceph-block
-      extraVolumeMounts:
-        - name: rules
-          mountPath: /rules/fake
-        - name: scratch
-          mountPath: /tmp/scratch
-      extraVolumes:
-        - name: rules
-          configMap:
-            name: loki-alerting-rules
-        - name: scratch
-          emptyDir: {}
 
-    # see https://grafana.com/docs/loki/latest/setup/upgrade/upgrade-to-6x/#monitoring
-    # monitoring:
-    #   dashboards:
-    #     enabled: true
-    #     annotations:
-    #       kustomize.toolkit.fluxcd.io/substitute: disabled
-    #       grafana_folder: Loki
-    #     labels:
-    #       grafana_dashboard: "true"
-    #   rules:
-    #     enabled: false
-    #   serviceMonitor:
-    #     enabled: true
-    #   selfMonitoring:
-    #     enabled: false
-    #     lokiCanary:
-    #       enabled: false
-    #     grafanaAgent:
-    #       installOperator: false
+    monitoring:
+      dashboards:
+        annotations:
+          grafana_folder: Loki
+      serviceMonitor:
+        enabled: false
+        metricsInstance:
+          enabled: false
+      selfMonitoring:
+        enabled: false
+        grafanaAgent:
+          installOperator: false
+
+    lokiCanary:
+      enabled: false
+
     test:
       enabled: false
 
+
   valuesFrom:
-  - targetPath: loki.storage.bucketnames
+  - targetPath: loki.storage.bucketnames.chunks
     kind: ConfigMap
     name: loki-bucket
     valuesKey: BUCKET_NAME
-  - targetPath: loki.storage.endpoint
+  - targetPath: loki.storage.bucketnames.ruler
+    kind: ConfigMap
+    name: loki-bucket
+    valuesKey: BUCKET_NAME
+  - targetPath: loki.storage.bucketnames.admin
+    kind: ConfigMap
+    name: loki-bucket
+    valuesKey: BUCKET_NAME
+  - targetPath: loki.storage.s3.endpoint
     kind: ConfigMap
     name: loki-bucket
     valuesKey: BUCKET_HOST
-  - targetPath: loki.storage.access_key_id
+  - targetPath: loki.storage.s3.accessKeyId
     kind: Secret
     name: loki-bucket
     valuesKey: AWS_ACCESS_KEY_ID
-  - targetPath: loki.storage.secret_access_key
+  - targetPath: loki.storage.s3.secretAccessKey
     kind: Secret
     name: loki-bucket
     valuesKey: AWS_SECRET_ACCESS_KEY
