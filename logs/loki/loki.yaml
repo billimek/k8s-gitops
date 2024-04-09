@@ -28,7 +28,6 @@ spec:
     keepHistory: false
   values:
     loki:
-
       schemaConfig:
           configs:
             - from: "2024-04-01"
@@ -39,11 +38,11 @@ spec:
                 prefix: loki_index_
                 period: 24h
 
-        storage:
-          type: s3
-          s3:
-            s3ForcePathStyle: true
-            insecure: true
+      storage:
+        type: s3
+        s3:
+          s3ForcePathStyle: true
+          insecure: true
 
       structuredConfig:
         auth_enabled: false
