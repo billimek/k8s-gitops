@@ -28,6 +28,23 @@ spec:
     keepHistory: false
   values:
     loki:
+
+      schemaConfig:
+          configs:
+            - from: "2024-04-01"
+              store: tsdb
+              object_store: s3
+              schema: v13
+              index:
+                prefix: loki_index_
+                period: 24h
+
+        storage:
+          type: s3
+          s3:
+            s3ForcePathStyle: true
+            insecure: true
+
       structuredConfig:
         auth_enabled: false
 
@@ -35,17 +52,24 @@ spec:
           log_level: info
           http_listen_port: 3100
           grpc_listen_port: 9095
+          grpc_server_max_recv_msg_size: 8388608
+          grpc_server_max_send_msg_size: 8388608
 
         memberlist:
           join_members: ["loki-memberlist"]
 
         limits_config:
-          ingestion_rate_mb: 8
-          ingestion_burst_size_mb: 16
+          ingestion_burst_size_mb: 128
+          ingestion_rate_mb: 64
+          max_query_parallelism: 100
+          per_stream_rate_limit: 64M
+          per_stream_rate_limit_burst: 128M
           reject_old_samples: true
           reject_old_samples_max_age: 168h
-          max_query_parallelism: 100
           retention_period: 30d
+          shard_streams:
+            enabled: true
+          split_queries_by_interval: 1h
 
         query_scheduler:
           max_outstanding_requests_per_tenant: 4096
@@ -53,24 +77,9 @@ spec:
         frontend:
           max_outstanding_per_tenant: 4096
 
-        schema_config:
-          configs:
-            - from: "2024-04-01"
-              object_store: s3
-              store: tsdb
-              schema: v13
-              index:
-                prefix: index_
-                period: 24h
-
         common:
           path_prefix: /var/loki
           replication_factor: 2
-          storage:
-            s3:
-              s3: null
-              insecure: true
-              s3forcepathstyle: true
           ring:
             kvstore:
               store: memberlist
@@ -166,19 +175,19 @@ spec:
       enabled: false
 
   valuesFrom:
-  - targetPath: loki.structuredConfig.common.storage.s3.bucketnames
+  - targetPath: loki.storage.bucketnames
     kind: ConfigMap
     name: loki-bucket
     valuesKey: BUCKET_NAME
-  - targetPath: loki.structuredConfig.common.storage.s3.endpoint
+  - targetPath: loki.storage.endpoint
     kind: ConfigMap
     name: loki-bucket
     valuesKey: BUCKET_HOST
-  - targetPath: loki.structuredConfig.common.storage.s3.access_key_id
+  - targetPath: loki.storage.access_key_id
     kind: Secret
     name: loki-bucket
     valuesKey: AWS_ACCESS_KEY_ID
-  - targetPath: loki.structuredConfig.common.storage.s3.secret_access_key
+  - targetPath: loki.storage.secret_access_key
     kind: Secret
     name: loki-bucket
     valuesKey: AWS_SECRET_ACCESS_KEY
