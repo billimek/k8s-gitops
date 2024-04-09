@@ -55,12 +55,12 @@ spec:
 
         schema_config:
           configs:
-            - from: "2024-01-01"
-              store: boltdb-shipper
+            - from: "2024-04-01"
               object_store: s3
+              store: tsdb
               schema: v13
               index:
-                prefix: loki_index_
+                prefix: index_
                 period: 24h
 
         common:
@@ -177,24 +177,25 @@ spec:
         - name: scratch
           emptyDir: {}
 
-    monitoring:
-      dashboards:
-        enabled: true
-        annotations:
-          kustomize.toolkit.fluxcd.io/substitute: disabled
-          grafana_folder: Loki
-        labels:
-          grafana_dashboard: "true"
-      rules:
-        enabled: false
-      serviceMonitor:
-        enabled: true
-      selfMonitoring:
-        enabled: false
-        lokiCanary:
-          enabled: false
-        grafanaAgent:
-          installOperator: false
+    # see https://grafana.com/docs/loki/latest/setup/upgrade/upgrade-to-6x/#monitoring
+    # monitoring:
+    #   dashboards:
+    #     enabled: true
+    #     annotations:
+    #       kustomize.toolkit.fluxcd.io/substitute: disabled
+    #       grafana_folder: Loki
+    #     labels:
+    #       grafana_dashboard: "true"
+    #   rules:
+    #     enabled: false
+    #   serviceMonitor:
+    #     enabled: true
+    #   selfMonitoring:
+    #     enabled: false
+    #     lokiCanary:
+    #       enabled: false
+    #     grafanaAgent:
+    #       installOperator: false
     test:
       enabled: false
 
