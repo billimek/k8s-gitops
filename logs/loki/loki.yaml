@@ -136,15 +136,15 @@ spec:
 
 
   valuesFrom:
-  - targetPath: loki.storage.bucketnames.chunks
+  - targetPath: loki.storage.bucketNames.chunks
     kind: ConfigMap
     name: loki-bucket
     valuesKey: BUCKET_NAME
-  - targetPath: loki.storage.bucketnames.ruler
+  - targetPath: loki.storage.bucketNames.ruler
     kind: ConfigMap
     name: loki-bucket
     valuesKey: BUCKET_NAME
-  - targetPath: loki.storage.bucketnames.admin
+  - targetPath: loki.storage.bucketNames.admin
     kind: ConfigMap
     name: loki-bucket
     valuesKey: BUCKET_NAME
