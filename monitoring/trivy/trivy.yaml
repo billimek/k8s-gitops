@@ -25,6 +25,11 @@ spec:
       configAuditScannerScanOnlyCurrentRevisions: true
       metricsVulnIdEnabled: true
 
+    trivyOperator:
+      scanJobTolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+
     trivy:
       ignoreUnfixed: true
       mode: ClientServer
