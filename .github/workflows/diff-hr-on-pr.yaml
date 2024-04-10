@@ -111,7 +111,6 @@ jobs:
   flux-diff-success:
     needs:
       - flux-diff
-    if: ${{ always() }}
     name: Flux Diff successful
     runs-on: ubuntu-latest
     steps:
