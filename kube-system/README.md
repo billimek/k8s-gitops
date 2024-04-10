@@ -55,12 +55,6 @@ Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-
 
 * [node-feature-discovery](node-feature-discovery/)
 
-# oauth2-proxy
-
-[OAuth2 authenticating proxy](https://github.com/pusher/oauth2_proxy) leveraging Auth0
-
-* [oauth2-proxy/](oauth2-proxy/)
-
 # reloader
 
 [reloader](https://github.com/stakater/Reloader): A Kubernetes controller to watch changes in ConfigMap and Secrets and do rolling upgrades on Pods with their associated Deployment, StatefulSet, DaemonSet and DeploymentConfig
