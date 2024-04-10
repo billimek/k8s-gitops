@@ -1,92 +1,120 @@
 ---
-name: "HelmRelease Diff"
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Flux Diff"
 
 on:
   pull_request:
     branches: ["master"]
     paths: ["**.yaml"]
 
-env:
-  KUBERNETES_DIR: ./
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   changed-files:
-    name: Detect File Changes
+    name: Changed Files
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@2d756ea4c53f7f6b397767d8723b3a10a9f35bf2 # v44
+      - name: Checkout Default Branch
+        uses: actions/checkout@v4
         with:
-          json: true
+          fetch-depth: 0
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Get Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
           files: |
             **/*.yaml
           files_ignore: |
             .github/**
             flux-system/**
             Taskfile.yml
+          dir_names: true
+          dir_names_max_depth: 2
+          json: true
+          escape_json: false
 
-      - id: set-matrix
-        run: echo "matrix={\"file\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "${GITHUB_OUTPUT}"
+      - name: List All Changed Files
+        run: echo "${{ steps.changed-files.outputs.all_changed_and_modified_files }}"
 
-  diff:
-    name: Diff on Helm Releases
+  flux-diff:
+    name: Flux Diff
     runs-on: ubuntu-latest
-    needs: [changed-files]
+    needs:
+      - changed-files
+    permissions:
+      pull-requests: write
     strategy:
-      matrix: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+      matrix:
+        paths: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+        resources:
+          - helmrelease
+      max-parallel: 4
+      fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+        uses: actions/checkout@v4
+        with:
+          path: pull
 
-      - name: Checkout default branch
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Checkout Default Branch
+        uses: actions/checkout@v4
         with:
           ref: "${{ github.event.repository.default_branch }}"
-          path: default_branch
+          path: default
 
-      - name: Setup Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+      - name: Diff Resources
+        uses: docker://ghcr.io/allenporter/flux-local:v4.3.1
+        with:
+          args: >-
+            diff ${{ matrix.resources }}
+            --unified 6
+            --path /github/workspace/pull/${{ matrix.paths }}/flux
+            --path-orig /github/workspace/default/${{ matrix.paths }}/flux
+            --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
+            --limit-bytes 10000
+            --all-namespaces
+            --sources "home-ops-kubernetes"
+            --output-file diff.patch
 
-      - name: Setup Tools
-        run: |
-          brew install helm homeport/tap/dyff kustomize yq
-
-      - name: Diff
+      - name: Generate Diff
         id: diff
         run: |
-          diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
-            --current-release "default_branch/${{ matrix.file }}" \
-            --incoming-release "${{ matrix.file }}" \
-            --kubernetes-dir ${{ env.KUBERNETES_DIR }} \
-            --diff-tool "diff")
-          echo "diff<<EOF" >> "${GITHUB_OUTPUT}"
-          echo "${diff}" >> "${GITHUB_OUTPUT}"
-          echo "EOF" >> "${GITHUB_OUTPUT}"
+          cat diff.patch;
+          {
+            echo 'diff<<EOF'
+            cat diff.patch
+            echo EOF
+          } >> "$GITHUB_OUTPUT";
+          {
+            echo "### Diff"
+            echo '```diff'
+            cat diff.patch
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Find Comment
-        if: ${{ always() && steps.diff.outputs.diff != '' }}
-        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e # v3.1.0
-        id: find-comment
+      - if: ${{ steps.diff.outputs.diff != '' }}
+        name: Add comment
+        uses: mshick/add-pr-comment@v2
         with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body-includes: "Helm Release Diff: ${{ matrix.file }}"
-
-      - name: Create or update comment
-        if: ${{ always() && steps.diff.outputs.diff != '' }}
-        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4.0.0
-        with:
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Helm Release Diff: `${{ matrix.file }}`
-
+          message-id: "${{ github.event.pull_request.number }}/${{ matrix.paths }}/${{ matrix.resources }}"
+          message-failure: Diff was not successful
+          message: |
             ```diff
             ${{ steps.diff.outputs.diff }}
-            ```
-          edit-mode: replace
+
+  flux-diff-success:
+    needs:
+      - flux-diff
+    if: ${{ always() }}
+    name: Flux Diff successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check matrix status
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
