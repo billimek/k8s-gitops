@@ -5,7 +5,11 @@ name: "Flux Diff"
 on:
   pull_request:
     branches: ["master"]
-    paths: ["**.yaml"]
+    paths:
+      - '**.yaml'
+      - '!.github/**'
+      - '!flux-system/**'
+      - '!Taskfile.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
