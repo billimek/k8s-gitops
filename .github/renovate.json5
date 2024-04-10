@@ -14,7 +14,6 @@
     "github>billimek/k8s-gitops//.github/renovate/disabledDatasources.json5",
     "github>billimek/k8s-gitops//.github/renovate/groups.json5",
     "github>billimek/k8s-gitops//.github/renovate/semantic-commits.json5",
-    "helpers:pinGitHubActionDigests"
   ],
   "enabled": true,
   "timezone": "America/New_York",
