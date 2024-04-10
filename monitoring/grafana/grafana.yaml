@@ -175,6 +175,9 @@ spec:
           gnetId: 13407
           revision: 1
           datasource: Prometheus
+        loki-logs:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/loki-logs.json
+          datasource: Loki
         # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
           gnetId: 1860
