@@ -176,7 +176,7 @@ spec:
           revision: 1
           datasource: Prometheus
         loki-logs:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/loki-logs.json
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/loki_logs.json
           datasource: Loki
         # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
