@@ -67,10 +67,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "loki",
-        "uid": "${DS_LOKI}"
-      },
+      "datasource": "${DS_LOKI}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -147,10 +144,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "loki",
-            "uid": "${DS_LOKI}"
-          },
+          "datasource": "${DS_LOKI}",
           "editorMode": "code",
           "expr": "sum(count_over_time({namespace=~\"$namespace\", app =~\"$app\"} |= \"$query\" [$__interval]))",
           "instant": false,
@@ -163,10 +157,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "loki",
-        "uid": "${DS_LOKI}"
-      },
+      "datasource": "${DS_LOKI}",
       "description": "Logs from services running in Kubernetes",
       "gridPos": {
         "h": 25,
@@ -187,10 +178,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "loki",
-            "uid": "${DS_LOKI}"
-          },
+          "datasource": "${DS_LOKI}",
           "editorMode": "builder",
           "expr": "{namespace=~\"$namespace\", app=~\"$app\"} |= `$query` | json | line_format `{{.message}}`",
           "queryType": "range",
@@ -231,10 +219,7 @@
       {
         "allValue": ".+",
         "current": {},
-        "datasource": {
-          "type": "loki",
-          "uid": "${DS_LOKI}"
-        },
+        "datasource": "${DS_LOKI}",
         "definition": "",
         "hide": 0,
         "includeAll": true,
@@ -256,10 +241,7 @@
       {
         "allValue": ".+",
         "current": {},
-        "datasource": {
-          "type": "loki",
-          "uid": "${DS_LOKI}"
-        },
+        "datasource": "${DS_LOKI}",
         "definition": "",
         "hide": 0,
         "includeAll": false,
