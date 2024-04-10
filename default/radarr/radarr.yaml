@@ -80,7 +80,3 @@ spec:
         cpu: 25m
       limits:
         memory: 500Mi
-
-    tolerations:
-    - key: "arm"
-      operator: "Exists"

@@ -69,10 +69,6 @@ spec:
         accessMode: ReadWriteOnce
         size: "5Gi"
 
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
-
     resources:
       requests:
         memory: 350Mi

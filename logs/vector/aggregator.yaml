@@ -32,9 +32,6 @@ spec:
       repository: timberio/vector
       tag: 0.37.1-debian
     role: Stateless-Aggregator
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
     customConfig:
       data_dir: /vector-data-dir
       api:

@@ -81,7 +81,5 @@ spec:
         operator: Exists
       - effect: NoExecute
         operator: Exists
-      - key: "arm"
-        operator: "Exists"
       - key: "node-role.kubernetes.io/master"
         operator: "Exists"

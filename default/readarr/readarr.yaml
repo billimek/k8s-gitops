@@ -72,7 +72,3 @@ spec:
         cpu: 25m
       limits:
         memory: 2000Mi
-
-    tolerations:
-    - key: "arm"
-      operator: "Exists"

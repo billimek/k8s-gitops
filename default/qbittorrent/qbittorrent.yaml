@@ -86,6 +86,3 @@ spec:
         memory: 250Mi
       limits:
         memory: 2Gi
-    tolerations:
-    - key: "arm"
-      operator: "Exists"

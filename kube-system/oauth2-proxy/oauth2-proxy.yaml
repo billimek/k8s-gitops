@@ -20,9 +20,6 @@ spec:
       repository: "quay.io/oauth2-proxy/oauth2-proxy"
       tag: "v7.6.0"
     replicaCount: 2
-    tolerations:
-      - key: "arm"
-        operator: "Exists"
     ingress:
       enabled: true
       path: /oauth2

@@ -8,7 +8,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://coredns.github.io/helm
       chart: coredns
       version: 1.29.0
       sourceRef:
@@ -39,9 +38,6 @@ spec:
               values:
               - coredns
           topologyKey: "kubernetes.io/hostname"
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
     rbac:
       create: true
     isClusterService: false
@@ -57,12 +53,6 @@ spec:
         configBlock: |-
           lameduck 5s
       - name: ready
-      # - name: kubernetes
-      #   parameters: cluster.local in-addr.arpa ip6.arpa
-      #   configBlock: |-
-      #     pods insecure
-      #     fallthrough in-addr.arpa ip6.arpa
-      #     ttl 30
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: forward

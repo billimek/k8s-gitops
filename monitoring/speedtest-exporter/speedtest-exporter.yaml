@@ -36,6 +36,3 @@ spec:
             path: /metrics
             interval: 60m
             scrapeTimeout: 1m
-    tolerations:
-    - key: "arm"
-      operator: "Exists"

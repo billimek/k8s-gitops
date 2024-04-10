@@ -8,7 +8,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
       chart: minecraft-proxy
       version: 3.6.0
       sourceRef:
@@ -31,9 +30,6 @@ spec:
         cpu: 50m
       limits:
         memory: 500Mi
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
     podAnnotations:
       configmap.reloader.stakater.com/reload: "waterfall-minecraft-proxy-config"
     extraEnv:

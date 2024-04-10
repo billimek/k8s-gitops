@@ -33,6 +33,3 @@ spec:
         enabled: true
       prometheusRule:
         enabled: true
-    tolerations:
-      - key: "arm"
-        operator: "Exists"

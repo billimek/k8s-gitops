@@ -9,7 +9,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://itzg.github.io/minecraft-server-charts/
       chart: minecraft
       version: 4.15.0
       sourceRef:

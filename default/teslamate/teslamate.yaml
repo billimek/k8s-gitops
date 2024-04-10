@@ -61,9 +61,6 @@ spec:
         tls:
           - hosts:
               - *host
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
     resources:
       requests:
         memory: 250Mi

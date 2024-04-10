@@ -8,7 +8,6 @@ spec:
   interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://kubernetes-sigs.github.io/descheduler
       chart: descheduler
       version: 0.29.0
       sourceRef:
@@ -31,9 +30,6 @@ spec:
     deschedulingInterval: 1m
     cmdOptions:
       v: 3
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
     deschedulerPolicy:
       evictLocalStoragePods: true
       strategies:

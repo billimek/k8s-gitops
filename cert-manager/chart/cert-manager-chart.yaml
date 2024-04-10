@@ -8,7 +8,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://charts.jetstack.io/
       chart: cert-manager
       version: v1.14.4
       sourceRef:
@@ -24,22 +23,11 @@ spec:
     installCRDs: true
     webhook:
       enabled: true
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
     extraArgs:
     - --dns01-recursive-nameservers=1.1.1.1:53
     - --dns01-recursive-nameservers-only
-    tolerations:
-    - key: "arm"
-      operator: "Exists"
     cainjector:
       replicaCount: 1
-      # extraArgs:
-      #   - --leader-elect=false
-      tolerations:
-      - key: "arm"
-        operator: "Exists"
     prometheus:
       enabled: true
       servicemonitor:

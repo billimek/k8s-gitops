@@ -25,14 +25,9 @@ spec:
         env:
         - name: TZ
           value: America/New_York
-        # image: billimek/tesla_dashcam:0.1.20-intel-vaapi@sha256:ca9f10e47997615b8a5a37837763fc121ec65933e94f20e3faaebe9a5f6727cb
         image: billimek/tesla_dashcam:0.1.21-2@sha256:784c5542d28003b9d17e5c6fa015d8f340572422a27de932c502760e4a089eef
         imagePullPolicy: Always
-        # args: ["--delete_source", "--gpu", "--gpu_type", "vaapi", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
         args: ["--delete_source", "--skip_existing", "--monitor", "--monitor_trigger", "/input/SentryClips/ARCHIVE_UPLOADED", "--motion_only", "--output", "/output", "/input/SentryClips", "/input/SavedClips"]
-        #resources:
-        #  limits:
-        #    gpu.intel.com/i915: 1
         volumeMounts:
         - mountPath: /input
           name: media
@@ -42,8 +37,6 @@ spec:
           subPath: Videos/tesla_dashcam/
       securityContext:
         fsGroup: 1001
-          #runAsGroup: 1001
-          #runAsUser: 1001
       volumes:
       - name: media
         persistentVolumeClaim:

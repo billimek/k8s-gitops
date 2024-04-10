@@ -8,7 +8,6 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://repos.emqx.io/charts
       chart: emqx
       version: 5.6.0
       sourceRef:
@@ -32,9 +31,6 @@ spec:
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.50
-    tolerations:
-      - key: "arm"
-        operator: "Exists"
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -51,7 +47,6 @@ spec:
       EMQX_LOADED_PLUGINS: "emqx_management,emqx_recon,emqx_retainer,emqx_dashboard,emqx_rule_engine,emqx_auth_mnesia,emqx_prometheus"
       EMQX_AUTH__MNESIA__PASSWORD_HASH: plain
       EMQX_AUTH__USER__1__USERNAME: mqtt
-    #   EMQX_ACL_NOMATCH: "deny"
 
     emqxAclConfig: >
       {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
