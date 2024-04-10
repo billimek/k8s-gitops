@@ -30,10 +30,9 @@
   // Do not rebase PRs
   "rebaseWhen": "conflicted",
   "commitBodyTable": true,
-  "platformCommit": true
+  "platformCommit": true,
   "gitAuthor": "Jeff Billimek <billimek@users.noreply.github.com>",
   "commitBody": "Signed-off-by: Jeff Billimek <billimek@users.noreply.github.com>",
-  
   ignorePaths: [
     "setup/**",
     ".taskfiles/**",
