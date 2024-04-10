@@ -1,0 +1,47 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
+    {
+      description: "Loose versioning for non-semver packages",
+      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "ghcr.io/onedr0p/plex",
+        "ghcr.io/onedr0p/qbittorrent",
+      ],
+      versioning: "loose",
+    },
+    // Custom versions
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["blakeblackshear/frigate"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
+    },
+    {
+      "datasources": ["docker"],
+      "versionScheme": "regex:^nightly-0\\.(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+      "packageNames": ["hotio/readarr"]
+    },
+    {
+      "datasources": ["docker"],
+      "versioning": "loose",
+      "packageNames": ["ghcr.io/onedr0p/plex"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker.io/timberio/vector"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
+    },
+    {
+      description: "Custom versioning for http-https-echo",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/mendhak/http-https-echo"],
+      versioning: "regex:^(?<major>\\d+)$",
+    },
+    {
+      description: "Custom versioning for Minio",
+      matchDatasources: ["docker"],
+      versioning: "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z(-(?<compatibility>.*))?$",
+      matchPackageNames: ["quay.io/minio/minio"],
+    },
+  ],
+}
