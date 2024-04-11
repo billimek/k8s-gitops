@@ -57,7 +57,7 @@ spec:
       ENABLE_AUTOPAUSE: FALSE
     minecraftServer:
       modUrls:
-        - https://github.com/EssentialsX/Essentials/releases/download/2.20.0/EssentialsX-2.20.0.jar
+        - https://github.com/EssentialsX/Essentials/releases/download/2.20.1/EssentialsX-2.20.1.jar
       spigetResources:
         - 102931
       eula: true
