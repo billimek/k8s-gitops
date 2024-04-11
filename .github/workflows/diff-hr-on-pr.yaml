@@ -1,37 +1,92 @@
-name: Flux Diff
+---
+name: "HelmRelease Diff"
+
 on:
   pull_request:
-    branches:
-      - master
-    paths:
-      - "**.yaml"
+    branches: ["master"]
+    paths: ["**.yaml"]
+
+env:
+  KUBERNETES_DIR: ./
+
 jobs:
-  diffs:
-    name: Compute diffs
+  changed-files:
+    name: Detect File Changes
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        cluster_path:
-          - flux-system
-        resource:
-          - helmrelease
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - name: Setup Flux CLI
-        uses: fluxcd/flux2/action@v2.2.3
-      - name: flux-local diff
-        uses: allenporter/flux-local/action/diff@4.3.1
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          json: true
+          files: |
+            **/*.yaml
+          files_ignore: |
+            .github/**
+            flux-system/**
+            Taskfile.yml
+
+      - id: set-matrix
+        run: echo "matrix={\"file\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "${GITHUB_OUTPUT}"
+
+  diff:
+    name: Diff on Helm Releases
+    runs-on: ubuntu-latest
+    needs: [changed-files]
+    strategy:
+      matrix: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          ref: "${{ github.event.repository.default_branch }}"
+          path: default_branch
+
+      - name: Setup Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Setup Tools
+        run: |
+          brew install helm homeport/tap/dyff kustomize yq
+
+      - name: Diff
         id: diff
+        run: |
+          diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
+            --current-release "default_branch/${{ matrix.file }}" \
+            --incoming-release "${{ matrix.file }}" \
+            --kubernetes-dir ${{ env.KUBERNETES_DIR }} \
+            --diff-tool "diff")
+          echo "diff<<EOF" >> "${GITHUB_OUTPUT}"
+          echo "${diff}" >> "${GITHUB_OUTPUT}"
+          echo "EOF" >> "${GITHUB_OUTPUT}"
+
+      - name: Find Comment
+        if: ${{ always() && steps.diff.outputs.diff != '' }}
+        uses: peter-evans/find-comment@v3
+        id: find-comment
         with:
-          path: ${{ matrix.cluster_path }}
-          resource: ${{ matrix.resource }}
-          live-branch: master
-      - name: PR Comments
-        uses: mshick/add-pr-comment@v2
-        if: ${{ steps.diff.outputs.diff != '' }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: "Helm Release Diff: ${{ matrix.file }}"
+
+      - name: Create or update comment
+        if: ${{ always() && steps.diff.outputs.diff != '' }}
+        uses: peter-evans/create-or-update-comment@v4
         with:
-          message-id: ${{ github.event.pull_request.number }}/${{ matrix.cluster_path }}/${{ matrix.resource }}
-          message-failure: Unable to post diff
-          message: |
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Helm Release Diff: `${{ matrix.file }}`
+
             ```diff
             ${{ steps.diff.outputs.diff }}
             ```
+          edit-mode: replace
