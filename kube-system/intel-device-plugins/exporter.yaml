@@ -30,7 +30,7 @@ spec:
       type: daemonset
     image:
       repository: ghcr.io/onedr0p/intel-gpu-exporter
-      tag: rolling@sha256:724671c249e494fcaeacf67b23149da440cf3191b12e9f8481c826496d742ea8
+      tag: rolling@sha256:0161b11c38da67f9993003c53cd50b153168f954d77dcd4fdd3bcadbdc5e1e8a
     service:
       main:
         ports:
