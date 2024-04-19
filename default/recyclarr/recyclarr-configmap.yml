@@ -68,16 +68,16 @@ data:
             reset_unmatched_scores:
               enabled: true
             upgrade:
-              allowed: false
+              allowed: true
+              until_quality: WEB 2160p
+              until_score: 10000
             min_format_score: 0
             quality_sort: top
             qualities:
-              - name: Bluray-2160p
               - name: WEB 2160p
                 qualities:
                   - WEBDL-2160p
                   - WEBRip-2160p
-              - name: HDTV-2160p
 
         custom_formats:
           - trash_ids:
@@ -103,6 +103,8 @@ data:
               - 1efe8da11bfd74fbbcd4d8117ddb9213 # STAN
               - 5d2317d99af813b6529c7ebf01c83533 # VDL
               - 77a7b25585c18af08f60b1547bb9b4fb # CC
+              - 43b3cf48cb385cd3eac608ee6bca7f09 # UHD Streaming Boost 
+              - d2d299244a92b8a52d4921ce3897a256 # UHD Streaming Cut
               # Allowed Scene groups and tiered P2P groups
               - d0c516558625b04b363fa6c5c2c7cfd4 # WEB Scene (allowed Scene groups)
               - e6258996055b9fbab7e9cb2f75819294 # WEB Tier 01
@@ -113,6 +115,7 @@ data:
               - eb3d5cc0a2be0db205fb823640db6a3c # Repack v2
               - 44e7c4de10ae50265753082e5dc76047 # Repack v3
               # HDR Metadata
+              - 2b239ed870daba8126a53bd5dc8dc1c8 # DV HDR10+
               - 7878c33f1963fefb3d6c8657d46c2f0a # DV HDR10
               - 6d0d8de7b57e35518ac0308b0ddf404e # DV
               - 1f733af03141f068a540eec352589a89 # DV HLG
@@ -125,15 +128,18 @@ data:
               - 17e889ce13117940092308f48b48b45b # HLG
               - 9b27ab6498ec0f31a3353992e19434ca # DV (WEBDL)
               - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10+Boost
+              - 385e9e8581d33133c3961bdcdeffb7b4 # DV HDR10+Boost
               # Unwanted
-              - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
               - 85c61753df5da1fb2aab6f2a47426b09 # BR-DISK
-              - 9c14d194486c4014d422adc64092d794 # Dubs Only
               - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
+              - e2315f990da2e2cbfc9fa5b7a6fcfe48 # LQ (Release Title)
+              - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+              - fbcb31d8dabd2a319072b84fc0b7249c # Extras
+              - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
               - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
               - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
               - 06d66ab109d4d2eddb2794d21526d140 # Retags
-              - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+              - 9c14d194486c4014d422adc64092d794 # Dubs Only
 
             quality_profiles:
               - name: WEB 1080p
@@ -157,35 +163,32 @@ data:
               enabled: true
             upgrade:
               allowed: true
-              until_quality: Remux-1080p
-              until_score: 0
+              until_quality: Bluray-1080p
+              until_score: 10000
             min_format_score: 0
             quality_sort: top
             qualities:
-              - name: Remux-1080p
               - name: Bluray-1080p
               - name: WEB 1080p
                 qualities:
                   - WEBDL-1080p
                   - WEBRip-1080p
-              - name: HDTV-1080p
+              - name: Blueray-720p              
           - name: Ultra-HD
             reset_unmatched_scores:
               enabled: true
             upgrade:
               allowed: true
-              until_quality: Remux-2160p
-              until_score: 0
-            min_format_score: 4500
+              until_quality: Bluray-2160p
+              until_score: 10000
+            min_format_score: 0
             quality_sort: top
             qualities:
-              - name: Remux-2160p
               - name: Bluray-2160p
               - name: WEB 2160p
                 qualities:
                   - WEBDL-2160p
                   - WEBRip-2160p
-              - name: HDTV-2160p
 
         custom_formats:
           - trash_ids:
@@ -200,9 +203,12 @@ data:
               - eecf3a857724171f968a66cb5719e152 # IMAX
               - 9f6cbff8cfe4ebbc1bde14c7b7bec0de # IMAX Enhanced
               # HQ Release Groups
-              - 3a3ff47579026e76d6504ebea39390de # Remux Tier 01
-              - 9f98181fe5a3fbeb0cc29340da2a468a # Remux Tier 02
-              - 8baaf0b3142bf4d94c42a724f034e27a # Remux Tier 03
+              - 4d74ac4c4db0b64bff6ce0cffef99bf0 # UHD Blueray Tier 01
+              - a58f517a70193f8e578056642178419d # UHD Blueray Tier 02
+              - e71939fae578037e7aed3ee219bbe7c1 # UHD Blueray Tier 03
+              - ed27ebfef2f323e964fb1f61391bcb35 # HD Blueray Tier 01
+              - c20c8647f2746a1f4c4262b0fbbeeeae # HD Blueray Tier 02
+              - 5608c71bcebba0a5e666223bae8c9227 # HD Blueray Tier 03
               - c20f169ef63c5f40c2def54abaf4438e # WEB Tier 01
               - 403816d65392c79236dcb6dd591aeda4 # WEB Tier 02
               - af94e0fe497124d1f9ce732069ec8c3b # WEB Tier 03
@@ -222,6 +228,7 @@ data:
               - 240770601cc226190c367ef59aba7463 # AAC
               - c2998bd0d90ed5621d8df281e839436e # DD
               # HDR Metadata
+              - c53085ddbd027d9624b320627748612f # DV HDR10+
               - e23edd2482476e595fb990b12e7c609c # DV HDR10
               - 58d6a88f13e2db7f5059c41047876f00 # DV
               - 55d53828b9d81cbe20b02efd00aa0efd # DV HLG
@@ -234,6 +241,7 @@ data:
               - 9364dd386c9b4a1100dde8264690add7 # HLG
               - 923b6abef9b17f937fab56cfcf89e1f1 # DV (WEBDL)
               - b17886cb4158d9fea189859409975758 # HDR10+Boost
+              - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+Boost
               # Streaming Services
               - b3b3a6ac74ecbd56bcdbefa4799fb9df # AMZN
               - 40e9380490e748672c2522eaaeb692f7 # ATVP
@@ -258,8 +266,11 @@ data:
               # Unwanted
               - ed38b889b31be83fda192888e2286d83 # BR-DISK
               - 90a6f9a284dff5103f6346090e6280c8 # LQ
+              - e204b80c87be9497a8a6eaff48f72905 # LQ (Release Title)
               - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
               - b8cd450cbfa689c0259a01d9e29ba3d6 # 3D
+              - bfd8eb01832d646a0a89c4deb46f8564 # Upscaled
+              - 0a3f082873eb454bde444150b70253cc # Extras
               - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
 
             quality_profiles:
