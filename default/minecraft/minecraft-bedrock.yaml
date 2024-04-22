@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: minecraft-bedrock
-      version: 2.4.1
+      version: 2.4.2
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
