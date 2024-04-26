@@ -12,7 +12,7 @@ spec:
       version: v0.0.18
       sourceRef:
         kind: HelmRepository
-        name: xenitab
+        name: spegel-org
         namespace: flux-system
   install:
     remediation:
