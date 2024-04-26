@@ -28,6 +28,8 @@ spec:
       containerdRegistryConfigPath: /var/lib/rancher/k3s/agent/etc/containerd/certs.d
     serviceMonitor:
       enabled: true
+    grafanaDashboard:
+      enabled: true
     resources:
       requests:
         cpu: 50m
