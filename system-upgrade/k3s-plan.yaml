@@ -6,7 +6,7 @@ metadata:
   namespace: system-upgrade
 spec:
   concurrency: 1
-  cordon: true
+  cordon: false
   nodeSelector:
     matchExpressions:
     - key: node-role.kubernetes.io/master
