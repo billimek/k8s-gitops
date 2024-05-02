@@ -204,7 +204,7 @@ spec:
         replicas: 1
         replicaExternalLabelName: "replica"
         thanos:
-          image: quay.io/thanos/thanos:v0.34.1
+          image: quay.io/thanos/thanos:v0.35.0
           version: v0.30.1
           objectStorageConfig:
             name: thanos-objstore-secret
