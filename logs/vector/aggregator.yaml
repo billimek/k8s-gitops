@@ -154,7 +154,7 @@ spec:
       enabled: true
   postRenderers:
     - kustomize:
-        patchesJson6902:
+        patches:
           - target:
               kind: Service
               name: vector-aggregator
