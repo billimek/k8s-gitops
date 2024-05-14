@@ -158,7 +158,7 @@ spec:
           - target:
               kind: Service
               name: vector-aggregator
-            patch:
+            patch: |
               - op: replace
                 path: /spec/externalTrafficPolicy
                 value: Local
