@@ -23,6 +23,8 @@ spec:
       shared_buffers: 512MB
   monitoring:
     enablePodMonitor: true
+  # https://github.com/cloudnative-pg/cloudnative-pg/issues/2570
+  enablePDB: false
   resources:
     requests:
       memory: "512Mi"
