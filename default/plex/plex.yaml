@@ -94,7 +94,7 @@ spec:
         enabled: true
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
-        size: 30Gi
+        size: 55Gi
         mountPath: /config/Library/Application Support/Plex Media Server/Cache
       transcode:
         enabled: true
