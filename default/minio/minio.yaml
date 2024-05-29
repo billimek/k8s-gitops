@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: quay.io/minio/minio
-      tag: RELEASE.2024-05-10T01-41-38Z
+      tag: RELEASE.2024-05-28T17-19-04Z
 
     controller:
       annotations:
