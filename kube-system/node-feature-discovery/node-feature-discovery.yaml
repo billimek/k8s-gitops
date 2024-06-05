@@ -45,7 +45,13 @@ spec:
           operator: "Exists"
         - effect: "NoSchedule"
           operator: "Exists"
+      resources:
+        limits:
+          cpu: null
     master:
       tolerations:
         - key: arm
           operator: Exists
+      resources:
+        limits:
+          cpu: null
