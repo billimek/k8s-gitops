@@ -31,7 +31,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-assistant/home-assistant
-      tag: 2024.5.5
+      tag: 2024.6.0
 
     initContainers:
       init-db:
