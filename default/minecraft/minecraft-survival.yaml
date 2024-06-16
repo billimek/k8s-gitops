@@ -24,7 +24,7 @@ spec:
       storageClass: "rook-ceph-block"
       dataDir:
         enabled: true
-        Size: 10Gi
+        Size: 20Gi
     podSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -144,7 +144,7 @@ spec:
     copyMethod: Snapshot
     pruneIntervalDays: 10
     repository: mcsv-restic-secret
-    cacheCapacity: 20Gi
+    cacheCapacity: 40Gi
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
     moverSecurityContext:
