@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: velocity
+  name: waterfall
   namespace: default
 spec:
   interval: 5m
@@ -31,12 +31,11 @@ spec:
       limits:
         memory: 500Mi
     podAnnotations:
-      configmap.reloader.stakater.com/reload: "velocity-minecraft-proxy-config"
+      configmap.reloader.stakater.com/reload: "waterfall-minecraft-proxy-config"
     extraEnv:
-      # SPIGET_PLUGINS: "78915,75"
+      SPIGET_PLUGINS: "78915,75"
     minecraftProxy:
-      type: VELOCITY
-      velocityVersion: "latest"
+      type: WATERFALL
       # A list of .jar URLs to download into the plugins folder.
       # plugins: []
       serviceType: LoadBalancer
