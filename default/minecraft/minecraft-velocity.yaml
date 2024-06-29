@@ -74,3 +74,18 @@ data:
     try = [
         "lobby"
     ]
+
+    [forced-hosts]
+    # Configure your forced hosts here.
+    "mc-lobby-minecraft" = [
+        "lobby"
+    ]
+    "mc-minecraft" = [
+        "creative"
+    ]
+    "mcsv-minecraft" = [
+        "survival"
+    ]
+    "mcsv2-minecraft" = [
+        "survival2"
+    ]
