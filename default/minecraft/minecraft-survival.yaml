@@ -62,10 +62,10 @@ spec:
         - 74354
         # - 102931
       modrinth:
-        # 'Lu3KuzdV' is the project ID for the 'CoreProtect' plugin
-        # 'hXiIvTyT' is the project ID for the 'EssentialsX' plugin
-        # 'Vebnzrzj' is the project ID for the 'LuckPerms' plugin
-        projects: ['Lu3KuzdV', 'hXiIvTyT', 'Vebnzrzj']
+        projects: 
+          - 'Lu3KuzdV' # CoreProtect
+          - 'hXiIvTyT' # EssentialsX
+          - 'Vebnzrzj' # LuckPerms
       eula: true
       version: "LATEST"
       type: PAPER

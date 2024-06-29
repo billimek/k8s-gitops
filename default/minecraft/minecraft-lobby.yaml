@@ -42,11 +42,11 @@ spec:
       spigetResources:
         - 102931
       modrinth:
-        # 'Lu3KuzdV' is the project ID for the 'CoreProtect' plugin
-        # 'hXiIvTyT' is the project ID for the 'EssentialsX' plugin
-        # 'Vebnzrzj' is the project ID for the 'LuckPerms' plugin
-        # 'qG43Afem' is the project ID for the 'SimpleScore' plugin
-        projects: ['Lu3KuzdV', 'hXiIvTyT', 'Vebnzrzj', 'qG43Afem']
+        projects: 
+          - 'Lu3KuzdV' # CoreProtect
+          - 'hXiIvTyT' # EssentialsX
+          - 'Vebnzrzj' # LuckPerms
+          - 'qG43Afem' # SimpleScore
       eula: true
       version: "LATEST"
       type: PAPER
