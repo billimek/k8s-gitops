@@ -15,8 +15,8 @@ spec:
         name: minecraft-server-charts
         namespace: flux-system
       interval: 5m
-      upgrade:
-        disableWait: true
+    upgrade:
+      disableWait: true
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
