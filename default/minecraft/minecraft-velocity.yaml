@@ -65,7 +65,7 @@ metadata:
 data:
   velocity.toml: |
     bind = "0.0.0.0:25577"
-    motd = "<#09add3>eviljungle"
+    player-info-forwarding-mode = "modern"
     [servers]
     lobby = "mc-lobby-minecraft:25565"
     creative = "mc-minecraft:25565"
