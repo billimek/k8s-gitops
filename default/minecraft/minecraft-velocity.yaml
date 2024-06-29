@@ -39,6 +39,7 @@ spec:
       # A list of .jar URLs to download into the plugins folder.
       # plugins: []
       serviceType: LoadBalancer
+      loadBalancerIP: 10.0.6.107
       externalTrafficPolicy: Cluster
       configFilePath: /server/velocity.toml
     extraVolumes:
@@ -63,7 +64,7 @@ metadata:
   namespace: default
 data:
   velocity.toml: |
-    bind = "0.0.0.0:25565"
+    bind = "0.0.0.0:25577"
     motd = "<#09add3>eviljungle"
     [servers]
     lobby = "mc-lobby-minecraft:25565"
