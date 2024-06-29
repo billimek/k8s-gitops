@@ -63,6 +63,7 @@ metadata:
   namespace: default
 data:
   velocity.toml: |
+    bind = "0.0.0.0:25565"
     motd = "<#09add3>eviljungle"
     [servers]
     lobby = "mc-lobby-minecraft:25565"
