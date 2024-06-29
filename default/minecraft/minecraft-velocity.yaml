@@ -64,9 +64,9 @@ metadata:
   namespace: default
 data:
   velocity.toml: |
-    config-version = "2.7"
     bind = "0.0.0.0:25577"
     player-info-forwarding-mode = "legacy"
+
     [servers]
     lobby = "mc-lobby-minecraft:25565"
     creative = "mc-minecraft:25565"
