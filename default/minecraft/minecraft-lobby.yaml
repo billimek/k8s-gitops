@@ -44,7 +44,7 @@ spec:
       spigetResources:
         - 102931
       modrinth:
-        projects: 
+        projects:
           - 'Lu3KuzdV' # CoreProtect
           - 'hXiIvTyT' # EssentialsX
           - 'Vebnzrzj' # LuckPerms
