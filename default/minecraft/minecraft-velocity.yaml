@@ -51,6 +51,7 @@ spec:
           - name: velocity-config
             configMap:
               name: velocity-configmap
+              defaultMode: 420
               items:
                 - key: velocity.toml
                   path: velocity.toml
@@ -63,7 +64,6 @@ metadata:
 data:
   velocity.toml: |
     motd = "<#09add3>eviljungle"
-    player-info-forwarding-mode = "modern"
     [servers]
     lobby = "mc-lobby-minecraft:25565"
     creative = "mc-minecraft:25565"
