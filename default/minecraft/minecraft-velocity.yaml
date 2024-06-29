@@ -44,7 +44,7 @@ spec:
     extraVolumes:
       - volumeMounts:
         - name: velocity-config
-          mountPath: /server/velocity.toml
+          mountPath: /config/velocity.toml
           subPath: velocity.toml
           readOnly: false
         volumes:
