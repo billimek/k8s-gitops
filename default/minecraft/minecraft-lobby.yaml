@@ -40,15 +40,15 @@ spec:
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       PAPER_CHANNEL: "experimental"
+      MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
+      MODRINTH_PROJECTS: |-
+        Lu3KuzdV
+        hXiIvTyT
+        Vebnzrzj
+        qG43Afem
     minecraftServer:
       spigetResources:
         - 102931
-      modrinth:
-        projects:
-          - 'Lu3KuzdV' # CoreProtect
-          - 'hXiIvTyT' # EssentialsX
-          - 'Vebnzrzj' # LuckPerms
-          - 'qG43Afem' # SimpleScore
       eula: true
       version: "LATEST"
       type: PAPER
