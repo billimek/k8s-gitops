@@ -33,7 +33,7 @@ spec:
     podAnnotations:
       configmap.reloader.stakater.com/reload: "velocity-minecraft-proxy-config"
     extraEnv:
-      SPIGET_PLUGINS: "78915,75"
+      # SPIGET_PLUGINS: "78915,75"
     minecraftProxy:
       type: VELOCITY
       velocityVersion: "latest"
