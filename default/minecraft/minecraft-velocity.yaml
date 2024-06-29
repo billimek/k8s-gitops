@@ -46,7 +46,7 @@ spec:
         - name: velocity-config
           mountPath: /server/velocity.toml
           subPath: velocity.toml
-          readOnly: true
+          readOnly: false
         volumes:
           - name: velocity-config
             configMap:
