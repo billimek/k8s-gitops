@@ -37,6 +37,7 @@ spec:
         memory: 2Gi
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
+      PAPER_CHANNEL: "experimental"
     minecraftServer:
       spigetResources:
         - 28140
@@ -48,7 +49,6 @@ spec:
         - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
       eula: true
       version: "LATEST"
-      PAPER_CHANNEL: "experimental"
       type: PAPER
       forceReDownload: true
       onlineMode: false
