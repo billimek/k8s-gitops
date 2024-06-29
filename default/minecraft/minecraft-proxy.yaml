@@ -36,6 +36,7 @@ spec:
       SPIGET_PLUGINS: "78915,75"
     minecraftProxy:
       type: VELOCITY
+      velocityVersion: "latest"
       # A list of .jar URLs to download into the plugins folder.
       # plugins: []
       serviceType: LoadBalancer
