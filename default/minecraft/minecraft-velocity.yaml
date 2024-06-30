@@ -49,8 +49,8 @@ spec:
           subPath: velocity.toml
           readOnly: false
         - name: minimotd-config
-          mountPath: /server/plugins/minimotd-velocity/main.conf
-          subPath: main.conf
+          mountPath: /server/plugins/minimotd-velocity/main-new.conf
+          subPath: main-new.conf
           readOnly: false
         volumes:
           - name: velocity-config
