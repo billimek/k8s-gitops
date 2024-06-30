@@ -33,11 +33,11 @@ spec:
     podAnnotations:
       configmap.reloader.stakater.com/reload: "waterfall-minecraft-proxy-config"
     extraEnv:
-      SPIGET_PLUGINS: "78915,75"
+      SPIGET_PLUGINS: "78915"
     minecraftProxy:
       type: WATERFALL
-      # A list of .jar URLs to download into the plugins folder.
-      # plugins: []
+      plugins:
+        - https://github.com/Army-py/SlashServer/releases/download/tested/SlashServer-4.0.jar
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.106
       externalTrafficPolicy: Local
