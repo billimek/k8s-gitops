@@ -32,10 +32,15 @@ spec:
         memory: 500Mi
     podAnnotations:
       configmap.reloader.stakater.com/reload: "velocity-configmap"
+    extraEnv:
+      MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
+      MODRINTH_PROJECTS: |-
+        velocitab
+        slashserver
     minecraftProxy:
       type: velocity
-      plugins:
-        - https://cdn.modrinth.com/data/YnhEXQW8/versions/zh0iSh9V/slashserver-1.0-SNAPSHOT.jar
+      # plugins:
+      #   - https://cdn.modrinth.com/data/YnhEXQW8/versions/zh0iSh9V/slashserver-1.0-SNAPSHOT.jar
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.107
       externalTrafficPolicy: Cluster
