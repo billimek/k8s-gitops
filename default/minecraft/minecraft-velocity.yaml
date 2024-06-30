@@ -73,7 +73,7 @@ spec:
           - name: minimotd-config
             configMap:
               name: velocity-configmap
-              defaultMode: 420
+              defaultMode: 0777
               items:
                 - key: minimotd-main.conf
                   path: minimotd-main.conf
