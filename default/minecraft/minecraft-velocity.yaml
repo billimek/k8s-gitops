@@ -48,6 +48,10 @@ spec:
           mountPath: /config/velocity.toml
           subPath: velocity.toml
           readOnly: false
+        - name: minimotd-config
+          mountPath: /server/plugins/minimotd-velocity/main.conf
+          subPath: main.conf
+          readOnly: false
         volumes:
           - name: velocity-config
             configMap:
@@ -56,6 +60,14 @@ spec:
               items:
                 - key: velocity.toml
                   path: velocity.toml
+          - name: minimotd-config
+            configMap:
+              name: velocity-configmap
+              defaultMode: 420
+              items:
+                - key: minimotd-main.conf
+                  path: minimotd-main.conf
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -93,3 +105,29 @@ data:
     "mcsv2-minecraft" = [
         "survival2"
     ]
+  minimotd-main.conf: |
+    icon-enabled=true
+    motd-enabled=true
+    motds=[
+        {
+            icon=random
+            line1="<rainbow>eviljungle"
+            line2="<italic><gradient:red:green>much wow</gradient>"
+        }
+    ]
+    player-count-settings {
+        disable-player-list-hover=false
+        fake-players {
+            fake-players="25%"
+            fake-players-enabled=false
+        }
+        hide-player-count=false
+        just-x-more-settings {
+            just-x-more-enabled=false
+            x-value=3
+        }
+        max-players=500
+        max-players-enabled=false
+    }
+
+
