@@ -31,13 +31,13 @@ spec:
       limits:
         memory: 500Mi
     podAnnotations:
-      configmap.reloader.stakater.com/reload: "velocity-minecraft-proxy-config"
-    # extraEnv:
-    #   SPIGET_PLUGINS: "78915,75"
+      configmap.reloader.stakater.com/reload: "velocity-configmap"
     minecraftProxy:
       type: velocity
       # A list of .jar URLs to download into the plugins folder.
-      # plugins: []
+      plugins:
+        - https://cdn.modrinth.com/data/YnhEXQW8/versions/zh0iSh9V/slashserver-1.0-SNAPSHOT.jar
+        - https://cdn.modrinth.com/data/r64hFfps/versions/BOm3sqL8/Alert-1.5.jar
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.107
       externalTrafficPolicy: Cluster
