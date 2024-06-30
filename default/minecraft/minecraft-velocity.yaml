@@ -24,6 +24,16 @@ spec:
       runAsGroup: 1000
       runAsNonRoot: true
       fsGroup: 1000
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      fsGroup: 1000
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
     resources:
       requests:
         memory: 250Mi
