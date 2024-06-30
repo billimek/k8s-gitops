@@ -33,7 +33,7 @@ spec:
     podAnnotations:
       configmap.reloader.stakater.com/reload: "velocity-configmap"
     extraEnv:
-      MINECRAFT_VERSION: "latest"
+      MINECRAFT_VERSION: "1.21"
       MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
       MODRINTH_PROJECTS: |-
         velocitab
