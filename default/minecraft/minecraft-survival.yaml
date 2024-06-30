@@ -67,11 +67,11 @@ spec:
       maxWorldSize: 5999968
       maxTickTime: -1
       spawnProtection: 0
-      levelSeed: "1.21-20240629-3"
+      levelSeed: "1.21-20240629-4"
       gameMode: survival
       motd: "mcsv.eviljungle.com\n\u00A76\u00A7lSMPl\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP\u00A7r\n"
       pvp: false
-      worldSaveName: "1.21-20240629-3"
+      worldSaveName: "1.21-20240629-4"
       forceReDownload: true
       onlineMode: false
       memory: 8192M
