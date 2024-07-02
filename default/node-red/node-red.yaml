@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: nodered/node-red
-      tag: 4.0.1-18-minimal
+      tag: 4.0.2-18-minimal
 
     env:
       TZ: "America/New_York"
