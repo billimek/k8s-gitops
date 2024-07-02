@@ -366,6 +366,14 @@ spec:
           url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/thanos/dashboards/store.json
           datasource: Prometheus
 
+        volsync:
+          # removate: dashboardName="VolSync Dashboard"
+          gnetId: 21356
+          revision: 2
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
+
+
     sidecar:
       datasources:
         enabled: true
