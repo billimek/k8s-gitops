@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/sonarr
-      tag: 4.0.5.1710
+      tag: 4.0.6.1805
 
     env:
       TZ: "America/New_York"
