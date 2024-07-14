@@ -72,24 +72,22 @@ spec:
         port: 25575
         password: "mc-rcon"
         serviceType: LoadBalancer
-      # extraPorts:
-      #   - name: map
-      #     containerPort: 8123
-      #     service:
-      #       enabled: true
-      #       type: ClusterIP
-      #       port: 8123
-      #     ingress:
-      #       enabled: true
-      #       ingressClassName: nginx-tailscale
-      #       # annotations:
-      #       #   nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
-      #       hosts:
-      #         - name: mcsv2-map.t.eviljungle.com
-      #           path: /
-      #       tls:
-      #       - hosts:
-      #         - mcsv2-map.t.eviljungle.com
+      extraPorts:
+        - name: map
+          containerPort: 8100
+          service:
+            enabled: true
+            type: ClusterIP
+            port: 8100
+          ingress:
+            enabled: true
+            ingressClassName: nginx-tailscale
+            hosts:
+              - name: mcsv2-map.eviljungle.com
+                path: /
+            tls:
+            - hosts:
+              - mcsv2-map.eviljungle.com
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
