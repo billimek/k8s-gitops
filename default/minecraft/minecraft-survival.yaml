@@ -86,6 +86,7 @@ spec:
         - 74354
         - 102931
         - 83557 # bluemap
+        - 4441 # hibernate
       rcon:
         enabled: false
         port: 25575

@@ -50,6 +50,7 @@ spec:
         - 6245
         - 14754
         - 102931
+        - 4441 # hibernate
       modUrls:
         - https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.21.0-dev+104-33e086f.jar
         - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar

@@ -57,9 +57,12 @@ spec:
       ENABLE_AUTOPAUSE: FALSE
     minecraftServer:
       modUrls:
-        - https://github.com/EssentialsX/Essentials/releases/download/2.20.1/EssentialsX-2.20.1.jar
+        - https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.21.0-dev+104-33e086f.jar
+        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
       spigetResources:
         - 102931
+        - 83557 # bluemap
+        - 4441 # hibernate
       eula: true
       version: "LATEST"
       type: PAPER
