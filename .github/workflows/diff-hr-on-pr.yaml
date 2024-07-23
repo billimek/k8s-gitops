@@ -60,7 +60,9 @@ jobs:
       - name: Diff
         id: diff
         run: |
-          diff=$(npx zx ./.github/scripts/helmReleaseDiff.mjs \
+          # pin to 8.1.3 due to https://github.com/google/zx/issues/870
+          npm install zx@8.1.3
+          diff=$(npx zx@8.1.3 ./.github/scripts/helmReleaseDiff.mjs \
             --current-release "default_branch/${{ matrix.file }}" \
             --incoming-release "${{ matrix.file }}" \
             --kubernetes-dir ${{ env.KUBERNETES_DIR }} \
