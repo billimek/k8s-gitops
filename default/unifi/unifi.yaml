@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: jacobalberty/unifi
-      tag: v8.2.93@sha256:fa496261a406e64ecc03360466e80522a1fa3315f67a1b29a2ad05620af2efe7
+      tag: v8.3.32@sha256:4005799e87ce26d0b53bbdbdacfba7fa9262717b4aaac2ed7829c754175a5425
 
     env:
       TZ: "America/New_York"
