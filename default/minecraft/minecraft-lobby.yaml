@@ -38,10 +38,10 @@ spec:
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
       PAPER_CHANNEL: "experimental"
-      MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
-      MODRINTH_PROJECTS: |-
-        coreprotect
-        essentialsx
+      # MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
+      # MODRINTH_PROJECTS: |-
+      #   coreprotect
+      #   essentialsx
     minecraftServer:
       spigetResources:
         - 28140
@@ -49,9 +49,9 @@ spec:
         - 14754
         - 102931
         - 4441 # hibernate
-      # modUrls:
-      #   - https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.21.0-dev+106-8b08a8f.jar
-      #   - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
+      modUrls:
+        - https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar
+        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
       eula: true
       version: "LATEST"
       type: PAPER
