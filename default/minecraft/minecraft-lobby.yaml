@@ -42,8 +42,6 @@ spec:
       MODRINTH_PROJECTS: |-
         coreprotect
         essentialsx
-        # luckperms
-        # simplescore
     minecraftServer:
       spigetResources:
         - 28140
