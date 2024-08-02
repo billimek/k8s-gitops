@@ -2,6 +2,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- https://raw.githubusercontent.com/csi-addons/kubernetes-csi-addons/v0.8.0/deploy/controller/crds.yaml
-- https://raw.githubusercontent.com/csi-addons/kubernetes-csi-addons/v0.8.0/deploy/controller/rbac.yaml
-- https://raw.githubusercontent.com/csi-addons/kubernetes-csi-addons/v0.8.0/deploy/controller/setup-controller.yaml
+- https://github.com/csi-addons/kubernetes-csi-addons/releases/download/v0.8.0/crds.yaml
+- https://github.com/csi-addons/kubernetes-csi-addons/releases/download/v0.8.0/rbac.yaml
+- https://github.com/csi-addons/kubernetes-csi-addons/releases/download/v0.8.0/setup-controller.yaml
