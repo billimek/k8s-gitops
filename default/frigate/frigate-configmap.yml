@@ -5,6 +5,9 @@ metadata:
   namespace: default
 data:
   config.yml: |
+    auth:
+      enabled: false
+
     mqtt:
       host: emqx.default.svc
       topic_prefix: frigate
@@ -58,6 +61,18 @@ data:
           default: 14
           mode: active_objects
 
+    review:
+      alerts:
+        labels:
+          - person
+          - dog
+          - car
+      detections:
+        labels:
+          - person
+          - dog
+          - cat
+
     snapshots:
       enabled: true
       timestamp: false
@@ -97,9 +112,6 @@ data:
         doorbell_record:
           - rtsp://admin:{FRIGATE_RTSP_PASSWORD}@doorbell:554/cam/realmonitor?channel=1&subtype=0&authbasic=64#backchannel=0
           - "ffmpeg:doorbell_record#audio=aac"
-
-    ui:
-      live_mode: mse
 
     cameras:
       porch:
