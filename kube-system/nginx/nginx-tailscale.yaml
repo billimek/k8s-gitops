@@ -53,6 +53,7 @@ spec:
         client-header-timeout: 120
         client-body-buffer-size: 100M
         client-body-timeout: 120
+        custom-http-errors: 400,401,403,404,500,502,503,504
         enable-brotli: "true"
         enable-ocsp: "true"
         enable-real-ip: "true"
