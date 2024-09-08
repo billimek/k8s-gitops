@@ -29,5 +29,6 @@ spec:
   ports:
   - name: minio
     port: 9000
+    targetPort: 9000
   type: ExternalName
   externalName: nas.home
