@@ -15,7 +15,7 @@ spec:
           service:
             name: external-minio
             port:
-              number: 9000
+              number: 9001
   tls:
   - hosts:
     - *host
@@ -28,7 +28,7 @@ metadata:
 spec:
   ports:
   - name: minio
-    port: 9000
-    targetPort: 9000
+    port: 9001
+    targetPort: 9001
   type: ExternalName
   externalName: nas.home
