@@ -41,16 +41,6 @@ Using the [minecraft server](https://hub.docker.com/r/itzg/minecraft-server) con
 * [minecraft-survival.yaml](minecraft/minecraft-survival.yaml)
 * [minecraft-bedrock.yaml](minecraft/minecraft-bedrock.yaml)
 
-# minio
-
-[Minio](https://github.com/minio/minio) is a high performance S3-compatible kubernetes object storage solution.
-
-![](https://i.imgur.com/RF0aYAg.png)
-
-S3-compatible bucket storage service
-
-* [minio.yaml](minio/minio.yaml)
-
 # node-red
 
 ![](https://i.imgur.com/ABTbYw1.png)
