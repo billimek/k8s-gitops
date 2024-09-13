@@ -30,7 +30,7 @@ metadata:
 spec:
   sourcePVC: node-red-data
   trigger:
-    schedule: "0 6 * * *"
+    schedule: "20 5 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
