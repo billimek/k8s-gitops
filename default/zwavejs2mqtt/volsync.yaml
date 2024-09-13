@@ -30,7 +30,7 @@ metadata:
 spec:
   sourcePVC: zwavejs2mqtt-config
   trigger:
-    schedule: "20 6 * * *"
+    schedule: "10 7 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10

@@ -30,7 +30,7 @@ metadata:
 spec:
   sourcePVC: unifi-data
   trigger:
-    schedule: "10 6 * * *"
+    schedule: "0 5 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
