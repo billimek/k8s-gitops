@@ -29,7 +29,7 @@ spec:
   values:
     image:
       repository: ghcr.io/zwave-js/zwave-js-ui
-      tag: 9.19.0
+      tag: 9.20.0
 
     env:
       TZ: "America/New_York"
