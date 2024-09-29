@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: external-incus
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx-tailscale
+  rules:
+  - host: &host incus.eviljungle.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: external-incus
+            port:
+              number: 8443
+  tls:
+  - hosts:
+    - *host
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-incus
+  namespace: default
+spec:
+  ports:
+  - name: incus
+    port: 8443
+    targetPort: 8443
+  type: ExternalName
+  externalName: nas.home
