@@ -46,6 +46,8 @@ spec:
         # ensure that external DNS (cloudflare) has an entry for this directed to the router
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504"  # Using a smaller set than the default to fix javascript issues with overseer
         hosts:
           - host: &host request.eviljungle.com
             paths:
