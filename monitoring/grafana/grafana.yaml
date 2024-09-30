@@ -265,7 +265,7 @@ spec:
         k8s-views-global:
           # renovate: dashboardName="Kubernetes / Views / Global"
           gnetId: 15757
-          revision: 37
+          revision: 41
           datasource: Prometheus
         k8s-views-nodes:
           # renovate: dashboardName="Kubernetes / Views / Nodes"
