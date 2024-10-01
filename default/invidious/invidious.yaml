@@ -59,6 +59,7 @@ spec:
               INVIDIOUS_REGISTRATION_ENABLED: false
               INVIDIOUS_POPULAR_ENABLED: false
               INVIDIOUS_QUALITY: dash
+              INVIDIOUS_QUALITY_DASH: best
               INVIDIOUS_CHANNEL_REFRESH_INTERVAL: 30m
               INVIDIOUS_SIGNATURE_SERVER: inv-sig-helper:12999
             probes:
