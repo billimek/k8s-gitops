@@ -47,10 +47,46 @@ spec:
               repository: quay.io/invidious/invidious
               tag: latest@sha256:a95d807a24a9b9f956f4acb79d79c36a53817153553b08e1b1385bb588b0b079
             envFrom: *envFrom
+            env:
+              INVIDIOUS_ADMINS: "[billimek]"
+              INVIDIOUS_CHANNEL_THREADS: 2
+              INVIDIOUS_CHECK_TABLES: true
+              INVIDIOUS_DOMAIN: i.eviljungle.com
+              INVIDIOUS_EXTERNAL_PORT: 443
+              INVIDIOUS_FULL_REFRESH: true
+              INVIDIOUS_HTTPS_ONLY: true
+              INVIDIOUS_PORT: 3000
+              INVIDIOUS_REGISTRATION_ENABLED: false
+              INVIDIOUS_POPULAR_ENABLED: false
+              INVIDIOUS_QUALITY: dash
+              INVIDIOUS_CHANNEL_REFRESH_INTERVAL: 30m
+              INVIDIOUS_SIGNATURE_SERVER: localhost:12999
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/trending
+                    port: &port 3000
+                  initialDelaySeconds: 5
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
             resources:
               requests:
                 cpu: 50m
                 memory: 256Mi
+          inv-sig-helper:
+            image:
+              repository: quay.io/invidious/inv-sig-helper
+              tag: latest@sha256:c59df5204ff8ce70694b9f3568aa14a7d9e9a7bb2caedefb8c253a23aa474b0f
+            env:
+              TZ: America/New_York
+              RUST_LOG: info
     service:
       main:
         ports:
