@@ -60,7 +60,7 @@ spec:
               INVIDIOUS_POPULAR_ENABLED: false
               INVIDIOUS_QUALITY: dash
               INVIDIOUS_CHANNEL_REFRESH_INTERVAL: 30m
-              INVIDIOUS_SIGNATURE_SERVER: localhost:12999
+              INVIDIOUS_SIGNATURE_SERVER: inv-sig-helper:12999
             probes:
               liveness: &probes
                 enabled: true
@@ -80,13 +80,6 @@ spec:
               requests:
                 cpu: 50m
                 memory: 256Mi
-          inv-sig-helper:
-            image:
-              repository: quay.io/invidious/inv-sig-helper
-              tag: latest@sha256:c59df5204ff8ce70694b9f3568aa14a7d9e9a7bb2caedefb8c253a23aa474b0f
-            env:
-              TZ: America/New_York
-              RUST_LOG: info
     service:
       main:
         ports:
