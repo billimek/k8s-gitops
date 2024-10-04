@@ -20,7 +20,8 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-    installCRDs: true
+    crds:
+      enabled: true
     webhook:
       enabled: true
     extraArgs:
