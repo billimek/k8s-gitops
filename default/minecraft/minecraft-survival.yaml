@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2024.10.0
+      tag: 2024.10.1
     strategyType: Recreate
     persistence:
       storageClass: "rook-ceph-block"
