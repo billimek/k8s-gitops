@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/tautulli
-      tag: 2.14.5
+      tag: 2.14.6
 
     env:
       TZ: "America/New_York"
