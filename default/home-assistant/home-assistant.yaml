@@ -147,7 +147,7 @@ spec:
           enabled: true
           ingressClassName: nginx-tailscale
           annotations:
-            nginx.ingress.kubernetes.io/custom-http-errors: ""  # Using a nil set than the default to fix javascript issues
+            nginx.ingress.kubernetes.io/custom-http-errors: "500,502,503,504"  # Using only 5xx custom error pages
           hosts:
             - host: hass-vscode.eviljungle.com
               paths:
