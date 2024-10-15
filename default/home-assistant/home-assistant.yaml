@@ -146,6 +146,8 @@ spec:
         ingress:
           enabled: true
           ingressClassName: nginx-tailscale
+          annotations:
+            nginx.ingress.kubernetes.io/custom-http-errors: ""  # Using a nil set than the default to fix javascript issues
           hosts:
             - host: hass-vscode.eviljungle.com
               paths:
