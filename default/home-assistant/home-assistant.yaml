@@ -37,7 +37,7 @@ spec:
       TZ: "America/New_York"
       # https://github.com/home-assistant/core/issues/128214
       UV_CACHE_DIR: "/config/.config/uv-cache"
-      PYTHONNOUSERSITE: "/config/python_userdir"
+      UV_SYSTEM_PYTHON: "false"
 
     envFrom:
       - secretRef:
