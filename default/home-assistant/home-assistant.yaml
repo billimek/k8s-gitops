@@ -35,6 +35,8 @@ spec:
 
     env:
       TZ: "America/New_York"
+      # https://github.com/home-assistant/core/issues/128214
+      UV_CACHE_DIR: "/tmp/uv-cache" 
 
     envFrom:
       - secretRef:
