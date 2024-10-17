@@ -33,14 +33,6 @@ spec:
       repository: ghcr.io/home-assistant/home-assistant
       tag: 2024.10.2
 
-    initContainers:
-      init-db:
-        image: ghcr.io/onedr0p/postgres-init:14.10
-        imagePullPolicy: IfNotPresent
-        envFrom:
-          - secretRef:
-              name: home-assistant-secret
-
     env:
       TZ: "America/New_York"
 
