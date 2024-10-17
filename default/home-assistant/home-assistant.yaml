@@ -37,7 +37,6 @@ spec:
       TZ: "America/New_York"
       # https://github.com/home-assistant/core/issues/128214
       UV_CACHE_DIR: "/config/.config/uv-cache"
-      UV_SYSTEM_PYTHON: "false"
 
     envFrom:
       - secretRef:
@@ -108,6 +107,10 @@ spec:
         subPath: home-assistant-4d8d1f2ca10f.json
         mountPath: /config/home-assistant-4d8d1f2ca10f.json
         readOnly: true
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     resources:
       requests:
