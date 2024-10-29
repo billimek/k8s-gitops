@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: "influxdb"
-      tag: "1.8.10"
+      tag: "1.11.7"
     service:
       type: LoadBalancer
     persistence:
