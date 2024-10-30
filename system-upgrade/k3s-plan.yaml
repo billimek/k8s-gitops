@@ -27,10 +27,8 @@ spec:
     - {key: kubernetes.io/arch, effect: NoSchedule, operator: Equal, value: arm}
     - {key: arm, operator: Exists}
 
-  prepare:
-    # Since v0.5.0-m1 SUC will use the resolved version of the plan for the tag on the prepare container.
-    # image: rancher/k3s-upgrade:v1.17.4-k3s1
-    image: rancher/k3s-upgrade
-    args: ["prepare", "k3s-server"]
+  # prepare:
+  #   image: rancher/k3s-upgrade
+  #   args: ["prepare", "k3s-server"]
   upgrade:
     image: rancher/k3s-upgrade
