@@ -104,36 +104,36 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           volumeMounts:
-            - name: etc-ssl
-              mountPath: /etc/ssl
-              readOnly: true
-            - name: etc-pki
-              mountPath: /etc/pki
-              readOnly: true
-            - name: etc-static-ssl
-              mountPath: /etc/static/ssl/certs
-              readOnly: true
-            - name: etc-ca-certificates
-              mountPath: /etc/ca-certificates
-              readOnly: true
+            # - name: etc-ssl
+            #   mountPath: /etc/ssl
+            #   readOnly: true
+            # - name: etc-pki
+            #   mountPath: /etc/pki
+            #   readOnly: true
+            # - name: etc-static-ssl
+            #   mountPath: /etc/static/ssl/certs
+            #   readOnly: true
+            # - name: etc-ca-certificates
+            #   mountPath: /etc/ca-certificates
+            #   readOnly: true
             - name: tmp
               mountPath: /tmp
       volumes:
-        - name: etc-ssl
-          hostPath:
-            path: /etc/ssl
-            type: DirectoryOrCreate
-        - name: etc-pki
-          hostPath:
-            path: /etc/pki
-            type: DirectoryOrCreate
-        - name: etc-ca-certificates
-          hostPath:
-            path: /etc/ca-certificates
-            type: DirectoryOrCreate
-        - name: etc-static-ssl
-          hostPath:
-            path: /etc/ca-certificates
-            type: DirectoryOrCreate
+        # - name: etc-ssl
+        #   hostPath:
+        #     path: /etc/ssl
+        #     type: DirectoryOrCreate
+        # - name: etc-pki
+        #   hostPath:
+        #     path: /etc/pki
+        #     type: DirectoryOrCreate
+        # - name: etc-ca-certificates
+        #   hostPath:
+        #     path: /etc/ca-certificates
+        #     type: DirectoryOrCreate
+        # - name: etc-static-ssl
+        #   hostPath:
+        #     path: /etc/ca-certificates
+        #     type: DirectoryOrCreate
         - name: tmp
           emptyDir: {}
