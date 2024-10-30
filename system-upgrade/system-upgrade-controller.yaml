@@ -116,7 +116,6 @@ spec:
             - name: etc-ca-certificates
               mountPath: /etc/ca-certificates
               readOnly: true
-
             - name: tmp
               mountPath: /tmp
       volumes:
@@ -129,6 +128,10 @@ spec:
             path: /etc/pki
             type: DirectoryOrCreate
         - name: etc-ca-certificates
+          hostPath:
+            path: /etc/ca-certificates
+            type: DirectoryOrCreate
+        - name: etc-static-ssl
           hostPath:
             path: /etc/ca-certificates
             type: DirectoryOrCreate
