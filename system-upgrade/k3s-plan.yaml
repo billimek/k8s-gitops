@@ -8,7 +8,7 @@ metadata:
     k3s-upgrade: agent
 spec:
   concurrency: 1
-  channel: https://update.k3s.io/v1-release/channels/stable
+  channel: https://update.k3s.io/v1-release/channels/v1.31
   nodeSelector:
     matchExpressions:
       # - {key: k3s-upgrade, operator: Exists}
