@@ -124,7 +124,7 @@ spec:
         enabled: true
         image:
           repository: codercom/code-server
-          tag: 4.93.1
+          tag: 4.95.1
         workingDir: "/config"
         args:
           - --user-data-dir
