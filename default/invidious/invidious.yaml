@@ -45,7 +45,7 @@ spec:
           main:
             image:
               repository: quay.io/invidious/invidious
-              tag: 2024.10.30-2e3a7ad
+              tag: 2024.10.18-d8b893e
             envFrom: *envFrom
             env:
               # INVIDIOUS_ADMINS: "[billimek]"
