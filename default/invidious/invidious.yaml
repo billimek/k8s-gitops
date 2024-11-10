@@ -45,23 +45,36 @@ spec:
           main:
             image:
               repository: quay.io/invidious/invidious
-              tag: 2024.10.18-d8b893e
+              tag: 2024.11.08-b173d4a
             envFrom: *envFrom
             env:
-              INVIDIOUS_ADMINS: "[billimek]"
-              INVIDIOUS_CHANNEL_THREADS: 2
-              INVIDIOUS_CHECK_TABLES: true
-              INVIDIOUS_DOMAIN: i.eviljungle.com
-              INVIDIOUS_EXTERNAL_PORT: 443
-              INVIDIOUS_FULL_REFRESH: true
-              INVIDIOUS_HTTPS_ONLY: true
-              INVIDIOUS_PORT: 3000
-              INVIDIOUS_REGISTRATION_ENABLED: false
-              INVIDIOUS_POPULAR_ENABLED: false
-              INVIDIOUS_QUALITY: dash
-              INVIDIOUS_QUALITY_DASH: best
-              INVIDIOUS_CHANNEL_REFRESH_INTERVAL: 30m
-              INVIDIOUS_SIGNATURE_SERVER: inv-sig-helper:12999
+              # INVIDIOUS_ADMINS: "[billimek]"
+              # INVIDIOUS_CHANNEL_THREADS: 2
+              # INVIDIOUS_CHECK_TABLES: true
+              # INVIDIOUS_DOMAIN: i.eviljungle.com
+              # INVIDIOUS_EXTERNAL_PORT: 443
+              # INVIDIOUS_FULL_REFRESH: true
+              # INVIDIOUS_HTTPS_ONLY: true
+              # INVIDIOUS_PORT: 3000
+              # INVIDIOUS_REGISTRATION_ENABLED: false
+              # INVIDIOUS_POPULAR_ENABLED: false
+              # INVIDIOUS_QUALITY: dash
+              # INVIDIOUS_QUALITY_DASH: best
+              # INVIDIOUS_CHANNEL_REFRESH_INTERVAL: 30m
+              # INVIDIOUS_SIGNATURE_SERVER: inv-sig-helper:12999
+              INVIDIOUS_CONFIG: |
+                admins: [billimek]
+                channel_threads: 2
+                check_tables: true
+                full_refresh: true
+                registration_enabled: false
+                popular_enabled: false
+                quality: dash
+                quality_dash: best
+                signature_server: inv_sig_helper:12999
+                external_port: 443
+                domain: i.eviljungle.com
+                https_only: true
             probes:
               liveness: &probes
                 enabled: true
