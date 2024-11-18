@@ -29,7 +29,7 @@ spec:
   values:
     image:
       repository: espresense/espresense-companion
-      tag: "1.0.5"
+      tag: "1.0.8"
     env:
       TZ: "America/New_York"
       CONFIG_DIR: "/config"
