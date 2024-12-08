@@ -99,7 +99,7 @@ spec:
         enabled: true
         storageClass: "rook-ceph-block"
         accessMode: ReadWriteOnce
-        size: "30Gi"
+        size: "60Gi"
       hass-gcp-sa-json:
         enabled: true
         type: secret
