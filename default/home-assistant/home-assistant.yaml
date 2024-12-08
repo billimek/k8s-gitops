@@ -106,10 +106,12 @@ spec:
         mountPath: /config/home-assistant-4d8d1f2ca10f.json
         readOnly: true
       tmp:
+        enabled: true
         type: emptyDir
         globalMounts:
           - path: /tmp
       docker-env-empty:
+        enabled: true
         type: emptyDir
         globalMounts:
           - path: /.dockerenv
