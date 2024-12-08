@@ -113,8 +113,8 @@ spec:
       docker-env-empty:
         enabled: true
         type: emptyDir
-        subPath: .docker-env
-        mountPath: /.docker-env
+        subPath: .dockerenv
+        mountPath: /.dockerenv
 
     resources:
       requests:
