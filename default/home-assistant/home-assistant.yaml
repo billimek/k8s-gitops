@@ -109,6 +109,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      docker-env-empty:
+        type: emptyDir
+        globalMounts:
+          - path: /.dockerenv
 
     resources:
       requests:
