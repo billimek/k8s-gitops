@@ -35,6 +35,9 @@ spec:
 
     env:
       TZ: "America/New_York"
+      PYTHONPATH: "/config/deps"
+      UV_SYSTEM_PYTHON: "true"
+      UV_NO_CACHE: "true"
 
     envFrom:
       - secretRef:
@@ -115,6 +118,7 @@ spec:
         type: emptyDir
         subPath: .dockerenv
         mountPath: /.dockerenv
+        readOnly: true
 
     resources:
       requests:
