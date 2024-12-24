@@ -34,7 +34,7 @@ spec:
           main:
             image:
               repository: quay.io/invidious/inv-sig-helper
-              tag: latest@sha256:fca9bd68e69bc782aaf2be0ef8b3dc7a160dd57b2ac219a1caf16a33c249264c
+              tag: latest@sha256:5ee036b5b816f88ceb37fd07cde148cb99a3e42a19443b8a476d19c03d107745
             args:
               - --tcp
               - "0.0.0.0:12999"
