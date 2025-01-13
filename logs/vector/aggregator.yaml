@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: vector
-      version: 0.38.1
+      version: 0.39.0
       sourceRef:
         kind: HelmRepository
         name: vector-charts
