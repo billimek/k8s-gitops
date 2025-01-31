@@ -2,19 +2,19 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: overseerr-restic
+  name: jellyseerr-restic
   namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: overseerr-restic-secret
+    name: jellyseerr-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/overseerr'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/jellyseerr'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
@@ -25,16 +25,16 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: overseerr
+  name: jellyseerr
   namespace: default
 spec:
-  sourcePVC: overseerr-config
+  sourcePVC: jellyseerr-config
   trigger:
     schedule: "30 5 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: overseerr-restic-secret
+    repository: jellyseerr-restic-secret
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-rbdplugin-snapclass
     storageClassName: rook-ceph-block
