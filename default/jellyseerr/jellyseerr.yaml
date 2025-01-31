@@ -113,7 +113,7 @@ spec:
         accessMode: ReadWriteOnce
         size: 1Gi
         globalMounts:
-          - path: /config
+          - path: /app/config
       config-logs:
         type: emptyDir
         globalMounts:
