@@ -108,7 +108,7 @@ spec:
 
     persistence:
       config:
-        enabled: true
+        type: persistentVolumeClaim
         storageClass: rook-ceph-block
         accessMode: ReadWriteOnce
         size: 1Gi
