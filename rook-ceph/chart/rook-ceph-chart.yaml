@@ -20,6 +20,7 @@ spec:
       enabled: false
     pspEnable: false
     csi:
+      disableHolderPods: true
       kubeletDirPath: /var/lib/kubelet
       enableGrpcMetrics: true
       enableCSIHostNetwork: true
