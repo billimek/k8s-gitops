@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: victoria-metrics-k8s-stack
+  name: vm
   namespace: monitoring
 spec:
   chart:
@@ -27,6 +27,7 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    fullnameOverride: stack
     victoria-metrics-operator:
       enabled: true
 
