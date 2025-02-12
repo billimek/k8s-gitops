@@ -120,7 +120,8 @@ spec:
     vmalert:
       enabled: true
       spec:
-        externalURL: "https://vmalert.eviljungle.com"
+        extraArgs:
+          externalURL: "https://vmalert.eviljungle.com"
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
