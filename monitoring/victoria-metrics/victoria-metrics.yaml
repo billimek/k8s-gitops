@@ -77,9 +77,12 @@ spec:
         tls:
         - hosts:
           - vm-alert.eviljungle.com
-      # useManagedConfig: true
       config:
         route:
+          group_by: ["alertname", "job"]
+          group_wait: 45s
+          group_interval: 10m
+          repeat_interval: 12h
           routes:
           - matchers:
             - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit"
@@ -87,6 +90,12 @@ spec:
           - matchers:
             - severity=~"warning|critical"
             receiver: slack-notifications
+        inhibit_rules:
+          - source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity = "warning"
+            equal: ["alertname", "namespace"]
         receivers:
         - name: 'blackhole'
         - name: 'slack-notifications'
@@ -110,14 +119,16 @@ spec:
 
     vmalert:
       enabled: true
+      spec:
+        externalURL: "https://vmalert.eviljungle.com"
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-        - vmalerts.eviljungle.com
+        - vmalert.eviljungle.com
         tls:
         - hosts:
-          - vmalerts.eviljungle.com
+          - vmalert.eviljungle.com
 
     vmagent:
       enabled: true
