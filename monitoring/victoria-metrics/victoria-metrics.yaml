@@ -30,6 +30,13 @@ spec:
     fullnameOverride: stack
     victoria-metrics-operator:
       enabled: true
+      env:
+        - name: VM_VMALERTDEFAULT_CONFIGRELOADERCPU
+          value: 0
+        - name: VM_VMAGENTDEFAULT_CONFIGRELOADERCPU
+          value: 0
+        - name: VM_VMALERTMANAGER_CONFIGRELOADERCPU
+          value: 0
 
     defaultDashboards:
       enabled: true
