@@ -49,6 +49,13 @@ spec:
           resources:
             requests:
               storage: 60Gi
+        resources:
+          limits:
+            memory: 1.2Gi
+          requests:
+            cpu: 530m
+            memory: 1.2Gi
+
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
@@ -70,6 +77,17 @@ spec:
         tls:
         - hosts:
           - vm-alert.eviljungle.com
+      config:
+        route:
+          routes:
+          - matchers:
+            - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit"
+            receiver: 'blackhole'
+          - matchers:
+            - severity=~"warning|critical"
+            receiver: discord
+        receivers:
+        - name: 'blackhole'
 
     vmalert:
       enabled: true
@@ -92,24 +110,107 @@ spec:
         tls:
         - hosts:
           - vmagent.eviljungle.com
+      spec:
+        inlineScrapeConfig: |
+          - job_name: 'ipmi'
+            metrics_path: '/metrics'
+            static_configs:
+            - targets:
+              - nas.home:9290
+          - job_name: 'node'
+            static_configs:
+            - targets:
+              - proxmox-b.home:9100
+              - proxmox-c.home:9100
+              - opnsense.home:9100
+              - nas.home:9100
+          - job_name: 'smartctl'
+            metrics_path: '/metrics'
+            static_configs:
+            - targets:
+              - nas.home:9633
+          - job_name: 'upsc-exporter'
+            metrics_path: '/metrics'
+            static_configs:
+            - targets:
+              - proxmox-b.home:8081
+              - proxmox-c.home:8081
+          - job_name: 'zfs'
+            metrics_path: '/metrics'
+            static_configs:
+            - targets:
+              - nas.home:9134
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 100Mi
 
     grafana:
       enabled: false
 
     prometheus-node-exporter:
       enabled: true
+      extraArgs:
+      - --collector.disable-defaults
+      - --collector.uname
+      - --collector.cpu
+      - --collector.meminfo
+      - --collector.nfs
 
     kube-state-metrics:
       enabled: true
 
     kubelet:
       enabled: true
+      vmScrape:
+        spec:
+          # drop high cardinality label and useless metrics for cadvisor and kubelet
+          metricRelabelConfigs:
+          # Drop less useful container CPU metrics.
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_cpu_(cfs_throttled_seconds_total|load_average_10s|system_seconds_total|user_seconds_total)'
+          # Drop less useful / always zero container memory metrics.
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_memory_(failures_total|mapped_file|swap)'
+          # Drop less useful container process metrics.
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_(file_descriptors|tasks_state|threads_max)'
+          # Drop less useful container filesystem metrics.
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)'
+          # Drop less useful container blkio metrics.
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_blkio_device_usage_total'
+          # Drop container spec metrics that overlap with kube-state-metrics.
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_spec.*'
+          # Drop cgroup metrics with no pod.
+          - sourceLabels: [id, pod]
+            action: drop
+            regex: '.+;'
+          - action: drop
+            sourceLabels: [__name__]
+            regex: prober_probe_duration_seconds_bucket
+          # Drop high-cardinality labels.
+          - action: labeldrop
+            regex: (uid|id|name|pod_uid|interface)
+          - action: drop
+            sourceLabels: [__name__]
+            regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
 
     kubeApiServer:
       enabled: true
 
     kubeControllerManager:
-      enabled: true
+      enabled: false
 
     coreDns:
       enabled: true
