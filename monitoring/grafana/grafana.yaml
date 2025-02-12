@@ -393,19 +393,18 @@ spec:
           - name: Loki
             orgId: 1
         datasources:
-          - name: VictoriaMetrics
-            type: victoriametrics-metrics-datasource
-            access: proxy
-            url: http://vmsingle-stack:8429
-            isDefault: true
           - name: Prometheus
             type: prometheus
             access: proxy
-            url: http://thanos-query.monitoring.svc.cluster.local:9090
-            isDefault: false
+            # url: http://thanos-query.monitoring.svc.cluster.local:9090
+            url: http://vmsingle-stack.monitoring.svc.cluster.local:8429
+            isDefault: true
             jsonData:
-              prometheusType: Thanos
-              timeInterval: 1m
+              # prometheusType: Thanos
+              # timeInterval: 1m
+              timeInterval: "15s"
+              queryTimeout: "60s"
+              httpMethod: POST
           - name: Loki
             type: loki
             access: proxy
@@ -413,9 +412,11 @@ spec:
           - name: Alertmanager
             type: alertmanager
             access: proxy
-            url: http://alertmanager.monitoring.svc.cluster.local:9093
+            # url: http://alertmanager.monitoring.svc.cluster.local:9093
+            url: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
+              handleGrafanaManagedAlerts: true
           - name: influxdb
             type: influxdb
             access: proxy
