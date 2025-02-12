@@ -393,8 +393,6 @@ spec:
           - name: Loki
             orgId: 1
         datasources:
-
-        datasources:
           - name: VictoriaMetrics
             type: victoriametrics-metrics-datasource
             access: proxy
