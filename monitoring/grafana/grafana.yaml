@@ -393,11 +393,18 @@ spec:
           - name: Loki
             orgId: 1
         datasources:
+
+        datasources:
+          - name: VictoriaMetrics
+            type: victoriametrics-metrics-datasource
+            access: proxy
+            url: http://vmsingle-stack:8429
+            isDefault: true
           - name: Prometheus
             type: prometheus
             access: proxy
             url: http://thanos-query.monitoring.svc.cluster.local:9090
-            isDefault: true
+            isDefault: false
             jsonData:
               prometheusType: Thanos
               timeInterval: 1m
