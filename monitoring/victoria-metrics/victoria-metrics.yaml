@@ -77,7 +77,7 @@ spec:
         tls:
         - hosts:
           - vm-alert.eviljungle.com
-      useManagedConfig: true
+      # useManagedConfig: true
       config:
         route:
           routes:
