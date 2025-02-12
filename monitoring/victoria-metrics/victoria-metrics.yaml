@@ -1,0 +1,126 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vm
+  namespace: monitoring
+spec:
+  chart:
+    spec:
+      chart: victoria-metrics-k8s-stack
+      version: 0.36.1
+      sourceRef:
+        kind: HelmRepository
+        name: victoriametrics-charts
+        namespace: flux-system
+  interval: 15m
+  maxHistory: 3
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    victoria-metrics-operator:
+      enabled: true
+
+    defaultDashboards:
+      enabled: true
+      grafanaOperator:
+        # -- Create dashboards as CRDs (requires grafana-operator to be installed)
+        enabled: false
+
+    vmsingle:
+      enabled: true
+      spec:
+        # -- Data retention period. Possible units character: h(ours), d(ays), w(eeks), y(ears), if no unit character specified - month. The minimum retention period is 24h. See these [docs](https://docs.victoriametrics.com/single-server-victoriametrics/#retention)
+        retentionPeriod: "3"
+        replicaCount: 1
+        storage:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 60Gi
+      ingress:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+          - vm.eviljungle.com
+        tls:
+          hosts:
+            - vm.eviljungle.com
+
+    alertmanager:
+      enabled: true
+      spec:
+        externalURL: "vm-alert.eviljungle.com"
+      ingress:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+          - vm-alert.eviljungle.com
+        tls:
+          hosts:
+            - vm-alert.eviljungle.com
+
+    vmalert:
+      enabled: true
+      ingress:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+          - vmalerts.eviljungle.com
+        tls:
+          hosts:
+            - vmalerts.eviljungle.com
+
+    vmagent:
+      enabled: true
+      ingress:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+          - vmagent.eviljungle.com
+        tls:
+          hosts:
+            - vmagent.eviljungle.com
+
+    grafana:
+      enabled: false
+
+    prometheus-node-exporter:
+      enabled: true
+
+    kube-state-metrics:
+      enabled: true
+
+    kubelet:
+      enabled: true
+
+    kubeApiServer:
+      enabled: true
+
+    kubeControllerManager:
+      enabled: true
+
+    coreDns:
+      enabled: true
+
+    kubeEtcd:
+      enabled: false
+
+    kubeScheduler:
+      enabled: false
+
+    kubeProxy:
+      enabled: false
+
+    prometheus-operator-crds:
+      enabled: false
