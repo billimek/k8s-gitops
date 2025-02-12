@@ -52,10 +52,10 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - vm.eviljungle.com
+        - vm.eviljungle.com
         tls:
-          hosts:
-            - vm.eviljungle.com
+        - hosts:
+          - vm.eviljungle.com
 
     alertmanager:
       enabled: true
@@ -65,10 +65,10 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - vm-alert.eviljungle.com
+        - vm-alert.eviljungle.com
         tls:
-          hosts:
-            - vm-alert.eviljungle.com
+        - hosts:
+          - vm-alert.eviljungle.com
 
     vmalert:
       enabled: true
@@ -76,10 +76,10 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - vmalerts.eviljungle.com
+        - vmalerts.eviljungle.com
         tls:
-          hosts:
-            - vmalerts.eviljungle.com
+        - hosts:
+          - vmalerts.eviljungle.com
 
     vmagent:
       enabled: true
@@ -87,10 +87,10 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-          - vmagent.eviljungle.com
+        - vmagent.eviljungle.com
         tls:
-          hosts:
-            - vmagent.eviljungle.com
+        - hosts:
+          - vmagent.eviljungle.com
 
     grafana:
       enabled: false
