@@ -142,7 +142,7 @@ spec:
               - nas.home:9134
         resources:
           limits:
-            cpu: nil
+            cpu: null
             memory: 500Mi
           requests:
             cpu: 500m
