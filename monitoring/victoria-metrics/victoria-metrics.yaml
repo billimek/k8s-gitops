@@ -61,7 +61,7 @@ spec:
     alertmanager:
       enabled: true
       spec:
-        externalURL: "vm-alert.eviljungle.com"
+        externalURL: "https://vm-alert.eviljungle.com"
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
