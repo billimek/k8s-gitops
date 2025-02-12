@@ -142,6 +142,7 @@ spec:
               - nas.home:9134
         resources:
           limits:
+            cpu: nil
             memory: 500Mi
           requests:
             cpu: 500m
@@ -226,3 +227,8 @@ spec:
 
     prometheus-operator-crds:
       enabled: false
+
+  valuesFrom:
+  - kind: Secret
+    name: "victoria-metrics-k8s-stack-helm-values"
+    optional: false
