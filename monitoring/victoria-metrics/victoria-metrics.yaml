@@ -175,6 +175,11 @@ spec:
           name: victoria-metrics-k8s-stack-helm-values
           key: additionalScrapeConfigs.yaml 
         inlineScrapeConfig: |
+          - job_name: 'node-exporter'
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                target_label: instance
+                action: replace
           - job_name: 'ipmi'
             metrics_path: '/metrics'
             static_configs:
@@ -216,12 +221,6 @@ spec:
 
     prometheus-node-exporter:
       enabled: true
-      vmScrape:
-        spec:
-          relabelConfigs:
-            - source_labels: [__meta_kubernetes_pod_node_name]
-              target_label: instance
-              action: replace
 
     kube-state-metrics:
       enabled: true
