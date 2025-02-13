@@ -264,7 +264,7 @@ spec:
       enabled: false
 
     prometheus-operator-crds:
-      enabled: false
+      enabled: true
 
   valuesFrom:
   - kind: Secret
