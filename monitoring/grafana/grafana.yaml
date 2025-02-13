@@ -100,14 +100,6 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/ceph
-          - name: flux
-            orgId: 1
-            folder: Flux
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/flux
           - name: kubernetes
             orgId: 1
             folder: Kubernetes
@@ -133,14 +125,6 @@ spec:
             allowUiUpdates: true
             options:
               path: /var/lib/grafana/dashboards/teslamate
-          - name: thanos
-            orgId: 1
-            folder: Thanos
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/thanos
     dashboards:
       default:
         # Ref: https://grafana.com/grafana/dashboards/22413-k8s-node-metrics-multi-clusters-node-exporter-prometheus-grafana11-2024-en/
@@ -156,6 +140,9 @@ spec:
           datasource: Prometheus
         external-secrets:
           url: https://raw.githubusercontent.com/external-secrets/external-secrets/main/docs/snippets/dashboard.json
+          datasource: Prometheus
+        flux-control-plane:
+          url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/control-plane.json
           datasource: Prometheus
         frigate:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/frigate.json
@@ -215,18 +202,17 @@ spec:
         ups:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
           datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/3170-zfs/
-        zfs:
-          gnetId: 3170
-          revision: 3
-          datasource: Prometheus
         volsync:
           # removate: dashboardName="VolSync Dashboard"
           gnetId: 21356
           revision: 3
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-            - { name: VAR_REPLICATIONDESTNAME, value: .*-dst }
+        # Ref: https://grafana.com/grafana/dashboards/3170-zfs/
+        zfs:
+          gnetId: 3170
+          revision: 3
+          datasource: Prometheus
 
       ceph:
         ceph-cluster:
@@ -275,9 +261,6 @@ spec:
           # renovate: dashboardName="K8s / Storage / Volumes / Cluster"
           gnetId: 11454
           revision: 14
-          datasource: Prometheus
-        flux-control-plane:
-          url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/control-plane.json
           datasource: Prometheus
 
       nginx:
@@ -352,12 +335,9 @@ spec:
           - name: Prometheus
             type: prometheus
             access: proxy
-            # url: http://thanos-query.monitoring.svc.cluster.local:9090
             url: http://vmsingle-stack.monitoring.svc.cluster.local:8429
             isDefault: true
             jsonData:
-              # prometheusType: Thanos
-              # timeInterval: 1m
               timeInterval: "15s"
               queryTimeout: "60s"
               httpMethod: POST
@@ -368,7 +348,6 @@ spec:
           - name: Alertmanager
             type: alertmanager
             access: proxy
-            # url: http://alertmanager.monitoring.svc.cluster.local:9093
             url: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
