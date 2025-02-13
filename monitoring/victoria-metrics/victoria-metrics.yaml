@@ -208,17 +208,17 @@ spec:
           # drop high cardinality label and useless metrics for cadvisor and kubelet
           metricRelabelConfigs:
           # Drop less useful container CPU metrics.
-          - sourceLabels: [__name__]
-            action: drop
-            regex: 'container_cpu_(cfs_throttled_seconds_total|load_average_10s|system_seconds_total|user_seconds_total)'
+          # - sourceLabels: [__name__]
+          #   action: drop
+          #   regex: 'container_cpu_(cfs_throttled_seconds_total|load_average_10s|system_seconds_total|user_seconds_total)'
           # Drop less useful / always zero container memory metrics.
-          - sourceLabels: [__name__]
-            action: drop
-            regex: 'container_memory_(failures_total|mapped_file|swap)'
+          # - sourceLabels: [__name__]
+          #   action: drop
+          #   regex: 'container_memory_(failures_total|mapped_file|swap)'
           # Drop less useful container process metrics.
-          - sourceLabels: [__name__]
-            action: drop
-            regex: 'container_(file_descriptors|tasks_state|threads_max)'
+          # - sourceLabels: [__name__]
+          #   action: drop
+          #   regex: 'container_(file_descriptors|tasks_state|threads_max)'
           # Drop less useful container filesystem metrics.
           - sourceLabels: [__name__]
             action: drop
