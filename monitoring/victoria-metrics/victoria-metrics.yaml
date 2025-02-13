@@ -191,12 +191,12 @@ spec:
 
     prometheus-node-exporter:
       enabled: true
-      extraArgs:
-      - --collector.disable-defaults
-      - --collector.uname
-      - --collector.cpu
-      - --collector.meminfo
-      - --collector.nfs
+      # extraArgs:
+      # - --collector.disable-defaults
+      # - --collector.uname
+      # - --collector.cpu
+      # - --collector.meminfo
+      # - --collector.nfs
 
     kube-state-metrics:
       enabled: true
