@@ -150,7 +150,7 @@ spec:
           - vmagent.eviljungle.com
       spec:
         additionalScrapeConfigs:
-          name: victoria-metrics-k8s-stack-additionalScrapeConfigs
+          name: victoria-metrics-k8s-stack-helm-values
           key: additionalScrapeConfigs.yaml 
         inlineScrapeConfig: |
           - job_name: 'ipmi'
