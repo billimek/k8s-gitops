@@ -149,6 +149,9 @@ spec:
         - hosts:
           - vmagent.eviljungle.com
       spec:
+        additionalScrapeConfigs:
+          name: victoria-metrics-k8s-stack-additionalScrapeConfigs
+          key: additionalScrapeConfigs.yaml 
         inlineScrapeConfig: |
           - job_name: 'ipmi'
             metrics_path: '/metrics'
