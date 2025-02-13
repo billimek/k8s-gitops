@@ -175,11 +175,6 @@ spec:
           name: victoria-metrics-k8s-stack-helm-values
           key: additionalScrapeConfigs.yaml 
         inlineScrapeConfig: |
-          - job_name: 'node-exporter'
-            relabel_configs:
-              - source_labels: [__meta_kubernetes_pod_node_name]
-                target_label: instance
-                action: replace
           - job_name: 'ipmi'
             metrics_path: '/metrics'
             static_configs:
@@ -269,13 +264,6 @@ spec:
           - action: drop
             sourceLabels: [__name__]
             regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
-          # relabelConfigs:
-          #   - action: labelmap
-          #     regex: __meta_kubernetes_node_label_(.+)
-          #   - sourceLabels: [__metrics_path__]
-          #     targetLabel: metrics_path
-          #   - targetLabel: "job"
-          #     replacement: "kubelet"
 
     kubeApiServer:
       enabled: true
