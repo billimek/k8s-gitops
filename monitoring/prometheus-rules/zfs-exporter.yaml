@@ -51,3 +51,9 @@ spec:
           annotations:
             summary: "ZFS collector failed"
             description: ZFS collector for {{ $labels.instance }} has failed to collect information
+        - alert: ZfsUnexpectedPoolState
+          annotations:
+            summary: ZFS pool {{$labels.zpool}} on {{$labels.instance}} is in a unexpected state {{$labels.state}}
+          expr: node_zfs_zpool_state{state!="online"} > 0
+          labels:
+            severity: critical
