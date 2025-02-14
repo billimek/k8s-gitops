@@ -138,8 +138,8 @@ spec:
                 {{ if .Labels.pod }}• **Pod:** {{ .Labels.pod }}{{ end }}
                 {{ if .Labels.container }}• **Container:** {{ .Labels.container }}{{ end }}
 
-                {{ if .Annotations.runbook_url }}**Runbook:** {{ .Annotations.runbook_url }}{{ end }}                
-                {{ if .GeneratorURL }}**Source:** {{ .GeneratorURL }}{{ end }}
+                {{ if .Annotations.runbook_url }}[**Runbook**]({{ .Annotations.runbook_url }}){{ end }}
+                {{ if .GeneratorURL }}[**Source**]({{ .GeneratorURL }}){{ end }}
                 {{ end }}
 
     vmalert:
