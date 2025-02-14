@@ -151,11 +151,8 @@ spec:
         ipmi:
           gnetId: 13177
           revision: 2
-          datasource: Prometheus
-        loki:
-          gnetId: 13407
-          revision: 1
-          datasource: Prometheus
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
         loki-logs:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/loki_logs.json
           datasource: Loki
@@ -166,7 +163,8 @@ spec:
           datasource: Prometheus
         node-feature-discovery:
           url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
-          datasource: Prometheus
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
         opnsense:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
           datasource: Prometheus
@@ -178,9 +176,6 @@ spec:
           revision: 2
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-        speedtest-exporter:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/speedtest-exporter.json
-          datasource: Prometheus
         speedtest-exporter-hub:
           # renovate: dashboardName="Speedtest-Exporter Dashboard"
           gnetId: 13665
