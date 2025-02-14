@@ -17,7 +17,7 @@ spec:
       interval: 5m
   values:
     image:
-      repository: hcr.io/lpicanco/prometheus-speedtest-exporter
+      repository: ghcr.io/lpicanco/prometheus-speedtest-exporter
       tag: 0.2.2
     service:
       main:
