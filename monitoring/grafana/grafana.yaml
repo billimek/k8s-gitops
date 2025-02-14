@@ -150,7 +150,7 @@ spec:
         # Ref: https://grafana.com/grafana/dashboards/13177-ipmi-for-prometheus/
         ipmi:
           gnetId: 13177
-          revision: 2
+          revision: 3
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
         loki-logs:
