@@ -4,7 +4,7 @@
       {
         "builtIn": 1,
         "datasource": {
-          "type": "prometheus"  
+          "type": "prometheus"
         },
         "enable": true,
         "hide": true,
@@ -18,7 +18,7 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 2,
+  "graphTooltip": 0,
   "id": 215,
   "links": [],
   "panels": [
@@ -561,6 +561,6 @@
   "timezone": "",
   "title": "Prometheus Exporter Summary",
   "uid": "I7JgE68Zz",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
