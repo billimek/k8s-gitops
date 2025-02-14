@@ -13,15 +13,11 @@
 
 * [influxdb/influxdb.yaml](influxdb/influxdb.yaml)
 
-# kube-prometheus-stack
+# prometheus-rules
 
-![](https://i.imgur.com/VwDwdpQ.png)
+Various custom PrometheusRule definitions for this cluster
 
-[kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) installs Prometheus Operator, required CRDs, and a default altering ruleset.
-
-* [kube-prometheus-stack/kube-prometheus-stack.yaml](kube-prometheus-stack/kube-prometheus-stack.yaml)
-* [kube-prometheus-stack/prometheus-rules/](kube-prometheus-stack/prometheus-rules/)
-* [kube-prometheus-stack/crds/](kube-prometheus-stack/crds/)
+* [prometheus-rules/](prometheus-rules/)
 
 # speedtest-exporter
 
@@ -31,10 +27,18 @@ ISP speed test results collector
 
 * [speedtest-exporter/speedtest-exporter.yaml](speedtest-exporter/speedtest-exporter.yaml)
 
-# thanos
+# trivy
 
-![](https://i.imgur.com/6c5jubC.png)
+![](https://i.imgur.com/yvZ86z0.png)
 
-[Thanos](https://github.com/thanos-io/thanos) is a highly available Prometheus setup with long term storage capabilities.
+Be depressed about how many vulnerabilities you have in your images
 
-* [thanos/thanos.yaml](thanos/thanos.yaml)
+* [trivy/trivy.yaml](trivy/trivy.yaml)
+
+# victoria metrics
+
+![](https://i.imgur.com/ab4qB97.png)
+
+VictoriaMetrics [k8s stack helm chart](https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack) to take the place of kube-prometheus-stack helm chart & thanos for the same features/functionality but more stable and less resource intensive.
+
+* [victoria-metrics/victoria-metrics.yaml](victoria-metrics/victoria-metrics.yaml)

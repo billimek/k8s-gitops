@@ -67,6 +67,12 @@ Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-
 
 * [snapshot-controller/](snapshot-controller)
 
+# spegel
+
+[spegel](https://github.com/spegel-org/spegel): Makes managing and caching docker images much better!
+
+* [spegel/](spegel/spegel.yaml)
+
 # volsync
 
 [volsync](https://github.com/backube/volsync): Asynchronous data replication for Kubernetes volumes.  Leveraging storage CSI snapshotting and restic, this enables the backing-up of persistent volumes to an S3 bucket.

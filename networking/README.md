@@ -9,3 +9,9 @@ Using this specific [coredns](https://github.com/coredns/coredns) deployment to 
 [Run your own on-prem LoadBalancer](https://metallb.universe.tf/)
 
 * [metallb/metallb.yaml](metallb/metallb.yaml)
+
+# tailscale operator
+
+[Put things in kubernets on your tailnet!](https://tailscale.com/kb/1236/kubernetes-operator)
+
+* [tailscale/tailscale-operator.yaml](tailscale/tailscale-operator.yaml)
