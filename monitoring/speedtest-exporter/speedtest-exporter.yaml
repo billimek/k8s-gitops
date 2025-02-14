@@ -33,6 +33,6 @@ spec:
         enabled: true
         endpoints:
           - port: metrics
-            path: /
+            path: /metrics
             interval: 60m
             scrapeTimeout: 1m
