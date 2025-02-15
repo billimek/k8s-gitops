@@ -141,7 +141,7 @@ spec:
                 {{- end }}
 
 
-                {{- if or .Labels.alertname .Labels.namespace .Labels.pod .Labels.container }}
+                {{- if or .Labels.alertname .Labels.namespace .Labels.pod .Labels.container .Annotations.runbook_url .GeneratorURL }}
                 **Details:**
                 {{- if .Labels.alertname }}
                 • alert: {{ .Labels.alertname }}{{ end }}
@@ -151,15 +151,10 @@ spec:
                 • pod: {{ .Labels.pod }}{{ end }}
                 {{- if .Labels.container }}
                 • container: {{ .Labels.container }}{{ end }}
-                {{- end }}
-
-
-                {{- if or .Annotations.runbook_url .GeneratorURL }}
-                **Links:**
                 {{- if .Annotations.runbook_url }}
-                • [Runbook]({{ .Annotations.runbook_url }}){{ end }}
+                • [runbook]({{ .Annotations.runbook_url }}){{ end }}
                 {{- if .GeneratorURL }}
-                • [Source]({{ .GeneratorURL }}){{ end }}
+                • [source]({{ .GeneratorURL }}){{ end }}
                 {{- end }}
                 {{ end }}
 
