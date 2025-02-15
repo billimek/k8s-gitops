@@ -133,13 +133,15 @@ spec:
 
                 {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
 
-                {{ if .Labels.reason }}• **Reason:** {{ .Labels.reason }}{{ end }}
 
-                {{ if .Labels.node }}• **Node:** {{ .Labels.node }}{{ end }}
+                {{ if .Labels.alertname }}• **Alert Name:** {{ .Labels.alertname }}{{ end }}
+
+                {{ if .Labels.namespace }}• **Namespace:** {{ .Labels.namespace }}{{ end }}
 
                 {{ if .Labels.pod }}• **Pod:** {{ .Labels.pod }}{{ end }}
 
                 {{ if .Labels.container }}• **Container:** {{ .Labels.container }}{{ end }}
+
 
                 {{ if .Annotations.runbook_url }}[**Runbook**]({{ .Annotations.runbook_url }}){{ end }}
                 {{ if .GeneratorURL }}[**Source**]({{ .GeneratorURL }}){{ end }}
