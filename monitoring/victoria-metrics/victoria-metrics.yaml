@@ -126,10 +126,11 @@ spec:
               username: 'Alertmanager'
               send_resolved: true
               title: |-
-                {{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}🔥{{ else if eq .CommonLabels.severity "warning" }}⚠️{{ else }}ℹ️{{ end }}{{ else }}✅{{ end }} [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
+                [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}🔥{{ else if eq .CommonLabels.severity "warning" }}⚠️{{ else }}ℹ️{{ end }}{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
               text: |
                 {{ range .Alerts -}}
                 **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
 
                 {{- if ne .Annotations.summary "" }}
                 **Summary:** {{ .Annotations.summary }}
@@ -139,17 +140,19 @@ spec:
                 **Description:** {{ .Annotations.description }}
                 {{- end }}
 
+
                 {{- if or .Labels.alertname .Labels.namespace .Labels.pod .Labels.container }}
                 **Details:**
                 {{- if .Labels.alertname }}
-                • **Alert Name:** {{ .Labels.alertname }}{{ end }}
+                • alert: {{ .Labels.alertname }}{{ end }}
                 {{- if .Labels.namespace }}
-                • **Namespace:** {{ .Labels.namespace }}{{ end }}
+                • namespace: {{ .Labels.namespace }}{{ end }}
                 {{- if .Labels.pod }}
-                • **Pod:** {{ .Labels.pod }}{{ end }}
+                • pod: {{ .Labels.pod }}{{ end }}
                 {{- if .Labels.container }}
-                • **Container:** {{ .Labels.container }}{{ end }}
+                • container: {{ .Labels.container }}{{ end }}
                 {{- end }}
+
 
                 {{- if or .Annotations.runbook_url .GeneratorURL }}
                 **Links:**
