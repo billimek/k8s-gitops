@@ -131,15 +131,15 @@ spec:
                 {{- range .Alerts }}
                 **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
 
-                {{- if ne .Annotations.summary "" }}
+                {{ if ne .Annotations.summary "" }}
                 **Summary:** {{ .Annotations.summary }}
-                {{- else if ne .Annotations.message "" }}
+                {{ else if ne .Annotations.message "" }}
                 **Message:** {{ .Annotations.message }}
-                {{- else if ne .Annotations.description "" }}
+                {{ else if ne .Annotations.description "" }}
                 **Description:** {{ .Annotations.description }}
-                {{- end }}
+                {{ end }}
 
-                {{- if or .Labels.alertname .Labels.namespace .Labels.pod .Labels.container .Annotations.runbook_url .GeneratorURL }}
+                {{ if or .Labels.alertname .Labels.namespace .Labels.pod .Labels.container .Annotations.runbook_url .GeneratorURL }}
                 **Details:**
                 {{- if .Labels.alertname }}
                 • *alert*: {{ .Labels.alertname }}
@@ -150,7 +150,7 @@ spec:
                 • [*runbook*]({{ .Annotations.runbook_url }}){{ end }}{{ if .GeneratorURL }}  
                 • [*source*]({{ .GeneratorURL }}){{ end }}
                 {{- end }}
-                {{- end }}
+                {{ end }}
     vmalert:
       enabled: true
       spec:
