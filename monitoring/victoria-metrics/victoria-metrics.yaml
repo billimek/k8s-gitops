@@ -133,11 +133,11 @@ spec:
 
                 {{ if ne .Annotations.summary "" }}
                 **Summary:** {{ .Annotations.summary }}
-                {{ else if ne .Annotations.message "" }}
+                {{- else if ne .Annotations.message "" }}
                 **Message:** {{ .Annotations.message }}
-                {{ else if ne .Annotations.description "" }}
+                {{- else if ne .Annotations.description "" }}
                 **Description:** {{ .Annotations.description }}
-                {{ end }}
+                {{- end }}
 
                 {{ if or .Labels.alertname .Labels.namespace .Labels.pod .Labels.container .Annotations.runbook_url .GeneratorURL }}
                 **Details:**
