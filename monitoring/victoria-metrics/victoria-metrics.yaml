@@ -129,17 +129,23 @@ spec:
                 [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}🔥{{ else if eq .CommonLabels.severity "warning" }}⚠️{{ else }}ℹ️{{ end }}{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
               text: |-
                 {{ range .Alerts -}}
-                  *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+                  **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
 
                 {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
 
                 **Details:**
-                  {{- if .Labels.alertname }}• *alert*: {{ .Labels.alertname }}{{ end }}
-                  {{- if .Labels.namespace }}• *namespace*: `{{ .Labels.namespace }}`{{ end }}
-                  {{- if .Labels.pod }}• *pod*: `{{ .Labels.pod }}`{{ end }}
-                  {{- if .Labels.container }}• *container*: `{{ .Labels.container }}`{{ end }}
-                {{- if .Annotations.runbook_url }}  • [*runbook*]({{ .Annotations.runbook_url }}){{ end }}
-                {{- if .GeneratorURL }}  • [*source*]({{ .GeneratorURL }}){{ end }}
+                {{ if .Labels.alertname }}
+                  • *alert*: {{ .Labels.alertname }}
+                {{ end }}
+                {{ if .Labels.namespace }}
+                  • *namespace*: `{{ .Labels.namespace }}`
+                {{ end }}
+                {{ if .Labels.pod }}• *pod*: `{{ .Labels.pod }}`{{ end }}
+                {{ if .Labels.container }}• *container*: `{{ .Labels.container }}`{{ end }}
+                {{ if .Annotations.runbook_url }}
+                  • [*runbook*]({{ .Annotations.runbook_url }})
+                {{ end }}
+                {{ if .GeneratorURL }}  • [*source*]({{ .GeneratorURL }}){{ end }}
 
                 **More Details:**
                   {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
