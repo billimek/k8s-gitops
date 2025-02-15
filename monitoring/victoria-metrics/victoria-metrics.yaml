@@ -134,12 +134,12 @@ spec:
                 {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
 
                 **Details:**
-                  {{ if .Labels.alertname }} • *alert*: {{ .Labels.alertname }}{{ end }}
-                  {{ if .Labels.namespace }} • *namespace*: `{{ .Labels.namespace }}`{{ end }}
-                  {{ if .Labels.pod }} • *pod*: `{{ .Labels.pod }}`{{ end }}
-                  {{ if .Labels.container }} • *container*: `{{ .Labels.container }}`{{ end }}
-                  {{ if .Annotations.runbook_url }} • [*runbook*]({{ .Annotations.runbook_url }}){{ end }}
-                  {{ if .GeneratorURL }} • [*source*]({{ .GeneratorURL }}){{ end }}
+                  {{- if .Labels.alertname }}{{ "\n" }} • *alert*: {{ .Labels.alertname }}{{ end -}}
+                  {{- if .Labels.namespace }}{{ "\n" }} • *namespace*: `{{ .Labels.namespace }}`{{ end -}}
+                  {{- if .Labels.pod }}{{ "\n" }} • *pod*: `{{ .Labels.pod }}`{{ end -}}
+                  {{- if .Labels.container }}{{ "\n" }} • *container*: `{{ .Labels.container }}`{{ end -}}
+                  {{- if .Annotations.runbook_url }}{{ "\n" }} • [*runbook*]({{ .Annotations.runbook_url }}){{ end -}}
+                  {{- if .GeneratorURL }}{{ "\n" }} • [*source*]({{ .GeneratorURL }}){{ end }}
 
                 **More Details:**
                   {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
