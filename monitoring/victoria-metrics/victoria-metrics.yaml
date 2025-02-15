@@ -72,7 +72,7 @@ spec:
               storage: 60Gi
         resources:
           limits:
-            memory: 1.2Gi
+            memory: 2Gi
           requests:
             cpu: 530m
             memory: 1.2Gi
@@ -134,8 +134,11 @@ spec:
                 {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
 
                 {{ if .Labels.reason }}• **Reason:** {{ .Labels.reason }}{{ end }}
+
                 {{ if .Labels.node }}• **Node:** {{ .Labels.node }}{{ end }}
+
                 {{ if .Labels.pod }}• **Pod:** {{ .Labels.pod }}{{ end }}
+
                 {{ if .Labels.container }}• **Container:** {{ .Labels.container }}{{ end }}
 
                 {{ if .Annotations.runbook_url }}[**Runbook**]({{ .Annotations.runbook_url }}){{ end }}
