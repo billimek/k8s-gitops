@@ -136,6 +136,7 @@ spec:
                 **Details:**
                   {{- if .Labels.alertname }}{{ "\n" }} • *alert*: {{ .Labels.alertname }}{{ end -}}
                   {{- if .Labels.kubernetes_node }}{{ "\n" }} • *node*: `{{ .Labels.kubernetes_node }}`{{ end -}}
+                  {{- if .Labels.node }}{{ "\n" }} • *node*: `{{ .Labels.node }}`{{ end -}}
                   {{- if .Labels.namespace }}{{ "\n" }} • *namespace*: `{{ .Labels.namespace }}`{{ end -}}
                   {{- if .Labels.pod }}{{ "\n" }} • *pod*: `{{ .Labels.pod }}`{{ end -}}
                   {{- if .Labels.container }}{{ "\n" }} • *container*: `{{ .Labels.container }}`{{ end -}}
