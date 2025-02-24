@@ -33,10 +33,10 @@ spec:
       fsGroup: 1000
     resources:
       requests:
-        memory: 9Gi
+        memory: 10Gi
         cpu: 500m
       limits:
-        memory: 9Gi
+        memory: 10Gi
     startupProbe:
       enabled: true
     extraEnv:
