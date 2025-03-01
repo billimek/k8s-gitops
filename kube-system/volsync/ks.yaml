@@ -14,7 +14,7 @@ spec:
     name: flux-system
     namespace: flux-system
   healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: volsync
       namespace: kube-system
