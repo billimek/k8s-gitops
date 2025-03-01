@@ -34,7 +34,7 @@ spec:
     resources:
       requests:
         memory: 10Gi
-        cpu: 500m
+        cpu: 1000m
       limits:
         memory: 10Gi
     startupProbe:
@@ -74,6 +74,7 @@ spec:
       gameMode: survival
       onlineMode: false
       maxWorldSize: 5999968
+      viewDistance: 24
       worldSaveName: 'world-20250218-thunderdome'
       motd: "\u00A76\u00A7lpublic survival\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP\u00A7r\n"
       icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
