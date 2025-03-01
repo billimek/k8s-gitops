@@ -1,5 +1,5 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: mcsv2
@@ -43,14 +43,23 @@ spec:
       ENABLE_AUTOPAUSE: FALSE
     minecraftServer:
       modUrls:
-        - https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar
+        - https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.21.0-dev+182-e49021f.jar
         - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
+        - https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar
+      # A list of Modrinth project slugs with optional version after colon
+      modrinth:
+        projects:
+          # - locked-chests-plugin
+          # - essentialsx # manually downloading alpha version until it's released on modrinth
+          - bluemap
+          - freezehibernate
+          - luckperms
+        # Downloads Modrinth project dependencies marked as optional
+        optionalDependencies: false
+        # The version type is used to determine the newest version to use from each project. The allowed values are: release, beta, alpha
+        allowedVersionType: alpha
       spigetResources:
-        - 28140
-        - 74354
-        - 102931
-        - 83557 # bluemap
-        - 4441 # hibernate
+        - 102931 # NoChatReports
       eula: "TRUE"
       version: "LATEST"
       type: PAPER
