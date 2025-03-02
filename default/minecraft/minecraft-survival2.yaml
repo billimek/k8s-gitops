@@ -44,7 +44,7 @@ spec:
     minecraftServer:
       modUrls:
         - https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar
-        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
+        # - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
         - https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar
       # A list of Modrinth project slugs with optional version after colon
       modrinth:
