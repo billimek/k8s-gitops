@@ -25,7 +25,7 @@ spec:
       storageClass: "rook-ceph-block"
       dataDir:
         enabled: true
-        Size: 10Gi
+        Size: 30Gi
     podSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
