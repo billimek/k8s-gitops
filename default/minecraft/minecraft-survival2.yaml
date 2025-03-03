@@ -51,8 +51,9 @@ spec:
         projects:
           # - locked-chests-plugin
           # - essentialsx # manually downloading alpha version until it's released on modrinth
+          - chunky
           - bluemap
-          - freezehibernate
+          # - freezehibernate
           - luckperms
         # Downloads Modrinth project dependencies marked as optional
         optionalDependencies: false
