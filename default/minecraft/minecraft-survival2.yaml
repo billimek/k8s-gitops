@@ -93,7 +93,7 @@ spec:
             port: 8100
           ingress:
             enabled: true
-            ingressClassName: nginx-tailscale
+            ingressClassName: nginx
             hosts:
               - name: mcsv2-map.eviljungle.com
                 path: /
