@@ -73,6 +73,7 @@ spec:
         mc.eviljungle.com. IN A   10.0.6.106
         plex.eviljungle.com. IN A   10.0.6.150
         hass.eviljungle.com. IN A   10.0.6.150
+        mcsv2-map.eviljungle.com. IN A   10.0.6.150
         request.eviljungle.com. IN A   10.0.6.150
         *.t.eviljungle.com. IN CNAME nginx-tailscale.drake-eel.ts.net
         *.eviljungle.com. IN A   100.112.94.76
