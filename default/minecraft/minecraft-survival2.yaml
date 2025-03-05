@@ -42,49 +42,46 @@ spec:
     extraEnv:
       ENABLE_AUTOPAUSE: FALSE
     minecraftServer:
+      difficulty: normal
+      eula: true
+      forceReDownload: true
+      gameMode: survival
+      hardcore: false
+      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
+      jvmOpts: "-Xms8192M -Xmx8192M --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20"
+      maxTickTime: -1
+      maxWorldSize: 5999968
+      memory: 9G
       modUrls:
         - https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar
         # - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
         - https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar
-      # A list of Modrinth project slugs with optional version after colon
       modrinth:
+        allowedVersionType: alpha
         projects:
-          # - locked-chests-plugin
-          # - essentialsx # manually downloading alpha version until it's released on modrinth
           - chunky
           - bluemap
           - discordsrv
           # - freezehibernate
           - luckperms
-        # Downloads Modrinth project dependencies marked as optional
-        optionalDependencies: false
-        # The version type is used to determine the newest version to use from each project. The allowed values are: release, beta, alpha
-        allowedVersionType: alpha
-      spigetResources:
-        - 102931 # NoChatReports
-      eula: "TRUE"
-      version: "LATEST"
-      type: PAPER
-      forceReDownload: true
-      # paperDownloadUrl: https://api.papermc.io/v2/projects/paper/versions/1.21.4/builds/173/downloads/paper-1.21.4-173.jar
-      memory: 9G
-      jvmOpts: "-Xms8192M -Xmx8192M --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20"
-      difficulty: normal
-      hardcore: false
-      maxTickTime: -1
-      serviceType: ClusterIP
-      gameMode: survival
-      onlineMode: false
-      maxWorldSize: 5999968
-      viewDistance: 24
-      worldSaveName: 'world-20250218-thunderdome'
       motd: "\u00A76\u00A7lpublic survival\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP\u00A7r\n"
-      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
+      onlineMode: false
+      ops: "billimek"
+      overrideServerProperties: true
       rcon:
         enabled: false
-        port: 25575
         password: "mc-rcon"
+        port: 25575
         serviceType: LoadBalancer
+      serviceType: ClusterIP
+      spawnProtection: 4
+      spigetResources:
+        - 102931 # NoChatReports
+      type: PAPER
+      version: "LATEST"
+      viewDistance: 24
+      whitelist: "billimek,Nadorrior,Sandbragger,tkws88,KhrysPBacon,MackCulley,Guydon,Shivanater"
+      worldSaveName: 'world-20250218-thunderdome'
       extraPorts:
         - name: map
           containerPort: 8100
