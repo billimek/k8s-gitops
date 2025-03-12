@@ -32,7 +32,7 @@ spec:
           app:
             image:
               repository: fallenbagel/jellyseerr
-              tag: 2.3.0
+              tag: 2.5.0
             env:
               TZ: America/New_York
               LOG_LEVEL: "info"
