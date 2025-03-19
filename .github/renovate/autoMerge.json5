@@ -11,9 +11,9 @@
       "packageNames": [
         "espresense/espresense-companion",
         "ghcr.io/home-assistant/home-assistant",
-        "ghcr.io/onedr0p/radarr",
-        "ghcr.io/onedr0p/sonarr",
-        "ghcr.io/onedr0p/sabnzbd",
+        "ghcr.io/home-operations/radarr",
+        "ghcr.io/home-operations/sonarr",
+        "ghcr.io/home-operations/sabnzbd",
         "plexinc/pms-docker",
         "nodered/node-red",
         "ghcr.io/zwave-js/zwave-js-ui",
@@ -29,8 +29,8 @@
       "schedule": ["before 3am on Monday"],
       "updateTypes": ["minor", "patch"],
       "packageNames": [
-        "ghcr.io/onedr0p/prowlarr-develop",
-        "ghcr.io/onedr0p/readarr-develop"
+        "ghcr.io/home-operations/prowlarr",
+        "ghcr.io/home-operations/readarr"
       ]
     },
     {
@@ -61,7 +61,7 @@
       "automergeType": "branch",
       "requiredStatusChecks": null,
       "matchUpdateTypes": ["digest"],
-      "matchPackagePattern": ["ghcr.io/onedr0p", "quay.io/invidious/invidious"]
+      "matchPackagePattern": ["ghcr.io/home-operations", "quay.io/invidious/invidious"]
     }
   ]
 }

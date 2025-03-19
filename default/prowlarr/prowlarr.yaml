@@ -27,7 +27,7 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: ghcr.io/onedr0p/prowlarr-develop
+      repository: ghcr.io/home-operations/prowlarr
       tag: 1.32.2.4987
 
     env:

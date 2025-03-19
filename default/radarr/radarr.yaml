@@ -27,8 +27,8 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: ghcr.io/onedr0p/radarr
-      tag: 5.20.1.9773
+      repository: ghcr.io/home-operations/radarr
+      tag: 5.20.1.9777
 
     env:
       TZ: "America/New_York"

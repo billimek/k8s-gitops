@@ -27,8 +27,8 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: ghcr.io/onedr0p/readarr-develop
-      tag: 0.3.32.2587
+      repository: ghcr.io/home-operations/readarr
+      tag: 0.4.12.2753
 
     env:
       TZ: "America/New_York"

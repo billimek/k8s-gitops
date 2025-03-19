@@ -27,8 +27,8 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: ghcr.io/onedr0p/plex
-      tag: 1.41.5.9522 
+      repository: ghcr.io/home-operations/plex
+      tag: 1.41.5.9522
 
     env:
       TZ: "America/New_York"

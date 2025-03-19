@@ -27,7 +27,7 @@ spec:
     keepHistory: false
   values:
     image:
-      repository: ghcr.io/onedr0p/tautulli
+      repository: ghcr.io/home-operations/tautulli
       tag: 2.15.1
 
     env:
