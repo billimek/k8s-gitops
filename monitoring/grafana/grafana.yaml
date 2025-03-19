@@ -29,7 +29,7 @@ spec:
   values:
     extraInitContainers:
       - name: init-db
-        image: ghcr.io/onedr0p/postgres-init:14.10
+        image: ghcr.io/home-operations/postgres-init:17@sha256:a9f405688344a8a6f718e2c344438342ad21540986aeb5ab5fa781831eb2c597
         imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
