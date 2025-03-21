@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: minecraft
-      version: 4.25.1
+      version: 4.26.0
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
