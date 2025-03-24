@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-operations/prowlarr
-      tag: 1.32.2.4987
+      tag: 1.33.0.4994
 
     env:
       TZ: "America/New_York"
