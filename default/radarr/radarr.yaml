@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-operations/radarr
-      tag: 5.21.0.9792
+      tag: 5.21.1.9799
 
     env:
       TZ: "America/New_York"
