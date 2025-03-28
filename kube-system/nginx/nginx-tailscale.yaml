@@ -17,7 +17,7 @@ spec:
       interval: 5m
   values:
     controller:
-      replicaCount: 2
+      replicaCount: 1
 
       allowSnippetAnnotations: true
       enableAnnotationValidations: true
