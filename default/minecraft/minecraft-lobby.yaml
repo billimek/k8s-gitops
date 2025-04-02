@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2025.3.0
+      tag: 2025.4.0
     persistence:
       storageClass: "rook-ceph-block"
       dataDir:
