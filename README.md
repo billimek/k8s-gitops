@@ -12,15 +12,15 @@ See the [talos cluster setup](setup/talos/README.md) for more detail about hardw
 
 See [setup](setup/README.md) for more detail about setup & bootstrapping a new cluster
 
-## :wrench:&nbsp; Workloads (by namespace in kubernets/)
+## :wrench:&nbsp; Workloads (by namespace in kubernetes/)
 
-* [cert-manager](kubernets/cert-manager/)
-* [default](kubernets/default/)
-* [flux-system](kubernets/flux-system/)
-* [kube-system](kubernets/kube-system/)
-* [monitoring](kubernets/monitoring/)
-* [rook-ceph](kubernets/rook-ceph/)
-* [system-upgrade](kubernets/system-upgrade/)
+* [cert-manager](kubernetes/cert-manager/)
+* [default](kubernetes/default/)
+* [flux-system](kubernetes/flux-system/)
+* [kube-system](kubernetes/kube-system/)
+* [monitoring](kubernetes/monitoring/)
+* [rook-ceph](kubernetes/rook-ceph/)
+* [system-upgrade](kubernetes/system-upgrade/)
 
 ## :robot:&nbsp; Automation
 
