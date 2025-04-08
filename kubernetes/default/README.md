@@ -1,10 +1,22 @@
+# audiobookshelf
+
+like plex, but for audiobooks
+
+# cloudnative-pg
+
+postgresql operator for kubernetes
+
+# echo-server
+
+echo server for testing
+
 # emqx
 
 ![](https://i.imgur.com/uNxxBGX.png)
 
 [emqx](github.com/emqx/emqx) is a clustered MQTT broker
 
-* [emqx.yaml](emqx/emqx.yaml)
+* [emqx/](emqx/)
 
 # espresense-companion
 
@@ -30,6 +42,10 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 
 * [home-assistant.yaml](home-assistant/home-assistant.yaml)
 * Home Assistant configuration & settings are persisted to a [configuration repo](https://github.com/billimek/home-assistant-config)
+
+# jellyseerr
+
+jellyseerr is a self-hosted media request management tool for Plex and Jellyfin
 
 # minecraft
 
@@ -58,6 +74,15 @@ Rules-engine for automations
 
 * [plex.yaml](plex/plex.yaml)
 
+# prowlarr
+
+prowlarr is a movie/tv show indexer manager for sonarr/radarr
+
+
+# qbittorrent
+
+qbittorrent is a torrent client
+
 # radarr
 
 ![](https://i.imgur.com/eAgWySC.png)
@@ -73,6 +98,10 @@ Rules-engine for automations
 [Readarr](https://github.com/Readarr/Readarr) is an ebook/audiobook organizer
 
 * [readarr.yaml](readarr/readarr.yaml)
+
+# recyclarr
+
+recyclarr is a tool to help manage and maintain your sonarr/radarr library
 
 # sabnzbd
 
@@ -95,6 +124,10 @@ Rules-engine for automations
 [Sonarr](https://github.com/Sonarr/Sonarr) is a tv show downloader
 
 * [sonarr.yaml](sonarr/sonarr.yaml)
+
+# tautulli
+
+tautulli is a plex monitoring tool
 
 # tesla_dashcam
 

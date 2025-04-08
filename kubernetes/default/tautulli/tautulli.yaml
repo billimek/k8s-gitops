@@ -1,72 +1,97 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: tautulli
   namespace: default
 spec:
-  interval: 15m
+  suspend: true # TODO: remove this once the old cluster is removed
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    image:
-      repository: ghcr.io/home-operations/tautulli
-      tag: 2.15.1
-
-    env:
-      TZ: "America/New_York"
-
+    controllers:
+      tautulli:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/tautulli
+              tag: 2.15.1@sha256:0925254e24ca12769d437527a9463f0738d98908bc41f1bd77072aa8f0307a4c
+            env:
+              TZ: America/New_York
+              TAUTULLI__PORT: &port 8181
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 5m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
+      app:
+        controller: tautulli
         ports:
           http:
-            port: 8181
-
+            port: *port
     ingress:
       main:
-        enabled: true
-        ingressClassName: nginx-tailscale
+        className: "nginx-tailscale"
         hosts:
-          - host: &host tautulli.eviljungle.com
+          - host: &host "tautulli.t.eviljungle.com" # TODO: change this once old cluster is removed
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
-            - *host 
-            
+              - *host
     persistence:
       config:
-        enabled: true
-        storageClass: "rook-ceph-block"
-        size: 1Gi
-
-    podSecurityContext:
-      runAsUser: 1001
-      runAsGroup: 1001
-      fsGroup: 1001
-      fsGroupChangePolicy: "OnRootMismatch"
-
-    resources:
-      requests:
-        cpu: 5m
-        memory: 128Mi
-      limits:
-        memory: 512Mi
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "1Gi"
+      config-logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      tmp:
+        type: emptyDir

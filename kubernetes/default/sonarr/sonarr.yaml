@@ -1,79 +1,118 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: sonarr
   namespace: default
 spec:
-  interval: 15m
+  suspend: true # TODO: remove this once the old cluster is removed
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    image:
-      repository: ghcr.io/home-operations/sonarr
-      tag: 4.0.14.2938
-
-    env:
-      TZ: "America/New_York"
-      SONARR__INSTANCE_NAME: Sonarr
-      SONARR__PORT: 8989
-      SONARR__APPLICATION_URL: "https://shows.eviljungle.com"
-      SONARR__LOG_LEVEL: info
-
+    controllers:
+      sonarr:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/sonarr
+              tag: 4.0.14.2938@sha256:acd5416ab9c36d017687820a32f09d09a4e25a5754aa5ebeae2e7c63d7609c13
+            env:
+              SONARR__APP__INSTANCENAME: sonarr
+              SONARR__APPLICATION_URL: 'https://shows.eviljungle.com'
+              SONARR__APP__THEME: dark
+              SONARR__AUTH__METHOD: Forms
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__LEVEL: info
+              SONARR__SERVER__PORT: &port 8989
+              SONARR__UPDATE__BRANCH: develop
+              TZ: America/New_York
+            envFrom:
+              - secretRef:
+                  name: sonarr-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 50m
+                memory: 350Mi
+              limits:
+                memory: 500Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
+      app:
+        controller: sonarr
         ports:
           http:
-            port: 8989
-
+            port: *port
     ingress:
       main:
-        enabled: true
-        ingressClassName: nginx-tailscale
+        className: "nginx-tailscale"
         hosts:
-          - host: &host shows.eviljungle.com
+          - host: &host "sonarr.t.eviljungle.com" # TODO: change this once old cluster is removed
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+          - host: "shows.t.eviljungle.com" # TODO: change this once old cluster is removed
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
-            - *host
-
+              - *host
+              - "shows.t.eviljungle.com" # TODO: change this once old cluster is removed
     persistence:
       config:
-        enabled: true
-        storageClass: "rook-ceph-block"
-        size: 2Gi
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "2Gi"
       media:
-        enabled: true
-        existingClaim: nfs-media-pvc
-
-    podSecurityContext:
-      runAsUser: 1001
-      runAsGroup: 1001
-      fsGroup: 1001
-
-    resources:
-      requests:
-        memory: 350Mi
-        cpu: 25m
-      limits:
-        memory: 500Mi
-
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /media
+      tmp:
+        type: emptyDir

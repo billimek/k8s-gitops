@@ -1,12 +1,13 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: mcbr
+  name: minecraft-bedrock
   namespace: default
 spec:
   suspend: true
-  interval: 5m
+  interval: 1h
   chart:
     spec:
       chart: minecraft-bedrock
@@ -16,9 +17,17 @@ spec:
         name: minecraft-server-charts
         namespace: flux-system
       interval: 5m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
   values:
+    fullnameOverride: minecraft-bedrock
     persistence:
-      storageClass: "rook-ceph-block"
+      storageClass: "ceph-block"
       dataDir:
         enabled: true
         Size: 10Gi
@@ -43,24 +52,25 @@ spec:
       serverName: "\u00a79Lovely \u00a7c\u00a7lSMP\u00a7c\u00a7l\u00a7k!"
       cheats: true
       serviceType: LoadBalancer
-      loadBalancerIP: 10.0.6.103
+      loadBalancerIP: 10.0.5.103 # TODO: revisit
 ---
+# yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: mcbr-restic
+  name: minecraft-bedrock-restic
   namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: mcbr-restic-secret
+    name: minecraft-bedrock-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/mcbr'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/SANDBOX-minecraft-bedrock' # TODO: revisit
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
@@ -68,22 +78,23 @@ spec:
     - extract:
         key: minio
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: mcbr
+  name: minecraft-bedrock
   namespace: default
 spec:
-  sourcePVC: mcbr-minecraft-bedrock-datadir
+  sourcePVC: minecraft-bedrock-datadir
   trigger:
     schedule: "10 4 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: mcbr-restic-secret
+    repository: minecraft-bedrock-restic-secret
     cacheCapacity: 10Gi
-    volumeSnapshotClassName: csi-rbdplugin-snapclass
-    storageClassName: rook-ceph-block
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
     moverSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000

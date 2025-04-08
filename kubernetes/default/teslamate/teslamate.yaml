@@ -1,69 +1,80 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: teslamate
   namespace: default
 spec:
-  interval: 15m
+  suspend: true # TODO: remove this once the old cluster is removed
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
       interval: 15m
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    initContainers:
-      init-db:
-        image: ghcr.io/home-operations/postgres-init:17@sha256:a9f405688344a8a6f718e2c344438342ad21540986aeb5ab5fa781831eb2c597
-        envFrom:
-          - secretRef:
-              name: teslamate-secret
-    image:
-      repository: teslamate/teslamate
-      tag: "1.33.0"
-    env:
-      TZ: "America/New_York"
-      DISABLE_MQTT: "false"
-      MQTT_HOST: "emqx"
-      MQTT_USERNAME: "mqtt"
-    envFrom:
-      - secretRef:
-          name: teslamate-secret
+    controllers:
+      teslamate:
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 17@sha256:a9f405688344a8a6f718e2c344438342ad21540986aeb5ab5fa781831eb2c597
+              pullPolicy: IfNotPresent
+            envFrom:
+              - secretRef:
+                  name: teslamate-secret
+
+        containers:
+          main:
+            image:
+              repository: teslamate/teslamate
+              tag: 1.33.0
+            env:
+              TZ: "America/New_York"
+              DISABLE_MQTT: "false"
+              MQTT_USERNAME: "mqtt"
+              MQTT_HOST: "emqx-listeners"
+            envFrom: &envFrom
+              - secretRef:
+                  name: teslamate-secret
+            resources:
+              requests:
+                memory: 250Mi
+                cpu: 50m
+              limits:
+                memory: 500Mi
+
     service:
       main:
-        type: ClusterIP
+        controller: teslamate
         ports:
           http:
             port: 4000
+
     ingress:
       main:
-        enabled: true
-        ingressClassName: nginx-tailscale
+        className: "nginx-tailscale"
         hosts:
-          - host: &host teslamate.eviljungle.com
+          - host: &host "teslamate.t.eviljungle.com" # TODO: change this once old cluster is removed
             paths:
               - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
         tls:
           - hosts:
               - *host
-    resources:
-      requests:
-        memory: 250Mi
-        cpu: 50m
-      limits:
-        memory: 500Mi

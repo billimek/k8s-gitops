@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
@@ -14,7 +15,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/sonarr'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/SANDBOX-sonarr' # TODO: revisit
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
@@ -22,6 +23,7 @@ spec:
     - extract:
         key: minio
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
@@ -30,14 +32,14 @@ metadata:
 spec:
   sourcePVC: sonarr-config
   trigger:
-    schedule: "50 6 * * *"
+    schedule: "10 6 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
     repository: sonarr-restic-secret
-    cacheCapacity: 2Gi
-    volumeSnapshotClassName: csi-rbdplugin-snapclass
-    storageClassName: rook-ceph-block
+    cacheCapacity: 3Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
     moverSecurityContext:
       runAsUser: 1001
       runAsGroup: 1001

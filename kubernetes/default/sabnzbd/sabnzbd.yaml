@@ -1,99 +1,112 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: sabnzbd
   namespace: default
 spec:
-  interval: 15m
+  suspend: true # TODO: remove this once the old cluster is removed
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    image:
-      repository: ghcr.io/home-operations/sabnzbd
-      tag: 4.5.0
-    env:
-      TZ: America/New_York
-      SABNZBD__PORT: &port 80
-      SABNZBD__HOST_WHITELIST_ENTRIES: >-
-        sabnzbd,
-        sabnzbd.default,
-        sabnzbd.default.svc,
-        sabnzbd.default.svc.cluster,
-        sabnzbd.default.svc.cluster.local,
-        sabnzbd.eviljungle.com
-    envFrom:
-      - secretRef:
-          name: sabnzbd-secret
+    controllers:
+      sabnzbd:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/sabnzbd
+              tag: 4.5.0@sha256:2bf66d50132f1524067919a5b58215b18b1d9f30155c0008888e20fa609321ef
+            env:
+              TZ: America/New_York
+              SABNZBD__PORT: &port 8080
+              SABNZBD__HOST_WHITELIST_ENTRIES: >-
+                sabnzbd,
+                sabnzbd.default,
+                sabnzbd.default.svc,
+                sabnzbd.default.svc.cluster,
+                sabnzbd.default.svc.cluster.local,
+                sabnzbd.eviljungle.com
+            envFrom:
+              - secretRef:
+                  name: sabnzbd-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api?mode=version
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 50m
+                memory: 250Mi
+              limits:
+                memory: 2Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
+      app:
+        controller: sabnzbd
         ports:
           http:
             port: *port
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /api?mode=version
-            port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
     ingress:
       main:
-        enabled: true
-        ingressClassName: nginx-tailscale
+        className: "nginx-tailscale"
         hosts:
-          - host: &host sabnzbd.eviljungle.com
+          - host: &host "sabnzbd.t.eviljungle.com" # TODO: change this once old cluster is removed
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
               - *host
-    podSecurityContext:
-      runAsUser: 1001
-      runAsGroup: 1001
-      fsGroup: 1001
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups: [568]
     persistence:
       config:
-        enabled: true
-        storageClass: "rook-ceph-block"
-        size: 1Gi
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "1Gi"
       media:
-        enabled: true
-        existingClaim: nfs-media-pvc
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /media/downloads/sabnzbd
+            subPath: downloads/sabnzbd
       incomplete:
-        enabled: true
         type: emptyDir
-    resources:
-      requests:
-        cpu: 50m
-        memory: 250Mi
-      limits:
-        memory: 2Gi
+      tmp:
+        type: emptyDir

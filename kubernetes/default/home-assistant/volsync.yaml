@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
@@ -14,34 +15,36 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/home-assistant'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/SANDBOX-home-assistant' # TODO: change this to home-assistant once old cluster is removed
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
   dataFrom:
     - extract:
         key: minio
----
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationSource
-metadata:
-  name: home-assistant
-  namespace: default
-spec:
-  sourcePVC: home-assistant-config
-  trigger:
-    schedule: "40 4 * * *"
-  restic:
-    copyMethod: Snapshot
-    pruneIntervalDays: 10
-    repository: home-assistant-restic-secret
-    cacheCapacity: 60Gi
-    volumeSnapshotClassName: csi-rbdplugin-snapclass
-    storageClassName: rook-ceph-block
-    moverSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
-    retain:
-      daily: 10
-      within: 3d
+# TODO: uncomment
+# ---
+# # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationSource
+# metadata:
+#   name: home-assistant
+#   namespace: default
+# spec:
+#   sourcePVC: home-assistant-config
+#   trigger:
+#     schedule: "40 4 * * *"
+#   restic:
+#     copyMethod: Snapshot
+#     pruneIntervalDays: 10
+#     repository: home-assistant-restic-secret
+#     cacheCapacity: 5Gi # TODO: change this to 60Gi once old cluster is removed
+#     volumeSnapshotClassName: csi-ceph-blockpool
+#     storageClassName: ceph-block
+#     moverSecurityContext:
+#       runAsUser: 1000
+#       runAsGroup: 1000
+#       fsGroup: 1000
+#     retain:
+#       daily: 10
+#       within: 3d

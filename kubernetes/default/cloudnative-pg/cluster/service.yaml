@@ -7,12 +7,12 @@ metadata:
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Local
-  loadBalancerIP: 10.0.6.51
+  loadBalancerIP: 10.0.5.51 # TODO: change this once the old cluster is deleted
   ports:
     - name: postgres
       port: 5432
       protocol: TCP
       targetPort: 5432
   selector:
-    cnpg.io/cluster: postgres-v15
+    cnpg.io/cluster: postgres-v16
     role: primary

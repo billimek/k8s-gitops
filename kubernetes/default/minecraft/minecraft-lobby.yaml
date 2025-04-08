@@ -1,26 +1,36 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: mc-lobby
+  name: minecraft-lobby
   namespace: default
 spec:
-  interval: 5m
+  suspend: true
+  interval: 1h
   chart:
     spec:
       chart: minecraft
-      version: 4.25.1
+      version: 4.26.1
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
         namespace: flux-system
       interval: 5m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
       tag: 2025.4.0
+    fullnameOverride: minecraft-lobby
     persistence:
-      storageClass: "rook-ceph-block"
+      storageClass: "ceph-block"
       dataDir:
         enabled: true
         Size: 5Gi
@@ -46,7 +56,7 @@ spec:
       spigetResources:
         - 28140
         - 6245
-        - 14754
+        # - 14754
         - 102931
         - 4441 # hibernate
       modUrls:
@@ -67,22 +77,23 @@ spec:
       rcon:
         enabled: false
 ---
+# yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: mc-lobby-restic
+  name: minecraft-lobby-restic
   namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: mc-lobby-restic-secret
+    name: minecraft-lobby-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/mc-lobby'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/SANDBOX-minecraft-lobby' # TODO: revisit
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
@@ -90,22 +101,23 @@ spec:
     - extract:
         key: minio
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: mc-lobby
+  name: minecraft-lobby
   namespace: default
 spec:
-  sourcePVC: mc-lobby-minecraft-datadir
+  sourcePVC: minecraft-lobby-datadir
   trigger:
     schedule: "20 4 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: mc-lobby-restic-secret
+    repository: minecraft-lobby-restic-secret
     cacheCapacity: 5Gi
-    volumeSnapshotClassName: csi-rbdplugin-snapclass
-    storageClassName: rook-ceph-block
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
     moverSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000

@@ -1,65 +1,57 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: unifi
   namespace: default
 spec:
-  interval: 15m
+  suspend: true # TODO: remove this once the old cluster is removed
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    image:
-      repository: jacobalberty/unifi
-      tag: v9.0.114@sha256:d5c9f87e643854bec4d0c15f6cbeec75510a449a7ec46f1e223eded858add480
-
-    env:
-      TZ: "America/New_York"
-      RUNAS_UID0: "false"
-      UNIFI_UID: "999"
-      UNIFI_GID: "999"
-      UNIFI_STDOUT: "true"
-      JVM_INIT_HEAP_SIZE:
-      JVM_MAX_HEAP_SIZE: 1024M
-
-    ingress:
-      main:
-        enabled: true
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        ingressClassName: nginx-tailscale
-        hosts:
-          - host: &host unifi.eviljungle.com
-            paths:
-              - path: /
-        tls:
-          - hosts:
-              - *host
-
+    controllers:
+      unifi:
+        containers:
+          app:
+            image:
+              repository: jacobalberty/unifi
+              tag: v9.0.114@sha256:d5c9f87e643854bec4d0c15f6cbeec75510a449a7ec46f1e223eded858add480
+              pullPolicy: IfNotPresent
+            env:
+              TZ: "America/New_York"
+              RUNAS_UID0: "false"
+              UNIFI_UID: "999"
+              UNIFI_GID: "999"
+              UNIFI_STDOUT: "true"
+              JVM_INIT_HEAP_SIZE:
+              JVM_MAX_HEAP_SIZE: 1024M
+            resources:
+              requests:
+                memory: 1Gi
+                cpu: 50m
+              limits:
+                memory: 1250Mi
     service:
-      main:
+      app:
+        controller: unifi
         type: LoadBalancer
-        annotations:
-          metallb.universe.tf/allow-shared-ip: unifi
-        loadBalancerIP: 10.0.6.57
         externalTrafficPolicy: Local
+        loadBalancerIP: 10.0.5.57 # TODO: revisit
         ports:
           http:
             port: 8443
@@ -92,18 +84,26 @@ spec:
             enabled: true
             port: 10001
             protocol: UDP
-
+    ingress:
+      app:
+        enabled: true
+        className: nginx-tailscale
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+        hosts:
+          - host: &host "unifi.t.eviljungle.com" # TODO: change this once old cluster is removed
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host
     persistence:
       data:
-        enabled: true
-        size: 20Gi
-        storageClass: rook-ceph-block
+        storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        mountPath: /unifi
-
-    resources:
-      requests:
-        memory: 750Mi
-        cpu: 15m
-      limits:
-        memory: 1250Mi
+        size: "1Gi" # TODO: reset this to 20Gi after initial setup
+        globalMounts:
+          - path: /unifi

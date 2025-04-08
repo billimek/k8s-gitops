@@ -1,28 +1,37 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: mcsv2
+  name: minecraft-survival2
   namespace: default
 spec:
-  suspend: false
-  interval: 5m
+  suspend: true
+  interval: 1h
   chart:
     spec:
       chart: minecraft
-      version: 4.25.1
+      version: 4.26.1
       sourceRef:
         kind: HelmRepository
         name: minecraft-server-charts
         namespace: flux-system
       interval: 5m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
       tag: 2025.4.0
+    fullnameOverride: minecraft-survival2
     strategyType: Recreate
     persistence:
-      storageClass: "rook-ceph-block"
+      storageClass: "ceph-block"
       dataDir:
         enabled: true
         Size: 30Gi
@@ -82,39 +91,41 @@ spec:
       viewDistance: 24
       whitelist: "billimek,Nadorrior,Sandbragger,tkws88,KhrysPBacon,MackCulley,Guydon,Shivanater"
       worldSaveName: 'world-20250218-thunderdome'
-      extraPorts:
-        - name: map
-          containerPort: 8100
-          service:
-            enabled: true
-            type: ClusterIP
-            port: 8100
-          ingress:
-            enabled: true
-            ingressClassName: nginx
-            hosts:
-              - name: mcsv2-map.eviljungle.com
-                path: /
-            tls:
-            - hosts:
-              - mcsv2-map.eviljungle.com
+      # TODO: https://github.com/itzg/minecraft-server-charts/pull/253 may have broken this functionality. Will likely need to patch the chart. https://github.com/itzg/minecraft-server-charts/pull/259 may have been only a partial fix.
+      # extraPorts:
+      #   - name: map
+      #     containerPort: 8100
+      #     service:
+      #       enabled: true
+      #       type: ClusterIP
+      #       port: 8100
+      #     ingress:
+      #       enabled: true
+      #       ingressClassName: nginx
+      #       hosts:
+      #         - name: minecraft-survival2-map.t.eviljungle.com # TODO: revisit
+      #           path: /
+      #       tls:
+      #       - hosts:
+      #         - minecraft-survival2-map.t.eviljungle.com # TODO: revisit
 ---
+# yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: mcsv2-restic
+  name: minecraft-survival2-restic
   namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: mcsv2-restic-secret
+    name: minecraft-survival2-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/mcsv2'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/SANDBOX-minecraft-survival2' # TODO: revisit
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
@@ -122,22 +133,23 @@ spec:
     - extract:
         key: minio
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: mcsv2
+  name: minecraft-survival2
   namespace: default
 spec:
-  sourcePVC: mcsv2-minecraft-datadir
+  sourcePVC: minecraft-survival2-datadir
   trigger:
     schedule: "30 4 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: mcsv2-restic-secret
+    repository: minecraft-survival2-restic-secret
     cacheCapacity: 20Gi
-    volumeSnapshotClassName: csi-rbdplugin-snapclass
-    storageClassName: rook-ceph-block
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
     moverSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000

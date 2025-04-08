@@ -1,30 +1,28 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: jellyseerr
   namespace: default
 spec:
-  interval: 15m
+  suspend: true # TODO: remove this once the old cluster is removed
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 3.6.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
-      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
     controllers:
       jellyseerr:
@@ -84,7 +82,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504"  # Using a smaller set than the default to fix javascript issues with overseer
         hosts:
-          - host: &host request.eviljungle.com
+          - host: &host request.t.eviljungle.com # TODO: revisit
             paths:
               - path: /
                 service:
@@ -109,7 +107,7 @@ spec:
     persistence:
       config:
         type: persistentVolumeClaim
-        storageClass: rook-ceph-block
+        storageClass: ceph-block
         accessMode: ReadWriteOnce
         size: 1Gi
         globalMounts:

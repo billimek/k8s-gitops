@@ -1,100 +1,91 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: echo-server
   namespace: default
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    controller:
-      replicas: 2
-      strategy: RollingUpdate
-    image:
-      repository: docker.io/jmalloc/echo-server
-      tag: v0.3.7
+    controllers:
+      echo-server:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/mendhak/http-https-echo
+              tag: 36
+            env:
+              HTTP_PORT: &port 8080
+              LOG_WITHOUT_NEWLINE: "true"
+              LOG_IGNORE_PATH: "/healthz"
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 5m
+                memory: 64M
+              limits:
+                memory: 64M
+
     service:
-      main:
+      app:
+        controller: echo-server
         ports:
           http:
-            port: &port 8080
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /health
             port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
+
     ingress:
-      main:
+      app:
         enabled: true
-        ingressClassName: nginx
+        # ensure that external DNS (cloudflare) has an entry for this directed to the router
+        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
+        className: nginx
         hosts:
-          - host: eviljungle.com
+          - host: &host www.t.eviljungle.com # TODO: revisit
             paths:
               - path: /
                 pathType: Prefix
-          - host: www.eviljungle.com
-            paths:
-              - path: /
-                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
-              - eviljungle.com
-              - www.eviljungle.com
+            - *host
       tailscale:
         enabled: true
-        ingressClassName: nginx-tailscale
+        className: nginx-tailscale
         hosts:
-          - host: eviljungle.com
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
-          - host: www.eviljungle.com
-            paths:
-              - path: /
-                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
         tls:
           - hosts:
-              - eviljungle.com
-              - www.eviljungle.com
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: echo-server
-    resources:
-      requests:
-        cpu: 5m
-        memory: 10Mi
-      limits:
-        memory: 50Mi
+              - *host

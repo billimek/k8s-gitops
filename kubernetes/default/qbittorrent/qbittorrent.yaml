@@ -1,88 +1,110 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: qbittorrent
   namespace: default
 spec:
-  interval: 15m
+  suspend: true # TODO: remove this once the old cluster is removed
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    image:
-      repository: ghcr.io/home-operations/qbittorrent
-      tag: 5.0.4
-    env:
-      TZ: America/New_York
-      QBITTORRENT__PORT: &port 80
-      QBITTORRENT__BT_PORT: &port-bt 50413
+    controllers:
+      qbittorrent:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/qbittorrent
+              tag: 5.0.4@sha256:995c561247b069c10b1fa098186f35b3155c2df63912041f70637a9232755756
+            env:
+              TZ: America/New_York
+              QBT_WEBUI_PORT: &port 80
+              QBT_TORRENTING_PORT: &torrentPort 50413
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 250Mi
+              limits:
+                memory: 2Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
+      app:
+        controller: qbittorrent
+        type: LoadBalancer
+        loadBalancerIP: 10.0.5.52 # TODO: revisit
         ports:
           http:
+            primary: true
             port: *port
-      bittorrent:
-        enabled: true
-        type: LoadBalancer
-        loadBalancerIP: 10.0.6.52
-        ports:
           bittorrent:
             enabled: true
-            port: *port-bt
+            port: *torrentPort
             protocol: TCP
-            targetPort: *port-bt
-        externalTrafficPolicy: Local
     ingress:
       main:
-        enabled: true
-        ingressClassName: nginx-tailscale
+        className: "nginx-tailscale"
         hosts:
-          - host: &host q.eviljungle.com
+          - host: &host "q.t.eviljungle.com" # TODO: change this once old cluster is removed
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  identifier: app
+                  port: *port
         tls:
           - hosts:
               - *host
-    podSecurityContext:
-      runAsUser: 1001
-      runAsGroup: 1001
-      fsGroup: 1001
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups: [568]
     # Note: If downloading very large torrents it might be worth using NFS for your download directory.
     # Beware if you are downloading torrents directly to a ZFS dataset that dataset will accrue fragmentation.
     persistence:
       config:
-        enabled: true
-        storageClass: "rook-ceph-block"
-        size: 1Gi
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "1Gi"
       media:
-        enabled: true
-        existingClaim: nfs-media-pvc
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /media/downloads/qbittorrent
+            subPath: downloads/qbittorrent
+      tmp:
+        type: emptyDir
       incomplete:
         enabled: true
         type: emptyDir
-    resources:
-      requests:
-        cpu: 10m
-        memory: 250Mi
-      limits:
-        memory: 2Gi

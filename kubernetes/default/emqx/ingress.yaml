@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: emqx-dashboard
+  namespace: default
+spec:
+  ingressClassName: nginx-tailscale
+  rules:
+    - host: "emqx.t.eviljungle.com" # TODO: Update
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: emqx-dashboard
+                port:
+                  number: 18083
