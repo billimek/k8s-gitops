@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -17,7 +18,7 @@ spec:
       interval: 5m
   values:
     controller:
-      replicaCount: 1
+      replicaCount: 1 # TODO: expand this to 2 replicas after the old cluster is removed
 
       allowSnippetAnnotations: true
       enableAnnotationValidations: true
@@ -28,7 +29,7 @@ spec:
       service:
         enabled: true
         annotations:
-          tailscale.com/hostname: "nginx-tailscale"
+          tailscale.com/hostname: "nginx-tailscale-talos" # TODO: change this once the old cluster is removed
         type: LoadBalancer
         loadBalancerClass: tailscale
         externalTrafficPolicy: Local

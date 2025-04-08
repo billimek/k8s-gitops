@@ -1,0 +1,42 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: talos-s3-backup
+  namespace: kube-system
+spec:
+  schedule: "10 0/6 * * *" # 10 mins past the hour every 6 hours
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: talos-backup
+              image: ghcr.io/siderolabs/talos-backup:v0.1.0-beta.3
+              workingDir: /tmp
+              imagePullPolicy: Always
+              envFrom:
+                - secretRef:
+                    name: talos-s3-secret
+              securityContext:
+                runAsUser: 1000
+                runAsGroup: 1000
+                allowPrivilegeEscalation: false
+                runAsNonRoot: true
+                capabilities:
+                  drop: [ALL]
+                seccompProfile:
+                  type: RuntimeDefault
+              command: [/talos-backup]
+              volumeMounts:
+                - mountPath: /tmp
+                  name: tmp
+                - mountPath: /var/run/secrets/talos.dev
+                  name: talos-secrets
+          restartPolicy: OnFailure
+          volumes:
+            - emptyDir: {}
+              name: tmp
+            - name: talos-secrets
+              secret:
+                secretName: talos-s3-backup

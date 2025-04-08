@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -6,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx-tailscale
   rules:
-  - host: &host minio-nas.eviljungle.com
+  - host: &host minio-nas.t.eviljungle.com
     http:
       paths:
       - path: /

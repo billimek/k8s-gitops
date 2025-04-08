@@ -1,9 +1,10 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: tailscale-operator
-  namespace: networking
+  namespace: kube-system
 spec:
   interval: 30m
   chart:
@@ -17,6 +18,6 @@ spec:
         namespace: flux-system
   values:
     operatorConfig:
-      hostname: "tailscale-operator"
+      hostname: "tailscale-operator-talos" # TODO: change this once the old cluster is removed
     apiServerProxyConfig:
       mode: "true"

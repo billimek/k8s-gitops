@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -17,7 +18,7 @@ spec:
       interval: 5m
   values:
     controller:
-      replicaCount: 1
+      replicaCount: 1 # TODO: expand this to 2 replicas after the old cluster is removed
       config:
         block-user-agents: "~*AdsBot-Google.*,~*Amazonbot.*,~*anthropic-ai.*,~*Applebot-Extended.*,~*Bytespider.*,~*CCBot.*,~*ChatGPT-User.*,~*ClaudeBot.*,~*Claude-Web.*,~*cohere-ai.*,~*Diffbot.*,~*FacebookBot.*,~*FriendlyCrawler.*,~*Google-Extended.*,~*GoogleOther.*,~*GPTBot.*,~*img2dataset.*,~*omgili.*,~*omgilibot.*,~*peer39_crawler.*,~*peer39_crawler/1.0.*,~*PerplexityBot.*,~*YouBot.*" # taken from https://github.com/ai-robots-txt/ai.robots.txt
         client-body-buffer-size: 100M
@@ -46,7 +47,7 @@ spec:
         ssl-protocols: "TLSv1.3 TLSv1.2"
         use-forwarded-headers: "true"
       service:
-        loadBalancerIP: 10.0.6.150
+        loadBalancerIP: 10.0.5.150 # TODO: update to the correct IP after the old cluster is deleted
         externalTrafficPolicy: Local
       ingressClassResource:
         default: true
