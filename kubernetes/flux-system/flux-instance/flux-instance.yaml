@@ -1,0 +1,120 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: flux-instance
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: flux-instance
+      version: 0.18.0
+      sourceRef:
+        kind: HelmRepository
+        name: controlplaneio-fluxcd
+        namespace: flux-system
+      interval: 30m
+  interval: 1h
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    instance:
+      distribution:
+        # renovate: depName=controlplaneio-fluxcd/distribution datasource=github-releases
+        version: 2.5.1
+      cluster:
+        networkPolicy: false
+      components:
+        - source-controller
+        - kustomize-controller
+        - helm-controller
+        - notification-controller
+      sync:
+        kind: GitRepository
+        url: https://github.com/billimek/k8s-gitops-sandbox.git
+        ref: refs/heads/main
+        path: setup/flux/cluster
+        pullSecret: ghcr-auth
+        interval: 5m # TODO: revisit if/when webhooks from github are enabled to make this 1h
+      commonMetadata:
+        labels:
+          app.kubernetes.io/name: flux
+      kustomize:
+        patches:
+          # Increase the number of workers
+          - patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --concurrent=10
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --requeue-dependency=5s
+            target:
+              kind: Deployment
+              name: (kustomize-controller|helm-controller|source-controller)
+          # Increase the memory limits
+          # TODO: uncomment when old cluster is removed
+          # - patch: |
+          #     apiVersion: apps/v1
+          #     kind: Deployment
+          #     metadata:
+          #       name: all
+          #     spec:
+          #       template:
+          #         spec:
+          #           containers:
+          #             - name: manager
+          #               resources:
+          #                 limits:
+          #                   memory: 2Gi
+          #   target:
+          #     kind: Deployment
+          #     name: (kustomize-controller|helm-controller|source-controller)
+          # Enable in-memory kustomize builds
+          - patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --concurrent=20
+              - op: replace
+                path: /spec/template/spec/volumes/0
+                value:
+                  name: temp
+                  emptyDir:
+                    medium: Memory
+            target:
+              kind: Deployment
+              name: kustomize-controller
+          # Enable Helm repositories caching
+          - patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --helm-cache-max-size=10
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --helm-cache-ttl=60m
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --helm-cache-purge-interval=5m
+            target:
+              kind: Deployment
+              name: source-controller
+          # Flux near OOM detection for Helm
+          - patch: |
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --feature-gates=OOMWatch=true
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --oom-watch-memory-threshold=95
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --oom-watch-interval=500ms
+            target:
+              kind: Deployment
+              name: helm-controller
