@@ -1,0 +1,8 @@
+machine:
+  sysctls:
+    fs.inotify.max_user_instances: 8192    # Watchdog
+    fs.inotify.max_user_watches: 1048576   # Watchdog
+    net.core.rmem_max: 67108864            # Cloudflared / QUIC
+    net.core.wmem_max: 67108864            # Cloudflared / QUIC
+    net.ipv4.tcp_fastopen: 3               # Send and accept data in the opening SYN packet
+    vm.nr_hugepages: 1024                  # PostgreSQL

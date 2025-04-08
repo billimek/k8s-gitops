@@ -1,0 +1,190 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+---
+# renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+talosVersion: v1.9.5
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.32.3
+
+clusterName: home
+endpoint: https://k8s-0:6443
+
+additionalApiServerCertSans:
+  - k8s-0.home
+  - tailscale-operator-talos.drake-eel.ts.net
+  - tailscale-operator.drake-eel.ts.net
+
+# Disable built-in Flannel to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: k8s-0
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: true
+    ipAddress: 10.2.0.50
+    installDisk: /dev/sda
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: bc:24:11:*
+        dhcp: true
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/qemu-guest-agent
+  - hostname: k8s-a
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.51
+    installDisk: /dev/sda
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: bc:24:11:*
+        dhcp: true
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/qemu-guest-agent
+  # TODO: k8s-b is a temp sandbox testing node
+  - hostname: k8s-b
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.52
+    installDisk: /dev/sda
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: bc:24:11:*
+        dhcp: true
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/qemu-guest-agent
+  # - hostname: k8s-b
+  #   nodeAnnotations:
+  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+  #   controlPlane: false
+  #   ipAddress: 10.2.0.52
+  #   installDisk: /dev/nvme0n1
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: 70:85:c2:3f:7b:4d
+  #       dhcp: true
+  # TODO: k8s-c is a temp sandbox testing node
+  - hostname: k8s-c
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.53
+    installDisk: /dev/sda
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: bc:24:11:*
+        dhcp: true
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/qemu-guest-agent
+  # - hostname: k8s-c
+  #   nodeAnnotations:
+  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+  #   controlPlane: false
+  #   ipAddress: 10.2.0.53
+  #   installDisk: /dev/nvme0n1
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: ac:1f:6b:6f:23:4e
+  #       dhcp: true
+  # - hostname: k8s-d
+  #   nodeAnnotations:
+  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+  #   controlPlane: false
+  #   ipAddress: 10.2.0.54
+  #   installDisk: /dev/nvme0n1
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: 00:1e:06:45:0b:cd
+  #       dhcp: true
+  # - hostname: k8s-e
+  #   nodeAnnotations:
+  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+  #   controlPlane: false
+  #   ipAddress: 10.2.0.55
+  #   installDisk: /dev/sbd
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: 00:02:c9:55:b4:26
+  #       dhcp: true
+  # - hostname: k8s-f
+  #   nodeAnnotations:
+  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+  #   controlPlane: false
+  #   ipAddress: 10.2.0.56
+  #   installDisk: /dev/nvme0n1
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: 68:1d:ef:34:d8:1a
+  #       dhcp: true
+  # - hostname: k8s-g
+  #   nodeAnnotations:
+  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+  #   controlPlane: false
+  #   ipAddress: 10.2.0.57
+  #   installDisk: /dev/nvme0n1
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: 68:1d:ef:34:66:3f
+  #       dhcp: true
+  - hostname: k8s-h
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.58
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 68:1d:ef:34:d9:c7 # formerly k3s-h
+        dhcp: true
+  - hostname: k8s-i
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.59
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 98:fa:9b:04:47:b9 # formerly k3s-a
+        dhcp: true
+
+# Global patches
+patches:
+  - "@./patches/global/machine-dns.yaml"     # host DNS settings
+  - "@./patches/global/machine-files.yaml"   # spegel/NFS Mount
+  - "@./patches/global/machine-install.yaml" # less security, more performance
+  - "@./patches/global/machine-network.yaml" # search Domain
+  - "@./patches/global/machine-sysctls.yaml" # network tweaks
+  - "@./patches/global/machine-udev.yaml"    # udev settings
+
+controlPlane:
+  schematic:
+    customization:
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/intel-ucode
+  patches:
+    - "@./patches/controller/admission-controller-patch.yaml" # makes rook-ceph and anything else needing elevated permissions work
+    - "@./patches/controller/cluster.yaml" # control-plane tweaks
+    - "@./patches/controller/machine-features.yaml" # enabled API server access from the kube-system namespace
+
+worker:
+  schematic:
+    customization:
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/i915
+          - siderolabs/intel-ucode

@@ -1,0 +1,1 @@
+{{ (fromYaml (readFile "../../../kubernetes/kube-system/cilium/cilium.yaml")).spec.values | toYaml }}

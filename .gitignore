@@ -8,21 +8,20 @@ Thumbs.db
 bin
 /flux
 *.iso
-# Temp folders
+# Temp
 .temp*
-.private/
-.logs/
-.task/
-# Ansible
-xanmanning.k3s*
-# Sops
-.decrypted~*
+/.private/
+/.task/
+/.venv/
+Brewfile.lock.json
 # Kubernetes
 kubeconfig
+talosconfig
 # Other
-report.html
 .env
 auth
-master.key
 *.snap
-setup/cluster/*cluster.yml
+*.crt
+*.key
+.decrypted~*
+onepassword.env

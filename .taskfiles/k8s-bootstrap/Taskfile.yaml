@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+tasks:
+  talos:
+    desc: Bootstrap Talos
+    vars:
+      TALOS_CONTROLLER:
+        sh: talosctl --talosconfig "{{.TALOSCONFIG}}" config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
+    preconditions:
+      - which jq minijinja-cli talosctl
+      - test -f "{{.TALOSCONFIG}}"
+      - talosctl config info
+    cmds:
+      - task: :talos:apply-clusterconfig
+        vars:
+          INSECURE: "true"
+      - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
+      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "home" "{{.KUBECONFIG}}"
+
+  apps:
+    desc: Bootstrap Apps
+    prompt: Bootstrap apps into Talos cluster?
+    preconditions:
+      - which op helmfile kubectl
+      - test -f "{{.TALOSCONFIG}}"
+      - test -f {{.SETUP_DIR}}/bootstrap/helmfile.yaml
+      - test -f {{.SETUP_DIR}}/bootstrap/templates/resources.yaml.j2
+      - op user get --me
+      - talosctl config info
+    env:
+      NODE_COUNT:
+        sh: talosctl --talosconfig "{{.TALOSCONFIG}}" config info --output json | jq --raw-output '.nodes | length'
+    cmds:
+      - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
+      - minijinja-cli "{{.SETUP_DIR}}/bootstrap/templates/resources.yaml.j2" | op inject | kubectl apply --server-side --filename -
+      - helmfile --quiet --file {{.SETUP_DIR}}/bootstrap/helmfile.yaml apply --suppress-diff --skip-diff-on-install
+
+  wipe-disks:
+    desc: Wipe disks on Talos nodes
+    prompt: "WARNING: This will PERMANENTLY ERASE data on the specified disks. Continue?"
+    preconditions:
+      - which talosctl
+      - test -f "{{.TALOSCONFIG}}"
+      - talosctl config info
+    vars:
+      # See setup/talos/README.md for details on which nodes use which ceph disks that need to be wiped
+      NODE_DISK_MAPPINGS:
+        sh: |
+          cat << 'EOF'
+          10.2.0.59:sda
+          EOF
+          # 10.2.0.52:sda
+          # 10.2.0.53:sda
+          # 10.2.0.55:sda
+
+    cmds:
+      - echo "The following disks will be wiped:"
+      - cmd: |
+          echo "{{.NODE_DISK_MAPPINGS}}" | tr ' ' '\n'
+      - echo "Proceeding in 5 seconds... Press Ctrl+C to abort"
+      - sleep 5
+      - cmd: |
+          echo "{{.NODE_DISK_MAPPINGS}}" | while IFS=: read -r node disk; do
+            echo "Wiping disk /dev/${disk} on node ${node}..."
+            talosctl --talosconfig "{{.TALOSCONFIG}}" wipe disk "${disk}" --nodes="${node}" || echo "Failed to wipe disk ${disk} on node ${node}, continuing..."
+            talosctl --talosconfig "{{.TALOSCONFIG}}" get disk "${disk}" --nodes="${node}" || echo "Failed to get disk ${disk} on node ${node}, continuing..."
+          done
+        ignore_error: true
