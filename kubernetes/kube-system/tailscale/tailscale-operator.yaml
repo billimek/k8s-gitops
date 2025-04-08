@@ -18,6 +18,6 @@ spec:
         namespace: flux-system
   values:
     operatorConfig:
-      hostname: "tailscale-operator-talos" # TODO: change this once the old cluster is removed
+      hostname: "tailscale-operator"
     apiServerProxyConfig:
       mode: "true"

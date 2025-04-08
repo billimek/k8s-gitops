@@ -102,11 +102,11 @@ spec:
       #       enabled: true
       #       ingressClassName: nginx-tailscale
       #       hosts:
-      #         - name: mcsv-map.t.eviljungle.com # TODO: revisit
+      #         - name: mcsv-map.eviljungle.com
       #           path: /
       #       tls:
       #       - hosts:
-      #         - mcsv-map.t.eviljungle.com # TODO: revisit
+      #         - mcsv-map.eviljungle.com
 ---
 # yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
@@ -124,7 +124,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/SANDBOX-minecraft-survival' # TODO: revisit
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/minecraft-survival'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'

@@ -6,7 +6,6 @@ metadata:
   name: radarr
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -89,14 +88,14 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "radarr.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "radarr.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
                 service:
                   identifier: app
                   port: http
-          - host: "movies.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: "movies.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
@@ -106,7 +105,7 @@ spec:
         tls:
           - hosts:
               - *host
-              - "movies.t.eviljungle.com" # TODO: change this once old cluster is removed
+              - "movies.eviljungle.com"
     persistence:
       config:
         storageClass: "ceph-block"

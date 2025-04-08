@@ -6,7 +6,6 @@ metadata:
   name: recyclarr
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:

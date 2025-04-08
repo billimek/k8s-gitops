@@ -23,7 +23,7 @@ spec:
     remediation:
       retries: 3
   values:
-    replicas: 1 # TODO: revisit after old cluster is removed
+    replicas: 2
     kind: Deployment
     deschedulerPolicyAPIVersion: descheduler/v1alpha2
     deschedulerPolicy:

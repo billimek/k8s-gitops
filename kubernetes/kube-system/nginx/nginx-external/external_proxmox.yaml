@@ -13,7 +13,7 @@ metadata:
 spec:
   ingressClassName: nginx-tailscale
   rules:
-  - host: &host proxmox.t.eviljungle.com
+  - host: &host proxmox.eviljungle.com
     http:
       paths:
       - path: /

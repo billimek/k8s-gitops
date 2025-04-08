@@ -6,7 +6,6 @@ metadata:
   name: sabnzbd
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -84,7 +83,7 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "sabnzbd.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "sabnzbd.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix

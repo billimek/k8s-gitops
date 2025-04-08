@@ -6,7 +6,6 @@ metadata:
   name: node-red
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -60,7 +59,7 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "node-red.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "node-red.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
@@ -74,6 +73,6 @@ spec:
       data:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        size: "1Gi" # TODO: change this to 5Gi once old cluster is removed
+        size: "5Gi"
         globalMounts:
           - path: /data

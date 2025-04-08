@@ -6,8 +6,6 @@
 
 This is a control plane node that runs via proxmox VM on `nas.home`
 
-TODO: This replaces [k3s-0](https://github.com/billimek/dotfiles/tree/master/hosts/k3s-0)
-
 * MAC: `BC:24:11:73:58:F0` (hared-coded)
 * IP: 10.2.0.50
 * CPU: VM - 4 cores
@@ -68,8 +66,6 @@ sudo qm create 502 \
 
 This is a worker node, bare-metal
 
-TODO: This replaces proxmox-b which hosts k3s-b
-
 * MAC: `70:85:c2:3f:7b:4d`
 * IP: 10.2.0.52
 * CPU: Intel i3-7100 - 4 cores
@@ -82,8 +78,6 @@ TODO: This replaces proxmox-b which hosts k3s-b
 
 This is a worker node, bare-metal
 
-TODO: This replaces proxmox-c which hosts k3s-c
-
 * MAC: `ac:1f:6b:6f:23:4e`
 * IP: 10.2.0.53
 * CPU: Intel Xeon D-1518 - 8 cores
@@ -94,8 +88,6 @@ TODO: This replaces proxmox-c which hosts k3s-c
 ### k8s-d
 
 This is a worker node, bare-metal - **candidate for retirement**
-
-TODO: This replaces k3s-d
 
 * MAC: `00:1e:06:45:0b:cd`
 * IP: 10.2.0.54
@@ -108,8 +100,6 @@ TODO: This replaces k3s-d
 
 This is a worker node, bare-metal
 
-TODO: This replaces k3s-e
-
 * MAC: `00:02:c9:55:b4:26`
 * IP: 10.2.0.55
 * CPU: AMD Ryzen 3 3200G - 4 core
@@ -120,8 +110,6 @@ TODO: This replaces k3s-e
 ### k8s-f
 
 This is a worker node, bare-metal
-
-TODO: This replaces [k3s-f](https://github.com/billimek/dotfiles/tree/master/hosts/k3s-f)
 
 * MAC: `68:1d:ef:34:d8:1a`
 * IP: 10.2.0.56
@@ -136,8 +124,6 @@ This is a worker node, bare-metal
 
 This is a worker node, bare-metal
 
-TODO: This replaces [k3s-g](https://github.com/billimek/dotfiles/tree/master/hosts/k3s-g)
-
 * MAC: `68:1d:ef:34:66:3f`
 * IP: 10.2.0.57
 * CPU: Intel N100 - 4 core
@@ -148,8 +134,6 @@ TODO: This replaces [k3s-g](https://github.com/billimek/dotfiles/tree/master/hos
 ### k8s-h
 
 This is a worker node, bare-metal
-
-TODO: This replaces [k3s-h](https://github.com/billimek/dotfiles/tree/master/hosts/k3s-h)
 
 * MAC: `68:1d:ef:34:d9:c7`
 * IP: 10.2.0.58
@@ -162,8 +146,6 @@ TODO: This replaces [k3s-h](https://github.com/billimek/dotfiles/tree/master/hos
 
 This is a worker node, bare-metal
 
-TODO: This replaces `k3s-a`
-
 * MAC: `98:fa:9b:04:47:b9`
 * IP: 10.2.0.59
 * CPU: Intel i5-8500T - 6 core
@@ -171,62 +153,3 @@ TODO: This replaces `k3s-a`
 * Disk: host - 128GB - `/dev/nvme0n1`
 * Disk: SSD for ceph - 1TB `/dev/sda` - (`/dev/disk/by-id/wwn-0x5002538800374ff9`)
 * GPU: iGPU UHD 630
-
-## sandbox testing
-
-TODO: temporary worker nodes for testing rook-ceph, remove once testing is done
-
-```shell
-sudo qm create 502 \
-  --name k8s-a \
-  --ostype l26 \
-  --machine q35 \
-  --memory 8192 \
-  --cores 4 \
-  --cpu host \
-  --agent "enabled=1,fstrim_cloned_disks=1" \
-  --bios ovmf \
-  --net0 "model=virtio,macaddr=BC:24:11:F1:D5:9B,bridge=brk8s20" \
-  --scsihw virtio-scsi-single \
-  --efidisk0 "ssdtank-proxmox:1,efitype=4m" \
-  --scsi0 "ssdtank-proxmox:200,backup=0,iothread=1,ssd=1,discard=on" \
-  --ide2 tank-proxmox:iso/metal-amd64.iso,media=cdrom \
-  --hostpci0 "0000:00:02.0,mdev=i915-GVTg_V5_1,pcie=1" \
-  --scsi1 "ssdtank-proxmox:100,backup=0,iothread=1,ssd=1,discard=on"
-```
-
-```shell
-sudo qm create 503 \
-  --name k8s-b \
-  --ostype l26 \
-  --machine q35 \
-  --memory 8192 \
-  --cores 4 \
-  --cpu host \
-  --agent "enabled=1,fstrim_cloned_disks=1" \
-  --bios ovmf \
-  --net0 "model=virtio,macaddr=BC:24:11:F1:D5:9C,bridge=brk8s20" \
-  --scsihw virtio-scsi-single \
-  --efidisk0 "ssdtank-proxmox:1,efitype=4m" \
-  --scsi0 "ssdtank-proxmox:200,backup=0,iothread=1,ssd=1,discard=on" \
-  --ide2 tank-proxmox:iso/metal-amd64.iso,media=cdrom \
-  --scsi1 "ssdtank-proxmox:100,backup=0,iothread=1,ssd=1,discard=on"
-```
-
-```shell
-sudo qm create 504 \
-  --name k8s-c \
-  --ostype l26 \
-  --machine q35 \
-  --memory 8192 \
-  --cores 4 \
-  --cpu host \
-  --agent "enabled=1,fstrim_cloned_disks=1" \
-  --bios ovmf \
-  --net0 "model=virtio,macaddr=BC:24:11:F1:D5:9D,bridge=brk8s20" \
-  --scsihw virtio-scsi-single \
-  --efidisk0 "ssdtank-proxmox:1,efitype=4m" \
-  --scsi0 "ssdtank-proxmox:200,backup=0,iothread=1,ssd=1,discard=on" \
-  --ide2 tank-proxmox:iso/metal-amd64.iso,media=cdrom \
-  --scsi1 "ssdtank-proxmox:100,backup=0,iothread=1,ssd=1,discard=on"
-```

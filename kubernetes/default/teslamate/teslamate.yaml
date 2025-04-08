@@ -6,7 +6,6 @@ metadata:
   name: teslamate
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -68,7 +67,7 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "teslamate.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "teslamate.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix

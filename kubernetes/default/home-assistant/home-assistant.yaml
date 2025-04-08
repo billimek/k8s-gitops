@@ -6,7 +6,6 @@ metadata:
   name: home-assistant
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -93,7 +92,7 @@ spec:
         primary: true
         type: LoadBalancer
         controller: home-assistant
-        loadBalancerIP: 10.0.5.56 # TODO: change this once old cluster is removed
+        loadBalancerIP: 10.0.6.56
         ports:
           http:
             port: 8123
@@ -108,7 +107,7 @@ spec:
       config:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        size: "5Gi" # TODO: change this to 60Gi whence old cluster is removed
+        size: "60Gi"
         advancedMounts:
           home-assistant:
             app:
@@ -155,9 +154,9 @@ spec:
       main:
         # ensure that external DNS (cloudflare) has an entry for this directed to the router
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
-        className: "nginx-tailscale" # TODO: change this once old cluster is removed
+        className: "nginx"
         hosts:
-          - host: &host "hass.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "hass.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
@@ -167,23 +166,23 @@ spec:
         tls:
           - hosts:
               - *host
-      # tailscale:
-      #   className: "nginx-tailscale"
-      #   hosts:
-      #     - host: &host "hass.eviljungle.com"
-      #       paths:
-      #         - path: /
-      #           pathType: Prefix
-      #           service:
-      #             identifier: main
-      #             port: http
-      #   tls:
-      #     - hosts:
-      #         - *host
+      tailscale:
+        className: "nginx-tailscale"
+        hosts:
+          - host: &host "hass.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
       code:
         className: "nginx-tailscale"
         hosts:
-          - host: &host-code "hass-vscode.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host-code "hass-vscode.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix

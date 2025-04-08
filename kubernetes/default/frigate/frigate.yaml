@@ -6,7 +6,7 @@ metadata:
   name: frigate
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
+  suspend: false
   interval: 1h
   chart:
     spec:
@@ -85,9 +85,9 @@ spec:
 
     ingress:
       main:
-        className: "nginx-tailscale" # TODO: change this once old cluster is removed
+        className: "nginx-tailscale"
         hosts:
-          - host: &host "frigate.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "frigate.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
@@ -103,7 +103,7 @@ spec:
         enabled: true
         storageClass: ceph-block
         accessMode: ReadWriteOnce
-        size: 2Gi # TODO: change this to 10Gi after old cluster is removed
+        size: 10Gi
         globalMounts:
           - path: /config
       config-file:

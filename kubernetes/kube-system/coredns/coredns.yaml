@@ -20,7 +20,7 @@ spec:
     fullnameOverride: coredns
     image:
       repository: mirror.gcr.io/coredns/coredns
-    replicaCount: 1 # TODO: expand to 2 when cluster is larger
+    replicaCount: 2
     k8sAppLabelOverride: kube-dns
     prometheus:
       service:
@@ -94,7 +94,7 @@ spec:
         hass.eviljungle.com. IN A   10.0.6.150
         mcsv2-map.eviljungle.com. IN A   10.0.6.150
         request.eviljungle.com. IN A   10.0.6.150
-        *.t.eviljungle.com. IN CNAME nginx-tailscale-talos.drake-eel.ts.net
+        *.t.eviljungle.com. IN CNAME nginx-tailscale.drake-eel.ts.net
         *.eviljungle.com. IN A   100.112.245.35
         eviljungle.com. IN A   10.0.7.1
     topologySpreadConstraints:

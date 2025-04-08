@@ -47,7 +47,7 @@ spec:
       plugins:
         - https://github.com/Army-py/SlashServer/releases/download/tested/SlashServer-4.0.jar
       serviceType: LoadBalancer
-      loadBalancerIP: 10.0.5.106 # TODO: revisit
+      loadBalancerIP: 10.0.6.106
       externalTrafficPolicy: Local
       # externalIPs:
       # This can be set to the contents of your config file (only works with yaml currently)

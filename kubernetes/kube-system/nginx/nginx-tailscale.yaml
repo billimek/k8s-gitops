@@ -18,7 +18,7 @@ spec:
       interval: 5m
   values:
     controller:
-      replicaCount: 1 # TODO: expand this to 2 replicas after the old cluster is removed
+      replicaCount: 2
 
       allowSnippetAnnotations: true
       enableAnnotationValidations: true
@@ -29,7 +29,7 @@ spec:
       service:
         enabled: true
         annotations:
-          tailscale.com/hostname: "nginx-tailscale-talos" # TODO: change this once the old cluster is removed
+          tailscale.com/hostname: "nginx-tailscale"
         type: LoadBalancer
         loadBalancerClass: tailscale
         externalTrafficPolicy: Local

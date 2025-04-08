@@ -6,7 +6,6 @@ metadata:
   name: jellyseerr
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -82,7 +81,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504"  # Using a smaller set than the default to fix javascript issues with overseer
         hosts:
-          - host: &host request.t.eviljungle.com # TODO: revisit
+          - host: &host request.eviljungle.com
             paths:
               - path: /
                 service:

@@ -6,7 +6,6 @@ metadata:
   name: influxdb
   namespace: monitoring
 spec:
-  suspend: false # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -23,17 +22,17 @@ spec:
       tag: "1.8.10-alpine" # TODO: 1.11.8-alpine has issues and need to migrate to 2.x anyway
     service:
       type: LoadBalancer
-      loadBalancerIP: 10.0.5.2 # TODO: change this once the old cluster is removed
+      loadBalancerIP: 10.0.6.2
     persistence:
       enabled: true
-      size: 5Gi # TODO: change this back to 50Gi
+      size: 50Gi
       storageClass: ceph-block
     resources:
       requests:
-        memory: 500Mi # TODO: change this back to 2Gi
+        memory: 2Gi
         cpu: 100m
       limits:
-        memory: 1Gi # TOGO: change this back to 4Gi
+        memory: 4Gi
     livenessProbe:
       timeoutSeconds: 10
     readinessProbe:

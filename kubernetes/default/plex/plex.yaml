@@ -6,7 +6,6 @@ metadata:
   name: plex
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -86,7 +85,7 @@ spec:
       app:
         controller: plex
         type: LoadBalancer
-        loadBalancerIP: 10.0.5.53 # TODO: revisit
+        loadBalancerIP: 10.0.6.53
         ports:
           http:
             port: &port 32400
@@ -95,13 +94,13 @@ spec:
       config:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        size: "1Gi" # TODO: change this to 55Gi once old cluster is removed
+        size: "5Gi"
       # Separate PVC for cache to avoid backing up cache files
       # This must be commented on initial install in order to avoid permission issues in '/config/Library/Application Support/Plex Media Server'
       # plex-cache:
       #   storageClass: "ceph-block"
       #   accessMode: ReadWriteOnce
-      #   size: "1Gi" # TODO: change this to 55Gi once old cluster is removed
+      #   size: "55Gi"
       #   globalMounts:
       #     - path: /config/Library/Application Support/Plex Media Server/Cache
       # This must be commented on initial install in order to avoid permission issues in '/config/Library/Application Support/Plex Media Server'
@@ -131,7 +130,7 @@ spec:
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
         hosts:
-          - host: &host plex.t.eviljungle.com # TODO: revisit
+          - host: &host plex.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix

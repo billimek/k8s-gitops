@@ -52,7 +52,7 @@ spec:
       serverName: "\u00a79Lovely \u00a7c\u00a7lSMP\u00a7c\u00a7l\u00a7k!"
       cheats: true
       serviceType: LoadBalancer
-      loadBalancerIP: 10.0.5.103 # TODO: revisit
+      loadBalancerIP: 10.0.6.103
 ---
 # yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
@@ -70,7 +70,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/SANDBOX-minecraft-bedrock' # TODO: revisit
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/minecraft-bedrock'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
         AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'

@@ -6,7 +6,7 @@ metadata:
   name: espresense-companion
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
+  suspend: false
   interval: 1h
   chart:
     spec:
@@ -59,9 +59,9 @@ spec:
             readOnly: true
     ingress:
       main:
-        className: "nginx-tailscale" # TODO: change this once old cluster is removed
+        className: "nginx-tailscale"
         hosts:
-          - host: &host "espresense-companion.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "espresense-companion.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix

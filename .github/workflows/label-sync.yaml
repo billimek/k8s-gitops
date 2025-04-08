@@ -5,7 +5,7 @@ name: Label Sync
 on:
   workflow_dispatch:
   push:
-    branches: ["main"] # TODO: fix branch name after moving to k8s-gitops repo
+    branches: ["master"]
     paths: [".github/labels.yaml"]
   schedule:
     - cron: "0 0 * * *" # Every day at midnight

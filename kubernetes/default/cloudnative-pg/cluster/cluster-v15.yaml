@@ -13,7 +13,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
-    storageClass: ceph-block # TODO: set back to "ceph-block" after the old cluster is deleted
+    storageClass: ceph-block
   enableSuperuserAccess: true
   superuserSecret:
     name: cloudnative-pg-secret
@@ -32,14 +32,14 @@ spec:
       memory: "512Mi"
       cpu: "250m"
     limits:
-      memory: "1Gi" # TODO: set back to 4Gi after the old cluster is deleted
+      memory: "4Gi"
   backup:
-    retentionPolicy: 5d # TODO: set back to 30d after the old cluster is deleted
+    retentionPolicy: 30d
     barmanObjectStore:
       wal:
         compression: bzip2
         maxParallel: 8
-      destinationPath: s3://postgresql-sandbox/ # TODO: set back to s3://postgresql/ after the old cluster is deleted
+      destinationPath: s3://postgresql/
       endpointURL: http://nas.home:9000
       serverName: postgres-v15
       s3Credentials:
@@ -50,11 +50,10 @@ spec:
           name: cloudnative-pg-secret
           key: aws-secret-access-key
 
-  # TODO: comment this block out after the old cluster is deleted
-  bootstrap:
-    # use this to recover a net-new cluster from a backup
-    recovery:
-      source: postgres-backup # TODO: fix this to the real name of the backup when on the new cluster
+  # bootstrap:
+  #   # use this to recover a net-new cluster from a backup
+  #   recovery:
+  #     source: postgres-backup # TODO: fix this to the real name of the backup when on the new cluster
 
     # # use this to 'migrate' from an existing cnpg cluster (e.g. "cluster-pg14") to the new cluster
     # initdb:
@@ -69,7 +68,7 @@ spec:
 
   externalClusters:
     # this represents the s3 backup to restore from. *nota-bene: the backup must be the same major version of the target cluster
-    - name: postgres-backup # TODO: set back to "postgresql" after the old cluster is deleted
+    - name: postgres
       barmanObjectStore:
         wal:
           compression: bzip2

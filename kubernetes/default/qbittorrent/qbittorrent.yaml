@@ -6,7 +6,6 @@ metadata:
   name: qbittorrent
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -66,7 +65,7 @@ spec:
       app:
         controller: qbittorrent
         type: LoadBalancer
-        loadBalancerIP: 10.0.5.52 # TODO: revisit
+        loadBalancerIP: 10.0.6.52
         ports:
           http:
             primary: true
@@ -79,7 +78,7 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "q.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "q.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix

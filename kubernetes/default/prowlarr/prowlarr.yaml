@@ -6,7 +6,6 @@ metadata:
   name: prowlarr
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -84,7 +83,7 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "prowlarr.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "prowlarr.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
@@ -98,6 +97,6 @@ spec:
       config:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        size: "1Gi" # TODO: change this to 5Gi once old cluster is removed
+        size: "5Gi"
       tmp:
         type: emptyDir

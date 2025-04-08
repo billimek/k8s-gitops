@@ -34,7 +34,7 @@ spec:
       }
   coreTemplate:
     spec:
-      replicas: 1 # TODO: change to 2 after the new cluster is up
+      replicas: 2
       envFrom:
         - secretRef:
             name: emqx-secret
@@ -54,4 +54,4 @@ spec:
   listenersServiceTemplate:
     spec:
       type: LoadBalancer
-      loadBalancerIP: 10.0.5.50 # TODO: change back
+      loadBalancerIP: 10.0.6.50

@@ -50,7 +50,7 @@ metadata:
 spec:
   secretName: acme-crt-secret
   issuerRef:
-    name: letsencrypt-test # TODO: change to letsencrypt-prod once old cluster is decommissioned
+    name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
   - eviljungle.com

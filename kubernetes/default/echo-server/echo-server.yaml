@@ -65,7 +65,7 @@ spec:
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
         hosts:
-          - host: &host www.t.eviljungle.com # TODO: revisit
+          - host: &host www.eviljungle.com
             paths:
               - path: /
                 pathType: Prefix

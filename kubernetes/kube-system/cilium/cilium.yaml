@@ -72,10 +72,10 @@ spec:
           enabled: true
           className: "nginx-tailscale"
           hosts:
-            - hubble.t.eviljungle.com # TODO: revisit
+            - hubble.eviljungle.com
           tls:
             - hosts:
-                - hubble.t.eviljungle.com # TODO: revisit
+                - hubble.eviljungle.com
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.244.0.0/16

@@ -48,98 +48,66 @@ nodes:
         systemExtensions:
           officialExtensions:
             - siderolabs/qemu-guest-agent
-  # TODO: k8s-b is a temp sandbox testing node
   - hostname: k8s-b
     nodeAnnotations:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
     controlPlane: false
     ipAddress: 10.2.0.52
-    installDisk: /dev/sda
+    installDisk: /dev/nvme0n1
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: bc:24:11:*
+          hardwareAddr: 70:85:c2:3f:7b:4d
         dhcp: true
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/qemu-guest-agent
-  # - hostname: k8s-b
-  #   nodeAnnotations:
-  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-  #   controlPlane: false
-  #   ipAddress: 10.2.0.52
-  #   installDisk: /dev/nvme0n1
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: 70:85:c2:3f:7b:4d
-  #       dhcp: true
-  # TODO: k8s-c is a temp sandbox testing node
   - hostname: k8s-c
     nodeAnnotations:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
     controlPlane: false
     ipAddress: 10.2.0.53
-    installDisk: /dev/sda
+    installDisk: /dev/nvme0n1
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: bc:24:11:*
+          hardwareAddr: ac:1f:6b:6f:23:4e
         dhcp: true
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/qemu-guest-agent
-  # - hostname: k8s-c
-  #   nodeAnnotations:
-  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-  #   controlPlane: false
-  #   ipAddress: 10.2.0.53
-  #   installDisk: /dev/nvme0n1
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: ac:1f:6b:6f:23:4e
-  #       dhcp: true
-  # - hostname: k8s-d
-  #   nodeAnnotations:
-  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-  #   controlPlane: false
-  #   ipAddress: 10.2.0.54
-  #   installDisk: /dev/nvme0n1
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: 00:1e:06:45:0b:cd
-  #       dhcp: true
-  # - hostname: k8s-e
-  #   nodeAnnotations:
-  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-  #   controlPlane: false
-  #   ipAddress: 10.2.0.55
-  #   installDisk: /dev/sbd
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: 00:02:c9:55:b4:26
-  #       dhcp: true
-  # - hostname: k8s-f
-  #   nodeAnnotations:
-  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-  #   controlPlane: false
-  #   ipAddress: 10.2.0.56
-  #   installDisk: /dev/nvme0n1
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: 68:1d:ef:34:d8:1a
-  #       dhcp: true
-  # - hostname: k8s-g
-  #   nodeAnnotations:
-  #     installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-  #   controlPlane: false
-  #   ipAddress: 10.2.0.57
-  #   installDisk: /dev/nvme0n1
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: 68:1d:ef:34:66:3f
-  #       dhcp: true
+  - hostname: k8s-d
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.54
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 00:1e:06:45:0b:cd
+        dhcp: true
+  - hostname: k8s-e
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.55
+    installDisk: /dev/sbd
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 00:02:c9:55:b4:26
+        dhcp: true
+  - hostname: k8s-f
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.56
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 68:1d:ef:34:d8:1a
+        dhcp: true
+  - hostname: k8s-g
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.2.0.57
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 68:1d:ef:34:66:3f
+        dhcp: true
   - hostname: k8s-h
     nodeAnnotations:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'

@@ -6,7 +6,6 @@ metadata:
   name: unifi
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -51,7 +50,7 @@ spec:
         controller: unifi
         type: LoadBalancer
         externalTrafficPolicy: Local
-        loadBalancerIP: 10.0.5.57 # TODO: revisit
+        loadBalancerIP: 10.0.6.57
         ports:
           http:
             port: 8443
@@ -91,7 +90,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: HTTPS
         hosts:
-          - host: &host "unifi.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "unifi.eviljungle.com"
             paths:
               - path: /
                 service:
@@ -104,6 +103,6 @@ spec:
       data:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        size: "1Gi" # TODO: reset this to 20Gi after initial setup
+        size: "20Gi"
         globalMounts:
           - path: /unifi

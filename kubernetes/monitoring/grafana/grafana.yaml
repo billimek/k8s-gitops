@@ -52,17 +52,17 @@ spec:
       GF_PANELS_DISABLE_SANITIZE_HTML: true
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ALLOW_EMBEDDING: true
-      GF_SERVER_ROOT_URL: https://grafana.t.eviljungle.com # TODO: Update after old cluster is removed
+      GF_SERVER_ROOT_URL: https://grafana.eviljungle.com
       GF_SECURITY_COOKIE_SAMESITE: grafana
     envFromSecrets:
       - name: grafana-secret
     ingress:
       enabled: true
       ingressClassName: nginx-tailscale
-      hosts: [grafana.t.eviljungle.com] # TODO: Update after old cluster is removed
+      hosts: [grafana.eviljungle.com]
       tls:
       - hosts:
-        - grafana.t.eviljungle.com # TODO: Update after old cluster is removed
+        - grafana.eviljungle.com
     plugins:
     - pr0ps-trackmap-panel
     - natel-plotly-panel

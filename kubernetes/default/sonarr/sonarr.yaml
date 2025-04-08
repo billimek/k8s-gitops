@@ -6,7 +6,6 @@ metadata:
   name: sonarr
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -85,14 +84,14 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "sonarr.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "sonarr.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
                 service:
                   identifier: app
                   port: http
-          - host: "shows.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: "shows.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
@@ -102,7 +101,7 @@ spec:
         tls:
           - hosts:
               - *host
-              - "shows.t.eviljungle.com" # TODO: change this once old cluster is removed
+              - "shows.eviljungle.com"
     persistence:
       config:
         storageClass: "ceph-block"

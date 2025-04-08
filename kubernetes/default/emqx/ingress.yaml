@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx-tailscale
   rules:
-    - host: "emqx.t.eviljungle.com" # TODO: Update
+    - host: "emqx.eviljungle.com"
       http:
         paths:
           - path: /

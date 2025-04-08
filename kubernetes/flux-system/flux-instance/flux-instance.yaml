@@ -37,8 +37,8 @@ spec:
         - notification-controller
       sync:
         kind: GitRepository
-        url: https://github.com/billimek/k8s-gitops-sandbox.git
-        ref: refs/heads/main
+        url: https://github.com/billimek/k8s-gitops.git
+        ref: refs/heads/master
         path: setup/flux/cluster
         pullSecret: ghcr-auth
         interval: 5m # TODO: revisit if/when webhooks from github are enabled to make this 1h
@@ -59,23 +59,22 @@ spec:
               kind: Deployment
               name: (kustomize-controller|helm-controller|source-controller)
           # Increase the memory limits
-          # TODO: uncomment when old cluster is removed
-          # - patch: |
-          #     apiVersion: apps/v1
-          #     kind: Deployment
-          #     metadata:
-          #       name: all
-          #     spec:
-          #       template:
-          #         spec:
-          #           containers:
-          #             - name: manager
-          #               resources:
-          #                 limits:
-          #                   memory: 2Gi
-          #   target:
-          #     kind: Deployment
-          #     name: (kustomize-controller|helm-controller|source-controller)
+          - patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: all
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: manager
+                        resources:
+                          limits:
+                            memory: 2Gi
+            target:
+              kind: Deployment
+              name: (kustomize-controller|helm-controller|source-controller)
           # Enable in-memory kustomize builds
           - patch: |
               - op: add

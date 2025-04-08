@@ -6,7 +6,6 @@ metadata:
   name: tautulli
   namespace: default
 spec:
-  suspend: true # TODO: remove this once the old cluster is removed
   interval: 1h
   chart:
     spec:
@@ -74,7 +73,7 @@ spec:
       main:
         className: "nginx-tailscale"
         hosts:
-          - host: &host "tautulli.t.eviljungle.com" # TODO: change this once old cluster is removed
+          - host: &host "tautulli.eviljungle.com"
             paths:
               - path: /
                 pathType: Prefix
