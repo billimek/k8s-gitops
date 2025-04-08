@@ -13,11 +13,24 @@
 
 * [influxdb/influxdb.yaml](influxdb/influxdb.yaml)
 
+# loki
+
+[loki](https://github.com/grafana/loki) is a logging collection system
+
+* [loki/loki.yaml](loki/loki.yaml)
+* [loki/objectbucketclaim.yaml](loki/objectbucketclaim.yaml)
+
 # prometheus-rules
 
 Various custom PrometheusRule definitions for this cluster
 
 * [prometheus-rules/](prometheus-rules/)
+
+# promtail
+
+[promtail](https://github.com/grafana/helm-charts/tree/main/charts/promtail) is an agent which ships the contents of local logs to a Loki instance
+
+* [promtail/promtail.yaml](promtail/promtail.yaml)
 
 # speedtest-exporter
 
@@ -26,14 +39,6 @@ Various custom PrometheusRule definitions for this cluster
 ISP speed test results collector
 
 * [speedtest-exporter/speedtest-exporter.yaml](speedtest-exporter/speedtest-exporter.yaml)
-
-# trivy
-
-![](https://i.imgur.com/yvZ86z0.png)
-
-Be depressed about how many vulnerabilities you have in your images
-
-* [trivy/trivy.yaml](trivy/trivy.yaml)
 
 # victoria metrics
 

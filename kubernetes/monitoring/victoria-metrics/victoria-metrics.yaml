@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -7,12 +9,12 @@ spec:
   chart:
     spec:
       chart: victoria-metrics-k8s-stack
-      version: 0.38.0
+      version: 0.42.0
       sourceRef:
         kind: HelmRepository
         name: victoriametrics-charts
         namespace: flux-system
-  interval: 15m
+  interval: 1h
   maxHistory: 3
   install:
     crds: CreateReplace
@@ -49,27 +51,19 @@ spec:
 
     defaultRules:
       create: true
-      rules:
-        groups:
-          kubernetesSystemControllerManager:
-            create: false
-          etcd:
-            create: false
-          kubernetesSystemScheduler:
-            create: false
 
     vmsingle:
       enabled: true
       spec:
         # -- Data retention period. Possible units character: h(ours), d(ays), w(eeks), y(ears), if no unit character specified - month. The minimum retention period is 24h. See these [docs](https://docs.victoriametrics.com/single-server-victoriametrics/#retention)
-        retentionPeriod: "3"
+        retentionPeriod: "1w" # TODO: change this to "3" once the old cluster is removed
         replicaCount: 1
         storage:
           accessModes:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 60Gi
+              storage: 15Gi # TODO: change this back to 60Gi once the old cluster is removed
         resources:
           limits:
             memory: 2Gi
@@ -81,23 +75,23 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-        - vm.eviljungle.com
+        - vm.t.eviljungle.com # TODO: change this once the old cluster is removed
         tls:
         - hosts:
-          - vm.eviljungle.com
+          - vm.t.eviljungle.com # TODO: change this once the old cluster is removed
 
     alertmanager:
       enabled: true
       spec:
-        externalURL: "https://vm-alert.eviljungle.com"
+        externalURL: "https://vm-alert.t.eviljungle.com" # TODO: change this once the old cluster is removed
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-        - vm-alert.eviljungle.com
+        - vm-alert.t.eviljungle.com # TODO: change this once the old cluster is removed
         tls:
         - hosts:
-          - vm-alert.eviljungle.com
+          - vm-alert.t.eviljungle.com # TODO: change this once the old cluster is removed
       config:
         route:
           group_by: ["alertname", "job"]
@@ -106,7 +100,7 @@ spec:
           repeat_interval: 12h
           routes:
           - matchers:
-            - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit"
+            - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit|CephNodeNetworkPacketDrops"
             receiver: 'blackhole'
           - matchers:
             - severity=~"warning|critical"
@@ -123,7 +117,7 @@ spec:
           slack_configs:
             - channel: '#notifications'
               icon_url: https://avatars3.githubusercontent.com/u/3380462
-              username: 'Alertmanager'
+              username: 'Alertmanager - SANDBOX' # TODO: change this once the old cluster is removed
               send_resolved: true
               title: |-
                 [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}🔥{{ else if eq .CommonLabels.severity "warning" }}⚠️{{ else }}ℹ️{{ end }}{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
@@ -133,13 +127,10 @@ spec:
 
                 {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
 
-                **Details:**
-                  {{- if .Labels.alertname }}{{ "\n" }} • *alert*: {{ .Labels.alertname }}{{ end -}}
-                  {{- if .Labels.kubernetes_node }}{{ "\n" }} • *node*: `{{ .Labels.kubernetes_node }}`{{ end -}}
-                  {{- if .Labels.node }}{{ "\n" }} • *node*: `{{ .Labels.node }}`{{ end -}}
-                  {{- if .Labels.namespace }}{{ "\n" }} • *namespace*: `{{ .Labels.namespace }}`{{ end -}}
-                  {{- if .Labels.pod }}{{ "\n" }} • *pod*: `{{ .Labels.pod }}`{{ end -}}
-                  {{- if .Labels.container }}{{ "\n" }} • *container*: `{{ .Labels.container }}`{{ end -}}
+                🏷 Labels:
+                   {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+                   {{ end }}
+
                   {{- if .Annotations.runbook_url }}{{ "\n" }} • [*runbook*]({{ .Annotations.runbook_url }}){{ end -}}
                   {{- if .GeneratorURL }}{{ "\n" }} • [*source*]({{ .GeneratorURL }}){{ end }}
                 {{ end }}
@@ -149,15 +140,15 @@ spec:
       enabled: true
       spec:
         extraArgs:
-          external.url: "https://vmalert.eviljungle.com"
+          external.url: "https://vmalert.t.eviljungle.com" # TODO: change this once the old cluster is removed
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-        - vmalert.eviljungle.com
+        - vmalert.t.eviljungle.com # TODO: change this once the old cluster is removed
         tls:
         - hosts:
-          - vmalert.eviljungle.com
+          - vmalert.t.eviljungle.com # TODO: change this once the old cluster is removed
 
     vmagent:
       enabled: true
@@ -165,14 +156,15 @@ spec:
         enabled: true
         ingressClassName: nginx-tailscale
         hosts:
-        - vmagent.eviljungle.com
+        - vmagent.t.eviljungle.com # TODO: change this once the old cluster is removed
         tls:
         - hosts:
-          - vmagent.eviljungle.com
+          - vmagent.t.eviljungle.com # TODO: change this once the old cluster is removed
       spec:
-        additionalScrapeConfigs:
-          name: victoria-metrics-k8s-stack-helm-values
-          key: additionalScrapeConfigs.yaml 
+        # TODO: re-enable this once home-assistant is running on the new cluster
+        # additionalScrapeConfigs:
+        #   name: victoria-metrics-k8s-stack-helm-values
+        #   key: additionalScrapeConfigs.yaml 
         inlineScrapeConfig: |
           - job_name: 'ipmi'
             metrics_path: '/metrics'
@@ -268,22 +260,42 @@ spec:
       enabled: true
 
     kubeControllerManager:
-      enabled: false
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                insecureSkipVerify: true
+                serverName: localhost
 
     coreDns:
       enabled: true
 
     kubeEtcd:
       enabled: false
+      # service:
+      #   selector:
+      #     component: kube-apiserver
 
     kubeScheduler:
-      enabled: false
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                insecureSkipVerify: true
+                serverName: localhost
 
     kubeProxy:
       enabled: false
-
-    prometheus-operator-crds:
-      enabled: true
 
   valuesFrom:
   - kind: Secret

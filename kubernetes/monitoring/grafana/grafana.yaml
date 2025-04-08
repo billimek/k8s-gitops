@@ -1,11 +1,12 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: grafana
   namespace: monitoring
 spec:
-  interval: 15m
+  interval: 1h
   chart:
     spec:
       chart: grafana
@@ -14,32 +15,28 @@ spec:
         kind: HelmRepository
         name: grafana-charts
         namespace: flux-system
-  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
-      retries: 3
-    timeout: 15m
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    extraInitContainers:
-      - name: init-db
-        image: ghcr.io/home-operations/postgres-init:17@sha256:a9f405688344a8a6f718e2c344438342ad21540986aeb5ab5fa781831eb2c597
-        imagePullPolicy: IfNotPresent
-        envFrom:
-          - secretRef:
-              name: grafana-secret
+    admin:
+      existingSecret: grafana-secret
+    # TODO: revisit using postgres for grafana
+    # extraInitContainers:
+    #   - name: init-db
+    #     image: ghcr.io/home-operations/postgres-init:17@sha256:a9f405688344a8a6f718e2c344438342ad21540986aeb5ab5fa781831eb2c597
+    #     imagePullPolicy: IfNotPresent
+    #     envFrom:
+    #       - secretRef:
+    #           name: grafana-secret
     rbac:
       pspEnabled: false
     deploymentStrategy:
       type: Recreate
-    podAnnotations:
-      configmap.reloader.stakater.com/reload: "grafana"
     env:
       GF_ANALYTICS_CHECK_FOR_UPDATES: false
       GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: false
@@ -55,18 +52,17 @@ spec:
       GF_PANELS_DISABLE_SANITIZE_HTML: true
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ALLOW_EMBEDDING: true
-      # GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: true
-      GF_SERVER_ROOT_URL: https://grafana.eviljungle.com
+      GF_SERVER_ROOT_URL: https://grafana.t.eviljungle.com # TODO: Update after old cluster is removed
       GF_SECURITY_COOKIE_SAMESITE: grafana
     envFromSecrets:
       - name: grafana-secret
     ingress:
       enabled: true
       ingressClassName: nginx-tailscale
-      hosts: [grafana.eviljungle.com]
+      hosts: [grafana.t.eviljungle.com] # TODO: Update after old cluster is removed
       tls:
       - hosts:
-        - grafana.eviljungle.com
+        - grafana.t.eviljungle.com # TODO: Update after old cluster is removed
     plugins:
     - pr0ps-trackmap-panel
     - natel-plotly-panel
@@ -78,8 +74,9 @@ spec:
     - natel-discrete-panel
     serviceMonitor:
       enabled: true
-    serviceAccount:
-      autoMount: true
+    # serviceAccount:
+    #   create: true
+    #   autoMount: true
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -301,13 +298,25 @@ spec:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/drive-details.json
 
     sidecar:
-      datasources:
-        enabled: true
-        searchNamespace: ALL
-        # defaultDatasourceEnabled: false
       dashboards:
         enabled: true
         searchNamespace: ALL
+        label: grafana_dashboard
+        folderAnnotation: grafana_folder
+        provider:
+          disableDelete: true
+          foldersFromFilesStructure: true
+      datasources:
+        enabled: true
+        searchNamespace: ALL
+        labelValue: ""
+
+    persistence:
+      enabled: false
+
+    testFramework:
+      enabled: false
+
     datasources:
       datasources.yaml:
         apiVersion: 1
@@ -331,7 +340,7 @@ spec:
           - name: Loki
             type: loki
             access: proxy
-            url: http://loki-gateway.logs.svc.cluster.local:80
+            url: http://loki-headless.monitoring.svc.cluster.local:3100
           - name: Alertmanager
             type: alertmanager
             access: proxy
@@ -379,7 +388,7 @@ spec:
       auth:
         oauth_allow_insecure_email_lookup: false
       auth.basic:
-        disable_login_form: true
+        disable_login_form: false # TODO: revisit
       auth.azuread:
         enabled: true
         allow_sign_up: true
