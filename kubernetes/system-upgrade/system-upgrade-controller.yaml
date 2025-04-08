@@ -1,133 +1,69 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: system-upgrade
-  labels:
-    pod-security.kubernetes.io/enforce: privileged
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: system-upgrade
-  namespace: system-upgrade
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: system-upgrade
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: system-upgrade
-  namespace: system-upgrade
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: default-controller-env
-  namespace: system-upgrade
-data:
-  SYSTEM_UPGRADE_CONTROLLER_DEBUG: "false"
-  SYSTEM_UPGRADE_CONTROLLER_THREADS: "2"
-  SYSTEM_UPGRADE_JOB_ACTIVE_DEADLINE_SECONDS: "900"
-  SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT: "99"
-  SYSTEM_UPGRADE_JOB_IMAGE_PULL_POLICY: "Always"
-  SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE: "rancher/kubectl:v1.32.3"
-  SYSTEM_UPGRADE_JOB_PRIVILEGED: "true"
-  SYSTEM_UPGRADE_JOB_TTL_SECONDS_AFTER_FINISH: "900"
-  SYSTEM_UPGRADE_PLAN_POLLING_INTERVAL: "15m"
----
-apiVersion: apps/v1
-kind: Deployment
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
 metadata:
   name: system-upgrade-controller
   namespace: system-upgrade
 spec:
-  selector:
-    matchLabels:
-      upgrade.cattle.io/controller: system-upgrade-controller
-  template:
-    metadata:
-      labels:
-        upgrade.cattle.io/controller: system-upgrade-controller # necessary to avoid drain
+  interval: 15m
+  chart:
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: "k3s-upgrade"
-                    operator: "NotIn"
-                    values: ["false"]
-      serviceAccountName: system-upgrade
-      tolerations:
-        - key: "CriticalAddonsOnly"
-          operator: "Exists"
-        - key: "node-role.kubernetes.io/master"
-          operator: "Exists"
-          effect: "NoSchedule"
-        - key: "node-role.kubernetes.io/controlplane"
-          operator: "Exists"
-          effect: "NoSchedule"
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
-          effect: "NoSchedule"
-        - key: "node-role.kubernetes.io/etcd"
-          operator: "Exists"
-          effect: "NoExecute"
-      containers:
-        - name: system-upgrade-controller
-          image: rancher/system-upgrade-controller:v0.15.2
-          imagePullPolicy: IfNotPresent
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  values:
+    controllers:
+      system-upgrade-controller:
+        strategy: RollingUpdate
+        replicas: 1
+
+        pod:
           securityContext:
             runAsNonRoot: true
             runAsUser: 65534
             runAsGroup: 65534
-            allowPrivilegeEscalation: false
-            seccompProfile: 
-              type: RuntimeDefault
-            capabilities:
-              drop:
-                - ALL
-          envFrom:
-            - configMapRef:
-                name: default-controller-env
-          env:
-            - name: SYSTEM_UPGRADE_CONTROLLER_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels['upgrade.cattle.io/controller']
-            - name: SYSTEM_UPGRADE_CONTROLLER_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-          volumeMounts:
-            - name: etc-ssl
-              mountPath: /etc/ssl
-              readOnly: true
-            - name: etc-pki
-              mountPath: /etc/pki
-              readOnly: true
-            - name: etc-ca-certificates
-              mountPath: /etc/ca-certificates
-              readOnly: true
-            - name: tmp
-              mountPath: /tmp
-      volumes:
-        - name: etc-ssl
-          hostPath:
-            path: /etc/ssl
-            type: DirectoryOrCreate
-        - name: etc-pki
-          hostPath:
-            path: /etc/pki
-            type: DirectoryOrCreate
-        - name: etc-ca-certificates
-          hostPath:
-            path: /etc/ca-certificates
-            type: DirectoryOrCreate
-        - name: tmp
-          emptyDir: {}
+          tolerations:
+            - key: CriticalAddonsOnly
+              operator: Exists
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+              effect: NoSchedule
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+              effect: NoSchedule
+
+        containers:
+          app:
+            image:
+              repository: docker.io/rancher/system-upgrade-controller
+              tag: v0.15.2
+            env:
+              SYSTEM_UPGRADE_CONTROLLER_LEADER_ELECT: true
+              SYSTEM_UPGRADE_CONTROLLER_NAME: system-upgrade-controller
+              SYSTEM_UPGRADE_CONTROLLER_NAMESPACE:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              SYSTEM_UPGRADE_CONTROLLER_NODE_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+              SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT: "99"
+              SYSTEM_UPGRADE_JOB_PRIVILEGED: false
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
+
+    serviceAccount:
+      create: true
+      name: system-upgrade-controller
