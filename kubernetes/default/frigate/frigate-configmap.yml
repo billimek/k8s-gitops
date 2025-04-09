@@ -10,7 +10,7 @@ data:
       enabled: false
 
     mqtt:
-      host: emqx.default.svc
+      host: emqx-listeners.default.svc
       topic_prefix: frigate
       user: mqtt
       password: '{FRIGATE_MQTT_PASSWORD}'
