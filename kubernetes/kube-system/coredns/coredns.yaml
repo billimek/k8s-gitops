@@ -32,6 +32,7 @@ spec:
     service:
       name: kube-dns
       clusterIP: 10.96.0.10
+      loadBalancerIP: 10.0.6.99
     servers:
       - zones:
           - zone: .
