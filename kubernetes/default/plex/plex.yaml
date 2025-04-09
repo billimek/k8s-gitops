@@ -1,0 +1,156 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plex
+  namespace: default
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      plex:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/plex
+              tag: 1.41.5.9522
+            env:
+              TZ: "America/New_York"
+              PLEX_ADVERTISE_URL: https://10.0.6.53:32400,https://plex.eviljungle.com:443
+              PLEX_NO_AUTH_NETWORKS: "172.17.0.0/16,10.0.2.0/24,10.0.7.0/24,10.0.3.0/24,10.244.0.0/16"
+            envFrom:
+              - secretRef:
+                  name: plex-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /identity
+                    port: 32400
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                gpu.intel.com/i915: 1
+                cpu: 500m
+                memory: 2Gi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 5Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [44]
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: "true"
+
+    service:
+      app:
+        controller: plex
+        type: LoadBalancer
+        loadBalancerIP: 10.0.6.53
+        ports:
+          http:
+            port: &port 32400
+
+    persistence:
+      config:
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "5Gi"
+      # Separate PVC for cache to avoid backing up cache files
+      # This must be commented on initial install in order to avoid permission issues in '/config/Library/Application Support/Plex Media Server'
+      # plex-cache:
+      #   storageClass: "ceph-block"
+      #   accessMode: ReadWriteOnce
+      #   size: "55Gi"
+      #   globalMounts:
+      #     - path: /config/Library/Application Support/Plex Media Server/Cache
+      # This must be commented on initial install in order to avoid permission issues in '/config/Library/Application Support/Plex Media Server'
+      # logs:
+      #   type: emptyDir
+      #   globalMounts:
+      #     - path: /config/Library/Application Support/Plex Media Server/Logs
+      nfs-nas-media:
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        advancedMounts:
+          plex:
+            app:
+              - path: /data
+      transcode:
+        type: emptyDir
+        globalMounts:
+          - path: /transcode
+      tmp:
+        type: emptyDir
+
+    ingress:
+      app:
+        enabled: true
+        # ensure that external DNS (cloudflare) has an entry for this directed to the router
+        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
+        className: nginx
+        hosts:
+          - host: &host plex.eviljungle.com
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+            - *host
+      tailscale:
+        enabled: true
+        className: nginx-tailscale
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host

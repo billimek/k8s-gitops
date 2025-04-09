@@ -1,0 +1,1 @@
+{{ (fromYaml (readFile "../../../kubernetes/flux-system/flux-instance/flux-instance.yaml")).spec.values | toYaml }}

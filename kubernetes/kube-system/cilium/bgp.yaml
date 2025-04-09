@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumloadbalancerippool_v2alpha1.json
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: pool
+spec:
+  allowFirstLastIPs: "No"
+  blocks:
+    - start: 10.0.5.2
+      stop: 10.0.5.250
+    # - cidr: 10.0.5.0/24 # change to 10.0.6.0/24 after old cluster is decommissioned
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgppeeringpolicy_v2alpha1.json
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+  name: bgp-policy
+spec:
+  virtualRouters:
+    - localASN: 64513
+      exportPodCIDR: false
+      serviceSelector:
+        matchExpressions:
+          - key: thisFakeSelector
+            operator: NotIn
+            values:
+              - will-match-and-announce-all-services
+      neighbors:
+        - peerAddress: 10.0.7.1/32
+          peerASN: 64512
+          eBGPMultihopTTL: 10
+          gracefulRestart:
+            enabled: true

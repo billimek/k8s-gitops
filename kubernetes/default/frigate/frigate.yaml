@@ -1,0 +1,139 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frigate
+  namespace: default
+spec:
+  suspend: false
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      main:
+        annotations:
+          secret.reloader.stakater.com/reload: frigate-secret
+          configmap.reloader.stakater.com/reload: frigate-configmap
+        pod:
+          nodeSelector:
+            google.feature.node.kubernetes.io/coral: "true"
+            intel.feature.node.kubernetes.io/gpu: "true"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.15.0@sha256:dc77295ccc5a7258510ab6b1d9d5b7a339027305e2d29224338534febc4d1e89
+            env:
+              TZ: America/New_York
+            envFrom:
+              - secretRef:
+                  name: frigate-secret
+            securityContext:
+              privileged: true
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: 5000
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
+            resources:
+              requests:
+                memory: 1000Mi
+                cpu: 1500m
+                gpu.intel.com/i915: 1
+              limits:
+                memory: 4000Mi
+                gpu.intel.com/i915: 1
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: &port 5000
+            primary: true
+          go2rtc:
+            enabled: true
+            port: &apiPort 1984
+          rtsp:
+            enabled: true
+            port: 8554
+
+    ingress:
+      main:
+        className: "nginx-tailscale"
+        hosts:
+          - host: &host "frigate.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: *port
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        storageClass: ceph-block
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        globalMounts:
+          - path: /config
+      config-file:
+        enabled: true
+        type: configMap
+        name: frigate-configmap
+        globalMounts:
+          - path: /config/config.yml
+            subPath: config.yml
+            readOnly: true
+      media:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "nas.home"
+            path: /mnt/tank/media
+        globalMounts:
+          - path: /media
+      cache:
+        enabled: true
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 4Gi
+        globalMounts:
+          - path: /dev/shm
+      usb:
+        enabled: true
+        type: hostPath
+        hostPath: /dev/bus/usb
+        hostPathType: Directory
+        globalMounts:
+          - path: /dev/bus/usb

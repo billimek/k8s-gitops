@@ -1,0 +1,25 @@
+{% for namespace in ["flux-system", "monitoring", "rook-ceph"] %}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ namespace }}
+{% endfor %}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: onepassword-secret
+  namespace: kube-system
+stringData:
+  1password-credentials.json: op://Personal/52okh3ubjhdu5cgeqfvvldsj2u/credentials-json-base64
+  token: op://Personal/bspprtu7bu7qlnodme2hbfuoh4/credential
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ghcr-auth
+  namespace: flux-system
+stringData:
+  username: billimek
+  password: op://kubernetes/ghcr/password

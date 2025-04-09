@@ -1,0 +1,35 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: external-minio
+  namespace: default
+spec:
+  ingressClassName: nginx-tailscale
+  rules:
+  - host: &host minio-nas.eviljungle.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: external-minio
+            port:
+              number: 9001
+  tls:
+  - hosts:
+    - *host
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-minio
+  namespace: default
+spec:
+  ports:
+  - name: minio
+    port: 9001
+    targetPort: 9001
+  type: ExternalName
+  externalName: nas.home

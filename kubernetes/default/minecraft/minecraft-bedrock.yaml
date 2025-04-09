@@ -1,0 +1,104 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: minecraft-bedrock
+  namespace: default
+spec:
+  suspend: true
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft-bedrock
+      version: 2.8.4
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    fullnameOverride: minecraft-bedrock
+    persistence:
+      storageClass: "ceph-block"
+      dataDir:
+        enabled: true
+        Size: 10Gi
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      fsGroup: 1000
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 100m
+      limits:
+        memory: 250Mi
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      difficulty: normal
+      gameMode: survival
+      ops: "2535432067443552"
+      levelName: world
+      serverName: "\u00a79Lovely \u00a7c\u00a7lSMP\u00a7c\u00a7l\u00a7k!"
+      cheats: true
+      serviceType: LoadBalancer
+      loadBalancerIP: 10.0.6.103
+---
+# yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: minecraft-bedrock-restic
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: minecraft-bedrock-restic-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/minecraft-bedrock'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
+        AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
+  dataFrom:
+    - extract:
+        key: minio
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: minecraft-bedrock
+  namespace: default
+spec:
+  sourcePVC: minecraft-bedrock-datadir
+  trigger:
+    schedule: "10 4 * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: minecraft-bedrock-restic-secret
+    cacheCapacity: 10Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      daily: 10
+      within: 3d

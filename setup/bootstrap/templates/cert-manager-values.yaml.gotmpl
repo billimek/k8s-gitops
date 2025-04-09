@@ -1,0 +1,1 @@
+{{ (fromYaml (readFile "../../../kubernetes/cert-manager/cert-manager.yaml")).spec.values | toYaml }}

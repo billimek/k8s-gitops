@@ -1,0 +1,194 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: home-assistant
+  namespace: default
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    defaultPodOptions:
+      # required for mDNS and other host network features
+      hostNetwork: true
+    controllers:
+      home-assistant:
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-assistant/home-assistant
+              tag: 2025.4.1
+            env:
+              TZ: "America/New_York"
+              PYTHONPATH: "/config/deps"
+              UV_SYSTEM_PYTHON: "true"
+              UV_NO_CACHE: "true"
+              VENV_FOLDER: /venv
+
+            resources:
+              requests:
+                cpu: 50m
+                memory: 512M
+              limits:
+                memory: 2Gi
+            # commented due to limitations with official home-assistant image
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: true
+            #   capabilities:
+            #     drop:
+            #       - ALL
+
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.99.0@sha256:403adce354cc246be211db152294759fb5214a514eb6d10a20e29f889db93d36
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.code-server
+              - --extensions-dir
+              - /config/.code-server
+              - --port
+              - "12321"
+              - /config
+            env:
+              HASS_SERVER: http://localhost:8123
+              TZ: America/New_York
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+
+    service:
+      main:
+        primary: true
+        type: LoadBalancer
+        controller: home-assistant
+        loadBalancerIP: 10.0.6.56
+        ports:
+          http:
+            port: 8123
+      code:
+        type: ClusterIP
+        controller: home-assistant
+        ports:
+          http:
+            port: 12321
+
+    persistence:
+      config:
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "60Gi"
+        advancedMounts:
+          home-assistant:
+            app:
+              - path: /config
+            code-server:
+              - path: /config
+      hass-cache:
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "1Gi"
+        advancedMounts:
+          home-assistant:
+            app:
+              - path: /venv
+                subPath: hass-venv
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          home-assistant:
+            app:
+              - path: /tmp
+                subPath: hass-tmp
+            code-server:
+              - path: /tmp
+                subPath: code-server-tmp
+              - path: /nonexistent
+                subPath: nonexistent
+      hass-gcp-sa-json:
+        type: secret
+        name: home-assistant-gcp-sa-secret
+        globalMounts:
+          - path: /config/home-assistant-4d8d1f2ca10f.json
+            subPath: home-assistant-4d8d1f2ca10f.json
+            readOnly: true
+      docker-env-empty:
+        # enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /.dockerenv
+            subPath: .dockerenv
+            readOnly: true
+
+    ingress:
+      main:
+        # ensure that external DNS (cloudflare) has an entry for this directed to the router
+        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
+        className: "nginx"
+        hosts:
+          - host: &host "hass.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+      tailscale:
+        className: "nginx-tailscale"
+        hosts:
+          - host: &host "hass.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+      code:
+        className: "nginx-tailscale"
+        hosts:
+          - host: &host-code "hass-vscode.eviljungle.com"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: code
+                  port: http
+        tls:
+          - hosts:
+              - *host-code

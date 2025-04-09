@@ -1,0 +1,127 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: minecraft-lobby
+  namespace: default
+spec:
+  suspend: true
+  interval: 1h
+  chart:
+    spec:
+      chart: minecraft
+      version: 4.26.1
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    image:
+      repository: ghcr.io/itzg/minecraft-server
+      tag: 2025.4.0
+    fullnameOverride: minecraft-lobby
+    persistence:
+      storageClass: "ceph-block"
+      dataDir:
+        enabled: true
+        Size: 5Gi
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+      fsGroup: 1000
+    resources:
+      requests:
+        memory: 2Gi
+        cpu: 250m
+      limits:
+        memory: 2Gi
+    extraEnv:
+      ENABLE_AUTOPAUSE: FALSE
+      PAPER_CHANNEL: "experimental"
+      # MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
+      # MODRINTH_PROJECTS: |-
+      #   coreprotect
+      #   essentialsx
+    minecraftServer:
+      spigetResources:
+        - 28140
+        - 6245
+        # - 14754
+        - 102931
+        - 4441 # hibernate
+      modUrls:
+        - https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar
+        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
+      eula: true
+      version: "LATEST"
+      type: PAPER
+      forceReDownload: true
+      onlineMode: false
+      difficulty: peaceful
+      maxTickTime: -1
+      serviceType: ClusterIP
+      gameMode: adventure
+      worldSaveName: 'Basic Lobby'
+      motd: "\u00a7feviljungle\u00a7 - \u00a7a\u00a7llobby\u00a7"
+      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
+      rcon:
+        enabled: false
+---
+# yaml-language-server: $schema=https://crd.movishell.pl/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: minecraft-lobby-restic
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: minecraft-lobby-restic-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/minecraft-lobby'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
+        AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
+  dataFrom:
+    - extract:
+        key: minio
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: minecraft-lobby
+  namespace: default
+spec:
+  sourcePVC: minecraft-lobby-datadir
+  trigger:
+    schedule: "20 4 * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: minecraft-lobby-restic-secret
+    cacheCapacity: 5Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      daily: 10
+      within: 3d
