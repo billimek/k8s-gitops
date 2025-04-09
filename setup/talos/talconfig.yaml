@@ -52,7 +52,8 @@ nodes:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
     controlPlane: false
     ipAddress: 10.0.7.52
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      model: Samsung SSD 970
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 00:02:c9:57:5c:a8
@@ -62,7 +63,8 @@ nodes:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
     controlPlane: false
     ipAddress: 10.0.7.53
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      model: Samsung SSD 970
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: ac:1f:6b:6f:27:5f
@@ -72,7 +74,8 @@ nodes:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
     controlPlane: false
     ipAddress: 10.0.7.54
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      model: WDS500G3X0C-00SJG0
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 00:1e:06:45:0b:cd
