@@ -49,11 +49,11 @@ tasks:
       NODE_DISK_MAPPINGS:
         sh: |
           cat << 'EOF'
+          10.2.0.52:sda
+          10.2.0.53:sda
+          10.2.0.55:sda
           10.2.0.59:sda
           EOF
-          # 10.2.0.52:sda
-          # 10.2.0.53:sda
-          # 10.2.0.55:sda
 
     cmds:
       - echo "The following disks will be wiped:"
