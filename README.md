@@ -1,6 +1,6 @@
-### GitOps Workflow for Kubernetes Cluster
+# GitOps Workflow for Kubernetes Cluster
 
-![](https://i.imgur.com/KHFP4uR.png)
+![kubefetch](https://i.imgur.com/KHFP4uR.png)
 
 Leverages [flux](https://github.com/fluxcd/flux2) to automate cluster state using code residing in this repo
 
@@ -25,7 +25,7 @@ See [setup](setup/README.md) for more detail about setup & bootstrapping a new c
 ## :robot:&nbsp; Automation
 
 * [Renovate](https://github.com/renovatebot/renovate) keeps workloads up-to-date by scanning the repo and opening pull requests when it detects a new container image update or a new helm chart
-- [System Upgrade Controller](https://github.com/rancher/system-upgrade-controller) automatically upgrades talos and kubernetes to new versions as they are released
+* [System Upgrade Controller](https://github.com/rancher/system-upgrade-controller) automatically upgrades talos and kubernetes to new versions as they are released
 
 ## :handshake:&nbsp; Community
 
