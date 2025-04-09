@@ -22,7 +22,7 @@ sudo qm create 501 \
   --cpu host \
   --agent "enabled=1,fstrim_cloned_disks=1" \
   --bios ovmf \
-  --net0 "model=virtio,macaddr=BC:24:11:73:58:F0,bridge=brk8s20" \
+  --net0 "model=virtio,macaddr=BC:24:11:73:58:F0,bridge=br0" \
   --scsihw virtio-scsi-single \
   --efidisk0 "ssdtank-proxmox:1,efitype=4m" \
   --scsi0 "ssdtank-proxmox:200,backup=0,iothread=1,ssd=1,discard=on" \
@@ -53,7 +53,7 @@ sudo qm create 502 \
   --cpu host \
   --agent "enabled=1,fstrim_cloned_disks=1" \
   --bios ovmf \
-  --net0 "model=virtio,macaddr=BC:24:11:F1:D5:9B,bridge=brk8s20" \
+  --net0 "model=virtio,macaddr=BC:24:11:F1:D5:9B,bridge=br0" \
   --scsihw virtio-scsi-single \
   --efidisk0 "ssdtank-proxmox:1,efitype=4m" \
   --scsi0 "ssdtank-proxmox:200,backup=0,iothread=1,ssd=1,discard=on" \
@@ -66,7 +66,7 @@ sudo qm create 502 \
 
 This is a worker node, bare-metal
 
-* MAC: `70:85:c2:3f:7b:4d`
+* MAC: `00:02:c9:57:5c:a8`
 * IP: 10.2.0.52
 * CPU: Intel i3-7100 - 4 cores
 * RAM: 32GB
@@ -78,7 +78,7 @@ This is a worker node, bare-metal
 
 This is a worker node, bare-metal
 
-* MAC: `ac:1f:6b:6f:23:4e`
+* MAC: `ac:1f:6b:6f:27:5f`
 * IP: 10.2.0.53
 * CPU: Intel Xeon D-1518 - 8 cores
 * RAM: 64GB
