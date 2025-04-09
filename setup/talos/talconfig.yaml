@@ -10,7 +10,6 @@ endpoint: https://k8s-0:6443
 
 additionalApiServerCertSans:
   - k8s-0.home
-  - tailscale-operator-talos.drake-eel.ts.net
   - tailscale-operator.drake-eel.ts.net
 
 # Disable built-in Flannel to use Cilium
