@@ -29,6 +29,7 @@ spec:
         enabled: true
     serviceAccount:
       create: true
+    serviceType: "LoadBalancer"
     service:
       name: kube-dns
       clusterIP: 10.96.0.10
