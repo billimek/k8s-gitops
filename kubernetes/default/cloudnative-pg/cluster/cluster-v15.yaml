@@ -68,7 +68,7 @@ spec:
 
   externalClusters:
     # this represents the s3 backup to restore from. *nota-bene: the backup must be the same major version of the target cluster
-    - name: postgres
+    - name: postgres-backup
       barmanObjectStore:
         wal:
           compression: bzip2
