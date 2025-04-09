@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: coredns-eviljungle
+  namespace: kube-system
+spec:
+  chart:
+    spec:
+      chart: coredns
+      version: 1.39.2
+      sourceRef:
+        kind: HelmRepository
+        name: coredns
+        namespace: flux-system
+      interval: 30m
+  interval: 30m
+  values:
+    fullnameOverride: coredns-eviljungle
+    image:
+      repository: mirror.gcr.io/coredns/coredns
+    replicaCount: 2
+    serviceType: LoadBalancer
+    prometheus:
+      service:
+        enabled: true
+      monitor:
+        enabled: true
+    service:
+      externalTrafficPolicy: Local
+      loadBalancerIP: 10.0.6.99
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - coredns
+          topologyKey: "kubernetes.io/hostname"
+    rbac:
+      create: true
+    isClusterService: false
+    servers:
+    - zones:
+      - zone: eviljungle.com.
+        scheme: dns://
+        use_tcp: false
+      port: 53
+      plugins:
+      - name: errors
+      - name: health
+        configBlock: |-
+          lameduck 5s
+      - name: ready
+      - name: prometheus
+        parameters: 0.0.0.0:9153
+      - name: forward
+        parameters: . /etc/resolv.conf
+      - name: cache
+        parameters: 30
+      - name: loop
+      - name: reload
+      - name: loadbalance
+      - name: file
+        parameters: /etc/coredns/eviljungle.com
+    zoneFiles:
+     - filename: eviljungle.com
+       domain: eviljungle.com
+       contents: |
+        eviljungle.com.   IN SOA etta.ns.cloudflare.com. dns.cloudflare.com. 2020100600 10000 2400 604800 3600
+        abs.eviljungle.com. IN A   10.0.6.150
+        mc.eviljungle.com. IN A   10.0.6.106
+        plex.eviljungle.com. IN A   10.0.6.150
+        hass.eviljungle.com. IN A   10.0.6.150
+        mcsv2-map.eviljungle.com. IN A   10.0.6.150
+        request.eviljungle.com. IN A   10.0.6.150
+        *.t.eviljungle.com. IN CNAME nginx-tailscale.drake-eel.ts.net
+        *.eviljungle.com. IN A   100.65.132.11
+        eviljungle.com. IN A   10.0.7.1

@@ -29,11 +29,9 @@ spec:
         enabled: true
     serviceAccount:
       create: true
-    serviceType: "LoadBalancer"
     service:
       name: kube-dns
       clusterIP: 10.96.0.10
-      loadBalancerIP: 10.0.6.99
     servers:
       - zones:
           - zone: .
@@ -63,46 +61,46 @@ spec:
           - name: loop
           - name: reload
           - name: loadbalance
-      - zones:
-        - zone: eviljungle.com.
-          scheme: dns://
-          use_tcp: false
-        port: 53
-        plugins:
-        - name: errors
-        - name: health
-          configBlock: |-
-            lameduck 5s
-        - name: ready
-        - name: prometheus
-          parameters: 0.0.0.0:9153
-        - name: forward
-          parameters: . /etc/resolv.conf
-        - name: cache
-          parameters: 30
-        - name: loop
-        - name: reload
-        - name: loadbalance
-        - name: file
-          parameters: /etc/coredns/eviljungle.com
-    zoneFiles:
-    - filename: eviljungle.com
-      domain: eviljungle.com
-      contents: |
-        eviljungle.com.   IN SOA etta.ns.cloudflare.com. dns.cloudflare.com. 2020100600 10000 2400 604800 3600
-        abs.eviljungle.com. IN A   10.0.6.150
-        mc.eviljungle.com. IN A   10.0.6.106
-        plex.eviljungle.com. IN A   10.0.6.150
-        hass.eviljungle.com. IN A   10.0.6.150
-        mcsv2-map.eviljungle.com. IN A   10.0.6.150
-        request.eviljungle.com. IN A   10.0.6.150
-        *.t.eviljungle.com. IN CNAME nginx-tailscale.drake-eel.ts.net
-        *.eviljungle.com. IN A   100.65.132.11
-        eviljungle.com. IN A   10.0.7.1
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/instance: coredns
+    #   - zones:
+    #     - zone: eviljungle.com.
+    #       scheme: dns://
+    #       use_tcp: false
+    #     port: 53
+    #     plugins:
+    #     - name: errors
+    #     - name: health
+    #       configBlock: |-
+    #         lameduck 5s
+    #     - name: ready
+    #     - name: prometheus
+    #       parameters: 0.0.0.0:9153
+    #     - name: forward
+    #       parameters: . /etc/resolv.conf
+    #     - name: cache
+    #       parameters: 30
+    #     - name: loop
+    #     - name: reload
+    #     - name: loadbalance
+    #     - name: file
+    #       parameters: /etc/coredns/eviljungle.com
+    # zoneFiles:
+    # - filename: eviljungle.com
+    #   domain: eviljungle.com
+    #   contents: |
+    #     eviljungle.com.   IN SOA etta.ns.cloudflare.com. dns.cloudflare.com. 2020100600 10000 2400 604800 3600
+    #     abs.eviljungle.com. IN A   10.0.6.150
+    #     mc.eviljungle.com. IN A   10.0.6.106
+    #     plex.eviljungle.com. IN A   10.0.6.150
+    #     hass.eviljungle.com. IN A   10.0.6.150
+    #     mcsv2-map.eviljungle.com. IN A   10.0.6.150
+    #     request.eviljungle.com. IN A   10.0.6.150
+    #     *.t.eviljungle.com. IN CNAME nginx-tailscale.drake-eel.ts.net
+    #     *.eviljungle.com. IN A   100.65.132.11
+    #     eviljungle.com. IN A   10.0.7.1
+    # topologySpreadConstraints:
+    #   - maxSkew: 1
+    #     topologyKey: kubernetes.io/hostname
+    #     whenUnsatisfiable: DoNotSchedule
+    #     labelSelector:
+    #       matchLabels:
+    #         app.kubernetes.io/instance: coredns
