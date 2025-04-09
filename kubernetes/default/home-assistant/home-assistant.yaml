@@ -47,6 +47,9 @@ spec:
               UV_SYSTEM_PYTHON: "true"
               UV_NO_CACHE: "true"
               VENV_FOLDER: /venv
+            envFrom:
+              - secretRef:
+                  name: home-assistant-secret
 
             resources:
               requests:
