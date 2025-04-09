@@ -94,7 +94,7 @@ spec:
       config:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        size: "5Gi"
+        size: "55Gi"
       # Separate PVC for cache to avoid backing up cache files
       # This must be commented on initial install in order to avoid permission issues in '/config/Library/Application Support/Plex Media Server'
       # plex-cache:
