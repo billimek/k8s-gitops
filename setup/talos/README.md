@@ -7,7 +7,7 @@
 This is a control plane node that runs via proxmox VM on `nas.home`
 
 * MAC: `BC:24:11:73:58:F0` (hared-coded)
-* IP: 10.2.0.50
+* IP: 10.0.7.50
 * CPU: VM - 4 cores
 * RAM: VM - 8GB
 * Disk: VM - 200GB - `/dev/sda`
@@ -34,7 +34,7 @@ sudo qm create 501 \
 This is a worker node that runs via proxmox VM on `nas.home`
 
 * MAC: `BC:24:11:F1:D5:9B` (hard-coded)
-* IP: 10.2.0.51
+* IP: 10.0.7.51
 * CPU: VM - 4 cores
 * RAM: VM - 32GB
 * Disk: VM - 200GB - `/dev/sda`
@@ -67,7 +67,7 @@ sudo qm create 502 \
 This is a worker node, bare-metal
 
 * MAC: `00:02:c9:57:5c:a8`
-* IP: 10.2.0.52
+* IP: 10.0.7.52
 * CPU: Intel i3-7100 - 4 cores
 * RAM: 32GB
 * Disk: host - 500GB - `/dev/nvme0n1`
@@ -79,7 +79,7 @@ This is a worker node, bare-metal
 This is a worker node, bare-metal
 
 * MAC: `ac:1f:6b:6f:27:5f`
-* IP: 10.2.0.53
+* IP: 10.0.7.53
 * CPU: Intel Xeon D-1518 - 8 cores
 * RAM: 64GB
 * Disk: host - 1TB - `/dev/nvme0n1`
@@ -90,7 +90,7 @@ This is a worker node, bare-metal
 This is a worker node, bare-metal - **candidate for retirement**
 
 * MAC: `00:1e:06:45:0b:cd`
-* IP: 10.2.0.54
+* IP: 10.0.7.54
 * CPU: Intel J4105 - 4 core
 * RAM: 32GB
 * Disk: host - 500GB - `/dev/nvme0n1`
@@ -101,7 +101,7 @@ This is a worker node, bare-metal - **candidate for retirement**
 This is a worker node, bare-metal
 
 * MAC: `00:02:c9:55:b4:26`
-* IP: 10.2.0.55
+* IP: 10.0.7.55
 * CPU: AMD Ryzen 3 3200G - 4 core
 * RAM: 32GB
 * Disk: host - 256GB - `/dev/sdb`
@@ -112,7 +112,7 @@ This is a worker node, bare-metal
 This is a worker node, bare-metal
 
 * MAC: `68:1d:ef:34:d8:1a`
-* IP: 10.2.0.56
+* IP: 10.0.7.56
 * CPU: Intel N100 - 4 core
 * RAM: 16GB
 * Disk: host - 1TB - `/dev/nvme0n1`
@@ -125,7 +125,7 @@ This is a worker node, bare-metal
 This is a worker node, bare-metal
 
 * MAC: `68:1d:ef:34:66:3f`
-* IP: 10.2.0.57
+* IP: 10.0.7.57
 * CPU: Intel N100 - 4 core
 * RAM: 16GB
 * Disk: host - 1TB - `/dev/nvme0n1`
@@ -136,7 +136,7 @@ This is a worker node, bare-metal
 This is a worker node, bare-metal
 
 * MAC: `68:1d:ef:34:d9:c7`
-* IP: 10.2.0.58
+* IP: 10.0.7.58
 * CPU: Intel N100 - 4 core
 * RAM: 16GB
 * Disk: host - 1TB - `/dev/nvme0n1`
@@ -147,7 +147,7 @@ This is a worker node, bare-metal
 This is a worker node, bare-metal
 
 * MAC: `98:fa:9b:04:47:b9`
-* IP: 10.2.0.59
+* IP: 10.0.7.59
 * CPU: Intel i5-8500T - 6 core
 * RAM: 16GB
 * Disk: host - 128GB - `/dev/nvme0n1`
