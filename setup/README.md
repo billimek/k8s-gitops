@@ -1,41 +1,45 @@
-# Light-weight mixed-architecture cluster setup with k3s
+# cluster setup with talos
 
-## installation (one-time actions)
+## Setup Directory Structure
 
-### k3s node installation
+The `/setup` directory contains all the components needed to bootstrap the Kubernetes cluster:
 
-See [k3s bootstrapping](https://github.com/billimek/homelab-infrastructure/tree/master/k3s) for details on creating the k3s cluster itself
+### `/setup/bootstrap`
 
-Once a cluster is in-place, ensure that the `$KUBECONFIG` environment variable is set properly, or the target cluster is set in the `~/.kube/config` file.
+Contains Helmfile configurations for initial cluster bootstrapping, including CNI, CRDs, and other essential components required to get the cluster up and running with flux.
 
-```shell
-./bootstrap-cluster.sh
-```
+### `/setup/crds`
 
-This [script](bootstrap-cluster.sh) does several things:
+Custom Resource Definitions required before Flux can deploy applications. These are invoked during normal flux kustomization reconcilliation loops and are required to be housed outside the normal `kubernetes/` tree in order to ensure that the custom types are present before they are attempted to be used. It is structured this way so that unsightly proliferation of kustomization files throughout the repo is avoided.
 
-1. Installs flux2
-1. Stages the 1Password connect credentials into secrets for later use
-1. Stages the Docker registry access information into secrets for later use
+### `/setup/flux`
 
-## cluster maintenance
+Flux GitOps configuration files which are the entrypoint for flux operating the cluster from this repo. It also contains all of the `HelmRepository` definitions used by various HelmReleases in the cluster. It is necessary to ensure that the Helm repositories are available before the HelmReleases are applied.
 
-### `.env` file
+### `/setup/talos`
 
-<deprecateed>
+Talos Linux configuration for all cluster nodes.  See [talos/](talos/README.md) for details on the nodes and talos configuration
 
-### objects
+## talos setup & bootstrapping
 
-To apply necessary changes to kubernetes native objects, run [bootstrap-objects.sh](bootstrap-objects.sh):
+(run from the repo root)
+
+Use talhelper to generate the config files in the `clusterconfig` directory.
 
 ```shell
-./bootstrap-objects.sh
+task talos:generate-clusterconfig
 ```
 
-### secrets updates
+Bootstrap the talos nodes. It may take some time for the cluster to be ready.
 
-Leverages a 1Paswsword vault to persist secrets that are read dynamically via [external-secrets](https://external-secrets.io) & [1Password connect](https://github.com/1Password/connect)
+```shell
+task k8s-bootstrap:talos
+```
 
-### backup & restore
+## kubernetes setup & bootstrapping
 
-`volsync` is used as the backup mechanism.  See the `Taskfile.yml` at the root of the repo for a scripted way to manually backup and restore workloads.
+Bootstrap the kubernetes cluster with required prerequisites (cilium CNI, CRDs, flux, etc).
+
+```shell
+task k8s-bootstrap:apps
+```
