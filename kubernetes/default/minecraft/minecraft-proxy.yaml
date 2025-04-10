@@ -28,7 +28,6 @@ spec:
     image:
       repository: itzg/bungeecord
       tag: 2025.4.0
-    nameOverride: minecraft-proxy
     podSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
