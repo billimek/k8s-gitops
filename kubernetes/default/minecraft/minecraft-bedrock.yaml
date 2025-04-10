@@ -90,7 +90,7 @@ spec:
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: mcbr-minecraft-bedrock-secret
+    repository: mcbr-minecraft-bedrock-restic-secret
     cacheCapacity: 10Gi
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
