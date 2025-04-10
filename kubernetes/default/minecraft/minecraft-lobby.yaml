@@ -6,7 +6,7 @@ metadata:
   name: minecraft-lobby
   namespace: default
 spec:
-  suspend: true
+  suspend: false
   interval: 1h
   chart:
     spec:

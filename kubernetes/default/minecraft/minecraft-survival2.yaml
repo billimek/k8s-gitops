@@ -6,7 +6,7 @@ metadata:
   name: minecraft-survival2
   namespace: default
 spec:
-  suspend: true
+  suspend: false
   interval: 1h
   chart:
     spec:
