@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/plex
-              tag: 1.41.5.9522
+              tag: 1.41.6.9685
             env:
               TZ: "America/New_York"
               PLEX_ADVERTISE_URL: https://10.0.6.53:32400,https://plex.eviljungle.com:443
