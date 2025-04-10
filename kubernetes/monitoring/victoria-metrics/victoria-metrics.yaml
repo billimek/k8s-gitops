@@ -173,8 +173,6 @@ spec:
           - job_name: 'node'
             static_configs:
             - targets:
-              - proxmox-b.home:9100
-              - proxmox-c.home:9100
               - opnsense.home:9100
               - nas.home:9100
           - job_name: 'smartctl'
@@ -182,12 +180,12 @@ spec:
             static_configs:
             - targets:
               - nas.home:9633
-          - job_name: 'upsc-exporter'
-            metrics_path: '/metrics'
-            static_configs:
-            - targets:
-              - proxmox-b.home:8081
-              - proxmox-c.home:8081
+          # - job_name: 'upsc-exporter'
+          #   metrics_path: '/metrics'
+          #   static_configs:
+          #   - targets:
+          #     - proxmox-b.home:8081
+          #     - proxmox-c.home:8081
           - job_name: 'zfs'
             metrics_path: '/metrics'
             static_configs:
