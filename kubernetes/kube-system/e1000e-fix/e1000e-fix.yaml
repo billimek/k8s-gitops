@@ -1,0 +1,79 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.1.0/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  # https://github.com/siderolabs/talos/issues/10200
+  name: e1000e-fix
+  namespace: kube-system
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        name: bjw-s
+        kind: HelmRepository
+        namespace: flux-system
+  values:
+    controllers:
+      e1000e-fix:
+        type: daemonset
+        containers:
+          main:
+            image:
+              repository: ghcr.io/nicolaka/netshoot
+              tag: v0.13@sha256:a20c2531bf35436ed3766cd6cfe89d352b050ccc4d7005ce6400adf97503da1b
+            command: ["/bin/bash", "-c"]
+            args:
+              - |
+                find /sys/class/net/*/device/driver/module/drivers -maxdepth 1 -path "*e1000e*" | awk -F'/' '{print $5}' | xargs -I% nsenter --mount=/host/proc/$(pidof /usr/local/bin/kubelet)/ns/mnt --net=/host/proc/$(pidof /usr/local/bin/kubelet)/ns/net -- sh -c "
+                echo '% - BEFORE' &&
+                echo '==========' &&
+                ethtool -k % &&
+                echo '==========' &&
+                echo 'Disabling offloads for %...' &&
+                ethtool -K % tso off gso off gro off &&
+                echo '==========' &&
+                echo '% - AFTER' &&
+                echo '==========' &&
+                ethtool -k % &&
+                echo '=========='" &&
+
+                echo 'Setting bridge MACs based on bridge master interfaces' &&
+                for br in $(ip -json link show type bridge | jq -r '.[].ifname'); do
+                  ip link show dev $br
+                  ip -json link show dev $(ip -json link show master $br | jq -r '.[] | select(.flags[] | index("MASTER")) | .ifname') | jq -r '.[0].address' | xargs -I% ip link set dev $br address %
+                  ip link show dev $br
+                done &&
+                sleep infinity
+            securityContext:
+              privileged: true
+            resources:
+              requests:
+                cpu: "10m"
+              limits:
+                memory: "50Mi"
+    persistence:
+      procfs:
+        type: hostPath
+        hostPath: /proc
+        hostPathType: Directory
+        globalMounts:
+          - path: /host/proc
+            readOnly: true
+      netfs:
+        type: hostPath
+        hostPath: /sys
+        hostPathType: Directory
+        globalMounts:
+          - path: /host/net
+            readOnly: true
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      hostNetwork: true
+      hostPID: true
+      # nodeSelector:
+      #   feature.node.kubernetes.io/e1000e.present: "true"
