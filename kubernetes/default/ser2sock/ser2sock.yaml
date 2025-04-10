@@ -67,7 +67,9 @@ spec:
         enabled: true
         type: hostPath
         hostPath: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
-        hostPathType: Directory
-        # hostPathType: CharDevice
+        # hostPathType: Directory
+        hostPathType: CharDevice
         globalMounts:
           - path: /dev/ttyUSB0
+
+# MountVolume.SetUp failed for volume "usb" : hostPath type check failed: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0 is not a directory
