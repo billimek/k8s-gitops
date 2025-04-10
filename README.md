@@ -1,6 +1,6 @@
 # GitOps Workflow for Kubernetes Cluster
 
-![kubefetch](https://i.imgur.com/KHFP4uR.png)
+![kubefetch](https://i.imgur.com/IYniO9c.png)
 
 Leverages [flux](https://github.com/fluxcd/flux2) to automate cluster state using code residing in this repo
 
