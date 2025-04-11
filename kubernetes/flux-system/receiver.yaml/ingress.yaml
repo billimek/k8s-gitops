@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: flux-webhook.eviljungle.com
+  - host: &host flux-webhook.eviljungle.com
     http:
       paths:
       - pathType: Prefix
@@ -16,3 +16,6 @@ spec:
             name: webhook-receiver
             port:
               number: 80
+  tls:
+  - hosts:
+    - *host
