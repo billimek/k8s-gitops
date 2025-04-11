@@ -95,7 +95,7 @@ spec:
       config:
         route:
           # group_by: ["alertname", "job"]
-          group_by: ['job', 'alertname', 'severity', 'name', 'job_name', 'instance']
+          group_by: ['...']
           group_wait: 45s
           group_interval: 10m
           repeat_interval: 12h
