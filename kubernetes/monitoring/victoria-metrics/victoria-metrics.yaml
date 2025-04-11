@@ -94,7 +94,8 @@ spec:
           - vm-alert.eviljungle.com
       config:
         route:
-          group_by: ["alertname", "job"]
+          # group_by: ["alertname", "job"]
+          group_by: ['job', 'alertname', 'severity', 'name', 'job_name', 'instance']
           group_wait: 45s
           group_interval: 10m
           repeat_interval: 12h
@@ -106,11 +107,28 @@ spec:
             - severity=~"warning|critical"
             receiver: slack-notifications
         inhibit_rules:
+          # - source_matchers:
+          #     - severity = "critical"
+          #   target_matchers:
+          #     - severity = "warning"
+          #   equal: ["alertname", "namespace"]
           - source_matchers:
               - severity = "critical"
             target_matchers:
+              - severity =~ "warning|info"
+            equal: ['namespace', 'alertname']
+          - source_matchers:
               - severity = "warning"
-            equal: ["alertname", "namespace"]
+            target_matchers:
+              - severity = "info"
+            equal: ['namespace', 'alertname']
+          - source_matchers:
+              - alertname = "InfoInhibitor"
+            target_matchers:
+              - severity = "info"
+            equal: ['namespace']
+          - target_matchers:
+              - alertname = "InfoInhibitor"
         receivers:
         - name: 'blackhole'
         - name: 'slack-notifications'
