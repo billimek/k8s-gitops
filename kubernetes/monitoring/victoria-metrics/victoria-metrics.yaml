@@ -130,11 +130,7 @@ spec:
                 🏷 Labels:
                    {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
                    {{ end }}
-
-                  {{- if .Annotations.runbook_url }}{{ "\n" }} • [*runbook*]({{ .Annotations.runbook_url }}){{ end -}}
-                  {{- if .GeneratorURL }}{{ "\n" }} • [*source*]({{ .GeneratorURL }}){{ end }}
                 {{ end }}
-
 
     vmalert:
       enabled: true
