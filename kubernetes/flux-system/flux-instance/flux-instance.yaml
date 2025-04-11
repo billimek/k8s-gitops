@@ -41,7 +41,7 @@ spec:
         ref: refs/heads/master
         path: setup/flux/cluster
         pullSecret: ghcr-auth
-        interval: 5m # TODO: revisit if/when webhooks from github are enabled to make this 1h
+        interval: 1h
       commonMetadata:
         labels:
           app.kubernetes.io/name: flux
