@@ -184,7 +184,7 @@ spec:
             static_configs:
             - targets:
               - nas.home:9290
-          - job_name: 'node'
+          - job_name: 'node-exporter'
             static_configs:
             - targets:
               - opnsense.home:9100
