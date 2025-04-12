@@ -128,10 +128,7 @@ spec:
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
         annotations:
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            if ($request_uri = '/') {
-              return 302 $scheme://$host/web;
-            }
+          nginx.ingress.kubernetes.io/app-root: /web
         hosts:
           - host: &host plex.eviljungle.com
             paths:
@@ -147,10 +144,7 @@ spec:
         enabled: true
         className: nginx-tailscale
         annotations:
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            if ($request_uri = '/') {
-              return 302 $scheme://$host/web;
-            }
+          nginx.ingress.kubernetes.io/app-root: /web
         hosts:
           - host: *host
             paths:
