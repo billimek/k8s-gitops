@@ -2,6 +2,24 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      "description": "1Password Group",
+      "groupName": "1Password",
+      "matchPackagePatterns": ["1password"],
+      "matchDatasources": ["docker"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
+    },
+    {
+      "description": "System Upgrade Controller",
+      "matchDatasources": ["github-tags", "docker"],
+      "matchPackagePatterns": ["rancher/system-upgrade-controller"],
+      "groupName": "system-upgrade-controller-suite",
+      "additionalBranchPrefix": "",
+      "separateMinorPatch": true
+    },
+    {
       description: "Cert-Manager Group",
       groupName: "Cert-Manager",
       matchDatasources: ["docker"],

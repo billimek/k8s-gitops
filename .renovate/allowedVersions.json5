@@ -1,0 +1,11 @@
+{
+  packageRules: [
+    {
+      "matchDatasources": ["docker"],
+      "allowedVersions": "<2",
+      "matchPackageNames": [
+        "influxdb"
+      ]
+    },
+  ],
+}

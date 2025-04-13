@@ -1,6 +1,37 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
+    // auto-updates - daily
+    {
+      "datasources": ["docker"],
+      "automerge": true,
+      automergeType: "pr",
+      "schedule": "after 1am and before 5am",
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "espresense/espresense-companion",
+        "ghcr.io/home-assistant/home-assistant",
+        "ghcr.io/home-operations/radarr",
+        "ghcr.io/home-operations/sonarr",
+        "ghcr.io/home-operations/sabnzbd",
+        "plexinc/pms-docker",
+        "nodered/node-red",
+        "ghcr.io/zwave-js/zwave-js-ui",
+        "codercom/code-server"
+      ]
+    },
+    // auto-updates - weekly
+    {
+      "datasources": ["docker"],
+      "automerge": true,
+      automergeType: "pr",
+      "schedule": ["before 3am on Monday"],
+      "updateTypes": ["minor", "patch"],
+      "packageNames": [
+        "ghcr.io/home-operations/prowlarr",
+        "ghcr.io/home-operations/readarr"
+      ]
+    },
     {
       description: "Auto-merge trusted container digests",
       matchDatasources: ["docker"],
@@ -8,15 +39,6 @@
       automergeType: "pr",
       matchUpdateTypes: ["digest"],
       matchPackageNames: ["/home-operations/"],
-      ignoreTests: false,
-    },
-    {
-      description: "Auto-merge OCI Charts",
-      matchDatasources: ["docker"],
-      automerge: true,
-      automergeType: "pr",
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: ["/kube-prometheus-stack/"],
       ignoreTests: false,
     },
     {

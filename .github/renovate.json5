@@ -4,6 +4,7 @@
     "config:recommended",
     "docker:enableMajor",
     "helpers:pinGitHubActionDigests",
+    "github>billimek/k8s-gitops-sandbox//.renovate/allowedVersions.json5",
     "github>billimek/k8s-gitops-sandbox//.renovate/autoMerge.json5",
     "github>billimek/k8s-gitops-sandbox//.renovate/customManagers.json5",
     "github>billimek/k8s-gitops-sandbox//.renovate/grafanaDashboards.json5",
