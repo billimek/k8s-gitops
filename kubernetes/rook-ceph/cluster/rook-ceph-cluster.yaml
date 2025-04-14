@@ -45,7 +45,7 @@ spec:
         enabled: true
         urlPrefix: /
         ssl: false
-        # prometheusEndpoint: http://vmagent-stack.monitoring.svc.cluster.local:8429
+        prometheusEndpoint: http://vmsingle-stack.monitoring.svc.cluster.local:8429
       mgr:
         count: 1
         modules:
