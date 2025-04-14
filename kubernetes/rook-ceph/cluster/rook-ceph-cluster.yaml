@@ -51,11 +51,13 @@ spec:
         modules:
           # - name: diskprediction_local
           #   enabled: true
-          # - name: insights
-          #   enabled: true
-          # - name: pg_autoscaler
-          #   enabled: true
+          - name: insights
+            enabled: true
+          - name: pg_autoscaler
+            enabled: true
           - name: rook
+            enabled: true
+          - name: telemetry
             enabled: true
       mon:
         count: 3
