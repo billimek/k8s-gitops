@@ -49,8 +49,8 @@
     {
       description: "External Secrets Operator Group",
       groupName: "External Secrets Operator",
-      matchDatasources: ["docker"],
-      matchPackageNames: ["/external-secrets/"],
+      matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
+      matchPackagePatterns: ["external-secrets"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
