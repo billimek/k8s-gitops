@@ -64,7 +64,7 @@ spec:
       memory: 8192M
       modUrls:
         - https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar
-        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
+        # - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
         - https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar
         - https://cdn.modrinth.com/data/Vebnzrzj/versions/cfNN7sys/LuckPerms-Bukkit-5.4.145.jar
       # modrinth:
