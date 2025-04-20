@@ -63,16 +63,17 @@ spec:
       maxWorldSize: 5999968
       memory: 8192M
       modUrls:
-        - https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar
+        - https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar
         - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
         - https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar
+        - https://cdn.modrinth.com/data/Vebnzrzj/versions/cfNN7sys/LuckPerms-Bukkit-5.4.145.jar
       modrinth:
         allowedVersionType: alpha
         projects:
           - bluemap
           - discordsrv
           - freezehibernate
-          - luckperms
+          # - luckperms
       motd: "mcsv.eviljungle.com\n\u00A76\u00A7lSMPl\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP\u00A7r\n"
       onlineMode: false
       ops: "billimek"
