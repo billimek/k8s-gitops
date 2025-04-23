@@ -61,7 +61,7 @@ spec:
         - 4441 # hibernate
       modUrls:
         - https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar
-        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
+        # - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
       eula: true
       version: "LATEST"
       type: PAPER
