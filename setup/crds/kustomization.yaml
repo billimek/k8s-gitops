@@ -37,17 +37,17 @@ resources:
   # │ gateway-api      │
   # └──────────────────┘
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_gatewayclasses.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.3.0/config/crd/experimental/gateway.networking.k8s.io_gatewayclasses.yaml
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_gateways.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.3.0/config/crd/experimental/gateway.networking.k8s.io_gateways.yaml
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_httproutes.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.3.0/config/crd/experimental/gateway.networking.k8s.io_httproutes.yaml
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_grpcroutes.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.3.0/config/crd/experimental/gateway.networking.k8s.io_grpcroutes.yaml
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_referencegrants.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.3.0/config/crd/experimental/gateway.networking.k8s.io_referencegrants.yaml
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/raw/v1.3.0/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
 
   # ┌──────────────────┐
   # │ rook-ceph        │
