@@ -74,6 +74,15 @@
       },
     },
     {
+      description: "node-feature-discovery Group",
+      groupName: "node feature discovery",
+      matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
+      matchPackagePatterns: ["node-feature-discovery"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Rook-Ceph Group",
       groupName: "Rook-Ceph",
       matchDatasources: ["docker", "github-releases", "helm", "git-tags"],

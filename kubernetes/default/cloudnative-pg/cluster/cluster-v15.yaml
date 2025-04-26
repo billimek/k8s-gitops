@@ -33,22 +33,22 @@ spec:
       cpu: "250m"
     limits:
       memory: "4Gi"
-  backup:
-    retentionPolicy: 30d
-    barmanObjectStore:
-      wal:
-        compression: bzip2
-        maxParallel: 8
-      destinationPath: s3://postgresql/
-      endpointURL: http://nas.home:9000
-      serverName: postgres-v15
-      s3Credentials:
-        accessKeyId:
-          name: cloudnative-pg-secret
-          key: aws-access-key-id
-        secretAccessKey:
-          name: cloudnative-pg-secret
-          key: aws-secret-access-key
+  # backup:
+  #   retentionPolicy: 30d
+  #   barmanObjectStore:
+  #     wal:
+  #       compression: bzip2
+  #       maxParallel: 8
+  #     destinationPath: s3://postgresql/
+  #     endpointURL: http://nas.home:9000
+  #     serverName: postgres-v15
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: cloudnative-pg-secret
+  #         key: aws-access-key-id
+  #       secretAccessKey:
+  #         name: cloudnative-pg-secret
+  #         key: aws-secret-access-key
 
   # bootstrap:
   #   # use this to recover a net-new cluster from a backup
@@ -66,22 +66,22 @@ spec:
     #     source:
     #       externalCluster: cluster-pg14
 
-  externalClusters:
-    # this represents the s3 backup to restore from. *nota-bene: the backup must be the same major version of the target cluster
-    - name: postgres-backup
-      barmanObjectStore:
-        wal:
-          compression: bzip2
-          maxParallel: 8
-        destinationPath: s3://postgresql/
-        endpointURL: http://nas.home:9000
-        s3Credentials:
-          accessKeyId:
-            name: cloudnative-pg-secret
-            key: aws-access-key-id
-          secretAccessKey:
-            name: cloudnative-pg-secret
-            key: aws-secret-access-key
+  # externalClusters:
+  #   # this represents the s3 backup to restore from. *nota-bene: the backup must be the same major version of the target cluster
+  #   - name: postgres-backup
+  #     barmanObjectStore:
+  #       wal:
+  #         compression: bzip2
+  #         maxParallel: 8
+  #       destinationPath: s3://postgresql/
+  #       endpointURL: http://nas.home:9000
+  #       s3Credentials:
+  #         accessKeyId:
+  #           name: cloudnative-pg-secret
+  #           key: aws-access-key-id
+  #         secretAccessKey:
+  #           name: cloudnative-pg-secret
+  #           key: aws-secret-access-key
 
     # # this represents an existing cnpg cluster to migrate from (e.g. upgrading from postgres v14 to postgres v15)
     # - name: cluster-pg14
