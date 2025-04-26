@@ -50,21 +50,21 @@ spec:
           name: cloudnative-pg-secret
           key: aws-secret-access-key
 
-  bootstrap:
+  # bootstrap:
   # use this to recover a net-new cluster from a backup
   #   recovery:
   #     source: postgres-backup # TODO: fix this to the real name of the backup when on the new cluster
 
-    # use this to 'migrate' from an existing cnpg cluster (e.g. "cluster-pg14") to the new cluster
-    initdb:
-      import:
-        type: monolith
-        databases:
-          - "*"
-        roles:
-          - "*"
-        source:
-          externalCluster: postgres-v15
+    # # use this to 'migrate' from an existing cnpg cluster (e.g. "postgres-v15") to the new cluster
+    # initdb:
+    #   import:
+    #     type: monolith
+    #     databases:
+    #       - "*"
+    #     roles:
+    #       - "*"
+    #     source:
+    #       externalCluster: postgres-v15
 
   externalClusters:
     # this represents an existing cnpg cluster to migrate from (e.g. upgrading from postgres v14 to postgres v15)
