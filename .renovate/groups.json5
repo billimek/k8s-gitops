@@ -76,7 +76,7 @@
     {
       description: "node-feature-discovery Group",
       groupName: "node feature discovery",
-      matchDatasources: ["docker", "github-releases" ],
+      matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
       matchPackagePatterns: ["node-feature-discovery"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
