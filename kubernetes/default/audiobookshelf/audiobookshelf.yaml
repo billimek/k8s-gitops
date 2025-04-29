@@ -116,8 +116,6 @@ spec:
         size: "1Gi"
         globalMounts:
           - path: /config
-
-
       cache:
         type: emptyDir
         globalMounts:
@@ -130,3 +128,7 @@ spec:
         globalMounts:
           - path: /media
             readOnly: true
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
