@@ -100,5 +100,14 @@
         commitMessageTopic: "{{{groupName}}} group",
       },
     },
+    {
+      description: "Talos Group",
+      groupName: "Talos",
+      matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
+      matchPackagePatterns: ["/siderolabs/talosctl/", "/siderolabs/installer/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
   ],
 }
