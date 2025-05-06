@@ -47,6 +47,15 @@
       },
     },
     {
+      description: "Emqx Group",
+      groupName: "Emqx",
+      matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
+      matchPackageNames: ["/emqx-operator/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "External Secrets Operator Group",
       groupName: "External Secrets Operator",
       matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
