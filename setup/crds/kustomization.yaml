@@ -69,4 +69,4 @@ resources:
   # │ emqx             │
   # └──────────────────┘
   # renovate: datasource=github-releases depName=emqx/emqx-operator
-  - https://github.com/emqx/emqx-operator/releases/download/2.2.28/crds.yaml
+  - https://github.com/emqx/emqx-operator/releases/download/2.2.29/crds.yaml
