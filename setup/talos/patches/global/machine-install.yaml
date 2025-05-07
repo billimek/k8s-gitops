@@ -1,7 +1,6 @@
 machine:
   install:
     extraKernelArgs:
-      - -selinux       # Less security, more speed
       - apparmor=0 # Less security, more speed
       - init_on_alloc=0 # Less security, more speed
       - init_on_free=0 # Less security, more speed
