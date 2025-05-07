@@ -1,6 +1,7 @@
 machine:
   install:
     extraKernelArgs:
+      - -selinux # apparently needed for talos 1.10.x
       - apparmor=0 # Less security, more speed
       - init_on_alloc=0 # Less security, more speed
       - init_on_free=0 # Less security, more speed
