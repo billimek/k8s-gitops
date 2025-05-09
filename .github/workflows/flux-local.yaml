@@ -11,6 +11,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   filter-changes:
     name: Filter changes
@@ -24,6 +27,7 @@ jobs:
         with:
           patterns: |-
             kubernetes/**/*
+          persist-credentials: false
 
   test:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
@@ -34,11 +38,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Run flux-local test
         uses: docker://ghcr.io/allenporter/flux-local:v7.5.0
         with:
           args: test --enable-helm --all-namespaces --path /github/workspace/setup/flux/cluster -v
+          persist-credentials: false
 
   diff:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
@@ -61,12 +68,14 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           path: pull
+          persist-credentials: false
 
       - name: Checkout Default Branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: "${{ github.event.repository.default_branch }}"
           path: default
+          persist-credentials: false
 
       - name: Run flux-local diff
         uses: docker://ghcr.io/allenporter/flux-local:v7.5.0
@@ -81,6 +90,7 @@ jobs:
             --all-namespaces
             --sources "flux-system"
             --output-file diff.patch
+          persist-credentials: false
 
       - name: Generate Diff
         id: diff
@@ -106,6 +116,7 @@ jobs:
             ```diff
             ${{ steps.diff.outputs.diff }}
             ```
+          persist-credentials: false
 
   flux-local-success:
     needs:
@@ -118,3 +129,5 @@ jobs:
       - name: Check job status
         if: ${{ contains(needs.*.result, 'failure') }}
         run: exit 1
+        with:
+          persist-credentials: false
