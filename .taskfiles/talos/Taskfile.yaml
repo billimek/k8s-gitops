@@ -84,6 +84,7 @@ tasks:
     cmds:
       - talosctl --nodes {{.NODE}} upgrade-k8s --to $KUBERNETES_VERSION
 
+  # TODO: talosctl reboot doesn't appear to cordon and drain the node prior to rebooting - it just immediatley reboots. Not sure if this is going to be a problem.
   reboot-node:
     desc: Reboot Talos on a single node [NODE=required] [MODE=powercycle]
     preconditions:
@@ -96,6 +97,23 @@ tasks:
       MODE: '{{.MODE | default "powercycle"}}'
     cmds:
       - talosctl --nodes {{.NODE}} reboot --mode={{.MODE}}
+
+  reboot-cluster:
+    desc: Reboot Talos nodes one at a time across the whole cluster [MODE=powercycle]
+    preconditions:
+      - which jq talosctl
+    vars:
+      NODE_LIST:
+        sh: talosctl --talosconfig "{{.TALOSCONFIG}}" config info --output json | jq --exit-status --raw-output '.nodes[]' | sort -r
+      MODE: '{{.MODE | default "powercycle"}}'
+    prompt: Reboot all Talos nodes one by one ... continue?
+    cmds:
+      - for:
+          var: NODE_LIST
+        task: reboot-node
+        vars:
+          NODE: "{{.ITEM}}"
+          MODE: "{{.MODE}}"
 
   shutdown-cluster:
     desc: Shutdown Talos across the whole cluster
