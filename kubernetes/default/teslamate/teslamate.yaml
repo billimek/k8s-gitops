@@ -30,7 +30,7 @@ spec:
           init-db:
             image:
               repository: ghcr.io/home-operations/postgres-init
-              tag: 17@sha256:a9f405688344a8a6f718e2c344438342ad21540986aeb5ab5fa781831eb2c597
+              tag: 17@sha256:4f42dab13c8f3432d857394bdfa4b8640be97301bd15803dd62a302be7211d52
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
