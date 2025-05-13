@@ -38,7 +38,7 @@ spec:
         memory: 250Mi
         cpu: 50m
       limits:
-        memory: 500Mi
+        memory: 750Mi
     extraEnv:
       SPIGET_PLUGINS: "78915"
     minecraftProxy:
