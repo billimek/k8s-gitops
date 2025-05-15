@@ -90,7 +90,6 @@ jobs:
             --all-namespaces
             --sources "flux-system"
             --output-file diff.patch
-          persist-credentials: false
 
       - name: Generate Diff
         id: diff
@@ -116,7 +115,6 @@ jobs:
             ```diff
             ${{ steps.diff.outputs.diff }}
             ```
-          persist-credentials: false
 
   flux-local-success:
     needs:
@@ -129,5 +127,3 @@ jobs:
       - name: Check job status
         if: ${{ contains(needs.*.result, 'failure') }}
         run: exit 1
-        with:
-          persist-credentials: false
