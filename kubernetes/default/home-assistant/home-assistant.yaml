@@ -110,7 +110,7 @@ spec:
       config:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
-        size: "60Gi"
+        size: "30Gi"
         advancedMounts:
           home-assistant:
             app:
