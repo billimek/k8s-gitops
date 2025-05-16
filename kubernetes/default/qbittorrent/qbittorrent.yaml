@@ -66,6 +66,7 @@ spec:
         controller: qbittorrent
         type: LoadBalancer
         loadBalancerIP: 10.0.6.52
+        externalTrafficPolicy: Local
         ports:
           http:
             primary: true

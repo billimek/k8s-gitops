@@ -96,6 +96,7 @@ spec:
         type: LoadBalancer
         controller: home-assistant
         loadBalancerIP: 10.0.6.56
+        externalTrafficPolicy: Local
         ports:
           http:
             port: 8123

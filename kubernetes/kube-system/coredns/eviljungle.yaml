@@ -28,7 +28,7 @@ spec:
       monitor:
         enabled: true
     service:
-      externalTrafficPolicy: Local
+      externalTrafficPolicy: Cluster
       loadBalancerIP: 10.0.6.99
     affinity:
       podAntiAffinity:

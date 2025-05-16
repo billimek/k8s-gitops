@@ -86,6 +86,7 @@ spec:
         controller: plex
         type: LoadBalancer
         loadBalancerIP: 10.0.6.53
+        externalTrafficPolicy: Local
         ports:
           http:
             port: &port 32400

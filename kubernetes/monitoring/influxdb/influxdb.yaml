@@ -23,6 +23,7 @@ spec:
     service:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.2
+      externalTrafficPolicy: Local
     persistence:
       enabled: true
       size: 50Gi

@@ -48,7 +48,7 @@ spec:
         use-forwarded-headers: "true"
       service:
         loadBalancerIP: 10.0.6.150
-        externalTrafficPolicy: Local
+        externalTrafficPolicy: Cluster
       ingressClassResource:
         default: true
       metrics:
