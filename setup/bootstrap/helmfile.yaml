@@ -46,15 +46,6 @@ releases:
     needs:
       - kube-system/coredns
 
-  # - name: wipe-rook
-  #   namespace: kube-system
-  #   chart: oci://ghcr.io/bjw-s/helm/app-template
-  #   version: 3.7.3
-  #   values:
-  #     - ./templates/wipe-rook.yaml.gotmpl
-  #   needs:
-  #     - kube-system/coredns
-
   - name: flux-operator
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
@@ -63,8 +54,6 @@ releases:
       - templates/flux-operator-values.yaml.gotmpl
     needs:
       - monitoring/prometheus-operator-crds
-    # needs:
-    #   - kube-system/wipe-rook
 
   - name: flux-instance
     namespace: flux-system
