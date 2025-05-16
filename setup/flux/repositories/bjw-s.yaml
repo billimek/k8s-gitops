@@ -8,6 +8,6 @@ metadata:
 spec:
   type: "oci"
   interval: 30m
-  url: oci://ghcr.io/bjw-s/helm
+  url: oci://ghcr.io/bjw-s-labs/helm
   secretRef:
     name: ghcr-auth
