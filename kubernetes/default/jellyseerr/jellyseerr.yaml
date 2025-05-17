@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: 4.0.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -105,6 +105,7 @@ spec:
 
     persistence:
       config:
+        suffix: config
         type: persistentVolumeClaim
         storageClass: ceph-block
         accessMode: ReadWriteOnce

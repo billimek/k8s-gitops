@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: 4.0.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -88,6 +88,7 @@ spec:
               - *host
     persistence:
       config:
+        suffix: config
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
         size: "1Gi"
@@ -96,7 +97,6 @@ spec:
       tmp:
         type: emptyDir
       usb:
-        enabled: true
         type: hostPath
         hostPath: /dev/serial/by-id/usb-0658_0200-if00
         hostPathType: CharDevice

@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: 4.0.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -93,6 +93,7 @@ spec:
     service:
       main:
         primary: true
+        forceRename: home-assistant
         type: LoadBalancer
         controller: home-assistant
         loadBalancerIP: 10.0.6.56
@@ -109,6 +110,7 @@ spec:
 
     persistence:
       config:
+        suffix: config
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
         size: "60Gi"
