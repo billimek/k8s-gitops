@@ -105,6 +105,7 @@ spec:
 
     persistence:
       config:
+        suffix: config
         type: persistentVolumeClaim
         storageClass: ceph-block
         accessMode: ReadWriteOnce

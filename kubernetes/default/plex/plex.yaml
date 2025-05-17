@@ -93,6 +93,7 @@ spec:
 
     persistence:
       config:
+        suffix: config
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
         size: "55Gi"
