@@ -108,7 +108,7 @@ spec:
               - "movies.eviljungle.com"
     persistence:
       config:
-        identifier: config
+        suffix: config
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
         size: "3Gi"
