@@ -38,8 +38,6 @@ permissions:
 jobs:
   renovate:
     runs-on: ubuntu-latest
-    permissions:
-      packages: read
 
     steps:
       - name: Generate Token
