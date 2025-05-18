@@ -1,44 +1,55 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: [
-    "config:recommended",
-    "docker:enableMajor",
-    "helpers:pinGitHubActionDigests",
-    "github>billimek/k8s-gitops//.renovate/allowedVersions.json5",
-    "github>billimek/k8s-gitops//.renovate/autoMerge.json5",
-    "github>billimek/k8s-gitops//.renovate/customManagers.json5",
-    "github>billimek/k8s-gitops//.renovate/grafanaDashboards.json5",
-    "github>billimek/k8s-gitops//.renovate/groups.json5",
-    "github>billimek/k8s-gitops//.renovate/labels.json5",
-    "github>billimek/k8s-gitops//.renovate/semanticCommits.json5",
-    ":automergeBranch",
-    ":disableRateLimiting",
-    ":dependencyDashboard",
-    ":semanticCommits",
-    ":timezone(America/New_York)",
+    'config:recommended',
+    'docker:enableMajor',
+    'helpers:pinGitHubActionDigests',
+    'github>billimek/k8s-gitops//.renovate/allowedVersions.json5',
+    'github>billimek/k8s-gitops//.renovate/autoMerge.json5',
+    'github>billimek/k8s-gitops//.renovate/customManagers.json5',
+    'github>billimek/k8s-gitops//.renovate/grafanaDashboards.json5',
+    'github>billimek/k8s-gitops//.renovate/groups.json5',
+    'github>billimek/k8s-gitops//.renovate/labels.json5',
+    'github>billimek/k8s-gitops//.renovate/semanticCommits.json5',
+    ':automergeBranch',
+    ':disableRateLimiting',
+    ':dependencyDashboard',
+    ':semanticCommits',
+    ':timezone(America/New_York)',
   ],
-  "allowedCommands": ["python .github/scripts/update_crds_local.py"],
-  "postUpgradeTasks": {
-    "commands": ["python .github/scripts/update_crds_local.py"],
-    "fileFilters": ["setup/crds/kustomization.yaml"],
-    "executionMode": "update"
+  allowedCommands: [
+    'python .github/scripts/update_crds_local.py',
+  ],
+  postUpgradeTasks: {
+    commands: [
+      'python .github/scripts/update_crds_local.py',
+    ],
+    fileFilters: [
+      'setup/crds/kustomization.yaml',
+    ],
+    executionMode: 'update',
   },
-  dependencyDashboardTitle: "Renovate Dashboard 🤖",
+  dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   suppressNotifications: [
-    "prEditedNotification",
-    "prIgnoreNotification",
+    'prEditedNotification',
+    'prIgnoreNotification',
   ],
-  // ignorePaths: [
-  //   "**/*.sops.*",
-  //   "**/resources/**",
-  // ],
   flux: {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$", "(^|/)setup/.+\\.ya?ml$"]
+    managerFilePatterns: [
+      '/(^|/)kubernetes/.+\\.ya?ml$/',
+      '/(^|/)setup/.+\\.ya?ml$/',
+    ],
   },
-  "helm-values": {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$", "(^|/)setup/.+\\.ya?ml$"]
+  'helm-values': {
+    managerFilePatterns: [
+      '/(^|/)kubernetes/.+\\.ya?ml$/',
+      '/(^|/)setup/.+\\.ya?ml$/',
+    ],
   },
   kubernetes: {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$", "(^|/)setup/.+\\.ya?ml$"]
+    managerFilePatterns: [
+      '/(^|/)kubernetes/.+\\.ya?ml$/',
+      '/(^|/)setup/.+\\.ya?ml$/',
+    ],
   },
 }
