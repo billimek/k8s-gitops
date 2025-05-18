@@ -37,7 +37,6 @@ jobs:
       issues: write              # To create and manage issues for the Dependency Dashboard
       actions: read              # To read workflow information, if needed by Renovate for checks
       checks: write              # If Renovate integrates with GitHub checks
-      vulnerability-alerts: read # To access vulnerability alerts
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
