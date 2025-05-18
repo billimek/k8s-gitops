@@ -55,6 +55,7 @@ jobs:
           # Required for Renovate to be able to push changes back to the repository
           fetch-depth: 0
           token: ${{ steps.generate_token.outputs.token }}
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5

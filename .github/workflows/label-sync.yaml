@@ -29,4 +29,3 @@ jobs:
         with:
           config-file: .github/labels.yaml
           delete-other-labels: true
-          persist-credentials: false

@@ -27,7 +27,6 @@ jobs:
         with:
           patterns: |-
             kubernetes/**/*
-          persist-credentials: false
 
   test:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
@@ -45,7 +44,6 @@ jobs:
         uses: docker://ghcr.io/allenporter/flux-local:v7.5.0
         with:
           args: test --enable-helm --all-namespaces --path /github/workspace/setup/flux/cluster -v
-          persist-credentials: false
 
   diff:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
