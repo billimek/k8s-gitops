@@ -28,21 +28,26 @@ on:
         default: latest
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   renovate:
     runs-on: ubuntu-latest
-
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
-      cancel-in-progress: true
+    permissions:
+      packages: read
 
     steps:
       - name: Generate Token
         id: generate_token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         with:
-          app_id: ${{ secrets.RENOVATE_APP_ID }}
-          private_key: ${{ secrets.RENOVATE_PRIVATE_KEY }}
+          app-id: ${{ secrets.RENOVATE_APP_ID }}
+          private-key: ${{ secrets.RENOVATE_PRIVATE_KEY }}
 
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
