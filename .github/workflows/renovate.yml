@@ -31,13 +31,6 @@ on:
 jobs:
   renovate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write            # To create branches and commit changes
-      pull-requests: write       # To create and manage PRs
-      issues: write              # To create and manage issues for the Dependency Dashboard
-      actions: read              # To read workflow information, if needed by Renovate for checks
-      checks: write              # If Renovate integrates with GitHub checks
-      security-events: read      # To read security events, potentially including vulnerability information
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
