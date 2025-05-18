@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/gitrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: external-snapshotter-crds
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://github.com/kubernetes-csi/external-snapshotter
+  ref:
+    # renovate: datasource=github-releases depName=kubernetes-csi/external-snapshotter
+    tag: v8.2.1
+  timeout: 3m

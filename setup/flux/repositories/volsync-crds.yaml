@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/gitrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: volsync-crds
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://github.com/backube/volsync
+  ref:
+    # renovate: datasource=github-releases depName=backube/volsync
+    tag: v0.12.0
+  timeout: 3m

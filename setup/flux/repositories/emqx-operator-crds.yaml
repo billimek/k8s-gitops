@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/gitrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: emqx-operator-crds
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://github.com/emqx/emqx-operator
+  ref:
+    # renovate: datasource=github-releases depName=emqx/emqx-operator
+    tag: 2.2.29
+  timeout: 3m

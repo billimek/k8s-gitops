@@ -26,6 +26,8 @@ spec:
   path: ./setup/crds
   prune: true
   wait: true
+  dependsOn:
+    - name: core-crds-sources
   sourceRef:
     kind: GitRepository
     name: flux-system

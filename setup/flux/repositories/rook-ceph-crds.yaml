@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/gitrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: rook-ceph-crds
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://github.com/rook/rook
+  ref:
+    # renovate: datasource=github-releases depName=rook/rook
+    tag: v1.17.2
+  timeout: 3m
