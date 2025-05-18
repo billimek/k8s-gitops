@@ -19,9 +19,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install yq
-        uses: crazy-max/ghaction-setup-yq@50c4b9327c533a0f719339e07cb7003d40100a6a # v4.0.0
-        with:
-          yq-version: latest # Or pin to a specific yq version like "v4.40.5"
+        uses: frenck/action-setup-yq@c4b5be8b4a215c536a41d436757d9feb92836d4f # v1.0.2
 
       - name: Update CRDs
         run: python .github/scripts/update_crds_local.py
