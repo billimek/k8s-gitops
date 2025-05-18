@@ -1,8 +1,6 @@
 import os
 import re
 import subprocess
-# import yaml # yaml module is imported but not used, can be removed
-
 # Get the GitHub workspace path, defaulting to current dir if not set (for local runs)
 workspace_path = os.environ.get("GITHUB_WORKSPACE", os.getcwd())
 
