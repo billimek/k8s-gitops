@@ -1,0 +1,64 @@
+name: Renovate
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  push:
+    branches: ["master"]
+    paths:
+      - .github/.renovate.json5
+      - .renovate/**.json5
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: Dry Run
+        type: boolean
+        default: false
+        required: true
+      logLevel:
+        description: Log Level
+        type: choice
+        default: debug
+        options:
+          - debug
+          - info
+        required: true
+      version:
+        description: Renovate Version
+        default: latest
+        required: true
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write      # To create branches and commit changes
+      pull-requests: write # To create and manage PRs
+      actions: read        # To read workflow information, if needed by Renovate for checks
+      checks: write        # If Renovate integrates with GitHub checks
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # Required for Renovate to be able to push changes back to the repository
+          fetch-depth: 0
+
+      - name: Renovate
+        uses: renovatebot/github-action@f5c3383cb7cbf7711d8b66b809375b2d5f4e2d1d # v42.0.2
+        env:
+          LOG_LEVEL: ${{ inputs.logLevel || 'debug' }}
+          PYTHON_VERSION: '3.x'
+          RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: "python .github/scripts/update_crds_local.py"
+          RENOVATE_AUTODISCOVER: true
+          RENOVATE_AUTODISCOVER_FILTER: ${{ github.repository }}
+          RENOVATE_DRY_RUN: ${{ inputs.dryRun }}
+          RENOVATE_INTERNAL_CHECKS_FILTER: strict
+          RENOVATE_PLATFORM: github
+          RENOVATE_PLATFORM_COMMIT: true
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          renovate-version: ${{ inputs.version || 'latest' }}
