@@ -17,9 +17,9 @@
     ':semanticCommits',
     ':timezone(America/New_York)',
   ],
-  allowedCommands: [
-    'python .github/scripts/update_crds_local.py',
-  ],
+  // allowedCommands: [
+  //   'python .github/scripts/update_crds_local.py',
+  // ],
   postUpgradeTasks: {
     commands: [
       'python .github/scripts/update_crds_local.py',
