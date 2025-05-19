@@ -17,6 +17,23 @@
     ':semanticCommits',
     ':timezone(America/New_York)',
   ],
+
+  "regexManagers": [
+    {
+      "description": "Correctly update CRD URLs from GitHub release raw file links (e.g., for /config/crd/bases/)",
+      "fileMatch": [
+        "^setup/crds/vendor/.+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "^# crd-url: (?<baseUrl>https://github\\.com/)(?<owner>[^/]+)/(?<repo>[^/]+)/raw/(?<currentValue>v\\d+\\.\\d+\\.\\d+)(?<pathPrefix>/config/crd/bases/)(?<fileName>[^/\\s]+\\.yaml)$"
+      ],
+      "depNameTemplate": "crd-{{{captures.owner}}}-{{{captures.repo}}}-{{{captures.fileName}}}",
+      "datasourceTemplate": "github-releases",
+      "packageNameTemplate": "{{{captures.owner}}}/{{{captures.repo}}}",
+      "replaceStringTemplate": "# crd-url: {{{captures.baseUrl}}}{{{captures.owner}}}/{{{captures.repo}}}/raw/{{{newValue}}}{{{captures.pathPrefix}}}{{{captures.fileName}}}"
+    }
+  ],
+
   // allowedCommands: [
   //   'python .github/scripts/update_crds_local.py',
   // ],
