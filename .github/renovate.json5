@@ -22,7 +22,7 @@
   // ],
   postUpgradeTasks: {
     commands: [
-      'python .github/scripts/update_crds_local.py',
+      'python3 .github/scripts/update_crds_local.py',
     ],
     fileFilters: [
       'setup/crds/kustomization.yaml',

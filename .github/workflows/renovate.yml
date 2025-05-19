@@ -65,7 +65,7 @@ jobs:
         env:
           LOG_LEVEL: ${{ inputs.logLevel || 'debug' }}
           PYTHON_VERSION: '3.x'
-          RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: "python .github/scripts/update_crds_local.py"
+          RENOVATE_ALLOWED_POST_UPGRADE_COMMANDS: "python3 .github/scripts/update_crds_local.py"
           RENOVATE_AUTODISCOVER: true
           RENOVATE_AUTODISCOVER_FILTER: ${{ github.repository }}
           RENOVATE_DRY_RUN: ${{ inputs.dryRun }}
