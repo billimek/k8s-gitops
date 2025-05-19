@@ -27,10 +27,10 @@ resources:
   # │ volsync          │
   # └──────────────────┘
   # renovate: datasource=github-releases depName=backube/volsync
-  # crd-url: https://github.com/backube/volsync/raw/v0.12.0/config/crd/bases/volsync.backube_replicationdestinations.yaml
+  # crd-url: v0.12.1
   - ./vendor/backube_volsync/volsync.backube_replicationdestinations.yaml
   # renovate: datasource=github-releases depName=backube/volsync
-  # crd-url: https://github.com/backube/volsync/raw/v0.12.0/config/crd/bases/volsync.backube_replicationsources.yaml
+  # crd-url: v0.12.1
   - ./vendor/backube_volsync/volsync.backube_replicationsources.yaml
 
   # ┌──────────────────────────────┐
