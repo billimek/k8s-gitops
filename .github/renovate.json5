@@ -30,7 +30,7 @@
       "depNameTemplate": "crd-{{{captures.owner}}}-{{{captures.repo}}}-{{{captures.fileName}}}",
       "datasourceTemplate": "github-releases",
       "packageNameTemplate": "{{{captures.owner}}}/{{{captures.repo}}}",
-      "replaceStringTemplate": "# crd-url: {{{captures.baseUrl}}}{{{captures.owner}}}/{{{captures.repo}}}/raw/{{{newValue}}}{{{captures.pathPrefix}}}{{{captures.fileName}}}"
+      "replaceTemplate": "# crd-url: {{{captures.baseUrl}}}{{{captures.owner}}}/{{{captures.repo}}}/raw/{{{newValue}}}{{{captures.pathPrefix}}}{{{captures.fileName}}}"
     }
   ],
 
