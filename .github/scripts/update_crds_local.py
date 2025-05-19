@@ -23,7 +23,7 @@ with open(kustomization_file_abs, 'r') as f:
 
 # Find all crd-url comments and their corresponding local paths
 # The local path in kustomization.yaml is relative to kustomization.yaml itself (e.g., ./vendor/...)
-crd_urls = re.findall(r"# crd-url: (https?://[^\s]+)\n\s*- (./vendor/[^\s]+)", content)
+crd_urls = re.findall(r"# (https?://[^\s]+)\n\s*- (./vendor/[^\s]+)", content)
 
 if not crd_urls:
     print(f"No CRD URLs found in {kustomization_file_abs}. Check the file and regex pattern.")
