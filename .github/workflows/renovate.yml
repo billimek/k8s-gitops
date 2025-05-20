@@ -12,11 +12,19 @@ on:
     types: [edited]
   workflow_dispatch:
     inputs:
+      cache:
+        description: Use Renovate cache from GitHub repo's cache?
+        type: choice
+        default: "enabled"
+        options:
+          - enabled
+          - disabled
+          - reset
       dryRun:
         description: Dry Run
         type: boolean
         default: false
-        required: true
+        required: false
       logLevel:
         description: Log Level
         type: choice
@@ -24,11 +32,11 @@ on:
         options:
           - debug
           - info
-        required: true
+        required: false
       version:
         description: Renovate Version
         default: latest
-        required: true
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -67,6 +75,25 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
           persist-credentials: false
 
+      - name: Renovate Cache
+        id: renovate-cache
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        if: github.event.inputs.cache != 'disabled'
+        continue-on-error: true
+        with:
+          path: /tmp/renovate/cache/renovate/repository
+          key: renovate-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            renovate-cache-${{ runner.os }}
+
+      - name: Set cache folder permissions
+        shell: bash
+        run: |
+          # chown /tmp/renovate due to cache permissions
+          # UID from https://github.com/renovatebot/renovate/blob/9c999fb13e8746830a0c163bad9c244b0b926c6a/tools/docker/Dockerfile#L114
+          mkdir -p /tmp/renovate
+          sudo chown -R 12021:$(id -g) /tmp/renovate
+
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
@@ -84,6 +111,8 @@ jobs:
           RENOVATE_INTERNAL_CHECKS_FILTER: strict
           RENOVATE_PLATFORM: github
           RENOVATE_PLATFORM_COMMIT: true
+          RENOVATE_REPOSITORY_CACHE: ${{ github.event.inputs.cache }}
+
         with:
           token: ${{ steps.generate_token.outputs.token }}
           renovate-version: ${{ inputs.version || 'latest' }}
