@@ -44,7 +44,7 @@ spec:
                 memory: 1Gi
                 cpu: 50m
               limits:
-                memory: 1250Mi
+                memory: 1600Mi
     service:
       app:
         controller: unifi
