@@ -18,15 +18,16 @@
     ':timezone(America/New_York)',
   ],
 
-  postUpgradeTasks: {
-    commands: [
-      'python3 .github/scripts/update_crds_local.py',
-    ],
-    fileFilters: [
-      'setup/crds/kustomization.yaml',
-    ],
-    executionMode: 'update',
-  },
+  // postUpgradeTasks: {
+  //   commands: [
+  //     'python3 .github/scripts/update_crds_local.py',
+  //     'git status'
+  //   ],
+  //   fileFilters: [
+  //     'setup/crds/kustomization.yaml',
+  //   ],
+  //   executionMode: 'update',
+  // },
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   suppressNotifications: [
     'prEditedNotification',

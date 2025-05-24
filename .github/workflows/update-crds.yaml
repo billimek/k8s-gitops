@@ -1,6 +1,11 @@
 name: Update CRDs
 
 on:
+  push:
+    branches:
+      - 'renovate/**'
+    paths:
+      - 'setup/crds/kustomization.yaml'
   workflow_dispatch: # Allow manual triggering
 
 permissions:
@@ -29,8 +34,7 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         with:
-          commit_message: "Update CRDs from external sources (manual run)"
-          branch: master
+          commit_message: "Update vendored CRDs based on kustomization.yaml changes"
           file_pattern: setup/crds/vendor/**/*.yaml setup/crds/kustomization.yaml
           commit_options: "--signoff"
           # token: ${{ secrets.GITHUB_TOKEN }} # Ensure this token has write access if this step is used
