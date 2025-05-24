@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2025.4.2
+      tag: 2025.5.0
     fullnameOverride: minecraft-lobby
     persistence:
       storageClass: "ceph-block"
