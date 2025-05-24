@@ -10,6 +10,8 @@ on:
       - .github/workflows/renovate.yml
   issues:
     types: [edited]
+  pull_request:
+    types: [edited]
   workflow_dispatch:
     inputs:
       cache:
@@ -47,6 +49,7 @@ permissions:
 
 jobs:
   renovate:
+    if: (github.event_name != 'issues' && github.event_name != 'pull_request') || (github.event.sender.login == 'billimek')
     runs-on: ubuntu-latest
 
     steps:
