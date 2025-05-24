@@ -106,22 +106,23 @@ spec:
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server/Cache
       # This must be commented on initial install in order to avoid permission issues in '/config/Library/Application Support/Plex Media Server'
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server/Logs
       nfs-nas-media:
         type: nfs
         server: nas.home
         path: /mnt/tank/media
         globalMounts:
           - path: /data
-      transcode:
+      tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /transcode
-      tmp:
-        type: emptyDir
+        advancedMounts:
+          plex:
+            app:
+              - path: /config/Library/Application Support/Plex Media Server/Logs
+                subPath: logs
+              - path: /transcode
+                subPath: transcode
+              - path: /tmp
+                subPath: tmp
 
     ingress:
       app:
