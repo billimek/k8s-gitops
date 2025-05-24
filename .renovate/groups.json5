@@ -38,6 +38,15 @@
       },
     },
     {
+      description: "CNPG Group",
+      groupName: "CNPG",
+      matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
+      matchPackagePatterns: ["cloudnative-pg", "cloudnative-pg/cloudnative-pg"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "CoreDNS Group",
       groupName: "CoreDNS",
       matchDatasources: ["docker"],
