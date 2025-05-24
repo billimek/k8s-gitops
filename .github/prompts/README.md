@@ -36,6 +36,7 @@ Each deployed application typically follows this structure:
 
 ```
 kubernetes/<namespace>/<app-name>/
+├── namespace.yaml           # If creating a new namespace
 ├── app/
     ├── externalsecret.yaml  # If using external secrets
     ├── <app-name>.yaml      # The Helm release definition
