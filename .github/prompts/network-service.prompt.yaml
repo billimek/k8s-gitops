@@ -1,0 +1,126 @@
+name: Network Service Deployment
+description: Use this prompt to deploy network services like DNS, DHCP, VPNs, or reverse proxies.
+model: gpt-4o-mini # Specify your desired model
+modelParameters:
+  temperature: 0.5 # Add any model parameters if needed
+messages:
+  - role: system
+    content: |
+      You are an expert Kubernetes and GitOps assistant. Your task is to help deploy new network services (e.g., CoreDNS, AdGuard Home, Tailscale, Nginx Ingress Controller) using appropriate Helm charts (app-template or community charts), adhering to the patterns and best practices defined in this repository.
+
+      Key considerations:
+      - Applications will be deployed to the 'network' namespace by default, unless specified otherwise (e.g., 'kube-system' for ingress controllers).
+      - Follow the specified directory structure: `kubernetes/{{NAMESPACE | default("network")}}/<app-name>/app/`.
+      - Ensure all YAML files include the correct schema validation comments.
+      - Persistent storage for configuration/data will use VolSync if using app-template, or standard PVCs for community charts.
+      - Integrate with ExternalSecrets for any required API keys or credentials.
+      - Apply resource requests and limits.
+      - Configure hostPorts, nodePorts, or LoadBalancer services as appropriate for the network service.
+      - Pay close attention to network policies, RBAC, and security contexts.
+  - role: user
+    content: |
+      Please help me deploy a new network service with the following details:
+
+      ## Application Details
+      - **Application Name**: {{APP_NAME}}
+      - **Application Type**: {{APP_TYPE}} # (e.g., DNS, DHCP, VPN, Reverse Proxy, Ingress Controller)
+      - **Namespace**: {{NAMESPACE | default("network")}}
+
+      ## Helm Configuration
+      - **Chart**: {{CHART_NAME}} # (e.g., app-template, coredns/coredns, tailscale/tailscale-operator)
+      - **Version**: {{CHART_VERSION}}
+      - **Interval**: {{RECONCILIATION_INTERVAL | default("30m")}}
+
+      ## Container Configuration (if using app-template or similar)
+      - **Image Repository**: {{IMAGE_REPO}}
+      - **Image Tag**: {{IMAGE_TAG}}
+      - **Container Port(s)**: {{CONTAINER_PORTS}} # (e.g., 53/udp, 80/tcp)
+
+      ## Resource Requirements
+      - **CPU Requests**: {{CPU_REQUEST | default("100m")}}
+      - **Memory Requests**: {{MEMORY_REQUEST | default("128Mi")}}
+      - **Memory Limits**: {{MEMORY_LIMIT | default("256Mi")}}
+
+      ## Storage Requirements
+      - **Persistent Storage Required**: {{PERSISTENT_STORAGE_REQUIRED}} # YES/NO
+      #if PERSISTENT_STORAGE_REQUIRED == "YES"
+      - Size: {{STORAGE_SIZE | default("1Gi")}}
+      - Storage Class: {{STORAGE_CLASS | default("ceph-block")}}
+      #endif
+
+      ## Network Configuration
+      - **Service Type**: {{SERVICE_TYPE | default("ClusterIP")}} # (e.g., ClusterIP, NodePort, LoadBalancer)
+      #if SERVICE_TYPE == "NodePort" or SERVICE_TYPE == "LoadBalancer"
+      - External Port(s): {{EXTERNAL_PORTS}} # (e.g., 53:30053/udp)
+      #endif
+      - **Host Network**: {{HOST_NETWORK | default("false")}} # true/false
+      - **DNS Policy**: {{DNS_POLICY | default("ClusterFirst")}}
+
+      ## Security Context
+      - **Privileged**: {{PRIVILEGED | default("false")}} # true/false
+      - **Capabilities (add)**: {{CAP_ADD}} # (e.g., NET_ADMIN, NET_BIND_SERVICE)
+      - **Run As User**: {{RUN_AS_USER}}
+      - **Run As Group**: {{RUN_AS_GROUP}}
+      - **FS Group**: {{FS_GROUP}}
+
+      ## External Secrets
+      # (Define any necessary secrets, e.g., API_KEYS, VPN_AUTH_KEY)
+      - **Secrets Required**: {{SECRETS_REQUIRED}} # YES/NO
+      #if SECRETS_REQUIRED == "YES"
+      - One Password Item: {{OP_ITEM}}
+      - Secret Keys: # (e.g., TAILSCALE_AUTH_KEY: "{{ .TS_AUTHKEY }}")
+        {{SECRET_KEYS}}
+      #endif
+
+      Based on these details, generate the necessary YAML files.
+      This might include HelmRelease, Service, ConfigMaps, NetworkPolicy, or ExternalSecrets.
+      Ensure YAML files use appropriate schema validation comments.
+      The directory structure should be `kubernetes/{{NAMESPACE | default("network")}}/{{APP_NAME}}/app/`.
+
+      Example for {{APP_NAME}} values:
+      {{SAMPLE_REQUEST_APP_NAME}}
+testData:
+  - input: |
+      APP_NAME: adguard-home
+      APP_TYPE: DNS
+      NAMESPACE: network
+      CHART_NAME: app-template # Assuming bjw-s/app-template
+      CHART_VERSION: 3.2.1 # Use a valid version
+      IMAGE_REPO: adguard/adguardhome
+      IMAGE_TAG: v0.107.47
+      CONTAINER_PORTS: "53/udp, 80/tcp, 443/tcp, 3000/tcp"
+      CPU_REQUEST: 100m
+      MEMORY_REQUEST: 128Mi
+      MEMORY_LIMIT: 256Mi
+      PERSISTENT_STORAGE_REQUIRED: YES
+      STORAGE_SIZE: 2Gi
+      SERVICE_TYPE: LoadBalancer # Or NodePort if preferred
+      EXTERNAL_PORTS: "53:53/udp, 80:80/tcp, 443:443/tcp, 3000:3000/tcp" # Example, adjust as needed
+      HOST_NETWORK: false
+      PRIVILEGED: false
+      CAP_ADD: "NET_BIND_SERVICE"
+      SECRETS_REQUIRED: NO
+      SAMPLE_REQUEST_APP_NAME: |
+        "Please deploy AdGuard Home to the network namespace using the app-template chart. It should use the adguard/adguardhome:v0.107.47 image. Expose DNS on port 53 (UDP/TCP) and the web UI on port 3000 (TCP) via a LoadBalancer service. It requires 2Gi of persistent storage and NET_BIND_SERVICE capability."
+    expected: |
+      # This section would contain the expected YAML output for AdGuard Home.
+      # For example, the HelmRelease should start with:
+      # ---
+      # # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
+      # apiVersion: helm.toolkit.fluxcd.io/v2
+      # kind: HelmRelease
+      # ... (rest of the AdGuard Home HelmRelease definition)
+      # It should also include a Service definition if not handled by app-template.
+evaluators:
+  - name: Check for HelmRelease kind
+    string:
+      contains: "kind: HelmRelease"
+  - name: Check for app-template schema if app-template chart is used
+    string:
+      contains: "https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json"
+  - name: Check for correct namespace
+    string:
+      contains: "namespace: network"
+  - name: Check for NET_BIND_SERVICE capability if specified
+    string:
+      contains: "NET_BIND_SERVICE"

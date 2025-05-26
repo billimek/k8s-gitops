@@ -1,0 +1,148 @@
+name: Monitoring Application Deployment
+description: Use this prompt to deploy monitoring, observability, or metrics collection tools to your Kubernetes cluster.
+model: gpt-4o-mini # Specify your desired model
+modelParameters:
+  temperature: 0.5 # Add any model parameters if needed
+messages:
+  - role: system
+    content: |
+      You are an expert Kubernetes and GitOps assistant. Your task is to help deploy new monitoring applications (Prometheus, Grafana, etc.) using appropriate Helm charts (app-template or community charts), adhering to the patterns and best practices defined in this repository.
+
+      Key considerations:
+      - Applications will be deployed to the 'monitoring' namespace by default.
+      - Follow the specified directory structure: `kubernetes/monitoring/<app-name>/app/` (if applicable, some monitoring tools might have a different structure or be cluster-wide).
+      - Ensure all YAML files include the correct schema validation comments (e.g., for HelmRelease, ServiceMonitor, PrometheusRule).
+      - Persistent storage for configuration/data will use VolSync if using app-template, or standard PVCs for community charts.
+      - Integrate with ExternalSecrets for any required API keys or credentials.
+      - Apply resource requests and limits.
+      - Configure ServiceMonitors for Prometheus scraping.
+      - Define PrometheusRules for alerting if needed.
+  - role: user
+    content: |
+      Please help me deploy a new monitoring application with the following details:
+
+      ## Application Details
+      - **Application Name**: {{APP_NAME}}
+      - **Application Type**: {{APP_TYPE}} # (e.g., Prometheus, Grafana, Loki, Thanos, Victoria Metrics)
+      - **Namespace**: {{NAMESPACE | default("monitoring")}}
+
+      ## Helm Configuration
+      - **Chart**: {{CHART_NAME}} # (e.g., app-template, prometheus-community/prometheus)
+      - **Version**: {{CHART_VERSION}}
+      - **Interval**: {{RECONCILIATION_INTERVAL | default("30m")}}
+
+      ## Container Configuration (if using app-template or similar)
+      - **Image Repository**: {{IMAGE_REPO}}
+      - **Image Tag**: {{IMAGE_TAG}}
+      - **Container Port**: {{CONTAINER_PORT}}
+
+      ## Resource Requirements
+      - **CPU Requests**: {{CPU_REQUEST | default("100m")}}
+      - **Memory Requests**: {{MEMORY_REQUEST | default("128Mi")}}
+      - **Memory Limits**: {{MEMORY_LIMIT | default("512Mi")}}
+
+      ## Storage Requirements
+      - **Persistent Storage Required**: {{PERSISTENT_STORAGE_REQUIRED}} # YES/NO
+      #if PERSISTENT_STORAGE_REQUIRED == "YES"
+      - Size: {{STORAGE_SIZE | default("10Gi")}}
+      - Storage Class: {{STORAGE_CLASS | default("ceph-block")}}
+      - Retention Period: {{RETENTION_PERIOD}} # (e.g., 7d, if applicable)
+      #endif
+
+      ## Network Configuration
+      - **Ingress Required**: {{INGRESS_REQUIRED}} # YES/NO
+      #if INGRESS_REQUIRED == "YES"
+      - Hostname: {{HOSTNAME}} # (e.g., grafana.eviljungle.com)
+      - Internal or External: {{INGRESS_TYPE}} # INTERNAL/EXTERNAL
+      - Authentication Required: {{AUTH_REQUIRED}} # YES/NO
+      #endif
+
+      ## Monitoring Configuration
+      - **Service Monitor Required**: {{SERVICE_MONITOR_REQUIRED}} # YES/NO
+      #if SERVICE_MONITOR_REQUIRED == "YES"
+      - Metrics Path: {{METRICS_PATH | default("/metrics")}} # (e.g., /metrics)
+      - Interval: {{SCRAPE_INTERVAL | default("1m")}} # (e.g., 1m)
+      - Timeout: {{SCRAPE_TIMEOUT | default("10s")}} # (e.g., 10s)
+      #endif
+
+      - **Alert Rules Required**: {{ALERT_RULES_REQUIRED}} # YES/NO
+      #if ALERT_RULES_REQUIRED == "YES"
+      # Provide details for each alert rule:
+      #   - Alert Name: {{ALERT_NAME}}
+      #   - Expression: {{ALERT_EXPRESSION}}
+      #   - For Duration: {{ALERT_DURATION}}
+      #   - Severity: {{ALERT_SEVERITY}}
+      {{ALERT_RULES_DETAILS}}
+      #endif
+
+      ## Integration Configuration
+      - **Integrations Required**: # List integrations and if they are needed (e.g., Prometheus: YES, Loki: YES)
+        {{INTEGRATIONS_DETAILS}}
+
+      ## Security Context
+      - **Run As User**: {{RUN_AS_USER}}
+      - **Run As Group**: {{RUN_AS_GROUP}}
+      - **FS Group**: {{FS_GROUP}}
+
+      ## External Secrets
+      # (Define any necessary secrets, e.g., GRAFANA_ADMIN_PASSWORD, API_KEYS)
+      - **Secrets Required**: {{SECRETS_REQUIRED}} # YES/NO
+      #if SECRETS_REQUIRED == "YES"
+      - One Password Item: {{OP_ITEM}}
+      - Secret Keys: # (e.g., ADMIN_PASSWORD: "{{ .GRAFANA_ADMIN_PASSWORD }}")
+        {{SECRET_KEYS}}
+      #endif
+
+      Based on these details, generate the necessary YAML files.
+      This might include HelmRelease, ServiceMonitor, PrometheusRule, ConfigMaps, or ExternalSecrets.
+      Ensure YAML files use appropriate schema validation comments.
+      The directory structure should be `kubernetes/{{NAMESPACE | default("monitoring")}}/{{APP_NAME}}/app/` or as appropriate for the tool.
+
+      Example for {{APP_NAME}} values:
+      {{SAMPLE_REQUEST_APP_NAME}}
+testData:
+  - input: |
+      APP_NAME: grafana
+      APP_TYPE: Grafana
+      CHART_NAME: grafana/grafana
+      CHART_VERSION: 7.0.0
+      CPU_REQUEST: 200m
+      MEMORY_LIMIT: 512Mi
+      PERSISTENT_STORAGE_REQUIRED: YES
+      STORAGE_SIZE: 5Gi
+      INGRESS_REQUIRED: YES
+      HOSTNAME: grafana.eviljungle.com
+      INGRESS_TYPE: INTERNAL
+      AUTH_REQUIRED: NO # Assuming auth is handled by Grafana itself or an auth proxy
+      SERVICE_MONITOR_REQUIRED: YES
+      METRICS_PATH: /metrics
+      SCRAPE_INTERVAL: 30s
+      ALERT_RULES_REQUIRED: NO
+      INTEGRATIONS_DETAILS: "Prometheus: YES, Loki: YES"
+      SECRETS_REQUIRED: YES # For admin password or other configs
+      OP_ITEM: grafana-secrets
+      SECRET_KEYS: "ADMIN_PASSWORD: \"{{ .GRAFANA_ADMIN_PASSWORD }}\""
+      RUN_AS_USER: "472" # Grafana default user
+      RUN_AS_GROUP: "472" # Grafana default group
+      FS_GROUP: "472"
+      SAMPLE_REQUEST_APP_NAME: |
+        "Please deploy Grafana to the monitoring namespace using the grafana/grafana Helm chart version 7.0.0. It should use 200m CPU requests and 512Mi memory limit with 5Gi persistent storage. Make it available at grafana.eviljungle.com through the internal ingress. Configure it to use Prometheus as a data source and Loki for logs. Enable service monitor on /metrics path with 30s scrape interval."
+    expected: |
+      # This section would contain the expected YAML output for Grafana.
+      # For example, the HelmRelease should start with:
+      # ---
+      # # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json (or app-template schema if used)
+      # apiVersion: helm.toolkit.fluxcd.io/v2
+      # kind: HelmRelease
+      # ... (rest of the Grafana HelmRelease definition)
+      # It should also include a ServiceMonitor definition.
+evaluators:
+  - name: Check for HelmRelease kind
+    string:
+      contains: "kind: HelmRelease"
+  - name: Check for ServiceMonitor kind if required
+    string: # This would need to be more sophisticated to check conditionally
+      contains: "kind: ServiceMonitor"
+  - name: Check for correct namespace
+    string:
+      contains: "namespace: monitoring"
