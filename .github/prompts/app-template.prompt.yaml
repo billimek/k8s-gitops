@@ -45,19 +45,24 @@ messages:
       ## Storage Requirements
       - **Persistent Storage Required**: {{PERSISTENT_STORAGE_REQUIRED}} # YES/NO
       #if PERSISTENT_STORAGE_REQUIRED == "YES"
-      - **VolSync Backed Storage**:
-        - Primary Storage (config volume):
-          - Size: {{STORAGE_SIZE | default("10Gi")}}
-          - Storage Class: {{STORAGE_CLASS | default("ceph-block")}}
-          - Access Mode: {{ACCESS_MODE | default("ReadWriteOnce")}}
-          - Snapshot Class: {{SNAPSHOT_CLASS | default("csi-ceph-block")}}
-      - **Additional Volumes**: {{ADDITIONAL_VOLUMES_REQUIRED}} # YES/NO
+      - **VolSync Backed Storage (Primary Config Volume)**:
+        - Size: {{STORAGE_SIZE | default("10Gi")}}
+        - Storage Class: {{STORAGE_CLASS | default("ceph-block")}}
+        - Access Mode: {{ACCESS_MODE | default("ReadWriteOnce")}}
+        - Snapshot Class: {{SNAPSHOT_CLASS | default("csi-ceph-block")}}
+      - **Additional Volumes Required**: {{ADDITIONAL_VOLUMES_REQUIRED}} # YES/NO
       #if ADDITIONAL_VOLUMES_REQUIRED == "YES"
-      # Please provide details for each additional volume:
-      #   - Name: {{VOLUME_NAME}}
-      #   - Size: {{VOLUME_SIZE}}
-      #   - Mount Path: {{MOUNT_PATH}}
-      #   - Storage Class: {{VOLUME_STORAGE_CLASS | default("ceph-block")}}
+      - **Additional Volumes Details (YAML list)**:
+        # Example:
+        # ADDITIONAL_VOLUMES_DETAILS: |
+        #   - name: media
+        #     existingClaim: media-nfs-share-pvc
+        #     mountPath: /media
+        #   - name: cache
+        #     size: 2Gi
+        #     mountPath: /cache
+        #     storageClass: local-path
+        {{ADDITIONAL_VOLUMES_DETAILS}}
       #endif
       #endif
 
@@ -74,15 +79,19 @@ messages:
       - **Secrets Required**: {{SECRETS_REQUIRED}} # YES/NO
       #if SECRETS_REQUIRED == "YES"
       - OnePassword Item: {{OP_ITEM}}
-      - Secret Keys: # (e.g., KEY_1: "{{ .TEMPLATE_KEY_1 }}")
-        {{SECRET_KEYS}}
+      - Secret Keys (YAML map, e.g., KEY_1: "{{ .TEMPLATE_KEY_1 }}"):
+        {{SECRET_KEYS_YAML}}
       - Secret Name: {{SECRET_NAME | default(APP_NAME + "-secret")}}
       #endif
 
       ## Environment Configuration
-      - **Environment Variables**:
-        - TZ: America/New_York
-        {{ENVIRONMENT_VARIABLES}} # (e.g., ENV_VAR_1: VALUE_1)
+      - **Timezone (TZ)**: {{TZ | default("America/New_York")}}
+      - **Additional Environment Variables (YAML map)**:
+        # Example:
+        # ADDITIONAL_ENV_YAML: |
+        #   MY_VAR: "my_value"
+        #   ANOTHER_VAR: "another_value"
+        {{ADDITIONAL_ENV_YAML}}
 
       ## Health Checks
       - **Health Check Path**: {{HEALTH_CHECK_PATH | default("/health")}}
@@ -92,24 +101,31 @@ messages:
       - **Failure Threshold**: {{FAILURE_THRESHOLD | default(3)}}
 
       ## Security Context
+      # (RUN_AS_USER, RUN_AS_GROUP, and FS_GROUP often share the same ID)
       - **Run As User**: {{RUN_AS_USER | default(1001)}}
       - **Run As Group**: {{RUN_AS_GROUP | default(1001)}}
       - **FS Group**: {{FS_GROUP | default(1001)}}
-      - **Read-Only Root Filesystem**: {{READ_ONLY_ROOT_FS | default(true)}} # YES/NO
-      - **Allow Privilege Escalation**: {{ALLOW_PRIVILEGE_ESCALATION | default(false)}} # YES/NO
+      - **Read-Only Root Filesystem**: {{READ_ONLY_ROOT_FS | default(true)}} # true/false (literal)
+      - **Allow Privilege Escalation**: {{ALLOW_PRIVILEGE_ESCALATION | default(false)}} # true/false (literal)
 
       ## Additional Configuration
       - **Annotations Required**: {{ANNOTATIONS_REQUIRED}} # YES/NO
       #if ANNOTATIONS_REQUIRED == "YES"
-      # Provide annotation details (e.g., reloader.stakater.com/auto: "true")
-        {{ANNOTATIONS}}
+      - **Annotations (YAML map)**:
+        # Example:
+        # ANNOTATIONS_YAML: |
+        #   reloader.stakater.com/auto: "true"
+        {{ANNOTATIONS_YAML}}
       #endif
       - **Init Containers Required**: {{INIT_CONTAINERS_REQUIRED}} # YES/NO
       #if INIT_CONTAINERS_REQUIRED == "YES"
-      # Provide init container details:
-      #   - Name: {{INIT_CONTAINER_NAME}}
-      #   - Image: {{INIT_CONTAINER_IMAGE}}
-      #   - Command: {{INIT_CONTAINER_COMMAND}}
+      - **Init Containers Details (YAML list)**:
+        # Example:
+        # INIT_CONTAINERS_DETAILS: |
+        #   - name: my-init-container
+        #     image: busybox:latest
+        #     command: ['sh', '-c', 'echo "Hello"']
+        {{INIT_CONTAINERS_DETAILS}}
       #endif
 
       Based on these details, generate the necessary YAML files for the HelmRelease, ExternalSecret (if needed), and VolSync (if needed).
