@@ -49,10 +49,15 @@ permissions:
 
 jobs:
   renovate:
-    if: (github.event_name != 'issues' && github.event_name != 'pull_request') || (github.event.sender.login == 'billimek')
     runs-on: ubuntu-latest
 
     steps:
+      - name: Early exit if not billimek on issues or pull_request
+        if: ${{ (github.event_name == 'issues' || github.event_name == 'pull_request') && github.event.sender.login != 'billimek' }}
+        run: |
+          echo "Not billimek, exiting early."
+          exit 0
+
       - name: Generate Token
         id: generate_token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
