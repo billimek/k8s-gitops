@@ -1,17 +1,18 @@
 name: Renovate
 on:
-  schedule:
-    - cron: '0 * * * *' # Runs every hour
-  push:
-    branches: ["master"]
-    paths:
-      - .github/renovate.json5
-      - .renovate/**.json5
-      - .github/workflows/renovate.yml
-  issues:
-    types: [edited]
-  pull_request:
-    types: [edited]
+  # temporarily? reverting to mend-hosted Renovate
+  # schedule:
+  #   - cron: '0 * * * *' # Runs every hour
+  # push:
+  #   branches: ["master"]
+  #   paths:
+  #     - .github/renovate.json5
+  #     - .renovate/**.json5
+  #     - .github/workflows/renovate.yml
+  # issues:
+  #   types: [edited]
+  # pull_request:
+  #   types: [edited]
   workflow_dispatch:
     inputs:
       cache:
