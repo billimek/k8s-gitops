@@ -1,0 +1,145 @@
+name: Home Automation Deployment
+description: Use this prompt to deploy home automation services (like Home Assistant, Node-RED, etc.) to your Kubernetes cluster.
+model: gpt-4o-mini # Specify your desired model
+modelParameters:
+  temperature: 0.5 # Add any model parameters if needed
+messages:
+  - role: system
+    content: |
+      You are an expert Kubernetes and GitOps assistant. Your task is to help deploy new home automation applications using the app-template Helm chart, adhering to the patterns and best practices defined in this repository.
+
+      Key considerations:
+      - Applications will be deployed to the 'home' namespace by default.
+      - Follow the specified directory structure: `kubernetes/home/<app-name>/app/`
+      - Ensure all YAML files include the correct schema validation comments.
+      - Use VolSync for persistent storage by default if storage is required.
+      - Integrate with ExternalSecrets for secret management if secrets are required.
+      - Apply resource requests and limits.
+      - Configure health checks (if applicable).
+      - Set appropriate security contexts, including host network or device access if needed.
+  - role: user
+    content: |
+      Please help me deploy a new home automation service with the following details:
+
+      ## Application Details
+      - **Application Name**: {{APP_NAME}}
+      - **Application Type**: {{APP_TYPE}} # (e.g., Home Assistant, Node-RED, Zigbee2MQTT, ESPHome)
+      - **Namespace**: {{NAMESPACE | default("home")}}
+      - **Cluster**: {{CLUSTER}} # (e.g., cluster-0, nas-1)
+
+      ## Helm Configuration
+      - **Chart**: app-template
+      - **Version**: {{CHART_VERSION}} # (e.g., 3.5.1)
+      - **Interval**: {{RECONCILIATION_INTERVAL | default("30m")}}
+
+      ## Container Configuration
+      - **Image Repository**: {{IMAGE_REPO}} # (e.g., ghcr.io/home-assistant/home-assistant)
+      - **Image Tag**: {{IMAGE_TAG}} # (e.g., 2023.12.3)
+      - **Container Port**: {{CONTAINER_PORT}}
+
+      ## Resource Requirements
+      - **CPU Requests**: {{CPU_REQUEST | default("100m")}}
+      - **Memory Requests**: {{MEMORY_REQUEST | default("128Mi")}}
+      - **Memory Limits**: {{MEMORY_LIMIT | default("1Gi")}}
+
+      ## Storage Requirements
+      - **Persistent Storage Required**: {{PERSISTENT_STORAGE_REQUIRED}} # YES/NO
+      #if PERSISTENT_STORAGE_REQUIRED == "YES"
+      - Size: {{STORAGE_SIZE | default("10Gi")}}
+      - Storage Class: {{STORAGE_CLASS | default("ceph-block")}}
+      - Mount Path: {{MOUNT_PATH | default("/config")}}
+      #endif
+
+      ## Network Configuration
+      - **Ingress Required**: {{INGRESS_REQUIRED}} # YES/NO
+      #if INGRESS_REQUIRED == "YES"
+      - Hostname: {{HOSTNAME}} # (e.g., homeassistant.eviljungle.com)
+      - Internal or External: {{INGRESS_TYPE}} # INTERNAL/EXTERNAL
+      - Authentication Required: {{AUTH_REQUIRED}} # YES/NO
+      #endif
+
+      ## Device Access
+      - **Host Network Required**: {{HOST_NETWORK_REQUIRED | default("NO")}} # YES/NO
+      - **Host Devices Required**: {{HOST_DEVICES_REQUIRED | default("NO")}} # YES/NO
+      #if HOST_DEVICES_REQUIRED == "YES"
+      # List devices (e.g., /dev/ttyACM0, /dev/ttyUSB0)
+      {{HOST_DEVICES}}
+      #endif
+
+      ## Security Context
+      - **Run As User**: {{RUN_AS_USER}}
+      - **Run As Group**: {{RUN_AS_GROUP}}
+      - **FS Group**: {{FS_GROUP}}
+      - **Privileged Mode Required**: {{PRIVILEGED_MODE_REQUIRED | default("NO")}} # YES/NO
+
+      ## Environment Configuration
+      - **Environment Variables**:
+        - TZ: America/New_York
+        {{ENVIRONMENT_VARIABLES}} # (e.g., ENV_VAR_1: VALUE_1)
+
+      ## External Secrets
+      - **Secrets Required**: {{SECRETS_REQUIRED}} # YES/NO
+      #if SECRETS_REQUIRED == "YES"
+      - One Password Item: {{OP_ITEM}}
+      - Secret Keys: # (e.g., KEY_1: VALUE_OR_TEMPLATE_1)
+        {{SECRET_KEYS}}
+      #endif
+
+      Based on these details, generate the necessary YAML files for the HelmRelease and ExternalSecret (if needed).
+      Ensure the HelmRelease uses the bjw-s app-template schema.
+      The directory structure should be `kubernetes/{{NAMESPACE | default("home")}}/{{APP_NAME}}/app/`.
+      The HelmRelease should be named `{{APP_NAME}}.yaml`.
+      The ExternalSecret should be named `externalsecret.yaml`.
+
+      Example for {{APP_NAME}} values:
+      {{SAMPLE_REQUEST_APP_NAME}}
+testData:
+  - input: |
+      APP_NAME: home-assistant
+      APP_TYPE: Home Assistant
+      CLUSTER: cluster-0
+      CHART_VERSION: 3.5.1
+      IMAGE_REPO: ghcr.io/home-assistant/home-assistant
+      IMAGE_TAG: 2023.12.3
+      CONTAINER_PORT: 8123
+      CPU_REQUEST: 500m
+      MEMORY_LIMIT: 1Gi
+      PERSISTENT_STORAGE_REQUIRED: YES
+      STORAGE_SIZE: 20Gi
+      MOUNT_PATH: /config
+      INGRESS_REQUIRED: YES
+      HOSTNAME: homeassistant.eviljungle.com
+      INGRESS_TYPE: EXTERNAL
+      AUTH_REQUIRED: NO
+      HOST_NETWORK_REQUIRED: YES
+      HOST_DEVICES_REQUIRED: YES
+      HOST_DEVICES: "- /dev/ttyACM0"
+      PRIVILEGED_MODE_REQUIRED: YES
+      RUN_AS_USER: # Left blank as privileged often implies root or specific handling
+      RUN_AS_GROUP:
+      FS_GROUP:
+      ENVIRONMENT_VARIABLES: ""
+      SECRETS_REQUIRED: NO
+      SAMPLE_REQUEST_APP_NAME: |
+        "Please deploy Home Assistant to the default namespace. It should use the ghcr.io/home-assistant/home-assistant:2023.12.3 image on port 8123. It needs 500m CPU requests and 1Gi memory limit with 20Gi persistent storage at /config. Make it available at homeassistant.eviljungle.com through the external ingress. It needs host network access for device discovery and access to /dev/ttyACM0 for a Zwave stick. Run it in privileged mode with the America/New_York timezone."
+    expected: |
+      # This section would contain the expected YAML output for Home Assistant.
+      # For example, the HelmRelease should start with:
+      # ---
+      # # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
+      # apiVersion: helm.toolkit.fluxcd.io/v2
+      # kind: HelmRelease
+      # ... (rest of the home-assistant HelmRelease definition)
+evaluators:
+  - name: Check for HelmRelease schema
+    string:
+      contains: "# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json"
+  - name: Check for HelmRelease kind
+    string:
+      contains: "kind: HelmRelease"
+  - name: Check for app-template chart
+    string:
+      contains: "chart: app-template"
+  - name: Check for correct directory structure
+    string:
+      contains: "kubernetes/home/{{APP_NAME}}/app/"

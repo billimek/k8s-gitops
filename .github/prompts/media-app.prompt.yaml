@@ -1,0 +1,134 @@
+name: Media Application Deployment
+description: Use this prompt to deploy a new media management application (like Sonarr, Radarr, etc.) to your Kubernetes cluster.
+model: gpt-4o-mini # Specify your desired model
+modelParameters:
+  temperature: 0.5 # Add any model parameters if needed
+messages:
+  - role: system
+    content: |
+      You are an expert Kubernetes and GitOps assistant. Your task is to help deploy new media applications (Sonarr, Radarr, etc.) using the app-template Helm chart, adhering to the patterns and best practices defined in this repository.
+
+      Key considerations:
+      - Applications will be deployed to the 'media' namespace by default.
+      - Follow the specified directory structure: `kubernetes/media/<app-name>/app/`
+      - Ensure all YAML files include the correct schema validation comments.
+      - Persistent storage for configuration will use VolSync.
+      - Shared media and download paths will be mounted.
+      - Integrate with ExternalSecrets for API keys, database credentials, and notification tokens.
+      - Apply resource requests and limits.
+      - Configure health checks (if applicable).
+      - Set appropriate security contexts (typically runAsUser/Group 1001).
+  - role: user
+    content: |
+      Please help me deploy a new media application with the following details:
+
+      ## Application Details
+      - **Application Name**: {{APP_NAME}}
+      - **Application Type**: {{APP_TYPE}} # (e.g., Sonarr, Radarr, Lidarr, Prowlarr, etc.)
+      - **Namespace**: {{NAMESPACE | default("media")}}
+
+      ## Helm Configuration
+      - **Chart**: app-template
+      - **Version**: {{CHART_VERSION}} # (e.g., 3.5.1)
+      - **Interval**: {{RECONCILIATION_INTERVAL | default("30m")}}
+
+      ## Container Configuration
+      - **Image Repository**: {{IMAGE_REPO}} # (e.g., ghcr.io/onedr0p/sonarr-develop)
+      - **Image Tag**: {{IMAGE_TAG}} # (e.g., 4.0.10.2656)
+      - **Branch**: {{BRANCH}} # (e.g., develop, master, main)
+
+      ## Database Configuration
+      - **Postgres Database Required**: {{POSTGRES_REQUIRED}} # YES/NO
+      #if POSTGRES_REQUIRED == "YES"
+      - Database Names: {{DB_NAMES}} # (e.g., sonarr_main sonarr_log)
+      - Host: postgres-rw.db.svc.cluster.local
+      - Port: 5432
+      #endif
+
+      ## Resource Requirements
+      - **CPU Requests**: {{CPU_REQUEST | default("100m")}}
+      - **Memory Limits**: {{MEMORY_LIMIT | default("2Gi")}}
+
+      ## Storage Requirements
+      - **Media Path**: {{MEDIA_PATH | default("/data/media")}}
+      - **Downloads Path**: {{DOWNLOADS_PATH | default("/data/downloads")}}
+      - **Config Size**: {{CONFIG_SIZE | default("10Gi")}}
+
+      ## Network Configuration
+      - **Ingress Hostname**: {{HOSTNAME}} # (e.g., sonarr.eviljungle.com)
+      - **Internal or External**: {{INGRESS_TYPE | default("INTERNAL")}} # INTERNAL/EXTERNAL
+      - **Container Port**: {{CONTAINER_PORT | default(80)}}
+
+      ## Notification Configuration
+      - **Pushover Notifications**: {{PUSHOVER_REQUIRED}} # YES/NO
+      #if PUSHOVER_REQUIRED == "YES"
+      # Ensure Pushover token and user key are included in secrets
+      #endif
+
+      ## Security Context
+      - **Run As User**: {{RUN_AS_USER | default(1001)}}
+      - **Run As Group**: {{RUN_AS_GROUP | default(1001)}}
+      - **FS Group**: {{FS_GROUP | default(1001)}}
+
+      ## External Secrets
+      # (Define any necessary secrets, e.g., API_KEY, PUSHOVER_TOKEN, PUSHOVER_USER_KEY, DB_USER, DB_PASSWORD)
+      - **Secrets Required**: {{SECRETS_REQUIRED}} # YES/NO
+      #if SECRETS_REQUIRED == "YES"
+      - One Password Item: {{OP_ITEM}}
+      - Secret Keys: # (e.g., API_KEY: "{{ .API_KEY }}")
+        {{SECRET_KEYS}}
+      #endif
+
+      Based on these details, generate the necessary YAML files for the HelmRelease and ExternalSecret (if needed).
+      Ensure the HelmRelease uses the bjw-s app-template schema.
+      The directory structure should be `kubernetes/{{NAMESPACE | default("media")}}/{{APP_NAME}}/app/`.
+      The HelmRelease should be named `{{APP_NAME}}.yaml`.
+      The ExternalSecret should be named `externalsecret.yaml`.
+
+      Example for {{APP_NAME}} values:
+      {{SAMPLE_REQUEST_APP_NAME}}
+testData:
+  - input: |
+      APP_NAME: radarr
+      APP_TYPE: Radarr
+      CHART_VERSION: 3.5.1
+      IMAGE_REPO: ghcr.io/onedr0p/radarr-develop
+      IMAGE_TAG: 5.2.6.8376
+      BRANCH: develop
+      POSTGRES_REQUIRED: YES
+      DB_NAMES: radarr_main
+      CPU_REQUEST: 100m
+      MEMORY_LIMIT: 2Gi
+      HOSTNAME: radarr.eviljungle.com
+      PUSHOVER_REQUIRED: YES
+      SECRETS_REQUIRED: YES
+      OP_ITEM: radarr-secrets # Example, adjust as needed
+      SECRET_KEYS: |
+        API_KEY: "{{ .RADARR_API_KEY }}"
+        PUSHOVER_TOKEN: "{{ .PUSHOVER_APP_TOKEN }}"
+        PUSHOVER_USER_KEY: "{{ .PUSHOVER_USER_KEY }}"
+        POSTGRES_USER: "{{ .POSTGRES_USER_RADARR }}"
+        POSTGRES_PASS: "{{ .POSTGRES_PASS_RADARR }}"
+      SAMPLE_REQUEST_APP_NAME: |
+        "Please deploy Radarr to the media namespace on cluster-0. It should use the ghcr.io/onedr0p/radarr-develop:5.2.6.8376 image on the develop branch. It needs a Postgres database named radarr_main. Use 100m CPU requests and 2Gi memory limit. It needs access to /data/media and /data/downloads paths. Make it available at radarr.eviljungle.com through the internal ingress. Set up Pushover notifications using the same keys as Sonarr."
+    expected: |
+      # This section would contain the expected YAML output for Radarr.
+      # For example, the HelmRelease should start with:
+      # ---
+      # # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
+      # apiVersion: helm.toolkit.fluxcd.io/v2
+      # kind: HelmRelease
+      # ... (rest of the radarr HelmRelease definition)
+evaluators:
+  - name: Check for HelmRelease schema
+    string:
+      contains: "# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json"
+  - name: Check for HelmRelease kind
+    string:
+      contains: "kind: HelmRelease"
+  - name: Check for app-template chart
+    string:
+      contains: "chart: app-template"
+  - name: Check for correct directory structure
+    string:
+      contains: "kubernetes/media/{{APP_NAME}}/app/"
