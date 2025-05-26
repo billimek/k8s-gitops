@@ -1,0 +1,186 @@
+name: App-Template Deployment
+description: Use this prompt to deploy a new application using the app-template Helm chart following the established patterns in this GitOps repository.
+model: gpt-4o-mini # Specify your desired model
+modelParameters:
+  temperature: 0.5 # Add any model parameters if needed
+messages:
+  - role: system
+    content: |
+      You are an expert Kubernetes and GitOps assistant. Your task is to help deploy new applications using the app-template Helm chart, adhering to the patterns and best practices defined in this repository.
+
+      Key considerations:
+      - Follow the specified directory structure: `kubernetes/<namespace>/<app-name>/app/`
+      - Ensure all YAML files include the correct schema validation comments.
+      - Use VolSync for persistent storage by default.
+      - Integrate with ExternalSecrets for secret management.
+      - Apply resource requests and limits.
+      - Configure health checks.
+      - Set appropriate security contexts.
+  - role: user
+    content: |
+      Please help me deploy a new application with the following details:
+
+      ## Application Details
+      - **Application Name**: {{APP_NAME}}
+      - **Namespace**: {{NAMESPACE}}
+      - **Description**: {{BRIEF_DESCRIPTION}}
+
+      ## Helm Configuration
+      - **Chart**: app-template
+      - **Version**: {{CHART_VERSION}} # (e.g., 4.0.1)
+      - **Interval**: {{RECONCILIATION_INTERVAL | default("30m")}}
+      - **Max History**: {{MAX_HISTORY | default(3)}}
+
+      ## Container Configuration
+      - **Image Repository**: {{IMAGE_REPO}}
+      - **Image Tag**: {{IMAGE_TAG}}
+      - **Container Port**: {{CONTAINER_PORT}}
+      - **Controller Name**: {{CONTROLLER_NAME | default(APP_NAME)}}
+
+      ## Resource Requirements
+      - **CPU Requests**: {{CPU_REQUEST | default("100m")}}
+      - **Memory Requests**: {{MEMORY_REQUEST | default("128Mi")}}
+      - **Memory Limits**: {{MEMORY_LIMIT | default("512Mi")}}
+
+      ## Storage Requirements
+      - **Persistent Storage Required**: {{PERSISTENT_STORAGE_REQUIRED}} # YES/NO
+      #if PERSISTENT_STORAGE_REQUIRED == "YES"
+      - **VolSync Backed Storage**:
+        - Primary Storage (config volume):
+          - Size: {{STORAGE_SIZE | default("10Gi")}}
+          - Storage Class: {{STORAGE_CLASS | default("ceph-block")}}
+          - Access Mode: {{ACCESS_MODE | default("ReadWriteOnce")}}
+          - Snapshot Class: {{SNAPSHOT_CLASS | default("csi-ceph-block")}}
+      - **Additional Volumes**: {{ADDITIONAL_VOLUMES_REQUIRED}} # YES/NO
+      #if ADDITIONAL_VOLUMES_REQUIRED == "YES"
+      # Please provide details for each additional volume:
+      #   - Name: {{VOLUME_NAME}}
+      #   - Size: {{VOLUME_SIZE}}
+      #   - Mount Path: {{MOUNT_PATH}}
+      #   - Storage Class: {{VOLUME_STORAGE_CLASS | default("ceph-block")}}
+      #endif
+      #endif
+
+      ## Network Configuration
+      - **Ingress Required**: {{INGRESS_REQUIRED}} # YES/NO
+      #if INGRESS_REQUIRED == "YES"
+      - Hostname: {{HOSTNAME}} # (e.g., app.eviljungle.com)
+      - Internal or External: {{INGRESS_TYPE}} # INTERNAL/EXTERNAL
+      #  (For internal: Uses `nginx-tailscale` class, For external: Uses `nginx` class)
+      - Authentication Required: {{AUTH_REQUIRED}} # YES/NO
+      #endif
+
+      ## External Secrets
+      - **Secrets Required**: {{SECRETS_REQUIRED}} # YES/NO
+      #if SECRETS_REQUIRED == "YES"
+      - OnePassword Item: {{OP_ITEM}}
+      - Secret Keys: # (e.g., KEY_1: "{{ .TEMPLATE_KEY_1 }}")
+        {{SECRET_KEYS}}
+      - Secret Name: {{SECRET_NAME | default(APP_NAME + "-secret")}}
+      #endif
+
+      ## Environment Configuration
+      - **Environment Variables**:
+        - TZ: America/New_York
+        {{ENVIRONMENT_VARIABLES}} # (e.g., ENV_VAR_1: VALUE_1)
+
+      ## Health Checks
+      - **Health Check Path**: {{HEALTH_CHECK_PATH | default("/health")}}
+      - **Initial Delay**: {{INITIAL_DELAY | default(0)}}
+      - **Period Seconds**: {{PERIOD_SECONDS | default(10)}}
+      - **Timeout Seconds**: {{TIMEOUT_SECONDS | default(1)}}
+      - **Failure Threshold**: {{FAILURE_THRESHOLD | default(3)}}
+
+      ## Security Context
+      - **Run As User**: {{RUN_AS_USER | default(1001)}}
+      - **Run As Group**: {{RUN_AS_GROUP | default(1001)}}
+      - **FS Group**: {{FS_GROUP | default(1001)}}
+      - **Read-Only Root Filesystem**: {{READ_ONLY_ROOT_FS | default(true)}} # YES/NO
+      - **Allow Privilege Escalation**: {{ALLOW_PRIVILEGE_ESCALATION | default(false)}} # YES/NO
+
+      ## Additional Configuration
+      - **Annotations Required**: {{ANNOTATIONS_REQUIRED}} # YES/NO
+      #if ANNOTATIONS_REQUIRED == "YES"
+      # Provide annotation details (e.g., reloader.stakater.com/auto: "true")
+        {{ANNOTATIONS}}
+      #endif
+      - **Init Containers Required**: {{INIT_CONTAINERS_REQUIRED}} # YES/NO
+      #if INIT_CONTAINERS_REQUIRED == "YES"
+      # Provide init container details:
+      #   - Name: {{INIT_CONTAINER_NAME}}
+      #   - Image: {{INIT_CONTAINER_IMAGE}}
+      #   - Command: {{INIT_CONTAINER_COMMAND}}
+      #endif
+
+      Based on these details, generate the necessary YAML files for the HelmRelease, ExternalSecret (if needed), and VolSync (if needed).
+      Ensure the HelmRelease uses the bjw-s app-template schema and ExternalSecret uses the standard schema.
+      The directory structure should be `kubernetes/{{NAMESPACE}}/{{APP_NAME}}/app/`.
+      The HelmRelease should be named `{{APP_NAME}}.yaml`.
+      The ExternalSecret should be named `externalsecret.yaml`.
+      The VolSync configuration should be named `volsync.yaml`.
+
+      Example for {{APP_NAME}} values:
+      {{SAMPLE_REQUEST_APP_NAME}}
+testData:
+  - input: |
+      APP_NAME: paperless-ngx
+      NAMESPACE: default
+      BRIEF_DESCRIPTION: Document management system
+      CHART_VERSION: 4.0.1
+      IMAGE_REPO: ghcr.io/paperless-ngx/paperless-ngx
+      IMAGE_TAG: 2.5.0
+      CONTAINER_PORT: 8000
+      CPU_REQUEST: 500m
+      MEMORY_LIMIT: 1Gi
+      PERSISTENT_STORAGE_REQUIRED: YES
+      STORAGE_SIZE: 20Gi
+      ADDITIONAL_VOLUMES_REQUIRED: YES
+      VOLUME_DETAILS_LINE: "and the existing selfhosted-nfs-share-pvc mounted at /consume"
+      INGRESS_REQUIRED: YES
+      HOSTNAME: paperless.eviljungle.com
+      INGRESS_TYPE: INTERNAL
+      AUTH_REQUIRED: NO
+      SECRETS_REQUIRED: YES
+      OP_ITEM: paperless
+      SECRET_KEYS: |
+        PAPERLESS_SECRET_KEY: "{{ .PAPERLESS_SECRET_KEY }}"
+        PAPERLESS_ADMIN_USER: "{{ .PAPERLESS_ADMIN_USER }}"
+        PAPERLESS_ADMIN_PASSWORD: "{{ .PAPERLESS_ADMIN_PASSWORD }}"
+      ENVIRONMENT_VARIABLES: ""
+      HEALTH_CHECK_PATH: /api/health/
+      RUN_AS_USER: 1001
+      RUN_AS_GROUP: 1001
+      FS_GROUP: 1001
+      READ_ONLY_ROOT_FS: YES
+      ALLOW_PRIVILEGE_ESCALATION: NO
+      ANNOTATIONS_REQUIRED: YES
+      ANNOTATIONS: |
+        reloader.stakater.com/auto: "true"
+      INIT_CONTAINERS_REQUIRED: NO
+      SAMPLE_REQUEST_APP_NAME: |
+        "Please deploy Paperless-NGX in the default namespace. It should use the image ghcr.io/paperless-ngx/paperless-ngx:2.5.0 on port 8000. It needs 500m CPU requests and 1Gi memory limit with two storage volumes: 1) a volsync-backed 20Gi PVC using the ceph-block storage class mounted at /data for the application config, and 2) the existing selfhosted-nfs-share-pvc mounted at /consume. It should be accessible at paperless.eviljungle.com through the internal ingress. It needs secrets stored in a OnePassword item called 'paperless' with PAPERLESS_SECRET_KEY, PAPERLESS_ADMIN_USER, and PAPERLESS_ADMIN_PASSWORD. The health check should be on /api/health/ endpoint. Run as user/group 1001 with a read-only root filesystem and no privilege escalation. Add an annotation for automatic reloading. This application depends on rook-ceph-cluster for storage, external-secrets-stores for secrets management, and volsync for backups."
+
+    expected: |
+      # This section would contain the expected YAML output for the given testData.
+      # For example, the HelmRelease should start with:
+      # ---
+      # # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
+      # apiVersion: helm.toolkit.fluxcd.io/v2
+      # kind: HelmRelease
+      # ... (rest of the paperless-ngx HelmRelease definition)
+evaluators:
+  - name: Check for HelmRelease schema
+    string:
+      contains: "# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json"
+  - name: Check for ExternalSecret schema
+    string:
+      contains: "# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/external-secrets.io/externalsecret_v1.json"
+  - name: Check for HelmRelease kind
+    string:
+      contains: "kind: HelmRelease"
+  - name: Check for app-template chart
+    string:
+      contains: "chart: app-template"
+  - name: Check for correct directory structure in output paths
+    string: # This would ideally be a regex or more complex evaluator if the platform supports it
+      contains: "kubernetes/{{NAMESPACE}}/{{APP_NAME}}/app/"
