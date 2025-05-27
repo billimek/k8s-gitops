@@ -86,7 +86,7 @@ spec:
             port: *port
     ingress:
       main:
-        className: "nginx-tailscale"
+        className: "tailscale"
         hosts:
           - host: &host "radarr.eviljungle.com"
             paths:
