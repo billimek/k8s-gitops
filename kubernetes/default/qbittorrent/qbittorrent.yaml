@@ -104,6 +104,8 @@ spec:
         globalMounts:
           - path: /media/downloads/qbittorrent
             subPath: downloads/qbittorrent
+          - path: /media/books
+            subPath: books
       tmp:
         type: emptyDir
       incomplete:
