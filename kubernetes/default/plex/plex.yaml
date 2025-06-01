@@ -137,7 +137,7 @@ spec:
           - host: &host plex.eviljungle.com
             paths:
               - path: /(.*)
-                pathType: Prefix
+                pathType: ImplementationSpecific
                 service:
                   identifier: app
                   port: http
@@ -154,7 +154,7 @@ spec:
           - host: *host
             paths:
               - path: /(.*)
-                pathType: Prefix
+                pathType: ImplementationSpecific
                 service:
                   identifier: app
                   port: http
