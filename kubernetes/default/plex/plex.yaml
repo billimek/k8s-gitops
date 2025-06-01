@@ -130,10 +130,21 @@ spec:
         # ensure that external DNS (cloudflare) has an entry for this directed to the router
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
+        annotations:
+          # Extended timeouts for Plex streaming
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+          # Rewrite for the root path to redirect to web interface
+          nginx.ingress.kubernetes.io/rewrite-target: /web/index.html
         hosts:
           - host: &host plex.eviljungle.com
             paths:
               - path: /
+                pathType: Exact
+                service:
+                  identifier: app
+                  port: http
+              - path: /web
                 pathType: Prefix
                 service:
                   identifier: app
