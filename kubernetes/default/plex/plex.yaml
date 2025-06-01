@@ -140,11 +140,6 @@ spec:
           - host: &host plex.eviljungle.com
             paths:
               - path: /
-                pathType: Exact
-                service:
-                  identifier: app
-                  port: http
-              - path: /web
                 pathType: Prefix
                 service:
                   identifier: app
