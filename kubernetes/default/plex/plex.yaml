@@ -134,8 +134,6 @@ spec:
           # Extended timeouts for Plex streaming
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-          # Rewrite for the root path to redirect to web interface
-          nginx.ingress.kubernetes.io/rewrite-target: /web/index.html
         hosts:
           - host: &host plex.eviljungle.com
             paths:
