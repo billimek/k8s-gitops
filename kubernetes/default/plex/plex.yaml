@@ -130,9 +130,6 @@ spec:
         # ensure that external DNS (cloudflare) has an entry for this directed to the router
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-          nginx.ingress.kubernetes.io/proxy-ssl-verify: "off"
         hosts:
           - host: &host plex.eviljungle.com
             paths:
@@ -147,9 +144,6 @@ spec:
       tailscale:
         enabled: true
         className: nginx-tailscale
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-          nginx.ingress.kubernetes.io/proxy-ssl-verify: "off"
         hosts:
           - host: *host
             paths:
