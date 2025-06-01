@@ -133,6 +133,16 @@ spec:
         hosts:
           - host: &host plex.eviljungle.com
             paths:
+              - path: /library/streams
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+                # Remove Range header for streaming paths to improve transcoding behavior
+                headers:
+                  request:
+                    delete:
+                      - "Range"
               - path: /
                 pathType: Prefix
                 service:
