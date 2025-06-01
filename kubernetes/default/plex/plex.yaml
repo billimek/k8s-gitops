@@ -131,6 +131,7 @@ spec:
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
         annotations:
+          nginx.ingress.kubernetes.io/app-root: /web
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
           - host: &host plex.eviljungle.com
