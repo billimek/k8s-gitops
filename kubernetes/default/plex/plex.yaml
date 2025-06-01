@@ -130,14 +130,11 @@ spec:
         # ensure that external DNS (cloudflare) has an entry for this directed to the router
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
-        annotations:
-          nginx.ingress.kubernetes.io/use-regex: "true"
-          nginx.ingress.kubernetes.io/rewrite-target: /web$1
         hosts:
           - host: &host plex.eviljungle.com
             paths:
-              - path: /(.*)
-                pathType: ImplementationSpecific
+              - path: /
+                pathType: Prefix
                 service:
                   identifier: app
                   port: http
@@ -147,14 +144,11 @@ spec:
       tailscale:
         enabled: true
         className: nginx-tailscale
-        annotations:
-          nginx.ingress.kubernetes.io/use-regex: "true"
-          nginx.ingress.kubernetes.io/rewrite-target: /web$1
         hosts:
           - host: *host
             paths:
-              - path: /(.*)
-                pathType: ImplementationSpecific
+              - path: /
+                pathType: Prefix
                 service:
                   identifier: app
                   port: http
