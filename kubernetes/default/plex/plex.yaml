@@ -132,6 +132,7 @@ spec:
         className: nginx
         annotations:
           nginx.ingress.kubernetes.io/app-root: /web
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         hosts:
           - host: &host plex.eviljungle.com
             paths:
@@ -148,6 +149,7 @@ spec:
         className: nginx-tailscale
         annotations:
           nginx.ingress.kubernetes.io/app-root: /web
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         hosts:
           - host: *host
             paths:
