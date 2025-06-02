@@ -35,7 +35,7 @@ tasks:
     cmds:
       - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
       - minijinja-cli "{{.SETUP_DIR}}/bootstrap/templates/resources.yaml.j2" | op inject | kubectl apply --server-side --filename -
-      - helmfile --quiet --file {{.SETUP_DIR}}/bootstrap/helmfile.yaml apply --suppress-diff --skip-diff-on-install
+      - helmfile --quiet --file {{.SETUP_DIR}}/bootstrap/helmfile.yaml sync --hide-notes
 
   wipe-disks:
     desc: Wipe disks on Talos nodes
