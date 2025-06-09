@@ -24,3 +24,29 @@ spec:
     - name: instance
       value: nas.home:9100
       isRegex: false
+---
+apiVersion: monitoring.giantswarm.io/v1alpha1
+kind: Silence
+metadata:
+  name: host-node-overtemperature-alarm
+spec:
+  matchers:
+    - name: alertname
+      value: HostNodeOvertemperatureAlarm
+      isRegex: false
+    - name: instance
+      value: 10.0.7.55:9100
+      isRegex: false
+---
+apiVersion: monitoring.giantswarm.io/v1alpha1
+kind: Silence
+metadata:
+  name: host-physical-component-too-hot
+spec:
+  matchers:
+    - name: alertname
+      value: HostPhysicalComponentTooHot
+      isRegex: false
+    - name: instance
+      value: 10\.0\.7\.(55|59):9100
+      isRegex: true
