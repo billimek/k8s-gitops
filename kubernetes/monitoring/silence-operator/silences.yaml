@@ -63,3 +63,16 @@ spec:
     - name: instance
       value: 10\.0\.7\.(55|59):9100
       isRegex: true
+---
+apiVersion: monitoring.giantswarm.io/v1alpha1
+kind: Silence
+metadata:
+  name: ceph-pg-imbalance
+spec:
+  matchers:
+    - name: alertname
+      value: CephPGImbalance
+      isRegex: false
+    - name: ceph_daemon
+      value: osd.4
+      isRegex: false
