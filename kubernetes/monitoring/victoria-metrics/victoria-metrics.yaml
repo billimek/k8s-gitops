@@ -106,15 +106,7 @@ spec:
           - matchers:
             - severity=~"warning|critical"
             receiver: slack-notifications
-          - matchers:
-            - severity=~"warning|critical"
-            receiver: discord
         inhibit_rules:
-          # - source_matchers:
-          #     - severity = "critical"
-          #   target_matchers:
-          #     - severity = "warning"
-          #   equal: ["alertname", "namespace"]
           - source_matchers:
               - severity = "critical"
             target_matchers:
@@ -143,23 +135,15 @@ spec:
               title: |-
                 [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}🔥{{ else if eq .CommonLabels.severity "warning" }}⚠️{{ else }}ℹ️{{ end }}{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
               text: |-
-                {{ range .Alerts -}}
-                  **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+                # {{ range .Alerts -}}
+                #   **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
 
-                {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
+                # {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
 
-                🏷 Labels:
-                   {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
-                   {{ end }}
-                {{ end }}
-        - name: discord
-          discordConfigs:
-            - apiURL:
-                name: victoria-metrics-k8s-stack-helm-values
-                key: DISCORD_WEBHOOK_URL
-              title: |-
-                {{- if eq .Status "firing" }}🚨 **ALERT FIRING** 🚨{{- else }}✅ **ALERT RESOLVED** ✅{{- end }}
-              message: |-
+                # 🏷 Labels:
+                #    {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+                #    {{ end }}
+                # {{ end }}
                 {{- range .Alerts }}
                 {{- if eq .Status "firing" }}
                 > 🔥 **{{ .Labels.alertname }}** is currently **FIRING**
