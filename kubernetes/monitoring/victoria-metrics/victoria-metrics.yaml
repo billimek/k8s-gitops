@@ -135,72 +135,15 @@ spec:
               title: |-
                 [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}🔥{{ else if eq .CommonLabels.severity "warning" }}⚠️{{ else }}ℹ️{{ end }}{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
               text: |-
-                # {{ range .Alerts -}}
-                #   **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+                {{ range .Alerts -}}
+                  **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
 
-                # {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
+                {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
 
-                # 🏷 Labels:
-                #    {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
-                #    {{ end }}
-                # {{ end }}
-                {{- range .Alerts }}
-                {{- if eq .Status "firing" }}
-                > 🔥 **{{ .Labels.alertname }}** is currently **FIRING**
-                {{- else }}
-                > ✅ **{{ .Labels.alertname }}** has been **RESOLVED**
-                {{- end }}
-
-                {{- if eq .Labels.severity "critical" }}
-                🚨 **Severity:** `CRITICAL` 🚨
-                {{- else if eq .Labels.severity "warning" }}
-                ⚠️ **Severity:** `WARNING` ⚠️
-                {{- else if eq .Labels.severity "info" }}
-                ℹ️ **Severity:** `INFO` ℹ️
-                {{- else }}
-                📊 **Severity:** `{{ .Labels.severity }}`
-                {{- end }}
-
-                {{- if ne .Annotations.description "" }}
-                📝 **Description:**
-                ```
-                {{ .Annotations.description }}
-                ```
-                {{- else if ne .Annotations.summary "" }}
-                📋 **Summary:**
-                ```
-                {{ .Annotations.summary }}
-                ```
-                {{- else if ne .Annotations.message "" }}
-                💬 **Message:**
-                ```
-                {{ .Annotations.message }}
-                ```
-                {{- else }}
-                🔔 Alert has been triggered
-                {{- end }}
-
-                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-                **Alert Details:**
-                {{- if .Labels.namespace }}
-                **Namespace:** `{{ .Labels.namespace }}`
-                {{- end }}
-                {{- if .Labels.pod }}
-                **Pod:** `{{ .Labels.pod }}`
-                {{- end }}
-                {{- if .Labels.job }}
-                **Job:** `{{ .Labels.job }}`
-                {{- end }}
-                {{- if .Labels.instance }}
-                **Instance:** `{{ .Labels.instance }}`
-                {{- end }}
-                {{- if .Labels.container }}
-                **Container:** `{{ .Labels.container }}`
-                {{- end }}
-                {{- if .Labels.service }}
-                **Service:** `{{ .Labels.service }}`
-                {{- end }}
+                🏷 Labels:
+                   {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+                   {{ end }}
+                {{ end }}
 
                 ⏰ **Timeline:**
                 {{- if eq .Status "firing" }}
@@ -208,16 +151,6 @@ spec:
                 {{- else }}
                 ✅ **Resolved:** <t:{{ .EndsAt.Unix }}:F> (<t:{{ .EndsAt.Unix }}:R>)
                 🕐 **Duration:** {{ .StartsAt | since | humanizeDuration }}
-                {{- end }}
-
-                {{- if eq .Status "firing" }}
-                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                🚨 **Action Required** 🚨
-                {{- else }}
-                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                ✨ **All Clear** ✨
-                {{- end }}
-
                 {{- end }}
 
     vmalert:
