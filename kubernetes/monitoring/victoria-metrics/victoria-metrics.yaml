@@ -106,6 +106,9 @@ spec:
           - matchers:
             - severity=~"warning|critical"
             receiver: slack-notifications
+          - matchers:
+            - severity=~"warning|critical"
+            receiver: discord
         inhibit_rules:
           # - source_matchers:
           #     - severity = "critical"
@@ -149,6 +152,89 @@ spec:
                    {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
                    {{ end }}
                 {{ end }}
+        - name: discord
+          discordConfigs:
+            - apiURL:
+                name: victoria-metrics-k8s-stack-helm-values
+                key: DISCORD_WEBHOOK_URL
+              title: |-
+                {{- if eq .Status "firing" }}🚨 **ALERT FIRING** 🚨{{- else }}✅ **ALERT RESOLVED** ✅{{- end }}
+              message: |-
+                {{- range .Alerts }}
+                {{- if eq .Status "firing" }}
+                > 🔥 **{{ .Labels.alertname }}** is currently **FIRING**
+                {{- else }}
+                > ✅ **{{ .Labels.alertname }}** has been **RESOLVED**
+                {{- end }}
+
+                {{- if eq .Labels.severity "critical" }}
+                🚨 **Severity:** `CRITICAL` 🚨
+                {{- else if eq .Labels.severity "warning" }}
+                ⚠️ **Severity:** `WARNING` ⚠️
+                {{- else if eq .Labels.severity "info" }}
+                ℹ️ **Severity:** `INFO` ℹ️
+                {{- else }}
+                📊 **Severity:** `{{ .Labels.severity }}`
+                {{- end }}
+
+                {{- if ne .Annotations.description "" }}
+                📝 **Description:**
+                ```
+                {{ .Annotations.description }}
+                ```
+                {{- else if ne .Annotations.summary "" }}
+                📋 **Summary:**
+                ```
+                {{ .Annotations.summary }}
+                ```
+                {{- else if ne .Annotations.message "" }}
+                💬 **Message:**
+                ```
+                {{ .Annotations.message }}
+                ```
+                {{- else }}
+                🔔 Alert has been triggered
+                {{- end }}
+
+                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                **Alert Details:**
+                {{- if .Labels.namespace }}
+                **Namespace:** `{{ .Labels.namespace }}`
+                {{- end }}
+                {{- if .Labels.pod }}
+                **Pod:** `{{ .Labels.pod }}`
+                {{- end }}
+                {{- if .Labels.job }}
+                **Job:** `{{ .Labels.job }}`
+                {{- end }}
+                {{- if .Labels.instance }}
+                **Instance:** `{{ .Labels.instance }}`
+                {{- end }}
+                {{- if .Labels.container }}
+                **Container:** `{{ .Labels.container }}`
+                {{- end }}
+                {{- if .Labels.service }}
+                **Service:** `{{ .Labels.service }}`
+                {{- end }}
+
+                ⏰ **Timeline:**
+                {{- if eq .Status "firing" }}
+                🔥 **Started:** <t:{{ .StartsAt.Unix }}:F> (<t:{{ .StartsAt.Unix }}:R>)
+                {{- else }}
+                ✅ **Resolved:** <t:{{ .EndsAt.Unix }}:F> (<t:{{ .EndsAt.Unix }}:R>)
+                🕐 **Duration:** {{ .StartsAt | since | humanizeDuration }}
+                {{- end }}
+
+                {{- if eq .Status "firing" }}
+                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                🚨 **Action Required** 🚨
+                {{- else }}
+                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                ✨ **All Clear** ✨
+                {{- end }}
+
+                {{- end }}
 
     vmalert:
       enabled: true
