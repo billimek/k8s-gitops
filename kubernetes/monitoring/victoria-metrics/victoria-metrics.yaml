@@ -145,14 +145,6 @@ spec:
                    {{ end }}
                 {{ end }}
 
-                ⏰ **Timeline:**
-                {{- if eq .Status "firing" }}
-                🔥 **Started:** <t:{{ .StartsAt.Unix }}:F> (<t:{{ .StartsAt.Unix }}:R>)
-                {{- else }}
-                ✅ **Resolved:** <t:{{ .EndsAt.Unix }}:F> (<t:{{ .EndsAt.Unix }}:R>)
-                🕐 **Duration:** {{ .StartsAt | since | humanizeDuration }}
-                {{- end }}
-
     vmalert:
       enabled: true
       spec:
