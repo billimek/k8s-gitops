@@ -102,10 +102,7 @@ spec:
         server: nas.home
         path: /mnt/tank/media
         globalMounts:
-          - path: /media/downloads/qbittorrent
-            subPath: downloads/qbittorrent
-          - path: /media/books
-            subPath: books
+          - path: /media
       tmp:
         type: emptyDir
       incomplete:
