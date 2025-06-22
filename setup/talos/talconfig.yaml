@@ -54,6 +54,9 @@ nodes:
     ipAddress: 10.0.7.52
     installDiskSelector:
       model: Samsung SSD 970
+    extraManifests:
+      - ./manifests/i40e.yaml
+      - ./manifests/e1000e.yaml
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 00:02:c9:57:5c:a8
@@ -127,11 +130,13 @@ nodes:
     controlPlane: false
     ipAddress: 10.0.7.59
     installDisk: /dev/nvme0n1
+    extraManifests:
+      - ./manifests/i40e.yaml
+      - ./manifests/e1000e.yaml
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 98:fa:9b:04:47:b9 # formerly k3s-a
         dhcp: true
-
 
 # Global patches
 patches:
