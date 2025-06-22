@@ -28,13 +28,9 @@ spec:
           bdev_async_discard_threads: "1" # quote
           osd_class_update_on_start: "false" # quote
           device_failure_prediction_mode: local # requires mgr module
+      # TODO: Enable the following options whenever deploying to a new cluster
       # cleanupPolicy:
-      #   confirmation: "yes-really-destroy-data"
-      #   sanitizeDisks:
-      #     method: quick
-      #     dataSource: zero
-      #     iteration: 1
-      #   allowUninstallWithVolumes: false
+      #   wipeDevicesFromOtherClusters: true
       crashCollector:
         disable: false
         daysToRetain: 30
