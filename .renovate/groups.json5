@@ -13,7 +13,7 @@
     },
     {
       "description": "System Upgrade Controller",
-      "matchDatasources": ["github-tags", "docker"],
+      "matchDatasources": ["docker", "github-releases", "helm", "git-tags"],
       "matchPackagePatterns": ["rancher/system-upgrade-controller"],
       "groupName": "system-upgrade-controller-suite",
       "additionalBranchPrefix": "",
