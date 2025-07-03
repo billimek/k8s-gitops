@@ -24,7 +24,7 @@ spec:
     - {key: node-role.kubernetes.io/control-plane, effect: NoSchedule, operator: Exists}
   upgrade:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-    image: ghcr.io/siderolabs/talosctl:v1.10.4
+    image: ghcr.io/siderolabs/talosctl:v1.10.5
     args:
       - --nodes=$(SYSTEM_UPGRADE_NODE_NAME)
       - upgrade-k8s
