@@ -119,6 +119,15 @@
       },
     },
     {
+      description: "Silence Operator Group",
+      groupName: "Silence Operator",
+      matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
+      matchPackagePatterns: ["silence-operator", "giantswarm/silence-operator"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Talos Group",
       groupName: "Talos",
       matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
