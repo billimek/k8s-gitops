@@ -127,13 +127,14 @@ spec:
     ingress:
       app:
         enabled: true
-        # ensure that external DNS (cloudflare) has an entry for this directed to the router
-        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
         annotations:
           # Extended timeouts for Plex streaming
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+          # External DNS for public access
+          external-dns.alpha.kubernetes.io/external: "true"
+          external-dns.alpha.kubernetes.io/target: "eviljungle.com"
         hosts:
           - host: &host plex.eviljungle.com
             paths:
@@ -145,13 +146,17 @@ spec:
         tls:
           - hosts:
             - *host
-      tailscale:
+      internal:
         enabled: true
-        className: nginx-tailscale
+        className: nginx
+        annotations:
+          # Internal DNS for ISP outage resilience
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.150"
         hosts:
           - host: *host
             paths:
-              - path: /
+              - path: /internal-dns-only
                 pathType: Prefix
                 service:
                   identifier: app

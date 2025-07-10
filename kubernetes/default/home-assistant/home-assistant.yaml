@@ -158,9 +158,10 @@ spec:
 
     ingress:
       main:
-        # ensure that external DNS (cloudflare) has an entry for this directed to the router
-        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: "nginx"
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.150"
         hosts:
           - host: &host "hass.eviljungle.com"
             paths:
@@ -172,12 +173,16 @@ spec:
         tls:
           - hosts:
               - *host
-      tailscale:
-        className: "nginx-tailscale"
+      external:
+        className: "nginx"
+        annotations:
+          # External DNS for public access via Cloudflare  
+          external-dns.alpha.kubernetes.io/external: "true"
+          external-dns.alpha.kubernetes.io/target: "eviljungle.com"
         hosts:
           - host: &host "hass.eviljungle.com"
             paths:
-              - path: /
+              - path: /external-dns-only
                 pathType: Prefix
                 service:
                   identifier: main
