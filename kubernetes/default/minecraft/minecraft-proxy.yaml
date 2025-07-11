@@ -41,14 +41,7 @@ spec:
         memory: 750Mi
     extraEnv:
       SPIGET_PLUGINS: "78915"
-    minecraftProxy:
-      type: WATERFALL
-      plugins:
-        - https://github.com/Army-py/SlashServer/releases/download/tested/SlashServer-4.0.jar
-      serviceType: LoadBalancer
-      loadBalancerIP: 10.0.6.106
-      externalTrafficPolicy: Local
-    
+
     # Service annotations for external-dns - internal only
     serviceAnnotations:
       # Internal DNS: mc.eviljungle.com -> 10.0.6.106 (LoadBalancer IP)
@@ -56,82 +49,89 @@ spec:
       external-dns.alpha.kubernetes.io/hostname: mc.eviljungle.com
       # External eviljungle.com will be manually configured in Cloudflare
 
-    # This can be set to the contents of your config file (only works with yaml currently)
-    config: |
-      player_limit: -1
-      ip_forward: true
-      permissions:
-        default:
-        - bungeecord.command.server
-        - bungeecord.command.list
-        - alert.trigger
-        - slashserver.lobby
-        - slashserver.survival
-        - slashserver.survival2
-        admin:
-        - bungeecord.command.alert
-        - bungeecord.command.end
-        - bungeecord.command.ip
-        - bungeecord.command.reload
-        - alert.receive
-        - alert.receive.firstjoin
-        - alert.command.toggle
-        - alert.command.reload
-        family:
-        - bungeecord.server.survival
-      timeout: 30000
-      log_pings: true
-      log_commands: false
-      online_mode: true
-      servers:
-        lobby:
-          motd: '&1eviljungle lobby'
-          address: minecraft-lobby:25565
-          restricted: false
-        creative:
-          motd: 'creative server'
-          address: minecraft-creative:25565
-          restricted: false
-        survival:
-          motd: 'Survival SMP'
-          address: minecraft-survival:25565
-          restricted: false
-        survival2:
-          motd: 'Public Survival EZ-mode SMP'
-          address: minecraft-survival2:25565
-          restricted: false
-      listeners:
-      - query_port: 25577
-        motd: '&3eviljungle &6&Llobby'
-        priorities:
-        - lobby
-        bind_local_address: true
-        tab_list: GLOBAL_PING
-        query_enabled: true
-        host: 0.0.0.0:25577
-      ping_passthrough: true
-      groups:
-        billimek:
-        - admin
-        - family
-        AnsleyElla:
-        - family
-        BrinleyHarper:
-        - family
-    #    forced_hosts:
-    #      pvp.md-5.net: pvp
-    #    max_players: 1
-    #    tab_size: 60
-    #    force_default_server: false
-    #    proxy_protocol: false
-    #  disabled_commands:
-    #  - disabledcommandhere
-    #  network_compression_threshold: 256
-    #  groups:
-    #    md_5:
-    #    - admin
-    #  connection_throttle: 4000
-    #  connection_throttle_limit: 3
-    #  stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
-    #  forge_support: false
-    #  inject_commands: false
+    minecraftProxy:
+      type: WATERFALL
+      plugins:
+        - https://github.com/Army-py/SlashServer/releases/download/tested/SlashServer-4.0.jar
+      serviceType: LoadBalancer
+      loadBalancerIP: 10.0.6.106
+      externalTrafficPolicy: Local
+      # This can be set to the contents of your config file (only works with yaml currently)
+      config: |
+        player_limit: -1
+        ip_forward: true
+        permissions:
+          default:
+          - bungeecord.command.server
+          - bungeecord.command.list
+          - alert.trigger
+          - slashserver.lobby
+          - slashserver.survival
+          - slashserver.survival2
+          admin:
+          - bungeecord.command.alert
+          - bungeecord.command.end
+          - bungeecord.command.ip
+          - bungeecord.command.reload
+          - alert.receive
+          - alert.receive.firstjoin
+          - alert.command.toggle
+          - alert.command.reload
+          family:
+          - bungeecord.server.survival
+        timeout: 30000
+        log_pings: true
+        log_commands: false
+        online_mode: true
+        servers:
+          lobby:
+            motd: '&1eviljungle lobby'
+            address: minecraft-lobby:25565
+            restricted: false
+          creative:
+            motd: 'creative server'
+            address: minecraft-creative:25565
+            restricted: false
+          survival:
+            motd: 'Survival SMP'
+            address: minecraft-survival:25565
+            restricted: false
+          survival2:
+            motd: 'Public Survival EZ-mode SMP'
+            address: minecraft-survival2:25565
+            restricted: false
+        listeners:
+        - query_port: 25577
+          motd: '&3eviljungle &6&Llobby'
+          priorities:
+          - lobby
+          bind_local_address: true
+          tab_list: GLOBAL_PING
+          query_enabled: true
+          host: 0.0.0.0:25577
+        ping_passthrough: true
+        groups:
+          billimek:
+          - admin
+          - family
+          AnsleyElla:
+          - family
+          BrinleyHarper:
+          - family
+      #    forced_hosts:
+      #      pvp.md-5.net: pvp
+      #    max_players: 1
+      #    tab_size: 60
+      #    force_default_server: false
+      #    proxy_protocol: false
+      #  disabled_commands:
+      #  - disabledcommandhere
+      #  network_compression_threshold: 256
+      #  groups:
+      #    md_5:
+      #    - admin
+      #  connection_throttle: 4000
+      #  connection_throttle_limit: 3
+      #  stats: f2876aa6-74d2-468c-90ee-1377111f1c9f
+      #  forge_support: false
+      #  inject_commands: false
