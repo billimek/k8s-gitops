@@ -3,6 +3,7 @@ apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
   name: node-memory-high-utilization
+  namespace: monitoring
 spec:
   matchers:
     - name: alertname
@@ -16,6 +17,7 @@ apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
   name: nas-out-of-memory
+  namespace: monitoring
 spec:
   matchers:
     - name: alertname
@@ -29,6 +31,7 @@ apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
   name: nas-host-swap-is-filling-up
+  namespace: monitoring
 spec:
   matchers:
     - name: alertname
@@ -42,6 +45,7 @@ apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
   name: host-node-overtemperature-alarm
+  namespace: monitoring
 spec:
   matchers:
     - name: alertname
@@ -55,6 +59,7 @@ apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
   name: host-physical-component-too-hot
+  namespace: monitoring
 spec:
   matchers:
     - name: alertname
@@ -68,6 +73,7 @@ apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
   name: ceph-pg-imbalance
+  namespace: monitoring
 spec:
   matchers:
     - name: alertname
