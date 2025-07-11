@@ -43,7 +43,7 @@ spec:
         ssl: false
         prometheusEndpoint: http://vmsingle-stack.monitoring.svc.cluster.local:8429
       mgr:
-        count: 1
+        count: 2
         modules:
           # - name: diskprediction_local
           #   enabled: true
