@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns-opnsense
+  namespace: kube-system
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: external-dns
+      version: 1.17.0
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    # Use webhook provider for OpnSense
+    provider:
+      name: webhook
+      webhook:
+        image:
+          repository: ghcr.io/crutonjohn/external-dns-opnsense-webhook
+          tag: latest
+        env:
+          - name: OPNSENSE_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: opnsense-credentials
+                key: OPNSENSE_API_SECRET
+          - name: OPNSENSE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: opnsense-credentials
+                key: OPNSENSE_API_KEY
+          - name: OPNSENSE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: opnsense-credentials
+                key: OPNSENSE_HOST
+          - name: OPNSENSE_SKIP_TLS_VERIFY
+            value: "true"
+          - name: LOG_LEVEL
+            value: "debug"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            memory: 20Mi
+            cpu: 10m
+          limits:
+            memory: 100Mi
+    
+    # Sources to watch for DNS records
+    sources:
+      - ingress
+      - service
+      - crd
+    
+    # Only manage eviljungle.com domain
+    domainFilters:
+      - eviljungle.com
+    
+    # Unique identifier for this external-dns instance
+    txtOwnerId: k8s-internal
+    
+    # Extra arguments for external-dns
+    extraArgs:
+      - --annotation-filter=external-dns.alpha.kubernetes.io/internal in (true)
+      - --ignore-ingress-tls-spec
+    
+    # Policy and registry settings
+    policy: sync
+    registry: noop
+
+    triggerLoopOnEvent: true
+
+    
+    # Resource limits
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
+    
+    # Update interval
+    interval: 5m
+    
+    # Logging
+    logLevel: info
+    
+    # Metrics
+    metrics:
+      enabled: true
+      port: 7979
+    
+    # Service monitor for Prometheus
+    serviceMonitor:
+      enabled: true

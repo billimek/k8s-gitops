@@ -41,6 +41,14 @@ spec:
         memory: 750Mi
     extraEnv:
       SPIGET_PLUGINS: "78915"
+
+    # Service annotations for external-dns - internal only
+    serviceAnnotations:
+      # Internal DNS: mc.eviljungle.com -> 10.0.6.106 (LoadBalancer IP)
+      external-dns.alpha.kubernetes.io/internal: "true"
+      external-dns.alpha.kubernetes.io/hostname: mc.eviljungle.com
+      # External eviljungle.com will be manually configured in Cloudflare
+
     minecraftProxy:
       type: WATERFALL
       plugins:
@@ -48,7 +56,6 @@ spec:
       serviceType: LoadBalancer
       loadBalancerIP: 10.0.6.106
       externalTrafficPolicy: Local
-      # externalIPs:
       # This can be set to the contents of your config file (only works with yaml currently)
       config: |
         player_limit: -1

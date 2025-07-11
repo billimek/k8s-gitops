@@ -8,7 +8,7 @@ Popular CNI system that also enables BGP-based cluster loadbalancer: https://git
 
 # coredns
 
-[coredns](https://github.com/coredns/coredns) serves both cluster DNS as well as an internal DNS zone for support split-brain DNS for the home network (so that the same host will resolve properly for clients on the internal network as well as the external network).
+[coredns](https://github.com/coredns/coredns) serves cluster DNS
 
 * [coredns/coredns.yaml](coredns/coredns.yaml)
 
@@ -23,6 +23,12 @@ Popular CNI system that also enables BGP-based cluster loadbalancer: https://git
 Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to automatically evict pods that no longer satisfy their NodeAffinity constraints.  This is used to work in concert with `node-feature-discovery` such that when USB devices are moved from one node to a different node, the pods requiring the USB devices will be properly forced to reschedule to the new location
 
 * [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
+
+# external-dns
+
+[external-dns](https://github.com/kubernetes-sigs/external-dns) provides automated DNS management for Kubernetes ingresses and services with dual-provider setup for split-horizon DNS. Manages internal DNS records via OpnSense and external DNS records via Cloudflare for resilient service access.
+
+* [external-dns/](external-dns/)
 
 # external-secrets and 1Password connect
 

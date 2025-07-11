@@ -75,11 +75,12 @@ spec:
 
     ingress:
       app:
-        # ensure that external DNS (cloudflare) has an entry for this directed to the router
-        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
         className: nginx
         annotations:
           nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504"  # Using a smaller set than the default to fix javascript issues with overseer
+          # Internal DNS for ISP outage resilience
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.150"
         hosts:
           - host: &host request.eviljungle.com
             paths:
@@ -90,12 +91,16 @@ spec:
         tls:
           - hosts:
             - *host
-      tailscale:
-        className: nginx-tailscale
+      external:
+        className: nginx
+        annotations:
+          # External DNS for public access via Cloudflare
+          external-dns.alpha.kubernetes.io/external: "true"
+          external-dns.alpha.kubernetes.io/target: "eviljungle.com"
         hosts:
           - host: *host
             paths:
-              - path: /
+              - path: /external-dns-only
                 service:
                   identifier: app
                   port: http

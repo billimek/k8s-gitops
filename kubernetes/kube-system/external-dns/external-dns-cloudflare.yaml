@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns-cloudflare
+  namespace: kube-system
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: external-dns
+      version: 1.16.0
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    # Use Cloudflare provider
+    provider:
+      name: cloudflare
+    
+    policy: sync
+    triggerLoopOnEvent: true
+    
+    # Sources to watch for DNS records
+    sources:
+      - ingress
+      - service
+    
+    # Only manage eviljungle.com domain
+    domainFilters:
+      - eviljungle.com
+    
+    # Unique identifier for this external-dns instance
+    txtOwnerId: k8s-external
+    
+    # Extra arguments for external-dns
+    extraArgs:
+      - --annotation-filter=external-dns.alpha.kubernetes.io/external=true
+    
+    # Cloudflare configuration (using Global API Key)
+    env:
+      - name: CF_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-credentials
+            key: api-key
+      - name: CF_API_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-credentials
+            key: email
+    
+    # Resource limits
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
+    
+    # Update interval
+    interval: 5m
+    
+    # Logging
+    logLevel: info
+    
+    # Metrics
+    metrics:
+      enabled: true
+      port: 7979
+    
+    # Service monitor for Prometheus
+    serviceMonitor:
+      enabled: true
