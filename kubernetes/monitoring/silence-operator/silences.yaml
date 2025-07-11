@@ -8,10 +8,8 @@ spec:
   matchers:
     - name: alertname
       value: NodeMemoryHighUtilization
-      isRegex: false
     - name: instance
       value: nas.home:9100
-      isRegex: false
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -22,10 +20,8 @@ spec:
   matchers:
     - name: alertname
       value: HostOutOfMemory
-      isRegex: false
     - name: instance
       value: nas.home:9100
-      isRegex: false
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -36,10 +32,8 @@ spec:
   matchers:
     - name: alertname
       value: HostSwapIsFillingUp
-      isRegex: false
     - name: instance
       value: nas.home:9100
-      isRegex: false
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -50,10 +44,8 @@ spec:
   matchers:
     - name: alertname
       value: HostNodeOvertemperatureAlarm
-      isRegex: false
     - name: instance
       value: 10.0.7.55:9100
-      isRegex: false
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -64,10 +56,9 @@ spec:
   matchers:
     - name: alertname
       value: HostPhysicalComponentTooHot
-      isRegex: false
     - name: instance
       value: 10\.0\.7\.(55|59):9100
-      isRegex: true
+      matchType: "=~"
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -78,7 +69,6 @@ spec:
   matchers:
     - name: alertname
       value: CephPGImbalance
-      isRegex: false
     - name: ceph_daemon
       value: osd.4
-      isRegex: false
+      matchType: "=~"
