@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/observability.giantswarm.io/silence_v1alpha2.json
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -12,7 +11,6 @@ spec:
     - name: instance
       value: nas.home:9100
       isRegex: false
-# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/observability.giantswarm.io/silence_v1alpha2.json
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -26,7 +24,6 @@ spec:
     - name: instance
       value: nas.home:9100
       isRegex: false
-# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/observability.giantswarm.io/silence_v1alpha2.json
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -40,7 +37,6 @@ spec:
     - name: instance
       value: nas.home:9100
       isRegex: false
-# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/observability.giantswarm.io/silence_v1alpha2.json
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -54,7 +50,6 @@ spec:
     - name: instance
       value: 10.0.7.55:9100
       isRegex: false
-# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/observability.giantswarm.io/silence_v1alpha2.json
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
@@ -68,7 +63,6 @@ spec:
     - name: instance
       value: 10\.0\.7\.(55|59):9100
       isRegex: true
-# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/observability.giantswarm.io/silence_v1alpha2.json
 ---
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
