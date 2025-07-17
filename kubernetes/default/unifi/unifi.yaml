@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: jacobalberty/unifi
-              tag: v9.2.87@sha256:150ab9668d3101d0c3762db920a7925082faafa0bead810fafd0713ac1a7b7c6
+              tag: v9.3.43@sha256:d08af7bf1b8d2fd343770236333bf37fc26d9b51bb70dd79cc07e70857c73da1
               pullPolicy: IfNotPresent
             env:
               TZ: "America/New_York"
