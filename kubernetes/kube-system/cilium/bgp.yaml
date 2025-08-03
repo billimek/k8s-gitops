@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumloadbalancerippool_v2.json
-apiVersion: cilium.io/v2alpha1
+apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: pool
@@ -10,24 +10,61 @@ spec:
     - start: 10.0.6.2
       stop: 10.0.6.250
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumloadbalancerippool_v2.json
-apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPPeeringPolicy
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgpadvertisement_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
 metadata:
-  name: bgp-policy
+  name: bgp-advertisement
+  labels:
+    advertise: bgp
 spec:
-  virtualRouters:
-    - localASN: 64513
-      exportPodCIDR: false
-      serviceSelector:
+  advertisements:
+    - advertisementType: Service
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
         matchExpressions:
-          - key: thisFakeSelector
+          - key: fakeSelector
             operator: NotIn
             values:
               - will-match-and-announce-all-services
-      neighbors:
-        - peerAddress: 10.0.7.1/32
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgppeerconfig_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPPeerConfig
+metadata:
+  name: bgp-peer-config
+spec:
+  timers:
+    holdTimeSeconds: 9
+    keepAliveTimeSeconds: 3
+    connectRetryTimeSeconds: 5
+  ebgpMultihop: 10
+  gracefulRestart:
+    enabled: true
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: bgp
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgpclusterconfig_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-cluster-config
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
+  bgpInstances:
+    - name: cilium
+      localASN: 64513
+      peers:
+        - name: opnsense
           peerASN: 64512
-          eBGPMultihopTTL: 10
-          gracefulRestart:
-            enabled: true
+          peerAddress: 10.0.7.1
+          peerConfigRef:
+            name: bgp-peer-config
