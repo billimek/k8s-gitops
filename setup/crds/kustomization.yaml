@@ -7,7 +7,7 @@ resources:
   # │ external-secrets     │
   # └──────────────────────┘
   # renovate: datasource=github-releases depName=external-secrets/external-secrets
-  # https://github.com/external-secrets/external-secrets/raw/v0.19.1/deploy/crds/bundle.yaml
+  # https://github.com/external-secrets/external-secrets/raw/v0.19.2/deploy/crds/bundle.yaml
   - ./vendor/external-secrets_external-secrets/bundle.yaml
 
   # ┌──────────────────────┐
