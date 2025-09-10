@@ -141,6 +141,7 @@ patches:
   - "@./patches/global/machine-dns.yaml"     # host DNS settings
   - "@./patches/global/machine-files.yaml"   # spegel/NFS Mount
   - "@./patches/global/machine-install.yaml" # less security, more performance
+  - "@./patches/global/machine-kubelet.yaml" # kubelet tweaks
   - "@./patches/global/machine-network.yaml" # search Domain
   - "@./patches/global/machine-sysctls.yaml" # network tweaks
   - "@./patches/global/machine-udev.yaml"    # udev settings
