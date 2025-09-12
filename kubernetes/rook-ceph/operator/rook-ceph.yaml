@@ -25,7 +25,7 @@ spec:
       enableCephfsSnapshotter: false
       enableLiveness: true
       serviceMonitor:
-        enabled: true
+        enabled: false # broke after upgrading to v1.18
     enableDiscoveryDaemon: true
     monitoring:
       enabled: true
