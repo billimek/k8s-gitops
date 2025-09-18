@@ -22,12 +22,21 @@ tasks:
   crds:
     desc: Bootstrap CRDs required by cluster applications
     preconditions:
-      - which helmfile kubectl yq
+      - which helmfile kubectl yq curl
       - test -f "{{.TALOSCONFIG}}"
       - test -f {{.SETUP_DIR}}/bootstrap/crds-helmfile.yaml
       - talosctl config info
     cmds:
-      - helmfile --file {{.SETUP_DIR}}/bootstrap/crds-helmfile.yaml template --include-crds --no-hooks --quiet | yq ea --exit-status 'select(.kind == "CustomResourceDefinition")' - | kubectl apply --server-side --filename -
+      # Apply CRDs from helm charts
+      - helmfile --file {{.SETUP_DIR}}/bootstrap/crds-helmfile.yaml template --include-crds --quiet --args="--no-hooks" | yq ea --exit-status 'select(.kind == "CustomResourceDefinition")' - | kubectl apply --server-side --filename -
+      # Apply system-upgrade-controller CRDs directly from GitHub release
+      - curl -sSL https://github.com/rancher/system-upgrade-controller/releases/download/v0.16.3/crd.yaml | kubectl apply --server-side --filename -
+      # Apply external-snapshotter CRDs directly from GitHub release
+      - curl -sSL https://github.com/kubernetes-csi/external-snapshotter/raw/v8.3.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml | kubectl apply --server-side --filename -
+      - curl -sSL https://github.com/kubernetes-csi/external-snapshotter/raw/v8.3.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml | kubectl apply --server-side --filename -
+      - curl -sSL https://github.com/kubernetes-csi/external-snapshotter/raw/v8.3.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml | kubectl apply --server-side --filename -
+      # Apply gateway-api CRDs directly from GitHub release
+      - curl -sSL https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml | yq ea --exit-status 'select(.kind == "CustomResourceDefinition")' - | kubectl apply --server-side --filename -
 
   apps:
     desc: Bootstrap Apps
