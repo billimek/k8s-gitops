@@ -25,7 +25,7 @@ spec:
   timeout: 20m
   values:
     alertmanagerAddress: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
-    # crds:
-    #   install: false
+    crds:
+      install: true
     networkPolicy:
       enabled: false
