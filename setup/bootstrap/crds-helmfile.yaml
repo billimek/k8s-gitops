@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+# This helmfile is for extracting and installing Custom Resource Definitions (CRDs) from Helm charts.
+# It is not intended to be used with helmfile apply or helmfile sync.
+# Usage: helmfile --file crds-helmfile.yaml template --include-crds --no-hooks --quiet | yq ea --exit-status 'select(.kind == "CustomResourceDefinition")' -
+
+helmDefaults:
+  args:
+    - --include-crds
+    - --no-hooks
+  postRenderer: bash
+  postRendererArgs:
+    - -c
+    - yq ea -e 'select(.kind == "CustomResourceDefinition")'
+
+repositories:
+  - name: external-secrets
+    url: oci://ghcr.io/external-secrets/charts
+  - name: backube
+    url: https://backube.github.io/helm-charts/
+  - name: rook-ceph
+    url: https://charts.rook.io/release
+  - name: emqx-charts
+    url: https://repos.emqx.io/charts
+  - name: kubernetes-sigs-nfd-charts
+    url: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+  - name: giantswarm-charts
+    url: https://giantswarm.github.io/control-plane-catalog/
+
+releases:
+  - name: external-secrets
+    namespace: kube-system
+    chart: external-secrets/external-secrets
+    version: 0.19.2
+
+  - name: volsync
+    namespace: kube-system
+    chart: backube/volsync
+    version: 0.13.0
+
+  - name: rook-ceph
+    namespace: rook-ceph
+    chart: rook-ceph/rook-ceph
+    version: v1.18.2
+
+  - name: emqx-operator
+    namespace: default
+    chart: emqx-charts/emqx-operator
+    version: 2.2.29
+
+  - name: node-feature-discovery
+    namespace: kube-system
+    chart: kubernetes-sigs-nfd-charts/node-feature-discovery
+    version: 0.17.3
+
+  - name: silence-operator
+    namespace: monitoring
+    chart: giantswarm-charts/silence-operator
+    version: 0.19.0
