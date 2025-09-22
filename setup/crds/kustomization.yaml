@@ -37,7 +37,7 @@ resources:
   # │ node-feature-discovery       │
   # └──────────────────────────────┘
   # renovate: datasource=github-releases depName=kubernetes-sigs/node-feature-discovery
-  # https://github.com/kubernetes-sigs/node-feature-discovery/raw/v0.17.3/deployment/helm/node-feature-discovery/crds/nfd-api-crds.yaml
+  # https://github.com/kubernetes-sigs/node-feature-discovery/raw/v0.17.4/deployment/helm/node-feature-discovery/crds/nfd-api-crds.yaml
   - ./vendor/kubernetes-sigs_node-feature-discovery/nfd-api-crds.yaml
 
   # ┌──────────────────┐
