@@ -64,9 +64,9 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                memory: 100Mi
-              limits:
                 memory: 500Mi
+              limits:
+                memory: 1500Mi
     service:
       app:
         primary: true
@@ -80,7 +80,7 @@ spec:
         enabled: true
         className: nginx
         annotations:
-          nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504"  # Using a smaller set than the default to fix javascript issues with overseer
+          nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504" # Using a smaller set than the default to fix javascript issues with overseer
           # Internal DNS for ISP outage resilience
           external-dns.alpha.kubernetes.io/internal: "true"
           external-dns.alpha.kubernetes.io/target: "10.0.6.150"
@@ -94,7 +94,7 @@ spec:
                   port: http
         tls:
           - hosts:
-            - *host
+              - *host
       external:
         enabled: true
         className: nginx
