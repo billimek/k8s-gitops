@@ -17,7 +17,7 @@ data:
       topic_prefix: frigate
       user: mqtt
       password: '{FRIGATE_MQTT_PASSWORD}'
-      tls_insecure: true
+      # tls_insecure: true
 
     database:
       path: /config/frigate.db
