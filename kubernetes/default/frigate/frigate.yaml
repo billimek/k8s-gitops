@@ -112,7 +112,7 @@ spec:
         globalMounts:
           - path: /config/config.yml
             subPath: config.yml
-            readOnly: false
+            readOnly: true
       media:
         type: custom
         volumeSpec:

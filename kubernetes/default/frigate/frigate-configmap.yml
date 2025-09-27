@@ -144,8 +144,8 @@ data:
               max_area: 100000
               threshold: 0.75
               min_score: 0.60
-        live:
-          stream_name: porch_record
+        # live:
+        #   stream_name: porch_record
 
       front:
         ffmpeg:
@@ -162,8 +162,8 @@ data:
           height: 480
           width: 704
           fps: 5
-        live:
-          stream_name: front_record
+        # live:
+        #   stream_name: front_record
 
       driveway:
         ffmpeg:
@@ -180,8 +180,8 @@ data:
           height: 480
           width: 704
           fps: 5
-        live:
-          stream_name: driveway_record
+        # live:
+        #   stream_name: driveway_record
 
       pool:
         ffmpeg:
@@ -204,8 +204,8 @@ data:
               min_area: 1000
               max_area: 100000
               threshold: 0.75
-        live:
-          stream_name: pool_record
+        # live:
+        #   stream_name: pool_record
 
       basement:
         ffmpeg:
@@ -229,8 +229,8 @@ data:
           filters:
             person:
               mask: 0,352,151,352,153,242,0,243
-        live:
-          stream_name: basement_record
+        # live:
+        #   stream_name: basement_record
 
       doorbell:
         ffmpeg:
@@ -254,5 +254,5 @@ data:
               max_area: 100000
               threshold: 0.75
               min_score: 0.60
-        live:
-          stream_name: doorbell_record
+        # live:
+        #   stream_name: doorbell_record
