@@ -32,9 +32,10 @@ data:
     #   mode: continuous
 
     ffmpeg:
-      hwaccel_args: preset-intel-qsv-h264
+      # hwaccel_args: preset-vaapi
       output_args:
         record: preset-record-generic-audio-aac
+      apple_compatibility: true
 
     objects:
       track:
