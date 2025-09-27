@@ -9,6 +9,9 @@ data:
     auth:
       enabled: false
 
+    detect:
+      enabled: true
+
     mqtt:
       host: emqx-listeners.default.svc
       topic_prefix: frigate
