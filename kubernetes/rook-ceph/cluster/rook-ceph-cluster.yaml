@@ -68,7 +68,7 @@ spec:
             cpu: 35m
             memory: 512Mi
           limits:
-            memory: 512Mi
+            memory: 768Mi
         osd:
           requests:
             cpu: 100m
