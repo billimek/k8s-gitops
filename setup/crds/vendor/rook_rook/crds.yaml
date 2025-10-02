@@ -448,6 +448,7 @@ spec:
                   type: string
                 enableCrushUpdates:
                   description: Allow rook operator to change the pool CRUSH tunables once the pool is created
+                  nullable: true
                   type: boolean
                 enableRBDStats:
                   description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
@@ -897,7 +898,14 @@ spec:
     singular: cephbucketnotification
   scope: Namespaced
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .status.phase
+          name: Phase
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
       schema:
         openAPIV3Schema:
           description: CephBucketNotification represents a Bucket Notifications
@@ -7670,6 +7678,7 @@ spec:
                         type: string
                       enableCrushUpdates:
                         description: Allow rook operator to change the pool CRUSH tunables once the pool is created
+                        nullable: true
                         type: boolean
                       enableRBDStats:
                         description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
@@ -7864,6 +7873,7 @@ spec:
                       type: string
                     enableCrushUpdates:
                       description: Allow rook operator to change the pool CRUSH tunables once the pool is created
+                      nullable: true
                       type: boolean
                     enableRBDStats:
                       description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
@@ -9382,7 +9392,14 @@ spec:
     singular: cephnfs
   scope: Namespaced
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .status.phase
+          name: Phase
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
       schema:
         openAPIV3Schema:
           description: CephNFS represents a Ceph NFS
@@ -11306,8 +11323,33 @@ spec:
                 - server
               type: object
             status:
-              description: Status represents the status of an object
+              description: NFSStatus represents the status of Ceph NFS
               properties:
+                cephx:
+                  properties:
+                    daemon:
+                      description: Daemon shows the CephX key status for local Ceph daemons associated with this resources.
+                      properties:
+                        keyCephVersion:
+                          description: |-
+                            KeyCephVersion reports the Ceph version that created the current generation's keys. This is
+                            same string format as reported by `CephCluster.status.version.version` to allow them to be
+                            compared. E.g., `20.2.0-0`.
+                            For all newly-created resources, this field set to the version of Ceph that created the key.
+                            The special value "Uninitialized" indicates that keys are being created for the first time.
+                            An empty string indicates that the version is unknown, as expected in brownfield deployments.
+                          type: string
+                        keyGeneration:
+                          description: |-
+                            KeyGeneration represents the CephX key generation for the last successful reconcile.
+                            For all newly-created resources, this field is set to `1`.
+                            When keys are rotated due to any rotation policy, the generation is incremented or updated to
+                            the configured policy generation.
+                            Generation `0` indicates that keys existed prior to the implementation of key tracking.
+                          format: int32
+                          type: integer
+                      type: object
+                  type: object
                 conditions:
                   items:
                     description: Condition represents a status condition on any Rook-Ceph Custom Resource.
@@ -11364,7 +11406,14 @@ spec:
     singular: cephobjectrealm
   scope: Namespaced
   versions:
-    - name: v1
+    - additionalPrinterColumns:
+        - jsonPath: .status.phase
+          name: Phase
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
       schema:
         openAPIV3Schema:
           description: CephObjectRealm represents a Ceph Object Store Gateway Realm
@@ -11573,6 +11622,7 @@ spec:
                       type: string
                     enableCrushUpdates:
                       description: Allow rook operator to change the pool CRUSH tunables once the pool is created
+                      nullable: true
                       type: boolean
                     enableRBDStats:
                       description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
@@ -13186,6 +13236,7 @@ spec:
                       type: string
                     enableCrushUpdates:
                       description: Allow rook operator to change the pool CRUSH tunables once the pool is created
+                      nullable: true
                       type: boolean
                     enableRBDStats:
                       description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
@@ -13828,7 +13879,7 @@ spec:
                   description: The namespace where the parent CephCluster and CephObjectStore are found
                   type: string
                 displayName:
-                  description: The display name for the ceph users
+                  description: The display name for the ceph user.
                   type: string
                 keys:
                   description: |-
@@ -14009,7 +14060,7 @@ spec:
               description: ObjectZoneGroupSpec represent the spec of an ObjectZoneGroup
               properties:
                 realm:
-                  description: The display name for the ceph users
+                  description: The name of the realm the zone group is a member of.
                   type: string
               required:
                 - realm
@@ -14151,6 +14202,7 @@ spec:
                       type: string
                     enableCrushUpdates:
                       description: Allow rook operator to change the pool CRUSH tunables once the pool is created
+                      nullable: true
                       type: boolean
                     enableRBDStats:
                       description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
@@ -14340,6 +14392,7 @@ spec:
                       type: string
                     enableCrushUpdates:
                       description: Allow rook operator to change the pool CRUSH tunables once the pool is created
+                      nullable: true
                       type: boolean
                     enableRBDStats:
                       description: EnableRBDStats is used to enable gathering of statistics for all RBD images in the pool
@@ -14592,7 +14645,7 @@ spec:
                       type: boolean
                   type: object
                 zoneGroup:
-                  description: The display name for the ceph users
+                  description: The name of the zone group the zone is a member of.
                   type: string
               required:
                 - zoneGroup
