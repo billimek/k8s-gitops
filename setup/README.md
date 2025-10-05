@@ -10,7 +10,7 @@ Contains Helmfile configurations for initial cluster bootstrapping, including CN
 
 ### `/setup/crds`
 
-Custom Resource Definitions required before Flux can deploy applications. These are managed by a FluxCD Kustomization that references upstream CRD sources directly with Renovate-managed version tracking. This approach provides both automated upgrades and avoids vendoring large CRD files while ensuring CRDs are available before applications that depend on them.
+Custom Resource Definitions required before Flux can deploy applications. These are vendored locally and managed by a FluxCD Kustomization. Renovate tracks upstream versions, and a GitHub workflow automatically downloads updated CRDs when versions change. This ensures CRDs are available before applications that depend on them while providing a proper upgrade path through GitOps.
 
 ### `/setup/flux`
 
