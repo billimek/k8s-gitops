@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: csi-driver-nfs
-      version: 4.11.0
+      version: 4.12.0
       sourceRef:
         kind: HelmRepository
         name: csi-driver-nfs
