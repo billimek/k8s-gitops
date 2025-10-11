@@ -99,7 +99,7 @@ jobs:
           python-version: "3.x"
 
       - name: Renovate
-        uses: renovatebot/github-action@53bdcc4ec92f28e5023ac92356ea8bb45f8b807d # v43.0.15
+        uses: renovatebot/github-action@e2421a9a80287bba9997b41a15ea1e5585d96925 # v43.0.16
         env:
           LOG_LEVEL: ${{ inputs.logLevel || 'debug' }}
           PYTHON_VERSION: '3.x'
