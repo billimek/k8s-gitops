@@ -51,10 +51,9 @@ spec:
 
     defaultRules:
       create: true
-      defaultRules:
-        groups:
-          k8sContainerMemorySwap:
-            create: false
+      groups:
+        k8sContainerMemorySwap:
+          create: false
 
     vmsingle:
       enabled: true
