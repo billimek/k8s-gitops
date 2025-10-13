@@ -37,7 +37,7 @@ jobs:
         run: python .github/scripts/update_crds_local.py
 
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6
+        uses: stefanzweifel/git-auto-commit-action@28e16e81777b558cc906c8750092100bbb34c5e3 # v7
         with:
           commit_message: "Update vendored CRDs based on kustomization.yaml changes"
           file_pattern: setup/crds/vendor/**/*.yaml setup/crds/kustomization.yaml
