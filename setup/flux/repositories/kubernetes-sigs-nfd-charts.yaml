@@ -6,6 +6,8 @@ metadata:
   name: kubernetes-sigs-nfd-charts
   namespace: flux-system
 spec:
+  type: "oci"
   interval: 30m
-  url: https://kubernetes-sigs.github.io/node-feature-discovery/charts
-  timeout: 5m
+  url: oci://registry.k8s.io/nfd/charts
+  secretRef:
+    name: ghcr-auth
