@@ -65,31 +65,31 @@ resources:
   # │ cnpg             │
   # └──────────────────┘
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_backups.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_backups.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_backups.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_clusterimagecatalogs.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_clusterimagecatalogs.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_clusterimagecatalogs.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_clusters.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_clusters.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_clusters.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_databases.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_databases.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_databases.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_imagecatalogs.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_imagecatalogs.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_imagecatalogs.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_poolers.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_poolers.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_poolers.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_publications.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_publications.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_publications.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_scheduledbackups.yaml
   # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.0/config/crd/bases/postgresql.cnpg.io_subscriptions.yaml
+  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_subscriptions.yaml
   - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_subscriptions.yaml
 
   # ┌──────────────────┐
