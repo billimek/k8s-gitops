@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2025.10.2
+      tag: 2025.10.5
     fullnameOverride: minecraft-creative
     strategyType: Recreate
     persistence:
