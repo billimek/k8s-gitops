@@ -142,9 +142,6 @@ spec:
         home-assistant:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/home_assistant.json
           datasource: home_assistant
-        loki-logs:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/loki_logs.json
-          datasource: Loki
         # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
           gnetId: 1860
@@ -327,7 +324,7 @@ spec:
             orgId: 1
           - name: Prometheus
             orgId: 1
-          - name: Loki
+          - name: VictoriaLogs
             orgId: 1
         datasources:
           - name: Prometheus
@@ -339,10 +336,6 @@ spec:
               timeInterval: "15s"
               queryTimeout: "60s"
               httpMethod: POST
-          - name: Loki
-            type: loki
-            access: proxy
-            url: http://loki-headless.monitoring.svc.cluster.local:3100
           - name: VictoriaLogs
             type: victoriametrics-logs-datasource
             access: proxy
