@@ -72,6 +72,7 @@ spec:
     - grafana-clock-panel
     - grafana-worldmap-panel
     - natel-discrete-panel
+    - victoriametrics-logs-datasource
     serviceMonitor:
       enabled: true
     # serviceAccount:
@@ -342,6 +343,10 @@ spec:
             type: loki
             access: proxy
             url: http://loki-headless.monitoring.svc.cluster.local:3100
+          - name: VictoriaLogs
+            type: victoriametrics-logs-datasource
+            access: proxy
+            url: http://victoria-logs-server.monitoring.svc.cluster.local:9428
           - name: Alertmanager
             type: alertmanager
             access: proxy
