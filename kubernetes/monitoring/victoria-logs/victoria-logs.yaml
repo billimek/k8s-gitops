@@ -40,6 +40,9 @@ spec:
         enabled: true
         hosts:
           - name: victoria-logs.eviljungle.com
+            path:
+              - /
+            port: http
         tls:
           - hosts:
               - victoria-logs.eviljungle.com
