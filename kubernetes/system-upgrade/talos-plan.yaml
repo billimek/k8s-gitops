@@ -7,7 +7,7 @@ metadata:
   namespace: system-upgrade
 spec:
   # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-  version: v1.11.3
+  version: v1.11.5
   concurrency: 1
   postCompleteDelay: 2m
   exclusive: true
