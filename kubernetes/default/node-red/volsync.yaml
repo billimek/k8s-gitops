@@ -17,11 +17,11 @@ spec:
       data:
         RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/node-red'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
-        AWS_ACCESS_KEY_ID: '{{ .MINIO_ACCESS_KEY }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .MINIO_SECRET_KEY }}'
+        AWS_ACCESS_KEY_ID: '{{ .VOLSYNC_ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .VOLSYNC_SECRET_KEY }}'
   dataFrom:
     - extract:
-        key: minio
+        key: garage
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
