@@ -43,6 +43,9 @@ spec:
       endpointURL: http://nas.home:3900
       serverName: postgres-v17
       s3Credentials:
+        region:
+          name: cloudnative-pg-secret
+          key: REGION
         accessKeyId:
           name: cloudnative-pg-secret
           key: aws-access-key-id
