@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: grafana
-      version: 10.1.4
+      version: 12.1.1
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
@@ -49,8 +49,8 @@ spec:
       GF_LOG_MODE: console
       GF_FEATURE_TOGGLES_ENABLE: publicDashboards
       GF_NEWS_NEWS_FEED_ENABLED: false
-      GF_PANELS_DISABLE_SANITIZE_HTML: true
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
+      # GF_PANELS_DISABLE_SANITIZE_HTML: true
+      # GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_SERVER_ROOT_URL: https://grafana.eviljungle.com
       GF_SECURITY_COOKIE_SAMESITE: grafana
@@ -64,14 +64,14 @@ spec:
       - hosts:
         - grafana.eviljungle.com
     plugins:
-    - pr0ps-trackmap-panel
-    - natel-plotly-panel
-    - vonage-status-panel
-    - grafana-piechart-panel
-    - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-worldmap-panel-ng
-    - grafana-clock-panel
-    - grafana-worldmap-panel
-    - natel-discrete-panel
+    # - pr0ps-trackmap-panel
+    # - natel-plotly-panel
+    # - vonage-status-panel
+    # - grafana-piechart-panel
+    # - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-worldmap-panel-ng
+    # - grafana-clock-panel
+    # - grafana-worldmap-panel
+    # - natel-discrete-panel
     - victoriametrics-logs-datasource
     serviceMonitor:
       enabled: true
@@ -381,7 +381,7 @@ spec:
             secureJsonData:
               password: "$TESLAMATE_DB_PASSWORD"
             jsonData:
-              postgresVersion: 1000
+              postgresVersion: 1500
               sslmode: disable
     grafana.ini:
       auth:
