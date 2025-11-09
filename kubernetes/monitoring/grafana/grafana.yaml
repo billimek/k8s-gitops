@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: grafana
-      version: 12.1.1
+      version: 10.1.4
       sourceRef:
         kind: HelmRepository
         name: grafana-charts
@@ -375,7 +375,7 @@ spec:
           - name: TeslaMate
             type: postgres
             access: proxy
-            url: postgres-v17-rw.default.svc.cluster.local:5432
+            url: postgres-v17-ro.default.svc.cluster.local:5432
             database: teslamate
             user: teslamate
             secureJsonData:
@@ -383,6 +383,7 @@ spec:
             jsonData:
               postgresVersion: 1500
               sslmode: disable
+              database: teslamate
     grafana.ini:
       auth:
         oauth_allow_insecure_email_lookup: false
