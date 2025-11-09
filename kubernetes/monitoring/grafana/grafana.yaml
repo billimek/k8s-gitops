@@ -25,14 +25,6 @@ spec:
   values:
     admin:
       existingSecret: grafana-secret
-    # TODO: revisit using postgres for grafana
-    # extraInitContainers:
-    #   - name: init-db
-    #     image: ghcr.io/home-operations/postgres-init:17@sha256:a9f405688344a8a6f718e2c344438342ad21540986aeb5ab5fa781831eb2c597
-    #     imagePullPolicy: IfNotPresent
-    #     envFrom:
-    #       - secretRef:
-    #           name: grafana-secret
     rbac:
       pspEnabled: false
     deploymentStrategy:
@@ -49,8 +41,6 @@ spec:
       GF_LOG_MODE: console
       GF_FEATURE_TOGGLES_ENABLE: publicDashboards
       GF_NEWS_NEWS_FEED_ENABLED: false
-      # GF_PANELS_DISABLE_SANITIZE_HTML: true
-      # GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ALLOW_EMBEDDING: true
       GF_SERVER_ROOT_URL: https://grafana.eviljungle.com
       GF_SECURITY_COOKIE_SAMESITE: grafana
@@ -64,20 +54,9 @@ spec:
       - hosts:
         - grafana.eviljungle.com
     plugins:
-    # - pr0ps-trackmap-panel
-    # - natel-plotly-panel
-    # - vonage-status-panel
-    # - grafana-piechart-panel
-    # - https://github.com/panodata/panodata-map-panel/releases/download/0.16.0/panodata-map-panel-0.16.0.zip;grafana-worldmap-panel-ng
-    # - grafana-clock-panel
-    # - grafana-worldmap-panel
-    # - natel-discrete-panel
     - victoriametrics-logs-datasource
     serviceMonitor:
       enabled: true
-    # serviceAccount:
-    #   create: true
-    #   autoMount: true
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -119,7 +98,6 @@ spec:
             folder: Teslamate
             type: file
             disableDeletion: false
-            # updateIntervalSeconds: -1
             allowUiUpdates: true
             options:
               path: /var/lib/grafana/dashboards/teslamate
