@@ -28,5 +28,5 @@ spec:
       tls:
         certificateRefs:
           - kind: Secret
-            name: acme-crt
+            name: acme-crt-secret
             namespace: cert-manager
