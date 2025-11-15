@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:tailscale.com)",
+      "Bash(gh issue create:*)",
+      "WebSearch",
+      "WebFetch(domain:kubernetes-sigs.github.io)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:rajsingh.info)",
+      "Bash(gh issue view:*)",
+      "Bash(find:*)",
+      "Bash(kubectl get:*)",
+      "Bash(kubectl logs:*)",
+      "Bash(flux reconcile source git:*)",
+      "Bash(flux reconcile:*)",
+      "Bash(curl:*)",
+      "Bash(kubectl rollout restart:*)",
+      "Bash(kubectl rollout status:*)",
+      "Bash(kubectl wait:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
