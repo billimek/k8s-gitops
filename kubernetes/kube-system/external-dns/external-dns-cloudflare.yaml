@@ -35,7 +35,8 @@ spec:
     sources:
       - ingress
       - service
-      - crd
+      - gateway-httproute
+      - gateway-grpcroute
     
     # Only manage eviljungle.com domain
     domainFilters:
