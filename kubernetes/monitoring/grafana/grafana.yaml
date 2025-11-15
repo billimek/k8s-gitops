@@ -85,6 +85,14 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/kubernetes
+          - name: gateway
+            orgId: 1
+            folder: Gateway API
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/gateway
           - name: nginx
             orgId: 1
             folder: Nginx
@@ -220,6 +228,16 @@ spec:
           url: https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
           datasource: Prometheus
 
+      gateway:
+        # Envoy Proxy Global Dashboard
+        envoy-proxy-global:
+          gnetId: 16088
+          revision: 1
+          datasource: Prometheus
+        # Cilium Metrics (already enabled via Cilium dashboards.enabled, but adding explicit reference)
+        cilium-metrics:
+          url: https://raw.githubusercontent.com/cilium/cilium/v1.18.4/examples/kubernetes/addons/prometheus/files/grafana-dashboards/cilium-metrics.json
+          datasource: Prometheus
       nginx:
         nginx:
           url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json

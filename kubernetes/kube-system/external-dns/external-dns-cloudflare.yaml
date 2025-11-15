@@ -35,6 +35,7 @@ spec:
     sources:
       - ingress
       - service
+      - crd
     
     # Only manage eviljungle.com domain
     domainFilters:
