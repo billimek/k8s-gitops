@@ -1,0 +1,17 @@
+---
+# This Service resource configures the LoadBalancer for the cilium-tailscale IngressClass.
+# Cilium's ingress controller (in dedicated mode) creates a service named
+# cilium-ingress-cilium-tailscale for the cilium-tailscale IngressClass.
+# This manifest will be applied after Cilium creates it to add Tailscale-specific configuration.
+#
+# To manually patch after initial creation, use:
+# kubectl patch svc cilium-ingress-cilium-tailscale -n kube-system --type=merge -p '{"spec":{"loadBalancerClass":"tailscale"}}'
+apiVersion: v1
+kind: Service
+metadata:
+  name: cilium-ingress-cilium-tailscale
+  namespace: kube-system
+spec:
+  # Tailscale LoadBalancer configuration
+  loadBalancerClass: tailscale
+  type: LoadBalancer
