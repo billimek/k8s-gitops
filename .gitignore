@@ -25,3 +25,7 @@ auth
 *.key
 .decrypted~*
 onepassword.env
+
+# Claude Code local configuration
+.claude/
+CLAUDE.md
