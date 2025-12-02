@@ -13,12 +13,18 @@ External Users:
 │                 │    │   (1.1.1.1)      │    │  tailscale      │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 
-Internal Users:
+Tailscale Users:
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Query DNS     │───►│   OpnSense       │───►│  Local Services │
-│                 │    │   (10.0.7.1)     │    │  (10.0.6.150)   │
+│   Query DNS     │───►│   Cloudflare     │───►│  nginx-tailscale│
+│                 │    │   (wildcard)     │    │  (100.65.132.11)│
 └─────────────────┘    └──────────────────┘    └─────────────────┘
-                                │
+
+Internal Users:
+┌─────────────────┐    ┌──────────────────┐    ┌───────────────────────┐
+│   Query DNS     │───►│   OpnSense       │───►│  Local Services       │
+│                 │    │   (10.0.7.1)     │    │  nginx: 10.0.6.150    │
+└─────────────────┘    └──────────────────┘    │  nginx-ts: 10.0.6.160 │
+                                │              └───────────────────────┘
                                 ▼ (if no override)
                        ┌──────────────────┐
                        │   Cloudflare     │
@@ -87,6 +93,21 @@ ingress:
       external-dns.alpha.kubernetes.io/external: "true"
       external-dns.alpha.kubernetes.io/target: "nginx-tailscale.eviljungle.com"
 ```
+
+#### Tailnet Service with ISP Outage Resilience (nginx-tailscale + internal DNS)
+
+```yaml
+# External record: Relies on Cloudflare wildcard → 100.65.132.11
+# Internal record: app.eviljungle.com → 10.0.6.160 (nginx-tailscale local service)
+ingress:
+  tailscale:
+    className: nginx-tailscale
+    annotations:
+      external-dns.alpha.kubernetes.io/internal: "true"
+      external-dns.alpha.kubernetes.io/target: "10.0.6.160"
+```
+
+**Result**: OpnSense host override created pointing to nginx-tailscale's local IP, allowing access during ISP outages via the local LAN while Tailscale users access via VPN
 
 #### Fallback Behavior
 
@@ -189,16 +210,23 @@ Any service with `external-dns.alpha.kubernetes.io/internal=true` annotation wil
 
 1. DNS query goes to OpnSense (local)
 2. OpnSense finds the host override (created by External-DNS)
-3. Returns local IP (`10.0.6.150`)
+3. Returns local IP (`10.0.6.150` for nginx services, `10.0.6.160` for nginx-tailscale services)
 4. Connection made entirely within local network
 
-**Critical services configured for internal access:**
+**Critical services configured for internal access (nginx on 10.0.6.150):**
 
 - `plex.eviljungle.com`
 - `hass.eviljungle.com` (Home Assistant)
 - `request.eviljungle.com` (Jellyseerr)
 - `abs.eviljungle.com` (Audiobookshelf)
 - `mc.eviljungle.com` (Minecraft proxy - special case with LoadBalancer service)
+
+**Tailscale services also accessible during outages (nginx-tailscale on 10.0.6.160):**
+
+- All monitoring dashboards (Grafana, VictoriaMetrics, etc.)
+- Media management (Radarr, Sonarr, Prowlarr, etc.)
+- Home automation (Node-RED, Z-Wave JS UI, EMQX)
+- Infrastructure (UniFi, Rook-Ceph, Proxmox, MinIO)
 
 ### Services That Will Fail During Outages
 

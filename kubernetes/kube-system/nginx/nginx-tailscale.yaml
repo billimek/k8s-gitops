@@ -34,6 +34,15 @@ spec:
         loadBalancerClass: tailscale
         externalTrafficPolicy: Local
 
+        # Internal/local service for ISP outage resilience
+        # Allows local access to tailscale-backed services when internet is down
+        internal:
+          enabled: true
+          type: LoadBalancer
+          annotations:
+            io.cilium/lb-ipam-ips: "10.0.6.160"
+          externalTrafficPolicy: Local
+
       publishService:
         enabled: true
 
