@@ -256,6 +256,33 @@ Services without internal DNS records will fail because:
 - `flux-webhook.eviljungle.com` → `eviljungle.com` (CNAME)
 - `www.eviljungle.com` → `eviljungle.com` (CNAME)
 
+### Internal DNS for Tailscale Services (OpnSense Host Overrides)
+
+These services use `nginx-tailscale` ingressClass but have internal DNS for ISP outage resilience:
+
+- `grafana.eviljungle.com` → `10.0.6.160` (nginx-tailscale local)
+- `vm.eviljungle.com` → `10.0.6.160` (VictoriaMetrics)
+- `vm-alert.eviljungle.com` → `10.0.6.160` (Alertmanager)
+- `vmalert.eviljungle.com` → `10.0.6.160` (VMAlert)
+- `vmagent.eviljungle.com` → `10.0.6.160` (VMAgent)
+- `victoria-logs.eviljungle.com` → `10.0.6.160`
+- `radarr.eviljungle.com` / `movies.eviljungle.com` → `10.0.6.160`
+- `sonarr.eviljungle.com` / `shows.eviljungle.com` → `10.0.6.160`
+- `prowlarr.eviljungle.com` → `10.0.6.160`
+- `readarr.eviljungle.com` → `10.0.6.160`
+- `q.eviljungle.com` → `10.0.6.160` (qBittorrent)
+- `sabnzbd.eviljungle.com` → `10.0.6.160`
+- `tautulli.eviljungle.com` → `10.0.6.160`
+- `unifi.eviljungle.com` → `10.0.6.160`
+- `node-red.eviljungle.com` → `10.0.6.160`
+- `teslamate.eviljungle.com` → `10.0.6.160`
+- `z.eviljungle.com` → `10.0.6.160` (Z-Wave JS UI)
+- `hass-vscode.eviljungle.com` → `10.0.6.160`
+- `emqx.eviljungle.com` → `10.0.6.160`
+- `rook.eviljungle.com` → `10.0.6.160`
+- `proxmox.eviljungle.com` → `10.0.6.160`
+- `minio-nas.eviljungle.com` → `10.0.6.160`
+
 ### Manual Records (One-time Setup)
 
 - `eviljungle.com` A record → Router public IP (for port forwarding)
