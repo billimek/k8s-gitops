@@ -49,6 +49,9 @@ spec:
     ingress:
       enabled: true
       ingressClassName: nginx-tailscale
+      annotations:
+        external-dns.alpha.kubernetes.io/internal: "true"
+        external-dns.alpha.kubernetes.io/target: "10.0.6.160"
       hosts: [grafana.eviljungle.com]
       tls:
       - hosts:
