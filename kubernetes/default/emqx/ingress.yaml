@@ -4,6 +4,9 @@ kind: Ingress
 metadata:
   name: emqx-dashboard
   namespace: default
+  annotations:
+    external-dns.alpha.kubernetes.io/internal: "true"
+    external-dns.alpha.kubernetes.io/target: "10.0.6.160"
 spec:
   ingressClassName: nginx-tailscale
   rules:

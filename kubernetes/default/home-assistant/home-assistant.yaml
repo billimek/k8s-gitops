@@ -192,6 +192,9 @@ spec:
               - *host
       code:
         className: "nginx-tailscale"
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
         hosts:
           - host: &host-code "hass-vscode.eviljungle.com"
             paths:

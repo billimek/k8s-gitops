@@ -77,6 +77,9 @@ spec:
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
         hosts:
         - vm.eviljungle.com
         tls:
@@ -90,6 +93,9 @@ spec:
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
         hosts:
         - vm-alert.eviljungle.com
         tls:
@@ -156,6 +162,9 @@ spec:
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
         hosts:
         - vmalert.eviljungle.com
         tls:
@@ -167,6 +176,9 @@ spec:
       ingress:
         enabled: true
         ingressClassName: nginx-tailscale
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
         hosts:
         - vmagent.eviljungle.com
         tls:
