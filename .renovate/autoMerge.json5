@@ -9,11 +9,10 @@
       schedule: "after 1am and before 5am",
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
-        "/victoria-metrics/",
-        "codercom/code-server",
-        "espresense/espresense-companion",
         "ghcr.io/advplyr/audiobookshelf",
+        "ghcr.io/coder/code-server",
         "ghcr.io/home-assistant/home-assistant",
+        "ghcr.io/home-operations/plex",
         "ghcr.io/home-operations/qbittorrent",
         "ghcr.io/home-operations/radarr",
         "ghcr.io/home-operations/sabnzbd",
@@ -23,11 +22,7 @@
         "ghcr.io/recyclarr/recyclarr",
         "ghcr.io/tarampampam/error-pages",
         "ghcr.io/zwave-js/zwave-js-ui",
-        "grafana/grafana",
-        "grafana/loki",
-        "grafana/promtail",
-        "nodered/node-red",
-        "plexinc/pms-docker"
+        "nodered/node-red"
       ],
     },
     {
@@ -59,6 +54,8 @@
       schedule: "after 1am and before 5am",
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
+        "/victoria-metrics/",
+        "grafana",
         "tailscale-operator"
       ],
     },
