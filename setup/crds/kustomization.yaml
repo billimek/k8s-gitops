@@ -44,7 +44,7 @@ resources:
   # │ gateway-api      │
   # └──────────────────┘
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  # https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
+  # https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/experimental-install.yaml
   - ./vendor/kubernetes-sigs_gateway-api/experimental-install.yaml
 
   # ┌──────────────────┐
