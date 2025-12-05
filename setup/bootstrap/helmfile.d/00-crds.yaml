@@ -1,0 +1,72 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+#
+# CRD-only extraction helmfile
+# Usage: helmfile -f 00-crds.yaml template -q --include-crds | yq 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side -f -
+
+helmDefaults:
+  cleanupOnFail: true
+  wait: false
+  createNamespace: true
+
+repositories:
+  - name: backube
+    url: https://backube.github.io/helm-charts/
+  - name: cloudnative-pg
+    url: https://cloudnative-pg.github.io/charts
+  - name: emqx
+    url: https://repos.emqx.io/charts
+  - name: giantswarm
+    url: https://giantswarm.github.io/control-plane-catalog/
+  - name: piraeus
+    url: https://piraeus.io/helm-charts/
+  - name: rook-ceph
+    url: https://charts.rook.io/release
+  - name: wiremind
+    url: https://wiremind.github.io/wiremind-helm-charts
+
+releases:
+  - name: external-secrets
+    namespace: kube-system
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 1.1.0
+
+  - name: volsync
+    namespace: kube-system
+    chart: backube/volsync
+    version: 0.14.0
+
+  - name: rook-ceph
+    namespace: rook-ceph
+    chart: rook-ceph/rook-ceph
+    version: v1.18.8
+
+  - name: cloudnative-pg
+    namespace: default
+    chart: cloudnative-pg/cloudnative-pg
+    version: 0.26.1
+
+  - name: emqx-operator
+    namespace: default
+    chart: emqx/emqx-operator
+    version: 2.2.29
+
+  - name: node-feature-discovery
+    namespace: kube-system
+    chart: oci://registry.k8s.io/nfd/charts/node-feature-discovery
+    version: 0.18.3
+
+  - name: silence-operator
+    namespace: monitoring
+    chart: giantswarm/silence-operator
+    version: 0.20.0
+
+  - name: snapshot-controller
+    namespace: kube-system
+    chart: piraeus/snapshot-controller
+    version: 4.2.0
+
+  - name: gateway-api-crds
+    namespace: kube-system
+    chart: wiremind/gateway-api-crds
+    version: 1.4.0
