@@ -1,7 +1,16 @@
-# System Upgrade Controller
+# Tuppr - Talos Upgrade Controller
 
-This handles the automatic upgrade of the talos system and kubernetes cluster.  See [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller) for more details on the operation of this component.
+This handles automated upgrades of the Talos OS and Kubernetes cluster using [tuppr](https://github.com/home-operations/tuppr), a Talos-native upgrade controller with CEL-based health checks.
 
-* [system-upgrade-controller.yaml](system-upgrade-controller.yaml) - This is the foundational YAML to deploy the controller to make this capability work
-* [talos-plan.yaml](talos-plan.yaml) - This Plan will automatically upgrade to the talos system to the defined version which is managed by renovate.
-* [kubernetes-plan.yaml](kubernetes-plan.yaml) - This Plan will automatically upgrade to the kubernetes system to the defined version which is managed by renovate.
+## Components
+
+* [tuppr.yaml](tuppr.yaml) - HelmRelease for the tuppr controller
+* [talos-upgrade.yaml](talos-upgrade.yaml) - TalosUpgrade CR that automatically upgrades Talos OS to the defined version (managed by Renovate)
+* [kubernetes-upgrade.yaml](kubernetes-upgrade.yaml) - KubernetesUpgrade CR that automatically upgrades Kubernetes to the defined version (managed by Renovate)
+
+## Health Checks
+
+Both upgrade resources include CEL-based health checks that verify:
+
+1. **VolSync ReplicationSource** - All sync jobs must have `Synchronizing=False` to prevent upgrades during active PVC backups
+2. **CephCluster** - Must report `HEALTH_OK` to prevent upgrades during degraded storage
