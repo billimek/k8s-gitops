@@ -14,19 +14,12 @@ repositories:
     url: https://charts.jetstack.io
 
 releases:
-  - name: prometheus-operator-crds
-    namespace: monitoring
-    chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
-    version: 25.0.0
-
   - name: cilium
     namespace: kube-system
     chart: cilium/cilium
     version: 1.18.4
     values:
       - ../templates/cilium-values.yaml.gotmpl
-    needs:
-      - monitoring/prometheus-operator-crds
 
   - name: coredns
     namespace: kube-system
@@ -53,7 +46,7 @@ releases:
     values:
       - ../templates/flux-operator-values.yaml.gotmpl
     needs:
-      - monitoring/prometheus-operator-crds
+      - kube-system/coredns
 
   - name: flux-instance
     namespace: flux-system
