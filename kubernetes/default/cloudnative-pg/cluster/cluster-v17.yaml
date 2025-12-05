@@ -41,7 +41,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://postgresql/
       endpointURL: http://nas.home:3900
-      serverName: postgres-v17
+      serverName: postgres-v17-2  # New serverName to avoid WAL conflict during recovery
       s3Credentials:
         region:
           name: cloudnative-pg-secret
@@ -56,20 +56,25 @@ spec:
   # bootstrap:
   # use this to recover a net-new cluster from a backup
   #   recovery:
-  #     source: postgres-backup # TODO: fix this to the real name of the backup when on the new cluster
-
-    # # use this to 'migrate' from an existing cnpg cluster (e.g. "postgres-v15") to the new cluster
-    # initdb:
-    #   import:
-    #     type: monolith
-    #     databases:
-    #       - "*"
-    #     roles:
-    #       - "*"
-    #     source:
-    #       externalCluster: postgres-v15
+  #     source: postgres-v17-backup
 
   externalClusters:
+    # S3 backup source for recovery (uncomment bootstrap section above to use)
+    - name: postgres-v17-backup
+      barmanObjectStore:
+        destinationPath: s3://postgresql/
+        endpointURL: http://nas.home:3900
+        serverName: postgres-v17
+        s3Credentials:
+          region:
+            name: cloudnative-pg-secret
+            key: REGION
+          accessKeyId:
+            name: cloudnative-pg-secret
+            key: aws-access-key-id
+          secretAccessKey:
+            name: cloudnative-pg-secret
+            key: aws-secret-access-key
     # this represents an existing cnpg cluster to migrate from (e.g. upgrading from postgres v14 to postgres v15)
     - name: postgres-v15
       connectionParameters:
