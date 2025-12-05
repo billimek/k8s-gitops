@@ -24,7 +24,7 @@ metadata:
 spec:
   interval: 30m
   path: ./setup/crds
-  prune: true
+  prune: false # CRDs managed by HelmReleases, don't auto-delete
   wait: true
   sourceRef:
     kind: GitRepository

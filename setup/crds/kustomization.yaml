@@ -3,53 +3,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # ┌──────────────────────┐
-  # │ external-secrets     │
-  # └──────────────────────┘
-  # renovate: datasource=github-releases depName=external-secrets/external-secrets
-  # https://github.com/external-secrets/external-secrets/raw/v1.1.0/deploy/crds/bundle.yaml
-  - ./vendor/external-secrets_external-secrets/bundle.yaml
-
-  # ┌──────────────────────┐
-  # │ external-snapshotter │
-  # └──────────────────────┘
-  # renovate: datasource=github-releases depName=kubernetes-csi/external-snapshotter
-  # https://github.com/kubernetes-csi/external-snapshotter/raw/v8.4.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
-  - ./vendor/kubernetes-csi_external-snapshotter/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
-  # renovate: datasource=github-releases depName=kubernetes-csi/external-snapshotter
-  # https://github.com/kubernetes-csi/external-snapshotter/raw/v8.4.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
-  - ./vendor/kubernetes-csi_external-snapshotter/snapshot.storage.k8s.io_volumesnapshots.yaml
-  # renovate: datasource=github-releases depName=kubernetes-csi/external-snapshotter
-  # https://github.com/kubernetes-csi/external-snapshotter/raw/v8.4.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
-  - ./vendor/kubernetes-csi_external-snapshotter/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
-
-  # ┌──────────────────┐
-  # │ volsync          │
-  # └──────────────────┘
-  # renovate: datasource=github-releases depName=backube/volsync
-  # https://github.com/backube/volsync/raw/v0.12.0/config/crd/bases/volsync.backube_replicationdestinations.yaml
-  - ./vendor/backube_volsync/volsync.backube_replicationdestinations.yaml
-  # renovate: datasource=github-releases depName=backube/volsync
-  # https://github.com/backube/volsync/raw/v0.12.0/config/crd/bases/volsync.backube_replicationsources.yaml
-  - ./vendor/backube_volsync/volsync.backube_replicationsources.yaml
-
-  # ┌──────────────────────────────┐
-  # │ node-feature-discovery       │
-  # └──────────────────────────────┘
-  # renovate: datasource=github-releases depName=kubernetes-sigs/node-feature-discovery
-  # https://github.com/kubernetes-sigs/node-feature-discovery/raw/v0.18.3/deployment/helm/node-feature-discovery/crds/nfd-api-crds.yaml
-  - ./vendor/kubernetes-sigs_node-feature-discovery/nfd-api-crds.yaml
-
-  # ┌──────────────────┐
-  # │ gateway-api      │
-  # └──────────────────┘
-  # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-  # https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/experimental-install.yaml
-  - ./vendor/kubernetes-sigs_gateway-api/experimental-install.yaml
-
   # ┌──────────────────┐
   # │ rook-ceph        │
   # └──────────────────┘
+  # NOTE: Kept as safety backup - also installed via helmfile bootstrap
   # renovate: datasource=github-releases depName=rook/rook
   # https://github.com/rook/rook/raw/v1.18.8/deploy/examples/crds.yaml
   - ./vendor/rook_rook/crds.yaml
@@ -60,48 +17,3 @@ resources:
   # renovate: datasource=github-releases depName=rancher/system-upgrade-controller
   # https://github.com/rancher/system-upgrade-controller/releases/download/v0.18.0/crd.yaml
   - ./vendor/rancher_system-upgrade-controller/crd.yaml
-
-  # ┌──────────────────┐
-  # │ cnpg             │
-  # └──────────────────┘
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_backups.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_backups.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_clusterimagecatalogs.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_clusterimagecatalogs.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_clusters.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_clusters.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_databases.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_databases.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_imagecatalogs.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_imagecatalogs.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_poolers.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_poolers.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_publications.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_publications.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_scheduledbackups.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_scheduledbackups.yaml
-  # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-  # https://github.com/cloudnative-pg/cloudnative-pg/raw/v1.27.1/config/crd/bases/postgresql.cnpg.io_subscriptions.yaml
-  - ./vendor/cloudnative-pg_cloudnative-pg/postgresql.cnpg.io_subscriptions.yaml
-
-  # ┌──────────────────┐
-  # │ emqx             │
-  # └──────────────────┘
-  # renovate: datasource=github-releases depName=emqx/emqx-operator
-  # https://github.com/emqx/emqx-operator/releases/download/2.2.29/crds.yaml
-  - ./vendor/emqx_emqx-operator/crds.yaml
-
-  # ┌──────────────────────┐
-  # │ silence-operator     │
-  # └──────────────────────┘
-  # renovate: datasource=github-releases depName=giantswarm/silence-operator
-  # https://raw.githubusercontent.com/giantswarm/silence-operator/refs/tags/v0.20.0/config/crd/bases/observability.giantswarm.io_silences.yaml
-  - ./vendor/giantswarm_silence-operator/observability.giantswarm.io_silences.yaml

@@ -23,9 +23,10 @@ tasks:
     desc: Bootstrap Apps
     prompt: Bootstrap apps into Talos cluster?
     preconditions:
-      - which op helmfile kubectl
+      - which op helmfile kubectl yq
       - test -f "{{.TALOSCONFIG}}"
-      - test -f {{.SETUP_DIR}}/bootstrap/helmfile.yaml
+      - test -f {{.SETUP_DIR}}/bootstrap/helmfile.d/00-crds.yaml
+      - test -f {{.SETUP_DIR}}/bootstrap/helmfile.d/01-apps.yaml
       - test -f {{.SETUP_DIR}}/bootstrap/templates/resources.yaml.j2
       - op user get --me
       - talosctl config info
@@ -35,7 +36,10 @@ tasks:
     cmds:
       - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
       - minijinja-cli "{{.SETUP_DIR}}/bootstrap/templates/resources.yaml.j2" | op inject | kubectl apply --server-side --filename -
-      - helmfile --quiet --file {{.SETUP_DIR}}/bootstrap/helmfile.yaml sync --hide-notes
+      # Apply CRDs first (template + filter + server-side apply)
+      - helmfile -f "{{.SETUP_DIR}}/bootstrap/helmfile.d/00-crds.yaml" template -q --include-crds | yq 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side -f -
+      # Then sync apps
+      - helmfile --quiet --file {{.SETUP_DIR}}/bootstrap/helmfile.d/01-apps.yaml sync --hide-notes
 
   wipe-disks:
     desc: Wipe disks on Talos nodes

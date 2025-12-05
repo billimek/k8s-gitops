@@ -6,11 +6,17 @@ The `/setup` directory contains all the components needed to bootstrap the Kuber
 
 ### `/setup/bootstrap`
 
-Contains Helmfile configurations for initial cluster bootstrapping, including CNI, CRDs, and other essential components required to get the cluster up and running with flux.
+Contains Helmfile configurations for initial cluster bootstrapping:
+
+- `helmfile.d/00-crds.yaml` - Extracts CRDs from Helm charts before Flux starts
+- `helmfile.d/01-apps.yaml` - Core apps (Cilium CNI, CoreDNS, cert-manager, Flux)
 
 ### `/setup/crds`
 
-Custom Resource Definitions required before Flux can deploy applications. These are invoked during normal flux kustomization reconcilliation loops and are required to be housed outside the normal `kubernetes/` tree in order to ensure that the custom types are present before they are attempted to be used. It is structured this way so that unsightly proliferation of kustomization files throughout the repo is avoided.
+Vendored CRDs for components without Helm chart support. Most CRDs are now managed via HelmReleases (belt-and-suspenders approach: bootstrap installs, HelmRelease maintains). Only these remain vendored:
+
+- `rook-ceph` - Safety backup (also installed via helmfile)
+- `system-upgrade-controller` - No Helm chart available
 
 ### `/setup/flux`
 
