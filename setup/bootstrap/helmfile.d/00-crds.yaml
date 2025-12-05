@@ -75,3 +75,8 @@ releases:
     namespace: kube-system
     chart: wiremind/gateway-api-crds
     version: 1.4.0
+
+  - name: tuppr
+    namespace: system-upgrade
+    chart: oci://ghcr.io/home-operations/charts/tuppr
+    version: 0.0.43

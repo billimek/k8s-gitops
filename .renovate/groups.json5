@@ -12,12 +12,13 @@
       "separateMinorPatch": true
     },
     {
-      "description": "System Upgrade Controller",
-      "matchDatasources": ["docker", "github-releases", "helm", "git-tags"],
-      "matchPackagePatterns": ["rancher/system-upgrade-controller"],
-      "groupName": "system-upgrade-controller-suite",
-      "additionalBranchPrefix": "",
-      "separateMinorPatch": true
+      description: "Tuppr Group",
+      groupName: "Tuppr",
+      matchDatasources: ["docker", "helm"],
+      matchPackagePatterns: ["home-operations/tuppr", "home-operations/charts/tuppr"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
     },
     {
       description: "Cert-Manager Group",

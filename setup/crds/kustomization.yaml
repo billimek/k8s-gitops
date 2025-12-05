@@ -11,9 +11,3 @@ resources:
   # https://github.com/rook/rook/raw/v1.18.8/deploy/examples/crds.yaml
   - ./vendor/rook_rook/crds.yaml
 
-  # ┌──────────────────────────────────┐
-  # │ system-upgrade-controller        │
-  # └──────────────────────────────────┘
-  # renovate: datasource=github-releases depName=rancher/system-upgrade-controller
-  # https://github.com/rancher/system-upgrade-controller/releases/download/v0.18.0/crd.yaml
-  - ./vendor/rancher_system-upgrade-controller/crd.yaml
