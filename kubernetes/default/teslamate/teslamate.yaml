@@ -54,12 +54,14 @@ spec:
                 cpu: 50m
               limits:
                 memory: 500Mi
+
     service:
       main:
         controller: teslamate
         ports:
           http:
             port: 4000
+
     route:
       main:
         enabled: true

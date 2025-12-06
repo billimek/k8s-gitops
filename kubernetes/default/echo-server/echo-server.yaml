@@ -50,12 +50,14 @@ spec:
                 memory: 64M
               limits:
                 memory: 64M
+
     service:
       app:
         controller: echo-server
         ports:
           http:
             port: *port
+
     route:
       app:
         annotations:
@@ -65,7 +67,7 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - &host echo-server.eviljungle.com
+          - &host www.eviljungle.com
       internal:
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
