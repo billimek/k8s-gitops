@@ -75,44 +75,35 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: nginx
         annotations:
-          nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504" # Using a smaller set than the default to fix javascript issues with overseer
-          # Internal DNS for ISP outage resilience
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.150"
-        hosts:
-          - host: &host abs.eviljungle.com
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
-      external:
-        enabled: true
-        className: nginx
-        annotations:
-          # External DNS for public access via Cloudflare
           external-dns.alpha.kubernetes.io/external: "true"
           external-dns.alpha.kubernetes.io/target: "eviljungle.com"
-        hosts:
-          - host: *host
-            paths:
-              - path: /external-dns-only
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - &host abs.eviljungle.com
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
+      internal:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.150"
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - *host
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
 
     persistence:
       config:
