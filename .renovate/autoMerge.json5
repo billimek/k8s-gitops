@@ -6,7 +6,7 @@
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
-      schedule: "after 1am and before 5am",
+      automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
         "ghcr.io/advplyr/audiobookshelf",
@@ -32,7 +32,7 @@
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
-      schedule: "before 3am on Monday",
+      automergeSchedule: ["before 3am on Monday"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
         "ghcr.io/home-operations/prowlarr",
@@ -44,6 +44,7 @@
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
+      automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["digest"],
       matchPackageNames: ["/home-operations/"],
       ignoreTests: false,
@@ -53,7 +54,7 @@
       matchDatasources: ["helm"],
       automerge: true,
       automergeType: "pr",
-      schedule: "after 1am and before 5am",
+      automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
         "tailscale-operator"
