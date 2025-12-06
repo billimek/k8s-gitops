@@ -65,7 +65,7 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - *host
+          - &host echo-server.eviljungle.com
       internal:
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
