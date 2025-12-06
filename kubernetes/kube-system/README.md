@@ -57,12 +57,6 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 
 * [metric-server/metric-server.yaml](metric-server/metric-server.yaml)
 
-# envoy-gateway
-
-[Envoy Gateway](https://gateway.envoyproxy.io/) is used as the Gateway API controller for Tailscale integration. It manages the `tailscale-gateway` which provides a dedicated LoadBalancer IP from the Tailnet, allowing secure VPN access to internal services.
-
-* [envoy-gateway/](envoy-gateway/)
-
 # node-feature-discovery
 
 Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery) to dynamically label nodes that contain specific USB devices we care about

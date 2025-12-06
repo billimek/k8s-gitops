@@ -86,14 +86,6 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/gateway
-          - name: nginx
-            orgId: 1
-            folder: Nginx
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/nginx
           - name: 'teslamate'
             orgId: 1
             folder: Teslamate
@@ -227,13 +219,6 @@ spec:
         # Cilium Metrics (already enabled via Cilium dashboards.enabled, but adding explicit reference)
         cilium-metrics:
           url: https://raw.githubusercontent.com/cilium/cilium/v1.18.4/examples/kubernetes/addons/prometheus/files/grafana-dashboards/cilium-metrics.json
-          datasource: Prometheus
-      nginx:
-        nginx:
-          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
-          datasource: Prometheus
-        nginx-request-handling-performance:
-          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
           datasource: Prometheus
       teslamate:
         battery-health:
