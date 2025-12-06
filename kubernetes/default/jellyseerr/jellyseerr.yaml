@@ -73,35 +73,40 @@ spec:
           http:
             port: 5055
 
-    route:
+    ingress:
       app:
+        className: nginx
         annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
-          external-dns.alpha.kubernetes.io/target: "eviljungle.com"
-        parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
-        hostnames:
-          - &host request.eviljungle.com
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: http
-      internal:
-        annotations:
+          nginx.ingress.kubernetes.io/custom-http-errors: "400,404,500,502,503,504"  # Using a smaller set than the default to fix javascript issues with overseer
+          # Internal DNS for ISP outage resilience
           external-dns.alpha.kubernetes.io/internal: "true"
           external-dns.alpha.kubernetes.io/target: "10.0.6.150"
-        parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
-        hostnames:
-          - *host
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: http
+        hosts:
+          - host: &host request.eviljungle.com
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+            - *host
+      external:
+        className: nginx
+        annotations:
+          # External DNS for public access via Cloudflare
+          external-dns.alpha.kubernetes.io/external: "true"
+          external-dns.alpha.kubernetes.io/target: "eviljungle.com"
+        hosts:
+          - host: *host
+            paths:
+              - path: /external-dns-only
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+            - *host
 
     persistence:
       config:
