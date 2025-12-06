@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/gateway_v1.json
+# Gateway for internal/local DNS records (OpnSense)
+# Routes referencing this gateway will have DNS records pointing to 10.0.6.150 (local gateway IP)
+# This provides ISP outage resilience by allowing local DNS resolution
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal
+  namespace: kube-system
+  annotations:
+    external-dns.alpha.kubernetes.io/target: "10.0.6.150"
+spec:
+  gatewayClassName: cilium
+  addresses:
+    - type: IPAddress
+      value: 10.0.6.150
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: "*.eviljungle.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.eviljungle.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: acme-crt-secret
+            namespace: cert-manager

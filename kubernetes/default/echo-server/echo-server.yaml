@@ -79,7 +79,7 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/external: "true"
         parentRefs:
-          - name: external-public
+          - name: public
             namespace: kube-system
             sectionName: https
         hostnames:
@@ -88,7 +88,7 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
         parentRefs:
-          - name: external-internal
+          - name: internal
             namespace: kube-system
             sectionName: https
         hostnames:
