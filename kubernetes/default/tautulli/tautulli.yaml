@@ -90,6 +90,7 @@ spec:
             backendRefs:
               - name: tautulli
                 port: 8181
+
     persistence:
       config:
         suffix: config

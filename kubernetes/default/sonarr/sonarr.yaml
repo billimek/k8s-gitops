@@ -102,6 +102,7 @@ spec:
             backendRefs:
               - name: sonarr
                 port: 8989
+
     persistence:
       config:
         suffix: config

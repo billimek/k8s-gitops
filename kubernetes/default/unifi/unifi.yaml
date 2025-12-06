@@ -104,6 +104,7 @@ spec:
             backendRefs:
               - name: unifi
                 port: 8443
+
     persistence:
       data:
         suffix: data

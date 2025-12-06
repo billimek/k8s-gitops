@@ -157,6 +157,7 @@ spec:
           - path: /.dockerenv
             subPath: .dockerenv
             readOnly: true
+
     route:
       app:
         annotations:

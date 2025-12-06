@@ -93,6 +93,7 @@ spec:
             backendRefs:
               - name: zwave2mqtt
                 port: 8091
+
     persistence:
       config:
         suffix: config

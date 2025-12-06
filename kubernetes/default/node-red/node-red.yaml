@@ -76,6 +76,7 @@ spec:
             backendRefs:
               - name: node-red
                 port: 1880
+
     persistence:
       data:
         suffix: data

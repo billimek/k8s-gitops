@@ -106,6 +106,7 @@ spec:
             backendRefs:
               - name: radarr
                 port: 7878
+
     persistence:
       config:
         suffix: config

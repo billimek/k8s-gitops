@@ -98,6 +98,7 @@ spec:
             backendRefs:
               - name: readarr
                 port: 8787
+
     persistence:
       config:
         suffix: config

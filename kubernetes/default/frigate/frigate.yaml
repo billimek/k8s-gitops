@@ -102,6 +102,7 @@ spec:
             backendRefs:
               - name: frigate
                 port: 5000
+
     persistence:
       config:
         suffix: config

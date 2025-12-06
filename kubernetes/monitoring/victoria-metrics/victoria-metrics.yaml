@@ -90,6 +90,7 @@ spec:
             backendRefs:
               - name: vmsingle-stack
                 port: 8428
+
     alertmanager:
       enabled: true
       spec:
@@ -115,6 +116,7 @@ spec:
             backendRefs:
               - name: vmalertmanager-stack
                 port: 9093
+
       config:
         route:
           # group_by: ["alertname", "job"]
@@ -183,6 +185,7 @@ spec:
             backendRefs:
               - name: vmalert-stack
                 port: 8080
+
     vmagent:
       enabled: true
       spec:
@@ -212,6 +215,7 @@ spec:
             backendRefs:
               - name: vmagent-stack
                 port: 8429
+
         inlineScrapeConfig: |
           - job_name: 'ipmi'
             metrics_path: '/metrics'

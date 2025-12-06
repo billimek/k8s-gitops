@@ -95,6 +95,7 @@ spec:
             backendRefs:
               - name: sabnzbd
                 port: 8080
+
     persistence:
       config:
         suffix: config
