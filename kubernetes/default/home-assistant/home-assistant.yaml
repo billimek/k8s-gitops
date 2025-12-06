@@ -188,6 +188,7 @@ spec:
         rules:
           - backendRefs:
               - name: home-assistant
+                port: 8123
       internal:
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
@@ -201,3 +202,4 @@ spec:
         rules:
           - backendRefs:
               - name: home-assistant
+                port: 8123
