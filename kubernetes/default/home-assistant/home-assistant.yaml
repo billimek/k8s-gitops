@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-assistant/home-assistant
-              tag: 2025.12.1
+              tag: 2025.12.1@sha256:4e5e81917192e3fa730948964b19d6e03ff3b9c2694894bc6d6b76769e642055
             env:
               TZ: "America/New_York"
               PYTHONPATH: "/config/deps"

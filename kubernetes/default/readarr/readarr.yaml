@@ -29,10 +29,10 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/readarr
-              tag: 0.4.18.2805
+              tag: 0.4.18.2805@sha256:8f7551205fbdccd526db23a38a6fba18b0f40726e63bb89be0fb2333ff4ee4cd
             env:
               READARR__APP__INSTANCENAME: readarr
-              READARR__APPLICATION_URL: 'https://radarr.eviljungle.com'
+              READARR__APPLICATION_URL: 'https://readarr.eviljungle.com'
               READARR__APP__THEME: dark
               READARR__AUTH__METHOD: Forms
               READARR__AUTH__REQUIRED: DisabledForLocalAddresses

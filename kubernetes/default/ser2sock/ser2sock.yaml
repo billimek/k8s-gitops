@@ -39,7 +39,7 @@ spec:
           main:
             image:
               repository: tenstartups/ser2sock
-              tag: latest
+              tag: latest@sha256:379d9338c720da30b63dc4cf2ecea07eb89dac7d62d5c79047294fffe97ae559
               pullPolicy: Always
             env:
               TZ: "America/New York"

@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2025.10.5
+      tag: 2025.10.5@sha256:0062e45ec8aa8bdbeeb6b4ad0e15df804c4525f0e208b66d899ab677230ee0e9
     fullnameOverride: minecraft-survival
     strategyType: Recreate
     persistence:

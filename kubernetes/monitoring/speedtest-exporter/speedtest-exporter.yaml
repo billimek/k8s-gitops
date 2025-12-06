@@ -23,7 +23,7 @@ spec:
           main:
             image:
               repository: ghcr.io/lpicanco/prometheus-speedtest-exporter
-              tag: 0.2.2
+              tag: 0.2.2@sha256:0c12ce9315bcb4e26071caa3236a2c2dab8612301a892fdec8911a41058da8e9
             resources:
               requests:
                 cpu: 10m
