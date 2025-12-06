@@ -35,7 +35,6 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-
         containers:
           app:
             image:
@@ -50,7 +49,6 @@ spec:
             envFrom:
               - secretRef:
                   name: home-assistant-secret
-
             resources:
               requests:
                 cpu: 50m
@@ -64,7 +62,6 @@ spec:
             #   capabilities:
             #     drop:
             #       - ALL
-
           code-server:
             image:
               repository: ghcr.io/coder/code-server
@@ -89,7 +86,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
-
     service:
       main:
         primary: true
@@ -114,7 +110,6 @@ spec:
         ports:
           http:
             port: 12321
-
     persistence:
       config:
         suffix: config
@@ -162,25 +157,6 @@ spec:
           - path: /.dockerenv
             subPath: .dockerenv
             readOnly: true
-
-    ingress:
-      code:
-        className: "nginx-tailscale"
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        hosts:
-          - host: &host-code "hass-vscode.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: code
-                  port: http
-        tls:
-          - hosts:
-              - *host-code
-
     route:
       app:
         annotations:
@@ -208,3 +184,29 @@ spec:
           - backendRefs:
               - identifier: gateway
                 port: 8123
+      code:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+        hostnames: &hostnames
+          - hass-vscode.eviljungle.com
+        rules: &rules
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: home-assistant-code
+                port: 12321
+      code-internal:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+        hostnames: *hostnames
+        rules: *rules

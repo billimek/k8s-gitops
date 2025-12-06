@@ -83,24 +83,33 @@ spec:
             enabled: true
             port: 10001
             protocol: UDP
-    ingress:
+    route:
       app:
         enabled: true
-        className: nginx-tailscale
         annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+        hostnames: &hostnames
+          - unifi.eviljungle.com
+        rules: &rules
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: unifi
+                port: 8443
+      internal:
+        enabled: true
+        annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        hosts:
-          - host: &host "unifi.eviljungle.com"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+        hostnames: *hostnames
+        rules: *rules
     persistence:
       data:
         suffix: data

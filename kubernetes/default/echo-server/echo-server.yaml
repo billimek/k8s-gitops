@@ -50,30 +50,12 @@ spec:
                 memory: 64M
               limits:
                 memory: 64M
-
     service:
       app:
         controller: echo-server
         ports:
           http:
             port: *port
-
-    ingress:
-      tailscale:
-        enabled: true
-        className: nginx-tailscale
-        hosts:
-          - host: &host www.eviljungle.com
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
-
     route:
       app:
         annotations:
@@ -93,3 +75,29 @@ spec:
             sectionName: https
         hostnames:
           - *host
+      tailscale:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+        hostnames: &hostnames
+          - *host
+        rules: &rules
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: echo-server
+                port: 8080
+      tailscale-internal:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+        hostnames: *hostnames
+        rules: *rules

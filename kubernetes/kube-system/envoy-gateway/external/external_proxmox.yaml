@@ -2,7 +2,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: emqx-dashboard
+  name: external-proxmox
   namespace: default
   annotations:
     external-dns.alpha.kubernetes.io/external: "true"
@@ -11,20 +11,20 @@ spec:
     - name: tailscale-gateway
       namespace: kube-system
   hostnames:
-    - emqx.eviljungle.com
+    - proxmox.eviljungle.com
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: emqx-dashboard
-          port: 18083
+        - name: external-proxmox
+          port: 8006
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: emqx-dashboard-internal
+  name: external-proxmox-internal
   namespace: default
   annotations:
     external-dns.alpha.kubernetes.io/internal: "true"
@@ -33,12 +33,26 @@ spec:
     - name: internal
       namespace: kube-system
   hostnames:
-    - emqx.eviljungle.com
+    - proxmox.eviljungle.com
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: emqx-dashboard
-          port: 18083
+        - name: external-proxmox
+          port: 8006
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-proxmox
+  namespace: default
+spec:
+  ports:
+  - name: proxmox
+    port: 8006
+    targetPort: 8006
+    appProtocol: https
+  type: ExternalName
+  externalName: nas.home

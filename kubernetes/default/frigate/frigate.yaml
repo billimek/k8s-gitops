@@ -68,7 +68,6 @@ spec:
               limits:
                 memory: 4000Mi
                 gpu.intel.com/i915: 1
-
     service:
       main:
         controller: main
@@ -82,22 +81,33 @@ spec:
           rtsp:
             enabled: true
             port: 8554
-
-    ingress:
+    route:
       main:
-        className: "nginx-tailscale"
-        hosts:
-          - host: &host "frigate.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: main
-                  port: *port
-        tls:
-          - hosts:
-              - *host
-
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+        hostnames: &hostnames
+          - frigate.eviljungle.com
+        rules: &rules
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: frigate
+                port: 5000
+      internal:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+        hostnames: *hostnames
+        rules: *rules
     persistence:
       config:
         suffix: config

@@ -34,12 +34,7 @@ spec:
               TZ: America/New_York
               SABNZBD__PORT: &port 8080
               SABNZBD__HOST_WHITELIST_ENTRIES: >-
-                sabnzbd,
-                sabnzbd.default,
-                sabnzbd.default.svc,
-                sabnzbd.default.svc.cluster,
-                sabnzbd.default.svc.cluster.local,
-                sabnzbd.eviljungle.com
+                sabnzbd, sabnzbd.default, sabnzbd.default.svc, sabnzbd.default.svc.cluster, sabnzbd.default.svc.cluster.local, sabnzbd.eviljungle.com
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
@@ -59,7 +54,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 50m
@@ -79,23 +74,33 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
+    route:
       main:
-        className: "nginx-tailscale"
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+        hostnames: &hostnames
+          - sabnzbd.eviljungle.com
+        rules: &rules
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: sabnzbd
+                port: 8080
+      internal:
+        enabled: true
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        hosts:
-          - host: &host "sabnzbd.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+        hostnames: *hostnames
+        rules: *rules
     persistence:
       config:
         suffix: config

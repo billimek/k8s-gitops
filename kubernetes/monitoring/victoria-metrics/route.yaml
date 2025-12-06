@@ -1,0 +1,175 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmsingle
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/external: "true"
+spec:
+  parentRefs:
+    - name: tailscale-gateway
+      namespace: kube-system
+  hostnames:
+    - vm.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmsingle-stack
+          port: 8428
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmsingle-internal
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/internal: "true"
+spec:
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+  hostnames:
+    - vm.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmsingle-stack
+          port: 8428
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: alertmanager
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/external: "true"
+spec:
+  parentRefs:
+    - name: tailscale-gateway
+      namespace: kube-system
+  hostnames:
+    - vm-alert.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmalertmanager-stack
+          port: 9093
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: alertmanager-internal
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/internal: "true"
+spec:
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+  hostnames:
+    - vm-alert.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmalertmanager-stack
+          port: 9093
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmalert
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/external: "true"
+spec:
+  parentRefs:
+    - name: tailscale-gateway
+      namespace: kube-system
+  hostnames:
+    - vmalert.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmalert-stack
+          port: 8080
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmalert-internal
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/internal: "true"
+spec:
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+  hostnames:
+    - vmalert.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmalert-stack
+          port: 8080
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmagent
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/external: "true"
+spec:
+  parentRefs:
+    - name: tailscale-gateway
+      namespace: kube-system
+  hostnames:
+    - vmagent.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmagent-stack
+          port: 8429
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmagent-internal
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/internal: "true"
+spec:
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+  hostnames:
+    - vmagent.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmagent-stack
+          port: 8429

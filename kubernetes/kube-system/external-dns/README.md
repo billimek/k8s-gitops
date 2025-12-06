@@ -9,22 +9,22 @@ The External-DNS setup provides a resilient split-horizon DNS architecture with 
 ```text
 External Users:
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Query DNS     │───►│   Cloudflare     │───►│  nginx/nginx-   │
-│                 │    │   (1.1.1.1)      │    │  tailscale      │
+│   Query DNS     │───►│   Cloudflare     │───►│  Cilium Gateway │
+│                 │    │   (1.1.1.1)      │    │  (Public IP)    │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 
 Tailscale Users:
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Query DNS     │───►│   Cloudflare     │───►│  nginx-tailscale│
-│                 │    │   (wildcard)     │    │  (100.65.132.11)│
+│   Query DNS     │───►│   Cloudflare     │───►│  Envoy Gateway  │
+│                 │    │   (specific A)   │    │  (Tailscale IP) │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 
 Internal Users:
 ┌─────────────────┐    ┌──────────────────┐    ┌───────────────────────┐
 │   Query DNS     │───►│   OpnSense       │───►│  Local Services       │
-│                 │    │   (10.0.7.1)     │    │  nginx: 10.0.6.150    │
-└─────────────────┘    └──────────────────┘    │  nginx-ts: 10.0.6.160 │
-                                │              └───────────────────────┘
+│                 │    │   (10.0.7.1)     │    │  Cilium: 10.0.6.151   │
+└─────────────────┘    └──────────────────┘    └───────────────────────┘
+                                │
                                 ▼ (if no override)
                        ┌──────────────────┐
                        │   Cloudflare     │
@@ -41,91 +41,100 @@ Internal Users:
 
 ### Cloudflare Configuration
 
-- **Wildcard Record**: `*.eviljungle.com` → `100.65.132.11` (nginx-tailscale IP - fallback for undefined services)
-- **Specific Records**: Created by External-DNS for external services
-- **Manual Record**: `nginx-tailscale.eviljungle.com` → `100.65.132.11` (target for tailscale ingresses)
+- **Specific Records**: Created by External-DNS for external services (pointing to Envoy Gateway Tailscale IP)
+- **Public Records**: Created by External-DNS for public services (pointing to Cilium Gateway Public IP)
 
 ### Resolution Flow
 
 1. **Internal users** query `app.eviljungle.com` → OpnSense
-   - If host override exists → Returns local IP (`10.0.6.150`)
-   - If no override → Forwards to Cloudflare → Returns wildcard (`100.65.132.11`)
+   - If host override exists → Returns local IP (`10.0.6.151`)
+   - If no override → Forwards to Cloudflare → Returns Tailscale IP (accessible via VPN) or Public IP
 2. **External users** query `app.eviljungle.com` → Cloudflare directly
-   - If specific record exists → Returns configured target
-   - If no record → Returns wildcard (`100.65.132.11`)
+   - Returns configured target (Tailscale IP or Public IP)
 
-## Ingress Architecture
+## Gateway Architecture
 
-### Three Ingress Controllers
+### Three Gateways
 
-1. **`nginx`** - Public-facing services on `10.0.6.150`
-2. **`nginx-tailscale`** - Tailnet-only services on `100.65.132.11`
-3. **`tailscale`** - Native Tailscale ingress (not used in this setup)
+1. **`public` (Cilium)** - Public-facing services on `10.0.6.150` (Router forwards ports 80/443 here)
+2. **`internal` (Cilium)** - LAN-only services on `10.0.6.151` (OpnSense points here)
+3. **`tailscale-gateway` (Envoy)** - Tailnet-only services on Tailscale IP (e.g., `100.85.60.114`)
 
 ### Service Exposure Patterns
 
-#### Standard Public Service (nginx)
+#### Standard Public Service (Cilium)
 
 ```yaml
-# External record: app.eviljungle.com → eviljungle.com (public IP)
-# Internal record: app.eviljungle.com → 10.0.6.150 (nginx)
-ingress:
-  external:
-    className: nginx
+route:
+  app:
+    parentRefs:
+      - name: public
+        namespace: kube-system
+    hostnames:
+      - "app.eviljungle.com"
+```
+
+#### Tailnet-Only Service (Envoy Gateway)
+
+```yaml
+route:
+  main:
     annotations:
       external-dns.alpha.kubernetes.io/external: "true"
-      external-dns.alpha.kubernetes.io/target: "eviljungle.com"
+      external-dns.alpha.kubernetes.io/target: "envoy-tailscale.drake-eel.ts.net"
+    parentRefs:
+      - name: tailscale-gateway
+        namespace: kube-system
+    hostnames:
+      - "app.eviljungle.com"
+```
+
+#### Tailnet Service with ISP Outage Resilience (Split-Horizon)
+
+```yaml
+route:
+  # External/VPN Access (via Envoy Gateway)
+  main:
+    annotations:
+      external-dns.alpha.kubernetes.io/external: "true"
+      external-dns.alpha.kubernetes.io/target: "envoy-tailscale.drake-eel.ts.net"
+    parentRefs:
+      - name: tailscale-gateway
+        namespace: kube-system
+    hostnames:
+      - "app.eviljungle.com"
+  
+  # Internal/LAN Access (via Cilium Gateway)
   internal:
-    className: nginx
     annotations:
       external-dns.alpha.kubernetes.io/internal: "true"
-      external-dns.alpha.kubernetes.io/target: "10.0.6.150"
+      external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+    hostnames:
+      - "app.eviljungle.com"
 ```
 
-#### Tailnet-Only Service (nginx-tailscale)
+**Result**: 
+- **Cloudflare**: `app.eviljungle.com` -> `100.85.60.114` (Tailscale IP)
+- **OpnSense**: `app.eviljungle.com` -> `10.0.6.151` (LAN IP)
 
-```yaml
-# External record: app.eviljungle.com → nginx-tailscale.eviljungle.com → 100.65.132.11
-ingress:
-  tailscale:
-    className: nginx-tailscale
-    annotations:
-      external-dns.alpha.kubernetes.io/external: "true"
-      external-dns.alpha.kubernetes.io/target: "nginx-tailscale.eviljungle.com"
-```
-
-#### Tailnet Service with ISP Outage Resilience (nginx-tailscale + internal DNS)
-
-```yaml
-# External record: Relies on Cloudflare wildcard → 100.65.132.11
-# Internal record: app.eviljungle.com → 10.0.6.160 (nginx-tailscale local service)
-ingress:
-  tailscale:
-    className: nginx-tailscale
-    annotations:
-      external-dns.alpha.kubernetes.io/internal: "true"
-      external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-```
-
-**Result**: OpnSense host override created pointing to nginx-tailscale's local IP, allowing access during ISP outages via the local LAN while Tailscale users access via VPN
-
-#### Fallback Behavior
-
-Services without specific DNS records automatically resolve to the Cloudflare wildcard (`*.eviljungle.com` → `100.65.132.11`), routing them to the `nginx-tailscale` controller. This provides a secure default where undefined services are only accessible to tailnet users.
+This ensures that during an ISP outage, local devices can still access the service via the LAN IP, while remote devices use the Tailscale VPN.
 
 ## Components
 
 ### 1. External-DNS OpnSense (`external-dns-opnsense.yaml`)
 
 - Manages internal DNS records in OpnSense Unbound as **host overrides**
-- Watches for ingresses/services with `external-dns.alpha.kubernetes.io/internal=true`
-- Creates A records pointing to `10.0.6.150` (nginx controller)
+- Watches for `HTTPRoute` with `external-dns.alpha.kubernetes.io/internal=true`
+- Creates A records pointing to `10.0.6.151` (Cilium Internal Gateway)
 - Uses webhook provider with `crutonjohn/external-dns-opnsense-webhook`
 
 ### 2. External-DNS Cloudflare (`external-dns-cloudflare.yaml`)
 
 - Manages external DNS records in Cloudflare
-- Watches for ingresses/services with `external-dns.alpha.kubernetes.io/external=true`
+- Watches for `HTTPRoute` with `external-dns.alpha.kubernetes.io/external=true`
 - Uses native Cloudflare provider
 - **Registry**: `txt` with `txtOwnerId: k8s-external` for proper record lifecycle management
 
@@ -133,74 +142,6 @@ Services without specific DNS records automatically resolve to the Cloudflare wi
 
 - `opnsense-credentials.yaml`: OpnSense API credentials from 1Password
 - `cloudflare-credentials.yaml`: Cloudflare API token from 1Password
-
-## Usage Patterns
-
-### Internal-Only Service (ISP Outage Resilient)
-
-```yaml
-annotations:
-  external-dns.alpha.kubernetes.io/internal: "true"
-  external-dns.alpha.kubernetes.io/target: "10.0.6.150"
-```
-
-**Result**: OpnSense host override created, service accessible during internet outages
-
-### External Public Service
-
-```yaml
-annotations:
-  external-dns.alpha.kubernetes.io/external: "true"
-  external-dns.alpha.kubernetes.io/target: "eviljungle.com"
-```
-
-**Result**: Cloudflare record created pointing to public IP
-
-### Tailnet-Only Service
-
-```yaml
-annotations:
-  external-dns.alpha.kubernetes.io/external: "true"
-  external-dns.alpha.kubernetes.io/target: "nginx-tailscale.eviljungle.com"
-```
-
-**Result**: Cloudflare CNAME created pointing to tailscale IP
-
-### Dual Access (Public + Internal Optimization)
-
-**Method**: Create two separate ingresses with unique paths to avoid NGINX conflicts:
-
-```yaml
-# External ingress
-metadata:
-  name: app-external
-  annotations:
-    external-dns.alpha.kubernetes.io/external: "true"
-    external-dns.alpha.kubernetes.io/target: "eviljungle.com"
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: app.eviljungle.com
-      http:
-        paths:
-          - path: /
----
-# Internal ingress  
-metadata:
-  name: app-internal
-  annotations:
-    external-dns.alpha.kubernetes.io/internal: "true"
-    external-dns.alpha.kubernetes.io/target: "10.0.6.150"
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: app.eviljungle.com
-      http:
-        paths:
-          - path: /internal-dns-only  # Unique path to avoid conflicts
-```
-
-**Result**: Both Cloudflare and OpnSense records created for maximum resilience
 
 ## ISP Outage Resilience
 
@@ -210,19 +151,15 @@ Any service with `external-dns.alpha.kubernetes.io/internal=true` annotation wil
 
 1. DNS query goes to OpnSense (local)
 2. OpnSense finds the host override (created by External-DNS)
-3. Returns local IP (`10.0.6.150` for nginx services, `10.0.6.160` for nginx-tailscale services)
-4. Connection made entirely within local network
+3. Returns local IP (`10.0.6.151`)
+4. Connection made entirely within local network via Cilium Gateway
 
-**Critical services configured for internal access (nginx on 10.0.6.150):**
+**Critical services configured for internal access:**
 
 - `plex.eviljungle.com`
 - `hass.eviljungle.com` (Home Assistant)
 - `request.eviljungle.com` (Jellyseerr)
 - `abs.eviljungle.com` (Audiobookshelf)
-- `mc.eviljungle.com` (Minecraft proxy - special case with LoadBalancer service)
-
-**Tailscale services also accessible during outages (nginx-tailscale on 10.0.6.160):**
-
 - All monitoring dashboards (Grafana, VictoriaMetrics, etc.)
 - Media management (Radarr, Sonarr, Prowlarr, etc.)
 - Home automation (Node-RED, Z-Wave JS UI, EMQX)
@@ -241,25 +178,11 @@ Services without internal DNS records will fail because:
 
 ### Internal DNS (OpnSense Host Overrides)
 
-- `plex.eviljungle.com` → `10.0.6.150` (nginx ingress)
-- `hass.eviljungle.com` → `10.0.6.150` (nginx ingress)
-- `request.eviljungle.com` → `10.0.6.150` (nginx ingress)
-- `abs.eviljungle.com` → `10.0.6.150` (nginx ingress)
-- `mc.eviljungle.com` → `10.0.6.106` (LoadBalancer service)
+- All internal services → `10.0.6.151` (Cilium Internal Gateway)
 
 ### External DNS (Cloudflare Records)
 
-- `plex.eviljungle.com` → `eviljungle.com` (CNAME)
-- `hass.eviljungle.com` → `eviljungle.com` (CNAME)
-- `request.eviljungle.com` → `eviljungle.com` (CNAME)
-- `abs.eviljungle.com` → `eviljungle.com` (CNAME)
-- `flux-webhook.eviljungle.com` → `eviljungle.com` (CNAME)
-- `www.eviljungle.com` → `eviljungle.com` (CNAME)
+- Public services → `eviljungle.com` (CNAME) or Public IP
+- Tailscale services → `100.85.60.114` (Envoy Gateway Tailscale IP)
 
-### Manual Records (One-time Setup)
-
-- `eviljungle.com` A record → Router public IP (for port forwarding)
-- `nginx-tailscale.eviljungle.com` A record → `100.65.132.11`
-- `*.eviljungle.com` A record → `100.65.132.11` (wildcard fallback)
-
-This architecture provides maximum flexibility: external users get proper public access, internal users get optimized local routing, tailnet users get secure access, and critical services remain available during internet outages. The wildcard fallback ensures that any undefined service defaults to tailnet-only access, providing a secure-by-default posture.
+This architecture provides maximum flexibility: external users get proper public access, internal users get optimized local routing, tailnet users get secure access, and critical services remain available during internet outages.
