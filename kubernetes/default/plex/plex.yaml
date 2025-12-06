@@ -90,6 +90,13 @@ spec:
         ports:
           http:
             port: &port 32400
+      # Separate ClusterIP service for Gateway API routing
+      gateway:
+        controller: plex
+        type: ClusterIP
+        ports:
+          http:
+            port: *port
 
     persistence:
       config:
@@ -136,7 +143,7 @@ spec:
           - &host plex.eviljungle.com
         rules:
           - backendRefs:
-              - identifier: app
+              - identifier: gateway
                 port: *port
             timeouts:
               backendRequest: 3600s
@@ -151,7 +158,7 @@ spec:
           - *host
         rules:
           - backendRefs:
-              - identifier: app
+              - identifier: gateway
                 port: *port
             timeouts:
               backendRequest: 3600s

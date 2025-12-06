@@ -101,6 +101,13 @@ spec:
         ports:
           http:
             port: 8123
+      # Separate ClusterIP service for Gateway API routing
+      gateway:
+        controller: home-assistant
+        type: ClusterIP
+        ports:
+          http:
+            port: 8123
       code:
         type: ClusterIP
         controller: home-assistant
@@ -186,7 +193,7 @@ spec:
           - &host "hass.eviljungle.com"
         rules:
           - backendRefs:
-              - name: home-assistant
+              - identifier: gateway
                 port: 8123
       internal:
         annotations:
@@ -199,5 +206,5 @@ spec:
           - *host
         rules:
           - backendRefs:
-              - name: home-assistant
+              - identifier: gateway
                 port: 8123
