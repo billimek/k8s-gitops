@@ -363,3 +363,42 @@ spec:
         allowed_organizations:
         name: Azure AD
         scopes: openid profile email
+    route:
+      main:
+        enabled: true
+        apiVersion: gateway.networking.k8s.io/v1
+        kind: HTTPRoute
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+        hostnames:
+          - grafana.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: grafana
+                port: 80
+      internal:
+        enabled: true
+        apiVersion: gateway.networking.k8s.io/v1
+        kind: HTTPRoute
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - grafana.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: grafana
+                port: 80
