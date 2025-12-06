@@ -70,10 +70,51 @@ spec:
           requests:
             cpu: 530m
             memory: 1.2Gi
+      route:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - vm.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: vmsingle-stack
+                port: 8428
     alertmanager:
       enabled: true
       spec:
         externalURL: "https://vm-alert.eviljungle.com"
+        routePrefix: /
+      route:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - vm-alert.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: vmalertmanager-stack
+                port: 9093
       config:
         route:
           # group_by: ["alertname", "job"]
@@ -121,12 +162,56 @@ spec:
       spec:
         extraArgs:
           external.url: "https://vmalert.eviljungle.com"
+        evaluationInterval: 15s
+      route:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - vmalert.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: vmalert-stack
+                port: 8080
     vmagent:
       enabled: true
       spec:
         additionalScrapeConfigs:
           name: victoria-metrics-k8s-stack-helm-values
           key: additionalScrapeConfigs.yaml
+        scrapeInterval: 20s
+        externalLabels:
+          cluster: home-ops
+      route:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - vmagent.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: vmagent-stack
+                port: 8429
         inlineScrapeConfig: |
           - job_name: 'ipmi'
             metrics_path: '/metrics'
