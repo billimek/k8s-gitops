@@ -7,10 +7,9 @@ metadata:
   namespace: flux-system
   annotations:
     external-dns.alpha.kubernetes.io/external: "true"
-    external-dns.alpha.kubernetes.io/target: "eviljungle.com"
 spec:
   parentRefs:
-    - name: external
+    - name: public
       namespace: kube-system
       sectionName: https
   hostnames:
