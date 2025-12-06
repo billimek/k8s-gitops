@@ -79,13 +79,16 @@ spec:
       main:
         enabled: true
         annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: tailscale-gateway
             namespace: kube-system
-        hostnames: &hostnames
+          - name: internal
+            namespace: kube-system
+        hostnames:
           - q.eviljungle.com
-        rules: &rules
+        rules:
           - matches:
               - path:
                   type: PathPrefix
@@ -93,15 +96,6 @@ spec:
             backendRefs:
               - name: qbittorrent
                 port: 80
-      internal:
-        enabled: true
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-        hostnames: *hostnames
-        rules: *rules
     # Note: If downloading very large torrents it might be worth using NFS for your download directory.
     # Beware if you are downloading torrents directly to a ZFS dataset that dataset will accrue fragmentation.
     persistence:

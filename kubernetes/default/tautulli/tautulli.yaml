@@ -73,13 +73,16 @@ spec:
       main:
         enabled: true
         annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: tailscale-gateway
             namespace: kube-system
-        hostnames: &hostnames
+          - name: internal
+            namespace: kube-system
+        hostnames:
           - tautulli.eviljungle.com
-        rules: &rules
+        rules:
           - matches:
               - path:
                   type: PathPrefix
@@ -87,15 +90,6 @@ spec:
             backendRefs:
               - name: tautulli
                 port: 8181
-      internal:
-        enabled: true
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-        hostnames: *hostnames
-        rules: *rules
     persistence:
       config:
         suffix: config

@@ -5,31 +5,12 @@ metadata:
   name: emqx-dashboard
   namespace: default
   annotations:
-    external-dns.alpha.kubernetes.io/external: "true"
+    external-dns.alpha.kubernetes.io/internal: "true"
+    external-dns.alpha.kubernetes.io/target: "10.0.6.151"
 spec:
   parentRefs:
     - name: tailscale-gateway
       namespace: kube-system
-  hostnames:
-    - emqx.eviljungle.com
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - name: emqx-dashboard
-          port: 18083
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: emqx-dashboard-internal
-  namespace: default
-  annotations:
-    external-dns.alpha.kubernetes.io/internal: "true"
-spec:
-  parentRefs:
     - name: internal
       namespace: kube-system
   hostnames:

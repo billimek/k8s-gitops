@@ -1,0 +1,39 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: wildcard-dns-fallback
+  namespace: kube-system
+  annotations:
+    external-dns.alpha.kubernetes.io/external: "true"
+    external-dns.alpha.kubernetes.io/target: "envoy-tailscale.drake-eel.ts.net"
+spec:
+  parentRefs:
+    - name: tailscale-gateway
+      namespace: kube-system
+  hostnames:
+    - "*.eviljungle.com"
+  rules:
+    - backendRefs:
+        - name: tailscale-gateway-fallback
+          port: 80
+          kind: Service
+          group: ""
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tailscale-gateway-fallback
+  namespace: kube-system
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    gateway.envoyproxy.io/owning-gateway-name: tailscale-gateway
