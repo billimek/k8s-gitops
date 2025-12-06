@@ -9,12 +9,12 @@ metadata:
     external-dns.alpha.kubernetes.io/controller: none
 spec:
   parentRefs:
-    - name: external
+    - name: public
       namespace: kube-system
       sectionName: http
-    # - name: tailscale
-    #   namespace: kube-system
-    #   sectionName: http
+    - name: internal
+      namespace: kube-system
+      sectionName: http
   rules:
     - filters:
         - requestRedirect:
