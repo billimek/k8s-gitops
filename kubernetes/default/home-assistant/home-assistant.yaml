@@ -187,8 +187,7 @@ spec:
           - &host "hass.eviljungle.com"
         rules:
           - backendRefs:
-              - identifier: main
-                port: http
+              - name: home-assistant
       internal:
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
@@ -201,5 +200,4 @@ spec:
           - *host
         rules:
           - backendRefs:
-              - identifier: main
-                port: http
+              - name: home-assistant

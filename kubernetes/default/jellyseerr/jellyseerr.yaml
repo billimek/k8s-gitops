@@ -84,10 +84,6 @@ spec:
             sectionName: https
         hostnames:
           - &host request.eviljungle.com
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: http
       internal:
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
@@ -98,10 +94,6 @@ spec:
             sectionName: https
         hostnames:
           - *host
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: http
 
     persistence:
       config:

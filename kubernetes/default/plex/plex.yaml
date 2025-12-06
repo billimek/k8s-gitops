@@ -137,8 +137,7 @@ spec:
           - &host plex.eviljungle.com
         rules:
           - backendRefs:
-              - identifier: app
-                port: http
+              - {}
             timeouts:
               backendRequest: 3600s
       internal:
@@ -153,7 +152,6 @@ spec:
           - *host
         rules:
           - backendRefs:
-              - identifier: app
-                port: http
+              - {}
             timeouts:
               backendRequest: 3600s
