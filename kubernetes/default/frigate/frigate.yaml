@@ -68,6 +68,7 @@ spec:
               limits:
                 memory: 4000Mi
                 gpu.intel.com/i915: 1
+
     service:
       main:
         controller: main
@@ -81,6 +82,7 @@ spec:
           rtsp:
             enabled: true
             port: 8554
+
     route:
       main:
         enabled: true

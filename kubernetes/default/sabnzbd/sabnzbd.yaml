@@ -61,6 +61,7 @@ spec:
                 memory: 250Mi
               limits:
                 memory: 2Gi
+
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -68,12 +69,14 @@ spec:
         runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
+
     service:
       app:
         controller: sabnzbd
         ports:
           http:
             port: *port
+
     route:
       main:
         enabled: true

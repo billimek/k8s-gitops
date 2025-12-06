@@ -48,6 +48,7 @@ spec:
                 cpu: 150m
               limits:
                 memory: 1Gi
+
     service:
       main:
         controller: main
@@ -55,6 +56,7 @@ spec:
         ports:
           http:
             port: &port 1880
+
     route:
       main:
         enabled: true

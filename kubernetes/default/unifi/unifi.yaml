@@ -45,6 +45,7 @@ spec:
                 cpu: 50m
               limits:
                 memory: 1600Mi
+
     service:
       app:
         controller: unifi
@@ -83,6 +84,7 @@ spec:
             enabled: true
             port: 10001
             protocol: UDP
+
     route:
       app:
         enabled: true

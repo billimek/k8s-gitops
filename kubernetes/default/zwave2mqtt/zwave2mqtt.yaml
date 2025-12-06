@@ -54,6 +54,7 @@ spec:
                 memory: 200Mi
               limits:
                 memory: 512Mi
+
     defaultPodOptions:
       affinity:
         nodeAffinity:
@@ -64,6 +65,7 @@ spec:
                     operator: In
                     values:
                       - "true"
+
     service:
       app:
         controller: zwave
@@ -72,6 +74,7 @@ spec:
             port: *port
           websocket:
             port: 3000
+
     route:
       main:
         enabled: true

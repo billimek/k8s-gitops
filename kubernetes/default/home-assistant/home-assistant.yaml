@@ -86,6 +86,7 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
+
     service:
       main:
         primary: true
@@ -110,6 +111,7 @@ spec:
         ports:
           http:
             port: 12321
+
     persistence:
       config:
         suffix: config

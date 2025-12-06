@@ -195,27 +195,6 @@ spec:
         scrapeInterval: 20s
         externalLabels:
           cluster: home-ops
-      route:
-        enabled: true
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
-        parentRefs:
-          - name: tailscale-gateway
-            namespace: kube-system
-          - name: internal
-            namespace: kube-system
-        hostnames:
-          - vmagent.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: vmagent-stack
-                port: 8429
-
         inlineScrapeConfig: |
           - job_name: 'ipmi'
             metrics_path: '/metrics'
@@ -250,6 +229,27 @@ spec:
           requests:
             cpu: 500m
             memory: 100Mi
+
+      route:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - vmagent.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: vmagent-stack
+                port: 8429
     grafana:
       enabled: false
     prometheus-node-exporter:
