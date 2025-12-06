@@ -4,6 +4,10 @@
 
 Popular CNI system that also enables BGP-based cluster loadbalancer: https://github.com/cilium/cilium
 
+Cilium also provides Gateway API support, which has replaced nginx as the primary ingress controller. Two gateways are configured for split-horizon DNS:
+- `gateway-public.yaml` - For public/internet DNS records (Cloudflare) pointing to eviljungle.com
+- `gateway-internal.yaml` - For internal/local DNS records (OpnSense) pointing to 10.0.6.150
+
 * [cilium/](cilium/)
 
 # coredns
@@ -53,13 +57,11 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 
 * [metric-server/metric-server.yaml](metric-server/metric-server.yaml)
 
-# nginx
+# nginx-tailscale
 
-![](https://i.imgur.com/b21MHEE.png)
+[ingress-nginx](https://github.com/kubernetes/ingress-nginx) controller for Tailscale VPN-only access. The main nginx controller has been replaced by Cilium Gateway API.
 
-[ingress-nginx](https://github.com/kubernetes/ingress-nginx) controller leveraging cert-manager as the central cert store for the wildcard certificate
-
-* [nginx/](nginx/)
+* [nginx/nginx-tailscale.yaml](nginx/nginx-tailscale.yaml)
 
 # node-feature-discovery
 
