@@ -1,0 +1,39 @@
+---
+# PodMonitor for Envoy Proxy data plane metrics
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: envoy-proxy
+  namespace: kube-system
+spec:
+  jobLabel: envoy-proxy
+  namespaceSelector:
+    matchNames:
+      - kube-system
+  podMetricsEndpoints:
+    - port: metrics
+      path: /stats/prometheus
+      honorLabels: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: proxy
+      app.kubernetes.io/name: envoy
+---
+# ServiceMonitor for Envoy Gateway control plane metrics
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: envoy-gateway
+  namespace: kube-system
+spec:
+  endpoints:
+    - port: metrics
+      path: /metrics
+      honorLabels: true
+  jobLabel: envoy-gateway
+  namespaceSelector:
+    matchNames:
+      - kube-system
+  selector:
+    matchLabels:
+      control-plane: envoy-gateway

@@ -31,9 +31,26 @@ metadata:
   namespace: default
 spec:
   ports:
-  - name: proxmox
-    port: 8006
-    targetPort: 8006
-    appProtocol: https
+    - name: https
+      port: 8006
+      targetPort: 8006
+      appProtocol: https
   type: ExternalName
   externalName: nas.home
+---
+# BackendTLSPolicy to handle self-signed certificate on Proxmox
+apiVersion: gateway.networking.k8s.io/v1alpha3
+kind: BackendTLSPolicy
+metadata:
+  name: external-proxmox-tls
+  namespace: default
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: external-proxmox
+      sectionName: https
+  validation:
+    hostname: nas.home
+  options:
+    gateway.envoyproxy.io/insecureSkipVerify: "true"

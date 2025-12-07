@@ -9,6 +9,20 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
+      hostname: "*.eviljungle.com"
       allowedRoutes:
         namespaces:
           from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.eviljungle.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: acme-crt-secret
+            namespace: cert-manager

@@ -115,3 +115,18 @@ spec:
         size: "20Gi"
         globalMounts:
           - path: /unifi
+
+    rawResources:
+      backend-tls-policy:
+        apiVersion: gateway.networking.k8s.io/v1alpha3
+        kind: BackendTLSPolicy
+        spec:
+          targetRefs:
+            - group: ""
+              kind: Service
+              name: unifi
+              sectionName: http
+          validation:
+            hostname: unifi
+          options:
+            gateway.envoyproxy.io/insecureSkipVerify: "true"
