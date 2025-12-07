@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/servicemonitor_v1.json
 # ServiceMonitor for Envoy Gateway control plane metrics
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor

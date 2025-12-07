@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json
 # PodMonitor for Envoy Proxy data plane metrics
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
