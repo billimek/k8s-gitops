@@ -29,7 +29,7 @@ spec:
       name: webhook
       webhook:
         image:
-          repository: ghcr.io/billimek/external-dns-opnsense-webhook
+          repository: ghcr.io/billimek/external-dns-opnsense-webhook-amd64
           tag: memory-leak-fix
           pullPolicy: Always
         env:
