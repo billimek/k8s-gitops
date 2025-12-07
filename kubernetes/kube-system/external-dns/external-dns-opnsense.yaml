@@ -65,17 +65,15 @@ spec:
           timeoutSeconds: 5
         resources:
           requests:
-            memory: 20Mi
+            memory: 128Mi
             cpu: 10m
           limits:
-            memory: 200Mi
+            memory: 512Mi
     
     # Sources to watch for DNS records
     sources:
-      - ingress
       - service
       - gateway-httproute
-      - gateway-grpcroute
     
     # Only manage eviljungle.com domain
     domainFilters:
@@ -104,8 +102,8 @@ spec:
       limits:
         memory: 256Mi
     
-    # Update interval
-    interval: 5m
+    # Update interval (increased to reduce API calls and memory churn)
+    interval: 10m
     
     # Logging
     logLevel: info
