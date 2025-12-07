@@ -73,7 +73,7 @@ spec:
       kind: Backend
       name: external-proxmox
   validation:
-    hostname: nas.home
+    hostname: nas.drake-eel.ts.net
     wellKnownCACertificates: System
   options:
     gateway.envoyproxy.io/insecureSkipVerify: "true"
