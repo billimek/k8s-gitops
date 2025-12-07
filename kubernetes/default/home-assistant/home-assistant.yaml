@@ -163,24 +163,6 @@ spec:
             subPath: .dockerenv
             readOnly: true
 
-    ingress:
-      code:
-        className: "nginx-tailscale"
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        hosts:
-          - host: &host-code "hass-vscode.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: code
-                  port: http
-        tls:
-          - hosts:
-              - *host-code
-
     route:
       app:
         annotations:
@@ -208,3 +190,23 @@ spec:
           - backendRefs:
               - identifier: gateway
                 port: 8123
+      code:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - hass-vscode.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: home-assistant-code
+                port: 12321

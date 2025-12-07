@@ -36,22 +36,28 @@ spec:
         enabled: true
         storageClassName: ceph-block
         size: 20Gi
-      ingress:
+      serviceMonitor:
+        enabled: true
+      route:
         enabled: true
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        hosts:
-          - name: victoria-logs.eviljungle.com
-            path:
-              - /
-            port: http
-        tls:
-          - hosts:
-              - victoria-logs.eviljungle.com
-        ingressClassName: nginx-tailscale
-      serviceMonitor:
-        enabled: true
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - victoria-logs.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: victoria-logs-server
+                port: 9428
     dashboards:
       enabled: true
       annotations:

@@ -63,20 +63,24 @@ spec:
           http:
             port: 4000
 
-    ingress:
+    route:
       main:
-        className: "nginx-tailscale"
+        enabled: true
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        hosts:
-          - host: &host "teslamate.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - *host
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - teslamate.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: teslamate
+                port: 4000

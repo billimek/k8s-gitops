@@ -57,11 +57,11 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 
 * [metric-server/metric-server.yaml](metric-server/metric-server.yaml)
 
-# nginx-tailscale
+# envoy-gateway
 
-[ingress-nginx](https://github.com/kubernetes/ingress-nginx) controller for Tailscale VPN-only access. The main nginx controller has been replaced by Cilium Gateway API.
+[Envoy Gateway](https://gateway.envoyproxy.io/) is used as the Gateway API controller for Tailscale integration. It manages the `tailscale-gateway` which provides a dedicated LoadBalancer IP from the Tailnet, allowing secure VPN access to internal services.
 
-* [nginx/nginx-tailscale.yaml](nginx/nginx-tailscale.yaml)
+* [envoy-gateway/](envoy-gateway/)
 
 # node-feature-discovery
 

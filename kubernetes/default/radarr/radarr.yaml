@@ -64,13 +64,14 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 50m
                 memory: 350Mi
               limits:
                 memory: 500Mi
+
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -78,37 +79,37 @@ spec:
         runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
+
     service:
       app:
         controller: radarr
         ports:
           http:
             port: *port
-    ingress:
+
+    route:
       main:
-        className: "nginx-tailscale"
+        enabled: true
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        hosts:
-          - host: &host "radarr.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-          - host: "movies.eviljungle.com"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
-              - "movies.eviljungle.com"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - radarr.eviljungle.com
+          - movies.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: radarr
+                port: 7878
+
     persistence:
       config:
         suffix: config

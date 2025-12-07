@@ -81,19 +81,27 @@ spec:
         config:
           osdsPerDevice: "1"
 
-    ingress:
+    route:
       dashboard:
+        enabled: true
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.160"
-        host:
-          name: &host "rook.eviljungle.com"
-          path: "/"
-          pathType: Prefix
-        tls:
-        - hosts:
-            - *host
-        ingressClassName: nginx-tailscale
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: tailscale-gateway
+            namespace: kube-system
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - rook.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: rook-ceph-mgr-dashboard
+                port: 7000
 
     cephBlockPools:
       - name: ceph-blockpool
