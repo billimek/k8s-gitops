@@ -43,9 +43,7 @@ spec:
       matchLabels:
         gateway.envoyproxy.io/owning-gateway-name: tailscale-gateway
   compression:
-    - type: Brotli
     - type: Gzip
-    - type: Zstd
   connection:
     bufferLimit: 8Mi
   tcpKeepalive: {}
