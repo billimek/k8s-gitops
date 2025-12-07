@@ -9,6 +9,7 @@ metadata:
   namespace: kube-system
   annotations:
     external-dns.alpha.kubernetes.io/target: "eviljungle.com"
+    io.cilium/lb-ipam-ips: "10.0.6.150"
 spec:
   gatewayClassName: eg-standard
   addresses:
