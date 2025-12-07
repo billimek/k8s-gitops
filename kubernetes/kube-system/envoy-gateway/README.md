@@ -105,7 +105,7 @@ envoy-gateway/
 - Client IP detection (X-Forwarded-For handling)
 - Request timeouts
 
-Both policies currently apply only to the Tailscale gateway for enhanced security and performance tuning.
+Both policies apply to all Gateways (public, internal, and tailscale) for consistent security and performance tuning.
 
 ## Error Pages
 
