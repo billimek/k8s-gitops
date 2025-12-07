@@ -129,5 +129,6 @@ spec:
                 sectionName: http
             validation:
               hostname: unifi
+              wellKnownCACertificates: System
             options:
               gateway.envoyproxy.io/insecureSkipVerify: "true"

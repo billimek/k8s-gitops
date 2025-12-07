@@ -52,5 +52,6 @@ spec:
       sectionName: https
   validation:
     hostname: nas.home
+    wellKnownCACertificates: System
   options:
     gateway.envoyproxy.io/insecureSkipVerify: "true"
