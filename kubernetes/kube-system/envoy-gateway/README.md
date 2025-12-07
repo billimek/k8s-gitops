@@ -54,21 +54,27 @@ HTTPRoute (application routing)
 
 ```
 envoy-gateway/
-├── envoy-gateway.yaml              # HelmRelease
+├── envoy-gateway.yaml              # HelmRelease for Envoy Gateway controller
 ├── gateway-classes/
-│   ├── gateway-class-standard.yaml # For public/internal
-│   └── gateway-class.yaml          # For Tailscale
+│   ├── gateway-class-standard.yaml # eg-standard (public/internal)
+│   └── gateway-class.yaml          # eg-tailscale (VPN)
 ├── envoy-proxies/
-│   ├── envoy-proxy-standard.yaml   # 2 replicas, standard LB
-│   └── envoy-proxy.yaml            # 1 replica, Tailscale LB
+│   ├── envoy-proxy-standard.yaml   # 2 replicas, standard LB config
+│   └── envoy-proxy.yaml            # 1 replica, Tailscale LB config
 ├── gateways/
-│   ├── gateway-public.yaml         # 10.0.6.150
-│   ├── gateway-internal.yaml       # 10.0.6.151
-│   └── gateway.yaml                # 100.85.60.114
+│   ├── gateway-public.yaml         # 10.0.6.150 (internet)
+│   ├── gateway-internal.yaml       # 10.0.6.151 (LAN)
+│   └── gateway.yaml                # 100.85.60.114 (Tailscale)
 ├── routes/
-│   ├── https-redirect.yaml         # Global HTTP→HTTPS
-│   └── wildcard-route.yaml         # Fallback for Tailscale
-└── policies/                       # Traffic policies (Tailscale only)
+│   ├── https-redirect.yaml         # Global HTTP→HTTPS redirect
+│   └── wildcard-route.yaml         # Catchall fallback for Tailscale
+├── policies/
+│   ├── backend-traffic-policy.yaml # Backend connection settings
+│   └── client-traffic-policy.yaml  # TLS, HTTP/2, client IP detection
+├── monitoring/
+│   ├── podmonitor-envoy-proxy.yaml     # Prometheus scraping for proxies
+│   └── servicemonitor-envoy-gateway.yaml # Prometheus scraping for controller
+└── external-proxmox.yaml           # Example: External service proxy route
 ```
 
 ## Key Differences vs Nginx Ingress
@@ -81,9 +87,41 @@ envoy-gateway/
 | Duplicate Ingress for split-horizon | Single HTTPRoute, multiple parentRefs |
 | Limited RBAC separation | Infra (Gateway) vs Apps (HTTPRoute) |
 
+## Traffic Policies
+
+**BackendTrafficPolicy**: Controls connection settings to backend services
+- Compression (Gzip)
+- Connection buffer limits
+- TCP keepalive
+- Request timeouts
+
+**ClientTrafficPolicy**: Controls client-facing connection settings
+- TLS configuration (min version, ALPN)
+- HTTP/2 settings
+- Client IP detection (X-Forwarded-For handling)
+- Request timeouts
+
+Both policies currently apply only to the Tailscale gateway for enhanced security and performance tuning.
+
 ## DNS Integration
 
 HTTPRoutes are discovered by External-DNS and converted to DNS records. See [external-dns/README.md](../external-dns/README.md) for details on how split-horizon DNS works with the three gateways.
+
+## IP Address Management
+
+**CRITICAL**: Gateways must have `io.cilium/lb-ipam-ips` annotation to pin their LoadBalancer IPs:
+
+```yaml
+metadata:
+  annotations:
+    io.cilium/lb-ipam-ips: "10.0.6.151"  # Reserves this IP from Cilium LB-IPAM pool
+spec:
+  addresses:
+    - type: IPAddress
+      value: 10.0.6.151  # Must match annotation
+```
+
+Without this annotation, Cilium LB-IPAM assigns random IPs from the pool, breaking DNS and routing when services are recreated. The annotation ensures the Gateway always gets the same IP.
 
 ## Debugging
 
@@ -106,7 +144,8 @@ kubectl logs -n kube-system -l control-plane=envoy-gateway
 
 **Common issues:**
 - HTTPRoute not attaching: Check `hostnames` matches Gateway listener pattern
-- LoadBalancer IP not assigned: Check MetalLB config or Tailscale operator
+- LoadBalancer IP not assigned: Check Cilium LB-IPAM pool and `io.cilium/lb-ipam-ips` annotation
+- Wrong IP assigned: Missing or incorrect `io.cilium/lb-ipam-ips` annotation on Gateway
 - TLS errors: Verify `acme-crt-secret` exists in `cert-manager` namespace
 
 ## Further Reading
