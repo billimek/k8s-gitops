@@ -75,13 +75,7 @@ spec:
         enabled: true
         rollOutPods: true
         ingress:
-          enabled: true
-          className: "nginx-tailscale"
-          hosts:
-            - hubble.eviljungle.com
-          tls:
-            - hosts:
-                - hubble.eviljungle.com
+          enabled: false
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.244.0.0/16
