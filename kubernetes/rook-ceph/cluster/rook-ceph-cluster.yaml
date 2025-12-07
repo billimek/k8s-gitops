@@ -19,8 +19,9 @@ spec:
     monitoring:
       enabled: true
       createPrometheusRules: true
-      prometheusRulesExcluded:
-        - CephPoolGrowthWarning
+      prometheusRuleOverrides:
+        CephPoolGrowthWarning:
+          disabled: true
     toolbox:
       enabled: true
     cephClusterSpec:
