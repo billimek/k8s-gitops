@@ -116,6 +116,19 @@ spec:
         size: "20Gi"
         globalMounts:
           - path: /unifi
+      # Mount the TLS cert for unifi to use
+      cert:
+        type: secret
+        name: unifi-tls
+        advancedMounts:
+          unifi:
+            app:
+              - path: /unifi/cert/cert.pem
+                subPath: tls.crt
+                readOnly: true
+              - path: /unifi/cert/privkey.pem
+                subPath: tls.key
+                readOnly: true
 
     rawResources:
       backend-tls-policy:
@@ -129,7 +142,5 @@ spec:
                 name: unifi
                 sectionName: http
             validation:
-              hostname: UniFi
+              hostname: unifi.eviljungle.com
               wellKnownCACertificates: System
-            options:
-              gateway.envoyproxy.io/insecureSkipVerify: "true"
