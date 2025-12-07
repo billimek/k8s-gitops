@@ -24,9 +24,9 @@ spec:
     remediation:
       retries: 3
   values:
-    defaultPodOptions:
-      # required for mDNS and other host network features
-      hostNetwork: true
+    # defaultPodOptions:
+    #   # required for mDNS and other host network features
+    #   hostNetwork: true
     controllers:
       home-assistant:
         pod:
