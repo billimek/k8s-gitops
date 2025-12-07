@@ -67,10 +67,14 @@ envoy-gateway/
 │   └── gateway.yaml                # 100.85.60.114 (Tailscale)
 ├── routes/
 │   ├── https-redirect.yaml         # Global HTTP→HTTPS redirect
-│   └── wildcard-route.yaml         # Catchall fallback for Tailscale
+│   ├── wildcard-route.yaml         # Wildcard catchall for Tailscale
+│   ├── wildcard-public.yaml        # Wildcard catchall for Public
+│   └── wildcard-internal.yaml      # Wildcard catchall for Internal
 ├── policies/
 │   ├── backend-traffic-policy.yaml # Backend connection settings
 │   └── client-traffic-policy.yaml  # TLS, HTTP/2, client IP detection
+├── error-pages/
+│   └── error-pages.yaml            # Custom error page service
 ├── monitoring/
 │   ├── podmonitor-envoy-proxy.yaml     # Prometheus scraping for proxies
 │   └── servicemonitor-envoy-gateway.yaml # Prometheus scraping for controller
@@ -102,6 +106,14 @@ envoy-gateway/
 - Request timeouts
 
 Both policies currently apply only to the Tailscale gateway for enhanced security and performance tuning.
+
+## Error Pages
+
+All three gateways have wildcard catchall routes (`*.eviljungle.com`) that route undefined hostnames to a custom error-pages service using the [tarampampam/error-pages](https://github.com/tarampampam/error-pages) project.
+
+**Route Matching Precedence**: Gateway API ensures specific hostnames (e.g., `grafana.eviljungle.com`) always take precedence over wildcard patterns (`*.eviljungle.com`), so existing applications are unaffected.
+
+**DNS Exclusion**: Wildcard routes have `external-dns.alpha.kubernetes.io/exclude: "true"` to prevent External-DNS from creating wildcard DNS records. Only explicit application routes create DNS entries.
 
 ## DNS Integration
 
