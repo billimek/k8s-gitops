@@ -21,3 +21,5 @@ spec:
       hostname: "tailscale-operator"
     apiServerProxyConfig:
       mode: "true"
+    ingressClass:
+      create: false
