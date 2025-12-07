@@ -29,8 +29,8 @@ spec:
       name: webhook
       webhook:
         image:
-          repository: ghcr.io/crutonjohn/external-dns-opnsense-webhook
-          tag: latest@sha256:72d4f5c79e515b8a70bb2e48f6472c746671a3ae3d8ad224aa686dd7192e1609
+          repository: ghcr.io/billimek/external-dns-opnsense-webhook
+          tag: memory-leak-fix
         env:
           - name: OPNSENSE_API_SECRET
             valueFrom:
@@ -68,7 +68,7 @@ spec:
             memory: 128Mi
             cpu: 10m
           limits:
-            memory: 512Mi
+            memory: 256Mi
     
     # Sources to watch for DNS records
     sources:
@@ -102,8 +102,7 @@ spec:
       limits:
         memory: 256Mi
     
-    # Update interval (increased to reduce API calls and memory churn)
-    interval: 10m
+    interval: 5m
     
     # Logging
     logLevel: info
