@@ -56,8 +56,6 @@ metadata:
   name: external-proxmox
   namespace: kube-system
 spec:
-  appProtocols:
-    - https
   endpoints:
     - fqdn:
         hostname: nas.home
