@@ -56,8 +56,6 @@ metadata:
   name: external-proxmox
   namespace: kube-system
 spec:
-  appProtocols:
-    - gateway.envoyproxy.io/h2c
   endpoints:
     - fqdn:
         hostname: nas.home
