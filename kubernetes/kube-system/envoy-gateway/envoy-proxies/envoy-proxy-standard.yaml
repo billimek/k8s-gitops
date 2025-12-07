@@ -1,7 +1,9 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/envoyproxy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: tailscale-proxy-config
+  name: standard-proxy-config
   namespace: kube-system
 spec:
   logging:
@@ -11,20 +13,17 @@ spec:
     type: Kubernetes
     kubernetes:
       envoyDeployment:
-        replicas: 1
+        replicas: 2
         container:
           resources:
             requests:
               cpu: 100m
               memory: 256Mi
             limits:
-              memory: 512Mi
+              memory: 1Gi
       envoyService:
         type: LoadBalancer
-        loadBalancerClass: tailscale
         externalTrafficPolicy: Local
-        annotations:
-          tailscale.com/hostname: "envoy-tailscale"
   shutdown:
     drainTimeout: 180s
   telemetry:

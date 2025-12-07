@@ -1,19 +1,12 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/gateway_v1.json
-# Gateway for public/internet DNS records (Cloudflare)
-# Routes referencing this gateway will have DNS records pointing to eviljungle.com (router public IP)
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: public
+  name: tailscale-gateway
   namespace: kube-system
-  annotations:
-    external-dns.alpha.kubernetes.io/target: "eviljungle.com"
 spec:
-  gatewayClassName: cilium
-  addresses:
-    - type: IPAddress
-      value: 10.0.6.150
+  gatewayClassName: eg-tailscale
   listeners:
     - name: http
       protocol: HTTP
@@ -30,6 +23,7 @@ spec:
         namespaces:
           from: All
       tls:
+        mode: Terminate
         certificateRefs:
           - kind: Secret
             name: acme-crt-secret

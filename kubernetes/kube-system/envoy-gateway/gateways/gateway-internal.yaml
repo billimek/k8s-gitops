@@ -11,7 +11,7 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/target: "10.0.6.151"
 spec:
-  gatewayClassName: cilium
+  gatewayClassName: eg-standard
   addresses:
     - type: IPAddress
       value: 10.0.6.151

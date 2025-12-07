@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/clienttrafficpolicy_v1alpha1.json
 # ClientTrafficPolicy for TLS and connection settings
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: ClientTrafficPolicy
@@ -29,24 +30,3 @@ spec:
   timeout:
     http:
       requestReceivedTimeout: 0s
----
-# BackendTrafficPolicy for backend connection settings
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: BackendTrafficPolicy
-metadata:
-  name: tailscale-gateway
-  namespace: kube-system
-spec:
-  targetSelectors:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      matchLabels:
-        gateway.envoyproxy.io/owning-gateway-name: tailscale-gateway
-  compression:
-    - type: Gzip
-  connection:
-    bufferLimit: 8Mi
-  tcpKeepalive: {}
-  timeout:
-    http:
-      requestTimeout: 0s

@@ -4,10 +4,6 @@
 
 Popular CNI system that also enables BGP-based cluster loadbalancer: https://github.com/cilium/cilium
 
-Cilium also provides Gateway API support, which has replaced nginx as the primary ingress controller. Two gateways are configured for split-horizon DNS:
-- `gateway-public.yaml` - For public/internet DNS records (Cloudflare) pointing to eviljungle.com
-- `gateway-internal.yaml` - For internal/local DNS records (OpnSense) pointing to 10.0.6.150
-
 * [cilium/](cilium/)
 
 # coredns
@@ -27,6 +23,15 @@ Cilium also provides Gateway API support, which has replaced nginx as the primar
 Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to automatically evict pods that no longer satisfy their NodeAffinity constraints.  This is used to work in concert with `node-feature-discovery` such that when USB devices are moved from one node to a different node, the pods requiring the USB devices will be properly forced to reschedule to the new location
 
 * [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
+
+# envoy-gateway
+
+[Envoy Gateway](https://gateway.envoyproxy.io/) is the primary Gateway API controller, replacing Cilium Gateway. It manages multiple gateways for different access patterns:
+- `gateway-public.yaml` - For public/internet DNS records (Cloudflare) pointing to eviljungle.com
+- `gateway-internal.yaml` - For internal/local DNS records (OpnSense) pointing to 10.0.6.150
+- `gateway.yaml` - For Tailscale integration providing a dedicated LoadBalancer IP from the Tailnet for secure VPN access
+
+* [envoy-gateway/](envoy-gateway/)
 
 # external-dns
 
@@ -56,12 +61,6 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 [metrics-server](https://github.com/kubernetes-sigs/metrics-server) provides cluster-level metrics for things like `kubectl top nodes`, etc
 
 * [metric-server/metric-server.yaml](metric-server/metric-server.yaml)
-
-# envoy-gateway
-
-[Envoy Gateway](https://gateway.envoyproxy.io/) is used as the Gateway API controller for Tailscale integration. It manages the `tailscale-gateway` which provides a dedicated LoadBalancer IP from the Tailnet, allowing secure VPN access to internal services.
-
-* [envoy-gateway/](envoy-gateway/)
 
 # node-feature-discovery
 
