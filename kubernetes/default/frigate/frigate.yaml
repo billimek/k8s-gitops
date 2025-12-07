@@ -33,6 +33,7 @@ spec:
           nodeSelector:
             google.feature.node.kubernetes.io/coral: "true"
             intel.feature.node.kubernetes.io/gpu: "true"
+
         containers:
           main:
             image:
@@ -43,6 +44,7 @@ spec:
             envFrom:
               - secretRef:
                   name: frigate-secret
+
             securityContext:
               privileged: true
             probes:

@@ -42,16 +42,19 @@ spec:
       operator:
         disable_prometheus_converter: false # Ensure we keep enabled the converter to sync prom rules to VM rules
         enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
+
     defaultDashboards:
       enabled: true
       grafanaOperator:
         # -- Create dashboards as CRDs (requires grafana-operator to be installed)
         enabled: false
+
     defaultRules:
       create: true
       groups:
         k8sContainerMemorySwap:
           create: false
+
     vmsingle:
       enabled: true
       spec:
@@ -70,6 +73,7 @@ spec:
           requests:
             cpu: 530m
             memory: 1.2Gi
+
       route:
         enabled: true
         annotations:

@@ -159,6 +159,7 @@ spec:
           gnetId: 3170
           revision: 3
           datasource: Prometheus
+
       ceph:
         ceph-cluster:
           # renovate: dashboardName="Ceph Cluster"
@@ -175,6 +176,7 @@ spec:
           gnetId: 5342
           revision: 9
           datasource: Prometheus
+
       kubernetes:
         k8s-system-api-server:
           # renovate: dashboardName="Kubernetes / System / API Server"
@@ -210,6 +212,7 @@ spec:
         kube-prometheus-dashboards:
           url: https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
           datasource: Prometheus
+
       gateway:
         # Envoy Proxy Global Dashboard
         envoy-proxy-global:
@@ -265,6 +268,7 @@ spec:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/drive-details.json
         home-assistant:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/home.json
+
     sidecar:
       dashboards:
         enabled: true
@@ -278,10 +282,13 @@ spec:
         enabled: true
         searchNamespace: ALL
         labelValue: ""
+
     persistence:
       enabled: false
+
     testFramework:
       enabled: false
+
     datasources:
       datasources.yaml:
         apiVersion: 1
