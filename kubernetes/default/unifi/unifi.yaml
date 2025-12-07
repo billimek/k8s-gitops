@@ -121,12 +121,13 @@ spec:
         apiVersion: gateway.networking.k8s.io/v1alpha3
         kind: BackendTLSPolicy
         spec:
-          targetRefs:
-            - group: ""
-              kind: Service
-              name: unifi
-              sectionName: http
-          validation:
-            hostname: unifi
-          options:
-            gateway.envoyproxy.io/insecureSkipVerify: "true"
+          spec:
+            targetRefs:
+              - group: ""
+                kind: Service
+                name: unifi
+                sectionName: http
+            validation:
+              hostname: unifi
+            options:
+              gateway.envoyproxy.io/insecureSkipVerify: "true"
