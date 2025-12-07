@@ -56,6 +56,11 @@ releases:
     chart: emqx/emqx-operator
     version: 2.2.29
 
+  - name: envoy-gateway
+    namespace: kube-system
+    chart: oci://docker.io/envoyproxy/gateway-helm
+    version: v1.6.1
+
   - name: node-feature-discovery
     namespace: kube-system
     chart: oci://registry.k8s.io/nfd/charts/node-feature-discovery
@@ -70,11 +75,6 @@ releases:
     namespace: kube-system
     chart: piraeus/snapshot-controller
     version: 4.2.0
-
-  - name: gateway-api-crds
-    namespace: kube-system
-    chart: wiremind/gateway-api-crds
-    version: 1.4.0
 
   - name: tuppr
     namespace: system-upgrade

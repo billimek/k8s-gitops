@@ -1,85 +1,31 @@
 ---
-apiVersion: v1
-kind: ConfigMap
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.envoyproxy.io/backend_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
 metadata:
-  name: proxmox-proxy-config
-  namespace: default
-data:
-  nginx.conf: |
-    events {}
-    http {
-      server {
-        listen 8080;
-        location / {
-          proxy_pass https://nas.home:8006;
-          proxy_ssl_verify off;
-          proxy_ssl_server_name on;
-          proxy_set_header Host $host;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Proto $scheme;
-          proxy_read_timeout 1800s;
-        }
-      }
-    }
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: proxmox-proxy
-  namespace: default
+  name: proxmox
+  namespace: kube-system
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: proxmox-proxy
-  template:
-    metadata:
-      labels:
-        app: proxmox-proxy
-    spec:
-      containers:
-        - name: nginx
-          image: nginx:alpine
-          ports:
-            - containerPort: 8080
-              name: http
-          volumeMounts:
-            - name: config
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
-      volumes:
-        - name: config
-          configMap:
-            name: proxmox-proxy-config
+  endpoints:
+    - fqdn:
+        hostname: nas.home
+        port: 8006
+  tls:
+    insecureSkipVerify: true
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: proxmox-proxy
-  namespace: default
-spec:
-  selector:
-    app: proxmox-proxy
-  ports:
-    - port: 80
-      targetPort: 8080
-      name: http
----
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: external-proxmox
-  namespace: default
+  namespace: kube-system
   annotations:
     external-dns.alpha.kubernetes.io/internal: "true"
     external-dns.alpha.kubernetes.io/target: "10.0.6.151"
 spec:
   parentRefs:
     - name: tailscale-gateway
-      namespace: kube-system
     - name: internal
-      namespace: kube-system
   hostnames:
     - proxmox.eviljungle.com
   rules:
@@ -88,5 +34,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: proxmox-proxy
-          port: 80
+        - group: gateway.envoyproxy.io
+          kind: Backend
+          name: proxmox
+          port: 8006
