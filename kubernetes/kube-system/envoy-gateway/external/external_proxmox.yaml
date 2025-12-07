@@ -1,4 +1,5 @@
 ---
+# HTTPRoute for Cilium internal gateway (uses ExternalName service)
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,8 +10,6 @@ metadata:
     external-dns.alpha.kubernetes.io/target: "10.0.6.151"
 spec:
   parentRefs:
-    - name: tailscale-gateway
-      namespace: kube-system
     - name: internal
       namespace: kube-system
   hostnames:
@@ -24,6 +23,64 @@ spec:
         - name: external-proxmox
           port: 8006
 ---
+# HTTPRoute for Envoy Gateway tailscale-gateway (uses Backend resource)
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: external-proxmox-tailscale
+  namespace: kube-system
+  annotations:
+    external-dns.alpha.kubernetes.io/internal: "true"
+    external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+spec:
+  parentRefs:
+    - name: tailscale-gateway
+      namespace: kube-system
+  hostnames:
+    - proxmox.eviljungle.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: gateway.envoyproxy.io
+          kind: Backend
+          name: external-proxmox
+          namespace: kube-system
+---
+# Backend resource for Envoy Gateway
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: external-proxmox
+  namespace: kube-system
+spec:
+  appProtocols:
+    - gateway.envoyproxy.io/h2c
+  endpoints:
+    - fqdn:
+        hostname: nas.home
+        port: 8006
+---
+# BackendTLSPolicy for Envoy Gateway Backend
+apiVersion: gateway.networking.k8s.io/v1alpha3
+kind: BackendTLSPolicy
+metadata:
+  name: external-proxmox-tls
+  namespace: kube-system
+spec:
+  targetRefs:
+    - group: gateway.envoyproxy.io
+      kind: Backend
+      name: external-proxmox
+  validation:
+    hostname: nas.home
+    wellKnownCACertificates: System
+  options:
+    gateway.envoyproxy.io/insecureSkipVerify: "true"
+---
+# ExternalName Service for Cilium gateway
 apiVersion: v1
 kind: Service
 metadata:
@@ -37,21 +94,3 @@ spec:
       appProtocol: https
   type: ExternalName
   externalName: nas.home
----
-# BackendTLSPolicy to handle self-signed certificate on Proxmox
-apiVersion: gateway.networking.k8s.io/v1alpha3
-kind: BackendTLSPolicy
-metadata:
-  name: external-proxmox-tls
-  namespace: default
-spec:
-  targetRefs:
-    - group: ""
-      kind: Service
-      name: external-proxmox
-      sectionName: https
-  validation:
-    hostname: nas.home
-    wellKnownCACertificates: System
-  options:
-    gateway.envoyproxy.io/insecureSkipVerify: "true"

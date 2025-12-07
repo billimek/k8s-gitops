@@ -56,6 +56,7 @@ spec:
           http:
             port: 8443
             protocol: HTTPS
+            appProtocol: https
           controller:
             enabled: true
             port: 8080
