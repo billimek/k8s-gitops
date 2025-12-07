@@ -1,5 +1,5 @@
 ---
-# HTTPRoute to redirect HTTP to HTTPS
+# HTTPRoute to redirect HTTP to HTTPS for all gateways
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -10,6 +10,12 @@ metadata:
 spec:
   parentRefs:
     - name: tailscale-gateway
+      namespace: kube-system
+      sectionName: http
+    - name: public
+      namespace: kube-system
+      sectionName: http
+    - name: internal
       namespace: kube-system
       sectionName: http
   rules:
