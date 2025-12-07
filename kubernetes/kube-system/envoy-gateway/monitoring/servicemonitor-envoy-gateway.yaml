@@ -1,0 +1,19 @@
+---
+# ServiceMonitor for Envoy Gateway control plane metrics
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: envoy-gateway
+  namespace: kube-system
+spec:
+  endpoints:
+    - port: metrics
+      path: /metrics
+      honorLabels: true
+  jobLabel: envoy-gateway
+  namespaceSelector:
+    matchNames:
+      - kube-system
+  selector:
+    matchLabels:
+      control-plane: envoy-gateway
