@@ -300,8 +300,10 @@ spec:
             - action: drop
               sourceLabels: [__name__]
               regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+
     kubeApiServer:
       enabled: true
+
     kubeControllerManager:
       enabled: true
       vmScrape:
@@ -314,13 +316,16 @@ spec:
                 caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
                 insecureSkipVerify: true
                 serverName: localhost
+
     coreDns:
       enabled: true
+
     kubeEtcd:
       enabled: false
       # service:
       #   selector:
       #     component: kube-apiserver
+
     kubeScheduler:
       enabled: true
       vmScrape:
@@ -333,8 +338,10 @@ spec:
                 caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
                 insecureSkipVerify: true
                 serverName: localhost
+
     kubeProxy:
       enabled: false
+
   valuesFrom:
     - kind: Secret
       name: "victoria-metrics-k8s-stack-helm-values"

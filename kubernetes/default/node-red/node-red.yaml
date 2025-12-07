@@ -48,7 +48,6 @@ spec:
                 cpu: 150m
               limits:
                 memory: 1Gi
-
     service:
       main:
         controller: main

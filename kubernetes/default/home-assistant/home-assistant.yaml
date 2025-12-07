@@ -35,6 +35,7 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
+
         containers:
           app:
             image:
@@ -49,6 +50,7 @@ spec:
             envFrom:
               - secretRef:
                   name: home-assistant-secret
+
             resources:
               requests:
                 cpu: 50m
@@ -62,6 +64,7 @@ spec:
             #   capabilities:
             #     drop:
             #       - ALL
+
           code-server:
             image:
               repository: ghcr.io/coder/code-server
