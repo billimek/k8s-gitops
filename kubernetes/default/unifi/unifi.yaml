@@ -119,15 +119,3 @@ spec:
         size: "20Gi"
         globalMounts:
           - path: /unifi
-
-    rawResources:
-      unifi:
-        apiVersion: gateway.envoyproxy.io/v1alpha1
-        kind: Backend
-        spec:
-          endpoints:
-            - service:
-                name: unifi
-                port: 8443
-          tls:
-            insecureSkipVerify: true
