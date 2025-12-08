@@ -29,8 +29,8 @@ spec:
       name: webhook
       webhook:
         image:
-          repository: ghcr.io/billimek/external-dns-opnsense-webhook
-          tag: txt-record-support
+          repository: ghcr.io/crutonjohn/external-dns-opnsense-webhook
+          tag: v1@sha256:0bf02fe18db4fe3a86fe5f561313ee434a203f4dcee7d19e770f67df854f3cff
           pullPolicy: Always
         env:
           - name: OPNSENSE_API_SECRET
