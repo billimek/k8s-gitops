@@ -6,8 +6,8 @@ metadata:
   name: hubble-ui
   namespace: kube-system
   annotations:
-    external-dns.alpha.kubernetes.io/external: "true"
-    external-dns.alpha.kubernetes.io/target: "envoy-tailscale.drake-eel.ts.net"
+    external-dns.alpha.kubernetes.io/internal: "true"
+    external-dns.alpha.kubernetes.io/target: "10.0.6.151"
 spec:
   hostnames:
     - hubble.eviljungle.com
@@ -15,6 +15,8 @@ spec:
     - name: tailscale-gateway
       namespace: kube-system
       sectionName: https
+    - name: internal
+      namespace: kube-system
   rules:
     - backendRefs:
         - name: hubble-ui
