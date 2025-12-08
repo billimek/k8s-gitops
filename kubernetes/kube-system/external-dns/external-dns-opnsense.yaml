@@ -90,7 +90,7 @@ spec:
     
     # Policy and registry settings
     policy: sync
-    registry: noop
+    registry: txt
 
     triggerLoopOnEvent: true
 
