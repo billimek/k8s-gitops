@@ -22,7 +22,6 @@ spec:
             limits:
               memory: 1Gi
       envoyService:
-        type: LoadBalancer
         externalTrafficPolicy: Local
   shutdown:
     drainTimeout: 180s

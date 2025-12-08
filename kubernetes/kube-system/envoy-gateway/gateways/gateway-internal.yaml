@@ -10,12 +10,11 @@ metadata:
   namespace: kube-system
   annotations:
     external-dns.alpha.kubernetes.io/target: "10.0.6.151"
-    io.cilium/lb-ipam-ips: "10.0.6.151"
 spec:
   gatewayClassName: eg-standard
-  addresses:
-    - type: IPAddress
-      value: 10.0.6.151
+  infrastructure:
+    annotations:
+      lbipam.cilium.io/ips: "10.0.6.151"
   listeners:
     - name: http
       protocol: HTTP

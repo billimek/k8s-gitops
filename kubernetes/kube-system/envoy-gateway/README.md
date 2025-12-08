@@ -121,19 +121,16 @@ HTTPRoutes are discovered by External-DNS and converted to DNS records. See [ext
 
 ## IP Address Management
 
-**CRITICAL**: Gateways must have `io.cilium/lb-ipam-ips` annotation to pin their LoadBalancer IPs:
+**CRITICAL**: Gateways must use `spec.infrastructure.annotations` to pin their LoadBalancer IPs. This propagates the annotation to the Service that Envoy Gateway creates:
 
 ```yaml
-metadata:
-  annotations:
-    io.cilium/lb-ipam-ips: "10.0.6.151"  # Reserves this IP from Cilium LB-IPAM pool
 spec:
-  addresses:
-    - type: IPAddress
-      value: 10.0.6.151  # Must match annotation
+  infrastructure:
+    annotations:
+      lbipam.cilium.io/ips: "10.0.6.151"  # Propagated to LoadBalancer Service
 ```
 
-Without this annotation, Cilium LB-IPAM assigns random IPs from the pool, breaking DNS and routing when services are recreated. The annotation ensures the Gateway always gets the same IP.
+Without `spec.infrastructure.annotations`, Cilium LB-IPAM assigns random IPs from the pool. The annotation ensures deterministic IP assignment.
 
 ## Debugging
 
@@ -156,8 +153,8 @@ kubectl logs -n kube-system -l control-plane=envoy-gateway
 
 **Common issues:**
 - HTTPRoute not attaching: Check `hostnames` matches Gateway listener pattern
-- LoadBalancer IP not assigned: Check Cilium LB-IPAM pool and `io.cilium/lb-ipam-ips` annotation
-- Wrong IP assigned: Missing or incorrect `io.cilium/lb-ipam-ips` annotation on Gateway
+- LoadBalancer IP not assigned: Check Cilium LB-IPAM pool and `spec.infrastructure.annotations`
+- Dual IP assigned: Missing `lbipam.cilium.io/ips` in `spec.infrastructure.annotations`
 - TLS errors: Verify `acme-crt-secret` exists in `cert-manager` namespace
 
 ## Further Reading
