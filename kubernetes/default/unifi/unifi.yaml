@@ -106,7 +106,9 @@ spec:
                   type: PathPrefix
                   value: /
             backendRefs:
-              - name: unifi
+              - group: gateway.envoyproxy.io
+                kind: Backend
+                name: unifi
                 port: 8443
 
     persistence:
@@ -117,31 +119,15 @@ spec:
         size: "20Gi"
         globalMounts:
           - path: /unifi
-      # Mount the TLS cert for unifi to use
-      cert:
-        type: secret
-        name: unifi-tls
-        advancedMounts:
-          unifi:
-            app:
-              - path: /unifi/cert/cert.pem
-                subPath: tls.crt
-                readOnly: true
-              - path: /unifi/cert/privkey.pem
-                subPath: tls.key
-                readOnly: true
 
     rawResources:
-      backend-tls-policy:
-        apiVersion: gateway.networking.k8s.io/v1alpha3
-        kind: BackendTLSPolicy
+      unifi:
+        apiVersion: gateway.envoyproxy.io/v1alpha1
+        kind: Backend
         spec:
-          spec:
-            targetRefs:
-              - group: ""
-                kind: Service
+          endpoints:
+            - service:
                 name: unifi
-                sectionName: http
-            validation:
-              hostname: unifi.eviljungle.com
-              wellKnownCACertificates: System
+                port: 8443
+          tls:
+            insecureSkipVerify: true
