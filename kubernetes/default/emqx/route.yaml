@@ -9,8 +9,6 @@ metadata:
     external-dns.alpha.kubernetes.io/target: "10.0.6.151"
 spec:
   parentRefs:
-    - name: tailscale-gateway
-      namespace: kube-system
     - name: internal
       namespace: kube-system
   hostnames:

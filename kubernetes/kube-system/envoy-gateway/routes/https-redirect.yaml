@@ -10,9 +10,6 @@ metadata:
     external-dns.alpha.kubernetes.io/controller: none
 spec:
   parentRefs:
-    - name: tailscale-gateway
-      namespace: kube-system
-      sectionName: http
     - name: public
       namespace: kube-system
       sectionName: http

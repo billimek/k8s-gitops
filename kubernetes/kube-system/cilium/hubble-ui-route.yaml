@@ -12,9 +12,6 @@ spec:
   hostnames:
     - hubble.eviljungle.com
   parentRefs:
-    - name: tailscale-gateway
-      namespace: kube-system
-      sectionName: https
     - name: internal
       namespace: kube-system
   rules:
