@@ -1,0 +1,18 @@
+---
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: connector
+  namespace: kube-system
+spec:
+  # Hostname prefix for connector machines - will be app-connector-0, app-connector-1, etc.
+  hostnamePrefix: "app-connector"
+  # Tag for ACL policy matching
+  tags:
+    - "tag:connector"
+  # Advertise the internal gateway subnet to Tailscale
+  # This allows Tailscale clients to route traffic to 10.0.6.0/24 through this connector
+  appConnector:
+    routes:
+      - 10.0.6.0/24
+  replicas: 2
