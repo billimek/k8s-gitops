@@ -14,5 +14,6 @@ spec:
   # This allows Tailscale clients to route traffic to 10.0.6.0/24 through this connector
   appConnector:
     routes:
-      - 10.0.6.0/24
+      - 10.0.6.0/24  # Gateway subnet
+      - 10.0.7.0/24  # Infrastructure subnet (NAS, Proxmox, etc.)
   replicas: 2
