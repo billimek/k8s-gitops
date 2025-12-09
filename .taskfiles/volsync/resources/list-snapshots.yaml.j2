@@ -15,12 +15,13 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: list
-          image: docker.io/restic/restic:0.16.2
+          image: docker.io/kopia/kopia:0.18.2
           args:
-            - snapshots
+            - snapshot
+            - list
           envFrom:
             - secretRef:
-                name: {{ ENV.APP }}-restic-secret
+                name: {{ ENV.APP }}-kopia-secret
           volumeMounts:
             - mountPath: /repository
               name: repository
@@ -28,4 +29,4 @@ spec:
         - name: repository
           nfs:
             server: "nas.home"
-            path: "/mnt/ssdtank/s3/volsync"
+            path: "/mnt/tank/backups/kopia"

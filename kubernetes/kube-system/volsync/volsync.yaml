@@ -30,3 +30,9 @@ spec:
     manageCRDs: true
     metrics:
       disableAuth: true
+    # Override images to use perfectra1n fork with Kopia support
+    image: &image
+      repository: ghcr.io/perfectra1n/volsync
+      tag: v0.16.13
+    kopia: *image
+    restic: *image

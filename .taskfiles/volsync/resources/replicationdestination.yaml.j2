@@ -7,8 +7,8 @@ metadata:
 spec:
   trigger:
     manual: restore-once
-  restic:
-    repository: {{ ENV.APP }}-restic-secret
+  kopia:
+    repository: {{ ENV.APP }}-kopia-secret
     destinationPVC: {{ ENV.CLAIM }}
     copyMethod: Direct
     storageClassName: {{ ENV.STORAGE_CLASS_NAME }}
@@ -16,9 +16,9 @@ spec:
     previous: {{ ENV.PREVIOUS }}
     restoreAsOf: {{ ENV.RESTORE_AS_OF }}
     moverSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
-    enableFileDeletion: true
-    cleanupCachePVC: true
-    cleanupTempPVC: true
+      runAsUser: {{ ENV.PUID }}
+      runAsGroup: {{ ENV.PGID }}
+      fsGroup: {{ ENV.PGID }}
+    cacheStorageClassName: ceph-block
+    cacheAccessModes: ["ReadWriteOnce"]
+    cacheCapacity: 2Gi
