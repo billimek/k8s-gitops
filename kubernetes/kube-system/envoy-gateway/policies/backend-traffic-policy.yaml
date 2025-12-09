@@ -14,9 +14,6 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: internal
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: tailscale-gateway
   compression:
     - type: Gzip
   connection:

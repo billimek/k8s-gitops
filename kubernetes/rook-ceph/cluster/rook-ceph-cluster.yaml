@@ -94,8 +94,6 @@ spec:
           path: /
           pathType: PathPrefix
         parentRefs:
-          - name: tailscale-gateway
-            namespace: kube-system
           - name: internal
             namespace: kube-system
 

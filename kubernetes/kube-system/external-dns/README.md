@@ -4,32 +4,38 @@ This directory contains the dual External-DNS setup for automatic DNS management
 
 ## Architecture
 
-The External-DNS setup provides a resilient split-horizon DNS architecture with three ingress pathways:
+The External-DNS setup provides a resilient split-horizon DNS architecture with three access pathways:
 
 ```text
 External Users:
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Query DNS     │───►│   Cloudflare     │───►│  Envoy Gateway  │
-│                 │    │   (1.1.1.1)      │    │  (Public IP)    │
+│   Query DNS     │───►│   Cloudflare     │───►│ Public Gateway  │
+│                 │    │   (1.1.1.1)      │    │  10.0.6.150     │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 
 Tailscale Users:
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Query DNS     │───►│   Cloudflare     │───►│  Envoy Gateway  │
-│                 │    │   (specific A)   │    │  (Tailscale IP) │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-
-Internal Users:
 ┌─────────────────┐    ┌──────────────────┐    ┌───────────────────────┐
-│   Query DNS     │───►│   OpnSense       │───►│  Local Services       │
-│                 │    │   (10.0.7.1)     │    │  Envoy: 10.0.6.151    │
+│   Query DNS     │───►│  Tailscale DNS   │───►│  App Connector Pod    │
+│                 │    │ (100.100.100.100)│    │  (uses cluster DNS)   │
+└─────────────────┘    └──────────────────┘    └───────────┬───────────┘
+                                                           │
+                                                           ▼
+                                                   ┌─────────────────┐
+                                                   │Internal Gateway │
+                                                   │   10.0.6.151    │
+                                                   └─────────────────┘
+
+Internal Users (LAN):
+┌─────────────────┐    ┌──────────────────┐    ┌───────────────────────┐
+│   Query DNS     │───►│   OpnSense       │───►│ Internal Gateway      │
+│                 │    │   (10.0.7.1)     │    │   10.0.6.151          │
 └─────────────────┘    └──────────────────┘    └───────────────────────┘
-                                │
-                                ▼ (if no override)
-                       ┌──────────────────┐
-                       │   Cloudflare     │
-                       │   (fallback)     │
-                       └──────────────────┘
+                                 │
+                                 ▼ (if no host override)
+                        ┌──────────────────┐
+                        │   Cloudflare     │
+                        │   (fallback)     │
+                        └──────────────────┘
 ```
 
 ## DNS Resolution Strategy
@@ -41,24 +47,25 @@ Internal Users:
 
 ### Cloudflare Configuration
 
-- **Specific Records**: Created by External-DNS for external services (pointing to Envoy Gateway Tailscale IP)
-- **Public Records**: Created by External-DNS for public services (pointing to Cilium Gateway Public IP)
+- **Public Records**: Created by External-DNS for public services (pointing to Public Gateway or external IPs)
 
 ### Resolution Flow
 
 1. **Internal users** query `app.eviljungle.com` → OpnSense
    - If host override exists → Returns local IP (`10.0.6.151` - Envoy Gateway internal)
-   - If no override → Forwards to Cloudflare → Returns Tailscale IP (accessible via VPN) or Public IP
+   - If no override → Forwards to Cloudflare → Returns Public IP
 2. **External users** query `app.eviljungle.com` → Cloudflare directly
-   - Returns configured target (Tailscale IP or Public IP - both via Envoy Gateway)
+   - Returns configured target (Public Gateway IP)
+3. **Tailscale users** query `app.eviljungle.com` → Tailscale DNS
+   - App Connector resolves via cluster DNS → `10.0.6.151`
+   - Routes traffic through connector pod to internal gateway
 
 ## Gateway Architecture
 
-### Three Gateways (All Envoy Gateway)
+### Two Gateways (All Envoy Gateway)
 
 1. **`public`** - Public-facing services on `10.0.6.150` (Router forwards ports 80/443 here)
-2. **`internal`** - LAN-only services on `10.0.6.151` (OpnSense points here)
-3. **`tailscale-gateway`** - Tailnet-only services on Tailscale IP (e.g., `100.85.60.114`)
+2. **`internal`** - LAN-only services on `10.0.6.151` (OpnSense points here, Tailscale routes here via App Connector)
 
 ### Service Exposure Patterns
 
@@ -74,37 +81,38 @@ route:
       - "app.eviljungle.com"
 ```
 
-#### Tailnet-Only Service (Envoy Gateway)
+#### Tailnet-Only Service (Internal Gateway + App Connector)
 
 ```yaml
 route:
   main:
     annotations:
-      external-dns.alpha.kubernetes.io/external: "true"
-      external-dns.alpha.kubernetes.io/target: "envoy-tailscale.drake-eel.ts.net"
+      external-dns.alpha.kubernetes.io/internal: "true"
+      external-dns.alpha.kubernetes.io/target: "10.0.6.151"
     parentRefs:
-      - name: tailscale-gateway
+      - name: internal
         namespace: kube-system
     hostnames:
       - "app.eviljungle.com"
 ```
 
-#### Tailnet Service with ISP Outage Resilience (Split-Horizon)
+**Note**: Tailscale users access via App Connector which routes to the internal gateway.
+
+#### Split-Horizon Service (Public + Internal + Tailscale)
 
 ```yaml
 route:
-  # External/VPN Access (via Envoy Gateway)
-  main:
+  # External/Public Access
+  public:
     annotations:
       external-dns.alpha.kubernetes.io/external: "true"
-      external-dns.alpha.kubernetes.io/target: "envoy-tailscale.drake-eel.ts.net"
     parentRefs:
-      - name: tailscale-gateway
+      - name: public
         namespace: kube-system
     hostnames:
       - "app.eviljungle.com"
   
-  # Internal/LAN Access (via Envoy Gateway)
+  # Internal/LAN Access + Tailscale VPN Access
   internal:
     annotations:
       external-dns.alpha.kubernetes.io/internal: "true"
@@ -117,10 +125,11 @@ route:
 ```
 
 **Result**: 
-- **Cloudflare**: `app.eviljungle.com` -> `100.85.60.114` (Tailscale IP - via Envoy Gateway)
-- **OpnSense**: `app.eviljungle.com` -> `10.0.6.151` (LAN IP - via Envoy Gateway)
+- **Cloudflare**: `app.eviljungle.com` -> Public IP (via Envoy Gateway Public)
+- **OpnSense**: `app.eviljungle.com` -> `10.0.6.151` (LAN IP - via Envoy Gateway Internal)
+- **Tailscale**: `app.eviljungle.com` -> `10.0.6.151` (via App Connector routing)
 
-This ensures that during an ISP outage, local devices can still access the service via the LAN IP, while remote devices use the Tailscale VPN.
+This ensures that during an ISP outage, local devices can still access the service via the LAN IP, while remote devices use either the public gateway (from internet) or Tailscale VPN (via App Connector).
 
 ## Components
 
@@ -183,6 +192,5 @@ Services without internal DNS records will fail because:
 ### External DNS (Cloudflare Records)
 
 - Public services → `eviljungle.com` (CNAME) or Public IP (via Envoy Gateway Public)
-- Tailscale services → `100.85.60.114` (Envoy Gateway Tailscale)
 
-This architecture provides maximum flexibility: external users get proper public access, internal users get optimized local routing, tailnet users get secure access, and critical services remain available during internet outages.
+This architecture provides maximum flexibility: external users get proper public access, internal users get optimized local routing, tailnet users get secure access via App Connector, and critical services remain available during internet outages.

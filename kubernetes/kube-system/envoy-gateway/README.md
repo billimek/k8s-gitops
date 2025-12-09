@@ -2,17 +2,23 @@
 
 Primary Gateway API controller for L7 HTTP/HTTPS routing. Replaces nginx Ingress with a more flexible, role-oriented architecture.
 
-## Three Gateway Architecture
+## Two Gateway Architecture
 
 ```
-┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│ Public Gateway   │  │ Internal Gateway │  │Tailscale Gateway │
-│   10.0.6.150     │  │   10.0.6.151     │  │ 100.85.60.114    │
-│  eg-standard     │  │  eg-standard     │  │  eg-tailscale    │
-└────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘
-         │                     │                      │
-    Internet              LAN-Only             Tailnet VPN
-  (ports 80/443)      (ISP outage safe)    (secure remote)
+┌──────────────────┐  ┌──────────────────┐
+│ Public Gateway   │  │ Internal Gateway │
+│   10.0.6.150     │  │   10.0.6.151     │
+│  eg-standard     │  │  eg-standard     │
+└────────┬─────────┘  └────────┬─────────┘
+         │                     │
+    Internet         LAN + Tailscale (via App Connector)
+  (ports 80/443)      (ISP outage safe)
+                            ↑
+                     ┌──────┴────────┐
+                     │ App Connector │
+                     │ (advertises   │
+                     │ 10.0.6.0/24)  │
+                     └───────────────┘
 ```
 
 ### 1. Public (`10.0.6.150`)
@@ -24,11 +30,7 @@ Primary Gateway API controller for L7 HTTP/HTTPS routing. Replaces nginx Ingress
 - LAN-only services
 - ISP outage resilient (local DNS + routing)
 - DNS: OpnSense host overrides → `10.0.6.151`
-
-### 3. Tailscale (`100.85.60.114`)
-- VPN-only access
-- No public firewall ports
-- DNS: Cloudflare → Tailscale IP
+- **Tailscale access**: Via App Connector routing `10.0.6.0/24` subnet
 
 ## Component Hierarchy
 
@@ -56,18 +58,14 @@ HTTPRoute (application routing)
 envoy-gateway/
 ├── envoy-gateway.yaml              # HelmRelease for Envoy Gateway controller
 ├── gateway-classes/
-│   ├── gateway-class-standard.yaml # eg-standard (public/internal)
-│   └── gateway-class.yaml          # eg-tailscale (VPN)
+│   └── gateway-class-standard.yaml # eg-standard (public/internal)
 ├── envoy-proxies/
-│   ├── envoy-proxy-standard.yaml   # 2 replicas, standard LB config
-│   └── envoy-proxy.yaml            # 1 replica, Tailscale LB config
+│   └── envoy-proxy-standard.yaml   # 2 replicas, standard LB config
 ├── gateways/
 │   ├── gateway-public.yaml         # 10.0.6.150 (internet)
-│   ├── gateway-internal.yaml       # 10.0.6.151 (LAN)
-│   └── gateway.yaml                # 100.85.60.114 (Tailscale)
+│   └── gateway-internal.yaml       # 10.0.6.151 (LAN + Tailscale via App Connector)
 ├── routes/
 │   ├── https-redirect.yaml         # Global HTTP→HTTPS redirect
-│   ├── wildcard-route.yaml         # Wildcard catchall for Tailscale
 │   ├── wildcard-public.yaml        # Wildcard catchall for Public
 │   └── wildcard-internal.yaml      # Wildcard catchall for Internal
 ├── policies/
@@ -91,6 +89,10 @@ envoy-gateway/
 | Duplicate Ingress for split-horizon | Single HTTPRoute, multiple parentRefs |
 | Limited RBAC separation | Infra (Gateway) vs Apps (HTTPRoute) |
 
+## Tailscale Integration
+
+Remote access via Tailscale is handled by the **App Connector** (see `/kubernetes/kube-system/tailscale/`), which advertises the `10.0.6.0/24` subnet to the Tailscale network. This allows Tailscale clients to route traffic to the `internal` gateway at `10.0.6.151`.
+
 ## Traffic Policies
 
 **BackendTrafficPolicy**: Controls connection settings to backend services
@@ -105,11 +107,11 @@ envoy-gateway/
 - Client IP detection (X-Forwarded-For handling)
 - Request timeouts
 
-Both policies apply to all Gateways (public, internal, and tailscale) for consistent security and performance tuning.
+Both policies apply to all Gateways (public and internal) for consistent security and performance tuning.
 
 ## Error Pages
 
-All three gateways have wildcard catchall routes (`*.eviljungle.com`) that route undefined hostnames to a custom error-pages service using the [tarampampam/error-pages](https://github.com/tarampampam/error-pages) project.
+Both gateways have wildcard catchall routes (`*.eviljungle.com`) that route undefined hostnames to a custom error-pages service using the [tarampampam/error-pages](https://github.com/tarampampam/error-pages) project.
 
 **Route Matching Precedence**: Gateway API ensures specific hostnames (e.g., `grafana.eviljungle.com`) always take precedence over wildcard patterns (`*.eviljungle.com`), so existing applications are unaffected.
 
