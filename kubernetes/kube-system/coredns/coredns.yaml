@@ -49,18 +49,6 @@ spec:
               class error
           - name: prometheus
             parameters: 0.0.0.0:9153
-          - name: hosts
-            configBlock: |-
-              10.0.7.50 k8s-0
-              10.0.7.51 k8s-a
-              10.0.7.52 k8s-b
-              10.0.7.53 k8s-c
-              10.0.7.54 k8s-d
-              10.0.7.55 k8s-e
-              10.0.7.57 k8s-g
-              10.0.7.58 k8s-h
-              10.0.7.59 k8s-i
-              fallthrough
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
             configBlock: |-
