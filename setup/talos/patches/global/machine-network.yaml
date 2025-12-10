@@ -1,6 +1,3 @@
 machine:
   network:
     disableSearchDomain: false
-    searches:
-      - cluster.local
-      - home
