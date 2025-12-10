@@ -50,8 +50,17 @@ spec:
           - name: prometheus
             parameters: 0.0.0.0:9153
           - name: rewrite
-            configBlock: |-
-              name regex ^(k8s-[a-z0-9]+)$ {1}.home answer auto
+            configBlock:  |-
+              name exact k8s-0 k8s-0.home
+              name exact k8s-a k8s-a.home
+              name exact k8s-b k8s-b.home
+              name exact k8s-c k8s-c.home
+              name exact k8s-d k8s-d.home
+              name exact k8s-e k8s-e.home
+              name exact k8s-g k8s-g.home
+              name exact k8s-h k8s-h.home
+              name exact k8s-i k8s-i.home
+
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
             configBlock: |-
