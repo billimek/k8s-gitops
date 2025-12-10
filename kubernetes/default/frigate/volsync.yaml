@@ -3,25 +3,24 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: frigate-restic
+  name: frigate-kopia
   namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: frigate-restic-secret
+    name: frigate-kopia-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/frigate'
-        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
-        AWS_ACCESS_KEY_ID: '{{ .VOLSYNC_ACCESS_KEY }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .VOLSYNC_SECRET_KEY }}'
+        KOPIA_FS_PATH: /repository
+        KOPIA_PASSWORD: "{{ .KOPIA_PASSWORD }}"
+        KOPIA_REPOSITORY: filesystem:///repository
   dataFrom:
     - extract:
-        key: garage
+        key: kopia
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
@@ -33,17 +32,21 @@ spec:
   sourcePVC: frigate-config
   trigger:
     schedule: "0 4 * * *"
-  restic:
+  kopia:
+    repository: frigate-kopia-secret
     copyMethod: Snapshot
-    pruneIntervalDays: 10
-    repository: frigate-restic-secret
-    cacheCapacity: 10Gi
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
+    accessModes: ["ReadWriteOnce"]
+    cacheAccessModes: ["ReadWriteOnce"]
+    cacheCapacity: 10Gi
+    cacheStorageClassName: ceph-block
+    compression: zstd-fastest
+    parallelism: 2
     moverSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
       fsGroup: 1000
     retain:
+      hourly: 24
       daily: 10
-      within: 3d
