@@ -49,18 +49,18 @@ spec:
               class error
           - name: prometheus
             parameters: 0.0.0.0:9153
-          - name: rewrite
-            configBlock:  |-
-              name exact k8s-0 k8s-0.home
-              name exact k8s-a k8s-a.home
-              name exact k8s-b k8s-b.home
-              name exact k8s-c k8s-c.home
-              name exact k8s-d k8s-d.home
-              name exact k8s-e k8s-e.home
-              name exact k8s-g k8s-g.home
-              name exact k8s-h k8s-h.home
-              name exact k8s-i k8s-i.home
-
+          - name: hosts
+            configBlock: |-
+              10.0.7.50 k8s-0
+              10.0.7.51 k8s-a
+              10.0.7.52 k8s-b
+              10.0.7.53 k8s-c
+              10.0.7.54 k8s-d
+              10.0.7.55 k8s-e
+              10.0.7.57 k8s-g
+              10.0.7.58 k8s-h
+              10.0.7.59 k8s-i
+              fallthrough
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
             configBlock: |-
