@@ -21,4 +21,4 @@ spec:
   tcpKeepalive: {}
   timeout:
     http:
-      requestTimeout: 0s
+      requestTimeout: 300s # 5 minutes; allows for long streams but prevents indefinite hangs

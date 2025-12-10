@@ -32,3 +32,4 @@ spec:
   timeout:
     http:
       requestReceivedTimeout: 0s
+      idleTimeout: 3600s # 1 hour for long streams
