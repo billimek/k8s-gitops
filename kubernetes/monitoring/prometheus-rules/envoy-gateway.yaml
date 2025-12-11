@@ -32,16 +32,15 @@ spec:
             summary: "High error rate on Envoy cluster {{ $labels.envoy_cluster_name }}"
             description: "Error rate is above 5% for the last 5 minutes."
 
-        - alert: EnvoyHighLatency
-          expr: |
-            histogram_quantile(0.99, sum(rate(envoy_cluster_upstream_rq_time_bucket[5m])) by (le, envoy_cluster_name))
-            > 1000
+        - alert: EnvoyHighRequestLatency
+          expr: |-
+            histogram_quantile(0.99, sum by (le, envoy_cluster_name) (rate(envoy_cluster_upstream_rq_time_bucket[5m]))) > 3000
           for: 5m
-          labels:
-            severity: warning
           annotations:
-            summary: "High latency on Envoy cluster {{ $labels.envoy_cluster_name }}"
-            description: "P99 latency is above 1 second for the last 5 minutes."
+            summary: >-
+              The 99th percentile request latency for cluster {{ $labels.envoy_cluster_name }} is {{ $value }}ms
+          labels:
+            severity: critical
 
         - alert: EnvoyConnectionPoolExhausted
           expr: |
