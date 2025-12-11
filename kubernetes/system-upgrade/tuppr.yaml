@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: tuppr
-      version: 0.0.44
+      version: 0.0.45
       sourceRef:
         kind: HelmRepository
         name: home-operations
