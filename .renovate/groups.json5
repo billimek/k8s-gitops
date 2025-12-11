@@ -95,7 +95,7 @@
     {
       description: "Intel Device Plugins Group",
       groupName: "Intel-Device-Plugins",
-      matchDatasources: ["docker"],
+      matchDatasources: ["docker", "helm"],
       matchPackageNames: ["/intel-device-plugins-operator/", "/intel-device-plugins-gpu/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
