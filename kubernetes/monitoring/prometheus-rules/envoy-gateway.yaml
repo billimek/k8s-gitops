@@ -20,17 +20,18 @@ spec:
             description: "Envoy Gateway has been down for more than 5 minutes."
 
         - alert: EnvoyHighErrorRate
-          expr: |
-            sum(rate(envoy_cluster_upstream_rq_xx{envoy_response_code_class="5"}[5m])) by (envoy_cluster_name)
-            /
-            sum(rate(envoy_cluster_upstream_rq_total[5m])) by (envoy_cluster_name)
-            > 0.05
+          expr: |-
+            (
+              sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq{envoy_response_code=~"5.."}[5m]))
+              /
+              sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq[5m]))
+            ) > 0.05
           for: 5m
-          labels:
-            severity: warning
           annotations:
-            summary: "High error rate on Envoy cluster {{ $labels.envoy_cluster_name }}"
-            description: "Error rate is above 5% for the last 5 minutes."
+            summary: >-
+              The error rate for cluster {{ $labels.envoy_cluster_name }} is {{ printf "%.2f" $value }}%
+          labels:
+            severity: critical
 
         - alert: EnvoyHighRequestLatency
           expr: |-
