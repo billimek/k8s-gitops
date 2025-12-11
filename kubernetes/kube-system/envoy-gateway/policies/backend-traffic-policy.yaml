@@ -17,8 +17,19 @@ spec:
   compression:
     - type: Gzip
   connection:
-    bufferLimit: 8Mi
-  tcpKeepalive: {}
+    bufferLimit: 32Mi  # Increased from 8Mi
+  tcpKeepalive:
+    idleTime: 300s
+    interval: 30s
+    probes: 3
   timeout:
     http:
-      requestTimeout: 300s # 5 minutes; allows for long streams but prevents indefinite hangs
+      requestTimeout: 0s  # No timeout for streaming
+  circuitBreaker:
+    maxConnections: 4096  # High for streaming
+    maxPendingRequests: 2048
+    maxRequestsPerConnection: 0
+  loadBalancer:
+    type: LeastRequest
+    slowStart:
+      window: 30s  # Gradually ramp up traffic to new backends
