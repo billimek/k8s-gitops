@@ -23,6 +23,11 @@
     'prEditedNotification',
     'prIgnoreNotification',
   ],
+
+  "schedule": [
+    "every hour from 1am to 5am"
+  ],
+
   flux: {
     managerFilePatterns: [
       '/(^|/)kubernetes/.+\\.ya?ml$/',
