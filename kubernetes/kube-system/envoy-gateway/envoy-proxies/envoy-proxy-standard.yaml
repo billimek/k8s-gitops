@@ -4,6 +4,7 @@ apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
   name: standard-proxy-config
+  namespace: kube-system
 spec:
   logging:
     level:
@@ -28,4 +29,4 @@ spec:
     metrics:
       prometheus:
         compression:
-          type: Zstd
+          type: Gzip
