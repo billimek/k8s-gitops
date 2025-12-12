@@ -23,8 +23,7 @@
         "ghcr.io/tarampampam/error-pages",
         "ghcr.io/zwave-js/zwave-js-ui",
         "nodered/node-red",
-        "/victoria-metrics/",
-        "/grafana/"
+        "/victoria-metrics/"
       ],
     },
     {
