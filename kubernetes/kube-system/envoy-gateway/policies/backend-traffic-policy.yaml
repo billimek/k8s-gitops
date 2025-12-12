@@ -11,21 +11,12 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
   compression:
+    - type: Zstd
+    - type: Brotli
     - type: Gzip
   connection:
-    bufferLimit: 32Mi  # Increased from 8Mi
-  tcpKeepalive:
-    idleTime: 300s
-    interval: 30s
-    probes: 3
+    bufferLimit: 16Mi
+  tcpKeepalive: {}
   timeout:
     http:
-      requestTimeout: 0s  # No timeout for streaming
-  circuitBreaker:
-    maxConnections: 4096  # High for streaming
-    maxPendingRequests: 2048
-    maxRequestsPerConnection: 0
-  loadBalancer:
-    type: LeastRequest
-    slowStart:
-      window: 30s  # Gradually ramp up traffic to new backends
+      requestTimeout: 0s

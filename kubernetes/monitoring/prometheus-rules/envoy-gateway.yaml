@@ -35,7 +35,7 @@ spec:
 
         - alert: EnvoyHighRequestLatency
           expr: |-
-            histogram_quantile(0.99, sum by (le, envoy_cluster_name) (rate(envoy_cluster_upstream_rq_time_bucket[5m]))) > 3000
+            histogram_quantile(0.99, sum by (le, envoy_cluster_name) (rate(envoy_cluster_upstream_rq_time_bucket[5m]))) > 6000
           for: 5m
           annotations:
             summary: >-
