@@ -24,9 +24,7 @@
     'prIgnoreNotification',
   ],
 
-  "schedule": [
-    "every hour from 1am to 5am"
-  ],
+  "schedule": ["0 1-5 * * *"],
 
   flux: {
     managerFilePatterns: [
