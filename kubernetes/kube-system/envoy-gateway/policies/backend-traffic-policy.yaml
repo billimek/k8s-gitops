@@ -16,6 +16,7 @@ spec:
     - type: Gzip
   connection:
     bufferLimit: 16Mi
+  tcpKeepalive: {}
   timeout:
     http:
       requestTimeout: 0s
