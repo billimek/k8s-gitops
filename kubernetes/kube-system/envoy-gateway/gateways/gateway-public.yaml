@@ -6,7 +6,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: public
-  namespace: kube-system
   annotations:
     external-dns.alpha.kubernetes.io/target: "eviljungle.com"
 spec:
@@ -21,7 +20,7 @@ spec:
       hostname: "*.eviljungle.com"
       allowedRoutes:
         namespaces:
-          from: All
+          from: Same
     - name: https
       protocol: HTTPS
       port: 443
