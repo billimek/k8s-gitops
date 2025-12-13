@@ -31,7 +31,7 @@ spec:
               repository: busybox
               tag: 1.37.0
             command: ["sh", "-c"]
-            args: ["chown -R 1000:1000 /run"]
+            args: ["chown -R 1001:1001 /run"]
             securityContext:
               runAsNonRoot: false
               runAsUser: 0
