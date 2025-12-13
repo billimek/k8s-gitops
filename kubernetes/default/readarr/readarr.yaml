@@ -25,7 +25,6 @@ spec:
   values:
     controllers:
       readarr:
-        containers:
         initContainers:
           chown-run:
             image:
@@ -36,6 +35,7 @@ spec:
             securityContext:
               runAsNonRoot: false
               runAsUser: 0
+        containers:
           app:
             image:
               repository: ghcr.io/pennydreadful/bookshelf
