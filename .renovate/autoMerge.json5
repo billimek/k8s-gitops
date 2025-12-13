@@ -59,7 +59,6 @@
       automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["digest"],
       matchPackageNames: ["/home-operations/"],
-      ignoreTests: false,
     },
     {
       description: "Auto-merge trusted Helm chart patches",
@@ -78,7 +77,6 @@
       matchManagers: ["github-actions"],
       automerge: true,
       automergeType: "branch",
-      ignoreTests: false,
       matchUpdateTypes: ["minor", "patch", "digest"],
       minimumReleaseAge: "3 days",
       ignoreTests: true,
@@ -88,7 +86,6 @@
       matchDatasources: ["github-releases"],
       automerge: true,
       automergeType: "branch",
-      ignoreTests: false,
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: ["/external-dns/", "/gateway-api/", "/prometheus-operator/"],
       ignoreTests: true,
