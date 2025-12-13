@@ -24,8 +24,6 @@
     'prIgnoreNotification',
   ],
 
-  "schedule": ["* 1-5 * * *"],
-
   flux: {
     managerFilePatterns: [
       '/(^|/)kubernetes/.+\\.ya?ml$/',
