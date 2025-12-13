@@ -56,7 +56,7 @@ spec:
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              # readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
             resources:
               requests:
@@ -112,5 +112,9 @@ spec:
         path: /mnt/tank/media
         globalMounts:
           - path: /media
+      run:
+        type: emptyDir
+        globalMounts:
+          - path: /run
       tmp:
         type: emptyDir
