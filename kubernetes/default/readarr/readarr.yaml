@@ -40,7 +40,6 @@ spec:
             image:
               repository: ghcr.io/pennydreadful/bookshelf
               tag: softcover-v0.4.20.91@sha256:98408a79dcc80973e0021b6dd14f317b5449215a74b5ce9f9d1cb5da0a1bd234
-            # command: ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
             env:
               READARR__APP__INSTANCENAME: readarr
               READARR__APPLICATION_URL: 'https://readarr.eviljungle.com'
@@ -123,34 +122,9 @@ spec:
         path: /mnt/tank/media
         globalMounts:
           - path: /media
-      entrypoint:
-        type: configMap
-        name: readarr-entrypoint
-        defaultMode: 0755
-        advancedMounts:
-          readarr:
-            readarr:
-              - path: /entrypoint.sh
-                subPath: entrypoint.sh
-                readOnly: true
       run:
         type: emptyDir
         globalMounts:
           - path: /run
       tmp:
         type: emptyDir
-
-    rawResources:
-      configmap:
-        apiVersion: v1
-        kind: ConfigMap
-        spec:
-          data:
-            entrypoint.sh: |
-              #!/usr/bin/env bash
-
-              exec \
-                  /app/readarr/bin/Readarr \
-                      --nobrowser \
-                      --data=/config \
-                      "$@"
