@@ -77,6 +77,7 @@ spec:
       app:
         annotations:
           external-dns.alpha.kubernetes.io/external: "true"
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
         parentRefs:
           - name: public
             namespace: kube-system
