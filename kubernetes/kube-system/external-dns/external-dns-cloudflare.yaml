@@ -48,6 +48,7 @@ spec:
     # Extra arguments for external-dns
     extraArgs:
       - --annotation-filter=external-dns.alpha.kubernetes.io/external=true
+      - --cloudflare-proxied
     
     # Cloudflare configuration (using Global API Key)
     env:
