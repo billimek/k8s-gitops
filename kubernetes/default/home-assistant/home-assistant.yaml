@@ -152,8 +152,8 @@ spec:
         type: secret
         name: home-assistant-gcp-sa-secret
         globalMounts:
-          - path: /config/home-assistant-7c48d-46b62166197f.json
-            subPath: home-assistant-7c48d-46b62166197f.json
+          - path: /config/home-assistant-7c48d-e078848c9fb0.json
+            subPath: home-assistant-7c48d-e078848c9fb0.json
             readOnly: true
       docker-env-empty:
         # enabled: true
