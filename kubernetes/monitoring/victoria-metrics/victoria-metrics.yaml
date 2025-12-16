@@ -98,6 +98,14 @@ spec:
       spec:
         externalURL: "https://vm-alert.eviljungle.com"
         routePrefix: /
+        storage:
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
       route:
         enabled: true
         annotations:
