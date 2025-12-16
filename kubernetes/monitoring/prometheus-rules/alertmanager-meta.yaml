@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: alertmanager-meta-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: alertmanager-meta.rules
+    interval: 1m
+    rules:
+    # Alert when a notification group has more than max_alerts
+    - alert: AlertGroupExceedsMaxAlerts
+      expr: |
+        count by (alertname, severity) (
+          ALERTS{alertstate="firing", severity=~"warning|critical"}
+        ) > 15
+      for: 2m
+      labels:
+        severity: info
+      annotations:
+        summary: "Alert group {{ $labels.alertname }}/{{ $labels.severity }} has {{ $value }} alerts (max_alerts: 15)"
+        description: |
+          The alert group for {{ $labels.alertname }} with severity {{ $labels.severity }} currently has {{ $value }} firing alerts.
+          Since max_alerts is set to 15, only the first 15 alerts are being sent to Discord with full details.
+          
+          Check Alertmanager UI for complete list: https://vm-alert.eviljungle.com
+          
+          Consider:
+          - Is this a cluster-wide issue that needs immediate attention?
+          - Should the grouping for this alert type be adjusted?
+          - Is this a known issue that should be silenced?
+        title: "Alert Group Truncation: {{ $labels.alertname }}"
+    
+    # Alert on very large groups that indicate major incidents
+    - alert: MassiveAlertStorm
+      expr: |
+        count(ALERTS{alertstate="firing", severity=~"warning|critical"}) > 50
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Alert storm detected: {{ $value }} alerts currently firing"
+        description: |
+          There are currently {{ $value }} alerts firing in the cluster.
+          This indicates a significant incident that requires immediate investigation.
+          
+          Multiple notifications are being sent, but each is limited to showing 15 alerts with full details.
+          
+          Check Alertmanager UI: https://vm-alert.eviljungle.com
+        title: "🚨 Alert Storm Detected"

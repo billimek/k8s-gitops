@@ -120,17 +120,64 @@ spec:
       config:
         route:
           # group_by: ["alertname", "job"]
-          group_by: ['job', 'alertname', 'severity', 'name', 'job_name', 'instance']
-          group_wait: 45s
+          group_by: ['alertname', 'severity']
+          group_wait: 30s
           group_interval: 10m
           repeat_interval: 12h
           routes:
+            # Route 1: Blackhole for noise
             - matchers:
                 - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit|CephNodeNetworkPacketDrops|CephNodeNetworkPacketErrors"
               receiver: 'blackhole'
+            
+            # Route 2: Critical infrastructure alerts - group by instance for visibility
             - matchers:
-                - severity=~"warning|critical"
+                - severity = "critical"
+                - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
               receiver: slack-notifications
+              group_by: ['alertname', 'instance']
+              group_wait: 10s
+              continue: false
+            
+            # Route 3: Warning infrastructure alerts - group by instance
+            - matchers:
+                - severity = "warning"
+                - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'instance']
+              continue: false
+            
+            # Route 4: Critical Kubernetes/application alerts - group by namespace
+            - matchers:
+                - severity = "critical"
+                - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'namespace', 'severity']
+              group_wait: 10s
+              continue: false
+            
+            # Route 5: Warning Kubernetes/application alerts - group by namespace
+            - matchers:
+                - severity = "warning"
+                - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'namespace']
+              continue: false
+            
+            # Route 6: Catch-all for other critical alerts
+            - matchers:
+                - severity = "critical"
+              receiver: slack-notifications
+              group_by: ['alertname']
+              group_wait: 10s
+              continue: false
+            
+            # Route 7: Catch-all for other warning alerts
+            - matchers:
+                - severity = "warning"
+              receiver: slack-notifications
+              group_by: ['alertname']
+              continue: false
         inhibit_rules:
           - source_matchers:
               - severity = "critical"
@@ -154,6 +201,7 @@ spec:
           - name: 'slack-notifications'
             slack_configs:
               - channel: '#notifications'
+                max_alerts: 15
                 icon_url: https://avatars3.githubusercontent.com/u/3380462
                 username: 'Alertmanager'
                 send_resolved: true
