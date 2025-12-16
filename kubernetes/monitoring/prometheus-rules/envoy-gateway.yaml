@@ -22,7 +22,7 @@ spec:
 
         # Data plane health
         - alert: EnvoyProxyDown
-          expr: absent(up{job="envoy-proxy"} == 1)
+          expr: absent(up{job=~".*/envoy-proxy"} == 1)
           for: 2m
           labels:
             severity: critical
