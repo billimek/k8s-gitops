@@ -10,6 +10,7 @@ spec:
   groups:
     - name: envoy-gateway
       rules:
+        # Control plane health
         - alert: EnvoyGatewayDown
           expr: absent(up{job="envoy-gateway"} == 1)
           for: 5m
@@ -19,36 +20,63 @@ spec:
             summary: "Envoy Gateway is down"
             description: "Envoy Gateway has been down for more than 5 minutes."
 
+        # Data plane health
+        - alert: EnvoyProxyDown
+          expr: absent(up{job="envoy-proxy"} == 1)
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Envoy Proxy data plane is down"
+            description: "No Envoy proxy pods are reporting metrics"
+
+        # Sustained error rate - warning level
         - alert: EnvoyHighErrorRate
           expr: |-
             (
               sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq{envoy_response_code=~"5.."}[5m]))
               /
               sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq[5m]))
-            ) > 0.05
-          for: 5m
+              > 0.05
+            )
+            and
+            (
+              sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq[5m])) > 0.5
+            )
+          for: 10m
           annotations:
             summary: >-
-              The error rate for cluster {{ $labels.envoy_cluster_name }} is {{ printf "%.2f" $value }}%
+              Service {{ $labels.envoy_cluster_name }} has elevated error rate ({{ printf "%.1f" $value | humanizePercentage }})
           labels:
-            severity: critical
+            severity: warning
 
-        - alert: EnvoyHighRequestLatency
+        # Service mostly down - critical level
+        - alert: EnvoyServiceUnreachable
           expr: |-
-            histogram_quantile(0.99, sum by (le, envoy_cluster_name) (rate(envoy_cluster_upstream_rq_time_bucket[5m]))) > 6000
+            (
+              sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq{envoy_response_code=~"5.."}[5m]))
+              /
+              sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq[5m]))
+              > 0.50
+            )
           for: 5m
-          annotations:
-            summary: >-
-              The 99th percentile request latency for cluster {{ $labels.envoy_cluster_name }} is {{ $value }}ms
           labels:
             severity: critical
+          annotations:
+            summary: "Service {{ $labels.envoy_cluster_name }} is mostly unreachable"
+            description: "More than 50% of requests are failing ({{ printf \"%.1f\" $value | humanizePercentage }} error rate)"
 
-        - alert: EnvoyConnectionPoolExhausted
-          expr: |
-            envoy_cluster_upstream_cx_pool_overflow > 0
-          for: 5m
+        # Prevent OOM crashes
+        - alert: EnvoyProxyHighMemory
+          expr: |-
+            (
+              container_memory_working_set_bytes{namespace="kube-system", container="envoy"}
+              / 
+              container_spec_memory_limit_bytes{namespace="kube-system", container="envoy"}
+            ) > 0.90
+          for: 10m
           labels:
             severity: warning
           annotations:
-            summary: "Connection pool overflow on Envoy cluster {{ $labels.envoy_cluster_name }}"
-            description: "Envoy connection pool is exhausted, requests may be queued or rejected."
+            summary: "Envoy proxy memory usage above 90%"
+            description: "Pod {{ $labels.pod }} is using {{ $value | humanizePercentage }} of memory limit"
