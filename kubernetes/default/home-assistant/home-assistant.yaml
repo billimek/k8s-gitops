@@ -44,9 +44,9 @@ spec:
             env:
               TZ: "America/New_York"
               PYTHONPATH: "/config/deps"
-              UV_SYSTEM_PYTHON: "true"
+              UV_SYSTEM_PYTHON: "false"
               UV_NO_CACHE: "true"
-              VENV_FOLDER: /venv
+              PIP_TARGET: "/venv"
             envFrom:
               - secretRef:
                   name: home-assistant-secret
