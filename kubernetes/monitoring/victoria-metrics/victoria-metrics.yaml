@@ -201,7 +201,6 @@ spec:
           - name: 'slack-notifications'
             slack_configs:
               - channel: '#notifications'
-                max_alerts: 15
                 icon_url: https://avatars3.githubusercontent.com/u/3380462
                 username: 'Alertmanager'
                 send_resolved: true
