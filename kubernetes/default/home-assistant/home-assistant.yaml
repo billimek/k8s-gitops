@@ -44,6 +44,7 @@ spec:
             env:
               TZ: "America/New_York"
               UV_SYSTEM_PYTHON: "false"
+              PYTHONUSERBASE: "/config/.venv"
             envFrom:
               - secretRef:
                   name: home-assistant-secret
