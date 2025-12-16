@@ -36,6 +36,23 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
 
+        initContainers:
+          init-venv:
+            image:
+              repository: ghcr.io/home-assistant/home-assistant
+              tag: 2025.12.3@sha256:c9da2a0a5738ceb26e1b4f672825c09371e51ae5e285beffa3072757b7817f3e
+            command:
+              - /bin/sh
+              - -c
+              - |
+                if [ ! -d /config/.venv ]; then
+                  echo "Creating virtual environment at /config/.venv"
+                  python3 -m venv /config/.venv
+                  echo "Virtual environment created"
+                else
+                  echo "Virtual environment already exists"
+                fi
+
         containers:
           app:
             image:
