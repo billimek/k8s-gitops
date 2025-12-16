@@ -99,15 +99,11 @@ spec:
         externalURL: "https://vm-alert.eviljungle.com"
         routePrefix: /
         storage:
-          volumeClaimTemplate:
-            metadata:
-              name: vmalertmanager-db
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 1Gi
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
       route:
         enabled: true
         annotations:
