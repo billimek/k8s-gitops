@@ -24,17 +24,17 @@ spec:
   # Custom error page redirects
   responseOverride:
     # 401 Unauthorized
-    - match:
-        statusCodes:
-          - type: Value
-            value: 401
-      redirect:
-        scheme: https
-        hostname: error-pages.eviljungle.com
-        path:
-          type: ReplaceFullPath
-          replaceFullPath: /401.html
-        statusCode: 302
+    # - match:
+    #     statusCodes:
+    #       - type: Value
+    #         value: 401
+    #   redirect:
+    #     scheme: https
+    #     hostname: error-pages.eviljungle.com
+    #     path:
+    #       type: ReplaceFullPath
+    #       replaceFullPath: /401.html
+    #     statusCode: 302
     
     # 403 Forbidden
     - match:
