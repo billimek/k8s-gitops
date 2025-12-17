@@ -67,4 +67,30 @@ spec:
         controller: error-pages
         ports:
           http:
-            port: 8080
+            port: &port 8080
+
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: public
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - &host error-pages.eviljungle.com
+        rules:
+          - backendRefs:
+              - port: *port
+      internal:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - *host
+        rules:
+          - backendRefs:
+              - port: *port

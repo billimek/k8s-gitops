@@ -20,3 +20,96 @@ spec:
   timeout:
     http:
       requestTimeout: 0s
+  
+  # Custom error page redirects
+  responseOverride:
+    # 401 Unauthorized
+    - match:
+        statusCodes:
+          - type: Value
+            value: 401
+      redirect:
+        scheme: https
+        hostname: error-pages.eviljungle.com
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /401.html
+        statusCode: 302
+    
+    # 403 Forbidden
+    - match:
+        statusCodes:
+          - type: Value
+            value: 403
+      redirect:
+        scheme: https
+        hostname: error-pages.eviljungle.com
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /403.html
+        statusCode: 302
+    
+    # 404 Not Found
+    - match:
+        statusCodes:
+          - type: Value
+            value: 404
+      redirect:
+        scheme: https
+        hostname: error-pages.eviljungle.com
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /404.html
+        statusCode: 302
+    
+    # 500 Internal Server Error
+    - match:
+        statusCodes:
+          - type: Value
+            value: 500
+      redirect:
+        scheme: https
+        hostname: error-pages.eviljungle.com
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /500.html
+        statusCode: 302
+    
+    # 502 Bad Gateway
+    - match:
+        statusCodes:
+          - type: Value
+            value: 502
+      redirect:
+        scheme: https
+        hostname: error-pages.eviljungle.com
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /502.html
+        statusCode: 302
+    
+    # 503 Service Unavailable
+    - match:
+        statusCodes:
+          - type: Value
+            value: 503
+      redirect:
+        scheme: https
+        hostname: error-pages.eviljungle.com
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /503.html
+        statusCode: 302
+    
+    # 504 Gateway Timeout
+    - match:
+        statusCodes:
+          - type: Value
+            value: 504
+      redirect:
+        scheme: https
+        hostname: error-pages.eviljungle.com
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /504.html
+        statusCode: 302
