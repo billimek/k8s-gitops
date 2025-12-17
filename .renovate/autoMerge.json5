@@ -69,7 +69,7 @@
       // automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
-        "tailscale-operator"
+        // "tailscale-operator"
       ],
     },
     {
