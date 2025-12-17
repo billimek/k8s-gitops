@@ -33,7 +33,7 @@ spec:
               repository: ghcr.io/tarampampam/error-pages
               tag: 3.8.0
             env:
-              TEMPLATE_NAME: orient
+              TEMPLATE_NAME: connection
               SHOW_DETAILS: "false"
             probes:
               liveness:
