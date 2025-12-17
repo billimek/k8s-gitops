@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: cilium
         namespace: flux-system
-      version: 1.18.4
+      version: 1.18.5
   interval: 30m
   values:
     autoDirectNodeRoutes: true
