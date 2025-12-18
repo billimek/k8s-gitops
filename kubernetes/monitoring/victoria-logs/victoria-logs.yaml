@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: victoria-logs-single
-      version: 0.11.18
+      version: 0.11.19
       sourceRef:
         kind: HelmRepository
         name: victoriametrics-charts
