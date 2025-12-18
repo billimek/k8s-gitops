@@ -224,7 +224,7 @@ spec:
           datasource: Prometheus
         # Cilium Metrics (already enabled via Cilium dashboards.enabled, but adding explicit reference)
         cilium-metrics:
-          url: https://raw.githubusercontent.com/cilium/cilium/v1.18.4/examples/kubernetes/addons/prometheus/files/grafana-dashboards/cilium-metrics.json
+          url: https://raw.githubusercontent.com/cilium/cilium/v1.18.5/examples/kubernetes/addons/prometheus/files/grafana-dashboards/cilium-metrics.json
           datasource: Prometheus
       teslamate:
         battery-health:
