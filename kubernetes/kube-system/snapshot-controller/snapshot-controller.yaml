@@ -15,17 +15,6 @@ spec:
         kind: HelmRepository
         name: piraeus
         namespace: flux-system
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     controller:
       serviceMonitor:

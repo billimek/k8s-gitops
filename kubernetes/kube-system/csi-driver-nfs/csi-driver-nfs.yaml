@@ -16,13 +16,6 @@ spec:
         name: csi-driver-nfs
         namespace: flux-system
       interval: 30m
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     controller:
       replicas: 1

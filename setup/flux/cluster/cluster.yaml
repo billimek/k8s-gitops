@@ -46,4 +46,30 @@ spec:
   dependsOn:
     - name: flux-repositories
     - name: core-crds
+  patches:
+    - patch: |-
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: _
+        spec:
+          install:
+            crds: CreateReplace
+            remediation:
+              retries: 2
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            remediation:
+              retries: 2
+              strategy: rollback
+          rollback:
+            cleanupOnFail: true
+          uninstall:
+            keepHistory: false
+          timeout: 10m
+          maxHistory: 3
+      target:
+        group: helm.toolkit.fluxcd.io
+        kind: HelmRelease
 
