@@ -15,14 +15,6 @@ spec:
         kind: HelmRepository
         name: fluent
         namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  timeout: 20m
   values:
     tolerations:
       - key: node-role.kubernetes.io/master

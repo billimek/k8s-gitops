@@ -15,19 +15,8 @@ spec:
         name: victoriametrics-charts
         namespace: flux-system
   interval: 1h
-  maxHistory: 3
   install:
-    crds: CreateReplace
     createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    crds: CreateReplace
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     fullnameOverride: stack
     victoria-metrics-operator:

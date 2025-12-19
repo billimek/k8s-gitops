@@ -15,14 +15,6 @@ spec:
         kind: HelmRepository
         name: giantswarm-charts
         namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  timeout: 20m
   values:
     alertmanagerAddress: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
     # crds:

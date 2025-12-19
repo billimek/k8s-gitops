@@ -16,10 +16,6 @@ spec:
         name: emqx-charts
         namespace: flux-system
       interval: 5m
-  install:
-    crds: CreateReplace
-  upgrade:
-    crds: CreateReplace
   values:
     fullnameOverride: emqx-operator
     image:

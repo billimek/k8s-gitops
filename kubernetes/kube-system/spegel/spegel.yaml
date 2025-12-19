@@ -15,14 +15,6 @@ spec:
         kind: HelmRepository
         name: spegel-org
         namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
   values:
     spegel:
       appendMirrors: true

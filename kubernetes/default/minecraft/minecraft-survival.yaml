@@ -17,13 +17,6 @@ spec:
         name: minecraft-server-charts
         namespace: flux-system
       interval: 5m
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     image:
       repository: ghcr.io/itzg/minecraft-server

@@ -15,18 +15,6 @@ spec:
         kind: HelmRepository
         name: intel
         namespace: flux-system
-  maxHistory: 3
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     manager:
       devices:
