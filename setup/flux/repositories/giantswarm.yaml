@@ -6,6 +6,6 @@ metadata:
   name: giantswarm-charts
   namespace: flux-system
 spec:
-  interval: 10m
-  url: https://giantswarm.github.io/control-plane-catalog/
-  timeout: 3m
+  type: oci
+  interval: 1h
+  url: oci://gsoci.azurecr.io/charts/giantswarm
