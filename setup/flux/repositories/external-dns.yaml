@@ -6,6 +6,5 @@ metadata:
   name: external-dns
   namespace: flux-system
 spec:
-  type: oci
   interval: 1h
-  url: oci://registry.k8s.io/external-dns
+  url: https://kubernetes-sigs.github.io/external-dns/

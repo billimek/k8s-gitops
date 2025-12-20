@@ -6,6 +6,5 @@ metadata:
   name: cilium
   namespace: flux-system
 spec:
-  type: oci
-  interval: 1h
-  url: oci://quay.io/cilium/charts
+  interval: 30m
+  url: https://helm.cilium.io
