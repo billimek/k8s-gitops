@@ -6,5 +6,6 @@ metadata:
   name: tailscale
   namespace: flux-system
 spec:
-  interval: 2h
-  url: https://pkgs.tailscale.com/helmcharts
+  type: oci
+  interval: 1h
+  url: oci://ghcr.io/tailscale/tailscale
