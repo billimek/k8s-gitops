@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: envoy-gateway-ui
+  namespace: kube-system
+  annotations:
+    external-dns.alpha.kubernetes.io/internal: "true"
+    external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+spec:
+  hostnames:
+    - envoy-admin.eviljungle.com
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: envoy-gateway-admin
+          port: 19001
+          kind: Service
+          group: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: envoy-gateway-admin
+  namespace: kube-system
+  labels:
+    control-plane: envoy-gateway
+spec:
+  selector:
+    control-plane: envoy-gateway
+  ports:
+    - name: admin
+      port: 19001
+      targetPort: 19001
+  type: ClusterIP
