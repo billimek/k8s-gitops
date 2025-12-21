@@ -59,6 +59,10 @@ spec:
               sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq[5m]))
               > 0.50
             )
+            and
+            (
+              sum by (envoy_cluster_name) (rate(envoy_cluster_upstream_rq[5m])) > 0.5
+            )
           for: 5m
           labels:
             severity: critical
