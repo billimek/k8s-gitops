@@ -75,15 +75,6 @@
       },
     },
     {
-      description: "Gateway API CRDs Group",
-      groupName: "Gateway API CRDs",
-      matchDatasources: ["helm"],
-      matchPackagePatterns: ["gateway-api-crds"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
       description: "Flux Operator Group",
       groupName: "Flux Operator",
       matchDatasources: ["docker"],
