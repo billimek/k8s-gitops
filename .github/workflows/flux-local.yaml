@@ -56,7 +56,7 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        resources:
+        resource:
           - helmrelease
           - kustomization
       max-parallel: 4
@@ -79,7 +79,7 @@ jobs:
         uses: docker://ghcr.io/allenporter/flux-local:v8.0.1
         with:
           args: >-
-            diff ${{ matrix.resources }}
+            diff ${{ matrix.resource }}
             --unified 6
             --path /github/workspace/pull/setup/flux/cluster
             --path-orig /github/workspace/default/setup/flux/cluster
@@ -98,7 +98,7 @@ jobs:
               echo EOF
           } >> "${GITHUB_OUTPUT}";
           {
-              echo "## Flux ${{ matrix.resources }} diff"
+              echo "## Flux ${{ matrix.resource }} diff"
               echo '```diff'
               cat diff.patch
               echo '```'
@@ -131,6 +131,9 @@ jobs:
     name: Flux Local successful
     runs-on: ubuntu-latest
     steps:
-      - name: Check job status
+      - name: Any jobs failed?
         if: ${{ contains(needs.*.result, 'failure') }}
         run: exit 1
+      - name: All jobs passed or skipped?
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: echo "All jobs passed or skipped" && echo "${{ toJSON(needs.*.result) }}"
