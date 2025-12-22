@@ -39,7 +39,7 @@ spec:
         daysToRetain: 30
       csi:
         readAffinity:
-          enabled: true
+          enabled: false
       dashboard:
         enabled: true
         urlPrefix: /
