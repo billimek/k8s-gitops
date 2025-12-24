@@ -3,25 +3,24 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: qbittorrent-restic
+  name: qbittorrent-kopia
   namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: qbittorrent-restic-secret
+    name: qbittorrent-kopia-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/qbittorrent'
-        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
-        AWS_ACCESS_KEY_ID: '{{ .VOLSYNC_ACCESS_KEY }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .VOLSYNC_SECRET_KEY }}'
+        KOPIA_FS_PATH: /repository
+        KOPIA_PASSWORD: "{{ .KOPIA_PASSWORD }}"
+        KOPIA_REPOSITORY: filesystem:///repository
   dataFrom:
     - extract:
-        key: garage
+        key: kopia
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
@@ -33,18 +32,22 @@ spec:
   sourcePVC: qbittorrent-config
   trigger:
     schedule: "0 6 * * *"
-  restic:
+  kopia:
+    repository: qbittorrent-kopia-secret
     copyMethod: Snapshot
-    pruneIntervalDays: 10
-    repository: qbittorrent-restic-secret
-    cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
+    accessModes: ["ReadWriteOnce"]
+    cacheAccessModes: ["ReadWriteOnce"]
+    cacheCapacity: 2Gi
+    cacheStorageClassName: ceph-block
+    compression: zstd-fastest
+    parallelism: 2
     moverSecurityContext:
       runAsUser: 1001
       runAsGroup: 1001
       fsGroup: 1001
     retain:
+      hourly: 24
       daily: 10
-      within: 3d
 
