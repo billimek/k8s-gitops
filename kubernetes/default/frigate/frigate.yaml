@@ -25,7 +25,6 @@ spec:
         pod:
           nodeSelector:
             google.feature.node.kubernetes.io/coral: "true"
-            intel.feature.node.kubernetes.io/gpu: "true"
 
         containers:
           main:
@@ -56,13 +55,18 @@ spec:
               startup:
                 enabled: false
             resources:
+              claims:
+                - name: gpu
               requests:
                 memory: 1000Mi
                 cpu: 1500m
-                gpu.intel.com/i915: 1
               limits:
                 memory: 4000Mi
-                gpu.intel.com/i915: 1
+
+    defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: frigate
 
     service:
       main:
@@ -77,6 +81,19 @@ spec:
           rtsp:
             enabled: true
             port: 8554
+
+    rawResources:
+      gpu:
+        apiVersion: resource.k8s.io/v1
+        kind: ResourceClaimTemplate
+        spec:
+          spec:
+            spec:
+              devices:
+                requests:
+                  - name: gpu
+                    exactly:
+                      deviceClassName: gpu.intel.com
 
     route:
       main:
