@@ -98,8 +98,6 @@ spec:
       coral:
         apiVersion: resource.k8s.io/v1
         kind: ResourceClaimTemplate
-        metadata:
-          name: frigate-coral
         spec:
           spec:
             spec:
