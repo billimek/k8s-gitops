@@ -30,6 +30,7 @@ spec:
               tag: latest@sha256:2b53d255017668d70d7f59ff0b874a66c3a50922d1f8cfff182e4c55b82251a1
             args:
               - --log-level=info
+              - --domain=squat-ai
               - --device
               - |
                 name: tun

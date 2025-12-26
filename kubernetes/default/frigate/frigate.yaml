@@ -105,7 +105,7 @@ spec:
                 requests:
                   - name: coral
                     exactly:
-                      deviceClassName: squat.ai/coral
+                      deviceClassName: squat-ai-coral
 
     route:
       main:
