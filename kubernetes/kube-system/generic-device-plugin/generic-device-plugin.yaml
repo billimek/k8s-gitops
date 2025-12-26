@@ -4,7 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: generic-device-plugin
-  namespace: default
+  namespace: kube-system
 spec:
   suspend: false
   interval: 1h
