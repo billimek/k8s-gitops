@@ -55,15 +55,18 @@ spec:
                 drop:
                   - ALL
             resources:
+              claims:
+                - name: gpu
               requests:
-                gpu.intel.com/i915: 1
                 cpu: 500m
                 memory: 2Gi
               limits:
-                gpu.intel.com/i915: 1
                 memory: 5Gi
 
     defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: plex
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -123,6 +126,19 @@ spec:
                 subPath: transcode
               - path: /tmp
                 subPath: tmp
+
+    rawResources:
+      gpu:
+        apiVersion: resource.k8s.io/v1
+        kind: ResourceClaimTemplate
+        spec:
+          spec:
+            spec:
+              devices:
+                requests:
+                  - name: gpu
+                    exactly:
+                      deviceClassName: gpu.intel.com
 
     route:
       app:
