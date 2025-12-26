@@ -37,8 +37,6 @@ spec:
               - secretRef:
                   name: frigate-secret
 
-            securityContext:
-              privileged: true
             probes:
               liveness: &probes
                 enabled: true
@@ -57,6 +55,7 @@ spec:
             resources:
               claims:
                 - name: gpu
+                - name: coral
               requests:
                 memory: 1000Mi
                 cpu: 1500m
@@ -67,6 +66,8 @@ spec:
       resourceClaims:
         - name: gpu
           resourceClaimTemplateName: frigate
+        - name: coral
+          resourceClaimTemplateName: frigate-coral
 
     service:
       main:
@@ -94,6 +95,19 @@ spec:
                   - name: gpu
                     exactly:
                       deviceClassName: gpu.intel.com
+      coral:
+        apiVersion: resource.k8s.io/v1
+        kind: ResourceClaimTemplate
+        metadata:
+          name: frigate-coral
+        spec:
+          spec:
+            spec:
+              devices:
+                requests:
+                  - name: coral
+                    exactly:
+                      deviceClassName: squat.ai/coral
 
     route:
       main:
@@ -144,9 +158,3 @@ spec:
         sizeLimit: 4Gi
         globalMounts:
           - path: /dev/shm
-      usb:
-        type: hostPath
-        hostPath: /dev/bus/usb
-        hostPathType: Directory
-        globalMounts:
-          - path: /dev/bus/usb
