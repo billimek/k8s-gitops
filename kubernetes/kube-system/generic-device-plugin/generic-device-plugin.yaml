@@ -30,27 +30,33 @@ spec:
               tag: latest@sha256:45abfa9c45aee2d8d9cc1f3d4587c4cf382b36d17b9d937e43d0c07126243037
             args:
               - --log-level=info
+              - --domain=generic-device-plugin
               - --device
               - |
                 name: coral
                 groups:
-                  - usb:
-                      - vendor: "0403"
-                      - vendor: "18d1"
+                  # - usb:
+                  #     - vendor: "1a6e"
+                  #     - vendor: "18d1"
+                  - paths:
+                      - path: /dev/bus/usb
               - --device
               - |
                 name: alarmdecoder
                 groups:
                   - usb:
-                      - vendor: "1a6e"
+                      - vendor: "0403"
                       - device: "6015"
               - --device
               - |
                 name: zwave
+                # groups:
+                #   - usb:
+                #       - vendor: "0658"
+                #       - device: "0200"
                 groups:
-                  - usb:
-                      - vendor: "0658"
-                      - device: "0200"
+                  - paths:
+                      - path: /dev/serial/by-id/usb-0658_0200-if00
 
             ports:
               - containerPort: 8080
@@ -63,17 +69,18 @@ spec:
                 memory: 64Mi
 
             securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
+              privileged: true
+              # allowPrivilegeEscalation: false
+              # readOnlyRootFilesystem: true
+              # capabilities:
+              #   drop:
+              #     - ALL
     persistence:
       dev:
         type: hostPath
         hostPath: /dev
-        globalMounts:
-          - readOnly: true
+        # globalMounts:
+        #   - readOnly: true
       sys:
         type: hostPath
         hostPath: /sys
