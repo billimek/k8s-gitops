@@ -35,9 +35,9 @@ spec:
               - |
                 name: coral
                 groups:
-                  # - usb:
-                  #     - vendor: "1a6e"
-                  #     - vendor: "18d1"
+                  - usb:
+                      - vendor: "1a6e"
+                      - vendor: "18d1"
                   - paths:
                       - path: /dev/bus/usb
               - --device
@@ -47,6 +47,8 @@ spec:
                   - usb:
                       - vendor: "0403"
                       - device: "6015"
+                  - paths:
+                      - path: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
               - --device
               - |
                 name: zwave
