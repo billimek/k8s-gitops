@@ -35,9 +35,12 @@ spec:
               - |
                 name: coral
                 groups:
-                  - usb:
+                  - count: 1
+                    usb:
                       - vendor: "1a6e"
-                      # - device: "089a"
+                  - count: 1
+                    usb:
+                      - vendor: "18d1"
               - --device
               - |
                 name: alarmdecoder
