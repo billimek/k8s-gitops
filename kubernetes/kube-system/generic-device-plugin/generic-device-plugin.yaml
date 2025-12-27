@@ -27,39 +27,30 @@ spec:
           main:
             image:
               repository: ghcr.io/squat/generic-device-plugin
-              tag: latest@sha256:2b53d255017668d70d7f59ff0b874a66c3a50922d1f8cfff182e4c55b82251a1
+              tag: latest@sha256:5abfa9c45aee2d8d9cc1f3d4587c4cf382b36d17b9d937e43d0c07126243037
             args:
               - --log-level=info
-              - --device
-              - |
-                name: tun
-                groups:
-                  - count: 1000
-                    paths:
-                      - path: /dev/net/tun
               - --device
               - |
                 name: coral
                 groups:
                   - usb:
-                      - vendor: "1a6e"
+                      - vendor: "0403"
                       - vendor: "18d1"
               - --device
               - |
-                name: serial
+                name: alarmdecoder
                 groups:
-                  - paths:
-                      - path: /dev/ttyUSB*
-                  - paths:
-                      - path: /dev/ttyACM*
-                  - paths:
-                      - path: /dev/tty.usb*
-                  - paths:
-                      - path: /dev/cu.*
-                  - paths:
-                      - path: /dev/cuaU*
-                  - paths:
-                      - path: /dev/rfcomm*
+                  - usb:
+                      - vendor: "1a6e"
+                      - device: "6015"
+              - --device
+              - |
+                name: zwave
+                groups:
+                  - usb:
+                      - vendor: "0658"
+                      - device: "0200"
 
             ports:
               - containerPort: 8080
