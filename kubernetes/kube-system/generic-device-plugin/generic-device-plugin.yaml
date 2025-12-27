@@ -37,10 +37,10 @@ spec:
                 groups:
                   - count: 1
                     usb:
-                      - vendor: "1a6e"
-                  - count: 1
-                    usb:
-                      - vendor: "18d1"
+                      - vendor: 1a6e
+                        product: 089a
+                      - vendor: 18d1
+                        product: 9302
               - --device
               - |
                 name: alarmdecoder
