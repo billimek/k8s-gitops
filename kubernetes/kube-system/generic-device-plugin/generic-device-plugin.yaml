@@ -8,14 +8,10 @@ metadata:
 spec:
   suspend: false
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   values:
     defaultPodOptions:
       priorityClassName: system-node-critical
