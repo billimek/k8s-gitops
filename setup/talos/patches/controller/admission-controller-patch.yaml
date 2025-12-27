@@ -1,3 +1,5 @@
 cluster:
   apiServer:
-    admissionControl: []
+    admissionControl:
+      - name: PodSecurity
+        $$patch: delete
