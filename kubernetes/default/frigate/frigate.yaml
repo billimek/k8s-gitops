@@ -19,13 +19,6 @@ spec:
   values:
     controllers:
       main:
-        annotations:
-          secret.reloader.stakater.com/reload: frigate-secret
-          configmap.reloader.stakater.com/reload: frigate-configmap
-        # pod:
-        #   nodeSelector:
-        #     google.feature.node.kubernetes.io/coral: "true"
-
         containers:
           main:
             image:
@@ -36,9 +29,6 @@ spec:
             envFrom:
               - secretRef:
                   name: frigate-secret
-
-            # securityContext:
-            #   privileged: false
 
             probes:
               liveness: &probes
@@ -127,9 +117,3 @@ spec:
         sizeLimit: 4Gi
         globalMounts:
           - path: /dev/shm
-      # usb:
-      #   type: hostPath
-      #   hostPath: /dev/bus/usb
-      #   hostPathType: Directory
-      #   globalMounts:
-      #     - path: /dev/bus/usb
