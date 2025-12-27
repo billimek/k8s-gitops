@@ -1,4 +1,20 @@
 ---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: prometheus-charts
+  namespace: monitoring
+spec:
+  interval: 30m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 21.0.0
+  url: oci://ghcr.io/prometheus-community/charts
+  secretRef:
+    name: ghcr-auth
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -7,14 +23,9 @@ metadata:
   namespace: monitoring
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: prometheus-operator-crds
-      version: 21.0.0
-      sourceRef:
-        kind: HelmRepository
-        name: prometheus-charts
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: prometheus-charts
   maxHistory: 3
   timeout: 20m
   values:
