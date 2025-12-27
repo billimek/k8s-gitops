@@ -38,8 +38,8 @@ spec:
                   - usb:
                       - vendor: "1a6e"
                       - vendor: "18d1"
-                  - paths:
-                      - path: /dev/bus/usb
+                  # - paths:
+                  #     - path: /dev/bus/usb
               - --device
               - |
                 name: alarmdecoder
