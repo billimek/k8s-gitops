@@ -16,6 +16,16 @@ spec:
         name: bjw-s
         namespace: flux-system
   values:
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nutech.feature.node.kubernetes.io/alarmdecoder
+                    operator: In
+                    values:
+                      - "true"
     controllers:
       main:
         containers:

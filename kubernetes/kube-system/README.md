@@ -20,7 +20,7 @@ Popular CNI system that also enables BGP-based cluster loadbalancer: https://git
 
 # descheduler
 
-Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to automatically evict pods that no longer satisfy their NodeAffinity constraints.  This is used to work in concert with `generic-device-plugin` such that when USB devices are moved from one node to a different node, the pods requiring the USB devices will be properly forced to reschedule to the new location
+Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to automatically evict pods that no longer satisfy their NodeAffinity constraints.  This is used to work in concert with `node-feature-discovery` such that when USB devices are moved from one node to a different node, the pods requiring the USB devices will be properly forced to reschedule to the new location
 
 * [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
 
@@ -61,9 +61,15 @@ Leverage Intel-based iGPU via the [intel-gpu-resource-driver](https://github.com
 
 * [metric-server/metric-server.yaml](metric-server/metric-server.yaml)
 
+# node-feature-discovery
+
+Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery) to dynamically label nodes that contain specific USB devices we care about
+
+* [node-feature-discovery](node-feature-discovery/)
+
 # generic-device-plugin
 
-Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to dynamically label nodes that contain specific devices we care about
+Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to dynamically create resources for USB devices we care about
 
 * [generic-device-plugin/generic-device-plugin.yaml](generic-device-plugin/generic-device-plugin.yaml)
 
