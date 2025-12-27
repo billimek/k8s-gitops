@@ -37,7 +37,7 @@ spec:
                 groups:
                   - usb:
                       - vendor: "1a6e"
-                      - device: "089a"
+                      # - device: "089a"
               - --device
               - |
                 name: alarmdecoder
