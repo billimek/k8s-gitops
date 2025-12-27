@@ -20,7 +20,7 @@ Popular CNI system that also enables BGP-based cluster loadbalancer: https://git
 
 # descheduler
 
-Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to automatically evict pods that no longer satisfy their NodeAffinity constraints.  This is used to work in concert with `node-feature-discovery` such that when USB devices are moved from one node to a different node, the pods requiring the USB devices will be properly forced to reschedule to the new location
+Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to automatically evict pods that no longer satisfy their NodeAffinity constraints.  This is used to work in concert with `generic-device-plugin` such that when USB devices are moved from one node to a different node, the pods requiring the USB devices will be properly forced to reschedule to the new location
 
 * [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
 
@@ -49,12 +49,11 @@ Using [external-secrets](https://external-secrets.io) & [1Password connect](http
 
 * [external-secrets](external-secrets)
 
-# intel GPU device plugin
+# intel GPU resource driver
 
-Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/tree/master/cmd/gpu_plugin) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via the `gpu.intel.com/i915` node resource
+Leverage Intel-based iGPU via the [intel-gpu-resource-driver](https://github.com/intel/intel-gpu-resource-driver-k8s) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via node resources
 
-* [intel-device-plugins/gpu-plugin.yaml](intel-device-plugins/gpu-plugin.yaml)
-* [intel-device-plugins/operator.yaml](intel-device-plugins/operator.yaml)
+* [intel-gpu-resource-driver/intel-gpu-resource-driver.yaml](intel-gpu-resource-driver/intel-gpu-resource-driver.yaml)
 
 # metrics-server
 
@@ -62,11 +61,11 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 
 * [metric-server/metric-server.yaml](metric-server/metric-server.yaml)
 
-# node-feature-discovery
+# generic-device-plugin
 
-Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery) to dynamically label nodes that contain specific USB devices we care about
+Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to dynamically label nodes that contain specific devices we care about
 
-* [node-feature-discovery](node-feature-discovery/)
+* [generic-device-plugin/generic-device-plugin.yaml](generic-device-plugin/generic-device-plugin.yaml)
 
 # snapshot-controller
 
