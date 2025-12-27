@@ -39,7 +39,7 @@ metadata:
 spec:
   interval: 30m
   path: ./kubernetes
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
