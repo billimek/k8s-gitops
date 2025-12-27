@@ -71,19 +71,10 @@ spec:
               limits:
                 memory: 64Mi
 
-            securityContext:
-              privileged: true
-              # allowPrivilegeEscalation: false
-              # readOnlyRootFilesystem: true
-              # capabilities:
-              #   drop:
-              #     - ALL
     persistence:
       dev:
         type: hostPath
         hostPath: /dev
-        # globalMounts:
-        #   - readOnly: true
       sys:
         type: hostPath
         hostPath: /sys
