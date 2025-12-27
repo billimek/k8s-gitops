@@ -1,18 +1,4 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
-  name: jetstack
-  namespace: cert-manager
-spec:
-  interval: 30m
-  layerSelector:
-    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
-    operation: copy
-  ref:
-    tag: v1.19.2
-  url: oci://quay.io/jetstack/charts
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -21,9 +7,14 @@ metadata:
   namespace: cert-manager
 spec:
   interval: 30m
-  chartRef:
-    kind: OCIRepository
-    name: jetstack
+  chart:
+    spec:
+      chart: cert-manager
+      version: v1.19.2
+      sourceRef:
+        kind: HelmRepository
+        name: jetstack
+        namespace: flux-system
   values:
     crds:
       enabled: true
