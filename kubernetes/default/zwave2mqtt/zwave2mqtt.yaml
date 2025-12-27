@@ -39,25 +39,26 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
-              privileged: true
+            # securityContext:
+            #   privileged: true
             resources:
               requests:
                 cpu: 10m
                 memory: 200Mi
               limits:
                 memory: 512Mi
+                generic-device-plugin/zwave: 1
 
-    defaultPodOptions:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: aeotec.feature.node.kubernetes.io/zwave
-                    operator: In
-                    values:
-                      - "true"
+    # defaultPodOptions:
+    #   affinity:
+    #     nodeAffinity:
+    #       requiredDuringSchedulingIgnoredDuringExecution:
+    #         nodeSelectorTerms:
+    #           - matchExpressions:
+    #               - key: aeotec.feature.node.kubernetes.io/zwave
+    #                 operator: In
+    #                 values:
+    #                   - "true"
 
     service:
       app:
@@ -98,9 +99,9 @@ spec:
           - path: /usr/src/app/store
       tmp:
         type: emptyDir
-      usb:
-        type: hostPath
-        hostPath: /dev/serial/by-id/usb-0658_0200-if00
-        hostPathType: CharDevice
-        globalMounts:
-          - path: /dev/ttyACM0
+      # usb:
+      #   type: hostPath
+      #   hostPath: /dev/serial/by-id/usb-0658_0200-if00
+      #   hostPathType: CharDevice
+      #   globalMounts:
+      #     - path: /dev/ttyACM0
