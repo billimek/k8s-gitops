@@ -23,7 +23,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                  - key: nutech.feature.node.kubernetes.io/coral
+                  - key: google.feature.node.kubernetes.io/coral
                     operator: In
                     values:
                       - "true"
