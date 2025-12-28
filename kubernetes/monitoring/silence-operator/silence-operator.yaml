@@ -27,7 +27,5 @@ spec:
   interval: 1h
   values:
     alertmanagerAddress: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
-    # crds:
-    #   install: false
     networkPolicy:
       enabled: false
