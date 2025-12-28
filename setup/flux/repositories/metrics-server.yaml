@@ -9,3 +9,5 @@ spec:
   type: oci
   interval: 30m
   url: oci://ghcr.io/home-operations/charts-mirror/metrics-server
+  secretRef:
+    name: ghcr-auth

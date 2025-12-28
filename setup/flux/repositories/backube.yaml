@@ -9,3 +9,5 @@ spec:
   type: oci
   interval: 1h
   url: oci://ghcr.io/home-operations/charts-mirror/volsync
+  secretRef:
+    name: ghcr-auth

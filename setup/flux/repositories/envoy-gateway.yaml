@@ -8,3 +8,5 @@ spec:
   type: oci
   interval: 1h
   url: oci://docker.io/envoyproxy
+  secretRef:
+    name: ghcr-auth

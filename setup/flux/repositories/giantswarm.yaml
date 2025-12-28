@@ -9,3 +9,5 @@ spec:
   type: oci
   interval: 1h
   url: oci://gsoci.azurecr.io/charts/giantswarm
+  secretRef:
+    name: ghcr-auth

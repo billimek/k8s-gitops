@@ -9,3 +9,5 @@ spec:
   type: "oci"
   interval: 30m
   url: oci://quay.io/jetstack/charts
+  secretRef:
+    name: ghcr-auth

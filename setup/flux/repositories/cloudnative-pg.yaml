@@ -9,3 +9,5 @@ spec:
   type: oci
   interval: 1h
   url: oci://ghcr.io/cloudnative-pg/charts
+  secretRef:
+    name: ghcr-auth

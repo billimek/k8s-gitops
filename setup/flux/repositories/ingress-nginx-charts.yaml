@@ -10,3 +10,5 @@ spec:
   interval: 1h
   url: oci://ghcr.io/kubernetes/ingress-nginx
   timeout: 5m
+  secretRef:
+    name: ghcr-auth

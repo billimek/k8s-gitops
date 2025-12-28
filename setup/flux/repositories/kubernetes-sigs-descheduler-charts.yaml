@@ -10,3 +10,5 @@ spec:
   interval: 30m
   url: oci://ghcr.io/home-operations/charts-mirror/descheduler
   timeout: 5m
+  secretRef:
+    name: ghcr-auth
