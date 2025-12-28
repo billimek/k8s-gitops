@@ -11,8 +11,7 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    # tag: 0.20.0
-    digest: sha256:b986db6075785b8344f3996d74de72d6ce5215a985ce39590dcfb1788c832ce8
+    tag: 0.20.0
   url: oci://gsoci.azurecr.io/charts/giantswarm/silence-operator
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
@@ -27,6 +26,8 @@ spec:
     name: silence-operator
   interval: 1h
   values:
+    image:
+      tag: "0.20.0"
     alertmanagerAddress: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
     networkPolicy:
       enabled: false
