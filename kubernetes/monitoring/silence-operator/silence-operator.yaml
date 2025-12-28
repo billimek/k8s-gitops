@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: giantswarm-charts
+  name: silence-operator
   namespace: monitoring
 spec:
   interval: 1h
@@ -23,7 +23,7 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: giantswarm-charts
+    name: silence-operator
   interval: 1h
   values:
     alertmanagerAddress: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
