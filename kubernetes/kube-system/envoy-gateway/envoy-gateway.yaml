@@ -12,9 +12,7 @@ spec:
     operation: copy
   ref:
     tag: v1.6.1
-  url: oci://docker.io/envoyproxy
-  secretRef:
-    name: ghcr-auth
+  url: oci://mirror.gcr.io/envoyproxy/gateway-helm
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2

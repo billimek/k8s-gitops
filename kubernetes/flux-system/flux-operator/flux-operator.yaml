@@ -13,8 +13,6 @@ spec:
   ref:
     tag: 0.38.1
   url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-  secretRef:
-    name: ghcr-auth
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
