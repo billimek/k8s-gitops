@@ -13,12 +13,6 @@
 * [grafana/grafana.yaml](grafana/grafana.yaml)
 * [grafana/dashboards/](grafana/dashboards/)
 
-# influxdb
-
-[influxdb](https://github.com/influxdata/influxdb) is a metrics collection database
-
-* [influxdb/influxdb.yaml](influxdb/influxdb.yaml)
-
 # prometheus-rules
 
 Various custom PrometheusRule definitions for this cluster
