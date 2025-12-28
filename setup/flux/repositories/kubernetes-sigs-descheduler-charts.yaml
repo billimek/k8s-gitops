@@ -6,6 +6,7 @@ metadata:
   name: kubernetes-sigs-descheduler-charts
   namespace: flux-system
 spec:
+  type: oci
   interval: 30m
-  url: https://kubernetes-sigs.github.io/descheduler
+  url: oci://ghcr.io/home-operations/charts-mirror/descheduler
   timeout: 5m

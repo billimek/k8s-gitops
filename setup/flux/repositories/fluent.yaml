@@ -6,5 +6,6 @@ metadata:
   name: fluent
   namespace: flux-system
 spec:
+  type: oci
   interval: 1h
-  url: https://fluent.github.io/helm-charts/
+  url: oci://ghcr.io/home-operations/charts-mirror/fluent-bit
