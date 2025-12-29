@@ -37,7 +37,7 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 
 # icloudpd
 
- ![](https://i.imgur.com/7CvZFAk.png)
+ ![](https://i.imgur.com/ldJ6KQG.png)
 
 [icloudpd](https://github.com/icloud-photos-downloader/icloud_photos_downloader) is a tool to download photos from iCloud to local storage.
 
