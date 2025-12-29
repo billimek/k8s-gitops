@@ -25,6 +25,7 @@ spec:
                 /app/icloudpd \
                   --directory /data \
                   --username "$ICLOUD_USERNAME" \
+                  --library "SharedSync-557B8847-4A89-4504-95AF-8A5C92E5338F" \
                   --password-provider webui \
                   --mfa-provider webui \
                   --watch-with-interval 3600 \
