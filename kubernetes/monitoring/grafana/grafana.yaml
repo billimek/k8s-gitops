@@ -326,31 +326,6 @@ spec:
             jsonData:
               implementation: prometheus
               handleGrafanaManagedAlerts: true
-          - name: influxdb
-            type: influxdb
-            access: proxy
-            url: http://influxdb:8086
-            database: telegraf
-          - name: comcast
-            type: influxdb
-            access: proxy
-            url: http://influxdb:8086
-            database: comcast
-          - name: home_assistant
-            type: influxdb
-            access: proxy
-            url: http://influxdb:8086
-            database: home_assistant
-          - name: speedtests
-            type: influxdb
-            access: proxy
-            url: http://influxdb:8086
-            database: speedtests
-          - name: uptimerobot
-            type: influxdb
-            access: proxy
-            url: http://influxdb:8086
-            database: uptimerobot
           - name: TeslaMate
             type: postgres
             access: proxy
