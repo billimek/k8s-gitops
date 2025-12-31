@@ -5,6 +5,9 @@ cluster:
       enable-aggregator-routing: true
       feature-gates: MutatingAdmissionPolicy=true
       runtime-config: admissionregistration.k8s.io/v1beta1=true
+      # Increase timeout for single control plane under load
+      request-timeout: "120s"
+      min-request-timeout: "30"
   controllerManager:
     extraArgs:
       bind-address: 0.0.0.0
@@ -20,6 +23,13 @@ cluster:
   etcd:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
+      # Prevent database bloat with auto-compaction
+      auto-compaction-mode: periodic
+      auto-compaction-retention: "1h"
+      # Increase max database size for cluster growth
+      quota-backend-bytes: "8589934592"  # 8GB
+      # More frequent snapshots reduce WAL size
+      snapshot-count: "10000"
   proxy:
     disabled: true
   scheduler:

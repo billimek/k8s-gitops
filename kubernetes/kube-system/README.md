@@ -24,6 +24,12 @@ Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to auto
 
 * [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
 
+# etcd-defrag
+
+[etcd-defrag](https://github.com/ahrtr/etcd-defrag) provides automated defragmentation of the etcd database to prevent bloat buildup and maintain optimal performance. Runs weekly on Sunday at 3 AM to compact the database when needed (>50% quota usage or >100MB bloat).
+
+* [etcd-defrag/etcd-defrag.yaml](etcd-defrag/etcd-defrag.yaml)
+
 # envoy-gateway
 
 [Envoy Gateway](https://gateway.envoyproxy.io/) is the primary Gateway API controller, replacing Cilium Gateway. It manages multiple gateways for different access patterns:
