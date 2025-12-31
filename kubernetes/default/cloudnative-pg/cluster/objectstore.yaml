@@ -4,6 +4,7 @@ apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
   name: postgres
+  namespace: default
 spec:
   retentionPolicy: 30d
   instanceSidecarConfiguration:
