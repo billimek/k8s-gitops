@@ -6,7 +6,7 @@ metadata:
   name: emqx
   namespace: default
 spec:
-  image: public.ecr.aws/emqx/emqx:5.8.8
+  image: public.ecr.aws/emqx/emqx:5.8.9
   config:
     data: |
       authentication {
