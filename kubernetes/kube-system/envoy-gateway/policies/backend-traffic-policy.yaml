@@ -14,8 +14,6 @@ spec:
     - type: Zstd
     - type: Brotli
     - type: Gzip
-  connection:
-    bufferLimit: 16Mi
   tcpKeepalive: {}
   timeout:
     http:
