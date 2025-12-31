@@ -24,11 +24,21 @@ Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to auto
 
 * [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
 
-# etcd-defrag
+# etcd maintenance
+
+Automated maintenance tools for etcd database health and backup operations:
+
+## etcd-defrag
 
 [etcd-defrag](https://github.com/ahrtr/etcd-defrag) provides automated defragmentation of the etcd database to prevent bloat buildup and maintain optimal performance. Runs weekly on Sunday at 3 AM to compact the database when needed (>50% quota usage or >100MB bloat).
 
-* [etcd-defrag/etcd-defrag.yaml](etcd-defrag/etcd-defrag.yaml)
+* [etcd/etcd-defrag/](etcd/etcd-defrag/)
+
+## etcd-backup
+
+[talos-backup](https://github.com/siderolabs/talos-backup) provides automated etcd snapshot backups via the Talos API. Runs every 6 hours with compression enabled, storing encrypted snapshots to S3-compatible storage (Garage). Uses Talos ServiceAccount for secure API access.
+
+* [etcd/etcd-backup/](etcd/etcd-backup/)
 
 # envoy-gateway
 
@@ -96,12 +106,6 @@ Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to
 [Put things in kubernets on your tailnet!](https://tailscale.com/kb/1236/kubernetes-operator)
 
 * [tailscale/tailscale-operator.yaml](tailscale/tailscale-operator.yaml)
-
-# talos-backup
-
-[talos-backup](https://github.com/siderolabs/talos-backup) is a tool to backup and restore Talos clusters.  It uses the Talos API to get the current state of the cluster and stores it in a backup file.  This is used to backup the Talos control plane nodes.
-
-* [talos-backup/](talos-backup/)
 
 # volsync
 
