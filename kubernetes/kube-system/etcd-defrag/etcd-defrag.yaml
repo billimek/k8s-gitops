@@ -51,8 +51,9 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 128Mi
-        serviceAccount:
-          name: etcd-defrag
+    serviceAccount:
+      create: true
+      name: etcd-defrag
     defaultPodOptions:
       # Must use host network to access etcd on localhost:2379
       hostNetwork: true
