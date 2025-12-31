@@ -10,7 +10,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: app-template
-    namespace: kube-system
+    namespace: flux-system
   values:
     controllers:
       etcd-defrag:
