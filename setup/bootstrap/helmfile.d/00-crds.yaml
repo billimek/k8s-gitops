@@ -16,8 +16,6 @@ helmDefaults:
 repositories:
   - name: emqx
     url: https://repos.emqx.io/charts
-  - name: piraeus
-    url: https://piraeus.io/helm-charts/
 
 releases:
   - name: prometheus-operator-crds
@@ -67,7 +65,7 @@ releases:
 
   - name: snapshot-controller
     namespace: kube-system
-    chart: piraeus/snapshot-controller
+    chart: oci://ghcr.io/piraeusdatastore/helm-charts/snapshot-controller
     version: 4.2.0
 
   - name: tuppr
