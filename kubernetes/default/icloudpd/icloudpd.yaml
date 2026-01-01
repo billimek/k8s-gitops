@@ -32,7 +32,7 @@ spec:
                   --until-found 500 \
                   --username "$ICLOUD_USERNAME" \
                   --directory /data \
-#                  --until-found 500 \
+                  --until-found 500 \
             env:
               TZ: America/New_York
             envFrom:
