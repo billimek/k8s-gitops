@@ -36,7 +36,7 @@ Automated maintenance tools for etcd database health and backup operations:
 
 ## etcd-backup
 
-[talos-backup](https://github.com/siderolabs/talos-backup) provides automated etcd snapshot backups via the Talos API. Runs every 6 hours with compression enabled, storing encrypted snapshots to S3-compatible storage (Garage). Uses Talos ServiceAccount for secure API access.
+[talos-backup](https://github.com/siderolabs/talos-backup) provides automated etcd snapshot backups via the Talos API. Runs every 6 hours with compression enabled, storing encrypted snapshots to S3-compatible storage (Garage). Uses Talos ServiceAccount for secure API access with the `os:etcd:backup` role. The Talos controller automatically creates and manages the secret containing the API token.
 
 * [etcd/etcd-backup/](etcd/etcd-backup/)
 
