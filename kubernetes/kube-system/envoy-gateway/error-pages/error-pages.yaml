@@ -7,21 +7,10 @@ metadata:
   namespace: kube-system
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   values:
     controllers:
       error-pages:
@@ -33,7 +22,7 @@ spec:
               repository: ghcr.io/tarampampam/error-pages
               tag: 3.8.0
             env:
-              TEMPLATE_NAME: orient
+              TEMPLATE_NAME: connection
               SHOW_DETAILS: "false"
             probes:
               liveness:
@@ -67,4 +56,30 @@ spec:
         controller: error-pages
         ports:
           http:
-            port: 8080
+            port: &port 8080
+
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: public
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - &host error-pages.eviljungle.com
+        rules:
+          - backendRefs:
+              - port: *port
+      internal:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - *host
+        rules:
+          - backendRefs:
+              - port: *port

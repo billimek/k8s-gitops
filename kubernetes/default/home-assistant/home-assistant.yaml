@@ -7,22 +7,10 @@ metadata:
   namespace: default
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-      interval: 15m
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   values:
     # defaultPodOptions:
     #   # required for mDNS and other host network features
@@ -39,14 +27,10 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/home-assistant/home-assistant
-              tag: 2025.12.1@sha256:4e5e81917192e3fa730948964b19d6e03ff3b9c2694894bc6d6b76769e642055
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2025.12.5
             env:
               TZ: "America/New_York"
-              PYTHONPATH: "/config/deps"
-              UV_SYSTEM_PYTHON: "true"
-              UV_NO_CACHE: "true"
-              VENV_FOLDER: /venv
             envFrom:
               - secretRef:
                   name: home-assistant-secret
@@ -57,18 +41,17 @@ spec:
                 memory: 512M
               limits:
                 memory: 2Gi
-            # commented due to limitations with official home-assistant image
-            # securityContext:
-            #   allowPrivilegeEscalation: false
-            #   readOnlyRootFilesystem: true
-            #   capabilities:
-            #     drop:
-            #       - ALL
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
 
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.106.3@sha256:1a0e813039c8f01404a89654278779ac77492b833bc2d126431268b9b1f1e40a
+              tag: 4.107.0@sha256:4b622c4cd1b0f559fec0df67fcf09042d63e9ce84c575102066afd9511695627
             args:
               - --auth
               - none
@@ -134,7 +117,7 @@ spec:
         advancedMounts:
           home-assistant:
             app:
-              - path: /venv
+              - path: /config/.venv
                 subPath: hass-venv
       tmpfs:
         type: emptyDir
@@ -152,8 +135,8 @@ spec:
         type: secret
         name: home-assistant-gcp-sa-secret
         globalMounts:
-          - path: /config/home-assistant-4d8d1f2ca10f.json
-            subPath: home-assistant-4d8d1f2ca10f.json
+          - path: /config/home-assistant-7c48d-e078848c9fb0.json
+            subPath: home-assistant-7c48d-e078848c9fb0.json
             readOnly: true
       docker-env-empty:
         # enabled: true

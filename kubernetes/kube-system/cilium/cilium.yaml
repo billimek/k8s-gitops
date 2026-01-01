@@ -1,4 +1,19 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  interval: 1h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 1.18.5
+  url: oci://ghcr.io/home-operations/charts-mirror/cilium
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -6,15 +21,9 @@ metadata:
   name: cilium
   namespace: kube-system
 spec:
-  chart:
-    spec:
-      chart: cilium
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: cilium
-        namespace: flux-system
-      version: 1.18.4
+  chartRef:
+    kind: OCIRepository
+    name: cilium
   interval: 30m
   values:
     autoDirectNodeRoutes: true

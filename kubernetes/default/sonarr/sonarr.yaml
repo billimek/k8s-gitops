@@ -7,21 +7,10 @@ metadata:
   namespace: default
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   values:
     controllers:
       sonarr:
@@ -29,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/sonarr
-              tag: 4.0.16.2943@sha256:0a1b8f5cb5b072f7ad8c6ff64a25dc512115d1a114ecf19a58a3b4f870207ddd
+              tag: 4.0.16.2946@sha256:3597fd572f4599c67abbeb8afd3cb85bce8a9e389f0779b7ea1273781544d15c
             env:
               SONARR__APP__INSTANCENAME: sonarr
               SONARR__APPLICATION_URL: 'https://shows.eviljungle.com'

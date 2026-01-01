@@ -23,6 +23,7 @@
     'prEditedNotification',
     'prIgnoreNotification',
   ],
+
   flux: {
     managerFilePatterns: [
       '/(^|/)kubernetes/.+\\.ya?ml$/',

@@ -6,22 +6,11 @@ metadata:
   name: audiobookshelf
   namespace: default
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     controllers:
       audiobookshelf:
@@ -37,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/advplyr/audiobookshelf
-              tag: 2.31.0@sha256:e23adb24848d99d19cd1e251aee4e1e12ed4f5effc8ccb21754b062b6a06cf66
+              tag: 2.32.1@sha256:a52dc5db694a5bf041ce38f285dd6c6a660a4b1b21e37ad6b6746433263b2ae5
             env:
               TZ: "America/New_York"
               AUDIOBOOKSHELF_UID: 1001

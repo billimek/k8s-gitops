@@ -10,46 +10,36 @@ helmDefaults:
   createNamespace: true
 
 repositories:
-  - name: backube
-    url: https://backube.github.io/helm-charts/
-  - name: cloudnative-pg
-    url: https://cloudnative-pg.github.io/charts
   - name: emqx
     url: https://repos.emqx.io/charts
-  - name: giantswarm
-    url: https://giantswarm.github.io/control-plane-catalog/
   - name: piraeus
     url: https://piraeus.io/helm-charts/
-  - name: rook-ceph
-    url: https://charts.rook.io/release
-  - name: wiremind
-    url: https://wiremind.github.io/wiremind-helm-charts
 
 releases:
   - name: prometheus-operator-crds
     namespace: monitoring
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
-    version: 25.0.0
+    version: 25.0.1
 
   - name: external-secrets
     namespace: kube-system
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 1.1.1
+    version: 1.2.0
 
   - name: volsync
     namespace: kube-system
-    chart: backube/volsync
+    chart: oci://ghcr.io/home-operations/charts-mirror/volsync
     version: 0.14.0
 
   - name: rook-ceph
     namespace: rook-ceph
-    chart: rook-ceph/rook-ceph
+    chart: oci://ghcr.io/rook/rook-ceph
     version: v1.18.8
 
   - name: cloudnative-pg
     namespace: default
-    chart: cloudnative-pg/cloudnative-pg
-    version: 0.26.1
+    chart: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
+    version: 0.27.0
 
   - name: emqx-operator
     namespace: default
@@ -58,7 +48,7 @@ releases:
 
   - name: envoy-gateway
     namespace: kube-system
-    chart: oci://docker.io/envoyproxy/gateway-helm
+    chart: oci://mirror.gcr.io/envoyproxy/gateway-helm
     version: v1.6.1
 
   - name: node-feature-discovery
@@ -68,7 +58,7 @@ releases:
 
   - name: silence-operator
     namespace: monitoring
-    chart: giantswarm/silence-operator
+    chart: oci://gsoci.azurecr.io/charts/giantswarm/silence-operator
     version: 0.20.0
 
   - name: snapshot-controller
@@ -79,4 +69,4 @@ releases:
   - name: tuppr
     namespace: system-upgrade
     chart: oci://ghcr.io/home-operations/charts/tuppr
-    version: 0.0.43
+    version: 0.0.51

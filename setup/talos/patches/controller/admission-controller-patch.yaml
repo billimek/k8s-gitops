@@ -1,2 +1,5 @@
-- op: remove
-  path: /cluster/apiServer/admissionControl
+cluster:
+  apiServer:
+    admissionControl:
+      - name: PodSecurity
+        $$patch: delete

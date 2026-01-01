@@ -7,29 +7,28 @@ metadata:
   namespace: default
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   values:
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: aeotec.feature.node.kubernetes.io/zwave
+                    operator: In
+                    values:
+                      - "true"
     controllers:
       zwave:
         containers:
           app:
             image:
               repository: ghcr.io/zwave-js/zwave-js-ui
-              tag: 11.8.2@sha256:162877c73580588cbeeb94eaec2bfe68d7c41cacc338e1ed7675a0a4e67e3133
+              tag: 11.9.1@sha256:a7036e59a9d7916d1f92f2fa1e0b9f4a5ed317fc8bef38756368f7c865e0e95a
             env:
               TZ: America/New_York
               PORT: &port 8091
@@ -46,25 +45,13 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
-              privileged: true
             resources:
               requests:
                 cpu: 10m
                 memory: 200Mi
               limits:
                 memory: 512Mi
-
-    defaultPodOptions:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: aeotec.feature.node.kubernetes.io/zwave
-                    operator: In
-                    values:
-                      - "true"
+                generic-device-plugin/zwave: 1
 
     service:
       app:
@@ -105,9 +92,3 @@ spec:
           - path: /usr/src/app/store
       tmp:
         type: emptyDir
-      usb:
-        type: hostPath
-        hostPath: /dev/serial/by-id/usb-0658_0200-if00
-        hostPathType: CharDevice
-        globalMounts:
-          - path: /dev/ttyACM0

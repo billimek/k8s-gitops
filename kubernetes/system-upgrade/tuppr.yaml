@@ -1,4 +1,19 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: home-operations
+  namespace: system-upgrade
+spec:
+  interval: 30m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.0.51
+  url: oci://ghcr.io/home-operations/charts/tuppr
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -6,24 +21,9 @@ metadata:
   name: tuppr
   namespace: system-upgrade
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: home-operations
   interval: 30m
-  chart:
-    spec:
-      chart: tuppr
-      version: 0.0.43
-      sourceRef:
-        kind: HelmRepository
-        name: home-operations
-        namespace: flux-system
-  maxHistory: 2
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  upgrade:
-    crds: CreateReplace
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     replicaCount: 1

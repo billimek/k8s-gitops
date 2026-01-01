@@ -35,6 +35,15 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 * [home-assistant.yaml](home-assistant/home-assistant.yaml)
 * Home Assistant configuration & settings are persisted to a [configuration repo](https://github.com/billimek/home-assistant-config)
 
+# icloudpd
+
+ ![](https://i.imgur.com/ldJ6KQG.png)
+
+[icloudpd](https://github.com/icloud-photos-downloader/icloud_photos_downloader) is a tool to download photos from iCloud to local storage.
+
+* [icloudpd.yaml](icloudpd/icloudpd.yaml)
+* iCloud authentication cache is persisted to ceph-block storage at `/root/.pyicloud` to avoid repeated login/MFA prompts
+
 # jellyseerr
 
 jellyseerr is a self-hosted media request management tool for Plex and Jellyfin

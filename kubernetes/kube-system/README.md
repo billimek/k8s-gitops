@@ -24,6 +24,22 @@ Leveraging [descheduler](https://github.com/kubernetes-sigs/descheduler) to auto
 
 * [descheduler/descheduler.yaml](descheduler/descheduler.yaml)
 
+# etcd maintenance
+
+Automated maintenance tools for etcd database health and backup operations:
+
+## etcd-defrag
+
+[etcd-defrag](https://github.com/ahrtr/etcd-defrag) provides automated defragmentation of the etcd database to prevent bloat buildup and maintain optimal performance. Runs weekly on Sunday at 3 AM to compact the database when needed (>50% quota usage or >100MB bloat).
+
+* [etcd/etcd-defrag/](etcd/etcd-defrag/)
+
+## etcd-backup
+
+[talos-backup](https://github.com/siderolabs/talos-backup) provides automated etcd snapshot backups via the Talos API. Runs every 6 hours with compression enabled, storing encrypted snapshots to S3-compatible storage (Garage). Uses Talos ServiceAccount for secure API access with the `os:etcd:backup` role. The Talos controller automatically creates and manages the secret containing the API token.
+
+* [etcd/etcd-backup/](etcd/etcd-backup/)
+
 # envoy-gateway
 
 [Envoy Gateway](https://gateway.envoyproxy.io/) is the primary Gateway API controller, replacing Cilium Gateway. It manages multiple gateways for different access patterns:
@@ -49,12 +65,11 @@ Using [external-secrets](https://external-secrets.io) & [1Password connect](http
 
 * [external-secrets](external-secrets)
 
-# intel GPU device plugin
+# intel GPU resource driver
 
-Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-device-plugins-for-kubernetes/tree/master/cmd/gpu_plugin) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via the `gpu.intel.com/i915` node resource
+Leverage Intel-based iGPU via the [intel-gpu-resource-driver](https://github.com/intel/intel-gpu-resource-driver-k8s) DaemonSet for serving-up GPU-based workloads (e.g. Plex) via node resources
 
-* [intel-device-plugins/gpu-plugin.yaml](intel-device-plugins/gpu-plugin.yaml)
-* [intel-device-plugins/operator.yaml](intel-device-plugins/operator.yaml)
+* [intel-gpu-resource-driver/intel-gpu-resource-driver.yaml](intel-gpu-resource-driver/intel-gpu-resource-driver.yaml)
 
 # metrics-server
 
@@ -67,6 +82,12 @@ Leverage Intel-based iGPU via the [gpu plugin](https://github.com/intel/intel-de
 Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery) to dynamically label nodes that contain specific USB devices we care about
 
 * [node-feature-discovery](node-feature-discovery/)
+
+# generic-device-plugin
+
+Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to dynamically create resources for USB devices we care about
+
+* [generic-device-plugin/generic-device-plugin.yaml](generic-device-plugin/generic-device-plugin.yaml)
 
 # snapshot-controller
 
@@ -85,12 +106,6 @@ Using the USB feature of [node-feature-discovery](https://github.com/kubernetes-
 [Put things in kubernets on your tailnet!](https://tailscale.com/kb/1236/kubernetes-operator)
 
 * [tailscale/tailscale-operator.yaml](tailscale/tailscale-operator.yaml)
-
-# talos-backup
-
-[talos-backup](https://github.com/siderolabs/talos-backup) is a tool to backup and restore Talos clusters.  It uses the Talos API to get the current state of the cluster and stores it in a backup file.  This is used to backup the Talos control plane nodes.
-
-* [talos-backup/](talos-backup/)
 
 # volsync
 

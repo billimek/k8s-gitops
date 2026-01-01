@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: generic-device-plugin
+  namespace: kube-system
+spec:
+  suspend: false
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  values:
+    defaultPodOptions:
+      priorityClassName: system-node-critical
+    controllers:
+      generic-device-plugin:
+        type: daemonset
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/squat/generic-device-plugin
+              tag: latest@sha256:f1055553438c495c5258c4648a83f6aaf0a3c908d0c5313302ddf0feaa1758bd
+            args:
+              - --log-level=info
+              - --domain=generic-device-plugin
+              - --device
+              - |
+                name: coral
+                groups:
+                  - count: 1
+                    usb:
+                      - vendor: 1a6e
+                        product: 089a
+                      - vendor: 18d1
+                        product: 9302
+              - --device
+              - |
+                name: alarmdecoder
+                groups:
+                  - usb:
+                      - vendor: "0403"
+                      - device: "6015"
+                  - paths:
+                      - path: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
+                        mountPath: /dev/ttyUSB0
+              - --device
+              - |
+                name: zwave
+                groups:
+                  - usb:
+                      - vendor: "0658"
+                      - device: "0200"
+                  - paths:
+                      - path: /dev/serial/by-id/usb-0658_0200-if00
+                        mountPath: /dev/ttyACM0
+
+            ports:
+              - containerPort: 8080
+                name: http
+
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 64Mi
+
+    persistence:
+      dev:
+        type: hostPath
+        hostPath: /dev
+      sys:
+        type: hostPath
+        hostPath: /sys
+        globalMounts:
+          - readOnly: true
+      var-lib-kubelet-device-plugins:
+        type: hostPath
+        hostPath: /var/lib/kubelet/device-plugins

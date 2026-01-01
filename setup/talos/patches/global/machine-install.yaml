@@ -3,3 +3,4 @@ machine:
     extraKernelArgs:
       - intel_iommu=on # PCI Passthrough
       - iommu=pt # PCI Passthrough
+    grubUseUKICmdline: false

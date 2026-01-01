@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: etcd-defrag
+  namespace: kube-system
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  values:
+    controllers:
+      etcd-defrag:
+        type: cronjob
+        cronjob:
+          # Run weekly on Sunday at 3 AM
+          schedule: "0 3 * * 0"
+          concurrencyPolicy: Forbid
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
+        containers:
+          app:
+            image:
+              repository: ghcr.io/ahrtr/etcd-defrag
+              tag: v0.36.0
+            args:
+              - --endpoints=https://127.0.0.1:2379
+              - --cluster
+              - --cacert=/certs/ca.crt
+              - --cert=/certs/server.crt
+              - --key=/certs/server.key
+              # Defrag when DB quota usage > 50% OR free space > 100MB
+              - --defrag-rule=dbQuotaUsage > 0.5 || dbSizeFree > 100*1024*1024
+              # Move leader during defrag (safe for single-node)
+              - --move-leader
+              # Wait 30s between defrags (only matters if you had multiple members)
+              - --wait-between-defrags=30s
+              # Match the quota-backend-bytes we set in Talos config
+              - --etcd-storage-quota-bytes=8589934592
+              # Auto-disalarm space quota alarms
+              - --auto-disalarm
+              - --disalarm-threshold=0.8
+            securityContext:
+              privileged: true
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 128Mi
+        serviceAccount:
+          name: etcd-defrag
+    defaultPodOptions:
+      # Must use host network to access etcd on localhost:2379
+      hostNetwork: true
+      hostPID: true
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+      # Ensure this only runs on the control plane node
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+    persistence:
+      certs:
+        type: hostPath
+        hostPath: /system/secrets/etcd
+        globalMounts:
+          - path: /certs
+            readOnly: true
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          etcd-defrag:
+            app:
+              - path: /tmp
+                subPath: tmp

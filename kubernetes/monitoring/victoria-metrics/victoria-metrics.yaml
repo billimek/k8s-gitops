@@ -1,4 +1,19 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: victoriametrics-charts
+  namespace: monitoring
+spec:
+  interval: 2h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.66.1
+  url: oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -6,28 +21,12 @@ metadata:
   name: vm
   namespace: monitoring
 spec:
-  chart:
-    spec:
-      chart: victoria-metrics-k8s-stack
-      version: 0.65.1
-      sourceRef:
-        kind: HelmRepository
-        name: victoriametrics-charts
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: victoriametrics-charts
   interval: 1h
-  maxHistory: 3
   install:
-    crds: CreateReplace
     createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    crds: CreateReplace
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     fullnameOverride: stack
     victoria-metrics-operator:
@@ -120,17 +119,64 @@ spec:
       config:
         route:
           # group_by: ["alertname", "job"]
-          group_by: ['job', 'alertname', 'severity', 'name', 'job_name', 'instance']
-          group_wait: 45s
+          group_by: ['alertname', 'severity']
+          group_wait: 30s
           group_interval: 10m
           repeat_interval: 12h
           routes:
+            # Route 1: Blackhole for noise
             - matchers:
                 - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit|CephNodeNetworkPacketDrops|CephNodeNetworkPacketErrors"
               receiver: 'blackhole'
+            
+            # Route 2: Critical infrastructure alerts - group by instance for visibility
             - matchers:
-                - severity=~"warning|critical"
+                - severity = "critical"
+                - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
               receiver: slack-notifications
+              group_by: ['alertname', 'instance']
+              group_wait: 10s
+              continue: false
+            
+            # Route 3: Warning infrastructure alerts - group by instance
+            - matchers:
+                - severity = "warning"
+                - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'instance']
+              continue: false
+            
+            # Route 4: Critical Kubernetes/application alerts - group by namespace
+            - matchers:
+                - severity = "critical"
+                - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'namespace', 'severity']
+              group_wait: 10s
+              continue: false
+            
+            # Route 5: Warning Kubernetes/application alerts - group by namespace
+            - matchers:
+                - severity = "warning"
+                - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'namespace']
+              continue: false
+            
+            # Route 6: Catch-all for other critical alerts
+            - matchers:
+                - severity = "critical"
+              receiver: slack-notifications
+              group_by: ['alertname']
+              group_wait: 10s
+              continue: false
+            
+            # Route 7: Catch-all for other warning alerts
+            - matchers:
+                - severity = "warning"
+              receiver: slack-notifications
+              group_by: ['alertname']
+              continue: false
         inhibit_rules:
           - source_matchers:
               - severity = "critical"

@@ -1,62 +1,47 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: kubernetes-sigs-nfd-charts
+  namespace: kube-system
+spec:
+  interval: 30m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.18.3
+  url: oci://registry.k8s.io/nfd/charts/node-feature-discovery
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
-
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: node-feature-discovery
   namespace: kube-system
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: kubernetes-sigs-nfd-charts
   interval: 15m
-  chart:
-    spec:
-      chart: node-feature-discovery
-      version: 0.18.3
-      sourceRef:
-        kind: HelmRepository
-        name: kubernetes-sigs-nfd-charts
-        namespace: flux-system
-  maxHistory: 3
   install:
     createNamespace: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     worker:
       config:
         core:
-          sources: ["custom", "pci", "usb"]
+          sources: ["custom", "usb"]
         sources:
           usb:
             deviceClassWhitelist: ["02", "03", "0e", "ef", "fe", "ff"]
             deviceLabelFields: ["class", "vendor", "device"]
       tolerations:
-        - key: arm
-          operator: Exists
         - key: "node-role.kubernetes.io/master"
           operator: "Exists"
         - effect: "NoExecute"
           operator: "Exists"
         - effect: "NoSchedule"
           operator: "Exists"
-      # resources:
-      #   limits:
-      #     cpu: null
-    # master:
-    #   resources:
-    #     limits:
-    #       cpu: null
-    # gc:
-    #   resources:
-    #     limits:
-    #       cpu: null
     prometheus:
       enable: true

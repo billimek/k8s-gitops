@@ -17,7 +17,7 @@ releases:
   - name: cilium
     namespace: kube-system
     chart: cilium/cilium
-    version: 1.18.4
+    version: 1.18.5
     values:
       - ../templates/cilium-values.yaml.gotmpl
 
@@ -33,7 +33,7 @@ releases:
   - name: cert-manager
     namespace: cert-manager
     chart: jetstack/cert-manager
-    version: v1.19.1
+    version: v1.19.2
     values:
       - ../templates/cert-manager-values.yaml.gotmpl
     needs:
@@ -42,7 +42,7 @@ releases:
   - name: flux-operator
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.36.0
+    version: 0.38.1
     values:
       - ../templates/flux-operator-values.yaml.gotmpl
     needs:
@@ -51,7 +51,7 @@ releases:
   - name: flux-instance
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.36.0
+    version: 0.38.1
     wait: false
     values:
       - ../templates/flux-instance-values.yaml.gotmpl

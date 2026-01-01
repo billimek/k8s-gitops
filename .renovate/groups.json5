@@ -75,15 +75,6 @@
       },
     },
     {
-      description: "Gateway API CRDs Group",
-      groupName: "Gateway API CRDs",
-      matchDatasources: ["helm"],
-      matchPackagePatterns: ["gateway-api-crds"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
       description: "Flux Operator Group",
       groupName: "Flux Operator",
       matchDatasources: ["docker"],
@@ -95,7 +86,7 @@
     {
       description: "Intel Device Plugins Group",
       groupName: "Intel-Device-Plugins",
-      matchDatasources: ["docker"],
+      matchDatasources: ["docker", "helm"],
       matchPackageNames: ["/intel-device-plugins-operator/", "/intel-device-plugins-gpu/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",

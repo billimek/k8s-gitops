@@ -6,23 +6,13 @@ metadata:
   name: external-dns-cloudflare
   namespace: kube-system
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: external-dns
+    namespace: flux-system
   interval: 15m
-  chart:
-    spec:
-      chart: external-dns
-      version: 1.19.0
-      sourceRef:
-        kind: HelmRepository
-        name: external-dns
-        namespace: flux-system
   install:
     createNamespace: true
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     # Use Cloudflare provider
     provider:
@@ -48,6 +38,7 @@ spec:
     # Extra arguments for external-dns
     extraArgs:
       - --annotation-filter=external-dns.alpha.kubernetes.io/external=true
+      - --cloudflare-proxied
     
     # Cloudflare configuration (using Global API Key)
     env:

@@ -6,23 +6,13 @@ metadata:
   name: external-dns-opnsense
   namespace: kube-system
 spec:
+  chartRef:
+    kind: OCIRepository
+    name: external-dns
+    namespace: flux-system
   interval: 15m
-  chart:
-    spec:
-      chart: external-dns
-      version: 1.19.0
-      sourceRef:
-        kind: HelmRepository
-        name: external-dns
-        namespace: flux-system
   install:
     createNamespace: true
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     # Use webhook provider for OpnSense
     provider:

@@ -2,10 +2,28 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      description: "Auto-merge trusted containers - anytime",
+      matchDatasources: ["docker"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+      matchUpdateTypes: ["minor", "patch"],
+      matchPackageNames: [
+        "ghcr.io/home-operations/radarr",
+        "ghcr.io/home-operations/sabnzbd",
+        "ghcr.io/home-operations/sonarr",
+        "ghcr.io/home-operations/tautulli",
+        "ghcr.io/recyclarr/recyclarr",
+        "ghcr.io/tarampampam/error-pages",
+        "/victoria-metrics/"
+      ],
+    },
+    {
       description: "Auto-merge trusted containers - daily",
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
+      ignoreTests: false,
       automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
@@ -14,17 +32,9 @@
         "ghcr.io/home-assistant/home-assistant",
         "ghcr.io/home-operations/plex",
         "ghcr.io/home-operations/qbittorrent",
-        "ghcr.io/home-operations/radarr",
-        "ghcr.io/home-operations/sabnzbd",
-        "ghcr.io/home-operations/sonarr",
-        "ghcr.io/home-operations/tautulli",
         "ghcr.io/itzg/minecraft-server",
-        "ghcr.io/recyclarr/recyclarr",
-        "ghcr.io/tarampampam/error-pages",
         "ghcr.io/zwave-js/zwave-js-ui",
         "nodered/node-red",
-        "/victoria-metrics/",
-        "/grafana/"
       ],
     },
     {
@@ -32,6 +42,7 @@
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
+      ignoreTests: false,
       automergeSchedule: ["before 3am on Monday"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
@@ -44,20 +55,21 @@
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
+      ignoreTests: false,
       automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["digest"],
       matchPackageNames: ["/home-operations/"],
-      ignoreTests: false,
     },
     {
       description: "Auto-merge trusted Helm chart patches",
       matchDatasources: ["helm"],
       automerge: true,
       automergeType: "pr",
-      automergeSchedule: ["after 1am and before 5am"],
+      ignoreTests: false,
+      // automergeSchedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
-        "tailscale-operator"
+        // "tailscale-operator"
       ],
     },
     {

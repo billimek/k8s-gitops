@@ -7,21 +7,10 @@ metadata:
   namespace: default
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   values:
     defaultPodOptions:
       affinity:
@@ -46,14 +35,13 @@ spec:
               LISTENER_PORT: 10000
               BAUD_RATE: 115200
               SERIAL_DEVICE: "/dev/ttyUSB0"
-            securityContext:
-              privileged: true
             resources:
               requests:
                 memory: 50Mi
                 cpu: 15m
               limits:
                 memory: 250Mi
+                generic-device-plugin/alarmdecoder: 1
     service:
       main:
         controller: main
@@ -62,14 +50,3 @@ spec:
             port: 10000
             primary: true
             protocol: TCP
-    persistence:
-      usb:
-        enabled: true
-        type: hostPath
-        hostPath: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0
-        # hostPathType: Directory
-        hostPathType: CharDevice
-        globalMounts:
-          - path: /dev/ttyUSB0
-
-# MountVolume.SetUp failed for volume "usb" : hostPath type check failed: /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DO00DPTS-if00-port0 is not a directory

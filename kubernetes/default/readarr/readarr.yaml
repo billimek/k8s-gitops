@@ -7,29 +7,28 @@ metadata:
   namespace: default
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 4.5.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   values:
     controllers:
       readarr:
+        initContainers:
+          chown-run:
+            image:
+              repository: busybox
+              tag: 1.37.0
+            command: ["sh", "-c"]
+            args: ["chown -R 1001:1001 /run"]
+            securityContext:
+              runAsNonRoot: false
+              runAsUser: 0
         containers:
           app:
             image:
-              repository: ghcr.io/home-operations/readarr
-              tag: 0.4.18.2805@sha256:8f7551205fbdccd526db23a38a6fba18b0f40726e63bb89be0fb2333ff4ee4cd
+              repository: ghcr.io/pennydreadful/bookshelf
+              tag: softcover-v0.4.20.91@sha256:98408a79dcc80973e0021b6dd14f317b5449215a74b5ce9f9d1cb5da0a1bd234
             env:
               READARR__APP__INSTANCENAME: readarr
               READARR__APPLICATION_URL: 'https://readarr.eviljungle.com'
@@ -56,8 +55,8 @@ spec:
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+              # readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"], add: ["CHOWN"] }
             resources:
               requests:
                 cpu: 50m
@@ -112,5 +111,9 @@ spec:
         path: /mnt/tank/media
         globalMounts:
           - path: /media
+      run:
+        type: emptyDir
+        globalMounts:
+          - path: /run
       tmp:
         type: emptyDir
