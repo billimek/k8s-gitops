@@ -27,7 +27,6 @@ jobs:
         with:
           files: |-
             kubernetes/**/*
-            setup/flux/**/*
 
   test:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
