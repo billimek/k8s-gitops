@@ -1,0 +1,125 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: ups-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: ups.rules
+    rules:
+    - alert: UPSOnBattery
+      annotations:
+        summary: UPS {{$labels.ups}} is running on battery power
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) has switched to battery power.
+          This indicates a utility power failure or interruption.
+      expr: nut_status{flag="OB"} == 1
+      for: 30s
+      labels:
+        severity: critical
+    
+    - alert: UPSLowBatteryWarning
+      annotations:
+        summary: UPS {{$labels.ups}} battery charge is low
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) battery charge is below 50%.
+          Current charge: {{ $value | humanizePercentage }}
+      expr: nut_battery_charge < 50
+      for: 1m
+      labels:
+        severity: warning
+    
+    - alert: UPSLowBatteryCritical
+      annotations:
+        summary: UPS {{$labels.ups}} battery critically low
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) battery charge is critically low at {{ $value | humanizePercentage }}.
+          Immediate shutdown may be imminent.
+      expr: nut_battery_charge < 20
+      for: 30s
+      labels:
+        severity: critical
+    
+    - alert: UPSLowRuntimeWarning
+      annotations:
+        summary: UPS {{$labels.ups}} has low battery runtime remaining
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) has less than 15 minutes of battery runtime remaining.
+          Current runtime: {{ $value | humanizeDuration }}
+      expr: nut_battery_runtime < 900
+      for: 1m
+      labels:
+        severity: warning
+    
+    - alert: UPSLowRuntimeCritical
+      annotations:
+        summary: UPS {{$labels.ups}} has critical battery runtime remaining
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) has less than 5 minutes of battery runtime remaining.
+          Current runtime: {{ $value | humanizeDuration }}
+          Graceful shutdown should be initiated immediately.
+      expr: nut_battery_runtime < 300
+      for: 30s
+      labels:
+        severity: critical
+    
+    - alert: UPSOverload
+      annotations:
+        summary: UPS {{$labels.ups}} is overloaded
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) load is above 90%.
+          Current load: {{ $value }}%
+          Reduce connected equipment to prevent UPS shutdown.
+      expr: nut_load > 90
+      for: 5m
+      labels:
+        severity: warning
+    
+    - alert: UPSCommunicationLost
+      annotations:
+        summary: Unable to communicate with UPS {{$labels.ups}}
+        description: |
+          Communication with UPS {{$labels.ups}} ({{$labels.instance}}) has been lost.
+          Check NUT server connectivity and USB connection.
+      expr: up{job="nut-exporter"} == 0
+      for: 2m
+      labels:
+        severity: critical
+    
+    - alert: UPSPowerRestored
+      annotations:
+        summary: UPS {{$labels.ups}} power has been restored
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) is now running on utility power.
+          Battery is recharging.
+      expr: nut_status{flag="OL"} == 1 and nut_status{flag="OB"} == 0
+      for: 2m
+      labels:
+        severity: info
+    
+    - alert: UPSBatteryReplacementRequired
+      annotations:
+        summary: UPS {{$labels.ups}} battery needs replacement
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) has indicated that the battery needs replacement (RB flag).
+          Schedule battery replacement as soon as possible.
+      expr: nut_status{flag="RB"} == 1
+      for: 5m
+      labels:
+        severity: warning
+    
+    - alert: UPSTestInProgress
+      annotations:
+        summary: UPS {{$labels.ups}} is performing a self-test
+        description: |
+          UPS {{$labels.ups}} ({{$labels.instance}}) is currently running a self-test.
+          This is normal operation.
+      expr: nut_status{flag="TEST"} == 1
+      for: 1m
+      labels:
+        severity: info
