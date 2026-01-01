@@ -47,7 +47,7 @@ tasks:
       - which helmfile kubectl yq
       - test -f {{.SETUP_DIR}}/bootstrap/helmfile.d/00-crds.yaml
     cmds:
-      - helmfile -f "{{.SETUP_DIR}}/bootstrap/helmfile.d/00-crds.yaml" template -q --include-crds | yq 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side --force-conflicts -f -
+      - helmfile -f "{{.SETUP_DIR}}/bootstrap/helmfile.d/00-crds.yaml" template -q | kubectl apply --server-side --force-conflicts -f -
 
   wipe-disks:
     desc: Wipe disks on Talos nodes

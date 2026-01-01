@@ -8,7 +8,7 @@ The `/setup` directory contains all the components needed to bootstrap the Kuber
 
 Contains Helmfile configurations for initial cluster bootstrapping:
 
-- `helmfile.d/00-crds.yaml` - Extracts CRDs from Helm charts before Flux starts
+- `helmfile.d/00-crds.yaml` - Extracts CRDs from Helm charts before Flux starts (uses postRenderer to automatically filter CRDs)
 - `helmfile.d/01-apps.yaml` - Core apps (Cilium CNI, CoreDNS, cert-manager, Flux)
 
 ### `/setup/flux`

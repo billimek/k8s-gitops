@@ -2,21 +2,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 
 helmDefaults:
+  cleanupOnFail: true
   wait: true
   waitForJobs: true
   timeout: 600
   force: true
 
-repositories:
-  - name: cilium
-    url: https://helm.cilium.io
-  - name: jetstack
-    url: https://charts.jetstack.io
-
 releases:
   - name: cilium
     namespace: kube-system
-    chart: cilium/cilium
+    chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.18.5
     values:
       - ../templates/cilium-values.yaml.gotmpl
@@ -32,7 +27,7 @@ releases:
 
   - name: cert-manager
     namespace: cert-manager
-    chart: jetstack/cert-manager
+    chart: oci://quay.io/jetstack/charts/cert-manager
     version: v1.19.2
     values:
       - ../templates/cert-manager-values.yaml.gotmpl

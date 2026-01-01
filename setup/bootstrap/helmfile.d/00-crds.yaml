@@ -2,12 +2,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 #
 # CRD-only extraction helmfile
-# Usage: helmfile -f 00-crds.yaml template -q --include-crds | yq 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side -f -
+# Usage: helmfile -f 00-crds.yaml template -q | kubectl apply --server-side -f -
 
 helmDefaults:
-  cleanupOnFail: true
-  wait: false
-  createNamespace: true
+  args:
+    - --include-crds
+    - --no-hooks
+  postRenderer: bash
+  postRendererArgs:
+    - -c
+    - yq ea -e 'select(.kind == "CustomResourceDefinition")'
 
 repositories:
   - name: emqx
