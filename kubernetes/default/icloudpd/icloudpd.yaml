@@ -20,6 +20,7 @@ spec:
               repository: docker.io/icloudpd/icloudpd
               tag: 1.32.2@sha256:eb5fad6a58dc77ffa8c87d47078df28269959726eb58ed23502d27f6c6976c94
             command: ["/bin/sh", "-c"]
+            # download photos from both default (personal) album AND shared album every hour, incrementally checking for new photos (recent 500)
             args:
               - |
                 /app/icloudpd \
