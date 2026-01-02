@@ -53,7 +53,6 @@ kubectl get helmreleases -A
 ```
 /setup/
 ├── bootstrap/      # Helmfile for initial cluster bootstrap (CNI, CRDs, Flux)
-├── crds/           # Vendored CRDs (applied before workloads)
 ├── flux/           # FluxCD configuration and HelmRepository definitions
 └── talos/          # Talos Linux OS configuration (talconfig.yaml)
 
@@ -69,17 +68,16 @@ kubectl get helmreleases -A
 
 ### FluxCD Bootstrap Chain
 
-FluxCD reconciles in three stages (defined in `/setup/flux/cluster/cluster.yaml`):
+FluxCD reconciles in stages (defined in `/setup/flux/cluster/cluster.yaml`):
 
 1. **flux-repositories** → Deploys all HelmRepository CRDs first
-2. **core-crds** → Deploys vendored CRDs with `wait: true`
-3. **cluster-apps** → Deploys all applications (depends on above)
+2. **cluster-apps** → Deploys all applications (depends on above)
 
-This ensures HelmRepositories and CRDs exist before any workload tries to use them.
+This ensures HelmRepositories exist before any workload tries to use them.
 
 ### Key Architectural Patterns
 
-**CRDs Management**: All CRDs are vendored in `/setup/crds/vendor/` with Renovate tracking comments. They're applied before workloads via the `core-crds` Kustomization. Never add CRDs directly to app manifests.
+**CRDs Management**: CRDs are applied at bootstrap time via `/setup/bootstrap/helmfile.d/00-crds.yaml`. For adding new CRDs to an existing cluster, use the `task k8s-bootstrap:crds` command. Ongoing CRD lifecycle management is handled by Flux through HelmReleases in their respective namespaces (e.g., `/kubernetes/monitoring/prometheus-operator-crds/`).
 
 **Secret Management**: All secrets use ExternalSecret CRDs backed by 1Password Connect. Never commit plaintext secrets. Structure: `kubernetes/{namespace}/{app}/externalsecret.yaml`.
 
@@ -230,19 +228,52 @@ spec:
 
 ### Adding New CRDs
 
-1. Place vendored CRDs in `/setup/crds/vendor/{project}_{repo}/`
-2. Add Renovate tracking comment at top of file:
+When adding a new operator or chart that includes CRDs:
+
+1. **Add to bootstrap helmfile**: Include the chart in `/setup/bootstrap/helmfile.d/00-crds.yaml`
+   - The helmfile uses a postRenderer to extract only CRDs from charts
+   - Existing CRDs are applied at bootstrap time via `task k8s-bootstrap:apps`
+
+2. **Apply to existing cluster**: Run `task k8s-bootstrap:crds` to apply new CRDs without re-bootstrapping
+
+3. **Create ongoing management**: For CRD lifecycle management after bootstrap, create a HelmRelease in the appropriate namespace:
    ```yaml
-   # renovate: datasource=github-releases depName=org/repo
+   # kubernetes/{namespace}/{operator}-crds/
+   ---
+   apiVersion: source.toolkit.fluxcd.io/v1
+   kind: OCIRepository
+   metadata:
+     name: operator-crds
+     namespace: namespace
+   spec:
+     interval: 5m
+     layerSelector:
+       mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+       operation: copy
+     ref:
+       tag: 1.0.0
+     url: oci://ghcr.io/org/charts/operator-crds
+   ---
+   apiVersion: helm.toolkit.fluxcd.io/v2
+   kind: HelmRelease
+   metadata:
+     name: operator-crds
+     namespace: namespace
+   spec:
+     chartRef:
+       kind: OCIRepository
+       name: operator-crds
+     interval: 1h
    ```
-3. CRDs will be applied via `core-crds` Kustomization before applications
 
 ### Updating CRDs
 
-CRDs are tracked by Renovate. When updated:
-1. Renovate creates PR with new CRD versions
-2. Review changes to ensure no breaking changes
-3. Merge PR to update CRDs in cluster
+CRDs are updated through two mechanisms:
+
+1. **Bootstrap helmfile**: Renovate updates versions in `/setup/bootstrap/helmfile.d/00-crds.yaml`
+2. **Flux HelmReleases**: Renovate updates HelmRelease versions (e.g., `prometheus-operator-crds` in monitoring namespace)
+
+Both methods ensure CRDs stay current with their respective operators.
 
 ## Secret Management with 1Password
 
