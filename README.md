@@ -25,7 +25,7 @@ See [setup](setup/README.md) for more detail about setup & bootstrapping a new c
 ## :robot:&nbsp; Automation
 
 * [Renovate](https://github.com/renovatebot/renovate) keeps workloads up-to-date by scanning the repo and opening pull requests when it detects a new container image update or a new helm chart
-* [System Upgrade Controller](https://github.com/rancher/system-upgrade-controller) automatically upgrades talos and kubernetes to new versions as they are released
+* [tuppr](https://github.com/home-operations/tuppr/) automatically upgrades talos and kubernetes to new versions as they are released
 
 ## :handshake:&nbsp; Community
 

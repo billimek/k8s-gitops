@@ -13,7 +13,7 @@ Contains Helmfile configurations for initial cluster bootstrapping:
 
 ### `/setup/flux`
 
-Flux GitOps configuration files which are the entrypoint for flux operating the cluster from this repo. It also contains all of the `HelmRepository` definitions used by various HelmReleases in the cluster. It is necessary to ensure that the Helm repositories are available before the HelmReleases are applied.
+Flux GitOps configuration files which are the entrypoint for flux operating the cluster from this repo. It also contains all of the _shared_ `OCIRepository` and `HelmRepository` definitions used by various HelmReleases in the cluster. It is necessary to ensure that the Helm repositories are available before the HelmReleases are applied.
 
 ### `/setup/talos`
 
