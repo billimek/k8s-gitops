@@ -42,8 +42,6 @@ nodes:
       - deviceSelector:
           hardwareAddr: bc:24:11:*
         dhcp: true
-    patches:
-      - "@./patches/k8s-a-gpu.yaml"
     schematic:
       customization:
         systemExtensions:

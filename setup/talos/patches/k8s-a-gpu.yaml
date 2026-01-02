@@ -1,4 +1,0 @@
-machine:
-  kernel:
-    modules:
-      - name: i915
