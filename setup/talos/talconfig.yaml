@@ -47,6 +47,9 @@ nodes:
         systemExtensions:
           officialExtensions:
             - siderolabs/qemu-guest-agent
+            - siderolabs/i915
+            - siderolabs/intel-ucode
+            - siderolabs/mei
   - hostname: k8s-b
     nodeAnnotations:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
