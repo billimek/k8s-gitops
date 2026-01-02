@@ -14,6 +14,9 @@ spec:
     namespace: flux-system
   values:
     defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: frigate
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -53,6 +56,8 @@ spec:
                 enabled: false
 
             resources:
+              claims:
+                - name: gpu
               requests:
                 memory: 1000Mi
                 cpu: 1500m
@@ -123,3 +128,16 @@ spec:
         sizeLimit: 4Gi
         globalMounts:
           - path: /dev/shm
+
+    rawResources:
+      gpu:
+        apiVersion: resource.k8s.io/v1
+        kind: ResourceClaimTemplate
+        spec:
+          spec:
+            spec:
+              devices:
+                requests:
+                  - name: gpu
+                    exactly:
+                      deviceClassName: gpu.intel.com
