@@ -55,6 +55,10 @@ spec:
               startup:
                 enabled: false
 
+            securityContext:
+              capabilities:
+                add:
+                  - PERFMON
             resources:
               claims:
                 - name: gpu
