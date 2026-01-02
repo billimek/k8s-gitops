@@ -86,12 +86,12 @@ This ensures HelmRepositories exist before any workload tries to use them.
 - **Media**: NFS mounts from `nas.home` (read-only for most apps)
 - **Tmp/Cache**: emptyDir volumes
 
-**Dual-DNS Architecture**:
-- Internal DNS (10.0.6.150) for LAN access
-- External DNS (Cloudflare) for public access via `eviljungle.com`
-- External-DNS watches Ingress annotations and manages both
+**Dual-Gateway Architecture**:
+- **Public Gateway** (10.0.6.150): Internet-accessible services via `eviljungle.com` (Cloudflare DNS)
+- **Internal Gateway** (10.0.6.151): LAN and Tailscale access
+- External-DNS watches HTTPRoute annotations and manages both DNS backends
 
-**Ingress Pattern**: Apps use `nginx` IngressClass with both internal and external Ingress definitions when needed.
+**HTTPRoute Pattern**: Apps use Envoy Gateway with HTTPRoute resources. Services can be exposed via `public` gateway, `internal` gateway, or both (split-horizon) for dual access to the same hostname.
 
 ## Adding New Applications
 
@@ -162,20 +162,20 @@ spec:
           http:
             port: 8080
 
-    ingress:
+    route:
       app:
-        className: nginx
-        hosts:
-          - host: &host "app-name.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+        hostnames:
+          - &host "app-name.${SECRET_DOMAIN}"
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
 
     persistence:
       config:
@@ -355,6 +355,86 @@ spec:
 
 Backups use Restic to S3-compatible storage (Garage service).
 
+## HTTPRoute Patterns
+
+### Internal-Only Access
+
+For services accessible only from LAN and Tailscale:
+
+```yaml
+route:
+  app:
+    annotations:
+      external-dns.alpha.kubernetes.io/internal: "true"
+      external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+    hostnames:
+      - &host "app-name.${SECRET_DOMAIN}"
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: http
+```
+
+### Public Internet Access
+
+For services accessible from the internet:
+
+```yaml
+route:
+  app:
+    annotations:
+      external-dns.alpha.kubernetes.io/external: "true"
+    parentRefs:
+      - name: public
+        namespace: kube-system
+        sectionName: https  # HTTPS-only
+    hostnames:
+      - &host "app-name.${SECRET_DOMAIN}"
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: http
+```
+
+### Split-Horizon (Dual Access)
+
+For services accessible both internally and externally with the same hostname:
+
+```yaml
+route:
+  app:
+    annotations:
+      external-dns.alpha.kubernetes.io/external: "true"
+    parentRefs:
+      - name: public
+        namespace: kube-system
+        sectionName: https
+    hostnames:
+      - &host "app-name.${SECRET_DOMAIN}"
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: http
+  internal:
+    annotations:
+      external-dns.alpha.kubernetes.io/internal: "true"
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    hostnames:
+      - *host
+    rules:
+      - backendRefs:
+          - identifier: app
+            port: http
+```
+
+External-DNS creates both Cloudflare DNS records (public) and OpnSense host overrides (internal).
+
 ## YAML Schema Validation
 
 Always include schema validation comments:
@@ -364,16 +444,19 @@ Always include schema validation comments:
 - **Kustomization**: `# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json`
 - **ExternalSecret**: `# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/external-secrets.io/externalsecret_v1.json`
 - **HelmRepository**: `# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrepository-source-v1.json`
+- **HTTPRoute**: `# yaml-language-server: $schema=https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml`
+- **Gateway**: `# yaml-language-server: $schema=https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_gateways.yaml`
 - **Namespace**: `# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/v1/namespace.json`
 
 ## Key Technologies
 
 - **Talos Linux**: Immutable Kubernetes OS
 - **FluxCD v2**: GitOps controller using HelmRelease v2 and Kustomization APIs
-- **Cilium**: CNI and network policy
+- **Cilium**: CNI, network policy, and LoadBalancer IPAM
+- **Envoy Gateway**: Gateway API implementation for ingress (replaces nginx)
 - **Rook-Ceph**: Distributed block storage
 - **External-Secrets**: Secret management with 1Password backend
-- **External-DNS**: Automatic DNS management for both internal and Cloudflare
+- **External-DNS**: Automatic DNS management for both internal (OpnSense) and external (Cloudflare)
 - **Cert-Manager**: TLS certificate automation
 - **Renovate**: Automated dependency updates
 - **VolSync**: PVC backup using Restic
@@ -395,5 +478,6 @@ Always include schema validation comments:
 - **Avoid Kustomization files**: This repo intentionally avoids proliferating `kustomization.yaml` files throughout the tree
 - **Security defaults**: All containers run as non-root (UID 1001) with dropped capabilities and read-only root filesystem
 - **Renovate automation**: Images and charts auto-update via PRs. Review breaking changes before merging
-- **Dual ingress**: Most apps have separate internal and external ingress definitions
+- **Gateway selection**: Use `internal` gateway for LAN/Tailscale-only services, `public` gateway for internet-facing services, or both for split-horizon access
 - **No plaintext secrets**: All secrets must use ExternalSecret CRDs backed by 1Password
+- **HTTP→HTTPS redirect**: Automatic global redirect configured at gateway level; use `sectionName: https` to target HTTPS listener directly
