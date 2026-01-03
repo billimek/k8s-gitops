@@ -72,3 +72,8 @@ releases:
     namespace: system-upgrade
     chart: oci://ghcr.io/home-operations/charts/tuppr
     version: 0.0.51
+
+  - name: keda
+    namespace: kube-system
+    chart: oci://ghcr.io/home-operations/charts-mirror/keda
+    version: 2.18.3
