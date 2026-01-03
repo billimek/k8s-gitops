@@ -8,10 +8,10 @@ This is a control plane node
 
 - MAC: `00:1e:06:45:0b:cd`
 - IP: 10.0.7.54
-- CPU: Intel J4105 - 4 core
+- CPU: Intel Celeron J4105 (Gemini Lake, 4 cores, 4 threads)
 - RAM: 32GB
 - Disk: host - 500GB - `/dev/nvme0n1`
-- GPU: iGPU
+- GPU: Intel UHD Graphics 600 (Gen 9.5, 12 EUs, QuickSync Gen 9.5) - present but not configured for workloads
 
 ### k8s-0
 
@@ -23,12 +23,12 @@ This is a worker node that runs via proxmox VM on `nas.home`
 
 - MAC: `BC:24:11:F1:D5:9B` (hard-coded)
 - IP: 10.0.7.51
-- CPU: VM - 4 cores
+- CPU: Intel Core i5-9500T (Coffee Lake, 4 cores allocated from 6-core host, 4 threads, host passthrough)
 - RAM: VM - 32GB
 - Disk: VM - 200GB - `/dev/sda`
 - Disk: SSD for ceph - 1TB `/dev/sdb` -
   (`/dev/disk/by-id/wwn-0x5002538c000fc6fd` passthrough from the host)
-- GPU: iGPU passthrough via Intel GVT-g
+- GPU: Intel UHD Graphics 630 (Coffee Lake, Gen 9.5, 24 EUs, QuickSync Gen 9.5) via Intel GVT-g passthrough
   - Because I will probably forget this, the `i915-GVTg_V5_1` mdev device is
     possible to use only because the BIOS setting for the GPU memory were
     increased from the default value to the max value.
@@ -64,12 +64,12 @@ This is a worker node, bare-metal
 
 - MAC: `00:02:c9:57:5c:a8`
 - IP: 10.0.7.52
-- CPU: Intel i3-7100 - 4 cores
+- CPU: Intel Core i3-7100 (Kaby Lake, 2 cores, 4 threads)
 - RAM: 32GB
 - Disk: host - 500GB - `/dev/nvme0n1`
 - Disk: SSD for ceph - 2TB `/dev/sda` -
   (`/dev/disk/by-id/wwn-0x5002538c000fc709`)
-- GPU: iGPU
+- GPU: Intel HD Graphics 630 (Kaby Lake, Gen 9.5, 24 EUs, QuickSync Gen 9)
 
 ### k8s-c
 
@@ -77,11 +77,12 @@ This is a worker node, bare-metal
 
 - MAC: `ac:1f:6b:6f:27:5f`
 - IP: 10.0.7.53
-- CPU: Intel Xeon D-1518 - 8 cores
+- CPU: Intel Xeon D-1518 (Broadwell-DE, 8 cores, 8 threads)
 - RAM: 64GB
 - Disk: host - 1TB - `/dev/nvme0n1`
 - Disk: SSD for ceph - 2TB `/dev/sda` -
   (`/dev/disk/by-id/wwn-0x5002538c000cdf0f`)
+- GPU: ASPEED AST2400 BMC (not suitable for compute workloads)
 
 ### k8s-d
 
@@ -93,11 +94,12 @@ This is a worker node, bare-metal
 
 - MAC: `00:02:c9:55:b4:26`
 - IP: 10.0.7.55
-- CPU: AMD Ryzen 3 3200G - 4 core
+- CPU: AMD Ryzen 3 3200G (Zen+, 4 cores, 4 threads)
 - RAM: 32GB
 - Disk: host - 256GB - `/dev/sdb`
 - Disk: SSD for ceph = 2TB - `/dev/sda` - **note this is `/dev/sda`** -
   (`/dev/disk/by-id/wwn-0x5002538c000e0a55`)
+- GPU: AMD Radeon Vega 8 Graphics (integrated)
 
 ### k8s-f
 
@@ -105,12 +107,10 @@ This is a worker node, bare-metal
 
 - MAC: `68:1d:ef:34:d8:1a`
 - IP: 10.0.7.56
-- CPU: Intel N100 - 4 core
+- CPU: Intel N100 (Alder Lake-N, 4 cores, 4 threads)
 - RAM: 16GB
 - Disk: host - 1TB - `/dev/nvme0n1`
-- GPU: iGPU
-
-This is a worker node, bare-metal
+- GPU: Intel UHD Graphics (Gen 12 Xe, 24 EUs, QuickSync Gen 12 with AV1 encode/decode)
 
 ### k8s-g
 
@@ -118,10 +118,10 @@ This is a worker node, bare-metal
 
 - MAC: `68:1d:ef:34:66:3f`
 - IP: 10.0.7.57
-- CPU: Intel N100 - 4 core
+- CPU: Intel N100 (Alder Lake-N, 4 cores, 4 threads)
 - RAM: 16GB
 - Disk: host - 1TB - `/dev/nvme0n1`
-- GPU: iGPU
+- GPU: Intel UHD Graphics (Gen 12 Xe, 24 EUs, QuickSync Gen 12 with AV1 encode/decode)
 
 ### k8s-h
 
@@ -129,10 +129,10 @@ This is a worker node, bare-metal
 
 - MAC: `68:1d:ef:34:d9:c7`
 - IP: 10.0.7.58
-- CPU: Intel N100 - 4 core
+- CPU: Intel N100 (Alder Lake-N, 4 cores, 4 threads)
 - RAM: 16GB
 - Disk: host - 1TB - `/dev/nvme0n1`
-- GPU: iGPU
+- GPU: Intel UHD Graphics (Gen 12 Xe, 24 EUs, QuickSync Gen 12 with AV1 encode/decode)
 
 ### k8s-i
 
@@ -140,9 +140,9 @@ This is a worker node, bare-metal
 
 - MAC: `98:fa:9b:04:47:b9`
 - IP: 10.0.7.59
-- CPU: Intel i5-8500T - 6 core
+- CPU: Intel Core i5-8500T (Coffee Lake, 6 cores, 6 threads)
 - RAM: 16GB
 - Disk: host - 128GB - `/dev/nvme0n1`
 - Disk: SSD for ceph - 1TB `/dev/sda` -
   (`/dev/disk/by-id/wwn-0x5002538800374ff9`)
-- GPU: iGPU UHD 630
+- GPU: Intel UHD Graphics 630 (Coffee Lake, Gen 9.5, 24 EUs, QuickSync Gen 9.5)
