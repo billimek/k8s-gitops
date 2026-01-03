@@ -1,6 +1,4 @@
 machine:
   install:
-    extraKernelArgs:
-      - intel_iommu=on # PCI Passthrough
-      - iommu=pt # PCI Passthrough
+    extraKernelArgs: []
     grubUseUKICmdline: false
