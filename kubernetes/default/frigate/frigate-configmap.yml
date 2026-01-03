@@ -12,6 +12,11 @@ data:
     detect:
       enabled: true
 
+    motion:
+      threshold: 25
+      improve_contrast: True
+      contour_area: 10
+
     mqtt:
       host: emqx-listeners.default.svc
       topic_prefix: frigate
@@ -54,17 +59,17 @@ data:
         - cat
       filters:
         person:
-          min_area: 3000
+          min_area: 2000
           max_area: 100000
-          threshold: 0.75
+          threshold: 0.72
         dog:
           min_area: 1000
           max_area: 10000
-          threshold: 0.75
+          threshold: 0.72
         cat:
           min_area: 1000
           max_area: 10000
-          threshold: 0.75
+          threshold: 0.72
 
     record:
       enabled: true
@@ -153,8 +158,8 @@ data:
             person:
               min_area: 1500
               max_area: 100000
-              threshold: 0.75
-              min_score: 0.60
+              threshold: 0.72
+              min_score: 0.58
         live:
           streams:
             main_stream: porch_record
@@ -220,7 +225,7 @@ data:
             person:
               min_area: 1000
               max_area: 100000
-              threshold: 0.75
+              threshold: 0.72
         live:
           streams:
             main_stream: pool_record
@@ -273,8 +278,8 @@ data:
             person:
               min_area: 1500
               max_area: 100000
-              threshold: 0.75
-              min_score: 0.60
+              threshold: 0.72
+              min_score: 0.58
         live:
           streams:
             main_stream: doorbell_record
