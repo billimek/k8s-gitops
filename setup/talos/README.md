@@ -122,8 +122,6 @@ This is a worker node, bare-metal
 
 This is a worker node, bare-metal
 
-**2025-05-07:** This node appears to be dead (won't power on)
-
 - MAC: `68:1d:ef:34:d8:1a`
 - IP: 10.0.7.56
 - CPU: Intel N100 - 4 core
