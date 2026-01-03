@@ -2,32 +2,20 @@
 
 ## nodes
 
+### k8s-cp
+
+This is a control plane node
+
+- MAC: `00:1e:06:45:0b:cd`
+- IP: 10.0.7.54
+- CPU: Intel J4105 - 4 core
+- RAM: 32GB
+- Disk: host - 500GB - `/dev/nvme0n1`
+- GPU: iGPU
+
 ### k8s-0
 
-This is a control plane node that runs via proxmox VM on `nas.home`
-
-- MAC: `BC:24:11:73:58:F0` (hared-coded)
-- IP: 10.0.7.50
-- CPU: VM - 4 cores
-- RAM: VM - 8GB
-- Disk: VM - 200GB - `/dev/sda`
-
-```shell
-sudo qm create 501 \
-  --name k8s-0 \
-  --ostype l26 \
-  --machine q35 \
-  --memory 8192 \
-  --cores 4 \
-  --cpu host \
-  --agent "enabled=1,fstrim_cloned_disks=1" \
-  --bios ovmf \
-  --net0 "model=virtio,macaddr=BC:24:11:73:58:F0,bridge=br0" \
-  --scsihw virtio-scsi-single \
-  --efidisk0 "ssdtank-proxmox:1,efitype=4m" \
-  --scsi0 "ssdtank-proxmox:200,backup=0,iothread=1,ssd=1,discard=on" \
-  --ide2 tank-proxmox:iso/metal-amd64.iso,media=cdrom
-```
+2025-01-02: retired this node as it was replaced by k8s-cp
 
 ### k8s-a
 
@@ -97,14 +85,7 @@ This is a worker node, bare-metal
 
 ### k8s-d
 
-This is a worker node, bare-metal - **candidate for retirement**
-
-- MAC: `00:1e:06:45:0b:cd`
-- IP: 10.0.7.54
-- CPU: Intel J4105 - 4 core
-- RAM: 32GB
-- Disk: host - 500GB - `/dev/nvme0n1`
-- GPU: iGPU
+2025-01-02: retired this node as it was repurposed for the control plane
 
 ### k8s-e
 
