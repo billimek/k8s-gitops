@@ -6,9 +6,10 @@ talosVersion: v1.12.0
 kubernetesVersion: v1.35.0
 
 clusterName: home
-endpoint: https://k8s-0:6443
+endpoint: https://k8s-cp:6443
 
 additionalApiServerCertSans:
+  - k8s-cp.home
   - k8s-0.home
   - tailscale-operator.drake-eel.ts.net
 
@@ -17,21 +18,17 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: k8s-0
+  - hostname: k8s-cp
     nodeAnnotations:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
     controlPlane: true
-    ipAddress: 10.0.7.50
-    installDisk: /dev/sda
+    ipAddress: 10.0.7.49
+    installDiskSelector:
+      model: WDS500G3X0C-00SJG0
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: bc:24:11:*
+          hardwareAddr: 00:1e:06:45:0b:cd
         dhcp: true
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/qemu-guest-agent
   - hostname: k8s-a
     nodeAnnotations:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
@@ -85,17 +82,6 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: ac:1f:6b:6f:27:5f
-        dhcp: true
-  - hostname: k8s-d
-    nodeAnnotations:
-      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-    controlPlane: false
-    ipAddress: 10.0.7.54
-    installDiskSelector:
-      model: WDS500G3X0C-00SJG0
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 00:1e:06:45:0b:cd
         dhcp: true
   - hostname: k8s-e
     nodeAnnotations:
