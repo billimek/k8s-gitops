@@ -70,6 +70,36 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [44]
+      affinity:
+        nodeAffinity:
+          # Soft preferences - scheduler tries these in order but allows fallback
+          preferredDuringSchedulingIgnoredDuringExecution:
+            # Tier 1: Intel N100 (Gen 12 Xe) - Best transcoding + AV1 decode
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: intel.feature.node.kubernetes.io/gpu-gen
+                    operator: In
+                    values:
+                      - "12"
+            # Tier 2: Coffee Lake UHD 630 - Excellent transcoding
+            # Includes: k8s-i (i5-8500T), k8s-a (i5-9500T via GVT-g when fixed)
+            - weight: 70
+              preference:
+                matchExpressions:
+                  - key: intel.feature.node.kubernetes.io/gpu-family
+                    operator: In
+                    values:
+                      - "coffeelake"
+            # Tier 3: Kaby Lake HD 630 - Good transcoding
+            # Includes: k8s-b (i3-7100)
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: intel.feature.node.kubernetes.io/gpu-family
+                    operator: In
+                    values:
+                      - "kabylake"
 
     service:
       app:

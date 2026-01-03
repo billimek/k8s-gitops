@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/nfd.k8s-sigs.io/nodefeaturerule_v1alpha1.json
+apiVersion: nfd.k8s-sigs.io/v1alpha1
+kind: NodeFeatureRule
+metadata:
+  name: intel-gpu-alderlake-n
+spec:
+  rules:
+    - # Intel N100 Alder Lake-N (Gen 12 Xe)
+      name: intel.gpu.alderlake-n
+      labels:
+        intel.feature.node.kubernetes.io/gpu-gen: "12"
+        intel.feature.node.kubernetes.io/gpu-family: "alderlake-n"
+      matchFeatures:
+        - feature: pci.device
+          matchExpressions:
+            class: {op: In, value: ["0300", "0380"]}
+            vendor: {op: In, value: ["8086"]}
+            device: {op: In, value: ["46d0", "46d1", "46d2"]}
