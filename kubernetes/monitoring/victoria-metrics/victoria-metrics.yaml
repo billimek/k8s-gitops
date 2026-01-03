@@ -50,6 +50,11 @@ spec:
 
     defaultRules:
       create: true
+      rules:
+        # Disabled because KEDA NFS scalers intentionally run at maxReplicaCount=1
+        # See PR #5092 - this is expected behavior, not a scaling issue
+        KubeHpaMaxedOut:
+          create: false
       groups:
         k8sContainerMemorySwap:
           create: false
