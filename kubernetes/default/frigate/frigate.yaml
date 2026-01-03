@@ -19,13 +19,32 @@ spec:
           resourceClaimTemplateName: frigate
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: google.feature.node.kubernetes.io/coral
+          # Soft preferences - scheduler tries these in order but allows fallback
+          preferredDuringSchedulingIgnoredDuringExecution:
+            # Tier 1: Intel N100 (Gen 12 Xe) - Best for OpenVINO inference
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: intel.feature.node.kubernetes.io/gpu-gen
                     operator: In
                     values:
-                      - "true"
+                      - "12"
+            # Tier 2: Coffee Lake UHD 630 - Good OpenVINO performance
+            - weight: 70
+              preference:
+                matchExpressions:
+                  - key: intel.feature.node.kubernetes.io/gpu-family
+                    operator: In
+                    values:
+                      - "coffeelake"
+            # Tier 3: Kaby Lake HD 630 - Acceptable OpenVINO performance
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: intel.feature.node.kubernetes.io/gpu-family
+                    operator: In
+                    values:
+                      - "kabylake"
     controllers:
       main:
         containers:
@@ -67,7 +86,6 @@ spec:
                 cpu: 1500m
               limits:
                 memory: 4000Mi
-                generic-device-plugin/coral: 1
 
     service:
       main:
