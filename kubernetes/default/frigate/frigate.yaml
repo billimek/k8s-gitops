@@ -82,7 +82,7 @@ spec:
               claims:
                 - name: gpu
               requests:
-                memory: 1000Mi
+                memory: 1800Mi
                 cpu: 1500m
               limits:
                 memory: 4000Mi
@@ -96,7 +96,7 @@ spec:
             primary: true
           go2rtc:
             enabled: true
-            port: &apiPort 1984
+            port: 1984
           rtsp:
             enabled: true
             port: 8554
@@ -119,7 +119,7 @@ spec:
                   value: /
             backendRefs:
               - name: frigate
-                port: 5000
+                port: *port
 
     persistence:
       config:
