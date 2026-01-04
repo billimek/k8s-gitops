@@ -58,6 +58,10 @@ spec:
       groups:
         k8sContainerMemorySwap:
           create: false
+        # Disabled because kube-scheduler metrics produce no useful data
+        # (scheduler is mostly idle, histogram_quantile returns empty results)
+        kubeScheduler:
+          create: false
 
     vmsingle:
       enabled: true

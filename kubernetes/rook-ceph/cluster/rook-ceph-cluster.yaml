@@ -32,6 +32,8 @@ spec:
       prometheusRuleOverrides:
         CephPoolGrowthWarning:
           disabled: true
+        CephNodeDiskspaceWarning:
+          disabled: true
     toolbox:
       enabled: true
     cephClusterSpec:
