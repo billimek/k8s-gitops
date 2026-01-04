@@ -210,34 +210,12 @@ spec:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
                 title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
-                message: |-
-                  {{ range .Alerts -}}
-                  **Alert:** {{ .Labels.alertname }}
-                  **Severity:** {{ .Labels.severity }}
-                  {{ if .Annotations.summary }}**Summary:** {{ .Annotations.summary }}{{ end }}
-                  {{ if .Annotations.description }}**Description:** {{ .Annotations.description }}{{ end }}
-                  {{ if .Labels.instance }}**Instance:** `{{ .Labels.instance }}`{{ end }}
-                  {{ if .Labels.namespace }}**Namespace:** `{{ .Labels.namespace }}`{{ end }}
-                  {{ if .Labels.pod }}**Pod:** `{{ .Labels.pod }}`{{ end }}
-                  {{ if .Labels.job }}**Job:** `{{ .Labels.job }}`{{ end }}
-                  {{ end }}
           
           - name: 'warning-discord'
             discord_configs:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
                 title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}⚠️{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
-                message: |-
-                  {{ range .Alerts -}}
-                  **Alert:** {{ .Labels.alertname }}
-                  **Severity:** {{ .Labels.severity }}
-                  {{ if .Annotations.summary }}**Summary:** {{ .Annotations.summary }}{{ end }}
-                  {{ if .Annotations.description }}**Description:** {{ .Annotations.description }}{{ end }}
-                  {{ if .Labels.instance }}**Instance:** `{{ .Labels.instance }}`{{ end }}
-                  {{ if .Labels.namespace }}**Namespace:** `{{ .Labels.namespace }}`{{ end }}
-                  {{ if .Labels.pod }}**Pod:** `{{ .Labels.pod }}`{{ end }}
-                  {{ if .Labels.job }}**Job:** `{{ .Labels.job }}`{{ end }}
-                  {{ end }}
     vmalert:
       enabled: true
       spec:
