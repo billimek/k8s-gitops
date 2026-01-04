@@ -14,7 +14,7 @@ spec:
     - name: zfs-exporter.rules
       rules:
         - alert: HostOutOfMemory
-          expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+          expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10) unless on(instance) ({__name__=~".+", instance="nas.home:9100"})
           for: 5m
           labels:
             severity: warning
