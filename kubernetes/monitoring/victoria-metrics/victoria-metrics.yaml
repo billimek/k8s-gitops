@@ -138,7 +138,7 @@ spec:
             - matchers:
                 - severity = "critical"
                 - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
-              receiver: 'critical-slack'
+              receiver: 'critical-discord'
               group_by: ['alertname', 'instance']
               group_wait: 10s
               continue: false
@@ -147,7 +147,7 @@ spec:
             - matchers:
                 - severity = "warning"
                 - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
-              receiver: 'warning-slack'
+              receiver: 'warning-discord'
               group_by: ['alertname', 'instance']
               continue: false
             
@@ -155,7 +155,7 @@ spec:
             - matchers:
                 - severity = "critical"
                 - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
-              receiver: 'critical-slack'
+              receiver: 'critical-discord'
               group_by: ['alertname', 'namespace']
               group_wait: 10s
               continue: false
@@ -164,14 +164,14 @@ spec:
             - matchers:
                 - severity = "warning"
                 - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
-              receiver: 'warning-slack'
+              receiver: 'warning-discord'
               group_by: ['alertname', 'namespace']
               continue: false
             
             # Route 6: Catch-all for other critical alerts
             - matchers:
                 - severity = "critical"
-              receiver: 'critical-slack'
+              receiver: 'critical-discord'
               group_by: ['alertname']
               group_wait: 10s
               continue: false
@@ -179,7 +179,7 @@ spec:
             # Route 7: Catch-all for other warning alerts
             - matchers:
                 - severity = "warning"
-              receiver: 'warning-slack'
+              receiver: 'warning-discord'
               group_by: ['alertname']
               continue: false
         
@@ -205,30 +205,38 @@ spec:
         receivers:
           - name: 'blackhole'
           
-          - name: 'critical-slack'
-            slack_configs:
-              - api_url: "PLACEHOLDER"  # Injected via valuesFrom
+          - name: 'critical-discord'
+            discord_configs:
+              - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
-                title: ''
-                text: |
-                  **[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}**
+                title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
+                message: |
                   {{ range .Alerts -}}
-                  • **{{ .Labels.alertname }}** (`{{ .Labels.severity }}`)
-                  {{ if .Annotations.summary }}  {{ .Annotations.summary }}{{ else if .Annotations.description }}  {{ .Annotations.description }}{{ end }}
-                  {{ if .Labels.instance }}  Instance: `{{ .Labels.instance }}`{{ end }}{{ if .Labels.namespace }} | Namespace: `{{ .Labels.namespace }}`{{ end }}{{ if .Labels.pod }} | Pod: `{{ .Labels.pod }}`{{ end }}
+                  **Alert:** {{ .Labels.alertname }}
+                  **Severity:** {{ .Labels.severity }}
+                  {{ if .Annotations.summary }}**Summary:** {{ .Annotations.summary }}{{ end }}
+                  {{ if .Annotations.description }}**Description:** {{ .Annotations.description }}{{ end }}
+                  {{ if .Labels.instance }}**Instance:** `{{ .Labels.instance }}`{{ end }}
+                  {{ if .Labels.namespace }}**Namespace:** `{{ .Labels.namespace }}`{{ end }}
+                  {{ if .Labels.pod }}**Pod:** `{{ .Labels.pod }}`{{ end }}
+                  {{ if .Labels.job }}**Job:** `{{ .Labels.job }}`{{ end }}
                   {{ end }}
           
-          - name: 'warning-slack'
-            slack_configs:
-              - api_url: "PLACEHOLDER"  # Injected via valuesFrom
+          - name: 'warning-discord'
+            discord_configs:
+              - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
-                title: ''
-                text: |
-                  **[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}⚠️{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}**
+                title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}⚠️{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
+                message: |
                   {{ range .Alerts -}}
-                  • **{{ .Labels.alertname }}** (`{{ .Labels.severity }}`)
-                  {{ if .Annotations.summary }}  {{ .Annotations.summary }}{{ else if .Annotations.description }}  {{ .Annotations.description }}{{ end }}
-                  {{ if .Labels.instance }}  Instance: `{{ .Labels.instance }}`{{ end }}{{ if .Labels.namespace }} | Namespace: `{{ .Labels.namespace }}`{{ end }}{{ if .Labels.pod }} | Pod: `{{ .Labels.pod }}`{{ end }}
+                  **Alert:** {{ .Labels.alertname }}
+                  **Severity:** {{ .Labels.severity }}
+                  {{ if .Annotations.summary }}**Summary:** {{ .Annotations.summary }}{{ end }}
+                  {{ if .Annotations.description }}**Description:** {{ .Annotations.description }}{{ end }}
+                  {{ if .Labels.instance }}**Instance:** `{{ .Labels.instance }}`{{ end }}
+                  {{ if .Labels.namespace }}**Namespace:** `{{ .Labels.namespace }}`{{ end }}
+                  {{ if .Labels.pod }}**Pod:** `{{ .Labels.pod }}`{{ end }}
+                  {{ if .Labels.job }}**Job:** `{{ .Labels.job }}`{{ end }}
                   {{ end }}
     vmalert:
       enabled: true
@@ -412,8 +420,8 @@ spec:
     - kind: Secret
       name: alertmanager-webhooks
       valuesKey: critical-webhook-url
-      targetPath: alertmanager.config.receivers[1].slack_configs[0].api_url
+      targetPath: alertmanager.config.receivers[1].discord_configs[0].webhook_url
     - kind: Secret
       name: alertmanager-webhooks
       valuesKey: warning-webhook-url
-      targetPath: alertmanager.config.receivers[2].slack_configs[0].api_url
+      targetPath: alertmanager.config.receivers[2].discord_configs[0].webhook_url
