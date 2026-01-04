@@ -209,26 +209,32 @@ spec:
             discord_configs:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
-                title: ''
-                message: |
-                  **[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}**
+                title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}'
+                message: |-
                   {{ range .Alerts -}}
-                  • **{{ .Labels.alertname }}** (`{{ .Labels.severity }}`)
-                  {{ if .Annotations.summary }}  {{ .Annotations.summary }}{{ else if .Annotations.description }}  {{ .Annotations.description }}{{ end }}
-                  {{ if .Labels.instance }}  Instance: `{{ .Labels.instance }}`{{ end }}{{ if .Labels.namespace }} | Namespace: `{{ .Labels.namespace }}`{{ end }}{{ if .Labels.pod }} | Pod: `{{ .Labels.pod }}`{{ end }}
+                  **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
+                  {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }}{{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }}{{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
+
+                  🏷 **Labels:**
+                  {{ range .Labels.SortedPairs }} • {{ .Name }}: {{ .Value }}
+                  {{ end }}
                   {{ end }}
           
           - name: 'warning-discord'
             discord_configs:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
-                title: ''
-                message: |
-                  **[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}⚠️{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}**
+                title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}⚠️{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}'
+                message: |-
                   {{ range .Alerts -}}
-                  • **{{ .Labels.alertname }}** (`{{ .Labels.severity }}`)
-                  {{ if .Annotations.summary }}  {{ .Annotations.summary }}{{ else if .Annotations.description }}  {{ .Annotations.description }}{{ end }}
-                  {{ if .Labels.instance }}  Instance: `{{ .Labels.instance }}`{{ end }}{{ if .Labels.namespace }} | Namespace: `{{ .Labels.namespace }}`{{ end }}{{ if .Labels.pod }} | Pod: `{{ .Labels.pod }}`{{ end }}
+                  **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
+                  {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }}{{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }}{{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
+
+                  🏷 **Labels:**
+                  {{ range .Labels.SortedPairs }} • {{ .Name }}: {{ .Value }}
+                  {{ end }}
                   {{ end }}
     vmalert:
       enabled: true
