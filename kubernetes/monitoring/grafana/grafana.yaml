@@ -211,6 +211,11 @@ spec:
           gnetId: 11454
           revision: 14
           datasource: Prometheus
+        k8s-pvc-stats:
+          # renovate: dashboardName="Kubernetes PVC Stats"
+          gnetId: 23233
+          revision: 6
+          datasource: Prometheus
         # kube-prometheus-stack dashboards
         kube-prometheus-dashboards:
           url: https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
