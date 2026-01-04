@@ -138,9 +138,15 @@ spec:
             - matchers:
                 - severity = "critical"
                 - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
-              receiver: slack-notifications
+              receiver: pagerduty-critical
               group_by: ['alertname', 'instance']
               group_wait: 10s
+              continue: true
+            - matchers:
+                - severity = "critical"
+                - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'instance']
               continue: false
             
             # Route 3: Warning infrastructure alerts - group by instance
@@ -155,9 +161,15 @@ spec:
             - matchers:
                 - severity = "critical"
                 - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
-              receiver: slack-notifications
+              receiver: pagerduty-critical
               group_by: ['alertname', 'namespace', 'severity']
               group_wait: 10s
+              continue: true
+            - matchers:
+                - severity = "critical"
+                - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
+              receiver: slack-notifications
+              group_by: ['alertname', 'namespace', 'severity']
               continue: false
             
             # Route 5: Warning Kubernetes/application alerts - group by namespace
@@ -171,9 +183,14 @@ spec:
             # Route 6: Catch-all for other critical alerts
             - matchers:
                 - severity = "critical"
-              receiver: slack-notifications
+              receiver: pagerduty-critical
               group_by: ['alertname']
               group_wait: 10s
+              continue: true
+            - matchers:
+                - severity = "critical"
+              receiver: slack-notifications
+              group_by: ['alertname']
               continue: false
             
             # Route 7: Catch-all for other warning alerts
@@ -202,6 +219,17 @@ spec:
               - alertname = "InfoInhibitor"
         receivers:
           - name: 'blackhole'
+          - name: 'pagerduty-critical'
+            pagerduty_configs:
+              - send_resolved: true
+                severity: '{{ if .CommonLabels.severity }}{{ .CommonLabels.severity }}{{ else }}critical{{ end }}'
+                description: '{{ if .CommonAnnotations.summary }}{{ .CommonAnnotations.summary }}{{ else if .CommonAnnotations.message }}{{ .CommonAnnotations.message }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}'
+                client: 'VictoriaMetrics AlertManager'
+                client_url: 'https://vm-alert.eviljungle.com'
+                details:
+                  firing: '{{ .Alerts.Firing | len }}'
+                  resolved: '{{ .Alerts.Resolved | len }}'
+                  alert_details: '{{ range .Alerts }}{{ .Labels.alertname }}: {{ .Annotations.description }}{{ end }}'
           - name: 'slack-notifications'
             slack_configs:
               - channel: '#notifications'
