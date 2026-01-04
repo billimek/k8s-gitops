@@ -210,7 +210,7 @@ spec:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
                 title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
-                message: |-
+                content: |-
                   {{ range .Alerts -}}
                   **Alert:** {{ .Labels.alertname }}
                   **Severity:** {{ .Labels.severity }}
@@ -239,7 +239,7 @@ spec:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
                 title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}⚠️{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
-                message: |-
+                content: |-
                   {{ range .Alerts -}}
                   **Alert:** {{ .Labels.alertname }}
                   **Severity:** {{ .Labels.severity }}
