@@ -13,22 +13,14 @@ spec:
     # https://github.com/samber/awesome-prometheus-alerts/blob/master/_data/rules.yml
     - name: zfs-exporter.rules
       rules:
-        - alert: HostOutOfMemory
-          expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10) unless on(instance) ({__name__=~".+", instance="nas.home:9100"})
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Host out of memory (instance {{ $labels.instance }})"
-            description: "Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
         - alert: ZFS pool out of space
           expr: 'zfs_pool_free_bytes * 100 / zfs_pool_size_bytes < 10 and ON (instance, device, mountpoint) zfs_pool_readonly == 0'
           for: 15m
           labels:
             severity: warning
           annotations:
-            summary: "Host out of memory (instance {{ $labels.instance }})"
-            description: Disk is almost full (< 10% left)
+            summary: "ZFS pool almost full (instance {{ $labels.instance }})"
+            description: "ZFS pool is almost full (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
         - alert: ZFS pool unhealthy
           expr: 'zfs_pool_health > 0'
           labels:
