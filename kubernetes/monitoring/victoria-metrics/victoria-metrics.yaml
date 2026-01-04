@@ -210,8 +210,7 @@ spec:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
                 title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
-                message: ''
-                content: |-
+                message: |-
                   {{ range .Alerts -}}
                   **Alert:** {{ .Labels.alertname }}
                   **Severity:** {{ .Labels.severity }}
@@ -221,7 +220,6 @@ spec:
                   {{ if .Labels.namespace }}**Namespace:** `{{ .Labels.namespace }}`{{ end }}
                   {{ if .Labels.pod }}**Pod:** `{{ .Labels.pod }}`{{ end }}
                   {{ if .Labels.job }}**Job:** `{{ .Labels.job }}`{{ end }}
-
                   {{ end }}
           
           - name: 'warning-discord'
@@ -229,8 +227,7 @@ spec:
               - webhook_url: "PLACEHOLDER"  # Injected via valuesFrom
                 send_resolved: true
                 title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}⚠️{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}'
-                message: ''
-                content: |-
+                message: |-
                   {{ range .Alerts -}}
                   **Alert:** {{ .Labels.alertname }}
                   **Severity:** {{ .Labels.severity }}
@@ -240,7 +237,6 @@ spec:
                   {{ if .Labels.namespace }}**Namespace:** `{{ .Labels.namespace }}`{{ end }}
                   {{ if .Labels.pod }}**Pod:** `{{ .Labels.pod }}`{{ end }}
                   {{ if .Labels.job }}**Job:** `{{ .Labels.job }}`{{ end }}
-
                   {{ end }}
     vmalert:
       enabled: true
