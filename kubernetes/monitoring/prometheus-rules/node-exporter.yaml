@@ -13,7 +13,7 @@ spec:
   - name: node-exporter.rules
     rules:
     - alert: HostOutOfMemory
-      expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10) and on(instance) (instance !~ "nas.home:9100")
+      expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10) unless on(instance) ({__name__=~".+", instance="nas.home:9100"})
       for: 5m
       labels:
         severity: warning
@@ -93,7 +93,7 @@ spec:
         summary: "Host high CPU load (instance {{ $labels.instance }})"
         description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostSwapIsFillingUp
-      expr: ((1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80) and on(instance) (instance !~ "nas.home:9100")
+      expr: ((1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80) unless on(instance) ({__name__=~".+", instance="nas.home:9100"})
       for: 5m
       labels:
         severity: warning
@@ -109,7 +109,7 @@ spec:
         summary: "Host SystemD service crashed (instance {{ $labels.instance }})"
         description: "SystemD service crashed\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostPhysicalComponentTooHot
-      expr: (node_hwmon_temp_celsius > 75) and on(instance) (instance !~ "10\\.0\\.7\\.(52|55|59):9100")
+      expr: (node_hwmon_temp_celsius > 75) unless on(instance) ({__name__=~".+", instance=~"10\\.0\\.7\\.(52|55|59):9100"})
       for: 5m
       labels:
         severity: warning
@@ -117,7 +117,7 @@ spec:
         summary: "Host physical component too hot (instance {{ $labels.instance }})"
         description: "Physical hardware component too hot\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostNodeOvertemperatureAlarm
-      expr: (node_hwmon_temp_alarm == 1) and on(instance) (instance !~ "10\\.0\\.7\\.55:9100")
+      expr: (node_hwmon_temp_alarm == 1) unless on(instance) ({__name__=~".+", instance="10.0.7.55:9100"})
       for: 5m
       labels:
         severity: critical
