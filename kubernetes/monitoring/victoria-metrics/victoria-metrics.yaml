@@ -404,9 +404,6 @@ spec:
 
   valuesFrom:
     - kind: Secret
-      name: "victoria-metrics-k8s-stack-helm-values"
-      optional: false
-    - kind: Secret
       name: alertmanager-webhooks
       valuesKey: critical-webhook-url
       targetPath: alertmanager.config.receivers[1].slack_configs[0].api_url
