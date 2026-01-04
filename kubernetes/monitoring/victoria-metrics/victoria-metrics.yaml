@@ -123,7 +123,7 @@ spec:
 
       config:
         route:
-          # group_by: ["alertname", "job"]
+          receiver: 'blackhole'
           group_by: ['alertname', 'severity']
           group_wait: 30s
           group_interval: 10m
@@ -134,26 +134,20 @@ spec:
                 - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit|CephNodeNetworkPacketDrops|CephNodeNetworkPacketErrors"
               receiver: 'blackhole'
             
-            # Route 2: Critical infrastructure alerts - group by instance for visibility
+            # Route 2: Critical infrastructure alerts - group by instance
             - matchers:
                 - severity = "critical"
                 - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
-              receiver: pagerduty-critical
+              receiver: 'critical-slack'
               group_by: ['alertname', 'instance']
               group_wait: 10s
-              continue: true
-            - matchers:
-                - severity = "critical"
-                - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
-              receiver: slack-notifications
-              group_by: ['alertname', 'instance']
               continue: false
             
             # Route 3: Warning infrastructure alerts - group by instance
             - matchers:
                 - severity = "warning"
                 - alertname=~"Host.*|Node.*|Zfs.*|UPS.*|Smartctl.*"
-              receiver: slack-notifications
+              receiver: 'warning-slack'
               group_by: ['alertname', 'instance']
               continue: false
             
@@ -161,44 +155,34 @@ spec:
             - matchers:
                 - severity = "critical"
                 - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
-              receiver: pagerduty-critical
-              group_by: ['alertname', 'namespace', 'severity']
+              receiver: 'critical-slack'
+              group_by: ['alertname', 'namespace']
               group_wait: 10s
-              continue: true
-            - matchers:
-                - severity = "critical"
-                - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
-              receiver: slack-notifications
-              group_by: ['alertname', 'namespace', 'severity']
               continue: false
             
             # Route 5: Warning Kubernetes/application alerts - group by namespace
             - matchers:
                 - severity = "warning"
                 - alertname=~".*Pod.*|.*Container.*|.*Deployment.*|Cert.*|Flux.*|VolSync.*|Envoy.*|PG.*"
-              receiver: slack-notifications
+              receiver: 'warning-slack'
               group_by: ['alertname', 'namespace']
               continue: false
             
             # Route 6: Catch-all for other critical alerts
             - matchers:
                 - severity = "critical"
-              receiver: pagerduty-critical
+              receiver: 'critical-slack'
               group_by: ['alertname']
               group_wait: 10s
-              continue: true
-            - matchers:
-                - severity = "critical"
-              receiver: slack-notifications
-              group_by: ['alertname']
               continue: false
             
             # Route 7: Catch-all for other warning alerts
             - matchers:
                 - severity = "warning"
-              receiver: slack-notifications
+              receiver: 'warning-slack'
               group_by: ['alertname']
               continue: false
+        
         inhibit_rules:
           - source_matchers:
               - severity = "critical"
@@ -217,8 +201,8 @@ spec:
             equal: ['namespace']
           - target_matchers:
               - alertname = "InfoInhibitor"
-        # Receivers configuration (including PagerDuty routing_key and Slack webhook) is defined in
-        # the victoria-metrics-k8s-stack-helm-values secret via externalsecret.yaml
+        # Receivers configuration is defined in the victoria-metrics-k8s-stack-helm-values
+        # secret via externalsecret.yaml
     vmalert:
       enabled: true
       spec:
