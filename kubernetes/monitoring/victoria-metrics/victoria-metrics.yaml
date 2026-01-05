@@ -135,7 +135,7 @@ spec:
           routes:
             # Route 1: Blackhole for noise
             - matchers:
-                - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit|CephNodeNetworkPacketDrops|CephNodeNetworkPacketErrors"
+                - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit|CephNodeNetworkPacketErrors"
               receiver: 'blackhole'
             
             # Route 2: Critical infrastructure alerts - group by instance
