@@ -6,7 +6,6 @@ metadata:
   name: &app mosquitto
   namespace: default
 spec:
-  suspend: true
   interval: 1h
   chartRef:
     kind: OCIRepository
