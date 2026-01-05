@@ -1,0 +1,14 @@
+---
+# PodDisruptionBudget for Tailscale app connector to ensure high availability
+# This ensures at least one connector pod remains available during disruptions
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: connector-pdb
+  namespace: kube-system
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      tailscale.com/parent-resource: connector
+      tailscale.com/parent-resource-type: connector
