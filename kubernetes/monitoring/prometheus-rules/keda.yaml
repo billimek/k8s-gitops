@@ -1,0 +1,68 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: keda-rules
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: keda
+spec:
+  groups:
+    - name: keda
+      rules:
+        # Aggregated alert: Apps scaling up (NAS becomes available)
+        - alert: KEDAScalersActivated
+          expr: |
+            count(keda_scaler_active{namespace="default"} == 1) >= 1
+          for: 30s
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $value }} KEDA-managed apps scaled up"
+            description: "{{ $value }} applications have scaled to 1 replica, likely due to NAS becoming available"
+
+        # Aggregated alert: All apps scaled down (NAS unavailable)
+        - alert: KEDAScalersDeactivated
+          expr: |
+            count(keda_scaler_active{namespace="default"} == 1) == 0
+            and
+            count(keda_scaler_active{namespace="default"}) > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "All KEDA-managed apps scaled down to zero"
+            description: "All NAS-dependent applications have scaled to 0 replicas. NAS may be unavailable."
+
+        # Scaler errors
+        - alert: KEDAScalerErrors
+          expr: |
+            rate(keda_scaler_errors_total[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "KEDA scaler errors detected for {{ .Labels.scaledObject }}"
+            description: "ScaledObject {{ .Labels.scaledObject }} in namespace {{ .Labels.namespace }} is experiencing errors ({{ $value | humanize }} errors/sec)"
+
+        # ScaledObject errors
+        - alert: KEDAScaledObjectErrors
+          expr: |
+            keda_scaled_object_errors > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "KEDA ScaledObject error for {{ .Labels.scaledObject }}"
+            description: "ScaledObject {{ .Labels.scaledObject }} in namespace {{ .Labels.namespace }} has {{ $value }} error(s)"
+
+        # KEDA operator down
+        - alert: KEDAOperatorDown
+          expr: |
+            absent(up{job="keda-operator"} == 1)
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "KEDA operator is down"
+            description: "KEDA operator has been down for more than 5 minutes. Autoscaling is not functioning."

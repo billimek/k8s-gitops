@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: keda-operator
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: keda-operator
+    app.kubernetes.io/instance: keda
+spec:
+  selector:
+    matchLabels:
+      app: keda-operator
+  endpoints:
+    - port: metricsservice
+      interval: 30s
+      scrapeTimeout: 10s
+      path: /metrics
