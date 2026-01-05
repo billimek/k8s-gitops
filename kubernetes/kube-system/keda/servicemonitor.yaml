@@ -13,7 +13,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: keda-operator
   endpoints:
-    - port: metricsservice
+    - port: metrics
       interval: 30s
       scrapeTimeout: 10s
       path: /metrics
