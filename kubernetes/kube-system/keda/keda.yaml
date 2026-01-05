@@ -28,6 +28,6 @@ spec:
     enableServiceLinks: false
     prometheus:
       operator:
-        # Enable KEDA operator Prometheus metrics
+        # Enable KEDA operator Prometheus metrics on port 8080
         enabled: true
-        port: 9666
+        port: 8080
