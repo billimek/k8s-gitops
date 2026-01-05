@@ -56,6 +56,8 @@ spec:
           tag kubernetes.*
           skip_empty_lines on
           skip_long_lines on
+          buffer_chunk_size 32KB
+          buffer_max_size 64KB
 
       filters: |-
         [FILTER]
