@@ -11,7 +11,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: keda-operator
+      app.kubernetes.io/name: keda-operator
   endpoints:
     - port: metricsservice
       interval: 30s

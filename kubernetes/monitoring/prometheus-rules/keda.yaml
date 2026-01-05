@@ -59,7 +59,7 @@ spec:
         # KEDA operator down
         - alert: KEDAOperatorDown
           expr: |
-            absent(up{job="keda-operator"} == 1)
+            absent(up{job="kube-system/keda-operator"} == 1)
           for: 5m
           labels:
             severity: critical
