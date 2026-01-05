@@ -107,7 +107,6 @@ spec:
           format json_lines
           json_date_format iso8601
           compress gzip
-          buffer_size 128KB
           log_response_payload false
     dashboards:
       enabled: true
