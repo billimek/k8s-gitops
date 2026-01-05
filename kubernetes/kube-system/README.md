@@ -71,6 +71,14 @@ Leverage Intel-based iGPU via the [intel-gpu-resource-driver](https://github.com
 
 * [intel-gpu-resource-driver/intel-gpu-resource-driver.yaml](intel-gpu-resource-driver/intel-gpu-resource-driver.yaml)
 
+# keda
+
+[KEDA](https://keda.sh/) (Kubernetes Event Driven Autoscaler) enables event-driven autoscaling for Kubernetes workloads. Applications define `ScaledObject` resources to automatically scale deployments based on external metrics and events (e.g., Prometheus queries, queue depth, HTTP traffic). For example, Plex uses a ScaledObject to scale from 0→1 replicas based on NAS availability via Prometheus probe metrics.
+
+* [keda/keda.yaml](keda/keda.yaml)
+
+Example usage: [kubernetes/default/plex/scaledobject.yaml](../../default/plex/scaledobject.yaml)
+
 # metrics-server
 
 [metrics-server](https://github.com/kubernetes-sigs/metrics-server) provides cluster-level metrics for things like `kubectl top nodes`, etc
