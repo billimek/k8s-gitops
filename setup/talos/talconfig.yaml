@@ -35,6 +35,14 @@ nodes:
     controlPlane: false
     ipAddress: 10.0.7.51
     installDisk: /dev/sda
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/qemu-guest-agent
+            - siderolabs/i915
+            - siderolabs/intel-ucode
+            - siderolabs/mei
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: bc:24:11:*
@@ -167,7 +175,6 @@ worker:
     customization:
       systemExtensions:
         officialExtensions:
-          - siderolabs/qemu-guest-agent
           - siderolabs/i915
           - siderolabs/intel-ucode
           - siderolabs/mei
