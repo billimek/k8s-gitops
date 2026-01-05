@@ -55,3 +55,4 @@ spec:
     spec:
       type: LoadBalancer
       loadBalancerIP: 10.0.6.50
+      externalTrafficPolicy: Local

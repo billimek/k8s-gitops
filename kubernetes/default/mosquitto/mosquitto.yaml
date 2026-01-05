@@ -6,6 +6,7 @@ metadata:
   name: &app mosquitto
   namespace: default
 spec:
+  suspend: true
   interval: 1h
   chartRef:
     kind: OCIRepository
@@ -66,6 +67,7 @@ spec:
         controller: mosquitto
         type: LoadBalancer
         loadBalancerIP: 10.0.6.54
+        externalTrafficPolicy: Local
         ports:
           mqtt:
             port: 1883
