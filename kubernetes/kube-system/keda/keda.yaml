@@ -26,3 +26,6 @@ spec:
   interval: 1h
   values:
     enableServiceLinks: false
+    operator:
+      # Enable Prometheus metrics for monitoring KEDA operator health and scaler activity
+      enablePrometheusMetrics: true
