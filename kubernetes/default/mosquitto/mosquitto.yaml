@@ -108,7 +108,7 @@ spec:
           - path: /data
       config-file:
         type: configMap
-        name: mosquitto-config
+        name: mosquitto
         globalMounts:
           - path: /mosquitto/config/mosquitto.conf
             subPath: mosquitto.conf
