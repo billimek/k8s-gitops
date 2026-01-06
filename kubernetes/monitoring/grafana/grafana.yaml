@@ -163,7 +163,7 @@ spec:
           revision: 3
           datasource: Prometheus
         nfs-server:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/nfs_server.json
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/kubernetes/monitoring/grafana/dashboards/nfs_server.json
           datasource: Prometheus
 
       ceph:
