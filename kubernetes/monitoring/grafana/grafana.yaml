@@ -162,6 +162,10 @@ spec:
           gnetId: 3170
           revision: 3
           datasource: Prometheus
+        nfs-server:
+          gnetId: 10794
+          revision: 2
+          datasource: Prometheus
 
       ceph:
         ceph-cluster:
