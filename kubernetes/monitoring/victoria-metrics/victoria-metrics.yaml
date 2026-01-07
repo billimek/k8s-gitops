@@ -398,6 +398,8 @@ spec:
 
     kubeEtcd:
       enabled: true
+      endpoints:
+        - 10.0.7.49
       vmScrape:
         spec:
           endpoints:
@@ -408,8 +410,6 @@ spec:
         enabled: true
         port: 2381
         targetPort: 2381
-        selector:
-          node-role.kubernetes.io/control-plane: ""
 
     kubeScheduler:
       enabled: true
