@@ -58,6 +58,6 @@ spec:
     dashboards:
       enabled: true
       annotations:
-        grafana_folder: Infrastructure
+        grafana_folder: infrastructure
       labels:
         grafana_dashboard: "1"

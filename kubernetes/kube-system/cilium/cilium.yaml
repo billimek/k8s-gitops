@@ -52,7 +52,7 @@ spec:
     dashboards:
       enabled: true
       annotations:
-        grafana_folder: Networking
+        grafana_folder: networking
     endpointRoutes:
       enabled: true
     envoy:
@@ -79,7 +79,7 @@ spec:
         dashboards:
           enabled: true
           annotations:
-            grafana_folder: Networking
+            grafana_folder: networking
       relay:
         enabled: true
         rollOutPods: true
@@ -108,7 +108,7 @@ spec:
       dashboards:
         enabled: true
         annotations:
-          grafana_folder: Networking
+          grafana_folder: networking
       prometheus:
         enabled: true
         serviceMonitor:
