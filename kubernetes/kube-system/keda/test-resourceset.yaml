@@ -1,0 +1,19 @@
+---
+# Test ResourceSet to validate Flux Operator watches kube-system namespace
+# This file will be deleted after validation test completes
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: test-resourceset
+  namespace: kube-system
+spec:
+  inputs:
+    - name: test
+  resources:
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: test-<< inputs.name >>
+        namespace: default
+      data:
+        test: "ResourceSet in kube-system namespace works!"
