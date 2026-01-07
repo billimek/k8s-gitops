@@ -151,6 +151,11 @@ spec:
         ups:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
           datasource: Prometheus
+        etcd:
+          # renovate: dashboardName="etcd"
+          gnetId: 22236
+          revision: 4
+          datasource: Prometheus
         blackbox-exporter:
           # renovate: dashboardName="Blackbox Exporter"
           gnetId: 7587
