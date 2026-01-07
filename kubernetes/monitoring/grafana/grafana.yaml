@@ -226,14 +226,27 @@ spec:
           datasource: Prometheus
 
       gateway:
-        # Envoy Gateway Global Dashboard
-        envoy-gateway-global:
-          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-gateway-global.json
+        # Envoy Gateway Dashboards
+        envoy-global:
           datasource: Prometheus
-        # Envoy Proxy Global Dashboard
-        envoy-proxy-global:
-          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-proxy-global.json
+          gnetId: 24465
+          revision: 1
+        envoy-resources:
           datasource: Prometheus
+          gnetId: 24466
+          revision: 1
+        envoy-overview:
+          datasource: Prometheus
+          gnetId: 24459
+          revision: 1
+        envoy-upstream:
+          datasource: Prometheus
+          gnetId: 24457
+          revision: 1
+        envoy-downstream:
+          datasource: Prometheus
+          gnetId: 24458
+          revision: 1
         # Cilium Metrics (already enabled via Cilium dashboards.enabled, but adding explicit reference)
         cilium-metrics:
           url: https://raw.githubusercontent.com/cilium/cilium/v1.18.5/examples/kubernetes/addons/prometheus/files/grafana-dashboards/cilium-metrics.json
