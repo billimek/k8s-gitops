@@ -51,6 +51,8 @@ spec:
       exclusive: false
     dashboards:
       enabled: true
+      annotations:
+        grafana_folder: Networking
     endpointRoutes:
       enabled: true
     envoy:
@@ -76,6 +78,8 @@ spec:
           enabled: true
         dashboards:
           enabled: true
+          annotations:
+            grafana_folder: Networking
       relay:
         enabled: true
         rollOutPods: true
@@ -104,7 +108,7 @@ spec:
       dashboards:
         enabled: true
         annotations:
-          grafana_folder: Cilium
+          grafana_folder: Networking
       prometheus:
         enabled: true
         serviceMonitor:

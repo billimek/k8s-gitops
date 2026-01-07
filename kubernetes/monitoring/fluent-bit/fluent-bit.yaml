@@ -112,7 +112,7 @@ spec:
     dashboards:
       enabled: true
       annotations:
-        grafana_folder: observability
+        grafana_folder: Infrastructure
     logLevel: warn
     serviceMonitor:
       enabled: true
