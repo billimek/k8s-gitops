@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
+# ResourceSet for NFS-dependent app scalers
+# Scales apps to 0 replicas when NAS NFS mount (nas.home:2049) is unavailable
+# Generates 10 ScaledObjects in default namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: nfs-scalers
+  namespace: kube-system
+spec:
+  inputs:
+    - app: audiobookshelf
+    - app: frigate
+    - app: icloudpd
+    - app: plex
+    - app: prowlarr
+    - app: qbittorrent
+    - app: qui
+    - app: radarr
+    - app: readarr
+    - app: sonarr
+  resources:
+    - apiVersion: keda.sh/v1alpha1
+      kind: ScaledObject
+      metadata:
+        name: << inputs.app >>-nfs-scaler
+        namespace: default
+      spec:
+        cooldownPeriod: 0
+        minReplicaCount: 0
+        maxReplicaCount: 1
+        scaleTargetRef:
+          apiVersion: apps/v1
+          kind: Deployment
+          name: << inputs.app >>
+        triggers:
+          - type: prometheus
+            metadata:
+              serverAddress: http://vmsingle-stack.monitoring.svc.cluster.local:8428
+              query: probe_success{instance="nas.home:2049"}
+              threshold: "1"
