@@ -1,0 +1,80 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: unifi-poller
+  namespace: monitoring
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  values:
+    controllers:
+      unifi-poller:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/unpoller/unpoller
+              tag: v2.21.0@sha256:a08b532be181256318211b6170691e316d29ac04575bc54d59620189953f03aa
+            env:
+              TZ: America/New_York
+              UP_INFLUXDB_DISABLE: "true"
+              UP_PROMETHEUS_HTTP_LISTEN: 0.0.0.0:9130
+              UP_UNIFI_DEFAULT_ROLE: view-only
+              UP_UNIFI_DEFAULT_URL: https://unifi.default.svc.cluster.local:8443
+              UP_UNIFI_DEFAULT_VERIFY_SSL: "false"
+              UP_UNIFI_DEFAULT_SAVE_SITES: "true"
+              UP_UNIFI_DEFAULT_SAVE_DPI: "false"
+            envFrom:
+              - secretRef:
+                  name: unifi-poller-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 9130
+                  initialDelaySeconds: 15
+                  periodSeconds: 30
+                  timeoutSeconds: 3
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 9130
+                  initialDelaySeconds: 10
+                  periodSeconds: 30
+                  timeoutSeconds: 3
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+    service:
+      app:
+        controller: unifi-poller
+        ports:
+          http:
+            port: 9130

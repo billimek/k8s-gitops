@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: unifi-poller
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: unifi-poller
+    app.kubernetes.io/instance: unifi-poller
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unifi-poller
+      app.kubernetes.io/instance: unifi-poller
+  endpoints:
+    - port: http
+      interval: 2m
+      scrapeTimeout: 30s
+      path: /metrics

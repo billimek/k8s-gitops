@@ -173,12 +173,6 @@ spec:
           gnetId: 11311
           revision: 5
           datasource: Prometheus
-        unifi-pdu:
-          # renovate: dashboardName="UniFi-Poller: PDU Insights - Prometheus"
-          gnetId: 23027
-          revision: 1
-          datasource:
-            - {name: DS_PROMETHEUS, value: Prometheus}
         unifi-uap:
           # renovate: dashboardName="UniFi-Poller: UAP Insights - Prometheus"
           gnetId: 11314
