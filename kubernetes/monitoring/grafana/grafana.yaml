@@ -277,12 +277,6 @@ spec:
           gnetId: 24458
           revision: 1
           datasource: Prometheus
-        # Cilium Metrics
-        cilium-metrics:
-          # renovate: dashboardName="Cilium Metrics"
-          gnetId: 21431
-          revision: 6
-          datasource: Prometheus
       teslamate:
         battery-health:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/battery-health.json
