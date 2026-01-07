@@ -65,14 +65,38 @@ spec:
               path: /var/lib/grafana/dashboards/default
             orgId: 1
             type: file
-          - name: ceph
+          - name: infrastructure
             orgId: 1
-            folder: Ceph
+            folder: Infrastructure
             type: file
             disableDeletion: false
             editable: true
             options:
-              path: /var/lib/grafana/dashboards/ceph
+              path: /var/lib/grafana/dashboards/infrastructure
+          - name: networking
+            orgId: 1
+            folder: Networking
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/networking
+          - name: storage
+            orgId: 1
+            folder: Storage
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/storage
+          - name: node-metrics
+            orgId: 1
+            folder: Node Metrics
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/node-metrics
           - name: kubernetes
             orgId: 1
             folder: Kubernetes
@@ -81,14 +105,6 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/kubernetes
-          - name: gateway
-            orgId: 1
-            folder: Gateway API
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/gateway
           - name: 'teslamate'
             orgId: 1
             folder: Teslamate
@@ -99,10 +115,13 @@ spec:
               path: /var/lib/grafana/dashboards/teslamate
     dashboards:
       default:
-        # Ref: https://grafana.com/grafana/dashboards/22413-k8s-node-metrics-multi-clusters-node-exporter-prometheus-grafana11-2024-en/
-        1-node-exporter:
-          url: https://grafana.com/api/dashboards/22413/revisions/4/download
+        etcd:
+          # renovate: dashboardName="etcd"
+          gnetId: 22236
+          revision: 4
           datasource: Prometheus
+
+      infrastructure:
         cert-manager:
           gnetId: 20842
           revision: 3
@@ -116,50 +135,32 @@ spec:
         home-assistant:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/home_assistant.json
           datasource: home_assistant
-        # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
-        node-exporter-full:
-          gnetId: 1860
-          revision: 36
-          datasource: Prometheus
-        node-feature-discovery:
-          url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
+        volsync:
+          # removate: dashboardName="VolSync Dashboard"
+          gnetId: 21356
+          revision: 3
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
-        opnsense:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
-          datasource: Prometheus
-        prometheus-exporter-summary:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
-          datasource: Prometheus
-        smartctl:
-          gnetId: 22604
-          revision: 2
-          datasource:
-            - {name: DS_PROMETHEUS, value: Prometheus}
-        # Ref: https://grafana.com/grafana/dashboards/22651-prometheus-speedtest-exporter/
-        # renovate: dashboardName="Prometheus Speedtest Exporter"
-        speedtest-exporter:
-          gnetId: 22651
-          revision: 1
-          datasource: Prometheus
         spegel:
           # renovate: depName="Spegel"
           gnetId: 18089
           revision: 1
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
-        ups:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
-          datasource: Prometheus
-        etcd:
-          # renovate: dashboardName="etcd"
-          gnetId: 22236
-          revision: 4
+
+      networking:
+        opnsense:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
           datasource: Prometheus
         blackbox-exporter:
           # renovate: dashboardName="Blackbox Exporter"
           gnetId: 7587
           revision: 3
+          datasource: Prometheus
+        speedtest-exporter:
+          # renovate: dashboardName="Prometheus Speedtest Exporter"
+          gnetId: 22651
+          revision: 1
           datasource: Prometheus
         unifi-insights:
           # renovate: dashboardName="UniFi-Poller: Client Insights - Prometheus"
@@ -181,12 +182,24 @@ spec:
           gnetId: 11312
           revision: 9
           datasource: Prometheus
-        volsync:
-          # removate: dashboardName="VolSync Dashboard"
-          gnetId: 21356
-          revision: 3
-          datasource:
-            - {name: DS_PROMETHEUS, value: Prometheus}
+        # Envoy Gateway Dashboards
+        envoy-overview:
+          # renovate: dashboardName="Envoy Proxy Overview"
+          gnetId: 24459
+          revision: 1
+          datasource: Prometheus
+        envoy-upstream:
+          # renovate: dashboardName="Envoy Proxy Upstream"
+          gnetId: 24457
+          revision: 1
+          datasource: Prometheus
+        envoy-downstream:
+          # renovate: dashboardName="Envoy Proxy Downstream"
+          gnetId: 24458
+          revision: 1
+          datasource: Prometheus
+
+      storage:
         # Ref: https://grafana.com/grafana/dashboards/3170-zfs/
         zfs:
           gnetId: 3170
@@ -195,8 +208,11 @@ spec:
         nfs-server:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/kubernetes/monitoring/grafana/dashboards/nfs_server.json
           datasource: Prometheus
-
-      ceph:
+        smartctl:
+          gnetId: 22604
+          revision: 2
+          datasource:
+            - {name: DS_PROMETHEUS, value: Prometheus}
         ceph-cluster:
           # renovate: dashboardName="Ceph Cluster"
           gnetId: 2842
@@ -211,6 +227,27 @@ spec:
           # renovate: dashboardName="Ceph - Pools"
           gnetId: 5342
           revision: 9
+          datasource: Prometheus
+
+      node-metrics:
+        # Ref: https://grafana.com/grafana/dashboards/22413-k8s-node-metrics-multi-clusters-node-exporter-prometheus-grafana11-2024-en/
+        1-node-exporter:
+          url: https://grafana.com/api/dashboards/22413/revisions/4/download
+          datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
+        node-exporter-full:
+          gnetId: 1860
+          revision: 36
+          datasource: Prometheus
+        node-feature-discovery:
+          url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
+          datasource:
+            - {name: DS_PROMETHEUS, value: Prometheus}
+        ups:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
+          datasource: Prometheus
+        prometheus-exporter-summary:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
           datasource: Prometheus
 
       kubernetes:
@@ -260,23 +297,6 @@ spec:
           url: https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
           datasource: Prometheus
 
-      gateway:
-        # Envoy Gateway Dashboards
-        envoy-overview:
-          # renovate: dashboardName="Envoy Proxy Overview"
-          gnetId: 24459
-          revision: 1
-          datasource: Prometheus
-        envoy-upstream:
-          # renovate: dashboardName="Envoy Proxy Upstream"
-          gnetId: 24457
-          revision: 1
-          datasource: Prometheus
-        envoy-downstream:
-          # renovate: dashboardName="Envoy Proxy Downstream"
-          gnetId: 24458
-          revision: 1
-          datasource: Prometheus
       teslamate:
         battery-health:
           url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/battery-health.json
