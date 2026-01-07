@@ -67,7 +67,7 @@ spec:
             type: file
           - name: infrastructure
             orgId: 1
-            folder: Infrastructure
+            folder: infrastructure
             type: file
             disableDeletion: false
             editable: true
@@ -75,7 +75,7 @@ spec:
               path: /var/lib/grafana/dashboards/infrastructure
           - name: networking
             orgId: 1
-            folder: Networking
+            folder: networking
             type: file
             disableDeletion: false
             editable: true
@@ -83,7 +83,7 @@ spec:
               path: /var/lib/grafana/dashboards/networking
           - name: storage
             orgId: 1
-            folder: Storage
+            folder: storage
             type: file
             disableDeletion: false
             editable: true
@@ -91,7 +91,7 @@ spec:
               path: /var/lib/grafana/dashboards/storage
           - name: node-metrics
             orgId: 1
-            folder: Node Metrics
+            folder: node-metrics
             type: file
             disableDeletion: false
             editable: true
@@ -99,7 +99,7 @@ spec:
               path: /var/lib/grafana/dashboards/node-metrics
           - name: kubernetes
             orgId: 1
-            folder: Kubernetes
+            folder: kubernetes
             type: file
             disableDeletion: false
             editable: true
@@ -107,7 +107,7 @@ spec:
               path: /var/lib/grafana/dashboards/kubernetes
           - name: 'teslamate'
             orgId: 1
-            folder: Teslamate
+            folder: teslamate
             type: file
             disableDeletion: false
             allowUiUpdates: true
