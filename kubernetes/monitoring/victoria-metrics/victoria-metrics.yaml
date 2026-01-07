@@ -404,14 +404,10 @@ spec:
             - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
               port: http-metrics
               scheme: http
-              tlsConfig:
-                insecureSkipVerify: true
       service:
         enabled: true
-        ports:
-          - name: http-metrics
-            port: 2381
-            targetPort: 2381
+        port: 2381
+        targetPort: 2381
         selector:
           node-role.kubernetes.io/control-plane: ""
 
