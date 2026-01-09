@@ -27,3 +27,28 @@ spec:
           for: 15m
           labels:
             severity: critical
+        - alert: KopiaMaintenanceFailure
+          annotations:
+            summary: Kopia maintenance job has failed.
+          expr: |
+            kube_job_status_failed{job_name=~"kopia-maint-.*"} > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: KopiaMaintenanceMissing
+          annotations:
+            summary: Kopia maintenance has not run in over 8 days.
+          expr: |
+            (time() - kube_job_status_completion_time{job_name=~"kopia-maint-.*"}) > 691200
+          for: 1h
+          labels:
+            severity: warning
+        - alert: KopiaMaintenanceTimeout
+          annotations:
+            summary: Kopia maintenance job is taking longer than 4 hours.
+          expr: |
+            kube_job_status_active{job_name=~"kopia-maint-.*"} == 1 and
+            (time() - kube_job_status_start_time{job_name=~"kopia-maint-.*"}) > 14400
+          for: 15m
+          labels:
+            severity: warning
