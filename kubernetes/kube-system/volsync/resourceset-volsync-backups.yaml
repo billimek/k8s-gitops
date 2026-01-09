@@ -155,7 +155,6 @@ spec:
           copyMethod: Snapshot
           compression: zstd-fastest
           parallelism: 2
-          pruneIntervalDays: 10
           accessModes: ["ReadWriteOnce"]
           cacheCapacity: << inputs.cacheCapacity >>
           cacheStorageClassName: ceph-block
@@ -169,4 +168,4 @@ spec:
           retain:
             hourly: 24
             daily: 10
-            within: 3d
+            weekly: 4
