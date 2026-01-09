@@ -1,0 +1,79 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/admissionregistration.k8s.io/mutatingadmissionpolicy_v1.json
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: volsync-kopia-maintenance-nfs-injection
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ["batch"]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["jobs"]
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - kube-system
+    objectSelector:
+      matchExpressions:
+        - key: job-name
+          operator: Exists
+  matchConditions:
+    - name: kopia-maintenance-job
+      expression: |
+        object.metadata.name.startsWith('kopia-maint-')
+  mutations:
+    - patchType: ApplyConfiguration
+      applyConfiguration:
+        expression: |
+          Object{
+            spec: Object.spec{
+              template: Object.spec.template{
+                spec: Object.spec.template.spec{
+                  volumes: (
+                    has(Object.spec.template.spec.volumes) ?
+                    Object.spec.template.spec.volumes :
+                    []
+                  ) + [
+                    Object{
+                      name: "repository",
+                      nfs: Object{
+                        server: "nas.home",
+                        path: "/mnt/tank/backups/kopia"
+                      }
+                    }
+                  ],
+                  containers: Object.spec.template.spec.containers.map(c,
+                    c.name == 'kopia' ?
+                    Object{
+                      name: c.name,
+                      volumeMounts: (
+                        has(c.volumeMounts) ?
+                        c.volumeMounts :
+                        []
+                      ) + [
+                        Object{
+                          name: "repository",
+                          mountPath: "/repository"
+                        }
+                      ]
+                    } :
+                    c
+                  )
+                }
+              }
+            }
+          }
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/admissionregistration.k8s.io/mutatingadmissionpolicybinding_v1.json
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: volsync-kopia-maintenance-nfs-injection
+spec:
+  policyName: volsync-kopia-maintenance-nfs-injection
+  validationActions: [Audit, Warn]

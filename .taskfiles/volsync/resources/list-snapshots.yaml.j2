@@ -13,14 +13,29 @@ spec:
     spec:
       automountServiceAccountToken: false
       restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: list
-          image: docker.io/restic/restic:0.16.2
+          image: ghcr.io/home-operations/kopia:0.22.3@sha256:eeebd12fd4b3a9c25b9f711fff32454f62e2d5e2d431ab6806ad21c52f414807
           args:
-            - snapshots
+            - snapshot
+            - list
+            - --all
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
           envFrom:
             - secretRef:
-                name: {{ ENV.APP }}-restic-secret
+                name: {{ ENV.APP }}-kopia-secret
           volumeMounts:
             - mountPath: /repository
               name: repository
@@ -28,4 +43,4 @@ spec:
         - name: repository
           nfs:
             server: "nas.home"
-            path: "/mnt/ssdtank/s3/volsync"
+            path: "/mnt/tank/backups/kopia"

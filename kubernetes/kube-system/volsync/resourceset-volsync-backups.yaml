@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
 # ResourceSet for VolSync backups
-# Automated backups to Garage (S3-compatible storage) with Restic
+# Automated backups to NFS with Kopia for improved performance and deduplication
 # Backup window: 4:00-7:00 AM with 9-minute staggered intervals
 # Generates 42 resources (21 ExternalSecrets + 21 ReplicationSources) in default namespace
 apiVersion: fluxcd.controlplane.io/v1
@@ -118,29 +118,28 @@ spec:
       cacheCapacity: 20Gi
       schedule: "0 7 * * *"
   resources:
-    # ExternalSecret for Restic repository credentials
+    # ExternalSecret for Kopia repository credentials
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
       metadata:
-        name: << inputs.app >>-restic
+        name: << inputs.app >>-kopia
         namespace: default
       spec:
         secretStoreRef:
           kind: ClusterSecretStore
           name: onepassword-connect
         target:
-          name: << inputs.app >>-restic-secret
+          name: << inputs.app >>-kopia-secret
           creationPolicy: Owner
           template:
             engineVersion: v2
             data:
-              RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/<< inputs.app >>'
-              RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
-              AWS_ACCESS_KEY_ID: '{{ .VOLSYNC_ACCESS_KEY }}'
-              AWS_SECRET_ACCESS_KEY: '{{ .VOLSYNC_SECRET_KEY }}'
+              KOPIA_FS_PATH: /repository
+              KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
+              KOPIA_REPOSITORY: filesystem:///repository
         dataFrom:
           - extract:
-              key: garage
+              key: kopia
     # ReplicationSource for backup configuration
     - apiVersion: volsync.backube/v1alpha1
       kind: ReplicationSource
@@ -151,11 +150,16 @@ spec:
         sourcePVC: << inputs.pvcName >>
         trigger:
           schedule: "<< inputs.schedule >>"
-        restic:
+        kopia:
+          repository: << inputs.app >>-kopia-secret
           copyMethod: Snapshot
+          compression: zstd-fastest
+          parallelism: 2
           pruneIntervalDays: 10
-          repository: << inputs.app >>-restic-secret
+          accessModes: ["ReadWriteOnce"]
           cacheCapacity: << inputs.cacheCapacity >>
+          cacheStorageClassName: ceph-block
+          cacheAccessModes: ["ReadWriteOnce"]
           volumeSnapshotClassName: csi-ceph-blockpool
           storageClassName: ceph-block
           moverSecurityContext:
@@ -163,5 +167,6 @@ spec:
             runAsGroup: << inputs.runAsUser >>
             fsGroup: << inputs.runAsUser >>
           retain:
+            hourly: 24
             daily: 10
             within: 3d
