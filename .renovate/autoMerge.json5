@@ -1,94 +1,16 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
-  packageRules: [
+  "extends": ["config:base"],
+  "packageRules": [
     {
-      description: "Auto-merge trusted containers - anytime",
-      matchDatasources: ["docker"],
-      automerge: true,
-      automergeType: "pr",
-      ignoreTests: false,
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: [
-        "ghcr.io/home-operations/radarr",
-        "ghcr.io/home-operations/sabnzbd",
-        "ghcr.io/home-operations/sonarr",
-        "ghcr.io/home-operations/tautulli",
-        "ghcr.io/recyclarr/recyclarr",
-        "ghcr.io/tarampampam/error-pages",
-        "/victoria-metrics/"
+      "description": "Auto-merge trusted Helm chart patches",
+      "matchDatasources": ["helm"],
+      "matchPackageNames": [
+        "nginx",
+        "grafana",
+        "prometheus",
+        "grahams"
       ],
-    },
-    {
-      description: "Auto-merge trusted containers - daily",
-      matchDatasources: ["docker"],
-      automerge: true,
-      automergeType: "pr",
-      ignoreTests: false,
-      automergeSchedule: ["after 1am and before 5am"],
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: [
-        "ghcr.io/advplyr/audiobookshelf",
-        "ghcr.io/coder/code-server",
-        "ghcr.io/home-assistant/home-assistant",
-        "ghcr.io/home-operations/plex",
-        "ghcr.io/home-operations/qbittorrent",
-        "ghcr.io/itzg/minecraft-server",
-        "ghcr.io/zwave-js/zwave-js-ui",
-        "nodered/node-red",
-      ],
-    },
-    {
-      description: "Auto-merge trusted containers - weekly",
-      matchDatasources: ["docker"],
-      automerge: true,
-      automergeType: "pr",
-      ignoreTests: false,
-      automergeSchedule: ["before 3am on Monday"],
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: [
-        "ghcr.io/home-operations/prowlarr",
-        "ghcr.io/home-operations/readarr"
-      ],
-    },
-    {
-      description: "Auto-merge trusted container digests",
-      matchDatasources: ["docker"],
-      automerge: true,
-      automergeType: "pr",
-      ignoreTests: false,
-      automergeSchedule: ["after 1am and before 5am"],
-      matchUpdateTypes: ["digest"],
-      matchPackageNames: ["/home-operations/"],
-    },
-    {
-      description: "Auto-merge trusted Helm chart patches",
-      matchDatasources: ["helm"],
-      automerge: true,
-      automergeType: "pr",
-      ignoreTests: false,
-      // automergeSchedule: ["after 1am and before 5am"],
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: [
-        // "tailscale-operator"
-      ],
-    },
-    {
-      description: "Auto-merge GitHub Actions",
-      matchManagers: ["github-actions"],
-      automerge: true,
-      automergeType: "branch",
-      matchUpdateTypes: ["minor", "patch", "digest"],
-      minimumReleaseAge: "3 days",
-      ignoreTests: true,
-    },
-    {
-      description: "Auto-merge GitHub Releases",
-      matchDatasources: ["github-releases"],
-      automerge: true,
-      automergeType: "branch",
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: ["/external-dns/", "/gateway-api/", "/prometheus-operator/"],
-      ignoreTests: true,
-    },
-  ],
+      "enabled": true
+    }
+  ]
 }
