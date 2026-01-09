@@ -82,7 +82,7 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-                port: http
+                port: *port
 
     configMaps:
       config:
