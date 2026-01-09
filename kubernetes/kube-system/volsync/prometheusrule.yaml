@@ -10,21 +10,20 @@ spec:
     - name: volsync.rules
       rules:
         - alert: VolSyncComponentAbsent
+          annotations:
+            summary: VolSync component has disappeared from Prometheus target discovery.
           expr: |
             absent(up{job="volsync-metrics"})
-          annotations:
-            summary: >-
-              VolSync component has disappeared from Prometheus target discovery
-          for: 5m
+          for: 15m
           labels:
             severity: critical
-
         - alert: VolSyncVolumeOutOfSync
-          expr: |
-            volsync_volume_out_of_sync == 1
           annotations:
             summary: >-
-              {{ $labels.obj_namespace }}/{{ $labels.obj_name }} volume is out of sync
-          for: 5m
+              {{ $labels.obj_namespace }}/{{ $labels.obj_name }} volume
+              is out of sync.
+          expr: |
+            volsync_volume_out_of_sync == 1
+          for: 15m
           labels:
             severity: critical
