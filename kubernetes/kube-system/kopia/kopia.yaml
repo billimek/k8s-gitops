@@ -26,8 +26,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/kopia/kopia
-              tag: 0.18.2
+              repository: ghcr.io/home-operations/kopia
+              tag: 0.22.3@sha256:eeebd12fd4b3a9c25b9f711fff32454f62e2d5e2d431ab6806ad21c52f414807
             env:
               TZ: America/New_York
               KOPIA_WEB_ENABLED: "true"
@@ -36,12 +36,7 @@ spec:
               - secretRef:
                   name: kopia-secret
             args:
-              - server
-              - start
-              - --insecure
               - --without-password
-              - --override-hostname=volsync
-              - --override-username=volsync
             probes:
               liveness: &probes
                 enabled: true
@@ -69,9 +64,9 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
 
     service:
@@ -114,10 +109,6 @@ spec:
             }
 
     persistence:
-      config:
-        type: emptyDir
-        globalMounts:
-          - path: /config
       config-file:
         type: configMap
         identifier: config
@@ -130,15 +121,16 @@ spec:
         path: /mnt/tank/backups/kopia
         globalMounts:
           - path: /repository
-      cache:
+      tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /cache
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /logs
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
+        advancedMounts:
+          kopia:
+            app:
+              - path: /config
+                subPath: config
+              - path: /cache
+                subPath: cache
+              - path: /logs
+                subPath: logs
+              - path: /tmp
+                subPath: tmp
