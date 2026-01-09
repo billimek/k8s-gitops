@@ -156,6 +156,7 @@ spec:
           compression: zstd-fastest
           parallelism: 2
           pruneIntervalDays: 10
+          accessModes: ["ReadWriteOnce"]
           cacheCapacity: << inputs.cacheCapacity >>
           cacheStorageClassName: ceph-block
           cacheAccessModes: ["ReadWriteOnce"]
