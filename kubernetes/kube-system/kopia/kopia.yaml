@@ -94,7 +94,11 @@ spec:
                 "config": {
                   "path": "/repository"
                 }
-              }
+              },
+              "hostname": "volsync",
+              "username": "volsync",
+              "description": "volsync",
+              "enableActions": false
             }
 
     persistence:
