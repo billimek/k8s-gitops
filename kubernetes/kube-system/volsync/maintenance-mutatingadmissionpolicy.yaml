@@ -5,69 +5,50 @@ kind: MutatingAdmissionPolicy
 metadata:
   name: volsync-kopia-maintenance-nfs-injection
 spec:
-  failurePolicy: Fail
   matchConstraints:
     resourceRules:
-      - apiGroups: ["batch"]
-        apiVersions: ["v1"]
-        operations: ["CREATE"]
-        resources: ["jobs"]
-    namespaceSelector:
-      matchExpressions:
-        - key: kubernetes.io/metadata.name
-          operator: In
-          values:
-            - kube-system
-    objectSelector:
-      matchExpressions:
-        - key: job-name
-          operator: Exists
+      - apiGroups:
+          - "batch"
+        apiVersions:
+          - "v1"
+        operations:
+          - "CREATE"
+          - "UPDATE"
+        resources:
+          - "jobs"
   matchConditions:
-    - name: kopia-maintenance-job
-      expression: |
-        object.metadata.name.startsWith('kopia-maint-')
+    - name: has-kopia-maint-job-name-prefix
+      expression: >
+        object.metadata.name.startsWith("kopia-maint-")
+    - name: repository-volume-does-not-exist
+      expression: >
+        !has(object.spec.template.spec.volumes) ||
+        !object.spec.template.spec.volumes.exists(item, item.name == "repository")
+  failurePolicy: Fail
+  reinvocationPolicy: IfNeeded
   mutations:
-    - patchType: ApplyConfiguration
-      applyConfiguration:
-        expression: |
-          Object{
-            spec: Object.spec{
-              template: Object.spec.template{
-                spec: Object.spec.template.spec{
-                  volumes: (
-                    has(Object.spec.template.spec.volumes) ?
-                    Object.spec.template.spec.volumes :
-                    []
-                  ) + [
-                    Object{
-                      name: "repository",
-                      nfs: Object{
-                        server: "nas.home",
-                        path: "/mnt/tank/backups/kopia"
-                      }
-                    }
-                  ],
-                  containers: Object.spec.template.spec.containers.map(c,
-                    c.name == 'kopia' ?
-                    Object{
-                      name: c.name,
-                      volumeMounts: (
-                        has(c.volumeMounts) ?
-                        c.volumeMounts :
-                        []
-                      ) + [
-                        Object{
-                          name: "repository",
-                          mountPath: "/repository"
-                        }
-                      ]
-                    } :
-                    c
-                  )
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: >-
+          [
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/volumes/-",
+              value: Object.spec.template.spec.volumes{
+                name: "repository",
+                nfs: Object.spec.template.spec.volumes.nfs{
+                  server: "nas.home",
+                  path: "/mnt/tank/backups/kopia"
                 }
               }
+            },
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/containers/0/volumeMounts/-",
+              value: Object.spec.template.spec.containers.volumeMounts{
+                name: "repository",
+                mountPath: "/repository"
+              }
             }
-          }
+          ]
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/mutatingadmissionpolicybinding-admissionregistration-v1beta1.json
 apiVersion: admissionregistration.k8s.io/v1beta1
@@ -76,4 +57,3 @@ metadata:
   name: volsync-kopia-maintenance-nfs-injection
 spec:
   policyName: volsync-kopia-maintenance-nfs-injection
-  validationActions: [Audit, Warn]
