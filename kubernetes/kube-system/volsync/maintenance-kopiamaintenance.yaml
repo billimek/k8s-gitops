@@ -6,9 +6,10 @@ metadata:
   name: kopia-maintenance
   namespace: kube-system
 spec:
-  repoSecretRef: kopia-maintenance-secret
+  repository:
+    repository: kopia-maintenance-secret
   schedule: "0 3 * * 0"  # Weekly Sunday at 3 AM
-  timeoutSeconds: 14400  # 4 hours for large repository first run
+  activeDeadlineSeconds: 14400  # 4 hours for large repository first run
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 1001
@@ -22,7 +23,6 @@ spec:
     readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
-  cache:
-    capacity: 10Gi
-    accessModes: ["ReadWriteOnce"]
-    storageClassName: ceph-block
+  cacheCapacity: 10Gi
+  cacheAccessModes: ["ReadWriteOnce"]
+  cacheStorageClassName: ceph-block
