@@ -7,14 +7,10 @@ metadata:
   namespace: kube-system
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: 3.6.0
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
       retries: 3
@@ -31,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/kopia/kopia
-              tag: 0.18.2@sha256:f5c2d92a2e5f5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e
+              tag: 0.18.2
             env:
               TZ: America/New_York
               KOPIA_WEB_ENABLED: "true"
