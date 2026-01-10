@@ -41,11 +41,6 @@ spec:
       capacity: 1Gi
       runAsUser: "1001"
 
-  commonMetadata:
-    labels:
-      # Prevent Flux from resetting manual trigger values
-      kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
-
   resources:
     # ReplicationDestination for bootstrap restore
     - apiVersion: volsync.backube/v1alpha1
@@ -53,6 +48,9 @@ spec:
       metadata:
         name: << inputs.app >>-bootstrap
         namespace: default
+        labels:
+          # Prevent Flux from resetting manual trigger values
+          kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
       spec:
         trigger:
           manual: restore-once
