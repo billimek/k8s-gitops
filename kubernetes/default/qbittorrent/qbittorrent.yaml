@@ -91,10 +91,7 @@ spec:
     # Beware if you are downloading torrents directly to a ZFS dataset that dataset will accrue fragmentation.
     persistence:
       config:
-        suffix: config
-        storageClass: "ceph-block"
-        accessMode: ReadWriteOnce
-        size: "1Gi"
+        existingClaim: qbittorrent-config
       media:
         type: nfs
         server: nas.home
