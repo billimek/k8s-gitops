@@ -7,7 +7,7 @@
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
-  name: volsync-migrated-pvcs
+  name: volsync-pvcs
   namespace: kube-system
 spec:
   inputs:

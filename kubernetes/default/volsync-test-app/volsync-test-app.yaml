@@ -1,0 +1,90 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: volsync-test-app
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    controllers:
+      volsync-test-app:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          app:
+            # Using nginx with a simple web server to write test data
+            image:
+              repository: docker.io/library/nginx
+              tag: 1.27.3-alpine@sha256:2140dad235c130ac861018a4e13a6bc8aea3a35f3a40e20c1b060d51a7efd250
+            env:
+              TZ: "America/New_York"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 50Mi
+              limits:
+                memory: 100Mi
+            # Script to write test data on startup
+            command:
+              - /bin/sh
+              - -c
+              - |
+                # Write initial test data with timestamp
+                echo "VolSync PVC Migration Test - Initial deployment" > /data/test.txt
+                echo "Timestamp: $(date)" >> /data/test.txt
+                echo "Pod: $HOSTNAME" >> /data/test.txt
+                echo "This data should persist after PVC migration" >> /data/test.txt
+                
+                # Create a counter file that increments on each restart
+                if [ -f /data/restart_counter.txt ]; then
+                  COUNTER=$(cat /data/restart_counter.txt)
+                  COUNTER=$((COUNTER + 1))
+                else
+                  COUNTER=1
+                fi
+                echo $COUNTER > /data/restart_counter.txt
+                echo "Restart counter: $COUNTER" >> /data/test.txt
+                
+                echo "Test data written to /data/test.txt"
+                cat /data/test.txt
+                
+                # Keep container running
+                while true; do sleep 3600; done
+    
+    service:
+      app:
+        primary: true
+        controller: volsync-test-app
+        ports:
+          http:
+            port: 8080
+
+    persistence:
+      # This is the PVC that will be migrated from dynamic to ResourceSet-managed
+      data:
+        suffix: data
+        storageClass: "ceph-block"
+        accessMode: ReadWriteOnce
+        size: "1Gi"
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
