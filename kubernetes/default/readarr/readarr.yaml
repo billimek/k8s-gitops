@@ -101,10 +101,7 @@ spec:
 
     persistence:
       config:
-        suffix: config
-        storageClass: "ceph-block"
-        accessMode: ReadWriteOnce
-        size: "6Gi"
+        existingClaim: readarr-config
       media:
         type: nfs
         server: nas.home

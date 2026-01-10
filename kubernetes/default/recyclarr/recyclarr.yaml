@@ -60,10 +60,7 @@ spec:
 
     persistence:
       config:
-        suffix: config
-        storageClass: "ceph-block"
-        accessMode: ReadWriteOnce
-        size: 5Gi
+        existingClaim: recyclarr-config
       config-file:
         type: configMap
         name: recyclarr-configmap

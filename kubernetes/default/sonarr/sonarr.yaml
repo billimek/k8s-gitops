@@ -95,10 +95,7 @@ spec:
 
     persistence:
       config:
-        suffix: config
-        storageClass: "ceph-block"
-        accessMode: ReadWriteOnce
-        size: "2Gi"
+        existingClaim: sonarr-config
       media:
         type: nfs
         server: nas.home
