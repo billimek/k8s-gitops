@@ -3,7 +3,7 @@
 # ResourceSet for migrated PVCs with bootstrap capability
 # Creates PVCs with dataSourceRef for automatic restore during cluster bootstrap
 # These apps have been migrated from Helm-managed to Flux-managed PVCs
-# Progress: 11/21 apps migrated (52%)
+# Progress: 12/21 apps migrated (57%)
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
@@ -11,7 +11,7 @@ metadata:
   namespace: kube-system
 spec:
   inputs:
-    # Migrated apps (11/21) - sorted alphabetically
+    # Migrated apps (12/21) - sorted alphabetically
     - app: audiobookshelf
       pvcName: audiobookshelf-config
       capacity: 1Gi
@@ -54,6 +54,10 @@ spec:
       runAsUser: "1001"
     - app: tautulli
       pvcName: tautulli-config
+      capacity: 1Gi
+      runAsUser: "1001"
+    - app: zwave2mqtt
+      pvcName: zwave2mqtt-config
       capacity: 1Gi
       runAsUser: "1001"
 
