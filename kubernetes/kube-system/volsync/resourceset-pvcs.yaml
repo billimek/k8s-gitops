@@ -39,7 +39,7 @@ spec:
     - app: sonarr
       pvcName: sonarr-config
       capacity: 2Gi
-      runAsUser: "1000"
+      runAsUser: "1001"
     - app: tautulli
       pvcName: tautulli-config
       capacity: 1Gi
