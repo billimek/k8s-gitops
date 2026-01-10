@@ -12,11 +12,18 @@ spec:
     destinationPVC: {{ ENV.CLAIM }}
     copyMethod: Direct
     enableFileDeletion: true
-    storageClassName: {{ ENV.STORAGE_CLASS_NAME }}
-    accessModes: ["ReadWriteOnce"]
+    cacheCapacity: {{ ENV.CACHE_CAPACITY | default("5Gi") }}
+    cacheStorageClassName: ceph-block
+    cacheAccessModes: ["ReadWriteOnce"]
+    cleanupCachePVC: true
+    cleanupTempPVC: true
     previous: {{ ENV.PREVIOUS }}
     restoreAsOf: {{ ENV.RESTORE_AS_OF }}
     moverSecurityContext:
       runAsUser: {{ ENV.PUID }}
       runAsGroup: {{ ENV.PGID }}
       fsGroup: {{ ENV.PUID }}
+    sourceIdentity:
+      sourceName: {{ ENV.APP }}
+      sourceNamespace: {{ ENV.NS }}
+    volumeSnapshotClassName: csi-ceph-blockpool
