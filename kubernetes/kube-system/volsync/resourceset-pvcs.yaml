@@ -15,7 +15,7 @@ spec:
     - app: jellyseerr
       pvcName: jellyseerr-config
       capacity: 1Gi
-      runAsUser: "1000"
+      runAsUser: "1001"
     - app: prowlarr
       pvcName: prowlarr-config
       capacity: 5Gi
