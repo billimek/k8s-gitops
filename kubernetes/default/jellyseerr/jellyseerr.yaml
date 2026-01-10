@@ -84,11 +84,8 @@ spec:
 
     persistence:
       config:
-        suffix: config
+        existingClaim: jellyseerr-config
         type: persistentVolumeClaim
-        storageClass: ceph-block
-        accessMode: ReadWriteOnce
-        size: 1Gi
         globalMounts:
           - path: /app/config
       tmpfs:
