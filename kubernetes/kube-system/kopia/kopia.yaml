@@ -114,13 +114,18 @@ spec:
         path: /mnt/tank/backups/kopia
         globalMounts:
           - path: /repository
+      cache:
+        type: persistentVolumeClaim
+        storageClass: ceph-block
+        size: 5Gi
+        accessMode: ReadWriteOnce
+        globalMounts:
+          - path: /config/cache
       tmpfs:
         type: emptyDir
         advancedMounts:
           kopia:
             app:
-              - path: /config/cache
-                subPath: cache
               - path: /config/logs
                 subPath: logs
               - path: /tmp
