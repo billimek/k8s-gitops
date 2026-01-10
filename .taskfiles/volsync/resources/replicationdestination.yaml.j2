@@ -11,6 +11,7 @@ spec:
     repository: {{ ENV.APP }}-kopia-secret
     destinationPVC: {{ ENV.CLAIM }}
     copyMethod: Direct
+    enableFileDeletion: true
     storageClassName: {{ ENV.STORAGE_CLASS_NAME }}
     accessModes: ["ReadWriteOnce"]
     previous: {{ ENV.PREVIOUS }}
