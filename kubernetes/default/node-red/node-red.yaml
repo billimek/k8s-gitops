@@ -67,9 +67,6 @@ spec:
 
     persistence:
       data:
-        suffix: data
-        storageClass: "ceph-block"
-        accessMode: ReadWriteOnce
-        size: "5Gi"
+        existingClaim: node-red-data
         globalMounts:
           - path: /data
