@@ -106,7 +106,7 @@ spec:
                 name: "repository",
                 nfs: Object.spec.template.spec.volumes.nfs{
                   server: "nas.home",
-                  path: "/mnt/tank/backups/kopia"
+                  path: "/mnt/ssdtank/kopia"
                 }
               }
             },

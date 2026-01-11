@@ -111,7 +111,7 @@ spec:
       repository:
         type: nfs
         server: nas.home
-        path: /mnt/tank/backups/kopia
+        path: /mnt/sstank/kopia
         globalMounts:
           - path: /repository
       tmpfs:
