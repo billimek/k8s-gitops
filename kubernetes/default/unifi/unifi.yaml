@@ -97,10 +97,7 @@ spec:
 
     persistence:
       data:
-        suffix: data
-        storageClass: "ceph-block"
-        accessMode: ReadWriteOnce
-        size: "20Gi"
+        existingClaim: unifi-data
         globalMounts:
           - path: /unifi
       # Mount the TLS cert for unifi to use
