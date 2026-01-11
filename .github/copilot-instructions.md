@@ -84,6 +84,7 @@ This ensures HelmRepositories exist before any workload tries to use them.
 **Storage Strategy**:
 - **Config**: Ceph block storage (`ceph-block` storageClass)
 - **Media**: NFS mounts from `nas.home` (read-only for most apps)
+- **Backups**: VolSync + Kopia to NFS (`nas.home:/mnt/ssdtank/kopia`)
 - **Tmp/Cache**: emptyDir volumes
 
 **Dual-Gateway Architecture**:
@@ -100,9 +101,10 @@ This ensures HelmRepositories exist before any workload tries to use them.
 ```bash
 kubernetes/{namespace}/{app-name}/
 ├── {app-name}.yaml       # HelmRelease
-├── externalsecret.yaml   # If secrets needed
-└── volsync.yaml          # If backups needed
+└── externalsecret.yaml   # If secrets needed
 ```
+
+**Note**: Backups are managed centrally via ResourceSets in `kubernetes/kube-system/volsync/`. Do NOT create individual volsync.yaml files per app. See "Backup with VolSync + Kopia" section for adding backups to new apps.
 
 ### 2. HelmRelease Template
 
@@ -328,32 +330,29 @@ Renovate will automatically update these and create PRs.
 
 Many apps use custom images from `ghcr.io/home-operations/*`. These are pre-configured with specific settings and are maintained separately.
 
-## Backup with VolSync
+## Backup with VolSync + Kopia
 
-For applications requiring backup:
+### Overview
+
+Application PVC backups use VolSync with the Kopia backend (perfectra1n fork), storing encrypted snapshots to NFS (`nas.home:/mnt/ssdtank/kopia`). Architecture uses ResourceSet for centralized management and MutatingAdmissionPolicies for NFS injection.
+
+### Backup Configuration Pattern
+
+Backups are defined in `resourceset-volsync-backups.yaml` inputs section:
 
 ```yaml
----
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationSource
-metadata:
-  name: app-name
-  namespace: namespace
-spec:
-  sourcePVC: app-name-config
-  trigger:
-    schedule: "0 0 * * *"  # Daily at midnight
-  restic:
-    repository: app-name-restic-secret
-    copyMethod: Snapshot
-    pruneIntervalDays: 10
-    retain:
-      daily: 10
-      weekly: 4
-      monthly: 3
+inputs:
+  - app: app-name
+    pvcName: app-name-config
+    runAsUser: "1001"
+    cacheCapacity: 2Gi
+    schedule: "0 4 * * *"  # Staggered schedules
 ```
 
-Backups use Restic to S3-compatible storage (Garage service).
+This generates:
+1. ExternalSecret for Kopia credentials (from 1Password)
+2. ReplicationSource with Kopia backend
+
 
 ## HTTPRoute Patterns
 
@@ -459,7 +458,8 @@ Always include schema validation comments:
 - **External-DNS**: Automatic DNS management for both internal (OpnSense) and external (Cloudflare)
 - **Cert-Manager**: TLS certificate automation
 - **Renovate**: Automated dependency updates
-- **VolSync**: PVC backup using Restic
+- **VolSync**: PVC backup using Kopia backend to NFS
+- **Kopia**: Backup repository server with web UI
 
 ## Naming Conventions
 
