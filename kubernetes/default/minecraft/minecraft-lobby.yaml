@@ -24,10 +24,9 @@ spec:
       tag: 2026.1.1@sha256:7423a4cf59ec510a58294f853fc7b07cdf0a50c5bc4618ee172327d7913941eb
     fullnameOverride: minecraft-lobby
     persistence:
-      storageClass: "ceph-block"
       dataDir:
         enabled: true
-        Size: 5Gi
+        existingClaim: minecraft-lobby-datadir
     podSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
