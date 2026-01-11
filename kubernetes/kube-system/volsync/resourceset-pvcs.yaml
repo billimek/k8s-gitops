@@ -120,7 +120,6 @@ spec:
             runAsUser: << inputs.runAsUser >>
             runAsGroup: << inputs.runAsUser >>
             fsGroup: << inputs.runAsUser >>
-          parallelism: 4
           sourceIdentity:
             sourceName: << inputs.app >>
           cleanupTempPVC: true
