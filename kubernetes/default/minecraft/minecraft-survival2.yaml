@@ -25,10 +25,9 @@ spec:
     fullnameOverride: minecraft-survival2
     strategyType: Recreate
     persistence:
-      storageClass: "ceph-block"
       dataDir:
         enabled: true
-        Size: 30Gi
+        existingClaim: minecraft-survival2-datadir
     podSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
