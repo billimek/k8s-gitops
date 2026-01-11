@@ -158,6 +158,7 @@ patches:
   - "@./patches/global/machine-network.yaml" # search Domain
   - "@./patches/global/machine-sysctls.yaml" # network tweaks
   - "@./patches/global/machine-udev.yaml"    # udev settings
+  - "@./patches/global/machine-oom.yaml"     # disable OOM controller (workaround for v1.12.x bug)
 
 controlPlane:
   schematic:
