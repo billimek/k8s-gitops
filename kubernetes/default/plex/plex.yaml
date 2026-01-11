@@ -7,7 +7,6 @@ metadata:
   namespace: default
 spec:
   interval: 1h
-  timeout: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
