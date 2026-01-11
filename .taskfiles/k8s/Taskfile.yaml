@@ -6,7 +6,7 @@ tasks:
   browse-pvc:
     desc: Mount a PVC to an temp container [NS=default] [CLAIM=required]
     interactive: true
-    cmd: kubectl browse-pvc --namespace {{.NS}} --image docker.io/library/alpine:latest {{.CLAIM}}
+    cmd: kubectl browse-pvc --namespace {{.NS}} --image mirror.gcr.io/alpine:latest {{.CLAIM}}
     vars:
       NS: '{{.NS | default "default"}}'
     requires:
@@ -19,13 +19,14 @@ tasks:
   node-shell:
     desc: Open a shell to a node [NODE=required]
     interactive: true
-    cmd: kubectl node-shell -n kube-system -x {{.NODE}}
     requires:
       vars: [NODE]
     preconditions:
       - kubectl get nodes {{.NODE}}
-      - kubectl node-shell --version
       - which kubectl
+    cmds:
+      - kubectl debug node/{{.NODE}} --namespace default --image=mirror.gcr.io/alpine:latest --profile=sysadmin -it
+      - defer: kubectl delete pod --namespace default --selector app.kubernetes.io/managed-by=kubectl-debug --ignore-not-found=true
 
   sync-secrets:
     desc: Sync all ExternalSecrets
@@ -59,3 +60,25 @@ tasks:
     preconditions:
       - which flux
     cmd: flux --namespace flux-system resume kustomization cluster-apps
+
+  keda-suspend:
+    desc: Suspend all KEDA ScaledObjects across all namespaces
+    preconditions:
+      - which kubectl
+    vars:
+      SCALED_OBJECTS:
+        sh: kubectl get scaledobjects --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
+    cmds:
+      - for: { var: SCALED_OBJECTS, split: "\n" }
+        cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate --field-manager=flux-client-side-apply --overwrite scaledobject {{splitList "," .ITEM | last}} autoscaling.keda.sh/paused=true
+
+  keda-resume:
+    desc: Resume all KEDA ScaledObjects across all namespaces
+    preconditions:
+      - which kubectl
+    vars:
+      SCALED_OBJECTS:
+        sh: kubectl get scaledobjects --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
+    cmds:
+      - for: { var: SCALED_OBJECTS, split: "\n" }
+        cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate --field-manager=flux-client-side-apply --overwrite scaledobject {{splitList "," .ITEM | last}} autoscaling.keda.sh/paused-
