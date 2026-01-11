@@ -123,10 +123,7 @@ spec:
 
     persistence:
       config:
-        suffix: config
-        storageClass: ceph-block
-        accessMode: ReadWriteOnce
-        size: 10Gi
+        existingClaim: frigate-config
         globalMounts:
           - path: /config
       config-file:
