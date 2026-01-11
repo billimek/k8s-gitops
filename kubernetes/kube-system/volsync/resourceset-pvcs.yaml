@@ -3,7 +3,7 @@
 # ResourceSet for migrated PVCs with bootstrap capability
 # Creates PVCs with dataSourceRef for automatic restore during cluster bootstrap
 # These apps have been migrated from Helm-managed to Flux-managed PVCs
-# Progress: 17/21 apps migrated (81%)
+# Progress: 18/21 apps migrated (86%)
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
@@ -11,7 +11,7 @@ metadata:
   namespace: kube-system
 spec:
   inputs:
-    # Migrated apps (17/21) - sorted alphabetically
+    # Migrated apps (18/21) - sorted alphabetically
     - app: audiobookshelf
       pvcName: audiobookshelf-config
       capacity: 1Gi
@@ -31,6 +31,10 @@ spec:
     - app: minecraft-lobby
       pvcName: minecraft-lobby-datadir
       capacity: 5Gi
+      runAsUser: "1000"
+    - app: minecraft-survival
+      pvcName: minecraft-survival-datadir
+      capacity: 20Gi
       runAsUser: "1000"
     - app: node-red
       pvcName: node-red-data
