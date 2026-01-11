@@ -25,10 +25,9 @@ spec:
     fullnameOverride: minecraft-creative
     strategyType: Recreate
     persistence:
-      storageClass: "ceph-block"
       dataDir:
         enabled: true
-        Size: 15Gi
+        existingClaim: minecraft-creative-datadir
     podSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
