@@ -79,6 +79,14 @@ Leverage Intel-based iGPU via the [intel-gpu-resource-driver](https://github.com
 
 Example usage: [kubernetes/default/plex/scaledobject.yaml](../../default/plex/scaledobject.yaml)
 
+# kopia
+
+![](https://i.imgur.com/36Jh5uq.png)
+
+[kopia](https://github.com/kopia/kopia) is a backup repository server with web UI that provides a central backup storage location. Used as the repository backend for volsync-based PVC backups, storing encrypted snapshots on NFS.
+
+* [kopia/](kopia/)
+
 # metrics-server
 
 [metrics-server](https://github.com/kubernetes-sigs/metrics-server) provides cluster-level metrics for things like `kubectl top nodes`, etc
