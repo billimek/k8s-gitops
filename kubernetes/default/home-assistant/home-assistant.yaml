@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.1.0
+              tag: 2026.1.1
             env:
               TZ: "America/New_York"
             envFrom:
