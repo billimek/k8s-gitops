@@ -62,7 +62,8 @@ spec:
           type: RuntimeDefault
 
     service:
-      app:
+      mqtt:
+        nameOverride: mqtt
         controller: mosquitto
         type: LoadBalancer
         loadBalancerIP: 10.0.6.54
