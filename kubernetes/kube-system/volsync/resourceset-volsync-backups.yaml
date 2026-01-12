@@ -10,6 +10,25 @@ metadata:
   name: volsync-backups
   namespace: kube-system
 spec:
+  # Dependencies - wait for CRDs to be ready
+  dependsOn:
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: replicationsources.volsync.backube
+      ready: true
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: externalsecrets.external-secrets.io
+      ready: true
+  
+  # Health checks - wait for generated resources to be ready
+  wait: true
+  
+  # Import shared configuration
+  inputsFrom:
+    - kind: ResourceSetInputProvider
+      name: volsync-defaults
+  
   inputs:
     # Backup schedule: 21 apps × 9-minute intervals = 180 minutes (4:00-7:00 AM)
     - app: audiobookshelf
@@ -123,11 +142,11 @@ spec:
       kind: ExternalSecret
       metadata:
         name: << inputs.app >>-kopia
-        namespace: default
+        namespace: << inputs.targetNamespace >>
       spec:
         secretStoreRef:
-          kind: ClusterSecretStore
-          name: onepassword-connect
+          kind: << inputs.secretStoreKind >>
+          name: << inputs.secretStoreName >>
         target:
           name: << inputs.app >>-kopia-secret
           creationPolicy: Owner
@@ -145,7 +164,7 @@ spec:
       kind: ReplicationSource
       metadata:
         name: << inputs.app >>
-        namespace: default
+        namespace: << inputs.targetNamespace >>
       spec:
         sourcePVC: << inputs.pvcName >>
         trigger:
@@ -153,19 +172,19 @@ spec:
         kopia:
           repository: << inputs.app >>-kopia-secret
           copyMethod: Snapshot
-          compression: zstd-fastest
-          parallelism: 2
+          compression: << inputs.kopiaCompression >>
+          parallelism: << inputs.kopiaParallelism | int >>
           accessModes: ["ReadWriteOnce"]
           cacheCapacity: << inputs.cacheCapacity >>
-          cacheStorageClassName: ceph-block
+          cacheStorageClassName: << inputs.cacheStorageClassName >>
           cacheAccessModes: ["ReadWriteOnce"]
-          volumeSnapshotClassName: csi-ceph-blockpool
-          storageClassName: ceph-block
+          volumeSnapshotClassName: << inputs.volumeSnapshotClassName >>
+          storageClassName: << inputs.storageClassName >>
           moverSecurityContext:
             runAsUser: << inputs.runAsUser >>
             runAsGroup: << inputs.runAsUser >>
             fsGroup: << inputs.runAsUser >>
           retain:
-            hourly: 24
-            daily: 10
-            weekly: 4
+            hourly: << inputs.retainHourly | int >>
+            daily: << inputs.retainDaily | int >>
+            weekly: << inputs.retainWeekly | int >>

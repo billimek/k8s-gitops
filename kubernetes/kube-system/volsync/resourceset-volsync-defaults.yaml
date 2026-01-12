@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesetinputproviders.yaml
+# ResourceSetInputProvider for shared VolSync configuration constants
+# Referenced by volsync-backups and volsync-pvcs ResourceSets
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-defaults
+  namespace: kube-system
+spec:
+  type: Static
+  defaultValues:
+    storageClassName: ceph-block
+    cacheStorageClassName: ceph-block
+    volumeSnapshotClassName: csi-ceph-blockpool
+    secretStoreName: onepassword-connect
+    secretStoreKind: ClusterSecretStore
+    targetNamespace: default
+    kopiaCompression: zstd-fastest
+    kopiaParallelism: "2"
+    retainHourly: "24"
+    retainDaily: "10"
+    retainWeekly: "4"
