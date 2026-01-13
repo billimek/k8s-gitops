@@ -43,6 +43,7 @@ spec:
       - app: node-red
         pvcSuffix: "data"
         runAsUser: "1000"
+        capacity: 5Gi
       
       - app: plex
         runAsUser: "1000"
@@ -50,6 +51,7 @@ spec:
         schedule: "45 4 * * *"
       
       - app: prowlarr
+        capacity: 5Gi
       
       - app: qbittorrent
       
