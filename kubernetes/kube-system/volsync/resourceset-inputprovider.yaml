@@ -4,7 +4,7 @@
 # Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
 # All 21 apps are defined in a single nested array for easier management
 # Fields with defaults (can be omitted if value matches):
-#   - pvcSuffix: "-config" (PVC name will be <app><pvcSuffix>)
+#   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
 #   - runAsUser: "1001"
 #   - hasBackup: "true"
 #   - capacity: "1Gi"
@@ -26,7 +26,7 @@ spec:
       hasBackup: "true"
       capacity: "1Gi"
       schedule: "0 4 * * *"
-      pvcSuffix: "-config"
+      pvcSuffix: "config"
     apps:
       # Backups run 4:00-7:00 AM with 9-minute staggered intervals
       - app: audiobookshelf
@@ -45,7 +45,7 @@ spec:
         schedule: "27 4 * * *"
       
       - app: node-red
-        pvcSuffix: "-data"
+        pvcSuffix: "data"
         runAsUser: "1000"
         capacity: 5Gi
         schedule: "36 4 * * *"
@@ -88,7 +88,7 @@ spec:
         schedule: "6 6 * * *"
       
       - app: unifi
-        pvcSuffix: "-data"
+        pvcSuffix: "data"
         runAsUser: "999"
         capacity: 20Gi
         schedule: "15 6 * * *"
@@ -97,25 +97,25 @@ spec:
         schedule: "24 6 * * *"
       
       - app: minecraft-creative
-        pvcSuffix: "-datadir"
+        pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 15Gi
         schedule: "33 6 * * *"
       
       - app: minecraft-lobby
-        pvcSuffix: "-datadir"
+        pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 5Gi
         schedule: "42 6 * * *"
       
       - app: minecraft-survival
-        pvcSuffix: "-datadir"
+        pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 20Gi
         schedule: "51 6 * * *"
       
       - app: minecraft-survival2
-        pvcSuffix: "-datadir"
+        pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 30Gi
         schedule: "0 7 * * *"
