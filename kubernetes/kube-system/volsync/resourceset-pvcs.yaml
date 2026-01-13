@@ -3,6 +3,7 @@
 # ResourceSet for migrated PVCs with bootstrap capability
 # Creates PVCs with dataSourceRef for automatic restore during cluster bootstrap
 # hasBackup flag controls whether ReplicationDestination is created (true = restore from backup, false = empty PVC)
+# App definitions are shared via the volsync-apps ResourceSetInputProvider
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
@@ -26,117 +27,10 @@ spec:
   # Health checks - wait for generated resources to be ready
   wait: true
   
-  # Import shared configuration
+  # Import shared app definitions
   inputsFrom:
     - kind: ResourceSetInputProvider
-      name: volsync-defaults
-  
-  inputs:
-    - app: audiobookshelf
-      pvcName: audiobookshelf-config
-      capacity: 1Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: frigate
-      pvcName: frigate-config
-      capacity: 10Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: home-assistant
-      pvcName: home-assistant-config
-      capacity: 60Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: jellyseerr
-      pvcName: jellyseerr-config
-      capacity: 1Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: minecraft-creative
-      pvcName: minecraft-creative-datadir
-      capacity: 15Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: minecraft-lobby
-      pvcName: minecraft-lobby-datadir
-      capacity: 5Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: minecraft-survival
-      pvcName: minecraft-survival-datadir
-      capacity: 20Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: minecraft-survival2
-      pvcName: minecraft-survival2-datadir
-      capacity: 30Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: node-red
-      pvcName: node-red-data
-      capacity: 5Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: plex
-      pvcName: plex-config
-      capacity: 55Gi
-      runAsUser: "1000"
-      hasBackup: "true"
-    - app: prowlarr
-      pvcName: prowlarr-config
-      capacity: 5Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: qbittorrent
-      pvcName: qbittorrent-config
-      capacity: 1Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: qui
-      pvcName: qui-config
-      capacity: 1Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: radarr
-      pvcName: radarr-config
-      capacity: 3Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: sabnzbd
-      pvcName: sabnzbd-config
-      capacity: 1Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: readarr
-      pvcName: readarr-config
-      capacity: 6Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: recyclarr
-      pvcName: recyclarr-config
-      capacity: 5Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: sonarr
-      pvcName: sonarr-config
-      capacity: 2Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: tautulli
-      pvcName: tautulli-config
-      capacity: 1Gi
-      runAsUser: "1001"
-      hasBackup: "true"
-    - app: unifi
-      pvcName: unifi-data
-      capacity: 20Gi
-      runAsUser: "999"
-      hasBackup: "true"
-    - app: zwave2mqtt
-      pvcName: zwave2mqtt-config
-      capacity: 1Gi
-      runAsUser: "1001"
-      hasBackup: "true"
+      name: volsync-apps
 
   resources:
     # ReplicationDestination for bootstrap restore
@@ -144,22 +38,23 @@ spec:
       kind: ReplicationDestination
       metadata:
         name: << inputs.app >>-bootstrap
-        namespace: << inputs.targetNamespace >>
+        namespace: default
+        labels:
+          kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
         annotations:
           # Disable ReplicationDestination for apps without existing backups
           fluxcd.controlplane.io/reconcile: << if eq inputs.hasBackup "true" >>enabled<< else >>disabled<< end >>
-          kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
       spec:
         trigger:
           manual: restore-once
         kopia:
           repository: << inputs.app >>-kopia-secret
           copyMethod: Snapshot
-          storageClassName: << inputs.storageClassName >>
-          volumeSnapshotClassName: << inputs.volumeSnapshotClassName >>
+          storageClassName: ceph-block
+          volumeSnapshotClassName: csi-ceph-blockpool
           accessModes: [ReadWriteOnce]
           capacity: << inputs.capacity >>
-          cacheStorageClassName: << inputs.cacheStorageClassName >>
+          cacheStorageClassName: ceph-block
           cacheAccessModes: [ReadWriteOnce]
           cacheCapacity: 2Gi
           moverSecurityContext:
@@ -179,7 +74,7 @@ spec:
     kind: PersistentVolumeClaim
     metadata:
       name: << inputs.pvcName >>
-      namespace: << inputs.targetNamespace >>
+      namespace: default
     spec:
       accessModes:
         - ReadWriteOnce
@@ -189,7 +84,7 @@ spec:
         kind: ReplicationDestination
         name: << inputs.app >>-bootstrap
       <<- end >>
-      storageClassName: << inputs.storageClassName >>
+      storageClassName: ceph-block
       resources:
         requests:
           storage: << inputs.capacity >>

@@ -1,0 +1,162 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesetinputproviders.yaml
+# Shared ResourceSetInputProvider for VolSync applications
+# Defines all apps with backup/restore configuration in one place
+# Referenced by both volsync-backups and volsync-pvcs ResourceSets
+# Apps are ordered by backup schedule (4:00-7:00 AM with 9-minute intervals)
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-apps
+  namespace: kube-system
+spec:
+  type: Static
+  inputs:
+    # Backup schedule: 21 apps × 9-minute intervals = 180 minutes (4:00-7:00 AM)
+    - app: audiobookshelf
+      pvcName: audiobookshelf-config
+      runAsUser: "1001"
+      capacity: 1Gi
+      cacheCapacity: 1Gi
+      schedule: "0 4 * * *"
+      hasBackup: "true"
+    - app: frigate
+      pvcName: frigate-config
+      runAsUser: "1000"
+      capacity: 10Gi
+      cacheCapacity: 10Gi
+      schedule: "9 4 * * *"
+      hasBackup: "true"
+    - app: home-assistant
+      pvcName: home-assistant-config
+      runAsUser: "1000"
+      capacity: 60Gi
+      cacheCapacity: 60Gi
+      schedule: "18 4 * * *"
+      hasBackup: "true"
+    - app: jellyseerr
+      pvcName: jellyseerr-config
+      runAsUser: "1001"
+      capacity: 1Gi
+      cacheCapacity: 2Gi
+      schedule: "27 4 * * *"
+      hasBackup: "true"
+    - app: node-red
+      pvcName: node-red-data
+      runAsUser: "1000"
+      capacity: 5Gi
+      cacheCapacity: 10Gi
+      schedule: "36 4 * * *"
+      hasBackup: "true"
+    - app: plex
+      pvcName: plex-config
+      runAsUser: "1000"
+      capacity: 55Gi
+      cacheCapacity: 65Gi
+      schedule: "45 4 * * *"
+      hasBackup: "true"
+    - app: prowlarr
+      pvcName: prowlarr-config
+      runAsUser: "1001"
+      capacity: 5Gi
+      cacheCapacity: 5Gi
+      schedule: "54 4 * * *"
+      hasBackup: "true"
+    - app: qbittorrent
+      pvcName: qbittorrent-config
+      runAsUser: "1001"
+      capacity: 1Gi
+      cacheCapacity: 2Gi
+      schedule: "3 5 * * *"
+      hasBackup: "true"
+    - app: qui
+      pvcName: qui-config
+      runAsUser: "1001"
+      capacity: 1Gi
+      cacheCapacity: 2Gi
+      schedule: "12 5 * * *"
+      hasBackup: "true"
+    - app: radarr
+      pvcName: radarr-config
+      runAsUser: "1001"
+      capacity: 3Gi
+      cacheCapacity: 3Gi
+      schedule: "21 5 * * *"
+      hasBackup: "true"
+    - app: readarr
+      pvcName: readarr-config
+      runAsUser: "1001"
+      capacity: 6Gi
+      cacheCapacity: 8Gi
+      schedule: "30 5 * * *"
+      hasBackup: "true"
+    - app: recyclarr
+      pvcName: recyclarr-config
+      runAsUser: "1001"
+      capacity: 5Gi
+      cacheCapacity: 5Gi
+      schedule: "39 5 * * *"
+      hasBackup: "true"
+    - app: sabnzbd
+      pvcName: sabnzbd-config
+      runAsUser: "1001"
+      capacity: 1Gi
+      cacheCapacity: 2Gi
+      schedule: "48 5 * * *"
+      hasBackup: "true"
+    - app: sonarr
+      pvcName: sonarr-config
+      runAsUser: "1001"
+      capacity: 2Gi
+      cacheCapacity: 3Gi
+      schedule: "57 5 * * *"
+      hasBackup: "true"
+    - app: tautulli
+      pvcName: tautulli-config
+      runAsUser: "1001"
+      capacity: 1Gi
+      cacheCapacity: 2Gi
+      schedule: "6 6 * * *"
+      hasBackup: "true"
+    - app: unifi
+      pvcName: unifi-data
+      runAsUser: "999"
+      capacity: 20Gi
+      cacheCapacity: 20Gi
+      schedule: "15 6 * * *"
+      hasBackup: "true"
+    - app: zwave2mqtt
+      pvcName: zwave2mqtt-config
+      runAsUser: "1001"
+      capacity: 1Gi
+      cacheCapacity: 2Gi
+      schedule: "24 6 * * *"
+      hasBackup: "true"
+    - app: minecraft-creative
+      pvcName: minecraft-creative-datadir
+      runAsUser: "1000"
+      capacity: 15Gi
+      cacheCapacity: 30Gi
+      schedule: "33 6 * * *"
+      hasBackup: "true"
+    - app: minecraft-lobby
+      pvcName: minecraft-lobby-datadir
+      runAsUser: "1000"
+      capacity: 5Gi
+      cacheCapacity: 5Gi
+      schedule: "42 6 * * *"
+      hasBackup: "true"
+    - app: minecraft-survival
+      pvcName: minecraft-survival-datadir
+      runAsUser: "1000"
+      capacity: 20Gi
+      cacheCapacity: 40Gi
+      schedule: "51 6 * * *"
+      hasBackup: "true"
+    - app: minecraft-survival2
+      pvcName: minecraft-survival2-datadir
+      runAsUser: "1000"
+      capacity: 30Gi
+      cacheCapacity: 20Gi
+      schedule: "0 7 * * *"
+      hasBackup: "true"
