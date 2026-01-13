@@ -51,7 +51,7 @@ releases:
   - name: envoy-gateway
     namespace: kube-system
     chart: oci://mirror.gcr.io/envoyproxy/gateway-helm
-    version: v1.6.1
+    version: v1.6.2
 
   - name: node-feature-discovery
     namespace: kube-system
