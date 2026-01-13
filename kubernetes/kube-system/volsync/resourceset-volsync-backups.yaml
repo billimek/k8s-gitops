@@ -79,6 +79,7 @@ spec:
           runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
           runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
           fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          fsGroupChangePolicy: "OnRootMismatch"
         retain:
           hourly: 24
           daily: 10
