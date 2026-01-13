@@ -25,7 +25,7 @@ spec:
       runAsUser: "1001"
       hasBackup: "true"
       capacity: "1Gi"
-      schedule: "0 4 * * *"
+      schedule: "0 7 * * *"
       pvcSuffix: "config"
     apps:
       - app: audiobookshelf
@@ -48,7 +48,7 @@ spec:
       - app: plex
         runAsUser: "1000"
         capacity: 55Gi
-        schedule: "30 4 * * *"
+        schedule: "30 7 * * *"
       
       - app: prowlarr
         capacity: 5Gi
