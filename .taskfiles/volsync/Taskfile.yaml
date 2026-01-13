@@ -89,8 +89,6 @@ tasks:
       RESTORE_AS_OF: "{{.RESTORE_AS_OF | default .TIMESTAMP}}"
       CLAIM:
         sh: kubectl --namespace {{.NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.sourcePVC}"
-      CACHE_CAPACITY:
-        sh: kubectl --namespace {{.NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.kopia.cacheCapacity}"
       PUID:
         sh: kubectl --namespace {{.NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.kopia.moverSecurityContext.runAsUser}"
       PGID:

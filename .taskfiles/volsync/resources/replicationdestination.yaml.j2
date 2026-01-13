@@ -12,9 +12,6 @@ spec:
     destinationPVC: {{ ENV.CLAIM }}
     copyMethod: Direct
     enableFileDeletion: true
-    cacheCapacity: {{ ENV.CACHE_CAPACITY | default("5Gi") }}
-    cacheStorageClassName: ceph-block
-    cacheAccessModes: ["ReadWriteOnce"]
     cleanupCachePVC: true
     cleanupTempPVC: true
     previous: {{ ENV.PREVIOUS }}
