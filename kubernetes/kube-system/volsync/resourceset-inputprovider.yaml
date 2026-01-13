@@ -48,7 +48,7 @@ spec:
       - app: plex
         runAsUser: "1000"
         capacity: 55Gi
-        schedule: "45 4 * * *"
+        schedule: "30 4 * * *"
       
       - app: prowlarr
         capacity: 5Gi
@@ -77,7 +77,6 @@ spec:
         pvcSuffix: "data"
         runAsUser: "999"
         capacity: 20Gi
-        schedule: "15 6 * * *"
       
       - app: zwave2mqtt
       
@@ -85,7 +84,6 @@ spec:
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 15Gi
-        schedule: "33 6 * * *"
       
       - app: minecraft-lobby
         pvcSuffix: "datadir"
@@ -96,10 +94,8 @@ spec:
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 20Gi
-        schedule: "51 6 * * *"
       
       - app: minecraft-survival2
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 30Gi
-        schedule: "0 7 * * *"
