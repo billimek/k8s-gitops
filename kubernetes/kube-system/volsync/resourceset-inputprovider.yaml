@@ -28,27 +28,21 @@ spec:
       schedule: "0 4 * * *"
       pvcSuffix: "config"
     apps:
-      # Backups run 4:00-7:00 AM with 9-minute staggered intervals
       - app: audiobookshelf
       
       - app: frigate
         runAsUser: "1000"
         capacity: 10Gi
-        schedule: "9 4 * * *"
       
       - app: home-assistant
         runAsUser: "1000"
         capacity: 60Gi
-        schedule: "18 4 * * *"
       
       - app: jellyseerr
-        schedule: "27 4 * * *"
       
       - app: node-red
         pvcSuffix: "data"
         runAsUser: "1000"
-        capacity: 5Gi
-        schedule: "36 4 * * *"
       
       - app: plex
         runAsUser: "1000"
@@ -56,36 +50,26 @@ spec:
         schedule: "45 4 * * *"
       
       - app: prowlarr
-        capacity: 5Gi
-        schedule: "54 4 * * *"
       
       - app: qbittorrent
-        schedule: "3 5 * * *"
       
       - app: qui
-        schedule: "12 5 * * *"
       
       - app: radarr
         capacity: 3Gi
-        schedule: "21 5 * * *"
       
       - app: readarr
         capacity: 6Gi
-        schedule: "30 5 * * *"
       
       - app: recyclarr
         capacity: 5Gi
-        schedule: "39 5 * * *"
       
       - app: sabnzbd
-        schedule: "48 5 * * *"
       
       - app: sonarr
         capacity: 2Gi
-        schedule: "57 5 * * *"
       
       - app: tautulli
-        schedule: "6 6 * * *"
       
       - app: unifi
         pvcSuffix: "data"
@@ -94,7 +78,6 @@ spec:
         schedule: "15 6 * * *"
       
       - app: zwave2mqtt
-        schedule: "24 6 * * *"
       
       - app: minecraft-creative
         pvcSuffix: "datadir"
@@ -106,7 +89,6 @@ spec:
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 5Gi
-        schedule: "42 6 * * *"
       
       - app: minecraft-survival
         pvcSuffix: "datadir"
