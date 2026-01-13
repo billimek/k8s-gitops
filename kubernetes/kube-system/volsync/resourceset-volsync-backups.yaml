@@ -25,61 +25,62 @@ spec:
   # Health checks - wait for generated resources to be ready
   wait: true
   
-  # Automatically discover all app-specific backup configurations
-  # InputProviders are co-located with each app definition
-  # To add a new app: create InputProvider with label "volsync.backube/managed-by: resourceset"
-  # To remove an app: delete its InputProvider file
+  # Reference the consolidated InputProvider with all app configurations
+  # To add a new app: add entry to the apps array in resourceset-inputprovider.yaml
+  # To remove an app: delete entry from the apps array in resourceset-inputprovider.yaml
   inputsFrom:
-    - selector:
-        matchLabels:
-          volsync.backube/managed-by: resourceset
+    - name: volsync-apps
   
-  resources:
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
     # ExternalSecret for Kopia repository credentials
-    - apiVersion: external-secrets.io/v1
-      kind: ExternalSecret
-      metadata:
-        name: << inputs.app >>-kopia
-        namespace: default
-      spec:
-        secretStoreRef:
-          kind: ClusterSecretStore
-          name: onepassword-connect
-        target:
-          name: << inputs.app >>-kopia-secret
-          creationPolicy: Owner
-          template:
-            engineVersion: v2
-            data:
-              KOPIA_FS_PATH: /repository
-              KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
-              KOPIA_REPOSITORY: filesystem:///repository
-        dataFrom:
-          - extract:
-              key: kopia
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: << $app.app >>-kopia
+      namespace: default
+    spec:
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: onepassword-connect
+      target:
+        name: << $app.app >>-kopia-secret
+        creationPolicy: Owner
+        template:
+          engineVersion: v2
+          data:
+            KOPIA_FS_PATH: /repository
+            KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
+            KOPIA_REPOSITORY: filesystem:///repository
+      dataFrom:
+        - extract:
+            key: kopia
+    ---
     # ReplicationSource for backup configuration
-    - apiVersion: volsync.backube/v1alpha1
-      kind: ReplicationSource
-      metadata:
-        name: << inputs.app >>
-        namespace: default
-      spec:
-        sourcePVC: << inputs.pvcName >>
-        trigger:
-          schedule: "<< inputs.schedule >>"
-        kopia:
-          repository: << inputs.app >>-kopia-secret
-          copyMethod: Snapshot
-          compression: zstd-fastest
-          parallelism: 2
-          accessModes: ["ReadWriteOnce"]
-          volumeSnapshotClassName: csi-ceph-blockpool
-          storageClassName: ceph-block
-          moverSecurityContext:
-            runAsUser: << inputs.runAsUser >>
-            runAsGroup: << inputs.runAsUser >>
-            fsGroup: << inputs.runAsUser >>
-          retain:
-            hourly: 24
-            daily: 10
-            weekly: 4
+    apiVersion: volsync.backube/v1alpha1
+    kind: ReplicationSource
+    metadata:
+      name: << $app.app >>
+      namespace: default
+    spec:
+      sourcePVC: << $app.pvcName >>
+      trigger:
+        schedule: "<< $app.schedule >>"
+      kopia:
+        repository: << $app.app >>-kopia-secret
+        copyMethod: Snapshot
+        compression: zstd-fastest
+        parallelism: 2
+        accessModes: ["ReadWriteOnce"]
+        volumeSnapshotClassName: csi-ceph-blockpool
+        storageClassName: ceph-block
+        moverSecurityContext:
+          runAsUser: << $app.runAsUser >>
+          runAsGroup: << $app.runAsUser >>
+          fsGroup: << $app.runAsUser >>
+        retain:
+          hourly: 24
+          daily: 10
+          weekly: 4
+    <<- end >>

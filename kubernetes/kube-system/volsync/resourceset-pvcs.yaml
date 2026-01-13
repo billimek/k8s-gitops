@@ -27,65 +27,64 @@ spec:
   # Health checks - wait for generated resources to be ready
   wait: true
   
-  # Automatically discover all app-specific backup configurations
-  # InputProviders are co-located with each app definition
-  # To add a new app: create InputProvider with label "volsync.backube/managed-by: resourceset"
-  # To remove an app: delete its InputProvider file
+  # Reference the consolidated InputProvider with all app configurations
+  # To add a new app: add entry to the apps array in resourceset-inputprovider.yaml
+  # To remove an app: delete entry from the apps array in resourceset-inputprovider.yaml
   inputsFrom:
-    - selector:
-        matchLabels:
-          volsync.backube/managed-by: resourceset
+    - name: volsync-apps
 
-  resources:
-    # ReplicationDestination for bootstrap restore
-    - apiVersion: volsync.backube/v1alpha1
-      kind: ReplicationDestination
-      metadata:
-        name: << inputs.app >>-bootstrap
-        namespace: default
-        labels:
-          kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
-        annotations:
-          # Disable ReplicationDestination for apps without existing backups
-          fluxcd.controlplane.io/reconcile: << if eq inputs.hasBackup "true" >>enabled<< else >>disabled<< end >>
-      spec:
-        trigger:
-          manual: restore-once
-        kopia:
-          repository: << inputs.app >>-kopia-secret
-          copyMethod: Snapshot
-          storageClassName: ceph-block
-          volumeSnapshotClassName: csi-ceph-blockpool
-          accessModes: [ReadWriteOnce]
-          capacity: << inputs.capacity >>
-          moverSecurityContext:
-            runAsUser: << inputs.runAsUser >>
-            runAsGroup: << inputs.runAsUser >>
-            fsGroup: << inputs.runAsUser >>
-          sourceIdentity:
-            sourceName: << inputs.app >>
-          cleanupTempPVC: true
-          cleanupCachePVC: true
-          enableFileDeletion: true
-
-  # PVC with conditional dataSourceRef for automatic bootstrap
+  # Loop through all apps and create both ReplicationDestination and PVC
   resourcesTemplate: |
+    <<- range $app := inputs.apps >>
     ---
+    # ReplicationDestination for bootstrap restore
+    apiVersion: volsync.backube/v1alpha1
+    kind: ReplicationDestination
+    metadata:
+      name: << $app.app >>-bootstrap
+      namespace: default
+      labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+      annotations:
+        # Disable ReplicationDestination for apps without existing backups
+        fluxcd.controlplane.io/reconcile: << if eq $app.hasBackup "true" >>enabled<< else >>disabled<< end >>
+    spec:
+      trigger:
+        manual: restore-once
+      kopia:
+        repository: << $app.app >>-kopia-secret
+        copyMethod: Snapshot
+        storageClassName: ceph-block
+        volumeSnapshotClassName: csi-ceph-blockpool
+        accessModes: [ReadWriteOnce]
+        capacity: << $app.capacity >>
+        moverSecurityContext:
+          runAsUser: << $app.runAsUser >>
+          runAsGroup: << $app.runAsUser >>
+          fsGroup: << $app.runAsUser >>
+        sourceIdentity:
+          sourceName: << $app.app >>
+        cleanupTempPVC: true
+        cleanupCachePVC: true
+        enableFileDeletion: true
+    ---
+    # PVC with conditional dataSourceRef for automatic bootstrap
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: << inputs.pvcName >>
+      name: << $app.pvcName >>
       namespace: default
     spec:
       accessModes:
         - ReadWriteOnce
-      <<- if eq inputs.hasBackup "true" >>
+      <<- if eq $app.hasBackup "true" >>
       dataSourceRef:
         apiGroup: volsync.backube
         kind: ReplicationDestination
-        name: << inputs.app >>-bootstrap
+        name: << $app.app >>-bootstrap
       <<- end >>
       storageClassName: ceph-block
       resources:
         requests:
-          storage: << inputs.capacity >>
+          storage: << $app.capacity >>
+    <<- end >>
