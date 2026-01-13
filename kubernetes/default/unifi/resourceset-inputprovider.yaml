@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for unifi VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-unifi
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: unifi
+spec:
+  type: Static
+  defaultValues:
+    app: unifi
+    pvcName: unifi-data
+    runAsUser: "999"
+    capacity: 20Gi
+    schedule: "15 6 * * *"
+    hasBackup: "true"

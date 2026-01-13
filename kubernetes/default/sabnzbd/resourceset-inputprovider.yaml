@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for sabnzbd VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-sabnzbd
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: sabnzbd
+spec:
+  type: Static
+  defaultValues:
+    app: sabnzbd
+    pvcName: sabnzbd-config
+    runAsUser: "1001"
+    capacity: 1Gi
+    schedule: "48 5 * * *"
+    hasBackup: "true"

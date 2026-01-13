@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for home-assistant VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-home-assistant
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: home-assistant
+spec:
+  type: Static
+  defaultValues:
+    app: home-assistant
+    pvcName: home-assistant-config
+    runAsUser: "1000"
+    capacity: 60Gi
+    schedule: "18 4 * * *"
+    hasBackup: "true"

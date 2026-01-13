@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for minecraft-survival VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-minecraft-survival
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: minecraft-survival
+spec:
+  type: Static
+  defaultValues:
+    app: minecraft-survival
+    pvcName: minecraft-survival-datadir
+    runAsUser: "1000"
+    capacity: 20Gi
+    schedule: "51 6 * * *"
+    hasBackup: "true"

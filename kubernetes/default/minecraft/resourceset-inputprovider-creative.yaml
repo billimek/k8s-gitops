@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for minecraft-creative VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-minecraft-creative
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: minecraft-creative
+spec:
+  type: Static
+  defaultValues:
+    app: minecraft-creative
+    pvcName: minecraft-creative-datadir
+    runAsUser: "1000"
+    capacity: 15Gi
+    schedule: "33 6 * * *"
+    hasBackup: "true"

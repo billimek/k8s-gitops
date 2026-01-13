@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for minecraft-lobby VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-minecraft-lobby
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: minecraft-lobby
+spec:
+  type: Static
+  defaultValues:
+    app: minecraft-lobby
+    pvcName: minecraft-lobby-datadir
+    runAsUser: "1000"
+    capacity: 5Gi
+    schedule: "42 6 * * *"
+    hasBackup: "true"

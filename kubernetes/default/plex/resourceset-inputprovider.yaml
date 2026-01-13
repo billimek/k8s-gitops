@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for plex VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-plex
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: plex
+spec:
+  type: Static
+  defaultValues:
+    app: plex
+    pvcName: plex-config
+    runAsUser: "1000"
+    capacity: 55Gi
+    schedule: "45 4 * * *"
+    hasBackup: "true"

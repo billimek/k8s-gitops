@@ -25,10 +25,51 @@ spec:
   # Health checks - wait for generated resources to be ready
   wait: true
   
-  # Import shared app definitions
+  # Import app-specific backup configurations from individual InputProviders
+  # Each app defines its own InputProvider in its app directory
   inputsFrom:
     - kind: ResourceSetInputProvider
-      name: volsync-apps
+      name: volsync-audiobookshelf
+    - kind: ResourceSetInputProvider
+      name: volsync-frigate
+    - kind: ResourceSetInputProvider
+      name: volsync-home-assistant
+    - kind: ResourceSetInputProvider
+      name: volsync-jellyseerr
+    - kind: ResourceSetInputProvider
+      name: volsync-node-red
+    - kind: ResourceSetInputProvider
+      name: volsync-plex
+    - kind: ResourceSetInputProvider
+      name: volsync-prowlarr
+    - kind: ResourceSetInputProvider
+      name: volsync-qbittorrent
+    - kind: ResourceSetInputProvider
+      name: volsync-qui
+    - kind: ResourceSetInputProvider
+      name: volsync-radarr
+    - kind: ResourceSetInputProvider
+      name: volsync-readarr
+    - kind: ResourceSetInputProvider
+      name: volsync-recyclarr
+    - kind: ResourceSetInputProvider
+      name: volsync-sabnzbd
+    - kind: ResourceSetInputProvider
+      name: volsync-sonarr
+    - kind: ResourceSetInputProvider
+      name: volsync-tautulli
+    - kind: ResourceSetInputProvider
+      name: volsync-unifi
+    - kind: ResourceSetInputProvider
+      name: volsync-zwave2mqtt
+    - kind: ResourceSetInputProvider
+      name: volsync-minecraft-creative
+    - kind: ResourceSetInputProvider
+      name: volsync-minecraft-lobby
+    - kind: ResourceSetInputProvider
+      name: volsync-minecraft-survival
+    - kind: ResourceSetInputProvider
+      name: volsync-minecraft-survival2
   
   resources:
     # ExternalSecret for Kopia repository credentials

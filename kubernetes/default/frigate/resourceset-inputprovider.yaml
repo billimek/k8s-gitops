@@ -1,0 +1,20 @@
+---
+# ResourceSetInputProvider for frigate VolSync backup/restore configuration
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-frigate
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+    app.kubernetes.io/name: frigate
+spec:
+  type: Static
+  defaultValues:
+    app: frigate
+    pvcName: frigate-config
+    runAsUser: "1000"
+    capacity: 10Gi
+    schedule: "9 4 * * *"
+    hasBackup: "true"
