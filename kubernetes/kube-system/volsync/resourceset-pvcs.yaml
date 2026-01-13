@@ -54,9 +54,6 @@ spec:
           volumeSnapshotClassName: csi-ceph-blockpool
           accessModes: [ReadWriteOnce]
           capacity: << inputs.capacity >>
-          cacheStorageClassName: ceph-block
-          cacheAccessModes: [ReadWriteOnce]
-          cacheCapacity: 2Gi
           moverSecurityContext:
             runAsUser: << inputs.runAsUser >>
             runAsGroup: << inputs.runAsUser >>

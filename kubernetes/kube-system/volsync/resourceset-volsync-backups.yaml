@@ -69,9 +69,6 @@ spec:
           compression: zstd-fastest
           parallelism: 2
           accessModes: ["ReadWriteOnce"]
-          cacheCapacity: << inputs.cacheCapacity >>
-          cacheStorageClassName: ceph-block
-          cacheAccessModes: ["ReadWriteOnce"]
           volumeSnapshotClassName: csi-ceph-blockpool
           storageClassName: ceph-block
           moverSecurityContext:
