@@ -27,51 +27,14 @@ spec:
   # Health checks - wait for generated resources to be ready
   wait: true
   
-  # Import app-specific backup configurations from individual InputProviders
-  # Each app defines its own InputProvider in its app directory
+  # Automatically discover all app-specific backup configurations
+  # InputProviders are co-located with each app definition
+  # To add a new app: create InputProvider with label "volsync.backube/managed-by: resourceset"
+  # To remove an app: delete its InputProvider file
   inputsFrom:
-    - kind: ResourceSetInputProvider
-      name: volsync-audiobookshelf
-    - kind: ResourceSetInputProvider
-      name: volsync-frigate
-    - kind: ResourceSetInputProvider
-      name: volsync-home-assistant
-    - kind: ResourceSetInputProvider
-      name: volsync-jellyseerr
-    - kind: ResourceSetInputProvider
-      name: volsync-node-red
-    - kind: ResourceSetInputProvider
-      name: volsync-plex
-    - kind: ResourceSetInputProvider
-      name: volsync-prowlarr
-    - kind: ResourceSetInputProvider
-      name: volsync-qbittorrent
-    - kind: ResourceSetInputProvider
-      name: volsync-qui
-    - kind: ResourceSetInputProvider
-      name: volsync-radarr
-    - kind: ResourceSetInputProvider
-      name: volsync-readarr
-    - kind: ResourceSetInputProvider
-      name: volsync-recyclarr
-    - kind: ResourceSetInputProvider
-      name: volsync-sabnzbd
-    - kind: ResourceSetInputProvider
-      name: volsync-sonarr
-    - kind: ResourceSetInputProvider
-      name: volsync-tautulli
-    - kind: ResourceSetInputProvider
-      name: volsync-unifi
-    - kind: ResourceSetInputProvider
-      name: volsync-zwave2mqtt
-    - kind: ResourceSetInputProvider
-      name: volsync-minecraft-creative
-    - kind: ResourceSetInputProvider
-      name: volsync-minecraft-lobby
-    - kind: ResourceSetInputProvider
-      name: volsync-minecraft-survival
-    - kind: ResourceSetInputProvider
-      name: volsync-minecraft-survival2
+    - selector:
+        matchLabels:
+          volsync.backube/managed-by: resourceset
 
   resources:
     # ReplicationDestination for bootstrap restore
