@@ -64,7 +64,7 @@ spec:
       name: << $app.app >>
       namespace: default
     spec:
-      sourcePVC: << $app.app >>-<<- or $app.pvcSuffix inputs.defaults.pvcSuffix >>
+      sourcePVC: << $app.app >>-<< or $app.pvcSuffix inputs.defaults.pvcSuffix >>
       trigger:
         schedule: "<< or $app.schedule inputs.defaults.schedule >>"
       kopia:

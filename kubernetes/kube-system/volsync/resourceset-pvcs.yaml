@@ -72,7 +72,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: << $app.app >>-<<- or $app.pvcSuffix inputs.defaults.pvcSuffix >>
+      name: << $app.app >>-<< or $app.pvcSuffix inputs.defaults.pvcSuffix >>
       namespace: default
     spec:
       accessModes:
