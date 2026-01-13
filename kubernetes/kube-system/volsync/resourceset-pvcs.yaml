@@ -2,145 +2,89 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
 # ResourceSet for migrated PVCs with bootstrap capability
 # Creates PVCs with dataSourceRef for automatic restore during cluster bootstrap
+# hasBackup flag controls whether ReplicationDestination is created (true = restore from backup, false = empty PVC)
+# App definitions are shared via the volsync-apps ResourceSetInputProvider
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
   name: volsync-pvcs
   namespace: kube-system
 spec:
-  inputs:
-    - app: audiobookshelf
-      pvcName: audiobookshelf-config
-      capacity: 1Gi
-      runAsUser: "1001"
-    - app: frigate
-      pvcName: frigate-config
-      capacity: 10Gi
-      runAsUser: "1000"
-    - app: home-assistant
-      pvcName: home-assistant-config
-      capacity: 60Gi
-      runAsUser: "1000"
-    - app: jellyseerr
-      pvcName: jellyseerr-config
-      capacity: 1Gi
-      runAsUser: "1001"
-    - app: minecraft-creative
-      pvcName: minecraft-creative-datadir
-      capacity: 15Gi
-      runAsUser: "1000"
-    - app: minecraft-lobby
-      pvcName: minecraft-lobby-datadir
-      capacity: 5Gi
-      runAsUser: "1000"
-    - app: minecraft-survival
-      pvcName: minecraft-survival-datadir
-      capacity: 20Gi
-      runAsUser: "1000"
-    - app: minecraft-survival2
-      pvcName: minecraft-survival2-datadir
-      capacity: 30Gi
-      runAsUser: "1000"
-    - app: node-red
-      pvcName: node-red-data
-      capacity: 5Gi
-      runAsUser: "1000"
-    - app: plex
-      pvcName: plex-config
-      capacity: 55Gi
-      runAsUser: "1000"
-    - app: prowlarr
-      pvcName: prowlarr-config
-      capacity: 5Gi
-      runAsUser: "1001"
-    - app: qbittorrent
-      pvcName: qbittorrent-config
-      capacity: 1Gi
-      runAsUser: "1001"
-    - app: qui
-      pvcName: qui-config
-      capacity: 1Gi
-      runAsUser: "1001"
-    - app: radarr
-      pvcName: radarr-config
-      capacity: 3Gi
-      runAsUser: "1001"
-    - app: sabnzbd
-      pvcName: sabnzbd-config
-      capacity: 1Gi
-      runAsUser: "1001"
-    - app: readarr
-      pvcName: readarr-config
-      capacity: 6Gi
-      runAsUser: "1001"
-    - app: recyclarr
-      pvcName: recyclarr-config
-      capacity: 5Gi
-      runAsUser: "1001"
-    - app: sonarr
-      pvcName: sonarr-config
-      capacity: 2Gi
-      runAsUser: "1001"
-    - app: tautulli
-      pvcName: tautulli-config
-      capacity: 1Gi
-      runAsUser: "1001"
-    - app: unifi
-      pvcName: unifi-data
-      capacity: 20Gi
-      runAsUser: "999"
-    - app: zwave2mqtt
-      pvcName: zwave2mqtt-config
-      capacity: 1Gi
-      runAsUser: "1001"
+  # Dependencies - wait for volsync-backups ResourceSet and CRDs
+  dependsOn:
+    # Wait for the backups ResourceSet (creates ExternalSecrets referenced by ReplicationDestination)
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSet
+      name: volsync-backups
+      namespace: kube-system
+      ready: true
+    # Wait for VolSync CRDs
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: replicationdestinations.volsync.backube
+      ready: true
+  
+  # Health checks - wait for generated resources to be ready
+  wait: true
+  
+  # Reference the consolidated InputProvider with all app configurations
+  # To add a new app: add entry to the apps array in resourceset-inputprovider.yaml
+  # To remove an app: delete entry from the apps array in resourceset-inputprovider.yaml
+  inputsFrom:
+    - name: volsync-apps
 
-  resources:
+  # Loop through all apps and create both ReplicationDestination and PVC
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
     # ReplicationDestination for bootstrap restore
-    - apiVersion: volsync.backube/v1alpha1
-      kind: ReplicationDestination
-      metadata:
-        name: << inputs.app >>-bootstrap
-        namespace: default
-        labels:
-          # Prevent Flux from resetting manual trigger values
-          kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
-      spec:
-        trigger:
-          manual: restore-once
-        kopia:
-          repository: << inputs.app >>-kopia-secret
-          copyMethod: Snapshot
-          storageClassName: ceph-block
-          volumeSnapshotClassName: csi-ceph-blockpool
-          accessModes: [ReadWriteOnce]
-          capacity: << inputs.capacity >>
-          cacheStorageClassName: ceph-block
-          cacheAccessModes: [ReadWriteOnce]
-          cacheCapacity: 2Gi
-          moverSecurityContext:
-            runAsUser: << inputs.runAsUser >>
-            runAsGroup: << inputs.runAsUser >>
-            fsGroup: << inputs.runAsUser >>
-          sourceIdentity:
-            sourceName: << inputs.app >>
-          cleanupTempPVC: true
-          cleanupCachePVC: true
-          enableFileDeletion: true
-
-    # PVC with dataSourceRef for automatic bootstrap
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: << inputs.pvcName >>
-        namespace: default
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        dataSourceRef:
-          apiGroup: volsync.backube
-          kind: ReplicationDestination
-          name: << inputs.app >>-bootstrap
+    apiVersion: volsync.backube/v1alpha1
+    kind: ReplicationDestination
+    metadata:
+      name: << $app.app >>-bootstrap
+      namespace: default
+      labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+      annotations:
+        # Disable ReplicationDestination for apps without existing backups
+        fluxcd.controlplane.io/reconcile: << if eq ($app.hasBackup | default inputs.defaults.hasBackup) "true" >>enabled<< else >>disabled<< end >>
+    spec:
+      trigger:
+        manual: restore-once
+      kopia:
+        repository: << $app.app >>-kopia-secret
+        copyMethod: Snapshot
         storageClassName: ceph-block
-        resources:
-          requests:
-            storage: << inputs.capacity >>
+        volumeSnapshotClassName: csi-ceph-blockpool
+        accessModes: [ReadWriteOnce]
+        capacity: << $app.capacity | default inputs.defaults.capacity >>
+        moverSecurityContext:
+          runAsUser: << $app.runAsUser | default inputs.defaults.runAsUser >>
+          runAsGroup: << $app.runAsUser | default inputs.defaults.runAsUser >>
+          fsGroup: << $app.runAsUser | default inputs.defaults.runAsUser >>
+        sourceIdentity:
+          sourceName: << $app.app >>
+        cleanupTempPVC: true
+        cleanupCachePVC: true
+        enableFileDeletion: true
+    ---
+    # PVC with conditional dataSourceRef for automatic bootstrap
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: << $app.app >>-<<- $app.pvcSuffix | default inputs.defaults.pvcSuffix >>
+      namespace: default
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      <<- if eq ($app.hasBackup | default inputs.defaults.hasBackup) "true" >>
+      dataSourceRef:
+        apiGroup: volsync.backube
+        kind: ReplicationDestination
+        name: << $app.app >>-bootstrap
+      <<- end >>
+      storageClassName: ceph-block
+      resources:
+        requests:
+          storage: << $app.capacity | default inputs.defaults.capacity >>
+    <<- end >>

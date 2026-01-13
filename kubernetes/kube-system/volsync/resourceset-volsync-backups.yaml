@@ -4,168 +4,83 @@
 # Automated backups to NFS with Kopia for improved performance and deduplication
 # Backup window: 4:00-7:00 AM with 9-minute staggered intervals
 # Generates 42 resources (21 ExternalSecrets + 21 ReplicationSources) in default namespace
+# App definitions are shared via the volsync-apps ResourceSetInputProvider
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
   name: volsync-backups
   namespace: kube-system
 spec:
-  inputs:
-    # Backup schedule: 21 apps × 9-minute intervals = 180 minutes (4:00-7:00 AM)
-    - app: audiobookshelf
-      pvcName: audiobookshelf-config
-      runAsUser: "1001"
-      cacheCapacity: 1Gi
-      schedule: "0 4 * * *"
-    - app: frigate
-      pvcName: frigate-config
-      runAsUser: "1000"
-      cacheCapacity: 10Gi
-      schedule: "9 4 * * *"
-    - app: home-assistant
-      pvcName: home-assistant-config
-      runAsUser: "1000"
-      cacheCapacity: 60Gi
-      schedule: "18 4 * * *"
-    - app: jellyseerr
-      pvcName: jellyseerr-config
-      runAsUser: "1001"
-      cacheCapacity: 2Gi
-      schedule: "27 4 * * *"
-    - app: node-red
-      pvcName: node-red-data
-      runAsUser: "1000"
-      cacheCapacity: 10Gi
-      schedule: "36 4 * * *"
-    - app: plex
-      pvcName: plex-config
-      runAsUser: "1000"
-      cacheCapacity: 65Gi
-      schedule: "45 4 * * *"
-    - app: prowlarr
-      pvcName: prowlarr-config
-      runAsUser: "1001"
-      cacheCapacity: 5Gi
-      schedule: "54 4 * * *"
-    - app: qbittorrent
-      pvcName: qbittorrent-config
-      runAsUser: "1001"
-      cacheCapacity: 2Gi
-      schedule: "3 5 * * *"
-    - app: qui
-      pvcName: qui-config
-      runAsUser: "1001"
-      cacheCapacity: 2Gi
-      schedule: "12 5 * * *"
-    - app: radarr
-      pvcName: radarr-config
-      runAsUser: "1001"
-      cacheCapacity: 3Gi
-      schedule: "21 5 * * *"
-    - app: readarr
-      pvcName: readarr-config
-      runAsUser: "1001"
-      cacheCapacity: 8Gi
-      schedule: "30 5 * * *"
-    - app: recyclarr
-      pvcName: recyclarr-config
-      runAsUser: "1001"
-      cacheCapacity: 5Gi
-      schedule: "39 5 * * *"
-    - app: sabnzbd
-      pvcName: sabnzbd-config
-      runAsUser: "1001"
-      cacheCapacity: 2Gi
-      schedule: "48 5 * * *"
-    - app: sonarr
-      pvcName: sonarr-config
-      runAsUser: "1001"
-      cacheCapacity: 3Gi
-      schedule: "57 5 * * *"
-    - app: tautulli
-      pvcName: tautulli-config
-      runAsUser: "1001"
-      cacheCapacity: 2Gi
-      schedule: "6 6 * * *"
-    - app: unifi
-      pvcName: unifi-data
-      runAsUser: "999"
-      cacheCapacity: 20Gi
-      schedule: "15 6 * * *"
-    - app: zwave2mqtt
-      pvcName: zwave2mqtt-config
-      runAsUser: "1001"
-      cacheCapacity: 2Gi
-      schedule: "24 6 * * *"
-    - app: minecraft-creative
-      pvcName: minecraft-creative-datadir
-      runAsUser: "1000"
-      cacheCapacity: 30Gi
-      schedule: "33 6 * * *"
-    - app: minecraft-lobby
-      pvcName: minecraft-lobby-datadir
-      runAsUser: "1000"
-      cacheCapacity: 5Gi
-      schedule: "42 6 * * *"
-    - app: minecraft-survival
-      pvcName: minecraft-survival-datadir
-      runAsUser: "1000"
-      cacheCapacity: 40Gi
-      schedule: "51 6 * * *"
-    - app: minecraft-survival2
-      pvcName: minecraft-survival2-datadir
-      runAsUser: "1000"
-      cacheCapacity: 20Gi
-      schedule: "0 7 * * *"
-  resources:
+  # Dependencies - wait for CRDs to be ready
+  dependsOn:
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: replicationsources.volsync.backube
+      ready: true
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: externalsecrets.external-secrets.io
+      ready: true
+  
+  # Health checks - wait for generated resources to be ready
+  wait: true
+  
+  # Reference the consolidated InputProvider with all app configurations
+  # To add a new app: add entry to the apps array in resourceset-inputprovider.yaml
+  # To remove an app: delete entry from the apps array in resourceset-inputprovider.yaml
+  inputsFrom:
+    - name: volsync-apps
+  
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
     # ExternalSecret for Kopia repository credentials
-    - apiVersion: external-secrets.io/v1
-      kind: ExternalSecret
-      metadata:
-        name: << inputs.app >>-kopia
-        namespace: default
-      spec:
-        secretStoreRef:
-          kind: ClusterSecretStore
-          name: onepassword-connect
-        target:
-          name: << inputs.app >>-kopia-secret
-          creationPolicy: Owner
-          template:
-            engineVersion: v2
-            data:
-              KOPIA_FS_PATH: /repository
-              KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
-              KOPIA_REPOSITORY: filesystem:///repository
-        dataFrom:
-          - extract:
-              key: kopia
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: << $app.app >>-kopia
+      namespace: default
+    spec:
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: onepassword-connect
+      target:
+        name: << $app.app >>-kopia-secret
+        creationPolicy: Owner
+        template:
+          engineVersion: v2
+          data:
+            KOPIA_FS_PATH: /repository
+            KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
+            KOPIA_REPOSITORY: filesystem:///repository
+      dataFrom:
+        - extract:
+            key: kopia
+    ---
     # ReplicationSource for backup configuration
-    - apiVersion: volsync.backube/v1alpha1
-      kind: ReplicationSource
-      metadata:
-        name: << inputs.app >>
-        namespace: default
-      spec:
-        sourcePVC: << inputs.pvcName >>
-        trigger:
-          schedule: "<< inputs.schedule >>"
-        kopia:
-          repository: << inputs.app >>-kopia-secret
-          copyMethod: Snapshot
-          compression: zstd-fastest
-          parallelism: 2
-          accessModes: ["ReadWriteOnce"]
-          cacheCapacity: << inputs.cacheCapacity >>
-          cacheStorageClassName: ceph-block
-          cacheAccessModes: ["ReadWriteOnce"]
-          volumeSnapshotClassName: csi-ceph-blockpool
-          storageClassName: ceph-block
-          moverSecurityContext:
-            runAsUser: << inputs.runAsUser >>
-            runAsGroup: << inputs.runAsUser >>
-            fsGroup: << inputs.runAsUser >>
-          retain:
-            hourly: 24
-            daily: 10
-            weekly: 4
+    apiVersion: volsync.backube/v1alpha1
+    kind: ReplicationSource
+    metadata:
+      name: << $app.app >>
+      namespace: default
+    spec:
+      sourcePVC: << $app.app >>-<<- $app.pvcSuffix | default inputs.defaults.pvcSuffix >>
+      trigger:
+        schedule: "<< $app.schedule | default inputs.defaults.schedule >>"
+      kopia:
+        repository: << $app.app >>-kopia-secret
+        copyMethod: Snapshot
+        compression: zstd-fastest
+        parallelism: 2
+        accessModes: ["ReadWriteOnce"]
+        volumeSnapshotClassName: csi-ceph-blockpool
+        storageClassName: ceph-block
+        moverSecurityContext:
+          runAsUser: << $app.runAsUser | default inputs.defaults.runAsUser >>
+          runAsGroup: << $app.runAsUser | default inputs.defaults.runAsUser >>
+          fsGroup: << $app.runAsUser | default inputs.defaults.runAsUser >>
+        retain:
+          hourly: 24
+          daily: 10
+          weekly: 4
+    <<- end >>
