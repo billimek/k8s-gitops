@@ -64,9 +64,9 @@ spec:
       name: << $app.app >>
       namespace: default
     spec:
-      sourcePVC: << $app.app >>-<< or $app.pvcSuffix inputs.defaults.pvcSuffix >>
+      sourcePVC: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
       trigger:
-        schedule: "<< or $app.schedule inputs.defaults.schedule >>"
+        schedule: "<< get $app "schedule" | default inputs.defaults.schedule >>"
       kopia:
         repository: << $app.app >>-kopia-secret
         copyMethod: Snapshot
@@ -76,9 +76,9 @@ spec:
         volumeSnapshotClassName: csi-ceph-blockpool
         storageClassName: ceph-block
         moverSecurityContext:
-          runAsUser: << or $app.runAsUser inputs.defaults.runAsUser >>
-          runAsGroup: << or $app.runAsUser inputs.defaults.runAsUser >>
-          fsGroup: << or $app.runAsUser inputs.defaults.runAsUser >>
+          runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
         retain:
           hourly: 24
           daily: 10

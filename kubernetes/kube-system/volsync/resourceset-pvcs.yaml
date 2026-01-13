@@ -47,7 +47,7 @@ spec:
         kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
       annotations:
         # Disable ReplicationDestination for apps without existing backups
-        fluxcd.controlplane.io/reconcile: << if eq (or $app.hasBackup inputs.defaults.hasBackup) "true" >>enabled<< else >>disabled<< end >>
+        fluxcd.controlplane.io/reconcile: << if eq (get $app "hasBackup" | default inputs.defaults.hasBackup) "true" >>enabled<< else >>disabled<< end >>
     spec:
       trigger:
         manual: restore-once
@@ -57,11 +57,11 @@ spec:
         storageClassName: ceph-block
         volumeSnapshotClassName: csi-ceph-blockpool
         accessModes: [ReadWriteOnce]
-        capacity: << or $app.capacity inputs.defaults.capacity >>
+        capacity: << get $app "capacity" | default inputs.defaults.capacity >>
         moverSecurityContext:
-          runAsUser: << or $app.runAsUser inputs.defaults.runAsUser >>
-          runAsGroup: << or $app.runAsUser inputs.defaults.runAsUser >>
-          fsGroup: << or $app.runAsUser inputs.defaults.runAsUser >>
+          runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
         sourceIdentity:
           sourceName: << $app.app >>
         cleanupTempPVC: true
@@ -72,12 +72,12 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: << $app.app >>-<< or $app.pvcSuffix inputs.defaults.pvcSuffix >>
+      name: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
       namespace: default
     spec:
       accessModes:
         - ReadWriteOnce
-      <<- if eq (or $app.hasBackup inputs.defaults.hasBackup) "true" >>
+      <<- if eq (get $app "hasBackup" | default inputs.defaults.hasBackup) "true" >>
       dataSourceRef:
         apiGroup: volsync.backube
         kind: ReplicationDestination
@@ -86,5 +86,5 @@ spec:
       storageClassName: ceph-block
       resources:
         requests:
-          storage: << or $app.capacity inputs.defaults.capacity >>
+          storage: << get $app "capacity" | default inputs.defaults.capacity >>
     <<- end >>
