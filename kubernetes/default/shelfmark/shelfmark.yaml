@@ -34,9 +34,6 @@ spec:
             env:
               TZ: America/New_York
               FLASK_PORT: &port 8084
-            envFrom:
-              - secretRef:
-                  name: shelfmark-secret
             probes:
               liveness: &probes
                 enabled: true
