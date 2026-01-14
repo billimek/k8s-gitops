@@ -68,6 +68,8 @@ spec:
       
       - app: sabnzbd
       
+      - app: shelfmark
+      
       - app: sonarr
         capacity: 2Gi
       
