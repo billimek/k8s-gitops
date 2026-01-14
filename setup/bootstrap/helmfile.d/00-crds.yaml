@@ -36,7 +36,7 @@ releases:
   - name: rook-ceph
     namespace: rook-ceph
     chart: oci://ghcr.io/rook/rook-ceph
-    version: v1.18.8
+    version: v1.18.9
 
   - name: cloudnative-pg
     namespace: default
