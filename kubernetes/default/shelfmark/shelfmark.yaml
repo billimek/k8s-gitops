@@ -33,7 +33,9 @@ spec:
               - shelfmark.main:app
             env:
               TZ: America/New_York
-              INGEST_DIR: /media/books
+              INGEST_DIR: /media/book/import
+              LIBRARY_PATH: /media/books/ebooks
+              LIBRARY_PATH_AUDIOBOOK: /media/books/audiobooks
               FLASK_PORT: &port 8084
               METADATA_PROVIDER: hardcover
               PROWLARR_URL: http://prowlarr:9696
