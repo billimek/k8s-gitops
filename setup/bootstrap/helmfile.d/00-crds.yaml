@@ -66,7 +66,7 @@ releases:
   - name: snapshot-controller
     namespace: kube-system
     chart: oci://ghcr.io/piraeusdatastore/helm-charts/snapshot-controller
-    version: 4.2.0
+    version: 5.0.0
 
   - name: tuppr
     namespace: system-upgrade
