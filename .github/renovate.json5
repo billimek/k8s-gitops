@@ -8,6 +8,7 @@
     'github>billimek/k8s-gitops//.renovate/autoMerge.json5',
     'github>billimek/k8s-gitops//.renovate/customManagers.json5',
     'github>billimek/k8s-gitops//.renovate/grafanaDashboards.json5',
+    'github>billimek/k8s-gitops//.renovate/overrides.json5',
     'github>billimek/k8s-gitops//.renovate/groups.json5',
     'github>billimek/k8s-gitops//.renovate/labels.json5',
     'github>billimek/k8s-gitops//.renovate/semanticCommits.json5',
