@@ -6,17 +6,6 @@ vars:
   VOLSYNC_TASK_RESOURCES_DIR: "{{.ROOT_DIR}}/.taskfiles/volsync/resources"
 
 tasks:
-  unlock:
-    desc: Unlock all kopia source repos
-    preconditions:
-      - which kubectl
-    vars:
-      SOURCES:
-        sh: kubectl get replicationsources --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
-    cmds:
-      - for: { var: SOURCES, split: "\n" }
-        cmd: kubectl --namespace {{splitList "," .ITEM | first}} patch --field-manager=flux-client-side-apply replicationsources {{splitList "," .ITEM | last}} --type merge --patch "{\"spec\":{\"kopia\":{\"unlock\":\"{{now | unixEpoch}}\"}}}"
-
   list:
     desc: List snapshots for an app [NS=default] [APP=required]
     preconditions:
