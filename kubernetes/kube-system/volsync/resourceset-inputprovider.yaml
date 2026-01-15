@@ -6,9 +6,8 @@
 # Fields with defaults (can be omitted if value matches):
 #   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
 #   - runAsUser: "1001"
-#   - hasBackup: "true"
 #   - capacity: "1Gi"
-#   - schedule: "0 4 * * *"
+#   - schedule: "0 7 * * *"
 # To add a new app: add entry to the apps array below
 # To remove an app: delete entry from the apps array below
 apiVersion: fluxcd.controlplane.io/v1
@@ -23,7 +22,6 @@ spec:
   defaultValues:
     defaults:
       runAsUser: "1001"
-      hasBackup: "true"
       capacity: "1Gi"
       schedule: "0 7 * * *"
       pvcSuffix: "config"

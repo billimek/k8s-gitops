@@ -2,7 +2,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
 # ResourceSet for migrated PVCs with bootstrap capability
 # Creates PVCs with dataSourceRef for automatic restore during cluster bootstrap
-# hasBackup flag controls whether ReplicationDestination is created (true = restore from backup, false = empty PVC)
 # App definitions are shared via the volsync-apps ResourceSetInputProvider
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
@@ -45,9 +44,6 @@ spec:
       namespace: default
       labels:
         kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
-      annotations:
-        # Disable ReplicationDestination for apps without existing backups
-        fluxcd.controlplane.io/reconcile: << if eq (get $app "hasBackup" | default inputs.defaults.hasBackup) "true" >>enabled<< else >>disabled<< end >>
     spec:
       trigger:
         manual: restore-once
@@ -77,12 +73,10 @@ spec:
     spec:
       accessModes:
         - ReadWriteOnce
-      <<- if eq (get $app "hasBackup" | default inputs.defaults.hasBackup) "true" >>
       dataSourceRef:
         apiGroup: volsync.backube
         kind: ReplicationDestination
         name: << $app.app >>-bootstrap
-      <<- end >>
       storageClassName: ceph-block
       resources:
         requests:
