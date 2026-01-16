@@ -57,6 +57,10 @@ spec:
               FILE_ORGANIZATION_AUDIOBOOK: organize
               # HARDLINK_TORRENTS: "true"
               HARDLINK_TORRENTS_AUDIOBOOKS: "true"
+              
+              # Audiobookshelf integration
+              CUSTOM_SCRIPT: /config/scripts/scan-audiobookshelf.sh
+              AUDIOBOOKSHELF_LIBRARY_ID: 1461f532-1ee2-43f8-9f60-702176e1c3ac
 
             envFrom:
               - secretRef:
@@ -98,6 +102,53 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
 
+    configMaps:
+      scripts:
+        data:
+          scan-audiobookshelf.sh: |
+            #!/bin/sh
+            set -e
+            
+            # Validate required environment variables
+            if [ -z "$AUDIOBOOKSHELF_TOKEN" ]; then
+              echo "ERROR: AUDIOBOOKSHELF_TOKEN environment variable is not set" >&2
+              exit 1
+            fi
+            
+            if [ -z "$AUDIOBOOKSHELF_LIBRARY_ID" ]; then
+              echo "ERROR: AUDIOBOOKSHELF_LIBRARY_ID environment variable is not set" >&2
+              exit 1
+            fi
+            
+            # Audiobookshelf API endpoint
+            AUDIOBOOKSHELF_URL="http://audiobookshelf:80"
+            SCAN_ENDPOINT="${AUDIOBOOKSHELF_URL}/api/libraries/${AUDIOBOOKSHELF_LIBRARY_ID}/scan"
+            
+            echo "Triggering Audiobookshelf library scan..."
+            echo "Library ID: ${AUDIOBOOKSHELF_LIBRARY_ID}"
+            echo "Endpoint: ${SCAN_ENDPOINT}"
+            
+            # Trigger the library scan
+            HTTP_CODE=$(curl -s -o /tmp/abs-response.json -w "%{http_code}" \
+              -X POST \
+              -H "Authorization: Bearer ${AUDIOBOOKSHELF_TOKEN}" \
+              "${SCAN_ENDPOINT}")
+            
+            echo "Response code: ${HTTP_CODE}"
+            
+            # Check if the request was successful
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "SUCCESS: Audiobookshelf library scan triggered successfully"
+              cat /tmp/abs-response.json 2>/dev/null || true
+              rm -f /tmp/abs-response.json
+              exit 0
+            else
+              echo "ERROR: Failed to trigger Audiobookshelf library scan (HTTP ${HTTP_CODE})" >&2
+              cat /tmp/abs-response.json 2>/dev/null || true
+              rm -f /tmp/abs-response.json
+              exit 1
+            fi
+
     service:
       app:
         controller: shelfmark
@@ -121,6 +172,13 @@ spec:
         existingClaim: shelfmark-config
         globalMounts:
           - path: /config
+      scripts:
+        type: configMap
+        name: shelfmark-scripts
+        defaultMode: 0755
+        globalMounts:
+          - path: /config/scripts
+            readOnly: true
       media:
         type: nfs
         server: nas.home
