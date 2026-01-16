@@ -174,7 +174,7 @@ spec:
           - path: /config
       scripts:
         type: configMap
-        name: shelfmark-scripts
+        identifier: scripts
         defaultMode: 0755
         globalMounts:
           - path: /config/scripts
