@@ -34,6 +34,8 @@ spec:
             env:
               TZ: America/New_York
               FLASK_PORT: &port 8084
+              AUDIOBOOK_LIBRARY_URL: https://abs.eviljungle.com
+              SEARCH_MODE: universal
               
               # Download destinations
               INGEST_DIR: /media/book/import
@@ -41,7 +43,9 @@ spec:
               
               # Metadata provider configuration
               METADATA_PROVIDER: hardcover
+              METADATA_PROVIDER_AUDIOBOOK: hardcover
               HARDCOVER_ENABLED: "true"
+              DEFAULT_RELEASE_SOURCE: prowlarr
               
               # Prowlarr integration
               PROWLARR_ENABLED: "true"
