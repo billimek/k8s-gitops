@@ -1,0 +1,129 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbittorrent-scripts
+  namespace: default
+data:
+  qbit-hardlinker.sh: |
+    #!/bin/bash
+    set -euo pipefail
+    
+    # Validate required environment variables
+    if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+      echo "ERROR: DISCORD_WEBHOOK_URL environment variable is not set" >&2
+      exit 1
+    fi
+    
+    if [ -z "$PLEX_TOKEN" ]; then
+      echo "ERROR: PLEX_TOKEN environment variable is not set" >&2
+      exit 1
+    fi
+    
+    if [ -z "$AUDIOBOOKSHELF_TOKEN" ]; then
+      echo "ERROR: AUDIOBOOKSHELF_TOKEN environment variable is not set" >&2
+      exit 1
+    fi
+    
+    if [ -z "$AUDIOBOOKSHELF_LIBRARY_ID" ]; then
+      echo "ERROR: AUDIOBOOKSHELF_LIBRARY_ID environment variable is not set" >&2
+      exit 1
+    fi
+    
+    # Get the path to the download and the name of the torrent
+    torrent_name="$1"
+    download_path="$2"
+    category="$3"
+    
+    # Configuration
+    destination="/media/books/economist"
+    plex_refresh_url="https://plex.eviljungle.com/library/sections/19/refresh?X-Plex-Token=${PLEX_TOKEN}"
+    
+    # Validate that the required parameters have been passed
+    if [ -z "$download_path" ] || [ -z "$torrent_name" ] || [ -z "$category" ]; then
+      echo "Error: missing required parameters."
+      echo "Usage: $0 <torrent name> <download path> <category>"
+      exit 1
+    fi
+    
+    # Only process Economist category
+    if [[ "$category" != 'Economist' ]]; then
+      echo "Skipping non-Economist category: $category"
+      exit 0
+    fi
+    
+    echo "Processing torrent: $torrent_name"
+    echo "Download path: $download_path"
+    echo "Category: $category"
+    echo "Destination: $destination"
+    
+    # Validate destination directory exists
+    if [ ! -d "$destination" ]; then
+      echo "ERROR: Destination directory does not exist: $destination" >&2
+      curl -sf -H "Content-Type: application/json" \
+        -X POST \
+        --data "{\"content\": \"qbittorrent FAILED: destination directory missing\"}" \
+        "$DISCORD_WEBHOOK_URL" || true
+      exit 1
+    fi
+    
+    # Create hardlinks using cp -al (preserves directory structure and creates hardlinks)
+    source_path="$download_path/$torrent_name"
+    if [ ! -e "$source_path" ]; then
+      echo "ERROR: Source path does not exist: $source_path" >&2
+      exit 1
+    fi
+    
+    echo "Creating hardlinks..."
+    if ! cp -al "$source_path" "$destination/"; then
+      echo "ERROR: Failed to create hardlinks from $source_path to $destination" >&2
+      # Send failure notification to Discord
+      curl -sf -H "Content-Type: application/json" \
+        -X POST \
+        --data "{\"content\": \"qbittorrent FAILED to hardlink: ${torrent_name}\"}" \
+        "$DISCORD_WEBHOOK_URL" || true
+      exit 1
+    fi
+    
+    echo "Hardlinks created successfully"
+    
+    # Send success notification to Discord
+    echo "Sending Discord notification..."
+    if ! curl -sf -H "Content-Type: application/json" \
+      -X POST \
+      --data "{\"content\": \"qbittorrent processed ${torrent_name}\"}" \
+      "$DISCORD_WEBHOOK_URL"; then
+      echo "WARNING: Discord notification failed" >&2
+    fi
+    
+    # Trigger Plex library refresh
+    echo "Triggering Plex library refresh..."
+    if ! curl -sf "$plex_refresh_url"; then
+      echo "WARNING: Plex refresh failed" >&2
+    fi
+    
+    # Trigger Audiobookshelf library scan
+    echo "Triggering Audiobookshelf library scan..."
+    AUDIOBOOKSHELF_URL="http://audiobookshelf:80"
+    SCAN_ENDPOINT="${AUDIOBOOKSHELF_URL}/api/libraries/${AUDIOBOOKSHELF_LIBRARY_ID}/scan"
+    echo "Library ID: ${AUDIOBOOKSHELF_LIBRARY_ID}"
+    echo "Endpoint: ${SCAN_ENDPOINT}"
+    
+    HTTP_CODE=$(curl -s -o /tmp/abs-response.json -w "%{http_code}" \
+      -X POST \
+      -H "Authorization: Bearer ${AUDIOBOOKSHELF_TOKEN}" \
+      "${SCAN_ENDPOINT}")
+    
+    echo "Audiobookshelf response code: ${HTTP_CODE}"
+    
+    if [ "$HTTP_CODE" = "200" ]; then
+      echo "SUCCESS: Audiobookshelf library scan triggered successfully"
+      cat /tmp/abs-response.json 2>/dev/null || true
+      rm -f /tmp/abs-response.json
+    else
+      echo "WARNING: Failed to trigger Audiobookshelf library scan (HTTP ${HTTP_CODE})" >&2
+      cat /tmp/abs-response.json 2>/dev/null || true
+      rm -f /tmp/abs-response.json
+    fi
+    
+    echo "qbit-hardlinker task completed successfully"

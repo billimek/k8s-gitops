@@ -23,6 +23,9 @@ spec:
               TZ: America/New_York
               QBT_WEBUI_PORT: &port 80
               QBT_TORRENTING_PORT: &torrentPort 50413
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-secret
             probes:
               liveness:
                 enabled: true
@@ -92,6 +95,13 @@ spec:
     persistence:
       config:
         existingClaim: qbittorrent-config
+      scripts:
+        type: configMap
+        name: qbittorrent-scripts
+        defaultMode: 0755
+        globalMounts:
+          - path: /config/scripts
+            readOnly: true
       media:
         type: nfs
         server: nas.home
