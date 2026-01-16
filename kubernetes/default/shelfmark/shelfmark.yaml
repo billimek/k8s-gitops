@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/calibrain/shelfmark-lite
-              tag: v1.0.1@sha256:6a7a6415826b0378d5a338c6b0a5f688711861309a494a18386f2f7e3c48c3db
+              tag: dev@sha256:80637c16704b88ad0ff8560a7b7e12cdc2e1e13ce4675ea49a5b1aa3111ebb54
             command:
               - gunicorn
             args:
@@ -34,6 +34,29 @@ spec:
             env:
               TZ: America/New_York
               FLASK_PORT: &port 8084
+              
+              # Download destinations
+              INGEST_DIR: /media/book/import
+              DESTINATION_AUDIOBOOK: /media/books/audiobooks
+              
+              # Metadata provider configuration
+              METADATA_PROVIDER: hardcover
+              HARDCOVER_ENABLED: "true"
+              
+              # Prowlarr integration
+              PROWLARR_ENABLED: "true"
+              PROWLARR_URL: http://prowlarr:9696
+              PROWLARR_TORRENT_CLIENT: qbittorrent
+              QBITTORRENT_URL: http://qbittorrent:80
+              
+              # File organization
+              FILE_ORGANIZATION_AUDIOBOOK: organize
+              # HARDLINK_TORRENTS: "true"
+              HARDLINK_TORRENTS_AUDIOBOOKS: "true"
+
+            envFrom:
+              - secretRef:
+                  name: shelfmark-secret
             probes:
               liveness: &probes
                 enabled: true
