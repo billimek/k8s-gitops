@@ -55,7 +55,7 @@ spec:
               
               # File organization
               FILE_ORGANIZATION_AUDIOBOOK: organize
-              TEMPLATE_AUDIOBOOK_ORGANIZE: "{Author}/{Title}/{Author} - {Title}{ (PartNumber)}"
+              TEMPLATE_AUDIOBOOK_ORGANIZE: "{Author}/{Title}/{Author} - {Title}{ (}{PartNumber}{)}"
               # HARDLINK_TORRENTS: "true"
               HARDLINK_TORRENTS_AUDIOBOOKS: "true"
               
