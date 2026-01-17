@@ -29,6 +29,7 @@ spec:
     - app: qui
     - app: radarr
     - app: readarr
+    - app: shelfmark
     - app: sonarr
   resources:
     - apiVersion: keda.sh/v1alpha1
