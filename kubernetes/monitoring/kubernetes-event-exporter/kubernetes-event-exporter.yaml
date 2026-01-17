@@ -94,9 +94,9 @@ spec:
             route:
               routes:
                 - match:
-                    - receiver: "discord"
-                      kind: "ScaledObject"
+                    - kind: "ScaledObject"
                       apiVersion: "keda.sh/v1alpha1"
+                  receiver: "discord"
             
             receivers:
               - name: "discord"
@@ -105,13 +105,7 @@ spec:
                   headers:
                     Content-Type: "application/json"
                   layout:
-                    content: |
-                      **🔄 KEDA Scaling Event**
-                      {{`{{ if eq .Type "Normal" }}`}}✅{{`{{ else if eq .Type "Warning" }}`}}⚠️{{`{{ else }}`}}🔴{{`{{ end }}`}} **{{`{{ .Reason }}`}}**
-                      
-                      **Resource:** `{{`{{ .InvolvedObject.Namespace }}`}}/{{`{{ .InvolvedObject.Name }}`}}`
-                      **Message:** {{`{{ .Message }}`}}
-                      **Time:** {{`{{ .LastTimestamp }}`}}
+                    content: "{{`{{ if eq .Type \"Normal\" }}`}}✅{{`{{ else if eq .Type \"Warning\" }}`}}⚠️{{`{{ else }}`}}🔴{{`{{ end }}`}} **{{`{{ .Reason }}`}}** - `{{`{{ .InvolvedObject.Namespace }}`}}/{{`{{ .InvolvedObject.Name }}`}}` - {{`{{ .Message }}`}}"
     
     persistence:
       config:
