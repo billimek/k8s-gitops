@@ -94,8 +94,8 @@ spec:
             route:
               routes:
                 - match:
-                    - kind: "ScaledObject"
-                      apiVersion: "keda.sh/v1alpha1"
+                  - kind: "ScaledObject"
+                    apiVersion: "keda.sh/v1alpha1"
                   receiver: "discord"
             
             receivers:
