@@ -115,7 +115,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: kubernetes-event-exporter-config
+        name: kubernetes-event-exporter
         globalMounts:
           - path: /config
     
