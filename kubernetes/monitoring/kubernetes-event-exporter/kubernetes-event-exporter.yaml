@@ -82,7 +82,7 @@ spec:
       config:
         data:
           config.yaml: |
-            logLevel: info
+            logLevel: debug
             logFormat: json
             metricsNamePrefix: event_exporter_
             maxEventAgeSeconds: 60
