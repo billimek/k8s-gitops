@@ -85,7 +85,6 @@ spec:
             logLevel: info
             logFormat: json
             metricsNamePrefix: event_exporter_
-            maxEventAgeSeconds: 60
             
             throttle:
               afterFirst: 3
