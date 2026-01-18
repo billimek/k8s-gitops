@@ -15,12 +15,13 @@ spec:
       envoyDeployment:
         replicas: 2
         container:
+          image: mirror.gcr.io/envoyproxy/envoy:v1.37.0
           resources:
             requests:
               cpu: 100m
               memory: 256Mi
             limits:
-              memory: 1Gi
+              memory: 2Gi
       envoyService:
         externalTrafficPolicy: Local
   shutdown:
@@ -29,4 +30,4 @@ spec:
     metrics:
       prometheus:
         compression:
-          type: Gzip
+          type: Zstd

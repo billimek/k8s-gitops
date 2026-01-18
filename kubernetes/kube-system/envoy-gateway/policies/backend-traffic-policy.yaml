@@ -14,6 +14,11 @@ spec:
     - type: Zstd
     - type: Brotli
     - type: Gzip
+  retry:
+    numRetries: 2
+    retryOn:
+      triggers:
+        - reset
   tcpKeepalive: {}
   timeout:
     http:

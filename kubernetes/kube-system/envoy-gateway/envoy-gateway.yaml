@@ -24,7 +24,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: envoy-gateway
-  interval: 1h
+  interval: 30m
   install:
     createNamespace: true
   values:
@@ -34,3 +34,11 @@ spec:
           controllerName: gateway.envoyproxy.io/gatewayclass-controller
         extensionApis:
           enableBackend: true
+          enableEnvoyPatchPolicy: true
+        provider:
+          type: Kubernetes
+          kubernetes:
+            deploy:
+              type: GatewayNamespace
+    global:
+      imageRegistry: mirror.gcr.io

@@ -10,13 +10,21 @@ spec:
   clientIPDetection:
     xForwardedFor:
       numTrustedHops: 1
+  connection:
+    bufferLimit: 8Mi
+    maxAcceptPerSocketEvent: 0
   http2:
+    initialStreamWindowSize: 2Mi
+    initialConnectionWindowSize: 32Mi
     onInvalidMessage: TerminateStream
   http3: {}
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
   tcpKeepalive: {}
+  timeout:
+    http:
+      requestReceivedTimeout: 0s
   tls:
     minVersion: "1.2"
     alpnProtocols:
