@@ -38,7 +38,7 @@ spec:
               SEARCH_MODE: universal
               
               # Download destinations
-              INGEST_DIR: /media/book/import
+              INGEST_DIR: /media/books/import
               DESTINATION_AUDIOBOOK: /media/books/audiobooks
               
               # Metadata provider configuration
