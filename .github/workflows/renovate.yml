@@ -76,7 +76,7 @@ jobs:
 
       - name: Renovate Cache
         id: renovate-cache
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         if: github.event.inputs.cache != 'disabled'
         continue-on-error: true
         with:
@@ -94,7 +94,7 @@ jobs:
           sudo chown -R 12021:$(id -g) /tmp/renovate
 
       - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6
         with:
           python-version: "3.x"
 
