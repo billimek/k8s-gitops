@@ -14,7 +14,7 @@ spec:
   values:
     controllers:
       readarr:
-        replicas: 0
+        # replicas: 0
         initContainers:
           chown-run:
             image:
