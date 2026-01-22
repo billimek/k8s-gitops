@@ -30,26 +30,24 @@ spec:
       
       - app: frigate
         runAsUser: "1000"
-        capacity: 10Gi
       
       - app: home-assistant
         runAsUser: "1000"
-        capacity: 60Gi
+        capacity: 10Gi
       
       - app: jellyseerr
       
       - app: node-red
         pvcSuffix: "data"
         runAsUser: "1000"
-        capacity: 5Gi
+        capacity: 1Gi
       
       - app: plex
         runAsUser: "1000"
-        capacity: 55Gi
+        capacity: 35Gi
         schedule: "30 7 * * *"
       
       - app: prowlarr
-        capacity: 5Gi
       
       - app: qbittorrent
       
@@ -59,7 +57,7 @@ spec:
         capacity: 3Gi
       
       - app: readarr
-        capacity: 6Gi
+        capacity: 4Gi
       
       - app: recyclarr
         capacity: 5Gi
@@ -76,26 +74,26 @@ spec:
       - app: unifi
         pvcSuffix: "data"
         runAsUser: "999"
-        capacity: 20Gi
+        capacity: 2Gi
       
       - app: zwave2mqtt
       
       - app: minecraft-creative
         pvcSuffix: "datadir"
         runAsUser: "1000"
-        capacity: 15Gi
+        capacity: 10Gi
       
       - app: minecraft-lobby
         pvcSuffix: "datadir"
         runAsUser: "1000"
-        capacity: 5Gi
+        capacity: 3Gi
       
       - app: minecraft-survival
         pvcSuffix: "datadir"
         runAsUser: "1000"
-        capacity: 20Gi
+        capacity: 8Gi
       
       - app: minecraft-survival2
         pvcSuffix: "datadir"
         runAsUser: "1000"
-        capacity: 30Gi
+        capacity: 20Gi
