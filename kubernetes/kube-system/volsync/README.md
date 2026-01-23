@@ -87,6 +87,79 @@ task volsync:restore APP=<app> PREVIOUS=0 RESTORE_AS_OF="2026-01-14T12:00:00Z"
    - Matches: Jobs starting with `volsync-src-`
    - Prevents: Thundering herd (all apps backing up simultaneously)
 
+## Resizing a PVC
+
+Kubernetes only supports PVC **expansion**, not shrinking. To resize a PVC (especially to shrink it), use the backup/delete/restore workflow:
+
+### Shrinking a PVC
+
+1. **Suspend the app and scale down**:
+
+   ```bash
+   flux suspend helmrelease <app> -n default
+   kubectl scale deployment/<app> -n default --replicas 0
+   ```
+
+   > **Note**: If the app has a KEDA ScaledObject, pause it first:
+   > ```bash
+   > kubectl annotate scaledobject <app> -n default autoscaling.keda.sh/paused=true --overwrite
+   > ```
+
+2. **Trigger a fresh backup** (with app stopped for consistency):
+
+   ```bash
+   task volsync:snapshot APP=<app> WAIT=true
+   ```
+
+3. **Update capacity in `resourceset-inputprovider.yaml`**:
+
+   ```yaml
+   - app: <app>
+     capacity: <new-size>  # e.g., 5Gi
+   ```
+
+4. **Delete the PVC and ReplicationDestination**:
+
+   ```bash
+   kubectl delete pvc <app>-config -n default
+   kubectl delete replicationdestination <app>-bootstrap -n default --ignore-not-found
+   ```
+
+5. **Reconcile the ResourceSet** (recreates PVC at new size with restore):
+
+   ```bash
+   kubectl annotate resourceset volsync-pvcs -n kube-system \
+     reconcile.fluxcd.io/requestedAt="$(date +%s)" --overwrite
+   ```
+
+   Or, commit and push the changes to trigger reconciliation.
+
+   Wait for PVC to be bound (restore completes):
+
+   ```bash
+   kubectl wait pvc/<app>-config -n default --for=jsonpath='{.status.phase}'=Bound --timeout=10m
+   ```
+
+6. **Resume the app**:
+
+   ```bash
+   flux resume helmrelease <app> -n default
+   flux reconcile helmrelease <app> -n default --force
+   ```
+
+   > **Note**: If you paused a KEDA ScaledObject, resume it:
+   > ```bash
+   > kubectl annotate scaledobject <app> -n default autoscaling.keda.sh/paused- --overwrite
+   > ```
+
+7. **Trigger first backup at new size**:
+
+   ```bash
+   task volsync:snapshot APP=<app> WAIT=true
+   ```
+
+8. **Commit and push** the `resourceset-inputprovider.yaml` changes.
+
 ## Monitoring
 
 ### PrometheusRule Alerts
