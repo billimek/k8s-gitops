@@ -45,6 +45,7 @@ spec:
       - app: plex
         runAsUser: "1000"
         capacity: 35Gi
+        cacheCapacity: 20Gi
         schedule: "30 7 * * *"
       
       - app: prowlarr
@@ -97,3 +98,4 @@ spec:
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 20Gi
+        cacheCapacity: 12Gi

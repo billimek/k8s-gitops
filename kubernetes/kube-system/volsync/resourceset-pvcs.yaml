@@ -54,6 +54,11 @@ spec:
         volumeSnapshotClassName: csi-ceph-blockpool
         accessModes: [ReadWriteOnce]
         capacity: << get $app "capacity" | default inputs.defaults.capacity >>
+        <<- if get $app "cacheCapacity" >>
+        cacheCapacity: << get $app "cacheCapacity" >>
+        cacheStorageClassName: ceph-block
+        cacheAccessModes: [ReadWriteOnce]
+        <<- end >>
         moverSecurityContext:
           runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
           runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
