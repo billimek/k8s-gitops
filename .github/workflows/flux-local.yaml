@@ -17,7 +17,7 @@ permissions:
 jobs:
   filter-changes:
     name: Filter changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       changed-files: ${{ steps.changed-files.outputs.changed_files }}
     steps:
@@ -129,7 +129,7 @@ jobs:
       - diff
     if: ${{ !cancelled() }}
     name: Flux Local successful
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Any jobs failed?
         if: ${{ contains(needs.*.result, 'failure') }}
