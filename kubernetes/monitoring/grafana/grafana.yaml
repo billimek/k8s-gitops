@@ -165,7 +165,7 @@ spec:
         smokeping:
           # renovate: dashboardName="Smokeping"
           gnetId: 11335
-          revision: 12
+          revision: 1
           datasource: Prometheus
         unifi-insights:
           # renovate: dashboardName="UniFi-Poller: Client Insights - Prometheus"
