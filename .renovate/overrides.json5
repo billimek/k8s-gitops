@@ -13,5 +13,11 @@
       matchPackageNames: ["/factory\\.talos\\.dev/"],
       overridePackageName: "ghcr.io/siderolabs/installer",
     },
+    {
+      description: "pennydreadful/bookshelf uses prefixed tags with 4-part versions",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/pennydreadful/bookshelf"],
+      versioning: "loose",
+    },
   ],
 }
