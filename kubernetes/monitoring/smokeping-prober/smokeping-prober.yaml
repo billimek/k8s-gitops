@@ -80,7 +80,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: smokeping-prober-config
+        name: smokeping-prober
         globalMounts:
           - path: /config
             readOnly: true
