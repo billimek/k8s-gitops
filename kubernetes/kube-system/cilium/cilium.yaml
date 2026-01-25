@@ -34,10 +34,12 @@ spec:
       datapathMode: netkit
       masquerade: true
       preallocateMaps: true
+      tproxy: true
       # Reduce memory pressure and improve packet processing
       monitorAggregation: maximum
       monitorInterval: 5s
       monitorFlags: all
+    bpfClockProbe: true
     bgpControlPlane:
       enabled: true
     cgroup:
@@ -53,44 +55,15 @@ spec:
       enabled: true
       annotations:
         grafana_folder: networking
+    enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
     envoy:
-      enabled: true
-      prometheus:
-        enabled: true
-        serviceMonitor:
-          enabled: true
+      enabled: false
     gatewayAPI:
       enabled: false
     hubble:
-      enabled: true
-      metrics:
-        enabled:
-          - dns:query
-          - drop
-          - tcp
-          - flow
-          - port-distribution
-          - icmp
-          - http
-        serviceMonitor:
-          enabled: true
-        dashboards:
-          enabled: true
-          annotations:
-            grafana_folder: networking
-      relay:
-        enabled: true
-        rollOutPods: true
-        prometheus:
-          serviceMonitor:
-            enabled: true
-      ui:
-        enabled: true
-        rollOutPods: true
-        ingress:
-          enabled: false
+      enabled: false
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.244.0.0/16
@@ -101,9 +74,11 @@ spec:
     l2announcements:
       enabled: false
     loadBalancer:
+      acceleration: best-effort
       algorithm: maglev
       mode: dsr
-    localRedirectPolicy: true
+    localRedirectPolicies:
+      enabled: true
     operator:
       dashboards:
         enabled: true
@@ -115,6 +90,8 @@ spec:
           enabled: true
       replicas: 2
       rollOutPods: true
+    pmtuDiscovery:
+      enabled: true
     prometheus:
       enabled: true
       serviceMonitor:
@@ -142,6 +119,8 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+          - PERFMON
+          - BPF
     socketLB:
       hostNamespaceOnly: true # needed for tailscale (https://tailscale.com/kb/1236/kubernetes-operator#cilium-in-kube-proxy-replacement-mode)
     # Resource limits to prevent CPU starvation during packet bursts
