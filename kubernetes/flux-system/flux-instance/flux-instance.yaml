@@ -77,6 +77,23 @@ spec:
             target:
               kind: Deployment
               name: (kustomize-controller|helm-controller|source-controller)
+          # Reduce notification-controller memory limit
+          - patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: notification-controller
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: manager
+                        resources:
+                          limits:
+                            memory: 128Mi
+            target:
+              kind: Deployment
+              name: notification-controller
           # Enable in-memory kustomize builds
           - patch: |
               - op: add
