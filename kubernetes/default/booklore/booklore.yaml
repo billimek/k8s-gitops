@@ -190,10 +190,6 @@ spec:
             namespace: kube-system
         hostnames:
           - booklore.eviljungle.com
-        rules:
-          - backendRefs:
-              - name: app
-                port: http
     
     persistence:
       config:
