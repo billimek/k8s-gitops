@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: smokeping-prober-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: smokeping-prober.rules
+      rules:
+        - alert: SmokepingProberDown
+          annotations:
+            description: Smokeping Prober has disappeared from Prometheus target discovery.
+            summary: Smokeping Prober is down.
+          expr: |
+            absent(up{job=~".*smokeping-prober.*"} == 1)
+          for: 15m
+          labels:
+            severity: critical
+        
+        - alert: SmokepingHighLatency
+          annotations:
+            description: 'Network latency to {{ $labels.host }} is averaging {{ printf "%.2f" $value | humanize }}ms over the last 5 minutes.'
+            summary: High network latency detected to {{ $labels.host }}.
+          expr: |
+            (
+              rate(smokeping_response_duration_seconds_sum{job=~".*smokeping-prober.*"}[5m])
+              /
+              rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*"}[5m])
+            ) * 1000 > 50
+          for: 5m
+          labels:
+            severity: warning
+        
+        - alert: SmokepingPacketLoss
+          annotations:
+            description: 'Packet loss to {{ $labels.host }} is {{ printf "%.2f" $value | humanizePercentage }} over the last 5 minutes.'
+            summary: Packet loss detected to {{ $labels.host }}.
+          expr: |
+            (
+              (
+                rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+                -
+                rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*"}[5m])
+              )
+              /
+              rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+            ) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+        
+        - alert: SmokepingTargetDown
+          annotations:
+            description: 'Target {{ $labels.host }} is not responding to pings. Packet loss is 100% over the last 5 minutes.'
+            summary: Target {{ $labels.host }} is completely unreachable.
+          expr: |
+            (
+              (
+                rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+                -
+                rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*"}[5m])
+              )
+              /
+              rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+            ) >= 1
+          for: 5m
+          labels:
+            severity: critical

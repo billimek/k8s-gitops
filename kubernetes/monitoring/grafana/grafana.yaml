@@ -162,6 +162,11 @@ spec:
           gnetId: 22651
           revision: 1
           datasource: Prometheus
+        smokeping:
+          # renovate: dashboardName="Smokeping"
+          gnetId: 11335
+          revision: 12
+          datasource: Prometheus
         unifi-insights:
           # renovate: dashboardName="UniFi-Poller: Client Insights - Prometheus"
           gnetId: 11315
