@@ -22,9 +22,13 @@ spec:
         - alert: FluxInstanceNotReady
           expr: |
             flux_instance_info{exported_namespace="flux-system", name="flux", ready!="True"}
-          for: 5m
+          for: 30m
           annotations:
             summary: >-
-              Flux instance {{ $labels.name }} is not ready
+              Flux instance {{ $labels.name }} is not ready for 30+ minutes
+            description: >-
+              Flux instance has been reporting ready=False for over 30 minutes.
+              This may indicate sustained ghcr.io connectivity issues or a real failure.
+              Reason: {{ $labels.reason }}
           labels:
-            severity: critical
+            severity: warning
