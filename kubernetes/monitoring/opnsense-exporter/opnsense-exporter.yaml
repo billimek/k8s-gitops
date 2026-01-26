@@ -26,9 +26,9 @@ spec:
               - --log.format=json
               - --opnsense.protocol=https
               - --opnsense.address=10.0.7.1
-              - --opnsense.api-key=$(OPNSENSE_API_KEY)
-              - --opnsense.api-secret=$(OPNSENSE_API_SECRET)
-              - --opnsense.insecure=true
+              - --opnsense.api-key=$(OPNSENSE_PROM_API_KEY)
+              - --opnsense.api-secret=$(OPNSENSE_PROM_API_SECRET)
+              - --opnsense.insecure
               - --exporter.instance-label=opnsense-primary
               - --web.listen-address=:8080
             env:
