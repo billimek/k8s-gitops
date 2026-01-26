@@ -26,13 +26,13 @@ spec:
             (
               rate(unbound_cache_hits_total[5m]) / 
               (rate(unbound_cache_hits_total[5m]) + rate(unbound_cache_misses_total[5m]))
-            ) < 0.50
-          for: 15m
+            ) < 0.40
+          for: 30m
           labels:
             severity: warning
           annotations:
             summary: "Unbound cache hit rate is low ({{ $value | humanizePercentage }})"
-            description: "Cache hit rate has been below 50% for 15 minutes. Consider increasing cache sizes."
+            description: "Cache hit rate has been below 40% for 30 minutes. This may indicate high query diversity or potential DNS issues."
         
         # High query failure rate
         - alert: UnboundHighFailureRate
