@@ -61,8 +61,8 @@ spec:
                   - 8.8.8.8              # Google Primary
                   - 8.8.4.4              # Google Secondary
                   - 9.9.9.9              # Quad9 Primary
-                  - 149.112.112.112      # Quad9 Secondary
-                interval: 15s
+                  # 149.112.112.112 is used for WAN2 gateway monitoring in OPNsense
+                interval: 1s
                 network: ip4
                 protocol: icmp
                 size: 56
@@ -73,7 +73,7 @@ spec:
                   - github.com
                   - cnn.com
                   - ghcr.io
-                interval: 15s
+                interval: 1s
                 network: ip4
                 protocol: icmp
                 size: 56
