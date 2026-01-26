@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: unbound-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: unbound
+      interval: 60s
+      rules:
+        # Unbound is down
+        - alert: UnboundDown
+          expr: unbound_up == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Unbound DNS resolver is down on {{ $labels.instance }}"
+            description: "Unbound has been down for more than 5 minutes."
+        
+        # Low cache hit rate
+        - alert: UnboundLowCacheHitRate
+          expr: |
+            (
+              rate(unbound_cache_hits_total[5m]) / 
+              (rate(unbound_cache_hits_total[5m]) + rate(unbound_cache_misses_total[5m]))
+            ) < 0.50
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Unbound cache hit rate is low ({{ $value | humanizePercentage }})"
+            description: "Cache hit rate has been below 50% for 15 minutes. Consider increasing cache sizes."
+        
+        # High query failure rate
+        - alert: UnboundHighFailureRate
+          expr: |
+            (
+              rate(unbound_answer_rcodes{rcode="SERVFAIL"}[5m]) /
+              rate(unbound_queries_total[5m])
+            ) > 0.05
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Unbound DNS failure rate is high ({{ $value | humanizePercentage }})"
+            description: "More than 5% of queries are returning SERVFAIL. Upstream DNS may be having issues."
+        
+        # High recursion time
+        - alert: UnboundHighRecursionTime
+          expr: unbound_recursion_time_seconds_avg > 1.0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Unbound average recursion time is high ({{ $value }}s)"
+            description: "DNS recursion is taking longer than 1 second on average. Check upstream DNS performance."
+        
+        # OPNsense exporter down
+        - alert: OPNsenseExporterDown
+          expr: up{job="opnsense-exporter"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "OPNsense exporter is down"
+            description: "Cannot collect OPNsense metrics."
+        
+        # Gateway packet loss
+        - alert: OPNsenseGatewayPacketLoss
+          expr: opnsense_gateways_loss_percentage > 5
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Gateway {{ $labels.name }} has high packet loss ({{ $value }}%)"
+            description: "Packet loss to {{ $labels.address }} has been above 5% for 10 minutes."
+        
+        # Gateway high RTT
+        - alert: OPNsenseGatewayHighRTT
+          expr: opnsense_gateways_rtt_milliseconds > 100
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Gateway {{ $labels.name }} has high RTT ({{ $value }}ms)"
+            description: "Round-trip time to {{ $labels.address }} has been above 100ms for 10 minutes."

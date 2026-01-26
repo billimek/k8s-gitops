@@ -40,3 +40,19 @@ ISP speed test results collector
 VictoriaMetrics [k8s stack helm chart](https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack) to take the place of kube-prometheus-stack helm chart & thanos for the same features/functionality but more stable and less resource intensive.
 
 * [victoria-metrics/victoria-metrics.yaml](victoria-metrics/victoria-metrics.yaml)
+
+# opnsense-exporter
+
+[opnsense-exporter](https://github.com/AthennaMind/opnsense-exporter) provides comprehensive OPNsense firewall monitoring via the OPNsense API. Collects metrics for system status, firewall statistics, gateway monitoring, interfaces, and services.
+
+* [opnsense-exporter/opnsense-exporter.yaml](opnsense-exporter/opnsense-exporter.yaml)
+* Grafana Dashboard: [21113](https://grafana.com/grafana/dashboards/21113-opnsense/)
+
+# unbound-exporter
+
+[unbound-exporter](https://github.com/letsencrypt/unbound_exporter) provides detailed DNS metrics from Unbound resolver. Includes 60+ metrics covering queries, cache performance, DNSSEC validation, and recursion times.
+
+**Note:** Requires custom configuration on OPNsense. See [docs/opnsense-custom-configs.md](../docs/opnsense-custom-configs.md) for setup instructions.
+
+* [unbound-exporter/unbound-exporter.yaml](unbound-exporter/unbound-exporter.yaml)
+* Grafana Dashboard: [21006](https://grafana.com/grafana/dashboards/21006-unbound)
