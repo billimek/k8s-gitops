@@ -25,7 +25,7 @@ spec:
               - --log.level=info
               - --log.format=json
               - --opnsense.protocol=https
-              - --opnsense.address=10.0.7.1
+              - --opnsense.address=10.0.7.1:1443
               - --opnsense.api-key=$(OPNSENSE_PROM_API_KEY)
               - --opnsense.api-secret=$(OPNSENSE_PROM_API_SECRET)
               - --opnsense.insecure
