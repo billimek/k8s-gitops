@@ -158,6 +158,7 @@ spec:
           revision: 1
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
+            - {name: DS_PROMETHEUS-K0, value: Prometheus}
         unbound:
           # renovate: dashboardName="Unbound"
           gnetId: 21006
