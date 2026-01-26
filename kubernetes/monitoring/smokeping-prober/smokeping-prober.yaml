@@ -61,7 +61,7 @@ spec:
                   - 8.8.8.8              # Google Primary
                   - 8.8.4.4              # Google Secondary
                   - 9.9.9.9              # Quad9 Primary
-                  - 149.112.112.112      # Quad9 Secondary
+                  # - 149.112.112.112      # Quad9 Secondary # this seems to not respond to ICMP
                 interval: 1s
                 network: ip4
                 protocol: icmp
@@ -72,6 +72,7 @@ spec:
                   - google.com
                   - github.com
                   - cnn.com
+                  - ghcr.io
                 interval: 1s
                 network: ip4
                 protocol: icmp
