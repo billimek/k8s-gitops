@@ -152,6 +152,16 @@ spec:
         opnsense:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
           datasource: Prometheus
+        opnsense-exporter:
+          # renovate: dashboardName="OPNsense"
+          gnetId: 21113
+          revision: 1
+          datasource: Prometheus
+        unbound:
+          # renovate: dashboardName="Unbound"
+          gnetId: 21006
+          revision: 2
+          datasource: Prometheus
         blackbox-exporter:
           # renovate: dashboardName="Blackbox Exporter"
           gnetId: 7587
