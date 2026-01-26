@@ -39,7 +39,7 @@ spec:
           annotations:
             summary: Kopia maintenance has not run in over 8 days.
           expr: |
-            (time() - kube_job_status_completion_time{job_name=~"kopia-maint-.*"}) > 691200
+            (time() - max(kube_job_status_completion_time{job_name=~"kopia-maint-.*"})) > 691200
           for: 1h
           labels:
             severity: warning
