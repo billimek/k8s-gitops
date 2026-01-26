@@ -30,6 +30,8 @@ spec:
               - --opnsense.api-secret=$(OPNSENSE_API_SECRET)
               - --opnsense.insecure
               - --exporter.instance-label=opnsense-primary
+              - --exporter.disable-wireguard
+              - --exporter.disable-openvpn
               - --web.listen-address=:8080
             env:
               TZ: America/New_York
