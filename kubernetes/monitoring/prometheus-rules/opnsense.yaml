@@ -3,11 +3,11 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: unbound-rules
+  name: opnsense-rules
   namespace: monitoring
 spec:
   groups:
-    - name: unbound
+    - name: opnsense
       interval: 60s
       rules:
         # Unbound is down
@@ -70,7 +70,7 @@ spec:
         
         # Gateway packet loss
         - alert: OPNsenseGatewayPacketLoss
-          expr: opnsense_gateways_loss_percentage > 5
+          expr: opnsense_gateways_loss_percentage{name!~"WAN2_DHCP6?"} > 5
           for: 10m
           labels:
             severity: warning
@@ -80,7 +80,7 @@ spec:
         
         # Gateway high RTT
         - alert: OPNsenseGatewayHighRTT
-          expr: opnsense_gateways_rtt_milliseconds > 100
+          expr: opnsense_gateways_rtt_milliseconds{name!~"WAN2_DHCP6?"} > 100
           for: 10m
           labels:
             severity: warning
