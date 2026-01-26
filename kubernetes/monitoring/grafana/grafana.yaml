@@ -156,12 +156,14 @@ spec:
           # renovate: dashboardName="OPNsense"
           gnetId: 21113
           revision: 1
-          datasource: Prometheus
+          datasource:
+            - {name: DS_PROMETHEUS, value: Prometheus}
         unbound:
           # renovate: dashboardName="Unbound"
           gnetId: 21006
           revision: 2
-          datasource: Prometheus
+          datasource:
+            - {name: DS_PROMETHEUS, value: Prometheus}
         blackbox-exporter:
           # renovate: dashboardName="Blackbox Exporter"
           gnetId: 7587
