@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/pennydreadful/bookshelf
-              tag: softcover-v0.4.20.107@sha256:5e04539c661ba1ebb9a41f91c7778d28ae3cafe129e5c34aca08d3e11045688a
+              tag: softcover-v0.4.20.119@sha256:b3f1f4071a578ac19e02f6f0e1a41212d94e55db07f6ee20cb01e06484e60532
             env:
               READARR__APP__INSTANCENAME: readarr
               READARR__APPLICATION_URL: 'https://readarr.eviljungle.com'
