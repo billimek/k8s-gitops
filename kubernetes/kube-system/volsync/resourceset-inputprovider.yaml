@@ -67,8 +67,7 @@ spec:
       
       - app: shelfmark
       
-      - app: booklore
-        capacity: 5Gi
+
       
       - app: sonarr
         capacity: 2Gi
