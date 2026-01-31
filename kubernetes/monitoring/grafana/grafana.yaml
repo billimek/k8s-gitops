@@ -177,7 +177,7 @@ spec:
           datasource: Prometheus
         smokeping:
           # renovate: dashboardName="Smokeping"
-          gnetId: 22471
+          gnetId: 17335
           revision: 1
           datasource:
             - {name: DATASOURCE, value: Prometheus}
