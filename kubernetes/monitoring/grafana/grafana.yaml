@@ -179,7 +179,8 @@ spec:
           # renovate: dashboardName="Smokeping"
           gnetId: 22471
           revision: 1
-          datasource: Prometheus
+          datasource:
+            - {name: DATASOURCE, value: Prometheus}
         unifi-insights:
           # renovate: dashboardName="UniFi-Poller: Client Insights - Prometheus"
           gnetId: 11315
