@@ -180,7 +180,7 @@ spec:
           gnetId: 17335
           revision: 1
           datasource:
-            - {name: DATASOURCE, value: Prometheus}
+            - {name: DS_PROMETHEUS, value: Prometheus}
         unifi-insights:
           # renovate: dashboardName="UniFi-Poller: Client Insights - Prometheus"
           gnetId: 11315
