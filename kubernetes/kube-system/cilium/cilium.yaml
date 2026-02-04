@@ -34,7 +34,6 @@ spec:
       datapathMode: netkit
       masquerade: true
       preallocateMaps: true
-      tproxy: true
       # Reduce memory pressure and improve packet processing
       monitorAggregation: maximum
       monitorInterval: 5s
