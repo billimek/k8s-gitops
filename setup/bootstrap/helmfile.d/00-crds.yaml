@@ -41,7 +41,7 @@ releases:
   - name: cloudnative-pg
     namespace: default
     chart: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
-    version: 0.27.0
+    version: 0.27.1
 
   - name: emqx-operator
     namespace: default
