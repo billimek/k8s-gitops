@@ -68,15 +68,7 @@ spec:
             summary: "OPNsense exporter is down"
             description: "Cannot collect OPNsense metrics."
         
-        # Gateway packet loss
-        - alert: OPNsenseGatewayPacketLoss
-          expr: opnsense_gateways_loss_percentage{name!~"WAN2_DHCP6?"} > 5
-          for: 10m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Gateway {{ $labels.name }} has high packet loss ({{ $value }}%)"
-            description: "Packet loss to {{ $labels.address }} has been above 5% for 10 minutes."
+
         
         # Gateway high RTT
         - alert: OPNsenseGatewayHighRTT
