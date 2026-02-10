@@ -37,7 +37,7 @@ releases:
   - name: flux-operator
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.40.0
+    version: 0.41.0
     values:
       - ../templates/flux-operator-values.yaml.gotmpl
     needs:
@@ -46,7 +46,7 @@ releases:
   - name: flux-instance
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.40.0
+    version: 0.41.0
     wait: false
     values:
       - ../templates/flux-instance-values.yaml.gotmpl
