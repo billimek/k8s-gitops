@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/calibrain/shelfmark-lite
-              tag: dev@sha256:52154aa24e8fb263c1b01fb6f48ae11084dcff4a34a95e7f9bc40f705523271f
+              tag: dev@sha256:02105a08bf49ce2af3cf23470c4fcfab44eae8ad17bf6463b7385b76b2b83826
             command:
               - gunicorn
             args:
