@@ -49,5 +49,5 @@ spec:
           - type: prometheus
             metadata:
               serverAddress: http://vmsingle-stack.monitoring.svc.cluster.local:8428
-              query: probe_success{instance="nas.home:2049"}
+              query: max_over_time(probe_success{instance=~"nas.home:2049"}[1m])
               threshold: "1"
