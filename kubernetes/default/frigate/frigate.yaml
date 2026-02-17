@@ -92,6 +92,7 @@ spec:
         controller: main
         ports:
           http:
+            appProtocol: kubernetes.io/ws
             port: &port 5000
             primary: true
           go2rtc:
