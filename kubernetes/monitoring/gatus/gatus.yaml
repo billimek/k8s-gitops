@@ -133,6 +133,20 @@ spec:
                 conditions:
                   - "[CONNECTED] == true"
 
+              # Infrastructure
+              - name: Opnsense
+                group: infrastructure
+                url: "icmp://10.0.7.1"
+                interval: 1m
+                conditions:
+                  - "[CONNECTED] == true"
+              - name: nas
+                group: infrastructure
+                url: "icmp://nas.home"
+                interval: 1m
+                conditions:
+                  - "[CONNECTED] == true"
+
             metrics: true
 
             storage:
@@ -143,6 +157,13 @@ spec:
             ui:
               title: Status | eviljungle.com
               header: Status
+              logo: https://avatars.githubusercontent.com/u/6393612
+              link: https://github.com/billimek
+              buttons:
+                - name: Github
+                  link: https://github.com/billimek
+                - name: Homelab
+                  link: https://github.com/billimek/k8s-gitops
 
             web:
               port: ${GATUS_WEB_PORT}
