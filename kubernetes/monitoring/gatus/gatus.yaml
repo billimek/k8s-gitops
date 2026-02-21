@@ -154,7 +154,7 @@ spec:
           - path: /config
       config-file:
         type: configMap
-        name: gatus-config
+        name: gatus
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
