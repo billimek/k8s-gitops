@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
+# Route-level BackendTrafficPolicy for continuwuity.
+# Overrides the global policy to omit responseOverride rules which convert
+# HTTP error responses (403/404/500/etc) into 302 redirects. Matrix API clients
+# require raw status codes with CORS headers to function correctly.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: continuwuity
+  namespace: default
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: continuwuity-app
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: continuwuity-internal
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: continuwuity-well-known
+  compression:
+    - type: Zstd
+    - type: Brotli
+    - type: Gzip
+  retry:
+    numRetries: 2
+    retryOn:
+      triggers:
+        - reset
+  tcpKeepalive: {}
+  timeout:
+    http:
+      requestTimeout: 0s
+  # No responseOverride — Matrix API responses must pass through unmodified
