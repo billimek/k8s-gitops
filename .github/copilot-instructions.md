@@ -134,11 +134,11 @@ persistence:
 
 ## Troubleshooting
 
-**Stuck HelmRelease**: Scale deployment to 0 replicas to allow updates:
+**Stuck HelmRelease**: When a HelmRelease exhausts its upgrade retries (e.g. due to image pull failures or timeout), scale the deployment to 0 to unblock it, then force reconciliation:
 ```bash
 kubectl scale deployment app-name --replicas=0 -n namespace
-# Wait for reconciliation, then scale back up
-kubectl scale deployment app-name --replicas=1 -n namespace
+flux reconcile helmrelease app-name -n namespace --with-source
+# Flux will scale it back up automatically on success
 ```
 
 ## Schema Standards
