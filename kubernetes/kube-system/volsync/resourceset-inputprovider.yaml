@@ -27,7 +27,10 @@ spec:
       pvcSuffix: "config"
     apps:
       - app: audiobookshelf
-      
+
+      - app: continuwuity
+        capacity: 5Gi
+
       - app: frigate
         runAsUser: "1000"
       

@@ -1,0 +1,124 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app continuwuity
+  namespace: default
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+
+    controllers:
+      continuwuity:
+        containers:
+          app:
+            image:
+              repository: forgejo.ellis.link/continuwuation/continuwuity
+              tag: v0.5.5-maxperf@sha256:467801ef68a22772147ac6088976d5284ec9f3a2182f004a8432ceb3af7a2319
+            env:
+              TZ: "America/New_York"
+              CONDUWUIT_SERVER_NAME: eviljungle.com
+              CONDUWUIT_ADDRESS:
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: status.podIP
+              CONDUWUIT_PORT: &port 8080
+              CONDUWUIT_DATABASE_PATH: /data
+              CONDUWUIT_NEW_USER_DISPLAYNAME_SUFFIX: ""
+              CONDUWUIT_WELL_KNOWN__CLIENT: "https://matrix.eviljungle.com"
+              CONDUWUIT_WELL_KNOWN__SERVER: "matrix.eviljungle.com:443"
+              CONDUWUIT_ALLOW_ENCRYPTION: true
+              CONDUWUIT_ALLOW_FEDERATION: true
+              CONDUWUIT_ALLOW_REGISTRATION: true
+              CONDUWUIT_SUSPEND_ON_REGISTER: true
+              CONDUWUIT_FORGET_FORCED_UPON_LEAVE: true
+              CONDUWUIT_REQUIRE_AUTH_FOR_PROFILE_REQUESTS: true
+              CONDUWUIT_ALLOW_PUBLIC_ROOM_DIRECTORY_WITHOUT_AUTH: false
+              CONDUWUIT_ALLOW_PUBLIC_ROOM_DIRECTORY_OVER_FEDERATION: false
+              CONDUWUIT_LOCKDOWN_PUBLIC_ROOM_DIRECTORY: true
+              CONDUWUIT_ALLOW_LEGACY_MEDIA: false
+              CONDUWUIT_QUERY_OVER_TCP_ONLY: true
+              CONDUWUIT_IP_LOOKUP_STRATEGY: "1"
+            envFrom:
+              - secretRef:
+                  name: continuwuity-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+
+    service:
+      app:
+        controller: continuwuity
+        ports:
+          http:
+            port: *port
+
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: public
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - &host matrix.eviljungle.com
+      internal:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - *host
+      well-known:
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: public
+            namespace: kube-system
+            sectionName: https-bare
+        hostnames:
+          - eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /.well-known/matrix/
+            backendRefs:
+              - name: continuwuity
+                port: *port
+
+    persistence:
+      config:
+        existingClaim: continuwuity-config
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
