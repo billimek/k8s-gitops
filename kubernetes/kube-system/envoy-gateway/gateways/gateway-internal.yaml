@@ -10,6 +10,8 @@ metadata:
   namespace: kube-system
   annotations:
     external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+    gatus.home-operations.com/endpoint: |
+      group: internal
 spec:
   gatewayClassName: eg-standard
   infrastructure:

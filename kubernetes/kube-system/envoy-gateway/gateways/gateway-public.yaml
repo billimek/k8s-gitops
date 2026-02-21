@@ -9,6 +9,8 @@ metadata:
   namespace: kube-system
   annotations:
     external-dns.alpha.kubernetes.io/target: "eviljungle.com"
+    gatus.home-operations.com/endpoint: |
+      group: public
 spec:
   gatewayClassName: eg-standard
   infrastructure:
