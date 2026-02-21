@@ -100,7 +100,8 @@ spec:
       well-known:
         annotations:
           external-dns.alpha.kubernetes.io/external: "true"
-          gatus.home-operations.com/enabled: "false"
+          gatus.home-operations.com/endpoint: |-
+            url: https://eviljungle.com/.well-known/matrix/client
         parentRefs:
           - name: public
             namespace: kube-system
