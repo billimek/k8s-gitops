@@ -35,6 +35,7 @@ spec:
         runAsUser: "1000"
 
       - app: gatus
+        namespace: "monitoring"
         runAsUser: "1000"
 
       - app: home-assistant

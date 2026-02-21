@@ -3,7 +3,7 @@
 # ResourceSet for VolSync backups
 # Automated backups to NFS with Kopia for improved performance and deduplication
 # Backup window: 4:00-7:00 AM with 9-minute staggered intervals
-# Generates 42 resources (21 ExternalSecrets + 21 ReplicationSources) in default namespace
+# Generates 42 resources (21 ExternalSecrets + 21 ReplicationSources) across namespaces
 # App definitions are shared via the volsync-apps ResourceSetInputProvider
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
@@ -39,7 +39,7 @@ spec:
     kind: ExternalSecret
     metadata:
       name: << $app.app >>-kopia
-      namespace: default
+      namespace: << get $app "namespace" | default "default" >>
     spec:
       secretStoreRef:
         kind: ClusterSecretStore
@@ -62,7 +62,7 @@ spec:
     kind: ReplicationSource
     metadata:
       name: << $app.app >>
-      namespace: default
+      namespace: << get $app "namespace" | default "default" >>
     spec:
       sourcePVC: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
       trigger:

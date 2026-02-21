@@ -41,7 +41,7 @@ spec:
     kind: ReplicationDestination
     metadata:
       name: << $app.app >>-bootstrap
-      namespace: default
+      namespace: << get $app "namespace" | default "default" >>
       labels:
         kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
     spec:
@@ -74,7 +74,7 @@ spec:
     kind: PersistentVolumeClaim
     metadata:
       name: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
-      namespace: default
+      namespace: << get $app "namespace" | default "default" >>
     spec:
       accessModes:
         - ReadWriteOnce
