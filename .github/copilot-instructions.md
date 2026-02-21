@@ -116,6 +116,22 @@ apps:
     schedule: "0 4 * * *"
 ```
 
+## app-template ConfigMap Naming
+
+App-template v4 names ConfigMaps as `<release-name>` (not `<release-name>-<key>`).
+
+Example: a release named `gatus` with `configMaps.config` produces a ConfigMap named `gatus`.
+
+**Always reference the release name, not `<release-name>-<key>`:**
+
+```yaml
+persistence:
+  config-file:
+    type: configMap
+    name: gatus        # correct: just the release name
+    # name: gatus-config  # WRONG: do not append the configMap key
+```
+
 ## Troubleshooting
 
 **Stuck HelmRelease**: Scale deployment to 0 replicas to allow updates:
