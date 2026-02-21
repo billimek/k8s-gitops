@@ -39,18 +39,18 @@ spec:
     #       replaceFullPath: /401.html
     #     statusCode: 302
     
-    # 403 Forbidden
-    - match:
-        statusCodes:
-          - type: Value
-            value: 403
-      redirect:
-        scheme: https
-        hostname: error-pages.eviljungle.com
-        path:
-          type: ReplaceFullPath
-          replaceFullPath: /403.html
-        statusCode: 302
+    # 403 Forbidden - temporarily disabled to test Matrix/continuwuity fix
+    # - match:
+    #     statusCodes:
+    #       - type: Value
+    #         value: 403
+    #   redirect:
+    #     scheme: https
+    #     hostname: error-pages.eviljungle.com
+    #     path:
+    #       type: ReplaceFullPath
+    #       replaceFullPath: /403.html
+    #     statusCode: 302
     
     # 404 Not Found
     - match:
