@@ -33,7 +33,10 @@ spec:
 
       - app: frigate
         runAsUser: "1000"
-      
+
+      - app: gatus
+        runAsUser: "1000"
+
       - app: home-assistant
         runAsUser: "1000"
         capacity: 10Gi
