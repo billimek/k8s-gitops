@@ -11,7 +11,6 @@ data:
         api_key: !env_var SONARR_API_KEY
 
         delete_old_custom_formats: true
-        replace_existing_custom_formats: true
 
         quality_definition:
           type: series
@@ -141,7 +140,7 @@ data:
               - 06d66ab109d4d2eddb2794d21526d140 # Retags
               - 9c14d194486c4014d422adc64092d794 # Dubs Only
 
-            quality_profiles:
+            assign_scores_to:
               - name: WEB 1080p
               - name: Ultra-HD
               - name: Web 720p
@@ -152,7 +151,6 @@ data:
         api_key: !env_var RADARR_API_KEY
 
         delete_old_custom_formats: true
-        replace_existing_custom_formats: true
 
         quality_definition:
           type: movie
@@ -273,6 +271,6 @@ data:
               - 0a3f082873eb454bde444150b70253cc # Extras
               - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
 
-            quality_profiles:
+            assign_scores_to:
               - name: HD-1080p
               - name: Ultra-HD

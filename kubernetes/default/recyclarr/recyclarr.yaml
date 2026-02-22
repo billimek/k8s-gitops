@@ -36,15 +36,16 @@ spec:
             env:
               TZ: America/New_York
               COMPlus_EnableDiagnostics: "0"
+              RECYCLARR_DATA_DIR: /tmp
             envFrom:
               - secretRef:
                   name: recyclarr-secret
             resources:
               requests:
                 cpu: 5m
-                memory: 36M
+                memory: 36Mi
               limits:
-                memory: 128M
+                memory: 128Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
