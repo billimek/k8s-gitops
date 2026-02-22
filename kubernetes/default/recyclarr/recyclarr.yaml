@@ -30,21 +30,22 @@ spec:
           app:
             image:
               repository: ghcr.io/recyclarr/recyclarr
-              tag: 7.5.2@sha256:2550848d43a453f2c6adf3582f2198ac719f76670691d76de0819053103ef2fb
+              tag: 8.2.0@sha256:30e13877e8ef2242b053b986e69e64801797b39ae4f74b744d8f4dc3f98757ab
             args:
               - sync
             env:
               TZ: America/New_York
               COMPlus_EnableDiagnostics: "0"
+              RECYCLARR_DATA_DIR: /tmp
             envFrom:
               - secretRef:
                   name: recyclarr-secret
             resources:
               requests:
                 cpu: 5m
-                memory: 36M
+                memory: 36Mi
               limits:
-                memory: 128M
+                memory: 128Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
