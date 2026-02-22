@@ -164,6 +164,8 @@ spec:
                   link: https://github.com/billimek
                 - name: Homelab
                   link: https://github.com/billimek/k8s-gitops
+                - name: UptimeRobot
+                  link: https://stats.uptimerobot.com/57WrgTZZzz
 
             web:
               port: ${GATUS_WEB_PORT}
