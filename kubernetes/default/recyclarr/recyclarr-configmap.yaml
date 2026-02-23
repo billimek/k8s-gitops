@@ -33,6 +33,11 @@ data:
           add:
             - trash_id: d776a1ea912a117d66d83b880ff2055d  # [HDR Formats] DV (w/o HDR fallback)
             - trash_id: f4a0410a1df109a66d6e47dcadcce014  # [Optional] Miscellaneous
+              select:
+                - 32b367365729d530ca1c124a0b180c64  # Bad Dual Groups
+                - 82d40da2bc6923f41e14394075dd4b03  # No-RlsGroup
+                - e1a997ddb54e3ecbfe06341ad323c458  # Obfuscated
+                - 06d66ab109d4d2eddb2794d21526d140  # Retags
 
     radarr:
       radarr_main:
@@ -58,5 +63,24 @@ data:
         custom_format_groups:
           add:
             - trash_id: 9337080378236ce4c0b183e35790d2a7  # [Optional] Miscellaneous
+              select:
+                - b6832f586342ef70d9c128d40c07b872  # Bad Dual Groups
+                - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5  # No-RlsGroup
+                - 7357cf5161efbf8c4d5d0c30b4815ee2  # Obfuscated
+                - 5c44f52a8714fdd79bb4d98e2673be1f  # Retags
             - trash_id: f4f1474b963b24cf983455743aa9906c  # [Optional] Movie Versions
+              select:
+                - 0f12c086e289cf966fa5948eac571f44  # Hybrid
+                - 570bc9ebecd92723d2d21500f4be314c  # Remaster
+                - eca37840c13c6ef2dd0262b141a5482f  # 4K Remaster
+                - e0c07d59beb37348e975a930d5e50319  # Criterion Collection
+                - 9d27d9d2181838f76dee150882bdc58c  # Masters of Cinema
+                - db9b4c4b53d312a3ca5f1378f6440fc9  # Vinegar Syndrome
+                - 09d9dd29a0fc958f9796e65c2a8864b4  # Open Matte
+                - eecf3a857724171f968a66cb5719e152  # IMAX
+                - 9f6cbff8cfe4ebbc1bde14c7b7bec0de  # IMAX Enhanced
+                - 957d0f44b592285f26449575e8b1167e  # Special Edition
+                - e9001909a4c88013a359d0b9920d7bea  # Theatrical Cut
             - trash_id: 47f0d69750de9e16855915fa73bb7b08  # [Optional] SDR
+              select:
+                - 25c12f78430a3a23413652cbd1d48d77  # SDR (no WEBDL)
