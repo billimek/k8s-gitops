@@ -15,7 +15,6 @@
         "ghcr.io/home-operations/tautulli",
         "ghcr.io/recyclarr/recyclarr",
         "ghcr.io/tarampampam/error-pages",
-        "/victoria-metrics/",
         "/grafana/"
       ],
     },
