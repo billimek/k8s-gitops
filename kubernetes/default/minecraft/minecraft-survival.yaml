@@ -84,20 +84,3 @@ spec:
       type: PAPER
       version: "LATEST"
       worldSaveName: "1.21-20240629-5"
-      # TODO: https://github.com/itzg/minecraft-server-charts/pull/253 may have broken this functionality. Will likely need to patch the chart. https://github.com/itzg/minecraft-server-charts/pull/259 may have been only a partial fix.
-      # extraPorts:
-      #   - name: map
-      #     containerPort: 8100
-      #     service:
-      #       enabled: true
-      #       type: ClusterIP
-      #       port: 8100
-      #     ingress:
-      #       enabled: true
-      #       ingressClassName: nginx-tailscale
-      #       hosts:
-      #         - name: mcsv-map.eviljungle.com
-      #           path: /
-      #       tls:
-      #       - hosts:
-      #         - mcsv-map.eviljungle.com
