@@ -90,6 +90,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - vm.eviljungle.com
         rules:
@@ -114,6 +115,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - vm-alert.eviljungle.com
         rules:
@@ -254,6 +256,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - vmalert.eviljungle.com
         rules:
@@ -316,6 +319,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - vmagent.eviljungle.com
         rules:

@@ -75,6 +75,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - sabnzbd.eviljungle.com
         rules:

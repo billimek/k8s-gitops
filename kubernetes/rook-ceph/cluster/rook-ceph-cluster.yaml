@@ -110,6 +110,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
 
     cephBlockPools:
       - name: ceph-blockpool

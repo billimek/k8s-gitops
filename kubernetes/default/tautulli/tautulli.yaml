@@ -70,6 +70,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - tautulli.eviljungle.com
         rules:

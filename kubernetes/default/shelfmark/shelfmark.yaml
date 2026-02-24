@@ -165,6 +165,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - shelfmark.eviljungle.com
 

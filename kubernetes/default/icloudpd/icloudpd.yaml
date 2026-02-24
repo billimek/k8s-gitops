@@ -64,6 +64,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - "icloudpd.eviljungle.com"
         rules:

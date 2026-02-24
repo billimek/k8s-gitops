@@ -77,6 +77,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - kopia.eviljungle.com
         rules:

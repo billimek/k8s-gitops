@@ -25,6 +25,7 @@ metadata:
 spec:
   parentRefs:
     - name: internal
+      sectionName: https
   hostnames:
     - proxmox.eviljungle.com
   rules:
