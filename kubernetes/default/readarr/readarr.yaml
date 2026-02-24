@@ -19,7 +19,7 @@ spec:
           chown-run:
             image:
               repository: busybox
-              tag: 1.37.0@sha256:70ce0a747f09cd7c09c2d6eaeab69d60adb0398f569296e8c0e844599388ebd6
+              tag: 1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
             command: ["sh", "-c"]
             args: ["chown -R 1001:1001 /run"]
             securityContext:
