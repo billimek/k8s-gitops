@@ -37,6 +37,11 @@ spec:
                 cpu: 150m
               limits:
                 memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
     service:
       main:
         controller: main
@@ -70,3 +75,7 @@ spec:
         existingClaim: node-red-data
         globalMounts:
           - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

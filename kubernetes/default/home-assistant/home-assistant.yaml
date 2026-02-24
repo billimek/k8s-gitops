@@ -72,6 +72,11 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
 
     service:
       main:

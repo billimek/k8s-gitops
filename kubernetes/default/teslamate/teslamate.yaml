@@ -12,6 +12,16 @@ spec:
     name: app-template
     namespace: flux-system
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+
     controllers:
       teslamate:
         initContainers:
@@ -23,6 +33,11 @@ spec:
             envFrom:
               - secretRef:
                   name: teslamate-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
 
         containers:
           main:
@@ -37,6 +52,11 @@ spec:
             envFrom: &envFrom
               - secretRef:
                   name: teslamate-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
             resources:
               requests:
                 memory: 250Mi
@@ -70,3 +90,9 @@ spec:
             backendRefs:
               - name: teslamate
                 port: 4000
+
+    persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

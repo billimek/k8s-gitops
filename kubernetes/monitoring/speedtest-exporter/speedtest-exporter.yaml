@@ -12,6 +12,16 @@ spec:
     name: app-template
     namespace: flux-system
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+
     controllers:
       main:
         containers:
@@ -19,6 +29,11 @@ spec:
             image:
               repository: ghcr.io/lpicanco/prometheus-speedtest-exporter
               tag: 0.2.2@sha256:0c12ce9315bcb4e26071caa3236a2c2dab8612301a892fdec8911a41058da8e9
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
             resources:
               requests:
                 cpu: 10m
