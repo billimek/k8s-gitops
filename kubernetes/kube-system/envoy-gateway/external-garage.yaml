@@ -23,6 +23,7 @@ metadata:
 spec:
   parentRefs:
     - name: internal
+      sectionName: https
   hostnames:
     - garage.eviljungle.com
   rules:

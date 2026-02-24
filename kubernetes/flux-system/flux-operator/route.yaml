@@ -11,6 +11,7 @@ spec:
   parentRefs:
     - name: internal
       namespace: kube-system
+      sectionName: https
   hostnames:
     - flux.eviljungle.com
   rules:

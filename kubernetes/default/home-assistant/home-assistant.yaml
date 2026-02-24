@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.2.3
+              tag: 2026.2.3@sha256:c7a7d6663cae2e629953bf15b1743f0fd9b9090270bb5af070836482a6f6ec3b
             env:
               TZ: "America/New_York"
             envFrom:
@@ -72,6 +72,11 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
 
     service:
       main:
@@ -178,6 +183,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
+            sectionName: https
         hostnames:
           - hass-vscode.eviljungle.com
         rules:

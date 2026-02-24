@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: quay.io/superq/smokeping-prober
-              tag: v0.10.0
+              tag: v0.10.0@sha256:3717411629519de66c7b4ff767f61766c71b8d0d3a80707ae4c970d4e47f6cf6
             env:
               GOMAXPROCS: "1"
             args:

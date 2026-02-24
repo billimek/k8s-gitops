@@ -86,20 +86,3 @@ spec:
       viewDistance: 24
       whitelist: "billimek,Nadorrior,Sandbragger,tkws88,KhrysPBacon,MackCulley,Guydon,Shivanater"
       worldSaveName: 'world-20250218-thunderdome'
-      # TODO: https://github.com/itzg/minecraft-server-charts/pull/253 may have broken this functionality. Will likely need to patch the chart. https://github.com/itzg/minecraft-server-charts/pull/259 may have been only a partial fix.
-      # extraPorts:
-      #   - name: map
-      #     containerPort: 8100
-      #     service:
-      #       enabled: true
-      #       type: ClusterIP
-      #       port: 8100
-      #     ingress:
-      #       enabled: true
-      #       ingressClassName: nginx
-      #       hosts:
-      #         - name: minecraft-survival2-map.eviljungle.com
-      #           path: /
-      #       tls:
-      #       - hosts:
-      #         - minecraft-survival2-map.eviljungle.com
