@@ -20,41 +20,31 @@ spec:
             severity: critical
         - alert: SpeedtestSlowInternetDownload
           annotations:
-            description: Internet download speed is averaging {{ humanize $value }} Mbps.
+            description: Internet download speed is averaging {{ humanize $value }} bytes/s.
             summary: SpeedTest slow internet download.
           expr: |
-            avg_over_time(speedtest_download_bits_per_second{job=~".*speedtest-exporter.*"}[4h])
-              < 400
+            avg_over_time(speedtest_download_bandwidth_bytes{job=~".*speedtest-exporter.*"}[4h])
+              < 50000000
           for: 0m
           labels:
             severity: warning
         - alert: SpeedtestSlowInternetUpload
           annotations:
-            description: Internet upload speed is averaging {{ humanize $value }} Mbps.
+            description: Internet upload speed is averaging {{ humanize $value }} bytes/s.
             summary: SpeedTest slow internet upload.
           expr: |
-            avg_over_time(speedtest_upload_bits_per_second{job=~".*speedtest-exporter.*"}[4h])
-              < 400
+            avg_over_time(speedtest_upload_bandwidth_bytes{job=~".*speedtest-exporter.*"}[4h])
+              < 50000000
           for: 0m
           labels:
             severity: warning
         - alert: SpeedtestHighPingLatency
           annotations:
-            description: Internet ping latency is averaging {{ humanize $value }} ms.
+            description: Internet ping latency is averaging {{ humanize $value }} s.
             summary: SpeedTest high ping latency.
           expr: |
-            avg_over_time(speedtest_ping_latency_milliseconds{job=~".*speedtest-exporter.*"}[4h])
-              > 20
-          for: 0m
-          labels:
-            severity: warning
-        - alert: SpeedtestHighJitterLatency
-          annotations:
-            description: Internet jitter latency is averaging {{ humanize $value }} ms.
-            summary: SpeedTest high jitter latency.
-          expr: |
-            avg_over_time(speedtest_jitter_latency_milliseconds{job=~".*speedtest-exporter.*"}[4h])
-              > 30
+            avg_over_time(speedtest_ping_latency_seconds{job=~".*speedtest-exporter.*"}[4h])
+              > 0.020
           for: 0m
           labels:
             severity: warning
