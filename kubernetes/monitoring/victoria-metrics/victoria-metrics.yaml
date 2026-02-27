@@ -207,6 +207,13 @@ spec:
             equal: ['namespace']
           - target_matchers:
               - alertname = "InfoInhibitor"
+          # When the local gateway is down (router reboot / network outage),
+          # suppress external target alerts - they are expected side-effects, not
+          # independent incidents.
+          - source_matchers:
+              - alertname = "SmokepingGatewayDown"
+            target_matchers:
+              - alertname =~ "SmokepingTargetDown|SmokepingPacketLoss"
         
         receivers:
           - name: 'blackhole'

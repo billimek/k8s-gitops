@@ -58,13 +58,31 @@ spec:
           expr: |
             (
               (
-                rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+                rate(smokeping_requests_total{job=~".*smokeping-prober.*", host!="10.0.7.1"}[5m])
                 -
-                rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*"}[5m])
+                rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*", host!="10.0.7.1"}[5m])
               )
               /
-              rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+              rate(smokeping_requests_total{job=~".*smokeping-prober.*", host!="10.0.7.1"}[5m])
             ) >= 1
           for: 5m
+          labels:
+            severity: critical
+        
+        - alert: SmokepingGatewayDown
+          annotations:
+            description: 'Local gateway ({{ $labels.host }}) is not responding to pings. Packet loss is 100% over the last 2 minutes. This may indicate a router reboot or local network outage.'
+            summary: Local gateway {{ $labels.host }} is unreachable.
+          expr: |
+            (
+              (
+                rate(smokeping_requests_total{job=~".*smokeping-prober.*", host="10.0.7.1"}[5m])
+                -
+                rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*", host="10.0.7.1"}[5m])
+              )
+              /
+              rate(smokeping_requests_total{job=~".*smokeping-prober.*", host="10.0.7.1"}[5m])
+            ) >= 1
+          for: 2m
           labels:
             severity: critical
