@@ -82,14 +82,18 @@ spec:
                   fi
                   prev_responses="$responses"
                 done
-            livenessProbe:
-              exec:
-                command: ["test", "-f", "/tmp/smokeping-healthy"]
-              initialDelaySeconds: 90
-              periodSeconds: 30
-              failureThreshold: 3
-              successThreshold: 1
-              timeoutSeconds: 5
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: ["test", "-f", "/tmp/smokeping-healthy"]
+                  initialDelaySeconds: 90
+                  periodSeconds: 30
+                  failureThreshold: 3
+                  successThreshold: 1
+                  timeoutSeconds: 5
             securityContext:
               runAsUser: 1000
               runAsNonRoot: true
