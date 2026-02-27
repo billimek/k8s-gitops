@@ -49,7 +49,7 @@ spec:
           healthcheck:
             image:
               repository: busybox
-              tag: 1.37.0@sha256:37f7b378a29ceb4c551b1b5582e27747b855bbfaa73fa11914fe0df028dc581f
+              tag: 1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
             command:
               - /bin/sh
               - -c
