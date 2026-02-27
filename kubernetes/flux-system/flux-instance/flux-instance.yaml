@@ -29,7 +29,7 @@ spec:
     instance:
       distribution:
         # renovate: depName=controlplaneio-fluxcd/distribution datasource=github-releases
-        version: 2.7.5
+        version: 2.8.0
       cluster:
         networkPolicy: false
       components:
