@@ -103,6 +103,7 @@ spec:
                   secretKeyRef:
                     name: booklore-secret
                     key: booklore_mariadb_password
+              DISK_TYPE: NETWORK
             probes:
               liveness:
                 enabled: true
@@ -184,22 +185,21 @@ spec:
       books:
         type: nfs
         server: nas.home
-        path: /mnt/tank/media
+        path: /mnt/tank/media/books
         advancedMounts:
           booklore:
             app:
               - path: /books
-                subPath: books/ebooks
 
       bookdrop:
         type: nfs
         server: nas.home
-        path: /mnt/tank/media
+        path: /mnt/tank/media/books
         advancedMounts:
           booklore:
             app:
               - path: /bookdrop
-                subPath: books/bookdrop
+                subPath: bookdrop
 
       mysqld:
         type: emptyDir
