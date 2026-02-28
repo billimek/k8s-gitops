@@ -42,7 +42,7 @@ spec:
         runAsUser: "1000"
         capacity: 10Gi
       
-      - app: jellyseerr
+      - app: seerr
       
       - app: node-red
         pvcSuffix: "data"

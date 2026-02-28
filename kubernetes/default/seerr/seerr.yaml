@@ -84,7 +84,7 @@ spec:
 
     persistence:
       config:
-        existingClaim: jellyseerr-config
+        existingClaim: seerr-config
         type: persistentVolumeClaim
         globalMounts:
           - path: /app/config
