@@ -1,0 +1,222 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: booklore
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    controllers:
+      booklore:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+
+        initContainers:
+          mariadb:
+            image:
+              repository: docker.io/library/mariadb
+              tag: 12.2.2-noble@sha256:b1cb255a9939d28a1856815f0de6046c20c28c21b92a9f2696bc782b247a47ee
+            env:
+              MARIADB_DATABASE: booklore
+              MARIADB_USER: booklore
+              MARIADB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: booklore-secret
+                    key: booklore_mariadb_password
+              MARIADB_ROOT_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: booklore-secret
+                    key: booklore_mariadb_root_password
+              PUID: "1001"
+              PGID: "1001"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - bash
+                      - -c
+                      - |-
+                        mariadb-admin ping --socket=/run/mysqld/mysqld.sock --user=root --password=$${MARIADB_ROOT_PASSWORD}
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+            restartPolicy: Always
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              # NOTE: io_uring is blocked by the default containerd v2 seccomp profile
+              # https://github.com/containerd/containerd/pull/9320
+              seccompProfile: { type: Unconfined }
+
+          wait-for-mariadb:
+            image:
+              repository: wait4x/wait4x
+              tag: 3.6.0@sha256:bec7ac18547781d854562c3729d3195c3880116d6758c49fdf4573ad58805f14
+            args:
+              - "mysql"
+              - "booklore:$(DB_PASSWORD)@tcp(localhost:3306)/booklore"
+            env:
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: booklore-secret
+                    key: booklore_mariadb_password
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/booklore-app/booklore
+              tag: v2.0.3@sha256:50ddd52e70f4b5aba2d08e8467ee7648b45a6bad3d6201dedc453f12edd95dca
+            command:
+              - java
+            args:
+              - -jar
+              - /app/app.jar
+            env:
+              DATABASE_URL: jdbc:mariadb://localhost:3306/booklore
+              DATABASE_USERNAME: booklore
+              DATABASE_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: booklore-secret
+                    key: booklore_mariadb_password
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/healthcheck
+                    port: &httpPort 6060
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/healthcheck
+                    port: *httpPort
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 50m
+                memory: 1Gi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+
+    service:
+      app:
+        controller: booklore
+        ports:
+          http:
+            port: *httpPort
+
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - booklore.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: booklore
+                port: 6060
+
+    persistence:
+      config:
+        existingClaim: booklore-config
+        advancedMounts:
+          booklore:
+            app:
+              - path: /app/data
+                subPath: app
+            mariadb:
+              - path: /var/lib/mysql
+                subPath: mysql
+
+      books:
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        advancedMounts:
+          booklore:
+            app:
+              - path: /books
+                subPath: books/ebooks
+
+      bookdrop:
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        advancedMounts:
+          booklore:
+            app:
+              - path: /bookdrop
+                subPath: books/bookdrop
+
+      mysqld:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 1Mi
+        advancedMounts:
+          booklore:
+            mariadb:
+              - path: /run/mysqld
+
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          booklore:
+            app:
+              - path: /tmp
+                subPath: app
+            mariadb:
+              - path: /tmp
+                subPath: mysql
