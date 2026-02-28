@@ -31,7 +31,7 @@ releases:
   - name: volsync
     namespace: kube-system
     chart: oci://ghcr.io/home-operations/charts-mirror/volsync-perfectra1n
-    version: 0.18.2
+    version: 0.18.3
 
   - name: rook-ceph
     namespace: rook-ceph
