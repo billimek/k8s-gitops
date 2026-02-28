@@ -73,9 +73,8 @@ data:
 
     record:
       enabled: true
-      retain:
+      continuous:
         days: 3
-        mode: all
       alerts:
         retain:
           days: 3
