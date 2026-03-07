@@ -40,12 +40,15 @@ spec:
                 memory: 32Mi
               limits:
                 memory: 128Mi
-          # Sidecar that monitors gateway ICMP responses and triggers a pod restart
-          # if the gateway is reachable but smokeping's raw socket has become stuck.
-          # Logic: if 10.0.7.1 requests are incrementing but responses are frozen
-          # for two consecutive 30s checks (~60s), the liveness probe fails and
-          # Kubernetes restarts the pod. If the gateway itself is unreachable
-          # (router reboot), both counters stall and no restart is triggered.
+          # Sidecar that monitors the gateway (10.0.7.1) ICMP responses and triggers
+          # a pod restart in two scenarios:
+          # 1. Gateway recovery: after a router reboot the gateway goes dark (both
+          #    counters stall). When it comes back (responses resume incrementing),
+          #    we restart immediately so all raw ICMP sockets are recycled fresh.
+          #    This fixes hosts like 9.9.9.9 that stay stuck after a router reboot.
+          # 2. Stuck socket (no outage): if requests keep incrementing but responses
+          #    are frozen for two consecutive 30s checks, the raw socket is stuck and
+          #    we restart.
           healthcheck:
             image:
               repository: busybox
@@ -57,6 +60,7 @@ spec:
                 METRICS_URL="http://localhost:9374/metrics"
                 HEALTHY_FILE="/tmp/smokeping-healthy"
                 prev_responses=""
+                gateway_was_down="false"
                 touch "$HEALTHY_FILE"
                 while true; do
                   sleep 30
@@ -70,13 +74,22 @@ spec:
                   if [ -z "$requests" ] || [ -z "$responses" ]; then
                     touch "$HEALTHY_FILE"
                     prev_responses=""
+                    gateway_was_down="false"
                     continue
                   fi
-                  # If gateway requests are flowing but responses are frozen vs last check,
-                  # the raw ICMP socket is stuck - mark unhealthy to trigger pod restart.
-                  # If prev_responses is empty (first run), just record and continue.
-                  if [ -n "$prev_responses" ] && [ "$requests" != "$responses" ] && [ "$responses" = "$prev_responses" ]; then
+                  # Detect gateway down: requests incrementing but responses frozen
+                  # (or responses equal requests means no loss, so down = responses frozen
+                  # while requests are ahead).
+                  # Simpler signal: if responses haven't changed since last check and
+                  # requests != responses, the gateway is not responding.
+                  if [ -n "$prev_responses" ] && [ "$responses" = "$prev_responses" ] && [ "$requests" != "$responses" ]; then
+                    gateway_was_down="true"
+                    touch "$HEALTHY_FILE"
+                  elif [ "$gateway_was_down" = "true" ] && [ -n "$prev_responses" ] && [ "$responses" != "$prev_responses" ]; then
+                    # Gateway was down and responses are now incrementing again —
+                    # trigger a restart to recycle all raw ICMP sockets.
                     rm -f "$HEALTHY_FILE"
+                    gateway_was_down="false"
                   else
                     touch "$HEALTHY_FILE"
                   fi
