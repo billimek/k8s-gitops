@@ -65,7 +65,7 @@ spec:
                 spec:
                   httpGet:
                     path: /api/version
-                    port: 5000
+                    port: 8971
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -93,7 +93,7 @@ spec:
         ports:
           http:
             appProtocol: kubernetes.io/ws
-            port: &port 5000
+            port: &port 8971
             primary: true
           go2rtc:
             enabled: true
