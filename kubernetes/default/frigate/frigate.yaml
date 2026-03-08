@@ -93,7 +93,7 @@ spec:
         ports:
           http:
             appProtocol: kubernetes.io/ws
-            port: &port 8971
+            port: &port 5000
             primary: true
           go2rtc:
             enabled: true
