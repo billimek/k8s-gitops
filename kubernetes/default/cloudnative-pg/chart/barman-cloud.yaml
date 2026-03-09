@@ -26,3 +26,5 @@ spec:
     name: cnpg-barman-cloud
   interval: 1h
   values:
+    certificate:
+      renewBefore: 720h # 30 days — ensures renewal before the 21d alert threshold
