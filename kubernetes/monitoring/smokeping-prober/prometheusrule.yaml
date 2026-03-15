@@ -33,23 +33,24 @@ spec:
           labels:
             severity: warning
         
-        - alert: SmokepingPacketLoss
-          annotations:
-            description: 'Packet loss to {{ $labels.host }} is {{ printf "%.2f" $value | humanizePercentage }} over the last 5 minutes.'
-            summary: Packet loss detected to {{ $labels.host }}.
-          expr: |
-            (
-              (
-                rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
-                -
-                rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*"}[5m])
-              )
-              /
-              rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
-            ) > 0.20
-          for: 5m
-          labels:
-            severity: warning
+        # TEMPORARILY DISABLED
+        # - alert: SmokepingPacketLoss
+        #   annotations:
+        #     description: 'Packet loss to {{ $labels.host }} is {{ printf "%.2f" $value | humanizePercentage }} over the last 5 minutes.'
+        #     summary: Packet loss detected to {{ $labels.host }}.
+        #   expr: |
+        #     (
+        #       (
+        #         rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+        #         -
+        #         rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*"}[5m])
+        #       )
+        #       /
+        #       rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
+        #     ) > 0.20
+        #   for: 5m
+        #   labels:
+        #     severity: warning
         
         - alert: SmokepingTargetDown
           annotations:
