@@ -9,7 +9,7 @@ resourceset-inputprovider.yaml (apps defined)
     ├─→ resourceset-volsync-backups.yaml (ExternalSecret + ReplicationSource per app)
     └─→ resourceset-pvcs.yaml (ReplicationDestination + PVC with bootstrap per app)
             ↓
-mutatingadmissionpolicy.yaml (auto-inject NFS mount + jitter)
+mutatingadmissionpolicy.yaml (jitter only)
 ```
 
 **Key Features**:
@@ -27,7 +27,7 @@ mutatingadmissionpolicy.yaml (auto-inject NFS mount + jitter)
 | `resourceset-inputprovider.yaml` | App definitions | - |
 | `resourceset-volsync-backups.yaml` | Backup infrastructure | ExternalSecrets + ReplicationSources |
 | `resourceset-pvcs.yaml` | Bootstrap-capable PVCs | ReplicationDestinations + PVCs |
-| `mutatingadmissionpolicy.yaml` | NFS injection + jitter | Runtime mutations |
+| `mutatingadmissionpolicy.yaml` | Jitter only | Runtime mutations |
 | `maintenance-kopiamaintenance.yaml` | Repository optimization | Weekly CronJob |
 | `volsync.yaml` | VolSync controller | HelmRelease |
 | `prometheusrule.yaml` | Monitoring alerts | 5 alerts |
@@ -79,11 +79,7 @@ task volsync:restore APP=<app> PREVIOUS=0 RESTORE_AS_OF="2026-01-14T12:00:00Z"
 
 ### MutatingAdmissionPolicies
 
-1. **volsync-mover-nfs**: Auto-injects NFS mount into VolSync jobs
-   - Matches: Jobs starting with `volsync-`
-   - Injects: `nas.home:/mnt/ssdtank/kopia` mounted at `/repository`
-
-2. **volsync-mover-jitter**: Adds 0-30s random delay to backup jobs
+1. **volsync-mover-jitter**: Adds 0-30s random delay to backup jobs
    - Matches: Jobs starting with `volsync-src-`
    - Prevents: Thundering herd (all apps backing up simultaneously)
 

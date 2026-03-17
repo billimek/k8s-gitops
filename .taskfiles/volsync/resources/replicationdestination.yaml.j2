@@ -20,6 +20,12 @@ spec:
       runAsUser: {{ ENV.PUID }}
       runAsGroup: {{ ENV.PGID }}
       fsGroup: {{ ENV.PUID }}
+    moverVolumes:
+      - mountPath: repository
+        volumeSource:
+          nfs:
+            server: "nas.home"
+            path: "/mnt/ssdtank/kopia"
     sourceIdentity:
       sourceName: {{ ENV.APP }}
       sourceNamespace: {{ ENV.NS }}

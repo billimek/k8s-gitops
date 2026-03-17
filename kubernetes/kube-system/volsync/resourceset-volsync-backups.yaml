@@ -50,9 +50,8 @@ spec:
         template:
           engineVersion: v2
           data:
-            KOPIA_FS_PATH: /repository
             KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
-            KOPIA_REPOSITORY: filesystem:///repository
+            KOPIA_REPOSITORY: filesystem:///mnt/repository
       dataFrom:
         - extract:
             key: kopia
@@ -80,6 +79,12 @@ spec:
           runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
           fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
           fsGroupChangePolicy: "OnRootMismatch"
+        moverVolumes:
+          - mountPath: repository
+            volumeSource:
+              nfs:
+                server: "nas.home"
+                path: "/mnt/ssdtank/kopia"
         retain:
           hourly: 24
           daily: 10

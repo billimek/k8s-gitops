@@ -111,10 +111,14 @@ Add to `kubernetes/kube-system/volsync/resourceset-inputprovider.yaml`:
 ```yaml
 apps:
   - app: app-name
-    pvcName: app-name-config
-    runAsUser: "1001"
-    schedule: "0 4 * * *"
+    namespace: "default"   # omit if default
+    runAsUser: "1001"      # omit to use default
+    capacity: 1Gi          # omit to use default (1Gi)
+    schedule: "0 4 * * *"  # omit to use default (0 7 * * *)
+    pvcSuffix: "config"    # omit to use default (config)
 ```
+
+NFS repository (`nas.home:/mnt/ssdtank/kopia`) is configured via `moverVolumes` directly on each `ReplicationSource`/`ReplicationDestination`/`KopiaMaintenance` resource — no webhook injection.
 
 ## app-template ConfigMap Naming
 

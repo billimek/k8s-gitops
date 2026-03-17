@@ -63,6 +63,12 @@ spec:
           runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
           runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
           fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+        moverVolumes:
+          - mountPath: repository
+            volumeSource:
+              nfs:
+                server: "nas.home"
+                path: "/mnt/ssdtank/kopia"
         sourceIdentity:
           sourceName: << $app.app >>
         cleanupTempPVC: true
