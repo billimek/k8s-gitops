@@ -27,8 +27,6 @@ spec:
   interval: 1h
   install:
     createNamespace: true
-  upgrade:
-    force: true
   values:
     fullnameOverride: victoria-logs
     retentionPeriod: 14d
@@ -59,8 +57,4 @@ spec:
               - name: victoria-logs-server
                 port: 9428
     dashboards:
-      enabled: true
-      annotations:
-        grafana_folder: infrastructure
-      labels:
-        grafana_dashboard: "1"
+      enabled: false
