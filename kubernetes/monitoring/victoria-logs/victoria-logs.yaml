@@ -27,6 +27,8 @@ spec:
   interval: 1h
   install:
     createNamespace: true
+  upgrade:
+    force: true
   values:
     fullnameOverride: victoria-logs
     retentionPeriod: 14d
