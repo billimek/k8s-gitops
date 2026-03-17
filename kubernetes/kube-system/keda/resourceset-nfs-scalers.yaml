@@ -21,7 +21,6 @@ spec:
   
   inputs:
     - app: audiobookshelf
-    - app: booklore
     - app: frigate
     - app: icloudpd
     - app: plex
