@@ -147,7 +147,6 @@ spec:
                   - 1.1.1.1              # Cloudflare Primary
                   - 1.0.0.1              # Cloudflare Secondary
                   - 8.8.8.8              # Google Primary
-                  - 8.8.4.4              # Google Secondary
                   - 9.9.9.9              # Quad9 Primary
                   # 149.112.112.112 is used for WAN2 gateway monitoring in OPNsense
                 interval: 1s
