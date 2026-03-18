@@ -7,6 +7,8 @@ GitOps Kubernetes cluster on Talos + FluxCD. Infrastructure (`/setup`) separate 
 ```bash
 task                    # List all tasks
 task k8s:sync-secrets   # Force sync ExternalSecrets
+task k8s:cleanse-pods   # Delete Failed/Pending/Succeeded pods
+task volsync:snapshot APP=<name>  # Trigger immediate backup
 flux reconcile kustomization cluster-apps --with-source
 ```
 
@@ -19,9 +21,10 @@ flux reconcile kustomization cluster-apps --with-source
 **Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
 
 **Patterns**:
-- **Primary**: OCIRepository + chartRef (NOT HelmRepository)
-- **Ingress**: Envoy Gateway with HTTPRoute (NOT Traefik)
-- **Storage**: Ceph block, NFS media, VolSync+Kopia backups
+- **Primary**: OCIRepository + chartRef (exceptions: minecraft and emqx-operator use HelmRepository)
+- **Ingress**: Envoy Gateway with HTTPRoute (NOT Traefik/Ingress)
+- **Gateways**: `internal` (LAN + Tailscale, 10.0.6.151) and `public` (internet-facing, 10.0.6.150), both in `kube-system`
+- **Storage**: Ceph block (default), NFS media mounts, VolSync+Kopia backups
 - **Secrets**: ExternalSecret CRDs only (no plaintext)
 - **Backups**: ResourceSet automation in kube-system/volsync/
 
@@ -50,22 +53,24 @@ spec:
               tag: 1.0.0@sha256:...  # Always pin SHA
             securityContext:
               runAsNonRoot: true
-              runAsUser: 1001
+              runAsUser: 1001  # Check image docs; common values: 1001, 1000, 65534
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
-    
+
     service:
       app:
         controller: app-name
         ports:
           http:
             port: 8080
-    
+
     route:
       app:
         parentRefs:
-          - name: internal
+          - name: internal          # LAN/Tailscale only
             namespace: kube-system
+          # - name: public          # Add for internet-facing apps
+          #   namespace: kube-system
         hostnames:
           - "app.eviljungle.com"
         rules:
@@ -74,10 +79,17 @@ spec:
             backendRefs:
               - name: app-name
                 port: http
-    
+
     persistence:
       config:
         existingClaim: app-name-config
+```
+
+## Non-App-Template HelmReleases
+
+For infrastructure charts (not using app-template), use this schema:
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 ```
 
 ## ExternalSecret Template
@@ -116,6 +128,7 @@ apps:
     capacity: 1Gi          # omit to use default (1Gi)
     schedule: "0 4 * * *"  # omit to use default (0 7 * * *)
     pvcSuffix: "config"    # omit to use default (config)
+    cacheCapacity: 20Gi    # omit unless app needs large Kopia cache (e.g. plex)
 ```
 
 NFS repository (`nas.home:/mnt/ssdtank/kopia`) is configured via `moverVolumes` directly on each `ReplicationSource`/`ReplicationDestination`/`KopiaMaintenance` resource — no webhook injection.
@@ -124,15 +137,28 @@ NFS repository (`nas.home:/mnt/ssdtank/kopia`) is configured via `moverVolumes` 
 
 App-template v4 names ConfigMaps as `<release-name>` (not `<release-name>-<key>`).
 
-Example: a release named `gatus` with `configMaps.config` produces a ConfigMap named `gatus`.
+**Preferred**: Use `identifier` to cross-reference inline configMaps without depending on the naming convention:
 
-**Always reference the release name, not `<release-name>-<key>`:**
+```yaml
+configMaps:
+  config:
+    data:
+      config.yaml: |
+        ...
+
+persistence:
+  config-file:
+    type: configMap
+    identifier: config   # references configMaps.config by key
+```
+
+**Alternative**: Reference by release name directly:
 
 ```yaml
 persistence:
   config-file:
     type: configMap
-    name: gatus        # correct: just the release name
+    name: gatus           # correct: just the release name
     # name: gatus-config  # WRONG: do not append the configMap key
 ```
 
@@ -145,16 +171,10 @@ flux reconcile helmrelease app-name -n namespace --with-source
 # Flux will scale it back up automatically on success
 ```
 
-## Schema Standards
-
-- **App-template HelmReleases**: Use `https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json`
-- **Other HelmReleases**: Use `https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json`
-- **ExternalSecret**: Use `https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/external-secrets.io/externalsecret_v1.json`
-
 ## Standards
 
 - **Images**: Always pin with SHA256 digest
-- **Security**: Non-root (UID 1001), read-only, dropped capabilities
+- **Security**: Non-root preferred (default UID 1001), read-only rootfs, drop all capabilities. Check image docs for required UID.
 - **Naming**: kebab-case for all resources
-- **Schemas**: Include validation on all CRDs
+- **Schemas**: Include yaml-language-server validation on all CRDs
 - **No Kustomization**: Intentionally avoided throughout
