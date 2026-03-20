@@ -21,7 +21,7 @@ spec:
     replicaCount: 0
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2026.3.1@sha256:17020f7415ea5a471b4e4b9c5dbb9c411bbb53b2fe6c03a96aceb0ad472c5a5d
+      tag: 2026.3.2@sha256:0550bd3c1a184ca1ec76f89846e4fb16f965b96f242dc76102ca074e031be934
     fullnameOverride: minecraft-survival2
     strategyType: Recreate
     persistence:
