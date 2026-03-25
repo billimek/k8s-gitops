@@ -181,7 +181,7 @@ spec:
           datasource: Prometheus
         # Envoy Gateway Dashboards
         envoy-overview:
-          url: https://grafana.com/api/dashboards/24459/revisions/1/download
+          url: https://grafana.com/api/dashboards/24459/revisions/3/download
           datasource: Prometheus
         envoy-upstream:
           url: https://grafana.com/api/dashboards/24457/revisions/1/download
