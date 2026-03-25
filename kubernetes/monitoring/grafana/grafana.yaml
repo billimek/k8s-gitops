@@ -215,7 +215,7 @@ spec:
       node-metrics:
         # Ref: https://grafana.com/grafana/dashboards/22413-k8s-node-metrics-multi-clusters-node-exporter-prometheus-grafana11-2024-en/
         1-node-exporter:
-          url: https://grafana.com/api/dashboards/22413/revisions/4/download
+          url: https://grafana.com/api/dashboards/22413/revisions/6/download
           datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
