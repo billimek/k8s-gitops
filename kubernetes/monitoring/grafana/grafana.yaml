@@ -116,15 +116,12 @@ spec:
     dashboards:
       default:
         etcd:
-          # renovate: dashboardName="etcd"
-          gnetId: 22236
-          revision: 4
+          url: https://grafana.com/api/dashboards/22236/revisions/4/download
           datasource: Prometheus
 
       infrastructure:
         cert-manager:
-          gnetId: 20842
-          revision: 3
+          url: https://grafana.com/api/dashboards/20842/revisions/3/download
           datasource: Prometheus
         cloudnative-pg:
           url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/grafana-dashboard.json
@@ -136,15 +133,11 @@ spec:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/home_assistant.json
           datasource: home_assistant
         volsync:
-          # removate: dashboardName="VolSync Dashboard"
-          gnetId: 21356
-          revision: 3
+          url: https://grafana.com/api/dashboards/21356/revisions/3/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         spegel:
-          # renovate: depName="Spegel"
-          gnetId: 18089
-          revision: 1
+          url: https://grafana.com/api/dashboards/18089/revisions/1/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
 
@@ -153,102 +146,70 @@ spec:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
           datasource: Prometheus
         opnsense-exporter:
-          # renovate: dashboardName="OPNsense"
-          gnetId: 21113
-          revision: 1
+          url: https://grafana.com/api/dashboards/21113/revisions/1/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
             - {name: DS_PROMETHEUS-K0, value: Prometheus}
         unbound:
-          # renovate: dashboardName="Unbound"
-          gnetId: 21006
-          revision: 2
+          url: https://grafana.com/api/dashboards/21006/revisions/2/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         blackbox-exporter:
-          # renovate: dashboardName="Blackbox Exporter"
-          gnetId: 7587
-          revision: 3
+          url: https://grafana.com/api/dashboards/7587/revisions/3/download
           datasource: Prometheus
         speedtest-exporter:
-          # renovate: dashboardName="Prometheus Speedtest Exporter"
-          gnetId: 22651
-          revision: 1
+          url: https://grafana.com/api/dashboards/22651/revisions/1/download
           datasource: Prometheus
         smokeping:
-          # renovate: dashboardName="SmokePing"
-          gnetId: 22471
-          revision: 1
+          url: https://grafana.com/api/dashboards/22471/revisions/1/download
           datasource:
             - name: DATASOURCE
               value: Prometheus
             - name: VAR_JOB
               value: smokeping-prober
         unifi-insights:
-          # renovate: dashboardName="UniFi-Poller: Client Insights - Prometheus"
-          gnetId: 11315
-          revision: 9
+          url: https://grafana.com/api/dashboards/11315/revisions/9/download
           datasource: Prometheus
         unifi-network-sites:
-          # renovate: dashboardName="UniFi-Poller: Network Sites - Prometheus"
-          gnetId: 11311
-          revision: 5
+          url: https://grafana.com/api/dashboards/11311/revisions/5/download
           datasource: Prometheus
         unifi-uap:
-          # renovate: dashboardName="UniFi-Poller: UAP Insights - Prometheus"
-          gnetId: 11314
-          revision: 10
+          url: https://grafana.com/api/dashboards/11314/revisions/10/download
           datasource: Prometheus
         unifi-usw:
-          # renovate: dashboardName="UniFi-Poller: USW Insights - Prometheus"
-          gnetId: 11312
-          revision: 9
+          url: https://grafana.com/api/dashboards/11312/revisions/9/download
           datasource: Prometheus
         # Envoy Gateway Dashboards
         envoy-overview:
-          # renovate: dashboardName="Envoy Proxy Overview"
-          gnetId: 24459
-          revision: 1
+          url: https://grafana.com/api/dashboards/24459/revisions/1/download
           datasource: Prometheus
         envoy-upstream:
-          # renovate: dashboardName="Envoy Proxy Upstream"
-          gnetId: 24457
-          revision: 1
+          url: https://grafana.com/api/dashboards/24457/revisions/1/download
           datasource: Prometheus
         envoy-downstream:
-          # renovate: dashboardName="Envoy Proxy Downstream"
-          gnetId: 24458
-          revision: 1
+          url: https://grafana.com/api/dashboards/24458/revisions/1/download
           datasource: Prometheus
 
       storage:
         # Ref: https://grafana.com/grafana/dashboards/3170-zfs/
         zfs:
-          gnetId: 3170
-          revision: 3
+          url: https://grafana.com/api/dashboards/3170/revisions/3/download
           datasource: Prometheus
         nfs-server:
           url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/kubernetes/monitoring/grafana/dashboards/nfs_server.json
           datasource: Prometheus
         smartctl:
-          gnetId: 22604
-          revision: 2
+          url: https://grafana.com/api/dashboards/22604/revisions/2/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         ceph-cluster:
-          # renovate: dashboardName="Ceph Cluster"
-          gnetId: 2842
-          revision: 18
+          url: https://grafana.com/api/dashboards/2842/revisions/18/download
           datasource: Prometheus
         ceph-osd:
-          # renovate: dashboardName="Ceph - OSD (Single)"
-          gnetId: 5336
-          revision: 9
+          url: https://grafana.com/api/dashboards/5336/revisions/9/download
           datasource: Prometheus
         ceph-pools:
-          # renovate: dashboardName="Ceph - Pools"
-          gnetId: 5342
-          revision: 9
+          url: https://grafana.com/api/dashboards/5342/revisions/9/download
           datasource: Prometheus
 
       node-metrics:
@@ -258,8 +219,7 @@ spec:
           datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
-          gnetId: 1860
-          revision: 36
+          url: https://grafana.com/api/dashboards/1860/revisions/36/download
           datasource: Prometheus
         node-feature-discovery:
           url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
@@ -274,44 +234,28 @@ spec:
 
       kubernetes:
         k8s-system-api-server:
-          # renovate: dashboardName="Kubernetes / System / API Server"
-          gnetId: 15761
-          revision: 19
+          url: https://grafana.com/api/dashboards/15761/revisions/19/download
           datasource: Prometheus
         k8s-system-coredns:
-          # renovate: dashboardName="Kubernetes / System / CoreDNS"
-          gnetId: 15762
-          revision: 22
+          url: https://grafana.com/api/dashboards/15762/revisions/22/download
           datasource: Prometheus
         k8s-views-global:
-          # renovate: dashboardName="Kubernetes / Views / Global"
-          gnetId: 15757
-          revision: 43
+          url: https://grafana.com/api/dashboards/15757/revisions/43/download
           datasource: Prometheus
         k8s-views-nodes:
-          # renovate: dashboardName="Kubernetes / Views / Nodes"
-          gnetId: 15759
-          revision: 35
+          url: https://grafana.com/api/dashboards/15759/revisions/35/download
           datasource: Prometheus
         k8s-views-namespaces:
-          # renovate: dashboardName="Kubernetes / Views / Namespaces"
-          gnetId: 15758
-          revision: 42
+          url: https://grafana.com/api/dashboards/15758/revisions/42/download
           datasource: Prometheus
         k8s-views-pods:
-          # renovate: dashboardName="Kubernetes / Views / Pods"
-          gnetId: 15760
-          revision: 36
+          url: https://grafana.com/api/dashboards/15760/revisions/36/download
           datasource: Prometheus
         k8s-volumes:
-          # renovate: dashboardName="K8s / Storage / Volumes / Cluster"
-          gnetId: 11454
-          revision: 14
+          url: https://grafana.com/api/dashboards/11454/revisions/14/download
           datasource: Prometheus
         k8s-pvc-stats:
-          # renovate: dashboardName="Kubernetes PVC Stats"
-          gnetId: 23233
-          revision: 6
+          url: https://grafana.com/api/dashboards/23233/revisions/6/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         # kube-prometheus-stack dashboards
