@@ -246,7 +246,7 @@ spec:
           url: https://grafana.com/api/dashboards/15759/revisions/35/download
           datasource: Prometheus
         k8s-views-namespaces:
-          url: https://grafana.com/api/dashboards/15758/revisions/42/download
+          url: https://grafana.com/api/dashboards/15758/revisions/46/download
           datasource: Prometheus
         k8s-views-pods:
           url: https://grafana.com/api/dashboards/15760/revisions/36/download
