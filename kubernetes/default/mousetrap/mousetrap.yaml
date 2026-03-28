@@ -24,8 +24,8 @@ spec:
               LOGLEVEL: INFO
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: false
+              capabilities: {drop: ["ALL"], add: ["SETUID", "SETGID", "CHOWN"]}
             resources:
               requests:
                 cpu: 10m
@@ -34,9 +34,7 @@ spec:
 
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
+        runAsUser: 0
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
 
