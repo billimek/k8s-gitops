@@ -98,7 +98,7 @@ spec:
                   value: /
             backendRefs:
               - name: *app
-                port: http
+                port: 8789
 
     persistence:
       config:
