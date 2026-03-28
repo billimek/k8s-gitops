@@ -2,9 +2,21 @@
 
 like plex, but for audiobooks
 
+# chaptarr
+
+[chaptarr](https://github.com/jamcole/chaptarr) is a Readarr replacement for audiobook management and downloading
+
 # cloudnative-pg
 
 postgresql operator for kubernetes
+
+# continuwuity
+
+[continuwuity](https://forgejo.ellis.link/continuwuation/continuwuity) is a Matrix homeserver (conduwuit fork) running at `matrix.eviljungle.com`
+
+# crucix
+
+[crucix](https://github.com/calesthio/Crucix) is a self-hosted OSINT intelligence dashboard aggregating 27 data sources (satellite fire detection, flight tracking, conflict data, markets, and more)
 
 # echo-server
 
@@ -44,9 +56,9 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 * [icloudpd.yaml](icloudpd/icloudpd.yaml)
 * iCloud authentication cache is persisted to ceph-block storage at `/root/.pyicloud` to avoid repeated login/MFA prompts
 
-# jellyseerr
+# seerr
 
-jellyseerr is a self-hosted media request management tool for Plex and Jellyfin
+[seerr](https://github.com/seerr-team/seerr) is an open-source media request and discovery manager for Jellyfin, Plex, and Emby (successor to Overseerr/Jellyseerr)
 
 # minecraft
 
@@ -57,6 +69,14 @@ Using the [minecraft server](https://hub.docker.com/r/itzg/minecraft-server) con
 * [minecraft-creative.yaml](minecraft/minecraft-creative.yaml)
 * [minecraft-survival.yaml](minecraft/minecraft-survival.yaml)
 * [minecraft-bedrock.yaml](minecraft/minecraft-bedrock.yaml)
+
+# mosquitto
+
+[mosquitto](https://mosquitto.org/) is an MQTT broker used for home automation messaging
+
+# mousetrap
+
+[mousetrap](https://github.com/sirjmann92/mousetrap) is an automated MyAnonaMouse (MaM) IP/ASN/perk management tool
 
 # node-red
 
@@ -83,6 +103,10 @@ prowlarr is a movie/tv show indexer manager for sonarr/radarr
 # qbittorrent
 
 qbittorrent is a torrent client
+
+# qui
+
+[qui](https://github.com/autobrr/qui) is a fast, modern qBittorrent web UI supporting multiple instances and cross-seeding
 
 # radarr
 
@@ -118,6 +142,10 @@ recyclarr is a tool to help manage and maintain your sonarr/radarr library
 
 * [ser2sock.yaml](ser2sock/ser2sock.yaml)
 
+# shelfmark
+
+[shelfmark](https://github.com/calibrain/shelfmark) is a self-hosted web interface for searching and downloading books and audiobooks from multiple sources, with Audiobookshelf integration
+
 # sonarr
 
 ![](https://i.imgur.com/0CS5ADs.png)
@@ -129,14 +157,6 @@ recyclarr is a tool to help manage and maintain your sonarr/radarr library
 # tautulli
 
 tautulli is a plex monitoring tool
-
-# tesla_dashcam
-
-![](https://i.imgur.com/2tbqMGa.jpg)
-
-[tesla_dashcam](https://github.com/ehendrix23/tesla_dashcam) is a kubernetes cron job that runs nightly to combine multiple different dashcam videos into a single multi-pane video from the car cameras.
-
-* [tesla_dashcam.yaml](tesla_dashcam/tesla_dashcam.yaml)
 
 # teslamate
 
@@ -155,10 +175,10 @@ tautulli is a plex monitoring tool
 
 * [unifi.yaml](unifi/unifi.yaml)
 
-# zwavejs2mqtt
+# zwave2mqtt
 
 ![](https://i.imgur.com/Odhu4gJ.png)
 
-[zwavejs2mqtt](https://github.com/zwave-js/zwavejs2mqtt) for controlling z-wave devices from a connected zwave controller and publishing over MQTT or websocket
+[zwave2mqtt](https://github.com/zwave-js/zwave-js-ui) for controlling z-wave devices from a connected zwave controller and publishing over MQTT or websocket
 
-* [zwavejs2mqtt.yaml](zwavejs2mqtt/zwavejs2mqtt.yaml)
+* [zwave2mqtt.yaml](zwave2mqtt/zwave2mqtt.yaml)
