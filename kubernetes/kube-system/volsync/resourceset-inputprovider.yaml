@@ -86,6 +86,9 @@ spec:
         runAsUser: "999"
         capacity: 2Gi
       
+      - app: mousetrap
+        runAsUser: "1000"
+
       - app: zwave2mqtt
       
       - app: minecraft-creative
