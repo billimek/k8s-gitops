@@ -28,6 +28,8 @@ spec:
     apps:
       - app: audiobookshelf
 
+      - app: chaptarr
+
       - app: continuwuity
         capacity: 5Gi
 
