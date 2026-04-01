@@ -36,6 +36,11 @@ tasks:
     cmds:
       - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
       - minijinja-cli "{{.SETUP_DIR}}/bootstrap/templates/resources.yaml.j2" | op inject | kubectl apply --server-side --filename -
+      # Decode the base64-encoded credentials JSON into a raw JSON key for the native 1Password Connect chart
+      - |
+        RAW_JSON=$(kubectl get secret onepassword-secret -n kube-system -o jsonpath='{.data.1password-credentials\.json}' | base64 -d | base64 -d | base64 | tr -d '\n')
+        kubectl patch secret onepassword-secret -n kube-system --type='json' \
+          -p="[{\"op\": \"add\", \"path\": \"/data/credentials.json\", \"value\": \"${RAW_JSON}\"}]"
       # Apply CRDs first
       - task: crds
       # Then sync apps
