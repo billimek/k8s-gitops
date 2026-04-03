@@ -29,7 +29,7 @@
       matchPackageNames: [
         "ghcr.io/advplyr/audiobookshelf",
         "ghcr.io/coder/code-server",
-        "ghcr.io/home-assistant/home-assistant",
+        "ghcr.io/home-operations/home-assistant",
         "ghcr.io/home-operations/plex",
         "ghcr.io/home-operations/qbittorrent",
         "ghcr.io/itzg/minecraft-server",
@@ -59,18 +59,6 @@
       schedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["digest"],
       matchPackageNames: ["/home-operations/"],
-    },
-    {
-      description: "Auto-merge trusted Helm chart patches",
-      matchDatasources: ["helm"],
-      automerge: true,
-      automergeType: "pr",
-      ignoreTests: false,
-      // automergeSchedule: ["after 1am and before 5am"],
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: [
-        // "tailscale-operator"
-      ],
     },
     {
       description: "Auto-merge GitHub Actions",

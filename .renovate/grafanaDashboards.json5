@@ -24,7 +24,7 @@
     {
       addLabels: ["renovate/grafana-dashboard"],
       automerge: true,
-      automergeType: "branch",
+      automergeType: "pr",
       commitMessageExtra: "({{currentVersion}} → {{newVersion}})",
       commitMessageTopic: "dashboard {{depName}}",
       matchDatasources: ["custom.grafana-dashboards"],
