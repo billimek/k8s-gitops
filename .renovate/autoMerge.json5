@@ -58,7 +58,7 @@
       ignoreTests: false,
       schedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["digest"],
-      matchPackageNames: ["/home-operations/"],
+      matchPackageNames: ["/home-operations/", "docker.io/robertlordhood/chaptarr"],
     },
     {
       description: "Auto-merge GitHub Actions",
