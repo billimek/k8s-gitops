@@ -151,7 +151,7 @@ spec:
             - {name: DS_PROMETHEUS, value: Prometheus}
             - {name: DS_PROMETHEUS-K0, value: Prometheus}
         unbound:
-          url: https://grafana.com/api/dashboards/21006/revisions/2/download
+          url: https://grafana.com/api/dashboards/21006/revisions/3/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         blackbox-exporter:
