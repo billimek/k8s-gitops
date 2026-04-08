@@ -219,7 +219,7 @@ spec:
           datasource: Prometheus
         # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
         node-exporter-full:
-          url: https://grafana.com/api/dashboards/1860/revisions/43/download
+          url: https://grafana.com/api/dashboards/1860/revisions/44/download
           datasource: Prometheus
         node-feature-discovery:
           url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
