@@ -19,6 +19,16 @@ spec:
             image:
               repository: ghcr.io/rhoopr/kei
               tag: 0.6.2@sha256:ae0f07c5f6586e5eb2244036d6e6a9cd8b4e97617c08a0adf4d3630739b9e95d
+            args:
+              - sync
+              - --config
+              - /config/config.toml
+              - --data-dir
+              - /config
+              - --cookie-directory
+              - /config/cookies
+              - --directory
+              - /photos
             env:
               TZ: America/New_York
             envFrom:
