@@ -23,7 +23,6 @@ spec:
     - app: audiobookshelf
     - app: chaptarr
     - app: frigate
-    - app: icloudpd
     - app: kei
     - app: plex
     - app: prowlarr
