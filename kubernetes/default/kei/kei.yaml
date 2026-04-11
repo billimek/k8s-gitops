@@ -27,7 +27,7 @@ spec:
                   name: kei-secret
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities: {drop: ["ALL"]}
             resources:
               requests:
@@ -44,8 +44,6 @@ spec:
       scripts:
         data:
           config.toml: |
-            data_dir = "/config"
-
             [watch]
             interval = 3600
 
