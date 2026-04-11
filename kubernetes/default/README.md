@@ -14,10 +14,6 @@ postgresql operator for kubernetes
 
 [continuwuity](https://forgejo.ellis.link/continuwuation/continuwuity) is a Matrix homeserver (conduwuit fork) running at `matrix.eviljungle.com`
 
-# crucix
-
-[crucix](https://github.com/calesthio/Crucix) is a self-hosted OSINT intelligence dashboard aggregating 27 data sources (satellite fire detection, flight tracking, conflict data, markets, and more)
-
 # echo-server
 
 echo server for testing
