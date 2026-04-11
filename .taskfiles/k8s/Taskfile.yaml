@@ -72,6 +72,22 @@ tasks:
       - for: { var: SCALED_OBJECTS, split: "\n" }
         cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate --field-manager=flux-client-side-apply --overwrite scaledobject {{splitList "," .ITEM | last}} autoscaling.keda.sh/paused=true
 
+  kei-get-code:
+    desc: Request a 2FA code from Apple for kei iCloud auth
+    preconditions:
+      - which kubectl
+      - kubectl --namespace default get deployment kei
+    cmd: kubectl exec --namespace default deploy/kei -- kei get-code
+
+  kei-submit-code:
+    desc: Submit a 2FA code for kei iCloud auth [CODE=required]
+    requires:
+      vars: [CODE]
+    preconditions:
+      - which kubectl
+      - kubectl --namespace default get deployment kei
+    cmd: kubectl exec --namespace default deploy/kei -- kei submit-code {{.CODE}}
+
   keda-resume:
     desc: Resume all KEDA ScaledObjects across all namespaces
     preconditions:
