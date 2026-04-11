@@ -14,6 +14,8 @@ spec:
   values:
     controllers:
       icloudpd:
+        # scaled to 0 to avoid NFS write collisions while kei is being evaluated
+        replicas: 0
         containers:
           app:
             image:

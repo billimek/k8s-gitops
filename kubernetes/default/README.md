@@ -52,6 +52,10 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 * [icloudpd.yaml](icloudpd/icloudpd.yaml)
 * iCloud authentication cache is persisted to ceph-block storage at `/root/.pyicloud` to avoid repeated login/MFA prompts
 
+# kei
+
+[kei](https://github.com/rhoopr/kei) is a fast iCloud Photos sync engine and intended replacement for icloudpd
+
 # seerr
 
 [seerr](https://github.com/seerr-team/seerr) is an open-source media request and discovery manager for Jellyfin, Plex, and Emby (successor to Overseerr/Jellyseerr)
