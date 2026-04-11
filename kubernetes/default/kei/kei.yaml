@@ -21,8 +21,6 @@ spec:
               tag: 0.6.2@sha256:ae0f07c5f6586e5eb2244036d6e6a9cd8b4e97617c08a0adf4d3630739b9e95d
             env:
               TZ: America/New_York
-              KEI_WATCH_WITH_INTERVAL: "3600"
-              KEI_NOTIFICATION_SCRIPT: /scripts/notify.sh
             envFrom:
               - secretRef:
                   name: kei-secret
@@ -44,6 +42,15 @@ spec:
     configMaps:
       scripts:
         data:
+          config.toml: |
+            [auth]
+            cookie_directory = "/config/cookies"
+
+            [watch]
+            interval = 3600
+
+            [notifications]
+            script = "/scripts/notify.sh"
           notify.sh: |
             #!/bin/bash
             # KEI_EVENT: 2fa_required | sync_complete | sync_failed | session_expired
@@ -73,6 +80,9 @@ spec:
         identifier: scripts
         defaultMode: 0755
         globalMounts:
-          - path: /scripts
+          - path: /scripts/notify.sh
+            subPath: notify.sh
+          - path: /config/config.toml
+            subPath: config.toml
       tmp:
         type: emptyDir
