@@ -46,6 +46,9 @@ spec:
             [auth]
             cookie_directory = "/config"
 
+            [filters]
+            library = "all"
+
             [watch]
             interval = 3600
 
