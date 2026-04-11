@@ -77,7 +77,7 @@ tasks:
     preconditions:
       - which kubectl
       - kubectl --namespace default get deployment kei
-    cmd: kubectl exec --namespace default deploy/kei -- kei get-code
+    cmd: kubectl exec --namespace default deploy/kei -- kei login get-code
 
   kei-submit-code:
     desc: Submit a 2FA code for kei iCloud auth [CODE=required]
@@ -86,7 +86,7 @@ tasks:
     preconditions:
       - which kubectl
       - kubectl --namespace default get deployment kei
-    cmd: kubectl exec --namespace default deploy/kei -- kei submit-code {{.CODE}}
+    cmd: kubectl exec --namespace default deploy/kei -- kei login submit-code {{.CODE}}
 
   keda-resume:
     desc: Resume all KEDA ScaledObjects across all namespaces
