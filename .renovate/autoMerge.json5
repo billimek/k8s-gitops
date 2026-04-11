@@ -51,14 +51,13 @@
       ],
     },
     {
-      description: "Auto-merge trusted container digests",
+      description: "Auto-merge all container digest updates",
       matchDatasources: ["docker"],
       automerge: true,
       automergeType: "pr",
       ignoreTests: false,
       schedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["digest"],
-      matchPackageNames: ["/home-operations/", "docker.io/robertlordhood/chaptarr"],
     },
     {
       description: "Auto-merge GitHub Actions",
