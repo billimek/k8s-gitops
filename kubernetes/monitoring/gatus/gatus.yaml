@@ -108,7 +108,7 @@ spec:
           config.yaml: |
             remote:
               instances:
-                - endpoint-prefix: "external-"
+                - endpoint-prefix: ""
                   url: "https://cloud.drake-eel.ts.net/api/v1/endpoints/statuses"
 
             connectivity:
