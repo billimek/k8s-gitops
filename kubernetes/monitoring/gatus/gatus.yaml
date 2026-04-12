@@ -163,10 +163,9 @@ spec:
               title: Status | eviljungle.com
               header: Status
               logo: https://avatars.githubusercontent.com/u/6393612
-              link: https://github.com/billimek
               buttons:
-                - name: Github
-                  link: https://github.com/billimek
+                - name: External Status
+                  link: https://cloud.drake-eel.ts.net
                 - name: Homelab
                   link: https://github.com/billimek/k8s-gitops
                 - name: UptimeRobot
