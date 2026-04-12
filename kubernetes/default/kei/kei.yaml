@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              tag: 0.7.0@sha256:85d37494bc1ccac06ab87d78eacb5d8f36f6bf1dbc5158962db7a5f7b940e092
+              tag: 0.7.1@sha256:4453fd7f9a99470349d043d2c838f12a984d8e0c18c65fcc93638949ee0b3aa4
             env:
               TZ: America/New_York
             envFrom:
