@@ -163,6 +163,8 @@ spec:
               title: Status | eviljungle.com
               header: Status
               logo: https://avatars.githubusercontent.com/u/6393612
+              dashboard-heading: ""
+              dashboard-subheading: ""
               buttons:
                 - name: External Status
                   link: https://cloud.drake-eel.ts.net
