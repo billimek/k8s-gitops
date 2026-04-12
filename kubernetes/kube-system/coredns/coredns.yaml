@@ -70,3 +70,12 @@ spec:
           - name: loop
           - name: reload
           - name: loadbalance
+      - zones:
+          - zone: ts.net
+            scheme: dns://
+        port: 53
+        plugins:
+          - name: forward
+            parameters: . 1.1.1.1
+          - name: cache
+            parameters: 30
