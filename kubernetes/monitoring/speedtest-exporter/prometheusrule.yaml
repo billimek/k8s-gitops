@@ -23,9 +23,14 @@ spec:
             description: Internet download speed is averaging {{ humanize $value }} bytes/s.
             summary: SpeedTest slow internet download.
           expr: |
-            avg_over_time(speedtest_download_bandwidth_bytes{job=~".*speedtest-exporter.*"}[4h])
+            # Exclude Tata Communications (server_id 73614) - this Atlanta-listed server is a
+            # tier-1 global backbone provider whose test endpoint consistently delivers ~17 MB/s
+            # vs ~100-112 MB/s from all other local servers. Ookla's auto-selection picks it due
+            # to low ping latency, but it is not representative of actual connection performance.
+            # See: kubectl exec -n monitoring deploy/speedtest-exporter -- speedtest --servers
+            avg_over_time(speedtest_download_bandwidth_bytes{job=~".*speedtest-exporter.*",server_id!="73614"}[4h])
               < 50000000
-          for: 0m
+          for: 1h
           labels:
             severity: warning
         - alert: SpeedtestSlowInternetUpload
@@ -33,9 +38,10 @@ spec:
             description: Internet upload speed is averaging {{ humanize $value }} bytes/s.
             summary: SpeedTest slow internet upload.
           expr: |
-            avg_over_time(speedtest_upload_bandwidth_bytes{job=~".*speedtest-exporter.*"}[4h])
+            # Exclude Tata Communications (server_id 73614) - see SpeedtestSlowInternetDownload comment.
+            avg_over_time(speedtest_upload_bandwidth_bytes{job=~".*speedtest-exporter.*",server_id!="73614"}[4h])
               < 50000000
-          for: 0m
+          for: 1h
           labels:
             severity: warning
         - alert: SpeedtestHighPingLatency
