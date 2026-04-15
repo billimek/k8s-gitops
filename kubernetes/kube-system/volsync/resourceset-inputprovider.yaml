@@ -2,12 +2,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesetinputproviders.yaml
 # Consolidated ResourceSetInputProvider for all VolSync backup/restore configurations
 # Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
-# All 21 apps are defined in a single nested array for easier management
+# All 26 apps are defined in a single nested array for easier management
 # Fields with defaults (can be omitted if value matches):
 #   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
 #   - runAsUser: "1001"
 #   - capacity: "1Gi"
-#   - schedule: "0 7 * * *"
+#   - schedule: "0 * * * *"
 # To add a new app: add entry to the apps array below
 # To remove an app: delete entry from the apps array below
 apiVersion: fluxcd.controlplane.io/v1
@@ -23,7 +23,7 @@ spec:
     defaults:
       runAsUser: "1001"
       capacity: "1Gi"
-      schedule: "0 7 * * *"
+      schedule: "0 * * * *"
       pvcSuffix: "config"
     apps:
       - app: audiobookshelf
@@ -55,7 +55,6 @@ spec:
         runAsUser: "1000"
         capacity: 35Gi
         cacheCapacity: 20Gi
-        schedule: "30 7 * * *"
       
       - app: prowlarr
       

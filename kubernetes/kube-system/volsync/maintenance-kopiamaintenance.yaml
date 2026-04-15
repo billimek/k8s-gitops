@@ -8,7 +8,7 @@ metadata:
 spec:
   repository:
     repository: kopia-maintenance-secret
-  schedule: "0 3 * * 0"  # Weekly Sunday at 3 AM
+  schedule: "0 3 * * *"  # Daily at 3 AM
   activeDeadlineSeconds: 14400  # 4 hours for large repository first run
   moverVolumes:
     - mountPath: repository

@@ -2,8 +2,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
 # ResourceSet for VolSync backups
 # Automated backups to NFS with Kopia for improved performance and deduplication
-# Backup window: daily at 7:00 AM (schedule configurable per-app in resourceset-inputprovider.yaml)
-# Generates 42 resources (21 ExternalSecrets + 21 ReplicationSources) across namespaces
+# Backup window: hourly at the top of each hour (schedule configurable per-app in resourceset-inputprovider.yaml)
+# Generates 52 resources (26 ExternalSecrets + 26 ReplicationSources) across namespaces
 # App definitions are shared via the volsync-apps ResourceSetInputProvider
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
@@ -87,6 +87,7 @@ spec:
                 path: "/mnt/ssdtank/kopia"
         retain:
           hourly: 24
-          daily: 10
-          weekly: 4
+          daily: 14
+          weekly: 8
+          monthly: 6
     <<- end >>
