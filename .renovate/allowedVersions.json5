@@ -7,5 +7,11 @@
         "influxdb"
       ]
     },
+    {
+      description: "Pin emqx-operator below 2.3.0 - operator 2.3.0+ requires EMQX 5.9+ which is BSL-licensed",
+      matchDatasources: ["helm"],
+      matchPackageNames: ["emqx-operator"],
+      allowedVersions: "<2.3.0",
+    },
   ],
 }
