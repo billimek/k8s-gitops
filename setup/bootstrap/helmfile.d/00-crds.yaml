@@ -46,7 +46,7 @@ releases:
   - name: emqx-operator
     namespace: default
     chart: emqx/emqx-operator
-    version: 2.2.29
+    version: 2.3.0
 
   - name: envoy-gateway
     namespace: kube-system
