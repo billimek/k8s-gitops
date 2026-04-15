@@ -17,7 +17,7 @@ spec:
               Use this command to check the status:
               kubectl get externalsecret {{ $labels.name }} -n {{ $labels.exported_namespace }}
           expr: |
-            externalsecret_status_condition{status="False"} == 1
+            externalsecret_status_condition{condition="Ready",status="False"} == 1
           for: 5m
           labels:
             severity: warning
