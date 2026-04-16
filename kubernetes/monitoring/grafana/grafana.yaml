@@ -184,7 +184,7 @@ spec:
           url: https://grafana.com/api/dashboards/24459/revisions/3/download
           datasource: Prometheus
         envoy-upstream:
-          url: https://grafana.com/api/dashboards/24457/revisions/3/download
+          url: https://grafana.com/api/dashboards/24457/revisions/4/download
           datasource: Prometheus
         envoy-downstream:
           url: https://grafana.com/api/dashboards/24458/revisions/3/download
