@@ -63,7 +63,7 @@ spec:
           - &host error-pages.eviljungle.com
         rules:
           - backendRefs:
-              - port: *port
+              - port: 8080
       internal:
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
@@ -75,11 +75,11 @@ spec:
           - *host
         rules:
           - backendRefs:
-              - port: *port
+              - port: 8080
 
     service:
       app:
         controller: error-pages
         ports:
           http:
-            port: &port 8080
+            port: 8080
