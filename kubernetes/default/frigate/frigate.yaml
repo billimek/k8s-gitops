@@ -6,12 +6,12 @@ metadata:
   name: frigate
   namespace: default
 spec:
-  suspend: false
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
+  suspend: false
   values:
     defaultPodOptions:
       resourceClaims:
@@ -45,6 +45,7 @@ spec:
                     operator: In
                     values:
                       - "kabylake"
+
     controllers:
       main:
         containers:
@@ -74,10 +75,6 @@ spec:
               startup:
                 enabled: false
 
-            securityContext:
-              capabilities:
-                add:
-                  - PERFMON
             resources:
               claims:
                 - name: gpu
@@ -86,42 +83,10 @@ spec:
                 cpu: 1500m
               limits:
                 memory: 5000Mi
-
-    service:
-      main:
-        controller: main
-        ports:
-          http:
-            appProtocol: kubernetes.io/ws
-            port: &port 5000
-            primary: true
-          go2rtc:
-            enabled: true
-            port: 1984
-          rtsp:
-            enabled: true
-            port: 8554
-
-    route:
-      main:
-        enabled: true
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        hostnames:
-          - frigate.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: frigate
-                port: *port
+            securityContext:
+              capabilities:
+                add:
+                  - PERFMON
 
     persistence:
       config:
@@ -162,3 +127,39 @@ spec:
                   - name: gpu
                     exactly:
                       deviceClassName: gpu.intel.com
+
+    route:
+      main:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - frigate.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: frigate
+                port: *port
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            appProtocol: kubernetes.io/ws
+            port: &port 5000
+            primary: true
+          go2rtc:
+            enabled: true
+            port: 1984
+          rtsp:
+            enabled: true
+            port: 8554

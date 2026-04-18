@@ -6,7 +6,6 @@ metadata:
   name: &app mosquitto
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
@@ -15,11 +14,47 @@ spec:
     createNamespace: true
     remediation:
       retries: -1
+  interval: 1h
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
+
+    configMaps:
+      config:
+        data:
+          mosquitto.conf: |
+            # Authentication: allow both anonymous and authenticated clients
+            allow_anonymous true
+            password_file /mosquitto/config/passwd
+            
+            # Persistence
+            persistence true
+            persistence_location /data
+            autosave_interval 60
+            
+            # Performance & Logging
+            connection_messages false
+            per_listener_settings false
+            
+            # Standard MQTT listener
+            listener 1883 0.0.0.0
+            protocol mqtt
+            
+            # WebSocket listener (for web clients)
+            listener 9001 0.0.0.0
+            protocol websockets
+
     controllers:
       mosquitto:
         containers:
@@ -47,58 +82,9 @@ spec:
                 memory: 100Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop: ["ALL"]
-
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile:
-          type: RuntimeDefault
-
-    service:
-      mqtt:
-        controller: mosquitto
-        type: LoadBalancer
-        loadBalancerIP: 10.0.6.54
-        externalTrafficPolicy: Local
-        ports:
-          mqtt:
-            port: 1883
-            protocol: TCP
-          websocket:
-            port: 9001
-            protocol: TCP
-
-    configMaps:
-      config:
-        data:
-          mosquitto.conf: |
-            # Authentication: allow both anonymous and authenticated clients
-            allow_anonymous true
-            password_file /mosquitto/config/passwd
-            
-            # Persistence
-            persistence true
-            persistence_location /data
-            autosave_interval 60
-            
-            # Performance & Logging
-            connection_messages false
-            per_listener_settings false
-            
-            # Standard MQTT listener
-            listener 1883 0.0.0.0
-            protocol mqtt
-            
-            # WebSocket listener (for web clients)
-            listener 9001 0.0.0.0
-            protocol websockets
+              readOnlyRootFilesystem: true
 
     persistence:
       data:
@@ -121,3 +107,17 @@ spec:
           - path: /mosquitto/config/passwd
             subPath: passwd
             readOnly: true
+
+    service:
+      mqtt:
+        controller: mosquitto
+        ports:
+          mqtt:
+            port: 1883
+            protocol: TCP
+          websocket:
+            port: 9001
+            protocol: TCP
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        loadBalancerIP: 10.0.6.54

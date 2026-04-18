@@ -6,69 +6,22 @@ metadata:
   name: plex
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
-    controllers:
-      plex:
-        containers:
-          app:
-            image:
-              repository: ghcr.io/home-operations/plex
-              tag: 1.43.1.10611@sha256:a9c3723cb31cc9621df27cf5801184c290293adf1df2bfaea4b8b6fc01dbfd96
-            env:
-              TZ: "America/New_York"
-              PLEX_ADVERTISE_URL: https://10.0.6.53:32400,https://plex.eviljungle.com:443
-              PLEX_NO_AUTH_NETWORKS: "172.17.0.0/16,10.0.2.0/24,10.0.7.0/24,10.0.3.0/24,10.244.0.0/16"
-            envFrom:
-              - secretRef:
-                  name: plex-secret
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /identity
-                    port: 32400
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 10
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-            resources:
-              claims:
-                - name: gpu
-              requests:
-                cpu: 500m
-                memory: 2Gi
-              limits:
-                memory: 5Gi
-
     defaultPodOptions:
       resourceClaims:
         - name: gpu
           resourceClaimTemplateName: plex
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
         supplementalGroups: [44]
       affinity:
         nodeAffinity:
@@ -101,22 +54,52 @@ spec:
                     values:
                       - "kabylake"
 
-    service:
-      app:
-        controller: plex
-        type: LoadBalancer
-        loadBalancerIP: 10.0.6.53
-        externalTrafficPolicy: Local
-        ports:
-          http:
-            port: &port 32400
-      # Separate ClusterIP service for Gateway API routing
-      gateway:
-        controller: plex
-        type: ClusterIP
-        ports:
-          http:
-            port: *port
+    controllers:
+      plex:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/plex
+              tag: 1.43.1.10611@sha256:a9c3723cb31cc9621df27cf5801184c290293adf1df2bfaea4b8b6fc01dbfd96
+            env:
+              TZ: "America/New_York"
+              PLEX_ADVERTISE_URL: https://10.0.6.53:32400,https://plex.eviljungle.com:443
+              PLEX_NO_AUTH_NETWORKS: "172.17.0.0/16,10.0.2.0/24,10.0.7.0/24,10.0.3.0/24,10.244.0.0/16"
+            envFrom:
+              - secretRef:
+                  name: plex-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /identity
+                    port: 32400
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              claims:
+                - name: gpu
+              requests:
+                cpu: 500m
+                memory: 2Gi
+              limits:
+                memory: 5Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
 
     persistence:
       config:
@@ -196,3 +179,20 @@ spec:
                 port: *port
             timeouts:
               backendRequest: 3600s
+
+    service:
+      app:
+        controller: plex
+        externalTrafficPolicy: Local
+        loadBalancerIP: 10.0.6.53
+        ports:
+          http:
+            port: &port 32400
+        type: LoadBalancer
+      # Separate ClusterIP service for Gateway API routing
+      gateway:
+        controller: plex
+        ports:
+          http:
+            port: *port
+        type: ClusterIP

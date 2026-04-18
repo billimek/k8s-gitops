@@ -43,7 +43,16 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001  # Check image docs; common values: 1001, 1000, 65534
+
     controllers:
       app-name:
         containers:
@@ -51,18 +60,20 @@ spec:
             image:
               repository: ghcr.io/org/image
               tag: 1.0.0@sha256:...  # Always pin SHA
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
             securityContext:
-              runAsNonRoot: true
-              runAsUser: 1001  # Check image docs; common values: 1001, 1000, 65534
-              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
               capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
 
-    service:
-      app:
-        controller: app-name
-        ports:
-          http:
-            port: 8080
+    persistence:
+      config:
+        existingClaim: app-name-config
 
     route:
       app:
@@ -80,9 +91,12 @@ spec:
               - name: app-name
                 port: http
 
-    persistence:
-      config:
-        existingClaim: app-name-config
+    service:
+      app:
+        controller: app-name
+        ports:
+          http:
+            port: 8080
 ```
 
 ## Non-App-Template HelmReleases

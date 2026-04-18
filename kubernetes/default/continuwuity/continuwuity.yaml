@@ -6,19 +6,19 @@ metadata:
   name: &app continuwuity
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
 
     controllers:
       continuwuity:
@@ -55,10 +55,6 @@ spec:
             envFrom:
               - secretRef:
                   name: continuwuity-secret
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
             probes:
               liveness:
                 enabled: true
@@ -70,13 +66,18 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
 
-    service:
-      app:
-        controller: continuwuity
-        ports:
-          http:
-            port: *port
+    persistence:
+      config:
+        existingClaim: continuwuity-config
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
 
     route:
       app:
@@ -117,10 +118,9 @@ spec:
               - name: continuwuity
                 port: *port
 
-    persistence:
-      config:
-        existingClaim: continuwuity-config
-        globalMounts:
-          - path: /data
-      tmp:
-        type: emptyDir
+    service:
+      app:
+        controller: continuwuity
+        ports:
+          http:
+            port: *port

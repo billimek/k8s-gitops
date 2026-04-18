@@ -6,23 +6,20 @@ metadata:
   name: home-assistant
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
-    # defaultPodOptions:
-    #   # required for mDNS and other host network features
-    #   hostNetwork: true
     controllers:
       home-assistant:
         pod:
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsUser: 1000
 
         containers:
           app:
@@ -43,10 +40,10 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
+              readOnlyRootFilesystem: true
 
           code-server:
             image:
@@ -72,31 +69,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
-
-    service:
-      main:
-        primary: true
-        forceRename: home-assistant
-        type: LoadBalancer
-        controller: home-assistant
-        loadBalancerIP: 10.0.6.56
-        externalTrafficPolicy: Local
-        ports:
-          http:
-            port: 8123
-      # Separate ClusterIP service for Gateway API routing
-      gateway:
-        controller: home-assistant
-        type: ClusterIP
-        ports:
-          http:
-            port: 8123
-      code:
-        type: ClusterIP
-        controller: home-assistant
-        ports:
-          http:
-            port: 12321
 
     persistence:
       config:
@@ -189,3 +161,28 @@ spec:
             backendRefs:
               - name: home-assistant-code
                 port: 12321
+
+    service:
+      main:
+        controller: home-assistant
+        externalTrafficPolicy: Local
+        forceRename: home-assistant
+        loadBalancerIP: 10.0.6.56
+        ports:
+          http:
+            port: 8123
+        primary: true
+        type: LoadBalancer
+      # Separate ClusterIP service for Gateway API routing
+      gateway:
+        controller: home-assistant
+        ports:
+          http:
+            port: 8123
+        type: ClusterIP
+      code:
+        controller: home-assistant
+        ports:
+          http:
+            port: 12321
+        type: ClusterIP

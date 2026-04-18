@@ -6,19 +6,19 @@ metadata:
   name: teslamate
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 10000
-        runAsGroup: 10000
         fsGroup: 10000
         fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 10000
+        runAsNonRoot: true
+        runAsUser: 10000
         seccompProfile:
           type: RuntimeDefault
 
@@ -35,9 +35,9 @@ spec:
                   name: teslamate-secret
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop: ["ALL"]
+              readOnlyRootFilesystem: true
 
         containers:
           main:
@@ -52,24 +52,23 @@ spec:
             envFrom: &envFrom
               - secretRef:
                   name: teslamate-secret
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop: ["ALL"]
             resources:
               requests:
-                memory: 250Mi
                 cpu: 50m
+                memory: 250Mi
               limits:
                 memory: 500Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+              readOnlyRootFilesystem: true
 
-    service:
-      main:
-        controller: teslamate
-        ports:
-          http:
-            port: 4000
+    persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       main:
@@ -92,8 +91,9 @@ spec:
               - name: teslamate
                 port: 4000
 
-    persistence:
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
+    service:
+      main:
+        controller: teslamate
+        ports:
+          http:
+            port: 4000

@@ -6,12 +6,68 @@ metadata:
   name: shelfmark
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile: { type: RuntimeDefault }
+
+    configMaps:
+      scripts:
+        data:
+          scan-audiobookshelf.sh: |
+            #!/bin/sh
+            set -e
+            
+            # Validate required environment variables
+            if [ -z "$AUDIOBOOKSHELF_TOKEN" ]; then
+              echo "ERROR: AUDIOBOOKSHELF_TOKEN environment variable is not set" >&2
+              exit 1
+            fi
+            
+            if [ -z "$AUDIOBOOKSHELF_LIBRARY_ID" ]; then
+              echo "ERROR: AUDIOBOOKSHELF_LIBRARY_ID environment variable is not set" >&2
+              exit 1
+            fi
+            
+            # Audiobookshelf API endpoint
+            AUDIOBOOKSHELF_URL="http://audiobookshelf:80"
+            SCAN_ENDPOINT="${AUDIOBOOKSHELF_URL}/api/libraries/${AUDIOBOOKSHELF_LIBRARY_ID}/scan"
+            
+            echo "Triggering Audiobookshelf library scan..."
+            echo "Library ID: ${AUDIOBOOKSHELF_LIBRARY_ID}"
+            echo "Endpoint: ${SCAN_ENDPOINT}"
+            
+            # Trigger the library scan
+            HTTP_CODE=$(curl -s -o /tmp/abs-response.json -w "%{http_code}" \
+              -X POST \
+              -H "Authorization: Bearer ${AUDIOBOOKSHELF_TOKEN}" \
+              "${SCAN_ENDPOINT}")
+            
+            echo "Response code: ${HTTP_CODE}"
+            
+            # Check if the request was successful
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "SUCCESS: Audiobookshelf library scan triggered successfully"
+              cat /tmp/abs-response.json 2>/dev/null || true
+              rm -f /tmp/abs-response.json
+              exit 0
+            else
+              echo "ERROR: Failed to trigger Audiobookshelf library scan (HTTP ${HTTP_CODE})" >&2
+              cat /tmp/abs-response.json 2>/dev/null || true
+              rm -f /tmp/abs-response.json
+              exit 1
+            fi
+
     controllers:
       shelfmark:
         containers:
@@ -19,8 +75,6 @@ spec:
             image:
               repository: ghcr.io/calibrain/shelfmark-lite
               tag: v1.2.1@sha256:382a00d48f355845e9def23d78a135a062e62e07711ff7f505f8014eb2e02314
-            command:
-              - gunicorn
             args:
               - --access-logfile=-
               - --error-logfile=-
@@ -31,6 +85,8 @@ spec:
               - -b
               - 0.0.0.0:8084
               - shelfmark.main:app
+            command:
+              - gunicorn
             env:
               TZ: America/New_York
               FLASK_PORT: &port 8084
@@ -84,90 +140,15 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 10
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 1Gi
-
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
-
-    configMaps:
-      scripts:
-        data:
-          scan-audiobookshelf.sh: |
-            #!/bin/sh
-            set -e
-            
-            # Validate required environment variables
-            if [ -z "$AUDIOBOOKSHELF_TOKEN" ]; then
-              echo "ERROR: AUDIOBOOKSHELF_TOKEN environment variable is not set" >&2
-              exit 1
-            fi
-            
-            if [ -z "$AUDIOBOOKSHELF_LIBRARY_ID" ]; then
-              echo "ERROR: AUDIOBOOKSHELF_LIBRARY_ID environment variable is not set" >&2
-              exit 1
-            fi
-            
-            # Audiobookshelf API endpoint
-            AUDIOBOOKSHELF_URL="http://audiobookshelf:80"
-            SCAN_ENDPOINT="${AUDIOBOOKSHELF_URL}/api/libraries/${AUDIOBOOKSHELF_LIBRARY_ID}/scan"
-            
-            echo "Triggering Audiobookshelf library scan..."
-            echo "Library ID: ${AUDIOBOOKSHELF_LIBRARY_ID}"
-            echo "Endpoint: ${SCAN_ENDPOINT}"
-            
-            # Trigger the library scan
-            HTTP_CODE=$(curl -s -o /tmp/abs-response.json -w "%{http_code}" \
-              -X POST \
-              -H "Authorization: Bearer ${AUDIOBOOKSHELF_TOKEN}" \
-              "${SCAN_ENDPOINT}")
-            
-            echo "Response code: ${HTTP_CODE}"
-            
-            # Check if the request was successful
-            if [ "$HTTP_CODE" = "200" ]; then
-              echo "SUCCESS: Audiobookshelf library scan triggered successfully"
-              cat /tmp/abs-response.json 2>/dev/null || true
-              rm -f /tmp/abs-response.json
-              exit 0
-            else
-              echo "ERROR: Failed to trigger Audiobookshelf library scan (HTTP ${HTTP_CODE})" >&2
-              cat /tmp/abs-response.json 2>/dev/null || true
-              rm -f /tmp/abs-response.json
-              exit 1
-            fi
-
-    service:
-      app:
-        controller: shelfmark
-        ports:
-          http:
-            port: *port
-
-    route:
-      app:
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        hostnames:
-          - shelfmark.eviljungle.com
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     persistence:
       config:
@@ -194,3 +175,22 @@ spec:
             subPath: tmp
           - path: /var/log
             subPath: var-log
+
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - shelfmark.eviljungle.com
+
+    service:
+      app:
+        controller: shelfmark
+        ports:
+          http:
+            port: *port

@@ -6,12 +6,48 @@ metadata:
   name: &app smokeping-prober
   namespace: monitoring
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    configMaps:
+      config:
+        data:
+          smokeping.yaml: |
+            targets:
+              # Local gateway - used as health signal by the sidecar healthcheck
+              - hosts:
+                  - 10.0.7.1             # OPNsense gateway
+                interval: 1s
+                network: ip4
+                protocol: icmp
+                size: 56
+              
+              # Public DNS Servers (IPv4)
+              - hosts:
+                  - 1.1.1.1              # Cloudflare Primary
+                  - 1.0.0.1              # Cloudflare Secondary
+                  - 8.8.8.8              # Google Primary
+                  - 9.9.9.9              # Quad9 Primary
+                  # 149.112.112.112 is used for WAN2 gateway monitoring in OPNsense
+                interval: 1s
+                network: ip4
+                protocol: icmp
+                size: 56
+              
+              # Internet Services
+              - hosts:
+                  - google.com
+                  - github.com
+                  - cnn.com
+                  - ghcr.io
+                interval: 1s
+                network: ip4
+                protocol: icmp
+                size: 56
+
     controllers:
       smokeping-prober:
         containers:
@@ -19,27 +55,27 @@ spec:
             image:
               repository: quay.io/superq/smokeping-prober
               tag: v0.10.0@sha256:3717411629519de66c7b4ff767f61766c71b8d0d3a80707ae4c970d4e47f6cf6
-            env:
-              GOMAXPROCS: "1"
             args:
               - --config.file=/config/smokeping.yaml
               - --web.listen-address=:9374
-            securityContext:
-              # ICMP requires CAP_NET_RAW capability
-              # Must run as root for raw socket access
-              runAsUser: 0
-              runAsNonRoot: false
-              readOnlyRootFilesystem: true
-              allowPrivilegeEscalation: false
-              capabilities:
-                add: ["NET_RAW"]
-                drop: ["ALL"]
+            env:
+              GOMAXPROCS: "1"
             resources:
               requests:
                 cpu: 10m
                 memory: 32Mi
               limits:
                 memory: 128Mi
+            securityContext:
+              # ICMP requires CAP_NET_RAW capability
+              # Must run as root for raw socket access
+              allowPrivilegeEscalation: false
+              capabilities:
+                add: ["NET_RAW"]
+                drop: ["ALL"]
+              readOnlyRootFilesystem: true
+              runAsNonRoot: false
+              runAsUser: 0
           # Sidecar that monitors the gateway (10.0.7.1) ICMP responses and triggers
           # a pod restart in two scenarios:
           # 1. Gateway recovery: after a router reboot the gateway goes dark (both
@@ -102,69 +138,25 @@ spec:
                 spec:
                   exec:
                     command: ["test", "-f", "/tmp/smokeping-healthy"]
+                  failureThreshold: 3
                   initialDelaySeconds: 90
                   periodSeconds: 30
-                  failureThreshold: 3
                   successThreshold: 1
                   timeoutSeconds: 5
-            securityContext:
-              runAsUser: 1000
-              runAsNonRoot: true
-              readOnlyRootFilesystem: true
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop: ["ALL"]
             resources:
               requests:
                 cpu: 5m
                 memory: 8Mi
               limits:
                 memory: 32Mi
-    
-    service:
-      app:
-        controller: smokeping-prober
-        ipFamilyPolicy: SingleStack
-        ports:
-          metrics:
-            port: 9374
-    
-    configMaps:
-      config:
-        data:
-          smokeping.yaml: |
-            targets:
-              # Local gateway - used as health signal by the sidecar healthcheck
-              - hosts:
-                  - 10.0.7.1             # OPNsense gateway
-                interval: 1s
-                network: ip4
-                protocol: icmp
-                size: 56
-              
-              # Public DNS Servers (IPv4)
-              - hosts:
-                  - 1.1.1.1              # Cloudflare Primary
-                  - 1.0.0.1              # Cloudflare Secondary
-                  - 8.8.8.8              # Google Primary
-                  - 9.9.9.9              # Quad9 Primary
-                  # 149.112.112.112 is used for WAN2 gateway monitoring in OPNsense
-                interval: 1s
-                network: ip4
-                protocol: icmp
-                size: 56
-              
-              # Internet Services
-              - hosts:
-                  - google.com
-                  - github.com
-                  - cnn.com
-                  - ghcr.io
-                interval: 1s
-                network: ip4
-                protocol: icmp
-                size: 56
-    
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 1000
+
     persistence:
       config:
         type: configMap
@@ -176,3 +168,11 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+
+    service:
+      app:
+        controller: smokeping-prober
+        ipFamilyPolicy: SingleStack
+        ports:
+          metrics:
+            port: 9374

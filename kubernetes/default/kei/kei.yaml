@@ -6,12 +6,36 @@ metadata:
   name: &app kei
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      terminationGracePeriodSeconds: 35
+
+    configMaps:
+      scripts:
+        data:
+          notify.sh: |
+            #!/bin/bash
+            # KEI_EVENT: 2fa_required | sync_complete | sync_failed | session_expired
+            # KEI_MESSAGE: human-readable description
+            # KEI_ICLOUD_USERNAME: iCloud account
+            case "$KEI_EVENT" in
+              sync_complete) exit 0 ;;  # don't spam on every successful sync
+            esac
+            curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d "{\"content\": \"**kei** [\`$KEI_EVENT\`]: $KEI_MESSAGE (\`$KEI_ICLOUD_USERNAME\`)\"}"
+
     controllers:
       kei:
         containers:
@@ -33,35 +57,14 @@ spec:
             envFrom:
               - secretRef:
                   name: kei-secret
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-      terminationGracePeriodSeconds: 35
-    configMaps:
-      scripts:
-        data:
-          notify.sh: |
-            #!/bin/bash
-            # KEI_EVENT: 2fa_required | sync_complete | sync_failed | session_expired
-            # KEI_MESSAGE: human-readable description
-            # KEI_ICLOUD_USERNAME: iCloud account
-            case "$KEI_EVENT" in
-              sync_complete) exit 0 ;;  # don't spam on every successful sync
-            esac
-            curl -s -X POST "$DISCORD_WEBHOOK_URL" \
-              -H "Content-Type: application/json" \
-              -d "{\"content\": \"**kei** [\`$KEI_EVENT\`]: $KEI_MESSAGE (\`$KEI_ICLOUD_USERNAME\`)\"}"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
+
     persistence:
       photos:
         type: nfs

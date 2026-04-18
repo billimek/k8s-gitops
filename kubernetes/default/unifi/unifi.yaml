@@ -6,11 +6,11 @@ metadata:
   name: unifi
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
     controllers:
       unifi:
@@ -30,15 +30,69 @@ spec:
               JVM_MAX_HEAP_SIZE: 1024M
             resources:
               requests:
-                memory: 1Gi
                 cpu: 50m
+                memory: 1Gi
               limits:
                 memory: 1600Mi
+
+    persistence:
+      data:
+        existingClaim: unifi-data
+        globalMounts:
+          - path: /unifi
+      # Mount the TLS cert for unifi to use
+      cert:
+        type: secret
+        name: unifi-tls
+        advancedMounts:
+          unifi:
+            app:
+              - path: /unifi/cert/cert.pem
+                subPath: tls.crt
+                readOnly: true
+              - path: /unifi/cert/privkey.pem
+                subPath: tls.key
+                readOnly: true
+
+    rawResources:
+      backend-tls-policy:
+        apiVersion: gateway.networking.k8s.io/v1alpha3
+        kind: BackendTLSPolicy
+        spec:
+          spec:
+            targetRefs:
+              - group: ""
+                kind: Service
+                name: unifi
+                sectionName: http
+            validation:
+              hostname: unifi.eviljungle.com
+              wellKnownCACertificates: System
+
+    route:
+      app:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - unifi.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: unifi
+                port: 8443
 
     service:
       app:
         controller: unifi
-        type: LoadBalancer
         externalTrafficPolicy: Local
         loadBalancerIP: 10.0.6.57
         ports:
@@ -74,58 +128,4 @@ spec:
             enabled: true
             port: 10001
             protocol: UDP
-
-    route:
-      app:
-        enabled: true
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        hostnames:
-          - unifi.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: unifi
-                port: 8443
-
-    persistence:
-      data:
-        existingClaim: unifi-data
-        globalMounts:
-          - path: /unifi
-      # Mount the TLS cert for unifi to use
-      cert:
-        type: secret
-        name: unifi-tls
-        advancedMounts:
-          unifi:
-            app:
-              - path: /unifi/cert/cert.pem
-                subPath: tls.crt
-                readOnly: true
-              - path: /unifi/cert/privkey.pem
-                subPath: tls.key
-                readOnly: true
-
-    rawResources:
-      backend-tls-policy:
-        apiVersion: gateway.networking.k8s.io/v1alpha3
-        kind: BackendTLSPolicy
-        spec:
-          spec:
-            targetRefs:
-              - group: ""
-                kind: Service
-                name: unifi
-                sectionName: http
-            validation:
-              hostname: unifi.eviljungle.com
-              wellKnownCACertificates: System
+        type: LoadBalancer

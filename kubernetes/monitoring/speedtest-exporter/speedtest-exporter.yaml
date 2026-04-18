@@ -6,19 +6,19 @@ metadata:
   name: speedtest-exporter
   namespace: monitoring
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
         seccompProfile:
           type: RuntimeDefault
 
@@ -29,17 +29,18 @@ spec:
             image:
               repository: ghcr.io/lpicanco/prometheus-speedtest-exporter
               tag: 0.2.2@sha256:0c12ce9315bcb4e26071caa3236a2c2dab8612301a892fdec8911a41058da8e9
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop: ["ALL"]
             resources:
               requests:
                 cpu: 10m
                 memory: 15Mi
               limits:
                 memory: 100Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+              readOnlyRootFilesystem: true
+
     service:
       app:
         controller: main

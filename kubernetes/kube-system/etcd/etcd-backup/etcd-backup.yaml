@@ -6,12 +6,21 @@ metadata:
   name: etcd-backup
   namespace: kube-system
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      # Ensure this only runs on the control plane node
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+
     controllers:
       etcd-backup:
         type: cronjob
@@ -19,8 +28,8 @@ spec:
           # Run every 6 hours at 10 minutes past the hour
           schedule: "10 0/6 * * *"
           concurrencyPolicy: Forbid
-          successfulJobsHistory: 1
           failedJobsHistory: 1
+          successfulJobsHistory: 1
         pod:
           restartPolicy: OnFailure
         containers:
@@ -28,7 +37,6 @@ spec:
             image:
               repository: ghcr.io/siderolabs/talos-backup
               tag: v0.1.0-beta.3@sha256:0741255027c4dcae6bb8d4e18a824ba73c431d11b3dff4967e95b9ff5388cb85
-            workingDir: /tmp
             command:
               - /talos-backup
             env:
@@ -38,30 +46,25 @@ spec:
             envFrom:
               - secretRef:
                   name: etcd-backup-s3-secret
-            securityContext:
-              runAsUser: 1000
-              runAsGroup: 1000
-              allowPrivilegeEscalation: false
-              runAsNonRoot: true
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
             resources:
               requests:
                 cpu: 10m
                 memory: 64Mi
               limits:
                 memory: 256Mi
-    defaultPodOptions:
-      # Ensure this only runs on the control plane node
-      nodeSelector:
-        node-role.kubernetes.io/control-plane: ""
-      tolerations:
-        - key: node-role.kubernetes.io/control-plane
-          operator: Exists
-          effect: NoSchedule
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsGroup: 1000
+              runAsNonRoot: true
+              runAsUser: 1000
+              seccompProfile:
+                type: RuntimeDefault
+            workingDir: /tmp
+
     persistence:
       tmp:
         type: emptyDir

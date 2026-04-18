@@ -16,11 +16,11 @@ spec:
       audiobookshelf:
         pod:
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
-            runAsGroup: 1001
             fsGroup: 1001
             fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
             seccompProfile: { type: RuntimeDefault }
         containers:
           app:
@@ -46,43 +46,16 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 50m
                 memory: 500Mi
               limits:
                 memory: 1500Mi
-    service:
-      app:
-        primary: true
-        controller: audiobookshelf
-        ports:
-          http:
-            port: *port
-
-    route:
-      app:
-        annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
-        parentRefs:
-          - name: public
-            namespace: kube-system
-            sectionName: https
-        hostnames:
-          - &host abs.eviljungle.com
-      internal:
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        hostnames:
-          - *host
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     persistence:
       config:
@@ -105,3 +78,31 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/external: "true"
+        parentRefs:
+          - name: public
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - &host abs.eviljungle.com
+      internal:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - *host
+
+    service:
+      app:
+        controller: audiobookshelf
+        ports:
+          http:
+            port: *port
+        primary: true

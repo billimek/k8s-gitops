@@ -6,12 +6,28 @@ metadata:
   name: etcd-defrag
   namespace: kube-system
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      # Must use host network to access etcd on localhost:2379
+      hostNetwork: true
+      hostPID: true
+      securityContext:
+        runAsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+      # Ensure this only runs on the control plane node
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+
     controllers:
       etcd-defrag:
         type: cronjob
@@ -19,8 +35,8 @@ spec:
           # Run weekly on Sunday at 3 AM
           schedule: "0 3 * * 0"
           concurrencyPolicy: Forbid
-          successfulJobsHistory: 1
           failedJobsHistory: 1
+          successfulJobsHistory: 1
         containers:
           app:
             image:
@@ -43,31 +59,17 @@ spec:
               # Auto-disalarm space quota alarms
               - --auto-disalarm
               - --disalarm-threshold=0.8
-            securityContext:
-              privileged: true
             resources:
               requests:
                 cpu: 25m
                 memory: 128Mi
               limits:
                 memory: 128Mi
+            securityContext:
+              privileged: true
         serviceAccount:
           name: etcd-defrag
-    defaultPodOptions:
-      # Must use host network to access etcd on localhost:2379
-      hostNetwork: true
-      hostPID: true
-      securityContext:
-        runAsNonRoot: false
-        runAsUser: 0
-        runAsGroup: 0
-      # Ensure this only runs on the control plane node
-      nodeSelector:
-        node-role.kubernetes.io/control-plane: ""
-      tolerations:
-        - key: node-role.kubernetes.io/control-plane
-          operator: Exists
-          effect: NoSchedule
+
     persistence:
       certs:
         type: hostPath

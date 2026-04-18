@@ -6,19 +6,19 @@ metadata:
   name: echo-server
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
         seccompProfile:
           type: RuntimeDefault
 
@@ -43,24 +43,17 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 5
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop: ["ALL"]
             resources:
               requests:
                 cpu: 5m
                 memory: 64M
               limits:
                 memory: 64M
-
-    service:
-      app:
-        controller: echo-server
-        ports:
-          http:
-            port: *port
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+              readOnlyRootFilesystem: true
 
     route:
       app:
@@ -99,3 +92,10 @@ spec:
             sectionName: https-bare
         hostnames:
           - eviljungle.com
+
+    service:
+      app:
+        controller: echo-server
+        ports:
+          http:
+            port: *port

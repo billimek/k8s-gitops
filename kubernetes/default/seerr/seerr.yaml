@@ -6,12 +6,21 @@ metadata:
   name: seerr
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile: { type: RuntimeDefault }
+
     controllers:
       seerr:
         containers:
@@ -35,32 +44,32 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
                 memory: 250Mi
               limits:
                 memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
-
-    service:
-      app:
-        controller: seerr
-        ports:
-          http:
-            port: 5055
+    persistence:
+      config:
+        existingClaim: seerr-config
+        type: persistentVolumeClaim
+        globalMounts:
+          - path: /app/config
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          seerr:
+            app:
+              - path: /app/config/logs
+                subPath: logs
+              - path: /tmp
+                subPath: tmp
 
     route:
       app:
@@ -82,18 +91,9 @@ spec:
         hostnames:
           - *host
 
-    persistence:
-      config:
-        existingClaim: seerr-config
-        type: persistentVolumeClaim
-        globalMounts:
-          - path: /app/config
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          seerr:
-            app:
-              - path: /app/config/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
+    service:
+      app:
+        controller: seerr
+        ports:
+          http:
+            port: 5055

@@ -6,14 +6,22 @@ metadata:
   name: radarr
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
   install:
     createNamespace: true
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+
     controllers:
       radarr:
         containers:
@@ -48,31 +56,28 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 50m
                 memory: 350Mi
               limits:
                 memory: 500Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
 
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-
-    service:
-      app:
-        controller: radarr
-        ports:
-          http:
-            port: *port
+    persistence:
+      config:
+        existingClaim: radarr-config
+      media:
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /media
+      tmp:
+        type: emptyDir
 
     route:
       main:
@@ -96,14 +101,9 @@ spec:
               - name: radarr
                 port: 7878
 
-    persistence:
-      config:
-        existingClaim: radarr-config
-      media:
-        type: nfs
-        server: nas.home
-        path: /mnt/tank/media
-        globalMounts:
-          - path: /media
-      tmp:
-        type: emptyDir
+    service:
+      app:
+        controller: radarr
+        ports:
+          http:
+            port: *port

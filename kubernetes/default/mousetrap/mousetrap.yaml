@@ -6,12 +6,18 @@ metadata:
   name: &app mousetrap
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsUser: 0
+
     controllers:
       mousetrap:
         containers:
@@ -22,28 +28,29 @@ spec:
             env:
               TZ: America/New_York
               LOGLEVEL: INFO
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities: {drop: ["ALL"], add: ["SETUID", "SETGID", "CHOWN"]}
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"], add: ["SETUID", "SETGID", "CHOWN"]}
+              readOnlyRootFilesystem: false
 
-    defaultPodOptions:
-      securityContext:
-        runAsUser: 0
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-
-    service:
-      app:
-        controller: mousetrap
-        ports:
-          http:
-            port: 39842
+    persistence:
+      config:
+        existingClaim: mousetrap-config
+        globalMounts:
+          - path: /config
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /app/logs
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       main:
@@ -66,16 +73,9 @@ spec:
               - name: *app
                 port: 39842
 
-    persistence:
-      config:
-        existingClaim: mousetrap-config
-        globalMounts:
-          - path: /config
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /app/logs
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
+    service:
+      app:
+        controller: mousetrap
+        ports:
+          http:
+            port: 39842

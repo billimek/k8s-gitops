@@ -6,15 +6,16 @@ metadata:
   name: generic-device-plugin
   namespace: kube-system
 spec:
-  suspend: false
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
+  suspend: false
   values:
     defaultPodOptions:
       priorityClassName: system-node-critical
+
     controllers:
       generic-device-plugin:
         type: daemonset

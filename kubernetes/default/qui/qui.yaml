@@ -6,12 +6,20 @@ metadata:
   name: qui
   namespace: default
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+
     controllers:
       qui:
         containers:
@@ -40,30 +48,27 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
 
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-
-    service:
-      app:
-        controller: qui
-        ports:
-          http:
-            port: *port
+    persistence:
+      config:
+        existingClaim: qui-config
+      media:
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /media
+      tmp:
+        type: emptyDir
 
     route:
       main:
@@ -86,14 +91,9 @@ spec:
               - name: qui
                 port: 7476
 
-    persistence:
-      config:
-        existingClaim: qui-config
-      media:
-        type: nfs
-        server: nas.home
-        path: /mnt/tank/media
-        globalMounts:
-          - path: /media
-      tmp:
-        type: emptyDir
+    service:
+      app:
+        controller: qui
+        ports:
+          http:
+            port: *port
