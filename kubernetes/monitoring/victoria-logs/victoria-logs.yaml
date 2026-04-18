@@ -36,7 +36,7 @@ spec:
         storageClassName: ceph-block
         size: 20Gi
       serviceMonitor:
-        enabled: true
+        enabled: false
       route:
         enabled: true
         annotations:
