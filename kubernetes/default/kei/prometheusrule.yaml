@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kei-rules
+  namespace: default
+spec:
+  groups:
+    - name: kei.rules
+      rules:
+        - alert: KeiSyncFailing
+          annotations:
+            description: kei has had {{ $value }} consecutive sync failure(s). Check iCloud credentials or network connectivity.
+            summary: kei iCloud sync is failing.
+          expr: kei_sync_consecutive_failures > 0
+          for: 15m
+          labels:
+            severity: warning
+
+        - alert: KeiSyncDown
+          annotations:
+            description: kei has had {{ $value }} consecutive sync failures and has crossed the unhealthy threshold. The /healthz endpoint is returning 503.
+            summary: kei iCloud sync is critically failing.
+          expr: kei_sync_consecutive_failures >= 3
+          for: 10m
+          labels:
+            severity: critical
+
+        - alert: KeiNoRecentSync
+          annotations:
+            description: kei has not completed a successful iCloud sync in over 2 hours (last success was {{ $value | humanizeDuration }} ago).
+            summary: kei has not synced recently.
+          expr: (time() - kei_sync_last_success_timestamp) > 7200
+          for: 5m
+          labels:
+            severity: warning
+
+        - alert: KeiSessionExpired
+          annotations:
+            description: An iCloud session expiration was detected. Manual 2FA re-authentication may be required.
+            summary: kei iCloud session expired.
+          expr: increase(kei_sync_session_expirations_total[1h]) > 0
+          for: 0m
+          labels:
+            severity: warning

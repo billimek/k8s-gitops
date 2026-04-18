@@ -118,6 +118,9 @@ spec:
         etcd:
           url: https://grafana.com/api/dashboards/22236/revisions/4/download
           datasource: Prometheus
+        kei:
+          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/kubernetes/monitoring/grafana/dashboards/kei.json
+          datasource: Prometheus
 
       infrastructure:
         cert-manager:

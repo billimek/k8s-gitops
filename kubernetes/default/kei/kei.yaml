@@ -54,6 +54,28 @@ spec:
               KEI_LIBRARY: all
               KEI_WATCH_WITH_INTERVAL: "3600"
               KEI_NOTIFICATION_SCRIPT: /scripts/notify.sh
+              KEI_METRICS_PORT: "9090"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 9090
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 9090
+                  initialDelaySeconds: 10
+                  periodSeconds: 15
+                  failureThreshold: 3
             envFrom:
               - secretRef:
                   name: kei-secret
@@ -64,6 +86,21 @@ spec:
               allowPrivilegeEscalation: false
               capabilities: {drop: ["ALL"]}
               readOnlyRootFilesystem: true
+
+    service:
+      app:
+        controller: kei
+        ports:
+          http:
+            port: 9090
+
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 30s
 
     persistence:
       photos:
