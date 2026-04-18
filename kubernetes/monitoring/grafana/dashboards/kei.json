@@ -57,7 +57,7 @@
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
       "targets": [
         {
-          "expr": "kei_sync_consecutive_failures",
+          "expr": "kei_health_consecutive_failures",
           "legendFormat": "Consecutive Failures",
           "refId": "A"
         }
@@ -85,7 +85,7 @@
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
       "targets": [
         {
-          "expr": "kei_sync_last_success_timestamp * 1000",
+          "expr": "kei_health_last_success_timestamp_seconds * 1000",
           "legendFormat": "Last Success",
           "refId": "A"
         }
@@ -170,7 +170,7 @@
       "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["sum"]}},
       "targets": [
         {
-          "expr": "increase(kei_sync_interrupted_total[24h])",
+          "expr": "increase(kei_sync_interrupted_cycles_total[24h])",
           "legendFormat": "Interrupted (24h)",
           "refId": "A"
         }
@@ -182,7 +182,7 @@
       "collapsed": false,
       "gridPos": {"h": 1, "w": 24, "x": 0, "y": 5},
       "id": 101,
-      "title": "Downloads",
+      "title": "Downloads & Assets",
       "type": "row"
     },
     {
@@ -191,17 +191,51 @@
         "defaults": {"unit": "short"},
         "overrides": []
       },
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6},
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 6},
       "id": 10,
       "options": {"legend": {"calcs": ["sum"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
       "targets": [
         {
-          "expr": "rate(kei_sync_downloads_total[5m])",
-          "legendFormat": "{{status}}",
+          "expr": "rate(kei_sync_downloaded_total[5m])",
+          "legendFormat": "downloaded",
           "refId": "A"
+        },
+        {
+          "expr": "rate(kei_sync_failed_total[5m])",
+          "legendFormat": "failed",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(kei_sync_assets_seen_total[5m])",
+          "legendFormat": "assets seen",
+          "refId": "C"
         }
       ],
-      "title": "Download Rate by Status",
+      "title": "Asset Rate (5m)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {"unit": "bytes"},
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 6},
+      "id": 11,
+      "options": {"legend": {"calcs": ["sum"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {
+          "expr": "rate(kei_sync_bytes_downloaded_total[5m])",
+          "legendFormat": "network bytes",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(kei_sync_disk_bytes_written_total[5m])",
+          "legendFormat": "disk bytes written",
+          "refId": "B"
+        }
+      ],
+      "title": "Throughput (5m avg)",
       "type": "timeseries"
     },
     {
@@ -210,17 +244,27 @@
         "defaults": {"unit": "short"},
         "overrides": []
       },
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6},
-      "id": 11,
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 6},
+      "id": 12,
       "options": {"legend": {"calcs": ["sum"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
       "targets": [
         {
-          "expr": "increase(kei_sync_downloads_total[1h])",
-          "legendFormat": "{{status}}",
+          "expr": "rate(kei_sync_exif_failures_total[5m])",
+          "legendFormat": "EXIF failures",
           "refId": "A"
+        },
+        {
+          "expr": "rate(kei_sync_state_write_failures_total[5m])",
+          "legendFormat": "state write failures",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(kei_sync_enumeration_errors_total[5m])",
+          "legendFormat": "enumeration errors",
+          "refId": "C"
         }
       ],
-      "title": "Downloads per Hour by Status",
+      "title": "Error Rate (5m)",
       "type": "timeseries"
     },
     {
@@ -305,7 +349,7 @@
       "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
       "targets": [
         {
-          "expr": "kei_sync_consecutive_failures",
+          "expr": "kei_health_consecutive_failures",
           "legendFormat": "Consecutive Failures",
           "refId": "A"
         }
