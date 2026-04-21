@@ -54,28 +54,13 @@ spec:
               KEI_LIBRARY: all
               KEI_WATCH_WITH_INTERVAL: "3600"
               KEI_NOTIFICATION_SCRIPT: /scripts/notify.sh
-              KEI_METRICS_PORT: "9090"
+              # KEI_METRICS_PORT: "9090"  # disabled: 0.10.0 panics in metrics server (tokio runtime conflict)
+            # probes disabled: 0.10.0 metrics server panics (tokio runtime conflict)
             probes:
               liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: 9090
-                  initialDelaySeconds: 30
-                  periodSeconds: 30
-                  failureThreshold: 3
+                enabled: false
               readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: 9090
-                  initialDelaySeconds: 10
-                  periodSeconds: 15
-                  failureThreshold: 3
+                enabled: false
             envFrom:
               - secretRef:
                   name: kei-secret
@@ -94,13 +79,14 @@ spec:
           http:
             port: 9090
 
-    serviceMonitor:
-      app:
-        endpoints:
-          - port: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 30s
+    # serviceMonitor disabled: 0.10.0 metrics server panics
+    # serviceMonitor:
+    #   app:
+    #     endpoints:
+    #       - port: http
+    #         path: /metrics
+    #         interval: 1m
+    #         scrapeTimeout: 30s
 
     persistence:
       photos:
