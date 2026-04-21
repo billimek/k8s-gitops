@@ -262,6 +262,11 @@
           "expr": "sum(rate(kei_sync_enumeration_errors_total[5m]))",
           "legendFormat": "enumeration errors",
           "refId": "C"
+        },
+        {
+          "expr": "sum(rate(kei_db_summary_read_failures_total[5m]))",
+          "legendFormat": "DB summary read failures",
+          "refId": "D"
         }
       ],
       "title": "Error Rate (5m)",
@@ -355,6 +360,155 @@
         }
       ],
       "title": "Consecutive Sync Failures",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 32},
+      "id": 104,
+      "title": "Database State",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "short",
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "pending"},
+            "properties": [{"id": "thresholds", "value": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 1}]}}]
+          },
+          {
+            "matcher": {"id": "byName", "options": "failed"},
+            "properties": [{"id": "thresholds", "value": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "red", "value": 1}]}}]
+          }
+        ]
+      },
+      "gridPos": {"h": 4, "w": 8, "x": 0, "y": 33},
+      "id": 40,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "horizontal", "reduceOptions": {"calcs": ["lastNotNull"]}, "textMode": "auto"},
+      "targets": [
+        {
+          "expr": "kei_db_assets_total{status=\"downloaded\"}",
+          "legendFormat": "downloaded",
+          "refId": "A"
+        },
+        {
+          "expr": "kei_db_assets_total{status=\"pending\"}",
+          "legendFormat": "pending",
+          "refId": "B"
+        },
+        {
+          "expr": "kei_db_assets_total{status=\"failed\"}",
+          "legendFormat": "failed",
+          "refId": "C"
+        }
+      ],
+      "title": "Asset Count by Status",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+          "unit": "bytes"
+        }
+      },
+      "gridPos": {"h": 4, "w": 8, "x": 8, "y": 33},
+      "id": 41,
+      "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
+      "targets": [
+        {
+          "expr": "kei_db_assets_size_bytes{status=\"downloaded\"}",
+          "legendFormat": "Downloaded Size",
+          "refId": "A"
+        }
+      ],
+      "title": "Downloaded Assets Size",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "yellow", "value": 1},
+              {"color": "red", "value": 100}
+            ]
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": {"h": 4, "w": 8, "x": 16, "y": 33},
+      "id": 42,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
+      "targets": [
+        {
+          "expr": "kei_db_last_sync_assets_seen - kei_db_assets_total{status=\"downloaded\"}",
+          "legendFormat": "Sync Gap",
+          "refId": "A"
+        }
+      ],
+      "title": "Sync Gap (seen - downloaded)",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {"unit": "short"},
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 37},
+      "id": 43,
+      "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {
+          "expr": "kei_db_assets_total{status=\"downloaded\"}",
+          "legendFormat": "downloaded",
+          "refId": "A"
+        },
+        {
+          "expr": "kei_db_assets_total{status=\"pending\"}",
+          "legendFormat": "pending",
+          "refId": "B"
+        },
+        {
+          "expr": "kei_db_assets_total{status=\"failed\"}",
+          "legendFormat": "failed",
+          "refId": "C"
+        }
+      ],
+      "title": "Asset Counts Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {"unit": "bytes"},
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 37},
+      "id": 44,
+      "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "single", "sort": "none"}},
+      "targets": [
+        {
+          "expr": "kei_db_assets_size_bytes{status=\"downloaded\"}",
+          "legendFormat": "downloaded bytes",
+          "refId": "A"
+        }
+      ],
+      "title": "Downloaded Asset Size Over Time",
       "type": "timeseries"
     }
   ],
