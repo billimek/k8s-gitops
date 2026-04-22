@@ -394,17 +394,17 @@
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "horizontal", "reduceOptions": {"calcs": ["lastNotNull"]}, "textMode": "auto"},
       "targets": [
         {
-          "expr": "kei_db_assets_total{status=\"downloaded\"}",
+          "expr": "max(kei_db_assets_total{status=\"downloaded\"})",
           "legendFormat": "downloaded",
           "refId": "A"
         },
         {
-          "expr": "kei_db_assets_total{status=\"pending\"}",
+          "expr": "max(kei_db_assets_total{status=\"pending\"})",
           "legendFormat": "pending",
           "refId": "B"
         },
         {
-          "expr": "kei_db_assets_total{status=\"failed\"}",
+          "expr": "max(kei_db_assets_total{status=\"failed\"})",
           "legendFormat": "failed",
           "refId": "C"
         }
@@ -426,8 +426,7 @@
       "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
       "targets": [
         {
-          "expr": "kei_db_assets_size_bytes{status=\"downloaded\"}",
-          "legendFormat": "Downloaded Size",
+          "expr": "max(kei_db_assets_size_bytes{status=\"downloaded\"})",
           "refId": "A"
         }
       ],
@@ -455,7 +454,7 @@
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
       "targets": [
         {
-          "expr": "kei_db_last_sync_assets_seen - kei_db_assets_total{status=\"downloaded\"}",
+          "expr": "max(kei_db_last_sync_assets_seen) - max(kei_db_assets_total{status=\"downloaded\"})",
           "legendFormat": "Sync Gap",
           "refId": "A"
         }
@@ -474,17 +473,17 @@
       "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "desc"}},
       "targets": [
         {
-          "expr": "kei_db_assets_total{status=\"downloaded\"}",
+          "expr": "max(kei_db_assets_total{status=\"downloaded\"})",
           "legendFormat": "downloaded",
           "refId": "A"
         },
         {
-          "expr": "kei_db_assets_total{status=\"pending\"}",
+          "expr": "max(kei_db_assets_total{status=\"pending\"})",
           "legendFormat": "pending",
           "refId": "B"
         },
         {
-          "expr": "kei_db_assets_total{status=\"failed\"}",
+          "expr": "max(kei_db_assets_total{status=\"failed\"})",
           "legendFormat": "failed",
           "refId": "C"
         }
@@ -503,8 +502,7 @@
       "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom"}, "tooltip": {"mode": "single", "sort": "none"}},
       "targets": [
         {
-          "expr": "kei_db_assets_size_bytes{status=\"downloaded\"}",
-          "legendFormat": "downloaded bytes",
+          "expr": "max(kei_db_assets_size_bytes{status=\"downloaded\"})",
           "refId": "A"
         }
       ],
