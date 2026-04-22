@@ -21,7 +21,7 @@ spec:
     replicaCount: 0
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2026.4.1@sha256:1544b0bd94b2734a5b12cb38e73751cc5dee4d7f6ab5b751afcb6ecc4b8f1460
+      tag: 2026.4.2@sha256:13b19d4134d236de47320e937d456b38bbc148db2bbab4a81064a3e71dbe37ad
     fullnameOverride: minecraft-lobby
     persistence:
       dataDir:
