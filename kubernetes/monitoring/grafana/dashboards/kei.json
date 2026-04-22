@@ -389,7 +389,7 @@
           }
         ]
       },
-      "gridPos": {"h": 4, "w": 8, "x": 0, "y": 33},
+      "gridPos": {"h": 4, "w": 12, "x": 0, "y": 33},
       "id": 40,
       "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "horizontal", "reduceOptions": {"calcs": ["lastNotNull"]}, "textMode": "auto"},
       "targets": [
@@ -421,7 +421,7 @@
           "unit": "bytes"
         }
       },
-      "gridPos": {"h": 4, "w": 8, "x": 8, "y": 33},
+      "gridPos": {"h": 4, "w": 12, "x": 12, "y": 33},
       "id": 41,
       "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
       "targets": [
@@ -431,35 +431,6 @@
         }
       ],
       "title": "Downloaded Assets Size",
-      "type": "stat"
-    },
-    {
-      "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "color": {"mode": "thresholds"},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {"color": "green", "value": null},
-              {"color": "yellow", "value": 1},
-              {"color": "red", "value": 100}
-            ]
-          },
-          "unit": "short"
-        }
-      },
-      "gridPos": {"h": 4, "w": 8, "x": 16, "y": 33},
-      "id": 42,
-      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"]}},
-      "targets": [
-        {
-          "expr": "max(kei_db_last_sync_assets_seen) - max(kei_db_assets_total{status=\"downloaded\"})",
-          "legendFormat": "Sync Gap",
-          "refId": "A"
-        }
-      ],
-      "title": "Sync Gap (seen - downloaded)",
       "type": "stat"
     },
     {
