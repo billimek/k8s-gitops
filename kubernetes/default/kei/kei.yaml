@@ -42,7 +42,7 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              tag: 0.10.1@sha256:a041143e5be9b3025852bc67a19c9a042f78a3ab1ab428cd66ae3008d67f062a
+              tag: 0.11.0@sha256:e9a75b3c3e9f164077bea865e414443980dae6d91b59c7262663ec6a6e5119d0
             args:
               - sync
               - --data-dir
@@ -54,7 +54,7 @@ spec:
               KEI_LIBRARY: all
               KEI_WATCH_WITH_INTERVAL: "3600"
               KEI_NOTIFICATION_SCRIPT: /scripts/notify.sh
-              KEI_METRICS_PORT: "9090"
+              KEI_HTTP_PORT: "9090"
             probes:
               liveness:
                 enabled: true
