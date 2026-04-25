@@ -118,9 +118,6 @@ spec:
         etcd:
           url: https://grafana.com/api/dashboards/22236/revisions/4/download
           datasource: Prometheus
-        kei:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/kubernetes/monitoring/grafana/dashboards/kei.json
-          datasource: Prometheus
 
       infrastructure:
         cert-manager:
@@ -132,9 +129,7 @@ spec:
         flux-control-plane:
           url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/control-plane.json
           datasource: Prometheus
-        home-assistant:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/home_assistant.json
-          datasource: home_assistant
+
         volsync:
           url: https://grafana.com/api/dashboards/21356/revisions/3/download
           datasource:
@@ -145,9 +140,7 @@ spec:
             - {name: DS_PROMETHEUS, value: Prometheus}
 
       networking:
-        opnsense:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/opnsense.json
-          datasource: Prometheus
+
         opnsense-exporter:
           url: https://grafana.com/api/dashboards/21113/revisions/1/download
           datasource:
@@ -198,9 +191,7 @@ spec:
         zfs:
           url: https://grafana.com/api/dashboards/3170/revisions/3/download
           datasource: Prometheus
-        nfs-server:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/kubernetes/monitoring/grafana/dashboards/nfs_server.json
-          datasource: Prometheus
+
         smartctl:
           url: https://grafana.com/api/dashboards/22604/revisions/2/download
           datasource:
@@ -228,12 +219,6 @@ spec:
           url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
-        ups:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/ups.json
-          datasource: Prometheus
-        prometheus-exporter-summary:
-          url: https://raw.githubusercontent.com/billimek/k8s-gitops/master/monitoring/grafana/dashboards/prometheus_exporter_summary.json
-          datasource: Prometheus
 
       kubernetes:
         k8s-system-api-server:
