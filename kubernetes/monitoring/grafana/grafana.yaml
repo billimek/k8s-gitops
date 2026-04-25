@@ -360,6 +360,8 @@ spec:
               sslmode: disable
               database: teslamate
     grafana.ini:
+      feature_toggles:
+        publicDashboards: false
       auth:
         oauth_allow_insecure_email_lookup: false
       auth.basic:
