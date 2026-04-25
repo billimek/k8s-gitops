@@ -37,9 +37,9 @@ spec:
             severity: critical
         - alert: KopiaMaintenanceMissing
           annotations:
-            summary: Kopia maintenance has not run in over 2 days.
+            summary: Kopia maintenance has not run in over 12 hours.
           expr: |
-            (time() - max(kube_job_status_completion_time{job_name=~"kopia-maint-.*"})) > 172800
+            (time() - max(kube_job_status_completion_time{job_name=~"kopia-maint-.*"})) > 43200
           for: 1h
           labels:
             severity: warning

@@ -8,6 +8,10 @@
 #   - runAsUser: "1001"
 #   - capacity: "1Gi"
 #   - schedule: "0 * * * *"
+# Backup schedule groups (to reduce concurrent NFS/Ceph pressure):
+#   Group A (:00) - fast apps (~1 min): audiobookshelf, chaptarr, frigate, gatus, minecraft-lobby, qbittorrent, recyclarr, seerr, tautulli
+#   Group B (:15) - medium apps (~1.5 min): continuwuity, home-assistant, mousetrap, node-red, prowlarr, qui, sabnzbd, shelfmark, zwave2mqtt
+#   Group C (:30) - heavy apps (Plex ~8.5 min): minecraft-creative, minecraft-survival, minecraft-survival2, plex, radarr, readarr, sonarr, unifi
 # To add a new app: add entry to the apps array below
 # To remove an app: delete entry from the apps array below
 apiVersion: fluxcd.controlplane.io/v1
@@ -32,6 +36,7 @@ spec:
 
       - app: continuwuity
         capacity: 5Gi
+        schedule: "15 * * * *"
 
       - app: frigate
         runAsUser: "1000"
@@ -43,6 +48,7 @@ spec:
       - app: home-assistant
         runAsUser: "1000"
         capacity: 10Gi
+        schedule: "15 * * * *"
       
       - app: seerr
       
@@ -50,33 +56,42 @@ spec:
         pvcSuffix: "data"
         runAsUser: "1000"
         capacity: 1Gi
+        schedule: "15 * * * *"
       
       - app: plex
         runAsUser: "1000"
         capacity: 35Gi
         cacheCapacity: 20Gi
+        schedule: "30 * * * *"
       
       - app: prowlarr
-      
+        schedule: "15 * * * *"
+
       - app: qbittorrent
       
       - app: qui
-      
+        schedule: "15 * * * *"
+
       - app: radarr
         capacity: 3Gi
+        schedule: "30 * * * *"
       
       - app: readarr
         capacity: 4Gi
+        schedule: "30 * * * *"
       
       - app: recyclarr
         capacity: 5Gi
       
       - app: sabnzbd
-      
+        schedule: "15 * * * *"
+
       - app: shelfmark
+        schedule: "15 * * * *"
 
       - app: sonarr
         capacity: 2Gi
+        schedule: "30 * * * *"
       
       - app: tautulli
       
@@ -84,16 +99,20 @@ spec:
         pvcSuffix: "data"
         runAsUser: "999"
         capacity: 2Gi
+        schedule: "30 * * * *"
       
       - app: mousetrap
         runAsUser: "1000"
+        schedule: "15 * * * *"
 
       - app: zwave2mqtt
-      
+        schedule: "15 * * * *"
+
       - app: minecraft-creative
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 10Gi
+        schedule: "30 * * * *"
       
       - app: minecraft-lobby
         pvcSuffix: "datadir"
@@ -104,9 +123,11 @@ spec:
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 8Gi
+        schedule: "30 * * * *"
       
       - app: minecraft-survival2
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 20Gi
         cacheCapacity: 12Gi
+        schedule: "30 * * * *"
