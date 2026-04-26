@@ -26,11 +26,11 @@ spec:
         data:
           notify.sh: |
             #!/bin/bash
-            # KEI_EVENT: 2fa_required | sync_complete | sync_failed | session_expired
+            # KEI_EVENT: 2fa_required | sync_started | sync_complete | sync_failed | session_expired
             # KEI_MESSAGE: human-readable description
             # KEI_ICLOUD_USERNAME: iCloud account
             case "$KEI_EVENT" in
-              sync_complete) exit 0 ;;  # don't spam on every successful sync
+              sync_complete|sync_started) exit 0 ;;  # don't spam on every successful/started sync
             esac
             curl -s -X POST "$DISCORD_WEBHOOK_URL" \
               -H "Content-Type: application/json" \
@@ -47,7 +47,7 @@ spec:
               - sync
               - --data-dir
               - /config
-              - --directory
+              - --download-dir
               - /photos
             env:
               TZ: America/New_York
