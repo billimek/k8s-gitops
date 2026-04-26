@@ -26,11 +26,11 @@ spec:
         data:
           notify.sh: |
             #!/bin/bash
-            # KEI_EVENT: 2fa_required | sync_complete | sync_failed | session_expired
+            # KEI_EVENT: 2fa_required | sync_started | sync_complete | sync_failed | session_expired
             # KEI_MESSAGE: human-readable description
             # KEI_ICLOUD_USERNAME: iCloud account
             case "$KEI_EVENT" in
-              sync_complete) exit 0 ;;  # don't spam on every successful sync
+              sync_complete|sync_started) exit 0 ;;  # don't spam on every successful/started sync
             esac
             curl -s -X POST "$DISCORD_WEBHOOK_URL" \
               -H "Content-Type: application/json" \
@@ -42,12 +42,12 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              tag: 0.11.0@sha256:e9a75b3c3e9f164077bea865e414443980dae6d91b59c7262663ec6a6e5119d0
+              tag: 0.12.0@sha256:bb48c6634781d7cfbc29fd22758d0382da7e7db6184169f0457953f55a2e467c
             args:
               - sync
               - --data-dir
               - /config
-              - --directory
+              - --download-dir
               - /photos
             env:
               TZ: America/New_York
