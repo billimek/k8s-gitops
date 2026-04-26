@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: forgejo.ellis.link/continuwuation/continuwuity
-              tag: v0.5.8-maxperf@sha256:913a031d3fba0ae915606310310472c1727aae3d03dda2c8431c3e64c423b2c4
+              tag: v0.5.8-maxperf@sha256:526dd6e2aa8de82949392826cf903b5d1638677925f4c14dec0356d23e207052
             env:
               TZ: "America/New_York"
               CONDUWUIT_SERVER_NAME: eviljungle.com
