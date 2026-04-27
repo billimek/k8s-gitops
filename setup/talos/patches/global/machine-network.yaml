@@ -1,5 +1,0 @@
-machine:
-  network:
-    disableSearchDomain: true
-    searchDomains:
-      - home
