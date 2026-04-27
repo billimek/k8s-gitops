@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/nfd.k8s-sigs.io/nodefeaturerule_v1alpha1.json
+apiVersion: nfd.k8s-sigs.io/v1alpha1
+kind: NodeFeatureRule
+metadata:
+  name: intel-gpu-raptrlake
+spec:
+  rules:
+    - # Intel Raptor Lake-P [UHD Graphics] (Gen 12 Xe, no AV1 encode)
+      name: intel.gpu.raptrlake
+      labels:
+        intel.feature.node.kubernetes.io/gpu-gen: "12"
+        intel.feature.node.kubernetes.io/gpu-family: "raptrlake"
+      matchFeatures:
+        - feature: pci.device
+          matchExpressions:
+            class: {op: In, value: ["0300", "0380"]}
+            vendor: {op: In, value: ["8086"]}
+            device: {op: In, value: ["a720", "a721", "a7a0", "a7a1", "a7a8", "a7a9"]}

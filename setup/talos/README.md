@@ -88,6 +88,17 @@ This is a worker node, bare-metal
 
 2025-01-02: retired this node as it was repurposed for the control plane
 
+### k8s-d
+
+This is a worker node, bare-metal (HP laptop)
+
+- MAC: `10:82:86:03:8a:03` (USB-C ethernet adapter - may change if adapter is swapped)
+- IP: 10.0.7.54
+- CPU: Intel Core i3-1315U (Raptor Lake-P, 2P+4E cores, 8 threads)
+- RAM: 64GB
+- Disk: host - 2TB - `/dev/nvme0n1` (TIMETEC PCIe 3.0 2TB, serial QA250528B2F0467)
+- GPU: Intel UHD Graphics (Raptor Lake-P, Gen 12 Xe, 64 EUs, QuickSync Gen 12 - no AV1 encode)
+
 ### k8s-e
 
 This is a worker node, bare-metal

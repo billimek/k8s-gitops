@@ -83,6 +83,16 @@ nodes:
       - deviceSelector:
           hardwareAddr: ac:1f:6b:6f:27:5f
         dhcp: true
+  - hostname: k8s-d
+    nodeAnnotations:
+      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
+    controlPlane: false
+    ipAddress: 10.0.7.54
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 10:82:86:03:8a:03
+        dhcp: true
   - hostname: k8s-e
     nodeAnnotations:
       installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
