@@ -6,7 +6,7 @@ talosVersion: v1.13.0
 kubernetesVersion: v1.36.0
 
 clusterName: home
-endpoint: https://k8s-cp:6443
+endpoint: https://k8s-cp.home:6443
 
 additionalApiServerCertSans:
   - k8s-cp.home
@@ -103,16 +103,6 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 00:02:c9:55:b4:26
-        dhcp: true
-  - hostname: k8s-f
-    nodeAnnotations:
-      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-    controlPlane: false
-    ipAddress: 10.0.7.56
-    installDisk: /dev/nvme0n1
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 68:1d:ef:34:d8:1a
         dhcp: true
   - hostname: k8s-g
     nodeAnnotations:
