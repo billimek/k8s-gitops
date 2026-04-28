@@ -3,6 +3,7 @@ cluster:
   apiServer:
     extraArgs:
       enable-aggregator-routing: true
+      feature-gates: HPAScaleToZero=true
   controllerManager:
     extraArgs:
       bind-address: 0.0.0.0
