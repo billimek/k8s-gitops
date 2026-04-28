@@ -61,16 +61,16 @@ tasks:
       - which flux
     cmd: flux --namespace flux-system resume kustomization cluster-apps
 
-  keda-suspend:
-    desc: Suspend all KEDA ScaledObjects across all namespaces
+  hpa-suspend:
+    desc: Suspend all NFS zero-scalers (set minReplicas=1 to prevent scale-to-zero)
     preconditions:
       - which kubectl
     vars:
-      SCALED_OBJECTS:
-        sh: kubectl get scaledobjects --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
+      HPAS:
+        sh: kubectl get hpa --all-namespaces -l app.kubernetes.io/part-of=nfs-scalers --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
     cmds:
-      - for: { var: SCALED_OBJECTS, split: "\n" }
-        cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate --field-manager=flux-client-side-apply --overwrite scaledobject {{splitList "," .ITEM | last}} autoscaling.keda.sh/paused=true
+      - for: { var: HPAS, split: "\n" }
+        cmd: kubectl --namespace {{splitList "," .ITEM | first}} patch hpa {{splitList "," .ITEM | last}} --type=merge -p '{"spec":{"minReplicas":1}}'
 
   kei-get-code:
     desc: Request a 2FA code from Apple for kei iCloud auth
@@ -88,13 +88,13 @@ tasks:
       - kubectl --namespace default get deployment kei
     cmd: kubectl exec --namespace default deploy/kei -- kei login submit-code --data-dir /config {{.CODE}}
 
-  keda-resume:
-    desc: Resume all KEDA ScaledObjects across all namespaces
+  hpa-resume:
+    desc: Resume all NFS zero-scalers (set minReplicas=0 to allow scale-to-zero)
     preconditions:
       - which kubectl
     vars:
-      SCALED_OBJECTS:
-        sh: kubectl get scaledobjects --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
+      HPAS:
+        sh: kubectl get hpa --all-namespaces -l app.kubernetes.io/part-of=nfs-scalers --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
     cmds:
-      - for: { var: SCALED_OBJECTS, split: "\n" }
-        cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate --field-manager=flux-client-side-apply --overwrite scaledobject {{splitList "," .ITEM | last}} autoscaling.keda.sh/paused-
+      - for: { var: HPAS, split: "\n" }
+        cmd: kubectl --namespace {{splitList "," .ITEM | first}} patch hpa {{splitList "," .ITEM | last}} --type=merge -p '{"spec":{"minReplicas":0}}'

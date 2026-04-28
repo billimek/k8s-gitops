@@ -1,0 +1,66 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nfs-scaler-rules
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: nfs-scalers
+spec:
+  groups:
+    - name: nfs-scalers
+      rules:
+        # Aggregated alert: Apps scaling up (NAS becomes available)
+        - alert: NFSScalersActivated
+          expr: |
+            count(
+              kube_horizontalpodautoscaler_status_current_replicas{
+                namespace="default",
+                horizontalpodautoscaler=~".*-nfs-scaler"
+              } == 1
+            ) >= 1
+          for: 30s
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $value }} NFS-dependent apps scaled up"
+            description: "{{ $value }} applications have scaled to 1 replica, NAS is available"
+
+        # Aggregated alert: All apps scaled down (NAS unavailable)
+        - alert: NFSScalersDeactivated
+          expr: |
+            count(
+              kube_horizontalpodautoscaler_status_current_replicas{
+                namespace="default",
+                horizontalpodautoscaler=~".*-nfs-scaler"
+              } == 1
+            ) == 0
+            and
+            count(
+              kube_horizontalpodautoscaler_status_current_replicas{
+                namespace="default",
+                horizontalpodautoscaler=~".*-nfs-scaler"
+              }
+            ) > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "All NFS-dependent apps scaled down to zero"
+            description: "All NAS-dependent applications have 0 replicas. NAS may be unavailable."
+
+        # HPA unable to scale (metrics unavailable or adapter down)
+        - alert: NFSScalerError
+          expr: |
+            kube_horizontalpodautoscaler_status_condition{
+              namespace="default",
+              horizontalpodautoscaler=~".*-nfs-scaler",
+              condition="ScalingActive",
+              status="false"
+            } == 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "HPA scaling inactive for {{ $labels.horizontalpodautoscaler }}"
+            description: "HPA {{ $labels.horizontalpodautoscaler }} in {{ $labels.namespace }} cannot scale — metrics may be unavailable from prometheus-adapter"
