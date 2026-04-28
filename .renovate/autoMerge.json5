@@ -27,6 +27,7 @@
       schedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
+        "ghcr.io/advplyr/audiobookshelf",
         "ghcr.io/coder/code-server",
         "ghcr.io/home-operations/home-assistant",
         "ghcr.io/home-operations/plex",
