@@ -26,7 +26,7 @@ This is a worker node that runs via proxmox VM on `nas.home`
 - CPU: Intel Core i5-9500T (Coffee Lake, 4 cores allocated from 6-core host, 4 threads, host passthrough)
 - RAM: VM - 32GB
 - Disk: VM - 200GB - `/dev/sda`
-- Disk: SSD for ceph - 1TB `/dev/sdb` -
+- Disk: SSD for ceph - 2TB `/dev/sdb` -
   (`/dev/disk/by-id/wwn-0x5002538c000fc6fd` passthrough from the host)
 - GPU: Intel UHD Graphics 630 (Coffee Lake, Gen 9.5, 24 EUs, QuickSync Gen 9.5) via Intel GVT-g passthrough
   - Because I will probably forget this, the `i915-GVTg_V5_1` mdev device is
