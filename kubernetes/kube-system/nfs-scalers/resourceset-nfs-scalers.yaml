@@ -45,9 +45,6 @@ spec:
             external:
               metric:
                 name: probe_success
-                selector:
-                  matchLabels:
-                    job: probe/monitoring/nfs
               target:
                 type: Value
                 value: "1"
