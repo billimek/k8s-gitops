@@ -13,6 +13,12 @@
 * [grafana/grafana.yaml](grafana/grafana.yaml)
 * [grafana/dashboards/](grafana/dashboards/)
 
+# prometheus-adapter
+
+[prometheus-adapter](https://github.com/kubernetes-sigs/prometheus-adapter) exposes VictoriaMetrics metrics to the Kubernetes external metrics API (`/apis/external.metrics.k8s.io/v1beta1`). Used to serve the `probe_success` metric to HorizontalPodAutoscalers for NFS-dependent app scaling.
+
+* [prometheus-adapter/prometheus-adapter.yaml](prometheus-adapter/prometheus-adapter.yaml)
+
 # prometheus-rules
 
 Various custom PrometheusRule definitions for this cluster

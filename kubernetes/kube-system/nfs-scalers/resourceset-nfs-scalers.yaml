@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
+# ResourceSet for NFS-dependent app scalers
+# Scales apps to 0 replicas when NAS NFS mount (nas.home:2049) is unavailable
+# Generates 12 HPAs in default namespace via HPAScaleToZero feature gate + prometheus-adapter
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: nfs-scalers
+  namespace: kube-system
+spec:
+  # Health checks - wait for generated resources to be ready
+  wait: true
+
+  inputs:
+    - app: audiobookshelf
+    - app: chaptarr
+    - app: frigate
+    - app: kei
+    - app: plex
+    - app: prowlarr
+    - app: qbittorrent
+    - app: qui
+    - app: radarr
+    - app: readarr
+    - app: shelfmark
+    - app: sonarr
+  resources:
+    - apiVersion: autoscaling/v2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: << inputs.app >>-nfs-scaler
+        namespace: default
+        labels:
+          app.kubernetes.io/part-of: nfs-scalers
+      spec:
+        minReplicas: 0
+        maxReplicas: 1
+        scaleTargetRef:
+          apiVersion: apps/v1
+          kind: Deployment
+          name: << inputs.app >>
+        metrics:
+          - type: External
+            external:
+              metric:
+                name: probe_success
+                selector:
+                  matchLabels:
+                    job: probe/monitoring/nfs
+              target:
+                type: Value
+                value: "1"
+        behavior:
+          scaleDown:
+            policies:
+              - type: Pods
+                value: 1
+                periodSeconds: 15
+            selectPolicy: Max
+            stabilizationWindowSeconds: 0
+          scaleUp:
+            policies:
+              - type: Pods
+                value: 1
+                periodSeconds: 15
+            selectPolicy: Max
+            stabilizationWindowSeconds: 0
