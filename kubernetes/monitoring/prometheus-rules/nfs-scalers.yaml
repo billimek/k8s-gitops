@@ -10,22 +10,6 @@ spec:
   groups:
     - name: nfs-scalers
       rules:
-        # Aggregated alert: Apps scaling up (NAS becomes available)
-        - alert: NFSScalersActivated
-          expr: |
-            count(
-              kube_horizontalpodautoscaler_status_current_replicas{
-                namespace="default",
-                horizontalpodautoscaler=~".*-nfs-scaler"
-              } == 1
-            ) >= 1
-          for: 30s
-          labels:
-            severity: warning
-          annotations:
-            summary: "{{ $value }} NFS-dependent apps scaled up"
-            description: "{{ $value }} applications have scaled to 1 replica, NAS is available"
-
         # Aggregated alert: All apps scaled down (NAS unavailable)
         - alert: NFSScalersDeactivated
           expr: |
