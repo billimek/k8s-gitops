@@ -91,7 +91,7 @@ nodes:
     installDisk: /dev/nvme0n1
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: 10:82:86:03:8a:03
+          hardwareAddr: 00:e0:4c:68:16:17
         dhcp: true
   - hostname: k8s-e
     nodeAnnotations:
@@ -123,30 +123,6 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 68:1d:ef:34:d9:c7 # formerly k3s-h
-        dhcp: true
-  - hostname: k8s-i
-    nodeAnnotations:
-      installerImage: '{{ .MachineConfig.MachineInstall.InstallImage }}'
-    controlPlane: false
-    ipAddress: 10.0.7.59
-    installDisk: /dev/nvme0n1
-    patches:
-      - |-
-        ---
-        apiVersion: v1alpha1
-        kind: EthernetConfig
-        name: eno1
-        features:
-          tx-tcp-segmentation: false
-          tx-tcp6-segmentation: false
-          tx-generic-segmentation: false
-          rx-gro: false
-        rings:
-          rx: 4096
-          tx: 4096
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 98:fa:9b:04:47:b9 # formerly k3s-a
         dhcp: true
 
 # Global patches

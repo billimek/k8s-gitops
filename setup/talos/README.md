@@ -86,13 +86,9 @@ This is a worker node, bare-metal
 
 ### k8s-d
 
-2025-01-02: retired this node as it was repurposed for the control plane
-
-### k8s-d
-
 This is a worker node, bare-metal (HP laptop)
 
-- MAC: `10:82:86:03:8a:03` (USB-C ethernet adapter - may change if adapter is swapped)
+- MAC: `00:e0:4c:68:16:17` (USB-C ethernet adapter, Realtek - may change if adapter is swapped)
 - IP: 10.0.7.54
 - CPU: Intel Core i3-1315U (Raptor Lake-P, 2P+4E cores, 8 threads)
 - RAM: 64GB
@@ -145,15 +141,4 @@ This is a worker node, bare-metal
 - Disk: host - 1TB - `/dev/nvme0n1`
 - GPU: Intel UHD Graphics (Gen 12 Xe, 24 EUs, QuickSync Gen 12 with AV1 encode/decode)
 
-### k8s-i
 
-This is a worker node, bare-metal
-
-- MAC: `98:fa:9b:04:47:b9`
-- IP: 10.0.7.59
-- CPU: Intel Core i5-8500T (Coffee Lake, 6 cores, 6 threads)
-- RAM: 16GB
-- Disk: host - 128GB - `/dev/nvme0n1`
-- Disk: SSD for ceph - 1TB `/dev/sda` -
-  (`/dev/disk/by-id/wwn-0x5002538800374ff9`)
-- GPU: Intel UHD Graphics 630 (Coffee Lake, Gen 9.5, 24 EUs, QuickSync Gen 9.5)
