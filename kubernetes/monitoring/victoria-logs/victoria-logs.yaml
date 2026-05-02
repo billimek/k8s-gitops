@@ -58,3 +58,5 @@ spec:
                 port: 9428
     dashboards:
       enabled: false
+    vector:
+      enabled: false
