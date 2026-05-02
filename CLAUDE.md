@@ -1,5 +1,7 @@
 # Agent Instructions
 
+> Edit either `AGENTS.md` or `CLAUDE.md` — they are the same file (symlink).
+
 GitOps Kubernetes cluster on Talos + FluxCD. Infrastructure (`/setup`) separate from apps (`/kubernetes`).
 
 ## Key Commands
@@ -9,6 +11,8 @@ task                    # List all tasks
 task k8s:sync-secrets   # Force sync ExternalSecrets
 task k8s:cleanse-pods   # Delete Failed/Pending/Succeeded pods
 task volsync:snapshot APP=<name>  # Trigger immediate backup
+task volsync:list                 # List ReplicationSources/Destinations
+task volsync:restore APP=<name>   # Restore an app's PVC from latest backup
 flux reconcile kustomization cluster-apps --with-source
 ```
 
@@ -21,12 +25,14 @@ flux reconcile kustomization cluster-apps --with-source
 **Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
 
 **Patterns**:
+- **Cluster**: Single homelab cluster, 1 control plane + 7 workers (Talos)
 - **Primary**: OCIRepository + chartRef (exceptions: minecraft and emqx-operator use HelmRepository)
 - **Ingress**: Envoy Gateway with HTTPRoute (NOT Traefik/Ingress)
 - **Gateways**: `internal` (LAN + Tailscale, 10.0.6.151) and `public` (internet-facing, 10.0.6.150), both in `kube-system`
 - **Storage**: Ceph block (default), NFS media mounts, VolSync+Kopia backups
 - **Secrets**: ExternalSecret CRDs only (no plaintext)
 - **Backups**: ResourceSet automation in kube-system/volsync/
+- **CI**: PRs run `flux-local` diff/test (`.github/workflows/flux-local.yaml`); Renovate auto-bumps images per `.renovate/` rules
 
 ## Application Template
 
@@ -140,10 +146,12 @@ apps:
     namespace: "default"   # omit if default
     runAsUser: "1001"      # omit to use default
     capacity: 1Gi          # omit to use default (1Gi)
-    schedule: "0 4 * * *"  # omit to use default (0 7 * * *)
+    schedule: "0 4 * * *"  # omit to use default (0 * * * *, hourly)
     pvcSuffix: "config"    # omit to use default (config)
     cacheCapacity: 20Gi    # omit unless app needs large Kopia cache (e.g. plex)
 ```
+
+**Schedule groups** (see `resourceset-inputprovider.yaml` header): pick `:00` (Group A, fast), `:15` (Group B, medium), or `:30` (Group C, heavy) when adding an app to spread NFS/Ceph load.
 
 NFS repository (`nas.home:/mnt/ssdtank/kopia`) is configured via `moverVolumes` directly on each `ReplicationSource`/`ReplicationDestination`/`KopiaMaintenance` resource — no webhook injection.
 
@@ -183,6 +191,11 @@ persistence:
 kubectl scale deployment app-name --replicas=0 -n namespace
 flux reconcile helmrelease app-name -n namespace --with-source
 # Flux will scale it back up automatically on success
+```
+
+**Force ExternalSecret resync**: Bypass the secretStore cache when a 1Password value changed but the ExternalSecret hasn't picked it up:
+```bash
+kubectl annotate externalsecret <name> -n <ns> force-sync=$(date +%s) --overwrite
 ```
 
 ## Standards
