@@ -48,6 +48,7 @@ spec:
               requests:
                 cpu: 10m
                 memory: 250Mi
+                ephemeral-storage: 5Gi
               limits:
                 memory: 2Gi
             securityContext:
@@ -75,9 +76,11 @@ spec:
           - path: /media
       tmp:
         type: emptyDir
+        sizeLimit: 1Gi
       incomplete:
         enabled: true
         type: emptyDir
+        sizeLimit: 80Gi
 
     route:
       main:

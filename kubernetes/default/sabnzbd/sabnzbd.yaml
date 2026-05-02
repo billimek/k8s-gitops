@@ -52,6 +52,7 @@ spec:
               requests:
                 cpu: 50m
                 memory: 250Mi
+                ephemeral-storage: 5Gi
               limits:
                 memory: 3Gi
             securityContext:
@@ -71,8 +72,10 @@ spec:
             subPath: downloads/sabnzbd
       incomplete:
         type: emptyDir
+        sizeLimit: 80Gi
       tmp:
         type: emptyDir
+        sizeLimit: 1Gi
 
     route:
       main:
