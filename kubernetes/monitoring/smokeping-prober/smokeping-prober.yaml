@@ -40,7 +40,6 @@ spec:
               # Internet Services
               - hosts:
                   - google.com
-                  - github.com
                   - cnn.com
                   - ghcr.io
                 interval: 1s
