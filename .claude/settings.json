@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(task:*)",
+      "Bash(task --list)",
+      "Bash(kubectl get:*)",
+      "Bash(kubectl describe:*)",
+      "Bash(kubectl logs:*)",
+      "Bash(kubectl top:*)",
+      "Bash(kubectl explain:*)",
+      "Bash(kubectl api-resources:*)",
+      "Bash(kubectl api-versions)",
+      "Bash(flux get:*)",
+      "Bash(flux events:*)",
+      "Bash(flux stats:*)",
+      "Bash(flux tree:*)",
+      "Bash(talosctl get:*)",
+      "Bash(talosctl version:*)",
+      "Bash(kustomize build:*)",
+      "Bash(helm template:*)",
+      "Bash(helm show:*)",
+      "Bash(yq:*)",
+      "Bash(jq:*)",
+      "Bash(rg:*)",
+      "Bash(fd:*)",
+      "Bash(eza:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh api:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run list:*)"
+    ]
+  }
+}

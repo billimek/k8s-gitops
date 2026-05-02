@@ -26,6 +26,9 @@ auth
 .decrypted~*
 onepassword.env
 
-# Claude Code local configuration
-.claude/
-CLAUDE.md
+# Claude Code — commit shared config, ignore local-only state
+.claude/*
+!.claude/settings.json
+!.claude/commands/
+!.claude/commands/**
+.claude/settings.local.json
