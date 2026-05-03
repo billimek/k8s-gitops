@@ -71,8 +71,7 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /healthz
+                  tcpSocket:
                     port: 9090
                   initialDelaySeconds: 10
                   periodSeconds: 15
