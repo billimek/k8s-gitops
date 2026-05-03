@@ -103,6 +103,10 @@ spec:
             scrapeTimeout: 30s
 
     persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
       photos:
         type: nfs
         server: nas.home
