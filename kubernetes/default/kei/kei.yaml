@@ -52,6 +52,8 @@ spec:
             env:
               TZ: America/New_York
               KEI_LIBRARY: all
+              KEI_UNFILED: "true"
+              KEI_SMART_FOLDER: all
               KEI_WATCH_WITH_INTERVAL: "3600"
               KEI_NOTIFICATION_SCRIPT: /scripts/notify.sh
               KEI_HTTP_PORT: "9090"
@@ -60,8 +62,7 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /healthz
+                  tcpSocket:
                     port: 9090
                   initialDelaySeconds: 30
                   periodSeconds: 30
