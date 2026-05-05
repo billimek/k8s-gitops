@@ -56,9 +56,9 @@ spec:
 
     rawResources:
       backend-tls-policy:
-        apiVersion: gateway.networking.k8s.io/v1alpha3
-        kind: BackendTLSPolicy
-        spec:
+        manifest:
+          apiVersion: gateway.networking.k8s.io/v1alpha3
+          kind: BackendTLSPolicy
           spec:
             targetRefs:
               - group: ""
