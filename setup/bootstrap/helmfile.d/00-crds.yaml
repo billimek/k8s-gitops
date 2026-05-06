@@ -71,5 +71,5 @@ releases:
   - name: tuppr
     namespace: system-upgrade
     chart: oci://ghcr.io/home-operations/charts/tuppr
-    version: 0.1.19
+    version: 0.1.21
 
