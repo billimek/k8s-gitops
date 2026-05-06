@@ -27,3 +27,13 @@ spec:
   interval: 30m
   values:
     replicaCount: 1
+    controller:
+      metrics:
+        enabled: true
+    monitoring:
+      serviceMonitor:
+        enabled: true
+      prometheusRule:
+        enabled: true
+      dashboards:
+        enabled: true
