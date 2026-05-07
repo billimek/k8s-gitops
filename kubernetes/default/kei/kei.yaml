@@ -42,7 +42,7 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              tag: 0.13.2@sha256:0b4be77d09a2afd10007d56f76f48f364dd30359741320cbb68380bbd82f2c15
+              tag: 0.13.3@sha256:a275f27b2551e85d2efd6aae2337bd893919453d2e94148aaafe73edea88153d
             args:
               - sync
               - --data-dir
