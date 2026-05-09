@@ -32,6 +32,17 @@ spec:
               - secretRef:
                   name: home-assistant-secret
 
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  periodSeconds: 10
+                  failureThreshold: 60
+
             resources:
               requests:
                 cpu: 50m
