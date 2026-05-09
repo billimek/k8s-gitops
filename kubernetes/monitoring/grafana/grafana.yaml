@@ -113,11 +113,11 @@ spec:
             options:
               path: /var/lib/grafana/dashboards/teslamate
     dashboards:
-      default:
-        etcd:
-          url: https://grafana.com/api/dashboards/22236/revisions/4/download
-          datasource: Prometheus
-
+      # Note: kubernetes/etcd/node-exporter dashboards are provided by the
+      # victoria-metrics-k8s-stack chart as sidecar ConfigMaps (stack-etcd,
+      # stack-kubernetes-*, stack-node-exporter-full). Do not re-import them
+      # here — provisioning duplicate UIDs causes Grafana to mark the
+      # affected providers read-only.
       infrastructure:
         cert-manager:
           url: https://grafana.com/api/dashboards/20842/revisions/3/download
@@ -210,34 +210,16 @@ spec:
         1-node-exporter:
           url: https://grafana.com/api/dashboards/22413/revisions/6/download
           datasource: Prometheus
-        # Ref: https://grafana.com/grafana/dashboards/1860-node-exporter-full/
-        node-exporter-full:
-          url: https://grafana.com/api/dashboards/1860/revisions/45/download
-          datasource: Prometheus
+        # node-exporter-full (1860) is provided by vm-stack as
+        # `stack-node-exporter-full` sidecar ConfigMap — do not duplicate.
         node-feature-discovery:
           url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
 
       kubernetes:
-        k8s-system-api-server:
-          url: https://grafana.com/api/dashboards/15761/revisions/21/download
-          datasource: Prometheus
-        k8s-system-coredns:
-          url: https://grafana.com/api/dashboards/15762/revisions/22/download
-          datasource: Prometheus
-        k8s-views-global:
-          url: https://grafana.com/api/dashboards/15757/revisions/43/download
-          datasource: Prometheus
-        k8s-views-nodes:
-          url: https://grafana.com/api/dashboards/15759/revisions/40/download
-          datasource: Prometheus
-        k8s-views-namespaces:
-          url: https://grafana.com/api/dashboards/15758/revisions/46/download
-          datasource: Prometheus
-        k8s-views-pods:
-          url: https://grafana.com/api/dashboards/15760/revisions/39/download
-          datasource: Prometheus
+        # k8s-system-* and k8s-views-* (UIDs 15757-15762) are provided by
+        # vm-stack sidecar ConfigMaps (stack-kubernetes-*) — do not duplicate.
         k8s-volumes:
           url: https://grafana.com/api/dashboards/11454/revisions/14/download
           datasource: Prometheus

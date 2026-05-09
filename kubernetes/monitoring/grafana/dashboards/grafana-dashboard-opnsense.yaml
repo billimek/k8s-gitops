@@ -1,4 +1,11 @@
 ---
+# NOTE: This dashboard's panels query OPNsense filterlog data from
+# VictoriaLogs (datasource UID "VictoriaLogs"). They will be empty until
+# OPNsense syslog forwarding to VictoriaLogs is configured (e.g. via
+# vector or syslog-ng) with the JSON fields hostname, appname,
+# filter_action, filter_interface, filter_destination_port, and
+# geoip_country_code populated. Until then, prefer the
+# `opnsense-exporter` dashboard (URL-imported in grafana.yaml).
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -46,8 +53,8 @@ data:
             "rgba(50, 172, 45, 0.97)"
           ],
           "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "type": "victoriametrics-logs-datasource",
+            "uid": "VictoriaLogs"
           },
           "decimals": 0,
           "esMetric": "Count",
@@ -82,7 +89,7 @@ data:
                 "type": "loki",
                 "uid": "P8E80F9AEF21F6940"
               },
-              "expr": "sum(count_over_time({hostname=\"opnsense\"} | json | appname = \"filterlog\" | filter_action = \"pass\"[$__interval])) by (geoip_country_code)",
+              "expr": "_stream:{hostname=\"opnsense\"} appname:filterlog filter_action:pass | stats by (geoip_country_code) count()",
               "legendFormat": "{{geoip_country_code}}",
               "refId": "A"
             }
@@ -96,8 +103,8 @@ data:
         },
         {
           "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "type": "victoriametrics-logs-datasource",
+            "uid": "VictoriaLogs"
           },
           "fieldConfig": {
             "defaults": {
@@ -147,7 +154,7 @@ data:
                 "type": "loki",
                 "uid": "P8E80F9AEF21F6940"
               },
-              "expr": "topk(10, \n  sum by (filter_destination_port) (\n  count_over_time(\n      {hostname=\"opnsense\"} \n      | json \n      | appname = \"filterlog\"\n      | filter_destination_port != \"\"\n      | filter_action = \"pass\"\n      | filter_interface = \"igb0\"\n      [$__range]\n    )\n  )\n)",
+              "expr": "_stream:{hostname=\"opnsense\"} appname:filterlog filter_action:pass filter_interface:igb0 -filter_destination_port:\"\" | stats by (filter_destination_port) count() | sort by (count) desc | limit 10",
               "instant": true,
               "legendFormat": "{{filter_destination_port}}",
               "range": false,
