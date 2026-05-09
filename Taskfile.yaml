@@ -29,8 +29,3 @@ tasks:
   default:
     silent: true
     cmd: task --list
-
-  noop:
-    internal: true
-    silent: true
-    cmd: noop() { :; }
