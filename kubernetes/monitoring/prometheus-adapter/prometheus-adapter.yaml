@@ -26,6 +26,17 @@ spec:
     name: prometheus-adapter
   interval: 1h
   values:
+    replicas: 2
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: prometheus-adapter
+    podDisruptionBudget:
+      enabled: true
+      maxUnavailable: 1
     prometheus:
       url: http://vmsingle-stack.monitoring.svc.cluster.local
       port: 8428
