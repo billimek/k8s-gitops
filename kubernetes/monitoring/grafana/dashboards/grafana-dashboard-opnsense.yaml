@@ -1,13 +1,4 @@
 ---
-# NOTE: Queries OPNsense filterlog via VictoriaLogs (datasource UID
-# "VictoriaLogs"). Ingestion path: OPNsense → syslog UDP → LB
-# 10.0.6.58:514 → victoria-logs-collector vlagent (`-syslog.listenAddr.udp`)
-# → VictoriaLogs. With `streamFields=hostname,app_name`, hostname and
-# app_name become stream selectors. The CSV-formatted filterlog message
-# body lands in `_msg` and is parsed at query time with LogsQL `extract`.
-# OPNsense IPv4 TCP/UDP filterlog field positions (1-indexed):
-#   5 interface, 7 action, 9 ipversion, 22 dport.
-# WAN interface is igb0; change the `intf:=` filter if yours differs.
 apiVersion: v1
 kind: ConfigMap
 metadata:

@@ -27,11 +27,6 @@ spec:
   interval: 1h
   install:
     createNamespace: true
-  # The chart bundles two dashboards under a single `dashboards.enabled`
-  # toggle; we want the victorialogs-single-node one but not the Vector
-  # K8s monitoring one (no Vector instance runs in this cluster). Strip
-  # the sidecar-discovery label from the unwanted ConfigMap so Grafana
-  # ignores it without losing the useful dashboard.
   postRenderers:
     - kustomize:
         patches:

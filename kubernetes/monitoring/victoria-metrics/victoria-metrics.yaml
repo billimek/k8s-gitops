@@ -295,11 +295,7 @@ spec:
           key: additionalScrapeConfigs.yaml
         scrapeInterval: 20s
         externalLabels:
-          # Renamed from `cluster: home-ops` to avoid colliding with
-          # exporter-emitted `cluster` labels (e.g. cnpg writes
-          # `cluster=<cnpg-cluster-name>`, which vmagent renames to
-          # `exported_cluster` when honor_labels is false — that breaks
-          # chart-shipped dashboards filtering on `cluster=`).
+          # k8s_cluster (not cluster) — avoids collision with exporters that emit their own cluster label, e.g. cnpg.
           k8s_cluster: home-ops
         resources:
           limits:

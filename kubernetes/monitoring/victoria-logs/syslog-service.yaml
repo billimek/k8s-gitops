@@ -1,8 +1,4 @@
 ---
-# Externally-reachable LoadBalancer endpoint for syslog senders (e.g.
-# OPNsense). Routes UDP/514 on the VIP to the victoria-logs-collector
-# DaemonSet pods listening on UDP/5514 (configured via vlagent
-# `-syslog.listenAddr.udp` extraArg in collector.yaml).
 apiVersion: v1
 kind: Service
 metadata:

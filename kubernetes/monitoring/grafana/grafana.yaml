@@ -113,11 +113,7 @@ spec:
             options:
               path: /var/lib/grafana/dashboards/teslamate
     dashboards:
-      # Note: kubernetes/etcd/node-exporter dashboards are provided by the
-      # victoria-metrics-k8s-stack chart as sidecar ConfigMaps (stack-etcd,
-      # stack-kubernetes-*, stack-node-exporter-full). Do not re-import them
-      # here — provisioning duplicate UIDs causes Grafana to mark the
-      # affected providers read-only.
+      # vm-stack already ships kube-prometheus-stack-equivalent dashboards as sidecar ConfigMaps; do not re-import here (duplicate UIDs make providers read-only).
       infrastructure:
         cert-manager:
           url: https://grafana.com/api/dashboards/20842/revisions/3/download
@@ -142,10 +138,7 @@ spec:
 
         opnsense-exporter:
           url: https://grafana.com/api/dashboards/21113/revisions/1/download
-          # NOTE: this dashboard's only __input is DS_PROMETHEUS-K0. Do not
-          # add a DS_PROMETHEUS entry — the chart's substitution is a
-          # prefix-match `s|${DS_PROMETHEUS|Prometheus|`, which would
-          # corrupt `${DS_PROMETHEUS-K0}` into the literal `Prometheus-K0}`.
+          # Only DS_PROMETHEUS-K0 — chart substitution is prefix-matching, so adding DS_PROMETHEUS would corrupt ${DS_PROMETHEUS-K0}.
           datasource:
             - {name: DS_PROMETHEUS-K0, value: Prometheus}
         unbound:
@@ -213,16 +206,12 @@ spec:
         1-node-exporter:
           url: https://grafana.com/api/dashboards/22413/revisions/6/download
           datasource: Prometheus
-        # node-exporter-full (1860) is provided by vm-stack as
-        # `stack-node-exporter-full` sidecar ConfigMap — do not duplicate.
         node-feature-discovery:
           url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
 
       kubernetes:
-        # k8s-system-* and k8s-views-* (UIDs 15757-15762) are provided by
-        # vm-stack sidecar ConfigMaps (stack-kubernetes-*) — do not duplicate.
         k8s-volumes:
           url: https://grafana.com/api/dashboards/11454/revisions/14/download
           datasource: Prometheus
