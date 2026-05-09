@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: ipmi
+  namespace: monitoring
+spec:
+  staticConfigs:
+    - targets: ["nas.home:9290"]
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: ipmi
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: node-external
+  namespace: monitoring
+spec:
+  staticConfigs:
+    - targets:
+        - opnsense.home:9100
+        - nas.home:9100
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: node
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: smartctl
+  namespace: monitoring
+spec:
+  staticConfigs:
+    - targets: ["nas.home:9633"]
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: smartctl
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: nut-exporter
+  namespace: monitoring
+spec:
+  staticConfigs:
+    - targets: ["nas.home:9199"]
+  metricsPath: /ups_metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: nut-exporter
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: zfs
+  namespace: monitoring
+spec:
+  staticConfigs:
+    - targets: ["nas.home:9134"]
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: zfs
