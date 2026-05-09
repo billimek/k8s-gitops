@@ -12,6 +12,11 @@ spec:
     namespace: flux-system
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+
     controllers:
       unifi:
         containers:

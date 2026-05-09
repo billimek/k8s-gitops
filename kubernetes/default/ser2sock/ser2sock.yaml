@@ -13,6 +13,9 @@ spec:
   interval: 1h
   values:
     defaultPodOptions:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -43,6 +46,9 @@ spec:
               limits:
                 memory: 250Mi
                 generic-device-plugin/alarmdecoder: 1
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
 
     service:
       main:

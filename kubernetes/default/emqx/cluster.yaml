@@ -35,6 +35,19 @@ spec:
   coreTemplate:
     spec:
       replicas: 2
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+      resources:
+        requests:
+          cpu: 100m
+          memory: 512Mi
+        limits:
+          memory: 1Gi
       envFrom:
         - secretRef:
             name: emqx-secret
