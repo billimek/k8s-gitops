@@ -57,7 +57,7 @@ data:
                 "uid": "VictoriaLogs"
               },
               "expr": "kubernetes.namespace_name:~\"$namespace\" level:(error OR fatal OR panic OR critical) | stats count() errors",
-              "queryType": "instant",
+              "queryType": "stats",
               "refId": "A"
             }
           ],
@@ -98,7 +98,7 @@ data:
                 "uid": "VictoriaLogs"
               },
               "expr": "kubernetes.namespace_name:~\"$namespace\" | stats count() total",
-              "queryType": "instant",
+              "queryType": "stats",
               "refId": "A"
             }
           ],
@@ -136,7 +136,7 @@ data:
                 "uid": "VictoriaLogs"
               },
               "expr": "* | stats by (kubernetes.namespace_name) count() c | sort by (c) desc | limit 8",
-              "queryType": "instant",
+              "queryType": "stats",
               "legendFormat": "{{kubernetes.namespace_name}}",
               "refId": "A"
             }
@@ -189,7 +189,7 @@ data:
                 "uid": "VictoriaLogs"
               },
               "expr": "kubernetes.namespace_name:~\"$namespace\" | stats by (kubernetes.namespace_name, kubernetes.pod_name) count() count | sort by (count) desc | limit 20",
-              "queryType": "instant",
+              "queryType": "stats",
               "refId": "A"
             }
           ],
@@ -263,7 +263,7 @@ data:
                     "uid": "VictoriaLogs"
                   },
                   "expr": "_stream:{app_name!=\"\"} | stats by (hostname, app_name) count() c | sort by (c) desc | limit 10",
-                  "queryType": "instant",
+                  "queryType": "stats",
                   "legendFormat": "{{hostname}}/{{app_name}}",
                   "refId": "A"
                 }
