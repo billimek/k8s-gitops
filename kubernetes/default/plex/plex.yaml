@@ -22,6 +22,8 @@ spec:
         runAsGroup: 1000
         runAsNonRoot: true
         runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
         supplementalGroups: [44]
       affinity:
         nodeAffinity:
