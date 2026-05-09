@@ -122,9 +122,9 @@ spec:
         cert-manager:
           url: https://grafana.com/api/dashboards/20842/revisions/3/download
           datasource: Prometheus
-        cloudnative-pg:
-          url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/grafana-dashboard.json
-          datasource: Prometheus
+        # cloudnative-pg dashboard is now provided by the CNPG operator chart
+        # (monitoring.grafanaDashboard.create=true on the cloudnative-pg HR);
+        # the upstream URL we used here returns 404 since a repo restructure.
         flux-control-plane:
           url: https://raw.githubusercontent.com/fluxcd/flux2-monitoring-example/main/monitoring/configs/dashboards/control-plane.json
           datasource: Prometheus
@@ -245,10 +245,12 @@ spec:
           url: https://grafana.com/api/dashboards/23233/revisions/6/download
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
-        # kube-prometheus-stack dashboards
-        kube-prometheus-dashboards:
-          url: https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/grafana-dashboardDefinitions.yaml
-          datasource: Prometheus
+        # kube-prometheus-stack dashboards: removed. The upstream URL is a
+        # YAML manifest containing many dashboards-as-ConfigMaps, not a single
+        # dashboard JSON, so the dashboard provisioner errored on
+        # "invalid character 'a' looking for beginning of value".
+        # The vm-stack chart already ships kube-prometheus-stack-equivalent
+        # dashboards as ConfigMaps (visible as `stack-kubernetes-*`).
 
       teslamate:
         battery-health:
