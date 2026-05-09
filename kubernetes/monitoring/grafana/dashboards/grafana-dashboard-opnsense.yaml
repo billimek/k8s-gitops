@@ -5,8 +5,9 @@
 # → VictoriaLogs. With `streamFields=hostname,app_name`, hostname and
 # app_name become stream selectors. The CSV-formatted filterlog message
 # body lands in `_msg` and is parsed at query time with LogsQL `extract`.
-# OPNsense IPv4 TCP/UDP filterlog field positions used here:
+# OPNsense IPv4 TCP/UDP filterlog field positions (1-indexed):
 #   5 interface, 7 action, 9 ipversion, 22 dport.
+# WAN interface is igb0; change the `intf:=` filter if yours differs.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -91,53 +92,32 @@ data:
             },
             "showUnfilled": true
           },
-          "pluginVersion": "8.3.3",
+          "pluginVersion": "11.0.0",
           "targets": [
             {
               "datasource": {
                 "type": "victoriametrics-logs-datasource",
                 "uid": "VictoriaLogs"
               },
-              "expr": "_stream:{hostname=\"opnsense\",app_name=\"filterlog\"} | extract \"<_>,<_>,<_>,<_>,<intf>,<_>,<action>,<_>,<ipver>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<dport>,<_>\" | filter intf:=\"igb0\" action:=\"pass\" ipver:=\"4\" | stats by (dport) count() rows | sort by (rows) desc | limit 10",
-              "instant": true,
-              "legendFormat": "{{filter_destination_port}}",
-              "range": false,
+              "expr": "_stream:{hostname=\"OPNsense.home\",app_name=\"filterlog\"} | extract \"<_>,<_>,<_>,<_>,<intf>,<_>,<action>,<_>,<ipver>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<dport>,<_>\" | filter intf:=\"igb0\" action:=\"pass\" ipver:=\"4\" | stats by (dport) count() c | sort by (c) desc | limit 10",
+              "queryType": "stats",
+              "legendFormat": "{{dport}}",
               "refId": "A"
             }
           ],
-          "title": "Top 10 allowed incoming ports",
+          "title": "Top 10 allowed incoming ports (igb0/WAN)",
           "transformations": [
-            {
-              "id": "sortBy",
-              "options": {
-                "fields": {},
-                "sort": [
-                  {
-                    "desc": true,
-                    "field": "Value #A"
-                  }
-                ]
-              }
-            },
             {
               "id": "rowsToFields",
               "options": {
                 "mappings": [
                   {
-                    "fieldName": "Time",
-                    "handlerKey": "field.value"
-                  },
-                  {
-                    "fieldName": "filter_source_port",
+                    "fieldName": "dport",
                     "handlerKey": "field.name"
                   },
                   {
-                    "fieldName": "Value #A",
+                    "fieldName": "c",
                     "handlerKey": "field.value"
-                  },
-                  {
-                    "fieldName": "filter_destination_port",
-                    "handlerKey": "field.name"
                   }
                 ]
               }
@@ -146,7 +126,7 @@ data:
           "type": "bargauge"
         }
       ],
-      "schemaVersion": 34,
+      "schemaVersion": 39,
       "style": "dark",
       "tags": [],
       "templating": {
