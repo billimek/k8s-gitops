@@ -35,3 +35,5 @@ spec:
             preferred_ip_protocol: ip4
     serviceMonitor:
       enabled: true
+    prometheusRule:
+      enabled: true

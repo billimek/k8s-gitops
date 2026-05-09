@@ -36,7 +36,7 @@ spec:
         storageClassName: ceph-block
         size: 20Gi
       serviceMonitor:
-        enabled: false
+        enabled: true
       route:
         enabled: true
         annotations:
@@ -57,6 +57,7 @@ spec:
               - name: victoria-logs-server
                 port: 9428
     dashboards:
-      enabled: false
+      enabled: true
+      grafana_folder: infrastructure
     vector:
       enabled: false
