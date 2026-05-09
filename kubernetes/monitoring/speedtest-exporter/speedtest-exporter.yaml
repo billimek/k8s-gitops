@@ -35,6 +35,18 @@ spec:
                 memory: 15Mi
               limits:
                 memory: 100Mi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 9516
+                  initialDelaySeconds: 30
+                  periodSeconds: 60
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
