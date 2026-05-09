@@ -31,3 +31,13 @@ spec:
       - url: http://victoria-logs-server.monitoring.svc.cluster.local:9428
     podMonitor:
       enabled: true
+    tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+    resources:
+      requests:
+        cpu: 25m
+        memory: 128Mi
+      limits:
+        memory: 384Mi
