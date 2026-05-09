@@ -1,0 +1,383 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-cluster-logs
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "true"
+  annotations:
+    grafana_folder: "infrastructure"
+data:
+  cluster-logs.json: |
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "links": [],
+      "liveNow": false,
+      "panels": [
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "VictoriaLogs"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 10},
+                  {"color": "red", "value": 100}
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 4, "w": 4, "x": 0, "y": 0},
+          "id": 1,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "orientation": "horizontal",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "title": "Errors",
+          "targets": [
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
+              },
+              "expr": "kubernetes.namespace_name:~\"$namespace\" level:(error OR fatal OR panic OR critical) | stats count() errors",
+              "queryType": "instant",
+              "refId": "A"
+            }
+          ],
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "VictoriaLogs"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [{"color": "blue", "value": null}]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 4, "w": 4, "x": 4, "y": 0},
+          "id": 2,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center",
+            "orientation": "horizontal",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "title": "Total log lines",
+          "targets": [
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
+              },
+              "expr": "kubernetes.namespace_name:~\"$namespace\" | stats count() total",
+              "queryType": "instant",
+              "refId": "A"
+            }
+          ],
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "VictoriaLogs"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "continuous-BlPu"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [{"color": "green", "value": null}]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 4, "w": 16, "x": 8, "y": 0},
+          "id": 3,
+          "options": {
+            "displayMode": "gradient",
+            "orientation": "horizontal",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "title": "Top namespaces by volume",
+          "targets": [
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
+              },
+              "expr": "* | stats by (kubernetes.namespace_name) count() c | sort by (c) desc | limit 8",
+              "queryType": "instant",
+              "legendFormat": "{{kubernetes.namespace_name}}",
+              "refId": "A"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "rowsToFields",
+              "options": {
+                "mappings": [
+                  {"fieldName": "kubernetes.namespace_name", "handlerKey": "field.name"},
+                  {"fieldName": "c", "handlerKey": "field.value"}
+                ]
+              }
+            }
+          ],
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "VictoriaLogs"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "continuous-RdYlGr"},
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [{"color": "green", "value": null}]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 4},
+          "id": 4,
+          "options": {
+            "footer": {"show": false},
+            "showHeader": true,
+            "sortBy": [{"displayName": "count", "desc": true}]
+          },
+          "title": "Top pods by volume",
+          "targets": [
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
+              },
+              "expr": "kubernetes.namespace_name:~\"$namespace\" | stats by (kubernetes.namespace_name, kubernetes.pod_name) count() count | sort by (count) desc | limit 20",
+              "queryType": "instant",
+              "refId": "A"
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "VictoriaLogs"
+          },
+          "gridPos": {"h": 18, "w": 24, "x": 0, "y": 12},
+          "id": 5,
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": true,
+            "showTime": true,
+            "sortOrder": "Descending",
+            "wrapLogMessage": true
+          },
+          "title": "Logs",
+          "targets": [
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
+              },
+              "expr": "kubernetes.namespace_name:~\"$namespace\" kubernetes.pod_name:~\"$pod\" $search",
+              "refId": "A"
+            }
+          ],
+          "type": "logs"
+        },
+        {
+          "collapsed": true,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 30},
+          "id": 10,
+          "title": "Syslog",
+          "panels": [
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {"mode": "continuous-GrYlRd"},
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [{"color": "green", "value": null}]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {"h": 6, "w": 24, "x": 0, "y": 31},
+              "id": 11,
+              "options": {
+                "displayMode": "lcd",
+                "orientation": "horizontal",
+                "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+                "showUnfilled": true
+              },
+              "title": "Top syslog sources",
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "victoriametrics-logs-datasource",
+                    "uid": "VictoriaLogs"
+                  },
+                  "expr": "_stream:{app_name!=\"\"} | stats by (hostname, app_name) count() c | sort by (c) desc | limit 10",
+                  "queryType": "instant",
+                  "legendFormat": "{{hostname}}/{{app_name}}",
+                  "refId": "A"
+                }
+              ],
+              "transformations": [
+                {
+                  "id": "rowsToFields",
+                  "options": {
+                    "mappings": [
+                      {"fieldName": "hostname", "handlerKey": "field.name"},
+                      {"fieldName": "c", "handlerKey": "field.value"}
+                    ]
+                  }
+                }
+              ],
+              "type": "bargauge"
+            },
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
+              },
+              "gridPos": {"h": 14, "w": 24, "x": 0, "y": 37},
+              "id": 12,
+              "options": {
+                "dedupStrategy": "none",
+                "enableLogDetails": true,
+                "prettifyLogMessage": false,
+                "showCommonLabels": false,
+                "showLabels": true,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "wrapLogMessage": true
+              },
+              "title": "Syslog entries",
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "victoriametrics-logs-datasource",
+                    "uid": "VictoriaLogs"
+                  },
+                  "expr": "_stream:{app_name!=\"\"}",
+                  "refId": "A"
+                }
+              ],
+              "type": "logs"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "style": "dark",
+      "tags": ["logs"],
+      "templating": {
+        "list": [
+          {
+            "current": {},
+            "datasource": {
+              "type": "victoriametrics-logs-datasource",
+              "uid": "VictoriaLogs"
+            },
+            "definition": "{\"query\": \"*\", \"field\": \"kubernetes.namespace_name\"}",
+            "hide": 0,
+            "includeAll": true,
+            "allValue": ".*",
+            "label": "Namespace",
+            "multi": true,
+            "name": "namespace",
+            "options": [],
+            "query": "{\"query\": \"*\", \"field\": \"kubernetes.namespace_name\"}",
+            "refresh": 2,
+            "regex": "",
+            "sort": 1,
+            "type": "query"
+          },
+          {
+            "current": {},
+            "datasource": {
+              "type": "victoriametrics-logs-datasource",
+              "uid": "VictoriaLogs"
+            },
+            "definition": "{\"query\": \"kubernetes.namespace_name:~\\\"$namespace\\\"\", \"field\": \"kubernetes.pod_name\"}",
+            "hide": 0,
+            "includeAll": true,
+            "allValue": ".*",
+            "label": "Pod",
+            "multi": true,
+            "name": "pod",
+            "options": [],
+            "query": "{\"query\": \"kubernetes.namespace_name:~\\\"$namespace\\\"\", \"field\": \"kubernetes.pod_name\"}",
+            "refresh": 2,
+            "regex": "",
+            "sort": 1,
+            "type": "query"
+          },
+          {
+            "current": {"selected": false, "text": "", "value": ""},
+            "hide": 0,
+            "label": "Search",
+            "name": "search",
+            "options": [],
+            "query": "",
+            "skipUrlSync": false,
+            "type": "textbox"
+          }
+        ]
+      },
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {},
+      "timezone": "",
+      "title": "Cluster Logs",
+      "uid": "cluster-logs-k8s",
+      "version": 1,
+      "weekStart": ""
+    }
