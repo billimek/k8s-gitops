@@ -294,9 +294,6 @@ spec:
           name: victoria-metrics-k8s-stack-helm-values
           key: additionalScrapeConfigs.yaml
         scrapeInterval: 20s
-        externalLabels:
-          # k8s_cluster (not cluster) — avoids collision with exporters that emit their own cluster label, e.g. cnpg.
-          k8s_cluster: home-ops
         resources:
           limits:
             cpu: null
