@@ -1,9 +1,3 @@
-# fluent-bit
-
-[fluent-bit](https://fluentbit.io) is an agent which ships the contents of local logs to a victoria-logs instance
-
-* [fluent-bit/fluent-bit.yaml](fluent-bit/fluent-bit.yaml)
-
 # grafana
 
 ![](https://i.imgur.com/hzBFkEE.png)
@@ -35,9 +29,10 @@ ISP speed test results collector
 
 # victoria-logs
 
-[victoria-logs](https://docs.victoriametrics.com/victorialogs/) is a logging system
+[victoria-logs](https://docs.victoriametrics.com/victorialogs/) is a logging system; logs are shipped by `victoria-logs-collector` (vlagent) running as a DaemonSet.
 
 * [victoria-logs/victoria-logs.yaml](victoria-logs/victoria-logs.yaml)
+* [victoria-logs/collector.yaml](victoria-logs/collector.yaml)
 
 # victoria metrics
 
