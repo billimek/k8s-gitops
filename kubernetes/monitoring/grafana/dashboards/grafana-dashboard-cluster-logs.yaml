@@ -322,44 +322,24 @@ data:
       "templating": {
         "list": [
           {
-            "current": {},
-            "datasource": {
-              "type": "victoriametrics-logs-datasource",
-              "uid": "VictoriaLogs"
-            },
-            "definition": "{\"query\": \"*\", \"field\": \"kubernetes.namespace_name\"}",
+            "current": {"selected": false, "text": ".*", "value": ".*"},
             "hide": 0,
-            "includeAll": true,
-            "allValue": ".*",
-            "label": "Namespace",
-            "multi": true,
+            "label": "Namespace (regex)",
             "name": "namespace",
             "options": [],
-            "query": "{\"query\": \"*\", \"field\": \"kubernetes.namespace_name\"}",
-            "refresh": 2,
-            "regex": "",
-            "sort": 1,
-            "type": "query"
+            "query": ".*",
+            "skipUrlSync": false,
+            "type": "textbox"
           },
           {
-            "current": {},
-            "datasource": {
-              "type": "victoriametrics-logs-datasource",
-              "uid": "VictoriaLogs"
-            },
-            "definition": "{\"query\": \"kubernetes.namespace_name:~\\\"$namespace\\\"\", \"field\": \"kubernetes.pod_name\"}",
+            "current": {"selected": false, "text": ".*", "value": ".*"},
             "hide": 0,
-            "includeAll": true,
-            "allValue": ".*",
-            "label": "Pod",
-            "multi": true,
+            "label": "Pod (regex)",
             "name": "pod",
             "options": [],
-            "query": "{\"query\": \"kubernetes.namespace_name:~\\\"$namespace\\\"\", \"field\": \"kubernetes.pod_name\"}",
-            "refresh": 2,
-            "regex": "",
-            "sort": 1,
-            "type": "query"
+            "query": ".*",
+            "skipUrlSync": false,
+            "type": "textbox"
           },
           {
             "current": {"selected": false, "text": "", "value": ""},
