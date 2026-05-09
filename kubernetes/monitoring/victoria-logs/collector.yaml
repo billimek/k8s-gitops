@@ -31,6 +31,16 @@ spec:
       - url: http://victoria-logs-server.monitoring.svc.cluster.local:9428
     podMonitor:
       enabled: true
+    extraArgs:
+      # Listen for syslog from OPNsense (and other hosts). Exposed
+      # cluster-externally via the `victoria-logs-syslog` Service in this
+      # directory (LB IP 10.0.6.58, UDP/514 → pod UDP/5514).
+      syslog.listenAddr.udp: ":5514"
+      # Promote hostname and app_name to stream fields so dashboards can
+      # filter via `_stream:{hostname="opnsense", app_name="filterlog"}`.
+      syslog.streamFields.udp: "hostname,app_name"
+      # Trust the receiver clock; OPNsense may not send precise timestamps.
+      syslog.useLocalTimestamp.udp: "true"
     tolerations:
       - key: node-role.kubernetes.io/control-plane
         operator: Exists

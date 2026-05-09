@@ -1,11 +1,12 @@
 ---
-# NOTE: This dashboard's panels query OPNsense filterlog data from
-# VictoriaLogs (datasource UID "VictoriaLogs"). They will be empty until
-# OPNsense syslog forwarding to VictoriaLogs is configured (e.g. via
-# vector or syslog-ng) with the JSON fields hostname, appname,
-# filter_action, filter_interface, filter_destination_port, and
-# geoip_country_code populated. Until then, prefer the
-# `opnsense-exporter` dashboard (URL-imported in grafana.yaml).
+# NOTE: Queries OPNsense filterlog via VictoriaLogs (datasource UID
+# "VictoriaLogs"). Ingestion path: OPNsense → syslog UDP → LB
+# 10.0.6.58:514 → victoria-logs-collector vlagent (`-syslog.listenAddr.udp`)
+# → VictoriaLogs. With `streamFields=hostname,app_name`, hostname and
+# app_name become stream selectors. The CSV-formatted filterlog message
+# body lands in `_msg` and is parsed at query time with LogsQL `extract`.
+# OPNsense IPv4 TCP/UDP filterlog field positions used here:
+#   5 interface, 7 action, 9 ipversion, 22 dport.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -45,63 +46,6 @@ data:
       "liveNow": false,
       "panels": [
         {
-          "circleMaxSize": 30,
-          "circleMinSize": 2,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": {
-            "type": "victoriametrics-logs-datasource",
-            "uid": "VictoriaLogs"
-          },
-          "decimals": 0,
-          "esMetric": "Count",
-          "gridPos": {
-            "h": 11,
-            "w": 12,
-            "x": 0,
-            "y": 0
-          },
-          "hideEmpty": false,
-          "hideZero": false,
-          "id": 2,
-          "initialZoom": 1,
-          "locationData": "countries",
-          "mapCenter": "(0\u00b0, 0\u00b0)",
-          "mapCenterLatitude": 0,
-          "mapCenterLongitude": 0,
-          "maxDataPoints": 1,
-          "mouseWheelZoom": false,
-          "showLegend": true,
-          "stickyLabels": false,
-          "tableQueryOptions": {
-            "geohashField": "geohash",
-            "latitudeField": "latitude",
-            "longitudeField": "longitude",
-            "metricField": "metric",
-            "queryType": "geohash"
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
-              },
-              "expr": "_stream:{hostname=\"opnsense\"} appname:filterlog filter_action:pass | stats by (geoip_country_code) count()",
-              "legendFormat": "{{geoip_country_code}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": "0,10",
-          "title": "Allowed incoming connections by GeoIP",
-          "type": "grafana-worldmap-panel",
-          "unitPlural": "",
-          "unitSingle": "",
-          "valueName": "total"
-        },
-        {
           "datasource": {
             "type": "victoriametrics-logs-datasource",
             "uid": "VictoriaLogs"
@@ -130,8 +74,8 @@ data:
           },
           "gridPos": {
             "h": 11,
-            "w": 12,
-            "x": 12,
+            "w": 24,
+            "x": 0,
             "y": 0
           },
           "id": 4,
@@ -151,10 +95,10 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
+                "type": "victoriametrics-logs-datasource",
+                "uid": "VictoriaLogs"
               },
-              "expr": "_stream:{hostname=\"opnsense\"} appname:filterlog filter_action:pass filter_interface:igb0 -filter_destination_port:\"\" | stats by (filter_destination_port) count() | sort by (count) desc | limit 10",
+              "expr": "_stream:{hostname=\"opnsense\",app_name=\"filterlog\"} | extract \"<_>,<_>,<_>,<_>,<intf>,<_>,<action>,<_>,<ipver>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<_>,<dport>,<_>\" | filter intf:=\"igb0\" action:=\"pass\" ipver:=\"4\" | stats by (dport) count() rows | sort by (rows) desc | limit 10",
               "instant": true,
               "legendFormat": "{{filter_destination_port}}",
               "range": false,
