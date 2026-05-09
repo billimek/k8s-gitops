@@ -29,8 +29,8 @@ spec:
     createNamespace: true
   values:
     fullnameOverride: victoria-logs
-    retentionPeriod: 14d
     server:
+      retentionPeriod: 14d
       persistentVolume:
         enabled: true
         storageClassName: ceph-block
@@ -47,7 +47,7 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - victoria-logs.eviljungle.com
+          - vlogs.eviljungle.com
         rules:
           - matches:
               - path:

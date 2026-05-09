@@ -71,6 +71,7 @@ spec:
         storage:
           accessModes:
             - ReadWriteOnce
+          storageClassName: ceph-block
           resources:
             requests:
               storage: 60Gi
@@ -91,7 +92,7 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - vm.eviljungle.com
+          - vmsingle.eviljungle.com
         rules:
           - matches:
               - path:
@@ -104,8 +105,16 @@ spec:
     alertmanager:
       enabled: true
       spec:
-        externalURL: "https://vm-alert.eviljungle.com"
+        externalURL: "https://vmalertmanager.eviljungle.com"
         routePrefix: /
+        storage:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: ceph-block
+              resources:
+                requests:
+                  storage: 1Gi
       route:
         enabled: true
         annotations:
@@ -116,7 +125,7 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - vm-alert.eviljungle.com
+          - vmalertmanager.eviljungle.com
         rules:
           - matches:
               - path:
@@ -277,6 +286,10 @@ spec:
     vmagent:
       enabled: true
       spec:
+        extraArgs:
+          promscrape.dropOriginalLabels: "true"
+          promscrape.streamParse: "true"
+          promscrape.maxScrapeSize: 50MiB
         additionalScrapeConfigs:
           name: victoria-metrics-k8s-stack-helm-values
           key: additionalScrapeConfigs.yaml

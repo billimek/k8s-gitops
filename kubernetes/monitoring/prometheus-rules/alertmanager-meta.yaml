@@ -28,7 +28,7 @@ spec:
           The alert group for {{ $labels.alertname }} with severity {{ $labels.severity }} currently has {{ $value }} firing alerts.
           Since max_alerts is set to 15, only the first 15 alerts are being sent to Discord with full details.
           
-          Check Alertmanager UI for complete list: https://vm-alert.eviljungle.com
+          Check Alertmanager UI for complete list: https://vmalertmanager.eviljungle.com
           
           Consider:
           - Is this a cluster-wide issue that needs immediate attention?
@@ -51,5 +51,5 @@ spec:
           
           Multiple notifications are being sent, but each is limited to showing 15 alerts with full details.
           
-          Check Alertmanager UI: https://vm-alert.eviljungle.com
+          Check Alertmanager UI: https://vmalertmanager.eviljungle.com
         title: "🚨 Alert Storm Detected"
