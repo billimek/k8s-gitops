@@ -52,6 +52,19 @@ spec:
             envFrom: &envFrom
               - secretRef:
                   name: teslamate-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 4000
+                  initialDelaySeconds: 0
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
                 cpu: 50m

@@ -39,6 +39,18 @@ spec:
               LISTENER_PORT: 10000
               BAUD_RATE: 115200
               SERIAL_DEVICE: "/dev/ttyUSB0"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 10000
+                  initialDelaySeconds: 10
+                  periodSeconds: 30
+                  timeoutSeconds: 3
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
                 cpu: 15m

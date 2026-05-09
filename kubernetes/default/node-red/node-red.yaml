@@ -33,6 +33,19 @@ spec:
               FLOWS: "flows.json"
               NODE_RED_ENABLE_PROJECTS: "true"
               NODE_RED_ENABLE_SAFE_MODE: "false"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 1880
+                  initialDelaySeconds: 0
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
                 cpu: 150m
