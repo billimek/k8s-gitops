@@ -35,3 +35,22 @@ spec:
             preferred_ip_protocol: ip4
     serviceMonitor:
       enabled: true
+    prometheusRule:
+      enabled: true
+      rules:
+        - alert: BlackboxProbeFailed
+          expr: probe_success == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Blackbox probe failed (instance {{ $labels.instance }})"
+            description: "Probe has been failing for more than 5 minutes."
+        - alert: BlackboxProbeSlowProbe
+          expr: avg_over_time(probe_duration_seconds[1m]) > 5
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Blackbox probe slow (instance {{ $labels.instance }})"
+            description: "Average probe duration over the last minute is above 5s."
