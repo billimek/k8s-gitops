@@ -175,9 +175,21 @@ tasks:
     vars:
       MODE: '{{.MODE | default "auto"}}'
     cmds:
-      - talosctl apply-config
-        --nodes "{{.HOSTNAME}}"
-        --file "{{.FILENAME}}"
-        --mode="{{.MODE}}"
-        {{ if eq "true" .INSECURE }}--insecure{{ end }}
-        {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}
+      - cmd: |
+          set +e
+          output=$(talosctl apply-config \
+            --nodes "{{.HOSTNAME}}" \
+            --file "{{.FILENAME}}" \
+            --mode="{{.MODE}}" \
+            {{ if eq "true" .INSECURE }}--insecure{{ end }} \
+            {{ if eq "true" .DRY_RUN }}--dry-run{{ end }} 2>&1)
+          rc=$?
+          if [ $rc -ne 0 ]; then
+            if [ "{{.INSECURE}}" = "true" ] && echo "$output" | grep -q "certificate required"; then
+              echo "Node {{.HOSTNAME}} already configured; skipping insecure apply."
+              exit 0
+            fi
+            echo "$output" >&2
+            exit $rc
+          fi
+          echo "$output"
