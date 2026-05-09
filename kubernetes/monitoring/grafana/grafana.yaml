@@ -142,8 +142,11 @@ spec:
 
         opnsense-exporter:
           url: https://grafana.com/api/dashboards/21113/revisions/1/download
+          # NOTE: this dashboard's only __input is DS_PROMETHEUS-K0. Do not
+          # add a DS_PROMETHEUS entry — the chart's substitution is a
+          # prefix-match `s|${DS_PROMETHEUS|Prometheus|`, which would
+          # corrupt `${DS_PROMETHEUS-K0}` into the literal `Prometheus-K0}`.
           datasource:
-            - {name: DS_PROMETHEUS, value: Prometheus}
             - {name: DS_PROMETHEUS-K0, value: Prometheus}
         unbound:
           url: https://grafana.com/api/dashboards/21006/revisions/4/download

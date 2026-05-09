@@ -28,6 +28,18 @@ spec:
       pg_stat_statements.track: all
   monitoring:
     enablePodMonitor: true
+    # vmagent injects external label `cluster: home-ops`, which collides
+    # with cnpg's own `cluster=<name>` and gets renamed to
+    # `exported_cluster`. The chart-shipped CNPG Grafana dashboard filters
+    # on `cluster=` and `pod=~"$cluster-N"`, so it never resolves. Restore
+    # the cnpg cluster name into `cluster` for these series so the
+    # dashboard works without modification.
+    podMonitorMetricRelabelings:
+      - sourceLabels: [exported_cluster]
+        targetLabel: cluster
+        action: replace
+      - regex: exported_cluster
+        action: labeldrop
   # https://github.com/cloudnative-pg/cloudnative-pg/issues/2570
   enablePDB: false
   resources:
