@@ -37,6 +37,14 @@ spec:
     limits:
       memory: "4Gi"
 
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          cnpg.io/cluster: postgres
+
   bootstrap:
     # initdb: {}
     # use this to recover a net-new cluster from a backup

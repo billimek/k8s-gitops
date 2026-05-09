@@ -56,10 +56,27 @@ spec:
               - secretRef:
                   name: continuwuity-secret
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
+                custom: true
+                spec:
+                  httpGet:
+                    path: /_matrix/federation/v1/version
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 3
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
                 enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /_matrix/federation/v1/version
+                    port: *port
+                  periodSeconds: 5
+                  failureThreshold: 30
             resources:
               requests:
                 cpu: 100m

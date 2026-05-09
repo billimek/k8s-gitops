@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: emqx
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      apps.emqx.io/instance: emqx
+      apps.emqx.io/managed-by: emqx-operator
+  endpoints:
+    - port: dashboard
+      path: /api/v5/prometheus/stats
+      interval: 30s
+      scrapeTimeout: 10s

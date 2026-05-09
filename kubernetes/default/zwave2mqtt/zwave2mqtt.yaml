@@ -13,6 +13,9 @@ spec:
   interval: 1h
   values:
     defaultPodOptions:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -53,6 +56,10 @@ spec:
               limits:
                 memory: 512Mi
                 generic-device-plugin/zwave: 1
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     persistence:
       config:
@@ -61,6 +68,8 @@ spec:
           - path: /usr/src/app/store
       tmp:
         type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       main:

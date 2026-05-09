@@ -12,6 +12,11 @@ spec:
     namespace: flux-system
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+
     controllers:
       unifi:
         containers:
@@ -28,6 +33,30 @@ spec:
               UNIFI_STDOUT: "true"
               JVM_INIT_HEAP_SIZE:
               JVM_MAX_HEAP_SIZE: 1024M
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status
+                    port: 8443
+                    scheme: HTTPS
+                  initialDelaySeconds: 0
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status
+                    port: 8443
+                    scheme: HTTPS
+                  periodSeconds: 10
+                  failureThreshold: 30
             resources:
               requests:
                 cpu: 50m
