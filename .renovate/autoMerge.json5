@@ -29,7 +29,6 @@
       matchPackageNames: [
         "ghcr.io/advplyr/audiobookshelf",
         "ghcr.io/coder/code-server",
-        "ghcr.io/home-operations/home-assistant",
         "ghcr.io/home-operations/plex",
         "ghcr.io/home-operations/qbittorrent",
         "ghcr.io/itzg/minecraft-server",
@@ -58,6 +57,18 @@
       ignoreTests: false,
       schedule: ["after 1am and before 5am"],
       matchUpdateTypes: ["digest"],
+    },
+    {
+      description: "Auto-merge home-assistant patch releases only - daily",
+      matchDatasources: ["docker"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+      schedule: ["after 1am and before 5am"],
+      matchUpdateTypes: ["patch"],
+      matchPackageNames: [
+        "ghcr.io/home-operations/home-assistant",
+      ],
     },
     {
       description: "Auto-merge GitHub Actions",
