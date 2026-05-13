@@ -198,6 +198,11 @@ flux reconcile helmrelease app-name -n namespace --with-source
 kubectl annotate externalsecret <name> -n <ns> force-sync=$(date +%s) --overwrite
 ```
 
+**HelmRelease upgrade recovery**: Before reconciling an upgrade, check for stuck pods from the prior revision and scale the workload to 0 if needed. If a HelmRelease is stuck, prefer `helm rollback` or suspend/resume the HR over retrying reconciliation:
+```bash
+flux suspend helmrelease app-name -n namespace
+flux resume helmrelease app-name -n namespace
+```
 ## Standards
 
 - **Images**: Always pin with SHA256 digest
