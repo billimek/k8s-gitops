@@ -103,7 +103,6 @@ gh pr merge <PR> --squash --delete-branch
 After merging, confirm FluxCD picks up the change:
 
 ```bash
-flux reconcile kustomization cluster-apps --with-source
 flux get helmrelease <app> -n <namespace>
 ```
 
