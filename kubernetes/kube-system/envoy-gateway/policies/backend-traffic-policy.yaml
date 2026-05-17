@@ -14,11 +14,18 @@ spec:
     - type: Zstd
     - type: Brotli
     - type: Gzip
+  healthCheck:
+    passive:
+      consecutiveLocalOriginFailures: 1
+      interval: 1s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 100
   retry:
     numRetries: 2
     retryOn:
       triggers:
         - reset
+        - connect-failure
   tcpKeepalive: {}
   timeout:
     http:

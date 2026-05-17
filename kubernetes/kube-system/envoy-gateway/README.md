@@ -159,6 +159,30 @@ kubectl logs -n kube-system -l control-plane=envoy-gateway
 - Dual IP assigned: Missing `lbipam.cilium.io/ips` in `spec.infrastructure.annotations`
 - TLS errors: Verify `acme-crt-secret` exists in `cert-manager` namespace
 
+**Stale upstream after pod restart (Talos kubelet token bug):**
+After any Talos node upgrade or kubelet restart, the envoy proxy pods may end up with expired
+service account tokens (Talos issue #13352, fixed in Talos v1.13.3). The expired token drops
+the xDS stream from the proxy to the controller. When an app pod then restarts, the old pod IP
+is never evicted — requests hang (TLS ok, 0 bytes received) while `kubectl exec` into the envoy
+admin port shows the stale IP with `cx_connect_fail` climbing but `health_flags::healthy`.
+
+Diagnose:
+```bash
+kubectl port-forward -n kube-system deploy/public 19000:19000 &
+curl -s http://localhost:19000/clusters | rg '<app>.*<port>'
+# compare IP against: kubectl get pod -n <ns> -l app.kubernetes.io/name=<app> -o wide
+```
+
+Fix:
+```bash
+kubectl rollout restart -n kube-system deploy/envoy-gateway
+kubectl rollout status  -n kube-system deploy/envoy-gateway --timeout=120s
+kubectl rollout restart -n kube-system deploy/public deploy/internal
+kubectl rollout status  -n kube-system deploy/public deploy/internal --timeout=180s
+```
+
+**Run the fix above immediately after every Talos node upgrade** until all nodes are on v1.13.3+.
+
 ## Further Reading
 
 - [Gateway API](https://gateway-api.sigs.k8s.io/)
