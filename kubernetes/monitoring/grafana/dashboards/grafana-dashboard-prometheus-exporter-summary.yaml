@@ -4,10 +4,6 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboard-prometheus-exporter-summary
   namespace: monitoring
-  labels:
-    grafana_dashboard: "true"
-  annotations:
-    grafana_folder: "node-metrics"
 data:
   prometheus-exporter-summary.json: |
     {

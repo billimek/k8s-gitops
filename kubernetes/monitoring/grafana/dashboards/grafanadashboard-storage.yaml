@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: zfs
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: storage
+  # renovate: depName=3170
+  url: https://grafana.com/api/dashboards/3170/revisions/3/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: smartctl
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: storage
+  # renovate: depName=22604
+  url: https://grafana.com/api/dashboards/22604/revisions/2/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus

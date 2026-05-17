@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-volumes
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: kubernetes
+  # renovate: depName=11454
+  url: https://grafana.com/api/dashboards/11454/revisions/14/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-pvc-stats
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: kubernetes
+  # renovate: depName=23233
+  url: https://grafana.com/api/dashboards/23233/revisions/6/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus

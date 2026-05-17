@@ -1,0 +1,54 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: envoy-overview
+  namespace: kube-system
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: networking
+  # renovate: depName=24459
+  url: https://grafana.com/api/dashboards/24459/revisions/3/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: envoy-upstream
+  namespace: kube-system
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: networking
+  # renovate: depName=24457
+  url: https://grafana.com/api/dashboards/24457/revisions/4/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: envoy-downstream
+  namespace: kube-system
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: networking
+  # renovate: depName=24458
+  url: https://grafana.com/api/dashboards/24458/revisions/3/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus

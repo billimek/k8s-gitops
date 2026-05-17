@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: cluster-logs
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: infrastructure
+  configMapRef:
+    name: grafana-dashboard-cluster-logs
+    key: cluster-logs.json

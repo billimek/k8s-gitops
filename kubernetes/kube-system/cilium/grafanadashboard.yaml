@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanafolder_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  title: Cilium
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folderRef: cilium
+  configMapRef:
+    name: cilium-dashboard
+    key: cilium-dashboard.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: cilium-operator
+  namespace: kube-system
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folderRef: cilium
+  configMapRef:
+    name: cilium-operator-dashboard
+    key: cilium-operator-dashboard.json

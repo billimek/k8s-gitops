@@ -1,0 +1,80 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafana_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana
+  namespace: monitoring
+  labels:
+    dashboards: grafana
+spec:
+  config:
+    analytics:
+      check_for_updates: "false"
+      check_for_plugin_updates: "false"
+      reporting_enabled: "false"
+    auth:
+      disable_login_form: "false"
+    auth.anonymous:
+      enabled: "true"
+      org_role: Viewer
+    log:
+      mode: console
+    news:
+      news_feed_enabled: "false"
+    security:
+      angular_support_enabled: "true"
+      allow_embedding: "true"
+      cookie_samesite: grafana
+    server:
+      root_url: https://grafana.eviljungle.com
+    date_formats:
+      use_browser_locale: "true"
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: grafana
+              env:
+                - name: GF_SECURITY_ADMIN_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-secret
+                      key: admin-user
+                - name: GF_SECURITY_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-secret
+                      key: admin-password
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 472
+            runAsGroup: 472
+            fsGroup: 472
+            fsGroupChangePolicy: OnRootMismatch
+          volumes:
+            - name: tmp
+              emptyDir: {}
+            - name: grafana-data
+              emptyDir: {}
+  disableDefaultAdminSecret: true
+  disableDefaultSecurityContext: All
+  httpRoute:
+    metadata:
+      annotations:
+        external-dns.alpha.kubernetes.io/internal: "true"
+        external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+    spec:
+      parentRefs:
+        - name: internal
+          namespace: kube-system
+          sectionName: https
+      hostnames:
+        - grafana.eviljungle.com

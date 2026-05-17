@@ -1,0 +1,308 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-battery-health
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/battery-health.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-charge-level
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/charge-level.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-charges
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/charges.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-charging-stats
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/charging-stats.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-database-info
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/database-info.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-drive-stats
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/drive-stats.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-drives
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/drives.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-efficiency
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/efficiency.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-locations
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/locations.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-mileage
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/mileage.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-overview
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/overview.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-projected-range
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/projected-range.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-states
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/states.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-statistics
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/statistics.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-timeline
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/timeline.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-trip
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/trip.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-updates
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/updates.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-vampire-drain
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/vampire-drain.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-visited
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/visited.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-charge-details
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/charge-details.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-drive-details
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/drive-details.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: teslamate-home-assistant
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/home.json
