@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadatasource_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: teslamate
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  valuesFrom:
+    - targetPath: secureJsonData.password
+      valueFrom:
+        secretKeyRef:
+          name: grafana-secret
+          key: TESLAMATE_DB_PASSWORD
+  datasource:
+    name: TeslaMate
+    type: postgres
+    access: proxy
+    url: postgres-ro.default.svc.cluster.local:5432
+    database: teslamate
+    user: teslamate
+    secureJsonData:
+      password: "${password}"
+    jsonData:
+      postgresVersion: 1500
+      sslmode: disable
+      database: teslamate

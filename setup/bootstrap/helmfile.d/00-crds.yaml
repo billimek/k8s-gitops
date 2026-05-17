@@ -68,6 +68,11 @@ releases:
     chart: oci://ghcr.io/piraeusdatastore/helm-charts/snapshot-controller
     version: 5.0.4
 
+  - name: grafana-operator
+    namespace: monitoring
+    chart: oci://ghcr.io/grafana/helm-charts/grafana-operator
+    version: 5.22.2
+
   - name: tuppr
     namespace: system-upgrade
     chart: oci://ghcr.io/home-operations/charts/tuppr

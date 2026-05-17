@@ -3,11 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-dashboard-kei
-  namespace: monitoring
-  labels:
-    grafana_dashboard: "true"
-  annotations:
-    grafana_folder: "apps"
+  namespace: default
 data:
   kei.json: |
     {

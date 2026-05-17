@@ -4,10 +4,6 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboard-cluster-logs
   namespace: monitoring
-  labels:
-    grafana_dashboard: "true"
-  annotations:
-    grafana_folder: "infrastructure"
 data:
   cluster-logs.json: |
     {

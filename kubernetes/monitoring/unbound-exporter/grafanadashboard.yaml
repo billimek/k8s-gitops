@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unbound
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: networking
+  # renovate: depName=21006
+  url: https://grafana.com/api/dashboards/21006/revisions/4/download
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: Prometheus

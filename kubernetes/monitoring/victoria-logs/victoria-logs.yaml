@@ -27,15 +27,6 @@ spec:
   interval: 1h
   install:
     createNamespace: true
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: ConfigMap
-              name: victoria-logs-vector-k8s-monitoring
-            patch: |
-              - op: remove
-                path: /metadata/labels/grafana_dashboard
   values:
     fullnameOverride: victoria-logs
     server:
@@ -66,10 +57,12 @@ spec:
               - name: victoria-logs-server
                 port: 9428
     dashboards:
-      enabled: true
-      labels:
-        grafana_dashboard: "1"
-      annotations:
-        grafana_folder: "infrastructure"
+      enabled: false
+      grafanaOperator:
+        enabled: true
+        spec:
+          instanceSelector:
+            matchLabels:
+              dashboards: grafana
     vector:
       enabled: false

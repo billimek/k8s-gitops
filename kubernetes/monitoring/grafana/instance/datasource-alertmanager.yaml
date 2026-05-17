@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadatasource_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: alertmanager
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  datasource:
+    name: Alertmanager
+    type: alertmanager
+    access: proxy
+    url: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
+    jsonData:
+      implementation: prometheus
+      handleGrafanaManagedAlerts: true

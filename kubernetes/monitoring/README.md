@@ -2,10 +2,13 @@
 
 ![](https://i.imgur.com/hzBFkEE.png)
 
-[Grafana](https://github.com/grafana/grafana) is a metrics and logging dashboard
+[Grafana](https://github.com/grafana/grafana) is a metrics and logging dashboard, managed by [grafana-operator](https://github.com/grafana/grafana-operator).
 
-* [grafana/grafana.yaml](grafana/grafana.yaml)
-* [grafana/dashboards/](grafana/dashboards/)
+* [grafana/operator/](grafana/operator/) — operator HelmRelease
+* [grafana/instance/](grafana/instance/) — Grafana CR, ExternalSecret, datasource and folder CRDs
+* [grafana/dashboards/](grafana/dashboards/) — custom ConfigMap dashboards + GrafanaDashboard CRs without a clear app owner
+
+Dashboards are `GrafanaDashboard` CRs. Most are co-located with their respective app. All carry `instanceSelector: {matchLabels: {dashboards: grafana}}` and `allowCrossNamespaceImport: true` when outside the `monitoring` namespace.
 
 # prometheus-adapter
 

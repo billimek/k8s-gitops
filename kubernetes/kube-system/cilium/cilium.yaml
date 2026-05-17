@@ -52,8 +52,6 @@ spec:
       exclusive: false
     dashboards:
       enabled: true
-      annotations:
-        grafana_folder: networking
     enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
@@ -81,8 +79,6 @@ spec:
     operator:
       dashboards:
         enabled: true
-        annotations:
-          grafana_folder: networking
       prometheus:
         enabled: true
         serviceMonitor:

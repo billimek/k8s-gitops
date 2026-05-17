@@ -33,6 +33,7 @@ flux reconcile kustomization cluster-apps --with-source
 - **Secrets**: ExternalSecret CRDs only (no plaintext)
 - **Backups**: ResourceSet automation in kube-system/volsync/
 - **CI**: PRs run `flux-local` diff/test (`.github/workflows/flux-local.yaml`); Renovate auto-bumps images per `.renovate/` rules
+- **Grafana**: Managed by grafana-operator (`kubernetes/monitoring/grafana/`). Dashboards, folders, and datasources are `GrafanaDashboard`/`GrafanaFolder`/`GrafanaDatasource` CRs (`grafana.integreatly.org/v1beta1`). Instance selector label is `dashboards: grafana`. To add a dashboard, create a `GrafanaDashboard` CR next to the relevant app with `instanceSelector: {matchLabels: {dashboards: grafana}}`; add `allowCrossNamespaceImport: true` and a `folderRef` when outside the `monitoring` namespace. grafana.com dashboards use `spec.url`, chart-shipped ConfigMap dashboards use `spec.configMapRef`. Renovate tracks grafana.com revision URLs automatically via `.renovate/grafanaDashboards.json5`.
 
 ## Application Template
 

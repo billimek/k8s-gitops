@@ -4,10 +4,6 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboard-nfs-server
   namespace: monitoring
-  labels:
-    grafana_dashboard: "true"
-  annotations:
-    grafana_folder: "storage"
 data:
   nfs-server.json: |
     {
