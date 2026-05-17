@@ -24,7 +24,7 @@ spec:
 
     controllers:
       readarr:
-        # replicas: 0
+        replicas: 0  # phasing out — shelfmark replaces readarr
         initContainers:
           chown-run:
             image:

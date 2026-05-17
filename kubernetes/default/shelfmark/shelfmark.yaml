@@ -93,9 +93,9 @@ spec:
               AUDIOBOOK_LIBRARY_URL: https://abs.eviljungle.com
               SEARCH_MODE: universal
               
-              # Download destinations
-              INGEST_DIR: /media/books/import
-              DESTINATION_AUDIOBOOK: /media/books/audiobooks
+              # Download destinations (per-user subfolders)
+              INGEST_DIR: /media/books/import/{User}
+              DESTINATION_AUDIOBOOK: /media/books/audiobooks/{User}
               
               # Metadata provider configuration
               METADATA_PROVIDER: hardcover
@@ -115,6 +115,11 @@ spec:
               # HARDLINK_TORRENTS: "true"
               HARDLINK_TORRENTS_AUDIOBOOKS: "true"
               
+              # Authentication
+              AUTH_METHOD: builtin
+              SESSION_COOKIE_SECURE: "true"
+              MAX_CONCURRENT_DOWNLOADS: "3"
+
               # Audiobookshelf integration
               CUSTOM_SCRIPT: /config/scripts/scan-audiobookshelf.sh
               AUDIOBOOKSHELF_LIBRARY_ID: 1461f532-1ee2-43f8-9f60-702176e1c3ac
@@ -179,10 +184,9 @@ spec:
     route:
       app:
         annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.150"
         parentRefs:
-          - name: internal
+          - name: public
             namespace: kube-system
             sectionName: https
         hostnames:
