@@ -180,6 +180,8 @@ spec:
             subPath: tmp
           - path: /var/log
             subPath: var-log
+          - path: /.gunicorn
+            subPath: gunicorn
 
     route:
       app:
