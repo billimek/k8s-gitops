@@ -58,12 +58,6 @@ spec:
               capabilities: {drop: ["ALL"]}
               readOnlyRootFilesystem: true
 
-    # qBittorrent 5.2.0+ requires reverse-proxy trust for the envoy gateway path. These settings live in
-    # qBittorrent.conf inside the qbittorrent-config PVC (not git) and must be re-applied after a PVC restore:
-    #   WebUI\HostHeaderValidation=false
-    #   WebUI\ReverseProxySupportEnabled=true
-    #   WebUI\TrustedReverseProxiesList=10.244.0.0/16
-
     # Note: If downloading very large torrents it might be worth using NFS for your download directory.
     # Beware if you are downloading torrents directly to a ZFS dataset that dataset will accrue fragmentation.
     persistence:
