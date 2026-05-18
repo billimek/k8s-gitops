@@ -95,7 +95,7 @@ spec:
               
               # Download destinations (per-user subfolders)
               INGEST_DIR: /media/books/import/{User}
-              DESTINATION_AUDIOBOOK: /media/books/audiobooks/{User}
+              DESTINATION_AUDIOBOOK: /media/books/audiobooks
               
               # Metadata provider configuration
               METADATA_PROVIDER: hardcover
