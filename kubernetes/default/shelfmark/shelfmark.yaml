@@ -193,6 +193,7 @@ spec:
             sectionName: https
         hostnames:
           - shelfmark.eviljungle.com
+          - books.eviljungle.com
 
     service:
       app:
