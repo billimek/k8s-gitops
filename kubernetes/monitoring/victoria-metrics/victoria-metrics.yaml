@@ -74,12 +74,14 @@ spec:
           resources:
             requests:
               storage: 60Gi
+        extraArgs:
+          memory.allowedPercent: "75"
         resources:
           limits:
-            memory: 2Gi
+            memory: 3Gi
           requests:
             cpu: 530m
-            memory: 1.2Gi
+            memory: 1.5Gi
 
       route:
         enabled: true
