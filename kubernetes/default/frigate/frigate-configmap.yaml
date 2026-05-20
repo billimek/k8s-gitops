@@ -61,7 +61,7 @@ data:
         person:
           min_area: 2000
           max_area: 100000
-          threshold: 0.72
+          threshold: 0.75
         dog:
           min_area: 1000
           max_area: 10000
@@ -157,7 +157,7 @@ data:
             person:
               min_area: 1500
               max_area: 100000
-              threshold: 0.72
+              threshold: 0.75
               min_score: 0.58
         live:
           streams:
@@ -224,7 +224,7 @@ data:
             person:
               min_area: 1000
               max_area: 100000
-              threshold: 0.72
+              threshold: 0.75
         live:
           streams:
             main_stream: pool_record
@@ -277,7 +277,7 @@ data:
             person:
               min_area: 1500
               max_area: 100000
-              threshold: 0.72
+              threshold: 0.75
               min_score: 0.58
         live:
           streams:
