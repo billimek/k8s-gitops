@@ -36,7 +36,7 @@ spec:
           app:
             image:
               repository: docker.io/robertlordhood/chaptarr
-              tag: develop@sha256:16e530c58e5d304fddeab0c877aaea0e3a34f7d88db597301fb3b3d3c0cd0590
+              tag: develop@sha256:26be808ae9e6535b6543857b9a8c9bc9ed5983fe1ee1c338f41c63ff8c5d6f0f
             env:
               CHAPTARR__APP__INSTANCENAME: chaptarr
               CHAPTARR__APPLICATION_URL: 'https://chaptarr.eviljungle.com'
