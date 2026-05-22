@@ -60,13 +60,28 @@ spec:
               echo "SUCCESS: Audiobookshelf library scan triggered successfully"
               cat /tmp/abs-response.json 2>/dev/null || true
               rm -f /tmp/abs-response.json
-              exit 0
             else
               echo "ERROR: Failed to trigger Audiobookshelf library scan (HTTP ${HTTP_CODE})" >&2
               cat /tmp/abs-response.json 2>/dev/null || true
               rm -f /tmp/abs-response.json
               exit 1
             fi
+
+            MATCH_ENDPOINT="${AUDIOBOOKSHELF_URL}/api/libraries/${AUDIOBOOKSHELF_LIBRARY_ID}/matchall"
+            echo "Triggering Audiobookshelf matchall..."
+            MATCH_CODE=$(curl -s -o /tmp/abs-match.json -w "%{http_code}" \
+              -X GET \
+              -H "Authorization: Bearer ${AUDIOBOOKSHELF_TOKEN}" \
+              "${MATCH_ENDPOINT}")
+            echo "Matchall response code: ${MATCH_CODE}"
+            if [ "$MATCH_CODE" = "200" ]; then
+              echo "SUCCESS: matchall triggered"
+            else
+              echo "WARN: matchall returned HTTP ${MATCH_CODE}" >&2
+              cat /tmp/abs-match.json 2>/dev/null || true
+            fi
+            rm -f /tmp/abs-match.json
+            exit 0
 
     controllers:
       shelfmark:
