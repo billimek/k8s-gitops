@@ -80,6 +80,12 @@ spec:
         connections:
           requireMsgr2: true
       resources:
+        mgr:
+          requests:
+            cpu: 100m
+            memory: 1Gi
+          limits:
+            memory: 1536Mi
         mon:
           requests:
             cpu: 35m
