@@ -2,10 +2,6 @@
 
 like plex, but for audiobooks
 
-# chaptarr
-
-[chaptarr](https://github.com/jamcole/chaptarr) is a Readarr replacement for audiobook management and downloading
-
 # cloudnative-pg
 
 postgresql operator for kubernetes
@@ -106,14 +102,6 @@ qbittorrent is a torrent client
 [Radarr](https://github.com/Radarr/Radarr) is a movie downloader
 
 * [radarr.yaml](radarr/radarr.yaml)
-
-# readarr
-
-![](https://i.imgur.com/jc5Ftcr.png)
-
-[Readarr](https://github.com/Readarr/Readarr) is an ebook/audiobook organizer
-
-* [readarr.yaml](readarr/readarr.yaml)
 
 # recyclarr
 
