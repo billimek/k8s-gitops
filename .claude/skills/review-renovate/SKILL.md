@@ -1,109 +1,204 @@
 # review-renovate
 
-Review a Renovate-generated PR: fetch the diff, read the upstream changelog for the version range, flag breaking changes or schema migrations, verify cluster readiness, then merge via the Renovate branch — never directly to master.
+Review Renovate-generated PRs: classify each bump, scan for known hazards, check CI and cluster readiness, auto-merge low-risk changes, and poll until reconciliation is confirmed.
 
 ## Usage
 
 ```
-/review-renovate [PR# | branch]
+/review-renovate              # batch: all open Renovate PRs
+/review-renovate <PR# | branch>   # single PR
 ```
-
-If no argument is given, uses the current branch's open PR.
 
 ## Steps
 
-### 1 — Identify the PR
+### 1 — Enumerate PRs
 
+**Batch (no arg):**
 ```bash
-gh pr view <PR> --json number,title,headRefName,baseRefName,url
+gh pr list --author "app/renovate" --state open \
+  --json number,title,headRefName,url,statusCheckRollup
 ```
 
-Record: PR number, head branch, package/image bumped, old version, new version.
+**Single PR:**
+```bash
+gh pr view <PR> --json number,title,headRefName,baseRefName,url,statusCheckRollup
+```
 
-### 2 — Fetch the diff
+Process each PR through the remaining steps. Collect verdicts for the final batch summary.
+
+---
+
+### 2 — Classify the bump
+
+From the PR title and diff, assign one class:
+
+| Class | Pattern |
+|-------|---------|
+| `digest-only` | SHA/digest change only, no version bump |
+| `patch-image` | container image `x.y.Z+1` |
+| `minor-image` | container image `x.Y.0` |
+| `chart-minor` | Helm chart `x.Y.0` |
+| `chart-major` | Helm chart `X.0.0` |
+| `grouped` | multiple packages in one PR |
 
 ```bash
 gh pr diff <PR>
 ```
 
-Note:
-- Which HelmRelease(s) or image tags are bumped.
-- Whether any `values:` schema keys are added, removed, or renamed.
-- Whether securityContext, persistence, or resource fields changed.
+Note which HelmRelease(s) or image tags changed, and whether any `values:` keys, securityContext, persistence, or resource fields were touched.
 
-### 3 — Read the upstream changelog
+---
 
-Derive the source from the diff (chart repo, container image registry, GitHub releases).
+### 3 — Changelog
 
-**GitHub-hosted projects:**
+**Skip for `digest-only`.** For all other classes:
+
+**Step 3a — PR body first (Renovate embeds release notes):**
 ```bash
-gh api repos/<owner>/<repo>/releases \
-  --jq '[.[] | select(.tag_name >= "v<old>" and .tag_name <= "v<new>") | {tag: .tag_name, body: .body}]'
+gh pr view <PR> --json body --jq '.body'
+```
+Read the "Release Notes" section Renovate injects. If present and covers the full version range, use it — no need to fetch upstream.
+
+**Step 3b — Fallback: upstream releases:**
+```bash
+gh api repos/<owner>/<repo>/releases --jq \
+  '[.[] | {tag: .tag_name, body: .body}] | .[:20]'
+```
+Fetch the most recent 20 releases and manually filter to the bumped range. Do not rely on tag string comparison — just print them and read the relevant ones.
+
+**Explicitly call out:**
+- Breaking changes — config key renames, removed defaults, required new fields
+- Schema migrations — CRD version bumps, new required annotations
+- Deprecations becoming breaking in a future version
+- Security advisories patched in this range
+
+---
+
+### 4 — Known-hazard scan
+
+Grep the diff for these codified patterns and flag any matches:
+
+**app-template 4.x → 5.x**
+- `rawResources` key added/removed — requires manifest migration
+- ConfigMap names changed from `<release>-<key>` to `<release>` — breaks `persistence.configMap.name` references
+
+**automountServiceAccountToken**
+- Removed or default-flipped in chart majors — check if it was previously set explicitly in your values; if absent, the cluster default applies
+
+**CRD apiVersion bumps**
+```bash
+gh pr diff <PR> | rg 'apiVersion.*v[0-9]alpha|apiVersion.*v[0-9]beta|kind: CustomResourceDefinition'
 ```
 
-**Helm charts not on GitHub:** WebFetch the chart repo's `CHANGELOG.md` for the version range.
-
-Explicitly call out:
-- **Breaking changes** — config key renames, removed defaults, required new fields.
-- **Schema migrations** — CRD version bumps, new required annotations.
-- **Deprecations** that become breaking in a future version.
-- **Security advisories** patched in this range.
-
-### 4 — Check cluster readiness
-
-Per `CLAUDE.md` → Troubleshooting → "Stuck HelmRelease":
-
+**Key renames / removals in values schema**
 ```bash
-# Is the HelmRelease already failed/exhausted?
-flux get helmrelease <app> -n <namespace>
+gh pr diff <PR> | rg '^\+.*:.*null|^-.*:' | head -30
+```
 
-# Any pods stuck from a prior revision?
+**Extensible known-footgun list** (update as new ones are discovered):
+- `kei` image — SQLite tmp-dir migration on minor bumps; watch for CrashLoopBackOff on first start
+- any `home-assistant` major — config breaking changes common; check HA release notes carefully
+
+---
+
+### 5 — Cluster and CI readiness
+
+**CI checks:**
+```bash
+gh pr checks <PR>
+```
+Confirm `flux-local` diff and test checks are green. If pending → verdict is `defer`. If failing → verdict is `block`.
+
+**HelmRelease state:**
+```bash
+# Derive <app> and <namespace> from the diff
+flux get helmrelease <app> -n <namespace>
+```
+
+**Pod state:**
+```bash
 kubectl get pods -n <namespace> -l app.kubernetes.io/name=<app>
 ```
 
-If stuck pods exist, scale to 0 first:
+**Gateway check:** If the app has an HTTPRoute pointing to `internal` or `public` gateway in kube-system, flag it — the post-merge step will need to watch for envoy stale endpoints (dead pod IPs in xDS cache after image bumps).
+
+---
+
+### 6 — Decision summary and merge
+
+Print before acting:
+
+```
+PR #N    : <title>
+Class    : <class>
+Hazards  : none | <list>
+CI       : green | pending | failing
+Cluster  : ready | HR failed | stuck pods
+Verdict  : auto-merge | needs-confirmation | defer | block
+```
+
+**Verdict rules:**
+
+- **`auto-merge`** — class is `digest-only` or `patch-image`, hazards empty, CI green, cluster ready. Merge without asking.
+- **`needs-confirmation`** — `minor-image`, `chart-minor`, `chart-major`, or `grouped`; OR any class with non-empty hazards; OR cluster not ready. Stop and ask the user before proceeding.
+- **`defer`** — CI checks still pending. Skip this PR in the batch; include in final summary.
+- **`block`** — CI failing, or hazards that require manual intervention. Stop the entire batch and ask.
+
+**If stuck pods exist before merging:**
 ```bash
 kubectl scale deployment <app> --replicas=0 -n <namespace>
 ```
 
-If the HelmRelease is in a failed state, suspend before merging and resume after:
+**If the HelmRelease is in a failed state, suspend before merging:**
 ```bash
 flux suspend helmrelease <app> -n <namespace>
-# merge step
-flux resume helmrelease <app> -n <namespace>
 ```
 
-### 5 — Decision summary
-
-Print this before merging:
-
-```
-Package  : <name>  <old> → <new>
-Breaking : yes/no — <summary or "none">
-Schema   : yes/no — <summary or "none">
-Security : yes/no — <CVEs or "none">
-Cluster  : ready / needs scale-to-0 / HR stuck
-```
-
-Stop and ask the user to confirm before proceeding if any of the following are true:
-- Breaking changes found.
-- Schema migration required.
-- HelmRelease is currently in a failed state.
-
-Otherwise proceed to step 6.
-
-### 6 — Merge via the Renovate branch
-
-**Never push directly to master.** Always merge through the PR:
-
+**Merge:**
 ```bash
 gh pr merge <PR> --squash --delete-branch
 ```
 
-After merging, confirm FluxCD picks up the change:
+**If suspended, resume after merge:**
+```bash
+flux resume helmrelease <app> -n <namespace>
+```
 
+---
+
+### 7 — Post-merge: poll and auto-recover
+
+Poll every 15s for up to 5 minutes:
 ```bash
 flux get helmrelease <app> -n <namespace>
 ```
 
-Report the final HelmRelease status to the user.
+**If Ready=True within 5 min:**
+- Run `kubectl get pods -n <namespace>` and confirm pods are Running.
+- If app is gateway-routed, rollout-restart envoy to clear stale xDS endpoints:
+  ```bash
+  kubectl rollout restart deployment/envoy-gateway -n kube-system
+  kubectl rollout restart deployment/<envoy-proxy-deploy> -n kube-system
+  ```
+
+**If still not Ready after 5 min — auto-invoke stuck-HR recovery:**
+```bash
+# Scale down stuck workload
+kubectl scale deployment <app> --replicas=0 -n <namespace>
+# Force reconcile
+flux reconcile helmrelease <app> -n <namespace> --with-source
+```
+Then re-poll for another 5 minutes. If still failing, report to user and stop.
+
+---
+
+### 8 — Batch summary
+
+After processing all PRs, print one line per PR:
+
+```
+#N   auto-merged    Ready=True   <title>
+#N   confirmed+merged Ready=True  <title>
+#N   deferred       CI pending   <title>
+#N   blocked        hazards: ... <title>
+```
