@@ -33,6 +33,7 @@ spec:
             [filters]
             libraries = ["all"]
             albums = ["none"]
+            recent = "30d"
 
             [watch]
             interval = 3600
