@@ -51,8 +51,25 @@ spec:
             # KEI_MESSAGE: human-readable description
             # KEI_ICLOUD_USERNAME: iCloud account
             case "$KEI_EVENT" in
-              sync_complete|sync_started) exit 0 ;;  # don't spam on every successful/started sync
+              sync_complete|sync_started) exit 0 ;;
             esac
+
+            # Throttle: skip if same event+message was sent within 6 hours.
+            # State persists on the config PVC so pod restarts don't re-spam.
+            NOTIFY_DIR="${KEI_DATA_DIR:-/config}/.notify"
+            mkdir -p "$NOTIFY_DIR"
+            STATE_FILE="$NOTIFY_DIR/last_${KEI_EVENT}"
+            NOW=$(date +%s)
+            THROTTLE=21600
+            if [ -f "$STATE_FILE" ]; then
+              LAST_TS=$(head -1 "$STATE_FILE" 2>/dev/null || echo 0)
+              LAST_MSG=$(tail -n +2 "$STATE_FILE" 2>/dev/null || echo "")
+              if [ $(( NOW - LAST_TS )) -lt $THROTTLE ] && [ "$LAST_MSG" = "$KEI_MESSAGE" ]; then
+                exit 0
+              fi
+            fi
+            printf '%s\n%s' "$NOW" "$KEI_MESSAGE" > "$STATE_FILE"
+
             curl -s -X POST "$DISCORD_WEBHOOK_URL" \
               -H "Content-Type: application/json" \
               -d "{\"content\": \"**kei** [\`$KEI_EVENT\`]: $KEI_MESSAGE (\`$KEI_ICLOUD_USERNAME\`)\"}"

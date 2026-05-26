@@ -11,19 +11,19 @@ spec:
       rules:
         - alert: KeiSyncFailing
           annotations:
-            description: kei has had {{ $value }} consecutive sync failure(s). Check iCloud credentials or network connectivity.
+            description: kei download transfers are failing ({{ $value }} in the last 2h). Check iCloud credentials or network connectivity.
             summary: kei iCloud sync is failing.
-          expr: kei_health_consecutive_failures > 0
+          expr: increase(kei_sync_failed_total[2h]) > 0
           for: 15m
           labels:
             severity: warning
 
         - alert: KeiSyncDown
           annotations:
-            description: kei has had {{ $value }} consecutive sync failures and has crossed the unhealthy threshold. The /healthz endpoint is returning 503.
+            description: kei has {{ $value }} assets permanently stuck in the failed state. The download pipeline cannot make progress.
             summary: kei iCloud sync is critically failing.
-          expr: kei_health_consecutive_failures >= 3
-          for: 10m
+          expr: kei_db_assets_total{status="failed"} > 0
+          for: 30m
           labels:
             severity: critical
 
@@ -31,8 +31,17 @@ spec:
           annotations:
             description: kei has not completed a successful iCloud sync in over 2 hours (last success was {{ $value | humanizeDuration }} ago).
             summary: kei has not synced recently.
-          expr: (time() - kei_health_last_success_timestamp_seconds) > 7200
+          expr: ((time() - kei_health_last_success_timestamp_seconds) > 7200) and (kei_health_last_success_timestamp_seconds > 0)
           for: 5m
+          labels:
+            severity: warning
+
+        - alert: KeiEnumerationErrors
+          annotations:
+            description: kei has had repeated CloudKit enumeration shortfalls over the past 6 hours. This may indicate a persistent iCloud zone issue.
+            summary: kei iCloud enumeration is consistently incomplete.
+          expr: increase(kei_sync_enumeration_errors_total[6h]) > 3
+          for: 30m
           labels:
             severity: warning
 
