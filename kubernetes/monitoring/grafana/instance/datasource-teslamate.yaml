@@ -17,6 +17,7 @@ spec:
           key: TESLAMATE_DB_PASSWORD
   datasource:
     name: TeslaMate
+    uid: TeslaMate
     type: postgres
     access: proxy
     url: postgres-ro.default.svc.cluster.local:5432
