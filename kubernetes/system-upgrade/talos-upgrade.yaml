@@ -20,3 +20,7 @@ spec:
       kind: CephCluster
       expr: |-
         status.ceph.health in ['HEALTH_OK']
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      expr: |-
+        status.phase in ['Cluster in healthy state']
