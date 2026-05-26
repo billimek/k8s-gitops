@@ -22,6 +22,27 @@ spec:
       terminationGracePeriodSeconds: 35
 
     configMaps:
+      config:
+        data:
+          config.toml: |
+            log_level = "info"
+
+            [download]
+            directory = "/photos"
+
+            [filters]
+            libraries = ["all"]
+            albums = ["none"]
+
+            [watch]
+            interval = 3600
+
+            [notifications]
+            script = "/scripts/notify.sh"
+
+            [server]
+            bind = "0.0.0.0"
+            port = 9090
       scripts:
         data:
           notify.sh: |
@@ -42,20 +63,15 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              tag: 0.14.2@sha256:96cfb65896ef9575302ca28f1a80913a7497fcd0402e117665db46ab8cec7e35
+              tag: 0.20.0@sha256:89a927e832f3f4a3948e5f7b61ffe5cd9be9b715656500ae03c5dd415314b29d
             args:
-              - sync
-              - --data-dir
-              - /config
-              - --download-dir
-              - /photos
+              - service
+              - run
+              - --config
+              - /etc/kei/config.toml
             env:
               TZ: America/New_York
-              KEI_LIBRARY: all
-              KEI_ALBUM: "none"
-              KEI_WATCH_WITH_INTERVAL: "3600"
-              KEI_NOTIFICATION_SCRIPT: /scripts/notify.sh
-              KEI_HTTP_PORT: "9090"
+              KEI_DATA_DIR: /config
             probes:
               liveness:
                 enabled: true
@@ -118,6 +134,12 @@ spec:
         size: 1Gi
         globalMounts:
           - path: /config
+      kei-config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /etc/kei/config.toml
+            subPath: config.toml
       scripts:
         type: configMap
         identifier: scripts
