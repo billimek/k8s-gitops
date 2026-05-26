@@ -35,6 +35,14 @@ spec:
   coreTemplate:
     spec:
       replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  apps.emqx.io/db-role: core
+                  apps.emqx.io/instance: emqx
+              topologyKey: kubernetes.io/hostname
       podSecurityContext:
         seccompProfile:
           type: RuntimeDefault
