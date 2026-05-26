@@ -27,5 +27,5 @@ spec:
       password: "${password}"
     jsonData:
       postgresVersion: 1500
-      sslmode: disable
+      sslmode: require
       database: teslamate
