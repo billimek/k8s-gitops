@@ -31,7 +31,7 @@ spec:
             directory = "/photos"
 
             [filters]
-            libraries = ["all"]
+            libraries = ["primary"]
             albums = ["none"]
             recent = "30d"
 
