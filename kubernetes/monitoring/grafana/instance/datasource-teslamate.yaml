@@ -10,7 +10,8 @@ spec:
     matchLabels:
       dashboards: grafana
   valuesFrom:
-    - valueFrom:
+    - targetPath: secureJsonData.password
+      valueFrom:
         secretKeyRef:
           name: grafana-secret
           key: TESLAMATE_DB_PASSWORD
