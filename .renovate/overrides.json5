@@ -14,6 +14,12 @@
       overrideDepName: "{{packageName}}",
     },
     {
+      description: "Talos - 5-day cooldown before raising upgrade PRs",
+      matchDatasources: ["docker", "github-releases"],
+      matchPackageNames: ["ghcr.io/siderolabs/installer", "ghcr.io/siderolabs/talosctl", "/factory\\.talos\\.dev/"],
+      minimumReleaseAge: "5 days",
+    },
+    {
       description: "Override Talos Installer Package Name",
       matchDatasources: ["docker"],
       matchPackageNames: ["/factory\\.talos\\.dev/"],
