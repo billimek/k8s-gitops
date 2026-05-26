@@ -16,6 +16,31 @@ task volsync:restore APP=<name>   # Restore an app's PVC from latest backup
 flux reconcile kustomization cluster-apps --with-source
 ```
 
+## MCP Servers
+
+Five MCP servers are available for this repo. Read-only tools run without prompting; any
+tool that creates, updates, deletes, scales, execs, or pushes requires explicit confirmation
+(same rule as destructive CLI commands).
+
+- **flux** (`mcp__flux__*`) — Prefer over CLI `flux get` when you need structured output,
+  reconciliation error details, or want to look up Flux API fields via `search_flux_docs`.
+- **kubernetes** (`mcp__kubernetes__*`) — Prefer for structured resource/log/event/metric
+  reads. Mutating tools (`resources_create_or_update`, `resources_delete`,
+  `resources_scale`, `pods_delete`, `pods_exec`, `pods_run`) require confirmation. Because
+  this cluster is GitOps-managed, persistent changes belong in git + Flux reconcile, not
+  direct apply/scale.
+- **grafana** (`mcp__grafana__*`) — Use read-only: `query_prometheus` against the
+  VictoriaMetrics datasource, `search_dashboards`/`get_dashboard_by_uid` to inspect
+  dashboards, `list_alert_rules` for alerting review. **Do NOT create or update
+  dashboards/datasources via MCP** — they are GitOps-managed as `GrafanaDashboard` /
+  `GrafanaDatasource` CRs (`kubernetes/monitoring/grafana/`); MCP-written resources cause
+  drift and get reverted by Flux.
+- **victorialogs** (`mcp__victorialogs__*`) — Preferred path for cluster log investigation.
+  Use LogsQL queries here rather than scraping individual `kubectl logs` when searching
+  across pods or time windows. All tools are read-only.
+- **github** (`mcp__github__*`) — PR/issue/code reads; CLI `gh` (already allowlisted) is
+  equally fine for quick checks.
+
 ## Architecture
 
 **Directory Structure**:
