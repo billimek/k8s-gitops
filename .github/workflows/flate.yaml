@@ -70,8 +70,7 @@ jobs:
             echo 'diff<<EOF'
             flate diff ${{ matrix.resource }} \
               --path ./pull/setup/flux/cluster \
-              --path-orig ./default/setup/flux/cluster \
-              --output github
+              --path-orig ./default/setup/flux/cluster
             echo EOF
           } >> "${GITHUB_OUTPUT}"
 
