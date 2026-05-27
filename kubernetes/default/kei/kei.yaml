@@ -31,9 +31,16 @@ spec:
             directory = "/photos"
 
             [filters]
-            libraries = ["primary"]
+            libraries = ["all"]
             albums = ["none"]
-            recent = "30d"
+
+            [metadata]
+            set_exif_datetime = true
+            set_exif_rating = true
+            set_exif_gps = true
+            set_exif_description = true
+            embed_xmp = true
+            xmp_sidecar = false
 
             [watch]
             interval = 3600
