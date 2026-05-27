@@ -66,13 +66,12 @@ jobs:
       - name: Run Flate
         id: flate
         run: |
-          {
-            echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} \
-              --path ./pull/setup/flux/cluster \
-              --path-orig ./default/setup/flux/cluster
-            echo EOF
-          } >> "${GITHUB_OUTPUT}"
+          echo 'diff<<EOF' >> "${GITHUB_OUTPUT}"
+          flate diff ${{ matrix.resource }} \
+            --path ./pull/setup/flux/cluster \
+            --path-orig ./default/setup/flux/cluster \
+            --allow-missing-secrets >> "${GITHUB_OUTPUT}" || true
+          echo 'EOF' >> "${GITHUB_OUTPUT}"
 
       - if: ${{ steps.flate.outputs.diff != '' }}
         name: Add Comment
