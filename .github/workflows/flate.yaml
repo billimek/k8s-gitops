@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Flate
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  filter-changes:
+    name: Filter changes
+    runs-on: ubuntu-slim
+    outputs:
+      changed-files: ${{ steps.changed-files.outputs.changed_files }}
+    steps:
+      - name: Get changed files
+        id: changed-files
+        uses: step-security/changed-files@2e07db73e5ccdb319b9a6c7766bd46d39d304bad # v47.0.5
+        with:
+          files: |-
+            kubernetes/**/*
+
+  flate:
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
+    name: Flate
+    runs-on: ubuntu-latest
+    needs:
+      - filter-changes
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      matrix:
+        resource:
+          - helmrelease
+          - kustomization
+      fail-fast: false
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: pull
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout Default Branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: "${{ github.event.repository.default_branch }}"
+          path: default
+          persist-credentials: false
+
+      - name: Setup Flate
+        uses: home-operations/flate/action@aef47adc856bb97038ff321e5136cf65e0fa23cf # 0.1.27
+        with:
+          cache: true
+
+      - name: Run Flate
+        id: flate
+        run: |
+          {
+            echo 'diff<<EOF'
+            flate diff ${{ matrix.resource }} \
+              --path ./pull/setup/flux/cluster \
+              --path-orig ./default/setup/flux/cluster \
+              --output github
+            echo EOF
+          } >> "${GITHUB_OUTPUT}"
+
+      - if: ${{ steps.flate.outputs.diff != '' }}
+        name: Add Comment
+        uses: mshick/add-pr-comment@8e4927817251f1ff60c001f04568532b38e0b4a0 # v3.11.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          message-id: ${{ github.event.pull_request.number }}/kubernetes/flate/${{ matrix.resource }}
+          message: |
+            ```diff
+            ${{ steps.flate.outputs.diff }}
+            ```
+
+  flate-success:
+    needs:
+      - flate
+    if: ${{ !cancelled() }}
+    name: Flate successful
+    runs-on: ubuntu-slim
+    steps:
+      - name: Any jobs failed?
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+      - name: All jobs passed or skipped?
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: echo "All jobs passed or skipped" && echo "${{ toJSON(needs.*.result) }}"
