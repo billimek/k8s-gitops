@@ -48,7 +48,7 @@ spec:
               TZ: "America/New_York"
               DISABLE_MQTT: "false"
               MQTT_USERNAME: "mqtt"
-              MQTT_HOST: "emqx-listeners"
+              MQTT_HOST: "mosquitto"
             envFrom: &envFrom
               - secretRef:
                   name: teslamate-secret

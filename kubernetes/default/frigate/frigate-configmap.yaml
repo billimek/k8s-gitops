@@ -18,7 +18,7 @@ data:
       contour_area: 10
 
     mqtt:
-      host: emqx-listeners.default.svc
+      host: mosquitto.default.svc
       topic_prefix: frigate
       user: mqtt
       password: '{FRIGATE_MQTT_PASSWORD}'
