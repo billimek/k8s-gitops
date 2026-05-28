@@ -51,7 +51,7 @@ tool that creates, updates, deletes, scales, execs, or pushes requires explicit 
 
 **Patterns**:
 - **Cluster**: Single homelab cluster, 1 control plane + 7 workers (Talos)
-- **Primary**: OCIRepository + chartRef (exceptions: minecraft and emqx-operator use HelmRepository)
+- **Primary**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
 - **Ingress**: Envoy Gateway with HTTPRoute (NOT Traefik/Ingress)
 - **Gateways**: `internal` (LAN + Tailscale, 10.0.6.151) and `public` (internet-facing, 10.0.6.150), both in `kube-system`
 - **Storage**: Ceph block (default), NFS media mounts, VolSync+Kopia backups

@@ -13,10 +13,6 @@ helmDefaults:
     - -c
     - yq ea -e 'select(.kind == "CustomResourceDefinition")'
 
-repositories:
-  - name: emqx
-    url: https://repos.emqx.io/charts
-
 releases:
   - name: prometheus-operator-crds
     namespace: monitoring
@@ -42,11 +38,6 @@ releases:
     namespace: default
     chart: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
     version: 0.28.2
-
-  - name: emqx-operator
-    namespace: default
-    chart: emqx/emqx-operator
-    version: 2.2.29
 
   - name: envoy-gateway
     namespace: kube-system

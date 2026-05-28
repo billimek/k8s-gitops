@@ -14,14 +14,6 @@ postgresql operator for kubernetes
 
 echo server for testing
 
-# emqx
-
-![](https://i.imgur.com/uNxxBGX.png)
-
-[emqx](github.com/emqx/emqx) is a clustered MQTT broker
-
-* [emqx/](emqx/)
-
 # frigate
 
 ![](https://i.imgur.com/hv7bh6m.png)
