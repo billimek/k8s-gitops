@@ -32,7 +32,7 @@ spec:
 
             [filters]
             libraries = ["all"]
-            albums = ["all"]
+            albums = ["none"]
 
             [metadata]
             set_exif_datetime = true
