@@ -70,7 +70,9 @@ jobs:
           flate diff ${{ matrix.resource }} \
             --path ./pull/setup/flux/cluster \
             --path-orig ./default/setup/flux/cluster \
-            --allow-missing-secrets >> "${GITHUB_OUTPUT}" || true
+            --allow-missing-secrets \
+            --skip-kinds ValidatingWebhookConfiguration \
+            --skip-kinds MutatingWebhookConfiguration >> "${GITHUB_OUTPUT}" || true
           echo 'EOF' >> "${GITHUB_OUTPUT}"
 
       - if: ${{ steps.flate.outputs.diff != '' }}
