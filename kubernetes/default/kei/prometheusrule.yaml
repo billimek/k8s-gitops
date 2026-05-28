@@ -13,7 +13,9 @@ spec:
           annotations:
             description: kei download transfers are failing ({{ $value }} in the last 2h). Check iCloud credentials or network connectivity.
             summary: kei iCloud sync is failing.
-          expr: increase(kei_sync_failed_total[2h]) > 0
+          # Interim threshold: kei #507 / upstream #480 hard-fails valid media with mismatched extension
+          # (JPEG bytes under .PNG), inflating kei_sync_failed_total each cycle. Revert to > 0 once fixed.
+          expr: increase(kei_sync_failed_total[2h]) > 20
           for: 15m
           labels:
             severity: warning
