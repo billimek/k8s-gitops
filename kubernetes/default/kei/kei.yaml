@@ -33,9 +33,6 @@ spec:
             [filters]
             libraries = ["all"]
             albums = ["none"]
-            # Interim: these 3 files are JPEG content under .PNG extension; kei #507 blocks sync token
-            # advancement when they fail, causing full 20-min re-enumeration every cycle. Remove once fixed.
-            filename_exclude = ["cachedImage-34052.PNG", "*-249982.PNG", "*-413945.PNG"]
 
             [metadata]
             set_exif_datetime = true
