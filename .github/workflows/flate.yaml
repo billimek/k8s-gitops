@@ -114,13 +114,20 @@ jobs:
             const footer = `\n\n<sub>Diff created by [flate](https://github.com/home-operations/flate) - [Workflow run](${runUrl})</sub>`;
 
             const inline = [marker, '', '```diff', diff, '```', footer].join('\n');
-            const linked = [
-              marker, '',
-              `Flate diff (${diff.length.toLocaleString()} chars) exceeds GitHub's comment size limit.`,
-              `Download the \`flate-diff\` artifact from the [workflow run](${runUrl}).`,
-              footer,
-            ].join('\n');
-            const body = inline.length <= LIMIT ? inline : linked;
+            let body;
+            if (inline.length <= LIMIT) {
+              body = inline;
+            } else {
+              const noticeFor = (n) =>
+                `\n\n> [!NOTE]\n> Diff truncated — showing first ${n.toLocaleString()} of ${diff.length.toLocaleString()} chars. Full diff in the \`flate-diff\` [artifact](${runUrl}).`;
+              // Use diff.length as a conservative (worst-case) shown count to size the overhead
+              const overhead = [marker, '', '```diff', '', '```', noticeFor(diff.length), footer].join('\n').length;
+              const budget = LIMIT - overhead;
+              const raw = diff.slice(0, Math.max(0, budget));
+              // Trim to the last newline so the diff block closes on a clean line
+              const clean = raw.lastIndexOf('\n') > 0 ? raw.slice(0, raw.lastIndexOf('\n') + 1) : raw;
+              body = [marker, '', '```diff', clean, '```', noticeFor(clean.length), footer].join('\n');
+            }
 
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner, repo, issue_number, per_page: 100,
