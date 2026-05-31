@@ -292,7 +292,7 @@ jobs:
             echo "No execution file found (path: ${EXEC_FILE:-(empty)})." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          result=$(jq -sc '[.[] | select(.type == "result")] | last' "$EXEC_FILE" 2>/dev/null)
+          result=$(grep '"type"' "$EXEC_FILE" 2>/dev/null | grep '"result"' | tail -1)
           if [ -z "$result" ] || [ "$result" = "null" ]; then
             echo "Could not parse usage from execution file." >> "$GITHUB_STEP_SUMMARY"
             exit 0
