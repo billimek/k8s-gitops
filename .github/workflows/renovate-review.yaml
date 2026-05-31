@@ -280,35 +280,8 @@ jobs:
             -f description="$desc" \
             -f target_url="$RUN_URL"
 
-      - name: Log usage
+      - name: Log model
         if: always() && steps.gate.outputs.gated == 'true'
-        continue-on-error: true
         env:
-          EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
           MODEL: ${{ steps.model_tier.outputs.model }}
-        run: |
-          set +e
-          if [ ! -f "$EXEC_FILE" ]; then
-            echo "No execution file found (path: ${EXEC_FILE:-(empty)})." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          result=$(jq -rc 'select(.type == "result")' "$EXEC_FILE" 2>/dev/null | tail -1)
-          if [ -z "$result" ] || [ "$result" = "null" ]; then
-            echo "Could not parse usage from execution file." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          cost=$(echo "$result"   | jq -r '.total_cost_usd       // 0')
-          input=$(echo "$result"  | jq -r '.usage.input_tokens   // 0')
-          output=$(echo "$result" | jq -r '.usage.output_tokens  // 0')
-          turns=$(echo "$result"  | jq -r '.num_turns            // 0')
-          echo "model=$MODEL turns=$turns input_tokens=$input output_tokens=$output cost_usd=$cost"
-          {
-            echo "## Claude Review Usage"
-            echo "| | |"
-            echo "|---|---|"
-            printf "| Model | \`%s\` |\n" "$MODEL"
-            printf "| Turns | %s |\n"     "$turns"
-            printf "| Input tokens | %s |\n"  "$input"
-            printf "| Output tokens | %s |\n" "$output"
-            printf "| Cost (USD) | \$%s |\n"  "$cost"
-          } >> "$GITHUB_STEP_SUMMARY"
+        run: echo "model=$MODEL" >> "$GITHUB_STEP_SUMMARY"
