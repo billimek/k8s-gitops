@@ -33,14 +33,13 @@ jobs:
           # user.login from the webhook payload is "renovate[bot]"; gh pr view returns "app/renovate"
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
-          pr_json=$(gh pr view "$PR" --json labels,autoMergeRequest)
+          pr_json=$(gh pr view "$PR" --json labels)
           labels=$(echo "$pr_json" | jq -r '[.labels[].name] | join(" ")')
-          has_automerge=$(echo "$pr_json" | jq -r '.autoMergeRequest != null')
 
           is_renovate=false
           gated=false
 
-          if [[ "$PR_AUTHOR" == "renovate[bot]" ]] && [[ "$has_automerge" == "true" ]]; then
+          if [[ "$PR_AUTHOR" == "renovate[bot]" ]]; then
             is_renovate=true
             # Ungated = digest-only update OR GitHub Actions bump
             # Everything else from Renovate (minor/patch/major container/helm/release) is gated
