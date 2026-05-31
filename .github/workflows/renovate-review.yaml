@@ -25,12 +25,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: anthropics/claude-code-action@787c5a0ce96a9a6cfb050ea0c8f4c05f2447c251 # v1.0.133
+      - name: Select model tier
+        id: model_tier
+        run: |
+          title="${{ github.event.pull_request.title }}"
+          # Haiku for routine patch container bumps; Sonnet for everything else
+          # (chart upgrades, feat bumps, high-blast-radius components, GitHub Actions)
+          if [[ "$title" == fix\(container\):* ]] && \
+             ! echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets'; then
+            echo "model=claude-haiku-4-5-20251001" >> "$GITHUB_OUTPUT"
+          else
+            echo "model=claude-sonnet-4-6" >> "$GITHUB_OUTPUT"
+          fi
+
+      - id: claude
+        uses: anthropics/claude-code-action@787c5a0ce96a9a6cfb050ea0c8f4c05f2447c251 # v1.0.133
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: "renovate[bot]"
           claude_args: |
-            --model claude-sonnet-4-6
+            --model ${{ steps.model_tier.outputs.model }}
+            --max-turns 15
             --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(git log:*),Bash(curl:*),WebFetch,WebSearch"
           prompt: |
             You research dependency upgrades in Renovate pull requests and submit a GitHub PR review
@@ -59,15 +74,6 @@ jobs:
             - **Networking**: envoy-gateway, cilium
             - **Storage**: rook-ceph, volsync (check for data migrations or CRD changes)
             - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
-
-            Known recurring issues to flag if relevant:
-            - **Envoy stale endpoints**: After envoy-gateway image bumps, the public/internal envoy
-              proxy may keep routing to dead pod IPs (xDS sync bug). If this PR bumps envoy-gateway,
-              note that a rollout-restart of envoy-gateway + the affected proxy deployment is likely
-              needed after merge.
-            - **kei 0.20.0 false sync-failure alerts**: kei 0.20.0 mis-reports CloudKit pagination
-              shortfalls as "downloads failed". A workaround is in place; fix expected in 0.20.1.
-              If this PR bumps kei to 0.20.1+, note that the workaround can be removed.
 
             ## Pre-check: skip redundant re-reviews
 
@@ -110,6 +116,11 @@ jobs:
             - **Registry metadata**: When a repo has no releases or changelog, check the README or
               container registry (Docker Hub, GHCR, quay.io) for links to the upstream project.
             - **Web search**: Last resort for hard-to-find changelogs or community migration reports.
+            - **Upstream issues**: After reviewing release notes, search the upstream repo's GitHub
+              issues for open bugs or regressions reported against the new version. Use
+              `gh api "search/issues?q=repo:org/repo+label:bug+VERSION"` or WebSearch for issues
+              referencing the version number. This catches regressions that ship before being
+              documented in a changelog.
 
             Do not stop at the first source. Cross-reference multiple sources.
 
@@ -124,13 +135,15 @@ jobs:
 
             ### 4. Categorize
 
-            Sort actionable findings into three buckets:
+            Sort actionable findings into four buckets:
             - **Breaking changes**: Incompatibilities requiring repo changes before or alongside
               this upgrade
             - **Deprecations**: Treat identically to breaking changes; update usage now rather than
               relying on deprecated behavior
             - **New features**: Capabilities worth adopting (simplifies config, eliminates
               workarounds, improves functionality)
+            - **Known issues**: Open bugs or regressions reported against this version in the
+              upstream issue tracker that could affect this repo
 
             ## Submitting the Review
 
@@ -158,6 +171,9 @@ jobs:
             **New features worth adopting**:
             - [Feature] — [benefit]. Would change `path/to/file`.
 
+            **Known issues**:
+            - [Issue title/link] — [brief description of impact]
+
             **Not applicable to this repo**:
             - [Finding] — [why it doesn't apply]
 
@@ -178,3 +194,34 @@ jobs:
               or blob links), rewrite the host to `redirect.github.com`. This suppresses the
               cross-reference backlinks that would otherwise spam every linked issue/PR with a
               "mentioned in" notification. Non-github.com URLs are unaffected.
+
+      - name: Log usage
+        if: always()
+        env:
+          EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
+          MODEL: ${{ steps.model_tier.outputs.model }}
+        run: |
+          if [ ! -f "$EXEC_FILE" ]; then
+            echo "No execution file found." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          result=$(jq -sc '[.[] | select(.type == "result")] | last' "$EXEC_FILE" 2>/dev/null)
+          if [ -z "$result" ] || [ "$result" = "null" ]; then
+            echo "Could not parse usage from execution file." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          cost=$(echo "$result"   | jq -r '.cost_usd          // 0')
+          input=$(echo "$result"  | jq -r '.total_input_tokens  // 0')
+          output=$(echo "$result" | jq -r '.total_output_tokens // 0')
+          turns=$(echo "$result"  | jq -r '.num_turns           // 0')
+          echo "model=$MODEL turns=$turns input_tokens=$input output_tokens=$output cost_usd=$cost"
+          {
+            echo "## Claude Review Usage"
+            echo "| | |"
+            echo "|---|---|"
+            printf "| Model | \`%s\` |\n" "$MODEL"
+            printf "| Turns | %s |\n"     "$turns"
+            printf "| Input tokens | %s |\n"  "$input"
+            printf "| Output tokens | %s |\n" "$output"
+            printf "| Cost (USD) | \$%s |\n"  "$cost"
+          } >> "$GITHUB_STEP_SUMMARY"
