@@ -12,21 +12,51 @@ concurrency:
 
 jobs:
   review:
-    if: github.event.pull_request.user.login == 'renovate[bot]'
     name: Breaking Change Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
       pull-requests: write
+      statuses: write
       id-token: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
+      - name: Classify PR
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          pr_json=$(gh pr view "$PR" --json author,labels,autoMergeRequest)
+          author=$(echo "$pr_json" | jq -r '.author.login')
+          labels=$(echo "$pr_json" | jq -r '[.labels[].name] | join(" ")')
+          has_automerge=$(echo "$pr_json" | jq -r '.autoMergeRequest != null')
+
+          is_renovate=false
+          gated=false
+
+          if [[ "$author" == "renovate[bot]" ]] && [[ "$has_automerge" == "true" ]]; then
+            is_renovate=true
+            # Ungated = digest-only update OR GitHub Actions bump
+            # Everything else from Renovate (minor/patch/major container/helm/release) is gated
+            if echo "$labels" | grep -qwE 'type/digest|renovate/github-action'; then
+              gated=false
+            else
+              gated=true
+            fi
+          fi
+
+          echo "is_renovate=$is_renovate" >> "$GITHUB_OUTPUT"
+          echo "gated=$gated"             >> "$GITHUB_OUTPUT"
+          echo "author=$author labels=$labels -> is_renovate=$is_renovate gated=$gated"
+
       - name: Select model tier
         id: model_tier
+        if: steps.gate.outputs.gated == 'true'
         run: |
           title="${{ github.event.pull_request.title }}"
           # Haiku for routine patch container bumps; Sonnet for everything else
@@ -39,6 +69,7 @@ jobs:
           fi
 
       - id: claude
+        if: steps.gate.outputs.gated == 'true'
         uses: anthropics/claude-code-action@787c5a0ce96a9a6cfb050ea0c8f4c05f2447c251 # v1.0.133
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -195,8 +226,61 @@ jobs:
               cross-reference backlinks that would otherwise spam every linked issue/PR with a
               "mentioned in" notification. Non-github.com URLs are unaffected.
 
-      - name: Log usage
+      - name: Publish review status
         if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          IS_RENOVATE: ${{ steps.gate.outputs.is_renovate }}
+          GATED: ${{ steps.gate.outputs.gated }}
+        run: |
+          context="claude/renovate-review"
+
+          if [[ "$IS_RENOVATE" != "true" ]]; then
+            # Human PR or Renovate PR without auto-merge - not gated
+            state="success"
+            desc="Not a Renovate PR - skipped"
+          elif [[ "$GATED" != "true" ]]; then
+            # Digest-only or GitHub Actions bump - ungated, pass through
+            state="success"
+            desc="Ungated update type (digest/github-actions) - auto-approved"
+          else
+            # Gated version bump - read Claude's review verdict (fail closed)
+            state="failure"
+            desc="Claude review pending or errored"
+
+            for attempt in 1 2 3; do
+              review_state=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
+                --jq '[.[] | select(.user.login == "claude[bot]" or .user.login == "github-actions[bot]")]
+                      | last | .state // ""' 2>/dev/null || echo "")
+
+              if [[ "$review_state" == "APPROVED" ]]; then
+                state="success"
+                desc="Claude approved - safe to merge"
+                break
+              elif [[ "$review_state" == "CHANGES_REQUESTED" ]]; then
+                state="failure"
+                desc="Claude requested changes - manual review required"
+                break
+              fi
+
+              echo "Attempt $attempt: review_state='$review_state' - retrying in 5s..."
+              sleep 5
+            done
+          fi
+
+          echo "Posting commit status: context=$context state=$state desc=$desc"
+          gh api -X POST "repos/$REPO/statuses/$SHA" \
+            -f state="$state" \
+            -f context="$context" \
+            -f description="$desc" \
+            -f target_url="$RUN_URL"
+
+      - name: Log usage
+        if: always() && steps.gate.outputs.gated == 'true'
         env:
           EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
           MODEL: ${{ steps.model_tier.outputs.model }}
