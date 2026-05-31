@@ -110,7 +110,7 @@ jobs:
             ## Pre-check: skip redundant re-reviews
 
             Before doing any research, check whether claude[bot] has already reviewed this PR
-            (`gh pr reviews` or `gh api`). If a prior review exists, compare the package version(s)
+            (`gh pr view <n> --json reviews` or `gh api repos/<owner>/<repo>/pulls/<n>/reviews`). If a prior review exists, compare the package version(s)
             in the current diff against the versions mentioned in that review. If they are identical
             (i.e. Renovate just rebased without changing versions), stop immediately without posting
             a new review. Only proceed with a full review if the versions changed or new packages
@@ -282,6 +282,7 @@ jobs:
 
       - name: Log usage
         if: always() && steps.gate.outputs.gated == 'true'
+        continue-on-error: true
         env:
           EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
           MODEL: ${{ steps.model_tier.outputs.model }}
@@ -295,10 +296,10 @@ jobs:
             echo "Could not parse usage from execution file." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          cost=$(echo "$result"   | jq -r '.cost_usd          // 0')
-          input=$(echo "$result"  | jq -r '.total_input_tokens  // 0')
-          output=$(echo "$result" | jq -r '.total_output_tokens // 0')
-          turns=$(echo "$result"  | jq -r '.num_turns           // 0')
+          cost=$(echo "$result"   | jq -r '.total_cost_usd       // 0')
+          input=$(echo "$result"  | jq -r '.usage.input_tokens   // 0')
+          output=$(echo "$result" | jq -r '.usage.output_tokens  // 0')
+          turns=$(echo "$result"  | jq -r '.num_turns            // 0')
           echo "model=$MODEL turns=$turns input_tokens=$input output_tokens=$output cost_usd=$cost"
           {
             echo "## Claude Review Usage"
@@ -310,3 +311,4 @@ jobs:
             printf "| Output tokens | %s |\n" "$output"
             printf "| Cost (USD) | \$%s |\n"  "$cost"
           } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
