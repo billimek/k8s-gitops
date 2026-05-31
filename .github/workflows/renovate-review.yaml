@@ -30,16 +30,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}
+          # user.login from the webhook payload is "renovate[bot]"; gh pr view returns "app/renovate"
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
-          pr_json=$(gh pr view "$PR" --json author,labels,autoMergeRequest)
-          author=$(echo "$pr_json" | jq -r '.author.login')
+          pr_json=$(gh pr view "$PR" --json labels,autoMergeRequest)
           labels=$(echo "$pr_json" | jq -r '[.labels[].name] | join(" ")')
           has_automerge=$(echo "$pr_json" | jq -r '.autoMergeRequest != null')
 
           is_renovate=false
           gated=false
 
-          if [[ "$author" == "renovate[bot]" ]] && [[ "$has_automerge" == "true" ]]; then
+          if [[ "$PR_AUTHOR" == "renovate[bot]" ]] && [[ "$has_automerge" == "true" ]]; then
             is_renovate=true
             # Ungated = digest-only update OR GitHub Actions bump
             # Everything else from Renovate (minor/patch/major container/helm/release) is gated
@@ -52,7 +53,7 @@ jobs:
 
           echo "is_renovate=$is_renovate" >> "$GITHUB_OUTPUT"
           echo "gated=$gated"             >> "$GITHUB_OUTPUT"
-          echo "author=$author labels=$labels -> is_renovate=$is_renovate gated=$gated"
+          echo "author=$PR_AUTHOR labels=$labels -> is_renovate=$is_renovate gated=$gated"
 
       - name: Select model tier
         id: model_tier
