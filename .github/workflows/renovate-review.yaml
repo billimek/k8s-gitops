@@ -287,8 +287,9 @@ jobs:
           EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
           MODEL: ${{ steps.model_tier.outputs.model }}
         run: |
+          set +e
           if [ ! -f "$EXEC_FILE" ]; then
-            echo "No execution file found." >> "$GITHUB_STEP_SUMMARY"
+            echo "No execution file found (path: ${EXEC_FILE:-(empty)})." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           result=$(jq -sc '[.[] | select(.type == "result")] | last' "$EXEC_FILE" 2>/dev/null)
@@ -311,4 +312,3 @@ jobs:
             printf "| Output tokens | %s |\n" "$output"
             printf "| Cost (USD) | \$%s |\n"  "$cost"
           } >> "$GITHUB_STEP_SUMMARY"
-          exit 0
