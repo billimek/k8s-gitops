@@ -63,12 +63,13 @@ if [ -n "${PR:-}" ] && [ -n "${REPO:-}" ]; then
   comment_body=$(printf '%s\n### Claude Review Usage\n%s' "$MARKER" "$table")
   cid=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
     --jq "[.[] | select(.user.login==\"claude[bot]\" and (.body|startswith(\"$MARKER\")))] | last | .id // empty" \
-    2>/dev/null || true)
-  if [ -n "$cid" ]; then
+    2>&1 || true)
+  if [ -n "$cid" ] && [[ "$cid" =~ ^[0-9]+$ ]]; then
     gh api -X PATCH "repos/$REPO/issues/comments/$cid" \
-      -f body="$comment_body" >/dev/null 2>&1 || true
+      -f body="$comment_body" || true
   else
+    echo "Usage comment cid lookup result: ${cid:-(empty)}"
     gh api -X POST "repos/$REPO/issues/$PR/comments" \
-      -f body="$comment_body" >/dev/null 2>&1 || true
+      -f body="$comment_body" || true
   fi
 fi
