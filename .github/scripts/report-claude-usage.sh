@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Summarize Claude Code usage from the action's execution file.
-# Appends the usage table into Claude's own PR review (amend via PUT), so it
-# appears inline in the review rather than as a separate comment.
+# Posts (or upserts) a sticky claude[bot] issue comment with the usage table.
 #
 # The action writes JSON.stringify(messages) -> a JSON ARRAY, so the result
 # record must be selected with map()/last, NOT a bare `select()` (that throws
@@ -11,11 +10,10 @@
 #   EXEC_FILE    - path to execution file (steps.claude.outputs.execution_file)
 #   MODEL        - model name (steps.model_tier.outputs.model)
 #
-# Optional env (amend into Claude's review):
+# Optional env (sticky PR comment as claude[bot]):
 #   PR           - PR number
 #   REPO         - owner/repo
-#   HEAD_SHA     - PR head SHA to match this run's review by commit_id
-#   GH_TOKEN     - Claude App token (steps.claude.outputs.github_token) for edit
+#   GH_TOKEN     - Claude App token (steps.claude.outputs.github_token)
 
 set -u
 
@@ -57,28 +55,20 @@ EOF
   printf '%s\n' "$table"
 } >> "$out"
 
-# Amend into Claude's own PR review (best-effort; never fail job).
-# Match this run's review by commit_id == HEAD_SHA so we don't touch reviews
-# from prior runs on older commits.
-# Requires GH_TOKEN = Claude App token (steps.claude.outputs.github_token) to
-# have author identity for the edit.
-if [ -n "${PR:-}" ] && [ -n "${REPO:-}" ] && [ -n "${HEAD_SHA:-}" ]; then
-  rid=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
-    --jq "[.[] | select(.user.login==\"claude[bot]\" and .commit_id==\"$HEAD_SHA\")] | last | .id // empty" \
+# Sticky PR comment as claude[bot] (best-effort; never fail job).
+# Upsert by hidden marker so Renovate rebase/sync re-runs update one comment
+# instead of spamming new ones. GH_TOKEN is the Claude App token so the comment
+# is attributed to claude[bot].
+if [ -n "${PR:-}" ] && [ -n "${REPO:-}" ]; then
+  comment_body=$(printf '%s\n### Claude Review Usage\n%s' "$MARKER" "$table")
+  cid=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+    --jq "[.[] | select(.user.login==\"claude[bot]\" and (.body|startswith(\"$MARKER\")))] | last | .id // empty" \
     2>/dev/null || true)
-  if [ -n "$rid" ]; then
-    body=$(gh api "repos/$REPO/pulls/$PR/reviews/$rid" --jq '.body' 2>/dev/null || true)
-    if [ -n "$body" ]; then
-      # Strip any existing usage block (idempotent: replaces stale data on re-runs).
-      # Pattern: cut from MARKER onward, then trim the trailing \n and \n--- separator.
-      base="${body%%"$MARKER"*}"
-      base="${base%$'\n'}"
-      base="${base%$'\n---'}"
-      base="${base%$'\n'}"
-      newbody=$(printf '%s\n\n---\n%s\n%s' "$base" "$MARKER" "$table")
-      gh api -X PUT "repos/$REPO/pulls/$PR/reviews/$rid" \
-        -f body="$newbody" >/dev/null 2>&1 || true
-    fi
+  if [ -n "$cid" ]; then
+    gh api -X PATCH "repos/$REPO/issues/comments/$cid" \
+      -f body="$comment_body" >/dev/null 2>&1 || true
+  else
+    gh api -X POST "repos/$REPO/issues/$PR/comments" \
+      -f body="$comment_body" >/dev/null 2>&1 || true
   fi
-  # No matching review (rebase/skip run): do nothing on the PR — adding no noise.
 fi

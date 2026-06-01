@@ -319,5 +319,4 @@ jobs:
           GH_TOKEN: ${{ steps.claude.outputs.github_token }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: bash .github/scripts/report-claude-usage.sh
