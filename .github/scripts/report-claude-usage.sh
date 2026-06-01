@@ -1,23 +1,25 @@
 #!/usr/bin/env bash
-# Summarize Claude Code usage from the action's execution file and optionally
-# post it as a sticky comment on the PR.
+# Summarize Claude Code usage from the action's execution file.
+# Appends the usage table into Claude's own PR review (amend via PUT), so it
+# appears inline in the review rather than as a separate comment.
 #
 # The action writes JSON.stringify(messages) -> a JSON ARRAY, so the result
 # record must be selected with map()/last, NOT a bare `select()` (that throws
 # "Cannot index array with string", which silently broke earlier attempts).
 #
 # Required env:
-#   EXEC_FILE    - path to the execution file from steps.claude.outputs.execution_file
-#   MODEL        - model name from steps.model_tier.outputs.model
+#   EXEC_FILE    - path to execution file (steps.claude.outputs.execution_file)
+#   MODEL        - model name (steps.model_tier.outputs.model)
 #
-# Optional env (sticky PR comment):
+# Optional env (amend into Claude's review):
 #   PR           - PR number
 #   REPO         - owner/repo
-#   GH_TOKEN     - token with pull-requests:write
+#   HEAD_SHA     - PR head SHA to match this run's review by commit_id
+#   GH_TOKEN     - Claude App token (steps.claude.outputs.github_token) for edit
 
 set -u
 
-MARKER="<!-- claude-renovate-usage -->"
+MARKER="<!-- claude-usage -->"
 out="${GITHUB_STEP_SUMMARY:-/dev/stdout}"
 
 r=""
@@ -35,9 +37,7 @@ fi
 # division or multiply error. Use `(.x // 0)/...` not `(.x/...) // 0`.
 get() { printf '%s' "$r" | jq -r "$1 // 0"; }
 
-body=$(cat <<EOF
-$MARKER
-### Claude Review Usage
+table=$(cat <<EOF
 | Metric | Value |
 |---|---|
 | Model | \`${MODEL:-unknown}\` |
@@ -51,20 +51,34 @@ $MARKER
 EOF
 )
 
-printf '%s\n' "$body" >> "$out"
+# Write to Actions step summary
+{
+  echo "### Claude Review Usage"
+  printf '%s\n' "$table"
+} >> "$out"
 
-# Sticky PR comment: upsert by hidden marker so Renovate rebase/sync re-runs
-# update one comment instead of spamming new ones. Best-effort; never fail job.
-# NOTE: gh api has no --arg; the MARKER constant is interpolated directly (safe:
-# it's a fixed string, not user input). --paginate + gh's built-in --jq is the
-# correct combination here (standalone jq would need jq -s which changes semantics).
-if [ -n "${PR:-}" ] && [ -n "${REPO:-}" ]; then
-  cid=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
-    --jq "[.[] | select(.user.login==\"github-actions[bot]\" and (.body|startswith(\"$MARKER\")))] | last | .id // empty" \
+# Amend into Claude's own PR review (best-effort; never fail job).
+# Match this run's review by commit_id == HEAD_SHA so we don't touch reviews
+# from prior runs on older commits.
+# Requires GH_TOKEN = Claude App token (steps.claude.outputs.github_token) to
+# have author identity for the edit.
+if [ -n "${PR:-}" ] && [ -n "${REPO:-}" ] && [ -n "${HEAD_SHA:-}" ]; then
+  rid=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
+    --jq "[.[] | select(.user.login==\"claude[bot]\" and .commit_id==\"$HEAD_SHA\")] | last | .id // empty" \
     2>/dev/null || true)
-  if [ -n "$cid" ]; then
-    gh api -X PATCH "repos/$REPO/issues/comments/$cid" -f body="$body" >/dev/null 2>&1 || true
-  else
-    gh api -X POST "repos/$REPO/issues/$PR/comments" -f body="$body" >/dev/null 2>&1 || true
+  if [ -n "$rid" ]; then
+    body=$(gh api "repos/$REPO/pulls/$PR/reviews/$rid" --jq '.body' 2>/dev/null || true)
+    if [ -n "$body" ]; then
+      # Strip any existing usage block (idempotent: replaces stale data on re-runs).
+      # Pattern: cut from MARKER onward, then trim the trailing \n and \n--- separator.
+      base="${body%%"$MARKER"*}"
+      base="${base%$'\n'}"
+      base="${base%$'\n---'}"
+      base="${base%$'\n'}"
+      newbody=$(printf '%s\n\n---\n%s\n%s' "$base" "$MARKER" "$table")
+      gh api -X PUT "repos/$REPO/pulls/$PR/reviews/$rid" \
+        -f body="$newbody" >/dev/null 2>&1 || true
+    fi
   fi
+  # No matching review (rebase/skip run): do nothing on the PR — adding no noise.
 fi

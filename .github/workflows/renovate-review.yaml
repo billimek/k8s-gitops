@@ -64,8 +64,10 @@ jobs:
           if [[ "$title" == fix\(container\):* ]] && \
              ! echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets'; then
             echo "model=claude-haiku-4-5-20251001" >> "$GITHUB_OUTPUT"
+            echo "depth=light" >> "$GITHUB_OUTPUT"
           else
             echo "model=claude-sonnet-4-6" >> "$GITHUB_OUTPUT"
+            echo "depth=full" >> "$GITHUB_OUTPUT"
           fi
 
       - id: claude
@@ -87,6 +89,7 @@ jobs:
 
             REPO: ${{ github.repository }}
             PR: #${{ github.event.pull_request.number }}
+            REVIEW DEPTH: ${{ steps.model_tier.outputs.depth }}
 
             ## Repo Context
 
@@ -116,6 +119,32 @@ jobs:
             (i.e. Renovate just rebased without changing versions), stop immediately without posting
             a new review. Only proceed with a full review if the versions changed or new packages
             were added since the last review.
+
+            ## Tool Use Efficiency
+
+            When you need multiple independent read-only lookups — Grep/Glob/Read on repo files,
+            git log, or independent gh api calls — issue them as parallel tool calls in a single
+            turn rather than one at a time. For example, `gh pr view`, `gh api .../reviews`, and
+            `git log --grep` can all be issued in the same turn.
+
+            ## Review Depth
+
+            Your depth for this PR is **${{ steps.model_tier.outputs.depth }}**:
+
+            **light** — routine patch container bump (haiku tier):
+            1. Analyze (step 1 below).
+            2. Read the PR body for Renovate-embedded release notes. If present and covering the
+               full old→new range, use them. Otherwise fetch the upstream releases for that range
+               with a single `gh api` call.
+            3. Grep/Read the repo files that reference this component (step 3 below).
+            4. Submit verdict.
+            Skip the multi-source breadcrumb chase (CHANGELOG files, docs sites, commit history,
+            registry metadata, web search) and the upstream-issues search UNLESS the release notes
+            show breaking changes, deprecations, or security fixes — then escalate to full depth.
+            Target: 5–7 turns.
+
+            **full** — minor/major bump, chart upgrade, or high-blast-radius component (sonnet tier):
+            Follow the complete Workflow below without shortcuts. Target: 12–18 turns.
 
             ## Workflow
 
@@ -287,7 +316,8 @@ jobs:
         env:
           EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
           MODEL: ${{ steps.model_tier.outputs.model }}
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.claude.outputs.github_token }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: bash .github/scripts/report-claude-usage.sh
