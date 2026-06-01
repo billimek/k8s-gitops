@@ -25,7 +25,7 @@ spec:
         containers:
           app:
             image:
-              repository: forgejo.ellis.link/continuwuation/continuwuity
+              repository: ghcr.io/continuwuity/continuwuity
               tag: v0.5.9-maxperf@sha256:674f59c5c6c72a7ca08f01f09143761b0111127752a0f69607e3bed8ca9b4216
             env:
               TZ: "America/New_York"
