@@ -77,7 +77,8 @@ jobs:
           show_full_output: true
           claude_args: |
             --model ${{ steps.model_tier.outputs.model }}
-            --max-turns 15
+            --max-turns 25
+            --setting-sources user
             --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch"
           prompt: |
             You research dependency upgrades in Renovate pull requests and submit a GitHub PR review
@@ -280,8 +281,13 @@ jobs:
             -f description="$desc" \
             -f target_url="$RUN_URL"
 
-      - name: Log model
+      - name: Log usage
         if: always() && steps.gate.outputs.gated == 'true'
+        continue-on-error: true
         env:
+          EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
           MODEL: ${{ steps.model_tier.outputs.model }}
-        run: echo "model=$MODEL" >> "$GITHUB_STEP_SUMMARY"
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: bash .github/scripts/report-claude-usage.sh
