@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Summarize Claude Code usage from the action's execution file.
-# Posts (or upserts) a sticky claude[bot] issue comment with the usage table.
+# Posts (or upserts) a sticky github-actions[bot] issue comment with the usage table.
 #
 # The action writes JSON.stringify(messages) -> a JSON ARRAY, so the result
 # record must be selected with map()/last, NOT a bare `select()` (that throws
@@ -10,14 +10,14 @@
 #   EXEC_FILE    - path to execution file (steps.claude.outputs.execution_file)
 #   MODEL        - model name (steps.model_tier.outputs.model)
 #
-# Optional env (sticky PR comment as claude[bot]):
+# Optional env (sticky PR comment as github-actions[bot]):
 #   PR           - PR number
 #   REPO         - owner/repo
-#   GH_TOKEN     - Claude App token (steps.claude.outputs.github_token)
+#   GH_TOKEN     - default GITHUB_TOKEN (github.token)
 
 set -u
 
-MARKER="<!-- claude-usage -->"
+MARKER="<!-- claude-renovate-usage -->"
 out="${GITHUB_STEP_SUMMARY:-/dev/stdout}"
 
 r=""
@@ -55,14 +55,13 @@ EOF
   printf '%s\n' "$table"
 } >> "$out"
 
-# Sticky PR comment as claude[bot] (best-effort; never fail job).
+# Sticky PR comment as github-actions[bot] (best-effort; never fail job).
 # Upsert by hidden marker so Renovate rebase/sync re-runs update one comment
-# instead of spamming new ones. GH_TOKEN is the Claude App token so the comment
-# is attributed to claude[bot].
+# instead of spamming new ones.
 if [ -n "${PR:-}" ] && [ -n "${REPO:-}" ]; then
   comment_body=$(printf '%s\n### Claude Review Usage\n%s' "$MARKER" "$table")
   cid=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
-    --jq "[.[] | select(.user.login==\"claude[bot]\" and (.body|startswith(\"$MARKER\")))] | last | .id // empty" \
+    --jq "[.[] | select(.user.login==\"github-actions[bot]\" and (.body|startswith(\"$MARKER\")))] | last | .id // empty" \
     2>&1 || true)
   if [ -n "$cid" ] && [[ "$cid" =~ ^[0-9]+$ ]]; then
     gh api -X PATCH "repos/$REPO/issues/comments/$cid" \
