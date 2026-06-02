@@ -26,6 +26,12 @@
       overridePackageName: "ghcr.io/siderolabs/installer",
     },
     {
+      description: "Victoria Logs - 3-day cooldown before raising upgrade PRs",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/victoriametrics\\/helm-charts\\/victoria-logs/"],
+      minimumReleaseAge: "3 days",
+    },
+    {
       description: "pennydreadful/bookshelf uses prefixed tags with 4-part versions",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/pennydreadful/bookshelf"],
