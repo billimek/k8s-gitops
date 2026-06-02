@@ -81,7 +81,7 @@ jobs:
             --model ${{ steps.model_tier.outputs.model }}
             --max-turns 25
             --setting-sources user
-            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch"
+            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Bash(gh issue view:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch"
           prompt: |
             You research dependency upgrades in Renovate pull requests and submit a GitHub PR review
             with your findings. You do not make changes to files, do not merge PRs, and do not run
@@ -126,6 +126,25 @@ jobs:
             git log, or independent gh api calls — issue them as parallel tool calls in a single
             turn rather than one at a time. For example, `gh pr view`, `gh api .../reviews`, and
             `git log --grep` can all be issued in the same turn.
+
+            ## Shell & Tool Conventions
+
+            The allowed toolset is intentionally narrow. Violating these rules causes immediate
+            "requires approval" errors that waste turns and may exhaust the turn budget:
+
+            - **Always quote `gh api` URLs** that contain `?`, `&`, or `+`. An unquoted `&` is a
+              shell operator that splits the command into fragments — most will be denied. For
+              upstream-issue searches use the `search/issues` endpoint with `+`-joined qualifiers:
+              `gh api "search/issues?q=repo:org/repo+label:bug+v1.20.0&per_page=20"`
+            - **Filter JSON with `--jq`, not pipes to `python3` or `jq`**. Only `gh`, `git`,
+              `grep`, and `curl` are on the allowlist; piping to anything else is denied.
+              Correct: `gh api "repos/org/repo/releases/tags/v1.0" --jq '.body'`
+            - **Run `git` without `-C <path>`**. The checkout is already the working directory;
+              use plain `git log`, `git show`, `git tag` (all allowlisted). The flag
+              `git -C /abs/path ...` does not prefix-match the allowlist and is denied.
+            - **Read upstream issues with `gh issue view <n> --repo <org>/<repo>`** (allowlisted)
+              or `gh api repos/<org>/<repo>/issues/<n> --jq`. Do not use `gh issue list` (not
+              on the allowlist); use `gh api "search/issues?q=repo:org/repo+..."` instead.
 
             ## Review Depth
 
@@ -253,9 +272,10 @@ jobs:
               found and what you could not find rather than fabricating information
             - Submit exactly one `gh pr review` at the end of your analysis
             - When citing github.com URLs in the review body (PRs, issues, commits, releases, file
-              or blob links), rewrite the host to `redirect.github.com`. This suppresses the
-              cross-reference backlinks that would otherwise spam every linked issue/PR with a
-              "mentioned in" notification. Non-github.com URLs are unaffected.
+              or blob links), rewrite the host to `redirect.github.com` while keeping the full
+              `https://` scheme (e.g. `https://redirect.github.com/rook/rook/releases/tag/v1.20.0`).
+              This suppresses the cross-reference backlinks that would otherwise spam every linked
+              issue/PR with a "mentioned in" notification. Non-github.com URLs are unaffected.
 
       - name: Publish review status
         if: always()
