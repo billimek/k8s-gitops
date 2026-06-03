@@ -59,15 +59,21 @@ jobs:
         if: steps.gate.outputs.gated == 'true'
         run: |
           title="${{ github.event.pull_request.title }}"
-          # Haiku for routine patch container bumps; Sonnet for everything else
-          # (chart upgrades, feat bumps, high-blast-radius components, GitHub Actions)
-          if [[ "$title" == fix\(container\):* ]] && \
-             ! echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets'; then
+          # Deep (Sonnet, 40 turns): group PRs, major bumps, or high-blast-radius components
+          # Full (Sonnet, 25 turns): all other minor/feat bumps and chart upgrades
+          # Light (Haiku, 25 turns): routine fix(container) patch bumps not matching deep
+          if echo "$title" | grep -qiE 'group|envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets'; then
+            echo "model=claude-sonnet-4-6" >> "$GITHUB_OUTPUT"
+            echo "depth=deep" >> "$GITHUB_OUTPUT"
+            echo "max_turns=40" >> "$GITHUB_OUTPUT"
+          elif [[ "$title" == fix\(container\):* ]]; then
             echo "model=claude-haiku-4-5-20251001" >> "$GITHUB_OUTPUT"
             echo "depth=light" >> "$GITHUB_OUTPUT"
+            echo "max_turns=25" >> "$GITHUB_OUTPUT"
           else
             echo "model=claude-sonnet-4-6" >> "$GITHUB_OUTPUT"
             echo "depth=full" >> "$GITHUB_OUTPUT"
+            echo "max_turns=25" >> "$GITHUB_OUTPUT"
           fi
 
       - id: claude
@@ -79,7 +85,7 @@ jobs:
           show_full_output: true
           claude_args: |
             --model ${{ steps.model_tier.outputs.model }}
-            --max-turns 25
+            --max-turns ${{ steps.model_tier.outputs.max_turns }}
             --setting-sources user
             --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Bash(gh issue view:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch"
           prompt: |
@@ -146,9 +152,33 @@ jobs:
               or `gh api repos/<org>/<repo>/issues/<n> --jq`. Do not use `gh issue list` (not
               on the allowlist); use `gh api "search/issues?q=repo:org/repo+..."` instead.
 
+            ## Repo File Discovery
+
+            The repository is **fully checked out** in the working directory (`fetch-depth: 0`).
+            Use the **`Glob` and `Grep` tools** (both allowlisted) to find and read repo files.
+            Do NOT shell out to `find`, `find -exec`, or `grep -r` / `xargs grep`:
+            - `find -exec` is blocked by the command-safety gate (wastes a turn with
+              "cannot be auto-allowed by a Bash(find:*) prefix rule").
+            - Piping to `xargs` is not on the allowlist and will be denied.
+
+            To inspect an upstream chart or source file:
+            1. **Check the local tree first** — `Glob "kubernetes/**/<component>*.yaml"` and
+               `Read` the file. If it is present, there is no need for any `gh api .../contents` call.
+            2. **If the file is only upstream**, resolve the full path with a **single**
+               `gh api "repos/org/repo/git/trees/<ref>?recursive=1"` call and then fetch the one
+               file you need. Do NOT walk the directory tree one level at a time.
+
             ## Review Depth
 
-            Your depth for this PR is **${{ steps.model_tier.outputs.depth }}**:
+            Your depth for this PR is **${{ steps.model_tier.outputs.depth }}** and your turn
+            budget is **${{ steps.model_tier.outputs.max_turns }}** turns.
+
+            **Turn-budget rule (applies at all depths):** Reserve your last turn for `gh pr review`.
+            If research is still incomplete when the budget runs low, submit a review with what you
+            have found, noting explicitly what you could not verify (e.g., "could not confirm
+            ceph-csi-drivers values schema changes"). A hedged verdict is far better than a hard
+            failure that blocks the merge with no explanation. Never exhaust the budget without
+            submitting a review.
 
             **light** — routine patch container bump (haiku tier):
             1. Analyze (step 1 below).
@@ -162,8 +192,17 @@ jobs:
             show breaking changes, deprecations, or security fixes — then escalate to full depth.
             Target: 5–7 turns.
 
-            **full** — minor/major bump, chart upgrade, or high-blast-radius component (sonnet tier):
+            **full** — minor/feat bump or chart upgrade (sonnet tier):
             Follow the complete Workflow below without shortcuts. Target: 12–18 turns.
+
+            **deep** — Renovate group PR, high-blast-radius component (envoy, cilium, rook, ceph,
+            volsync, cert-manager, external-secrets), or any title containing "group" (sonnet tier,
+            40-turn budget):
+            Follow the complete Workflow. For group PRs bundling multiple components, research each
+            component **breadth-first**: check 2–3 sources per component (PR body, GitHub releases,
+            CHANGELOG) before moving to the next, rather than deep-diving any one component.
+            After covering all components, do the upstream-issues search and repo impact assessment.
+            Target: 20–30 turns.
 
             ## Workflow
 
