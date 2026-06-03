@@ -7,6 +7,7 @@ cluster:
   controllerManager:
     extraArgs:
       bind-address: 0.0.0.0
+      feature-gates: HPAScaleToZero=true
   coreDNS:
     disabled: true
   # discovery:
