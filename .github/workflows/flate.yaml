@@ -60,12 +60,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    strategy:
-      matrix:
-        resource:
-          - helmrelease
-          - kustomization
-      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -82,7 +76,7 @@ jobs:
         env:
           FLATE_PATH: setup/flux/cluster
         run: |
-          flate diff ${{ matrix.resource }} \
+          flate diff all \
             --allow-missing-secrets \
             --skip-kinds ValidatingWebhookConfiguration \
             --skip-kinds MutatingWebhookConfiguration \
@@ -123,7 +117,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
         with:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-          header: ${{ github.event.pull_request.number }}/flate/${{ matrix.resource }}
+          header: ${{ github.event.pull_request.number }}/flate
           path: comment.md
 
   flate-success:
