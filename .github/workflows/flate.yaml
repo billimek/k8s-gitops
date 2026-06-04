@@ -1,0 +1,142 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Flate
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  filter-changes:
+    name: Filter changes
+    runs-on: ubuntu-slim
+    outputs:
+      changed-files: ${{ steps.changed-files.outputs.changed_files }}
+    steps:
+      - name: Get changed files
+        id: changed-files
+        uses: step-security/changed-files@2e07db73e5ccdb319b9a6c7766bd46d39d304bad # v47.0.5
+        with:
+          files: |-
+            kubernetes/**/*
+
+  test:
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
+    name: Flate Test
+    runs-on: ubuntu-latest
+    needs:
+      - filter-changes
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Flate
+        uses: home-operations/flate/action@13917764cfe2966e22510118ccf2f77d3c4d74ba # 0.2.12
+        with:
+          cache: true
+
+      - name: Run Flate test
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: flate test all --allow-missing-secrets
+
+  diff:
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
+    name: Flate Diff
+    runs-on: ubuntu-latest
+    needs:
+      - filter-changes
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      matrix:
+        resource:
+          - helmrelease
+          - kustomization
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Flate
+        uses: home-operations/flate/action@13917764cfe2966e22510118ccf2f77d3c4d74ba # 0.2.12
+        with:
+          cache: true
+
+      - name: Run Flate diff
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: |
+          flate diff ${{ matrix.resource }} \
+            --allow-missing-secrets \
+            --skip-kinds ValidatingWebhookConfiguration \
+            --skip-kinds MutatingWebhookConfiguration \
+            -o diff > flate.diff || true
+          [ -s flate.diff ] || rm -f flate.diff
+
+      - name: Build comment body
+        if: ${{ hashFiles('flate.diff') != '' }}
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          LIMIT=60000
+          DIFF_LEN=$(wc -c < flate.diff)
+          OVERHEAD=300
+          BUDGET=$((LIMIT - OVERHEAD))
+          {
+            printf '```diff\n'
+            if [ "$DIFF_LEN" -gt "$BUDGET" ]; then
+              head -c "$BUDGET" flate.diff
+              printf '\n```\n\n> [!NOTE]\n> Diff truncated -- showing first %s of %s bytes. Full diff in [workflow run](%s).\n' \
+                "$BUDGET" "$DIFF_LEN" "$RUN_URL"
+            else
+              cat flate.diff
+              printf '\n```\n'
+            fi
+          } > comment.md
+
+      - if: ${{ hashFiles('comment.md') != '' }}
+        name: Generate Token
+        id: generate_token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.RENOVATE_APP_ID }}
+          private-key: ${{ secrets.RENOVATE_PRIVATE_KEY }}
+
+      - if: ${{ hashFiles('comment.md') != '' }}
+        name: Add or update comment
+        uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
+        with:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          header: ${{ github.event.pull_request.number }}/flate/${{ matrix.resource }}
+          path: comment.md
+
+  flate-success:
+    needs:
+      - test
+      - diff
+    if: ${{ !cancelled() }}
+    name: Flate successful
+    runs-on: ubuntu-slim
+    steps:
+      - name: Any jobs failed?
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+      - name: All jobs passed or skipped?
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: echo "All jobs passed or skipped" && echo "${{ toJSON(needs.*.result) }}"
