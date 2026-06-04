@@ -315,6 +315,12 @@ jobs:
               `https://` scheme (e.g. `https://redirect.github.com/rook/rook/releases/tag/v1.20.0`).
               This suppresses the cross-reference backlinks that would otherwise spam every linked
               issue/PR with a "mentioned in" notification. Non-github.com URLs are unaffected.
+            - NEVER write bare `#NNN` or `org/repo#NNN` references for upstream issues or PRs.
+              GitHub autolinks a bare `#552` to THIS repo (`${{ github.repository }}`), not the
+              upstream project, producing wrong cross-links. Every upstream issue or PR reference
+              must be a full markdown link using `redirect.github.com`, e.g.
+              `[#552](https://redirect.github.com/rhoopr/kei/issues/552)`. This rule applies to
+              prose, bullet points, and the Sources section — wherever a reference appears.
 
       - name: Publish review status
         if: always()
