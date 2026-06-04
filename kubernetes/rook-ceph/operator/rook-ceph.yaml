@@ -11,7 +11,7 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: v1.19.6
+    tag: v1.20.0
   url: oci://ghcr.io/rook/rook-ceph
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
@@ -30,12 +30,8 @@ spec:
     crds:
       enabled: true
     csi:
-      cephFSKernelMountOptions: ms_mode=prefer-crc
-      enableCephfsDriver: false
-      enableCephfsSnapshotter: false
-      enableLiveness: true
       serviceMonitor:
-        enabled: false # broke after upgrading to v1.18
+        enabled: false # liveness metrics require Driver.spec.liveness (not yet in ceph-csi-drivers chart v1.0.1)
     enableDiscoveryDaemon: true
     monitoring:
       enabled: true

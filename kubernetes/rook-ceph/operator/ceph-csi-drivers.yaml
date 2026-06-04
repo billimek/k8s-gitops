@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: ceph-csi-drivers
+  namespace: rook-ceph
+spec:
+  interval: 1h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 1.0.1
+  url: oci://ghcr.io/home-operations/charts-mirror/ceph-csi-drivers
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ceph-csi-drivers
+  namespace: rook-ceph
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: ceph-csi-drivers
+  interval: 1h
+  values:
+    drivers:
+      cephfs:
+        enabled: false
+      nfs:
+        enabled: false
+      nvmeof:
+        enabled: false
+      rbd:
+        enabled: true
+        name: rook-ceph.rbd.csi.ceph.com
+        clusterName: rook-ceph
+        fsGroupPolicy: File
+        snapshotPolicy: volumeSnapshot
+        controllerPlugin:
+          replicas: 2
+          priorityClassName: system-cluster-critical
+        nodePlugin:
+          priorityClassName: system-node-critical
