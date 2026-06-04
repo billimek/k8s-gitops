@@ -154,9 +154,7 @@ spec:
         globalMounts:
           - path: /photos
       config:
-        storageClass: ceph-block
-        accessMode: ReadWriteOnce
-        size: 1Gi
+        existingClaim: kei-config
         globalMounts:
           - path: /config
       kei-config:

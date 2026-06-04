@@ -79,8 +79,10 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
+      name: << if get $app "pvcName" >><< get $app "pvcName" >><< else >><< printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >><< end >>
       namespace: << get $app "namespace" | default "default" >>
+      labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
     spec:
       accessModes:
         - ReadWriteOnce

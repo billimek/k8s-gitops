@@ -3,7 +3,7 @@
 # ResourceSet for VolSync backups
 # Automated backups to NFS with Kopia for improved performance and deduplication
 # Backup window: hourly at the top of each hour (schedule configurable per-app in resourceset-inputprovider.yaml)
-# Generates 52 resources (26 ExternalSecrets + 26 ReplicationSources) across namespaces
+# Generates 54 resources (27 ExternalSecrets + 27 ReplicationSources) across namespaces
 # App definitions are shared via the volsync-apps ResourceSetInputProvider
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
