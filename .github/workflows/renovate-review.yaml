@@ -88,6 +88,7 @@ jobs:
             --max-turns ${{ steps.model_tier.outputs.max_turns }}
             --setting-sources user
             --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Bash(gh issue view:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch"
+            --disallowedTools "Task,Agent"
           prompt: |
             You research dependency upgrades in Renovate pull requests and submit a GitHub PR review
             with your findings. You do not make changes to files, do not merge PRs, and do not run
@@ -135,33 +136,40 @@ jobs:
 
             ## Shell & Tool Conventions
 
-            The allowed toolset is intentionally narrow. Violating these rules causes immediate
-            "requires approval" errors that waste turns and may exhaust the turn budget:
+            **What the safety gate actually blocks** — only *compound* Bash commands are denied:
+            pipes to `xargs`, pipes to bare `grep`/`awk`/`sed`, `&&`-chained commands, and
+            command substitution inside `find -exec`. Simple single-command invocations of
+            `find`, `grep -r`, `ls`, `cat`, etc. are allowed by the gate.
 
-            - **Always quote `gh api` URLs** that contain `?`, `&`, or `+`. An unquoted `&` is a
-              shell operator that splits the command into fragments — most will be denied. For
-              upstream-issue searches use the `search/issues` endpoint with `+`-joined qualifiers:
+            Even so, **prefer `Grep`/`Glob`/`Read`** over shell commands for repo files — one
+            `Grep "pattern" "kubernetes/**/*.yaml"` call beats ten sequential `grep -r`/`find`
+            invocations and uses far fewer turns.
+
+            Rules that *do* cause denials if violated:
+
+            - **Always quote `gh api` URLs** that contain `?`, `&`, or `+`. An unquoted `&`
+              splits the command at the shell level. Use `+`-joined qualifiers:
               `gh api "search/issues?q=repo:org/repo+label:bug+v1.20.0&per_page=20"`
-            - **Filter JSON with `--jq`, not pipes to `python3` or `jq`**. Only `gh`, `git`,
-              and `curl` are allowlisted as shell commands; bare `grep`, `diff`, `jq`, and `ls`
-              are NOT -- use the `Grep` and `Read` tools for local files instead.
-              Piping to anything other than the tools listed above is denied.
+            - **Filter JSON with `--jq`, not pipes**. Piping `gh`/`git`/`curl` output to bare
+              `jq`, `python3`, or `grep -E` is denied. Use `--jq` directly on the command.
               Correct: `gh api "repos/org/repo/releases/tags/v1.0" --jq '.body'`
             - **Run `git` without `-C <path>`**. The checkout is already the working directory;
-              use plain `git log`, `git show`, `git tag` (all allowlisted). The flag
-              `git -C /abs/path ...` does not prefix-match the allowlist and is denied.
-            - **Read upstream issues with `gh issue view <n> --repo <org>/<repo>`** (allowlisted)
-              or `gh api repos/<org>/<repo>/issues/<n> --jq`. Do not use `gh issue list` (not
-              on the allowlist); use `gh api "search/issues?q=repo:org/repo+..."` instead.
+              use plain `git log`, `git show`, `git tag`. The `-C /abs/path` flag breaks the
+              allowlist prefix match and is denied.
+            - **Read upstream issues with `gh issue view <n> --repo <org>/<repo>`** or
+              `gh api repos/<org>/<repo>/issues/<n> --jq`. Do not use `gh issue list`.
+
+            **Anti-thrash rule:** If a search (`Grep`, `Glob`, or `gh api`) returns empty, that
+            means the thing is absent — stop searching. Do **not** re-run the same query with
+            permuted patterns, synonyms, or similar terms. One empty result is a conclusive
+            answer; re-running wastes turns without new information.
 
             ## Repo File Discovery
 
             The repository is **fully checked out** in the working directory (`fetch-depth: 0`).
-            Use the **`Glob` and `Grep` tools** (both allowlisted) to find and read repo files.
-            Do NOT shell out to `find`, `find -exec`, or `grep -r` / `xargs grep`:
-            - `find -exec` is blocked by the command-safety gate (wastes a turn with
-              "cannot be auto-allowed by a Bash(find:*) prefix rule").
-            - Piping to `xargs` is not on the allowlist and will be denied.
+            Use the **`Glob` and `Grep` tools** (both allowlisted) to find and read repo files —
+            they complete in a single turn with no shell-escaping issues. Shell `find`/`grep -r`
+            work too but generate more tool calls and are harder to parallelize cleanly.
 
             To inspect an upstream chart or source file:
             1. **Check the local tree first** — `Glob "kubernetes/**/<component>*.yaml"` and
@@ -269,7 +277,19 @@ jobs:
 
             ## Submitting the Review
 
-            Submit your findings as a single GitHub PR review.
+            Submit your findings as **exactly one** GitHub PR review. Do not call `gh pr review`
+            more than once — if the first submission returns success, stop immediately.
+
+            **Always wrap the review body in a single-quoted heredoc** to avoid shell-escaping
+            failures with backticks, dollar signs, and special characters:
+            ```
+            gh pr review <n> --repo <owner>/<repo> --approve --body "$(cat <<'EOF'
+            ... body text ...
+            EOF
+            )"
+            ```
+            Never use an inline `--body "..."` string — backticks and `$(...)` inside it cause
+            the shell to misparse the argument and the review either errors or posts garbled text.
 
             **If there are breaking changes or deprecations that affect this repo**:
             Use `gh pr review --request-changes` with a structured body.
@@ -311,7 +331,7 @@ jobs:
             - If unclear, research more rather than guess
             - When stuck (private repo, ambiguous package, no changelog anywhere), report what you
               found and what you could not find rather than fabricating information
-            - Submit exactly one `gh pr review` at the end of your analysis
+            - Submit exactly one `gh pr review` at the end of your analysis; if it succeeds, stop — never submit a second review
             - When citing github.com URLs in the review body (PRs, issues, commits, releases, file
               or blob links), rewrite the host to `redirect.github.com` while keeping the full
               `https://` scheme (e.g. `https://redirect.github.com/rook/rook/releases/tag/v1.20.0`).
