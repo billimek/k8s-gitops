@@ -57,7 +57,7 @@ tool that creates, updates, deletes, scales, execs, or pushes requires explicit 
 - **Storage**: Ceph block (default), NFS media mounts, VolSync+Kopia backups
 - **Secrets**: ExternalSecret CRDs only (no plaintext)
 - **Backups**: ResourceSet automation in kube-system/volsync/
-- **CI**: PRs run `flate` diff/test (`.github/workflows/flate.yaml`); Renovate auto-bumps images per `.renovate/` rules
+- **CI**: PRs run `flate` diff/test (`.github/workflows/flate.yaml`); Renovate auto-bumps images per `.renovate/` rules; non-trivial Renovate version bumps are gated by a Claude review (`.github/workflows/renovate-review.yaml`, `claude/renovate-review` status — digest/github-action/grafana-dashboard updates are ungated); use `/review-renovate` to manually review and merge queued PRs and `/tune-renovate-review` to analyze recent CI runs for prompt/tier improvements
 - **Grafana**: Managed by grafana-operator (`kubernetes/monitoring/grafana/`). Dashboards, folders, and datasources are `GrafanaDashboard`/`GrafanaFolder`/`GrafanaDatasource` CRs (`grafana.integreatly.org/v1beta1`). Instance selector label is `dashboards: grafana`. To add a dashboard, create a `GrafanaDashboard` CR next to the relevant app with `instanceSelector: {matchLabels: {dashboards: grafana}}`; add `allowCrossNamespaceImport: true` and a `folderRef` when outside the `monitoring` namespace. grafana.com dashboards use `spec.url`, chart-shipped ConfigMap dashboards use `spec.configMapRef`. Renovate tracks grafana.com revision URLs automatically via `.renovate/grafanaDashboards.json5`.
 
 ## Application Template

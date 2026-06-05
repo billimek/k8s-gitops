@@ -14,7 +14,7 @@ jobs:
   review:
     name: Breaking Change Analysis
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     permissions:
       contents: read
       pull-requests: write
@@ -130,7 +130,7 @@ jobs:
             - Custom dependencies managed via regex in YAML files
 
             Architecture details relevant to impact assessment:
-            - **Flux pattern**: OCIRepository + chartRef (exceptions: minecraft, emqx-operator use HelmRepository)
+            - **Flux pattern**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
             - **Ingress**: Envoy Gateway with HTTPRoute only (NOT Traefik/Ingress)
             - **Storage**: Ceph block (default), NFS media mounts, VolSync + Kopia backups
             - **Secrets**: ExternalSecret CRDs only (no plaintext secrets)

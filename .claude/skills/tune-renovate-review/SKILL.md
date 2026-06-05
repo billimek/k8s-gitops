@@ -24,10 +24,19 @@ git log --oneline -20 -- .github/workflows/renovate-review.yaml
 ```
 
 Then read `.github/workflows/renovate-review.yaml`. The primary tuning targets are:
-- **Tier routing** (lines ~57-77): the `title` regex that assigns model/max-turns.
-- **allowedTools** (line ~90): the `Bash(...)` allowlist passed to the action.
-- **Prompt efficiency rules** (lines ~121-215): Tool Use Efficiency, Anti-thrash, Repo File
-  Discovery, and the per-tier turn-target bands.
+
+- **`Select model tier` step**: the `title` regex that routes each PR to a model + max-turns.
+- **`claude` step `--allowedTools` arg**: the `Bash(...)` allowlist passed to the action.
+- **`Gather PR evidence` step**: writes `pr-context.md`; a finding where the model re-fetches
+  PR data instead of reading that file maps here.
+- **`Tool Use Efficiency` section** (in the prompt): guidance on parallelizing independent
+  lookups in a single turn.
+- **`Shell & Tool Conventions` section** (in the prompt): allowlist rules, anti-thrash rule,
+  and permission-denial guidance.
+- **`Repo File Discovery` section** (in the prompt): guidance on using Glob/Read before
+  upstream API calls.
+- **`Review Depth` section** (in the prompt): per-tier turn-target bands (light 5-7 turns /
+  full 12-18 / deep 20-30) and the turn-budget rule.
 
 Anything the git log shows was previously added and then reverted must be explicitly excluded
 from this session's findings.
@@ -95,8 +104,8 @@ and the ordered Bash command list.
 ### 4 — Derive findings
 
 Analyze the full run window and group findings into the four categories below. Each finding must
-cite specific run IDs, repeat-counts, and the exact line/section of the workflow to change. Order
-within each category by frequency (most runs affected first).
+cite specific run IDs, repeat-counts, and the exact step or section of the workflow to change.
+Order within each category by frequency (most runs affected first).
 
 **Do not create a finding for something the Step 1 history shows was already tried and reverted.**
 
@@ -105,10 +114,10 @@ within each category by frequency (most runs affected first).
 Evidence: non-empty `permission_denials` array, or `"is_error": true` results whose message
 contains "denied", "not allowed", or "prefix rule".
 
-Proposed fix: add the missing `Bash(<command-prefix>:*)` entry to `--allowedTools` (workflow
-line ~90). If the command is already documented in the prompt's "Shell & Tool Conventions" block
-(lines ~137-165) but the model still trips it, the doc wording is the bug — propose a rewrite
-of that guidance instead.
+Proposed fix: add the missing `Bash(<command-prefix>:*)` entry to the `--allowedTools` arg in
+the `claude` step. If the command is already documented in the prompt's **`Shell & Tool
+Conventions`** section but the model still trips it, the doc wording is the bug — propose a
+rewrite of that guidance instead.
 
 #### B. Turn efficiency and waste
 
@@ -117,30 +126,35 @@ Evidence: `subtype == error_max_turns`; `num_turns` at or within 2 of the budget
 parallel); repeated near-identical `Grep`/`Glob`/`gh api` calls (thrash) in the same run.
 
 Map to the relevant prompt section:
-- Parallel lookups → Tool Use Efficiency (lines ~130-135)
-- Thrash → Anti-thrash rule (lines ~162-165)
-- Unnecessary upstream tree walks → Repo File Discovery (lines ~167-179)
+- Parallel lookups -> **`Tool Use Efficiency`** section
+- Thrash -> **`Anti-thrash rule`** in the **`Shell & Tool Conventions`** section
+- Unnecessary upstream tree walks -> **`Repo File Discovery`** section
+- Model re-fetching PR data instead of reading `pr-context.md` -> **`Gather PR evidence`** step
+  prompt note in the **`Workflow > 1. Analyze`** section
 
 Proposed fix: add or sharpen the guidance sentence that addresses the observed pattern.
 
 #### C. Tier calibration
 
-Evidence: compare actual `num_turns` and cost against each tier's stated target band —
-light 5-7 turns, full 12-18, deep 20-30 (workflow lines ~193-215) — and against the routing
-regex in the tier-selection step (lines ~65-69).
+Evidence: compare actual `num_turns` and cost against each tier's stated target band from the
+**`Review Depth`** section (light 5-7 turns, full 12-18, deep 20-30) and against the routing
+regex in the **`Select model tier`** step.
 
 Flag:
 - **Over-tiered**: a simple patch bump (`fix(container):` title, single image) routed to `full`
   or `deep` when it used only 4-6 turns and cost <$0.05. Propose tightening the haiku/light
-  routing regex.
+  routing regex in the `Select model tier` step.
 - **Under-tiered**: a grouped PR or high-blast-radius component that hit `error_max_turns` at
-  25 turns. Propose adding its keyword to the `deep` regex or bumping the `full` budget.
+  25 turns. Propose adding its keyword to the `deep` regex or bumping the `full` budget in the
+  `Select model tier` step.
 
 #### D. Reliability and noise
 
-Evidence: `error_during_execution` runs; duplicate reviews on the same PR (the pre-check at
-lines ~121-128 should prevent these); gated runs that ended without posting any review; status
-publish step toggling fail-closed noise (lines ~360-391).
+Evidence: `error_during_execution` runs; duplicate or stacked reviews on the same PR (the
+**`Pre-check: skip redundant re-reviews`** section and the **dismiss-stale-reviews block** in the
+**`Submitting the Review`** section are both dedup safeguards — duplicate reviews indicate one
+or both mis-fired); gated runs that ended without posting any review; **`Publish review status`**
+step toggling fail-closed noise.
 
 Proposed fix is specific to the failure mode observed.
 
@@ -155,21 +169,21 @@ Print the summary table first, then the findings list.
 ```
 Run ID       | PR title (truncated)               | Tier     | Turns/Budget | Subtype         | Cost    | Denials
 -------------|------------------------------------|-----------|-----------  |-----------------|---------|--------
-26952735414  | feat(container): kei 0.20.4→0.21.3 | full/25  | 4/25         | success         | $0.107  | 0
+26952735414  | feat(container): kei 0.20.4->0.21.3 | full/25  | 4/25         | success         | $0.107  | 0
 ...
 ```
 
-**Findings (prioritized, A→D order):**
+**Findings (prioritized, A->D order):**
 
 ```
-[A] Permission gap — <command> — seen N runs (IDs: ...)
-    Workflow line ~90 (allowedTools): add Bash(<prefix>:*)
+[A] Permission gap -- <command> -- seen N runs (IDs: ...)
+    claude step --allowedTools: add Bash(<prefix>:*)
 
-[B] Wasted turns — sequential X+Y lookups in separate turns — seen N runs
-    Workflow lines ~130-135 (Tool Use Efficiency): add "... and Y ..." to parallel example
+[B] Wasted turns -- sequential X+Y lookups in separate turns -- seen N runs
+    Prompt "Tool Use Efficiency" section: add "... and Y ..." to parallel example
 
-[C] Over-tiered — fix(container): patch bumps using 4-6 turns but routed to full/sonnet — N runs
-    Workflow lines ~65-69: tighten light-tier regex to also match ...
+[C] Over-tiered -- fix(container): patch bumps using 4-6 turns but routed to full/sonnet -- N runs
+    "Select model tier" step: tighten light-tier regex to also match ...
 
 [D] ...
 ```
