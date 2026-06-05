@@ -32,6 +32,7 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
           # user.login from the webhook payload is "renovate[bot]"; gh pr view returns "app/renovate"
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
         run: |
           pr_json=$(gh pr view "$PR" --json labels)
           labels=$(echo "$pr_json" | jq -r '[.labels[].name] | join(" ")')
@@ -50,15 +51,23 @@ jobs:
             fi
           fi
 
+          # Belt-and-suspenders: never gate tool execution on fork-supplied code
+          if [[ "$IS_FORK" == "true" ]]; then
+            is_renovate=false
+            gated=false
+          fi
+
           echo "is_renovate=$is_renovate" >> "$GITHUB_OUTPUT"
           echo "gated=$gated"             >> "$GITHUB_OUTPUT"
-          echo "author=$PR_AUTHOR labels=$labels -> is_renovate=$is_renovate gated=$gated"
+          echo "author=$PR_AUTHOR labels=$labels is_fork=$IS_FORK -> is_renovate=$is_renovate gated=$gated"
 
       - name: Select model tier
         id: model_tier
         if: steps.gate.outputs.gated == 'true'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          title="${{ github.event.pull_request.title }}"
+          title="$PR_TITLE"
           # Deep (Sonnet, 40 turns): group PRs, major bumps, or high-blast-radius components
           # Full (Sonnet, 25 turns): all other minor/feat bumps and chart upgrades
           # Light (Haiku, 25 turns): routine fix(container) patch bumps not matching deep
@@ -75,6 +84,20 @@ jobs:
             echo "depth=full" >> "$GITHUB_OUTPUT"
             echo "max_turns=25" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Gather PR evidence
+        id: evidence
+        if: steps.gate.outputs.gated == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          {
+            gh pr view "$PR" --json title,body,labels \
+              --jq '"# PR Context\n\n## Title\n" + .title + "\n\n## Labels: " + ([.labels[].name] | join(", ")) + "\n\n## Body (Renovate release notes)\n" + .body'
+            printf '\n---\n## Diff\n'
+            gh pr diff "$PR"
+          } > pr-context.md
 
       - id: claude
         if: steps.gate.outputs.gated == 'true'
@@ -191,10 +214,10 @@ jobs:
             submitting a review.
 
             **light** — routine patch container bump (haiku tier):
-            1. Analyze (step 1 below).
-            2. Read the PR body for Renovate-embedded release notes. If present and covering the
-               full old→new range, use them. Otherwise fetch the upstream releases for that range
-               with a single `gh api` call.
+            1. Analyze (step 1 below) — `pr-context.md` is already available; `Read` it first.
+            2. The PR body in `pr-context.md` contains Renovate-embedded release notes. If they
+               cover the full old→new range, use them. Otherwise fetch the upstream releases for
+               that range with a single `gh api` call.
             3. Grep/Read the repo files that reference this component (step 3 below).
             4. Submit verdict.
             Skip the multi-source breadcrumb chase (CHANGELOG files, docs sites, commit history,
@@ -218,7 +241,10 @@ jobs:
 
             ### 1. Analyze
 
-            Fetch PR details with `gh pr view`. Identify:
+            PR metadata (title, labels, Renovate-embedded release notes) and the full diff have
+            been pre-fetched into `pr-context.md` in the repo root. **`Read` that file first**
+            instead of calling `gh pr view` or `gh pr diff` — this saves a turn on every tier.
+            Identify:
             - What is being upgraded (container image, Helm chart, tool, etc.)
             - The old and new version
             - Whether this is a wrapper that bundles another component (a Docker image wrapping
@@ -279,6 +305,20 @@ jobs:
 
             Submit your findings as **exactly one** GitHub PR review. Do not call `gh pr review`
             more than once — if the first submission returns success, stop immediately.
+
+            **Before posting, dismiss any stale claude reviews** (keeps only the current verdict
+            visible and prevents stacking on rebases). Do this in one step before the review post:
+            ```
+            gh api "repos/<owner>/<repo>/pulls/<n>/reviews" --paginate \
+              --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED")) | .id][]'
+            ```
+            For each returned `<review_id>`:
+            ```
+            gh api -X PUT "repos/<owner>/<repo>/pulls/<n>/reviews/<review_id>/dismissals" \
+              -f message="Superseded by updated review"
+            ```
+            If there are no prior reviews (empty list), skip the dismissal loop and proceed
+            directly to posting. Do not dismiss reviews from human users.
 
             **Always wrap the review body in a single-quoted heredoc** to avoid shell-escaping
             failures with backticks, dollar signs, and special characters:
