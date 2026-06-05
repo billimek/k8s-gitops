@@ -11,7 +11,7 @@ spec:
       dashboards: grafana
   folder: node-metrics
   # renovate: depName=22413
-  url: https://grafana.com/api/dashboards/22413/revisions/7/download
+  url: https://grafana.com/api/dashboards/22413/revisions/8/download
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
