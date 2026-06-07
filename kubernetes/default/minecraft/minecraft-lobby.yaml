@@ -43,7 +43,8 @@ spec:
               LEVEL: "Basic Lobby"
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
               MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar"
-              SPIGET_RESOURCES: "28140,6245,102931,4441"
+              SPIGET_RESOURCES: "28140,6245,4441"
+              MODRINTH_PROJECTS: "nochatreports-spigot-paper"
             probes:
               liveness:
                 enabled: true
