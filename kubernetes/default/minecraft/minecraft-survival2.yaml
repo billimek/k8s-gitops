@@ -1,88 +1,107 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: minecraft-survival2
+  name: &app minecraft-survival2
   namespace: default
 spec:
-  suspend: false
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   interval: 1h
-  chart:
-    spec:
-      chart: minecraft
-      version: 5.1.3
-      sourceRef:
-        kind: HelmRepository
-        name: minecraft-server-charts
-        namespace: flux-system
-      interval: 5m
   values:
-    replicaCount: 0
-    image:
-      repository: ghcr.io/itzg/minecraft-server
-      tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
-    fullnameOverride: minecraft-survival2
-    strategyType: Recreate
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+
+    controllers:
+      minecraft-survival2:
+        replicas: 0
+        strategy: Recreate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/itzg/minecraft-server
+              tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
+            env:
+              ENABLE_AUTOPAUSE: "FALSE"
+              EULA: "true"
+              TYPE: PAPER
+              VERSION: LATEST
+              DIFFICULTY: normal
+              MODE: survival
+              HARDCORE: "false"
+              ONLINE_MODE: "false"
+              OVERRIDE_SERVER_PROPERTIES: "true"
+              FORCE_REDOWNLOAD: "TRUE"
+              MEMORY: 7168M
+              MAX_WORLD_SIZE: "5999968"
+              MAX_TICK_TIME: "-1"
+              SPAWN_PROTECTION: "4"
+              VIEW_DISTANCE: "24"
+              LEVEL: world-20250218-thunderdome
+              OPS: billimek
+              WHITELIST: "billimek,Nadorrior,Sandbragger,tkws88,KhrysPBacon,MackCulley,Guydon,Shivanater"
+              ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
+              MOTD: "§6§lpublic survival§r§l - §r§c§lSMP§r\n"
+              JVM_OPTS: "-Xms7168M -Xmx7168M --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20"
+              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar,https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar,https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar,https://cdn.modrinth.com/data/7KTcTCzs/versions/bMcXRaEu/FreezeHibernate-1.0.jar,https://cdn.modrinth.com/data/UmLGoGij/versions/MK210KrY/DiscordSRV-Build-1.29.0.jar"
+              SPIGET_RESOURCES: "102931"
+              MODRINTH_PROJECTS: "bluemap,luckperms"
+              MODRINTH_ALLOWED_VERSION_TYPE: alpha
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+                  initialDelaySeconds: 30
+                  periodSeconds: 5
+                  failureThreshold: 10
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+                  initialDelaySeconds: 30
+                  periodSeconds: 5
+                  failureThreshold: 10
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                memory: 9Gi
+                cpu: 1000m
+              limits:
+                memory: 9Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
     persistence:
-      dataDir:
-        enabled: true
+      data:
         existingClaim: minecraft-survival2-datadir
-    podSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      runAsNonRoot: true
-      fsGroup: 1000
-    resources:
-      requests:
-        memory: 9Gi
-        cpu: 1000m
-      limits:
-        memory: 9Gi
-    startupProbe:
-      enabled: true
-    extraEnv:
-      ENABLE_AUTOPAUSE: FALSE
-    minecraftServer:
-      difficulty: normal
-      eula: true
-      forceReDownload: true
-      gameMode: survival
-      hardcore: false
-      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
-      jvmOpts: "-Xms7168M -Xmx7168M --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20"
-      maxTickTime: -1
-      maxWorldSize: 5999968
-      memory: 7168M
-      modUrls:
-        - https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar
-        - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
-        - https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar
-        - https://cdn.modrinth.com/data/7KTcTCzs/versions/bMcXRaEu/FreezeHibernate-1.0.jar
-        - https://cdn.modrinth.com/data/UmLGoGij/versions/MK210KrY/DiscordSRV-Build-1.29.0.jar
-        # - https://cdn.modrinth.com/data/Vebnzrzj/versions/cfNN7sys/LuckPerms-Bukkit-5.4.145.jar
-      modrinth:
-        allowedVersionType: alpha
-        projects:
-          - bluemap
-          # - discordsrv
-          # - freezehibernate
-          - luckperms
-      motd: "\u00A76\u00A7lpublic survival\u00A7r\u00A7l - \u00A7r\u00A7c\u00A7lSMP\u00A7r\n"
-      onlineMode: false
-      ops: "billimek"
-      overrideServerProperties: true
-      rcon:
-        enabled: false
-        password: "mc-rcon"
-        port: 25575
-        serviceType: LoadBalancer
-      serviceType: ClusterIP
-      spawnProtection: 4
-      spigetResources:
-        - 102931 # NoChatReports
-      type: PAPER
-      version: "LATEST"
-      viewDistance: 24
-      whitelist: "billimek,Nadorrior,Sandbragger,tkws88,KhrysPBacon,MackCulley,Guydon,Shivanater"
-      worldSaveName: 'world-20250218-thunderdome'
+        globalMounts:
+          - path: /data
+
+    service:
+      app:
+        controller: minecraft-survival2
+        ports:
+          minecraft:
+            port: 25565
+            protocol: TCP
