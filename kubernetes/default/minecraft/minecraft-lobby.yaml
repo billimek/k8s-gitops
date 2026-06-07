@@ -22,7 +22,7 @@ spec:
 
     controllers:
       minecraft-lobby:
-        replicas: 0
+        replicas: 1
         containers:
           app:
             image:
