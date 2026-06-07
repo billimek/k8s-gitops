@@ -30,7 +30,6 @@ spec:
               tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
             env:
               ENABLE_AUTOPAUSE: "FALSE"
-              PAPER_CHANNEL: "experimental"
               EULA: "true"
               TYPE: PAPER
               VERSION: LATEST
