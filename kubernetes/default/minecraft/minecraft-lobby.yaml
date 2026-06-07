@@ -41,7 +41,7 @@ spec:
               MAX_TICK_TIME: "-1"
               LEVEL: "Basic Lobby"
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
-              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar,https://cdn.modrinth.com/data/l3Dexbwu/versions/vienNjat/StellarProtect.jar,https://cdn.modrinth.com/data/EWR3hxnq/versions/Z4RFs6bX/VoidSpawnPlus-1.2.0.jar"
+              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar,https://cdn.modrinth.com/data/Lu3KuzdV/versions/6W2ad1iI/CoreProtect-CE-23.2.jar,https://cdn.modrinth.com/data/EWR3hxnq/versions/Z4RFs6bX/VoidSpawnPlus-1.2.0.jar"
               SPIGET_RESOURCES: "28140,6245,4441"
               MODRINTH_PROJECTS: "nochatreports-spigot-paper"
             probes:
