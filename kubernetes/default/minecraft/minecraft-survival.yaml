@@ -44,8 +44,8 @@ spec:
               MAX_WORLD_SIZE: "5999968"
               MAX_TICK_TIME: "-1"
               SPAWN_PROTECTION: "0"
-              LEVEL: "1.21-20240629-5"
-              SEED: "1.21-20240629-5"
+              LEVEL: "26.1.2-20260607-1"
+              SEED: "26.1.2-20260607-1"
               OPS: billimek
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
               MOTD: "mcsv.eviljungle.com\n§6§lSMPl§r§l - §r§c§lSMP§r\n"
