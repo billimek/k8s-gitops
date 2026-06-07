@@ -98,6 +98,15 @@ spec:
               TZ: America/New_York
               KEI_DATA_DIR: /config
             probes:
+              # 2FA can stall startup indefinitely until a code is submitted; gate liveness behind a long startup window so the pod is not killed mid-auth
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 9090
+                  periodSeconds: 10
+                  failureThreshold: 180
               liveness:
                 enabled: true
                 custom: true
