@@ -124,6 +124,10 @@ spec:
               capabilities: {drop: ["ALL"]}
 
     persistence:
+      server:
+        type: emptyDir
+        globalMounts:
+          - path: /server
       config-file:
         type: configMap
         identifier: config
