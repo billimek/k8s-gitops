@@ -1,71 +1,96 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v4.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: minecraft-lobby
+  name: &app minecraft-lobby
   namespace: default
 spec:
-  suspend: false
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   interval: 1h
-  chart:
-    spec:
-      chart: minecraft
-      version: 5.1.3
-      sourceRef:
-        kind: HelmRepository
-        name: minecraft-server-charts
-        namespace: flux-system
-      interval: 5m
   values:
-    replicaCount: 0
-    image:
-      repository: ghcr.io/itzg/minecraft-server
-      tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
-    fullnameOverride: minecraft-lobby
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+
+    controllers:
+      minecraft-lobby:
+        replicas: 0
+        containers:
+          app:
+            image:
+              repository: ghcr.io/itzg/minecraft-server
+              tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
+            env:
+              ENABLE_AUTOPAUSE: "FALSE"
+              PAPER_CHANNEL: "experimental"
+              EULA: "true"
+              TYPE: PAPER
+              VERSION: LATEST
+              DIFFICULTY: peaceful
+              MODE: adventure
+              MOTD: "§feviljungle§ - §a§llobby§"
+              ONLINE_MODE: "false"
+              FORCE_REDOWNLOAD: "TRUE"
+              MAX_TICK_TIME: "-1"
+              LEVEL: "Basic Lobby"
+              ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
+              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar"
+              SPIGET_RESOURCES: "28140,6245,102931,4441"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+                  initialDelaySeconds: 30
+                  periodSeconds: 5
+                  failureThreshold: 10
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+                  initialDelaySeconds: 30
+                  periodSeconds: 5
+                  failureThreshold: 10
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: ["mc-monitor", "status", "--host", "127.0.0.1", "--port", "25565"]
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                memory: 2Gi
+                cpu: 250m
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
     persistence:
-      dataDir:
-        enabled: true
+      data:
         existingClaim: minecraft-lobby-datadir
-    podSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      runAsNonRoot: true
-      fsGroup: 1000
-    resources:
-      requests:
-        memory: 2Gi
-        cpu: 250m
-      limits:
-        memory: 2Gi
-    extraEnv:
-      ENABLE_AUTOPAUSE: FALSE
-      PAPER_CHANNEL: "experimental"
-      # MODRINTH_DOWNLOAD_DEPENDENCIES: "required"
-      # MODRINTH_PROJECTS: |-
-      #   coreprotect
-      #   essentialsx
-    minecraftServer:
-      spigetResources:
-        - 28140
-        - 6245
-        # - 14754
-        - 102931
-        - 4441 # hibernate
-      modUrls:
-        - https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar
-        # - https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar
-      eula: true
-      version: "LATEST"
-      type: PAPER
-      forceReDownload: true
-      onlineMode: false
-      difficulty: peaceful
-      maxTickTime: -1
-      serviceType: ClusterIP
-      gameMode: adventure
-      worldSaveName: 'Basic Lobby'
-      motd: "\u00a7feviljungle\u00a7 - \u00a7a\u00a7llobby\u00a7"
-      icon: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
-      rcon:
-        enabled: false
+        globalMounts:
+          - path: /data
+
+    service:
+      app:
+        controller: minecraft-lobby
+        ports:
+          minecraft:
+            port: 25565
+            protocol: TCP
