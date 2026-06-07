@@ -95,6 +95,24 @@ spec:
         globalMounts:
           - path: /data
 
+    route:
+      bluemap:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - mcsv-map.eviljungle.com
+        rules:
+          - matches:
+              - path: {type: PathPrefix, value: /}
+            backendRefs:
+              - name: minecraft-survival
+                port: 8100
+
     service:
       app:
         controller: minecraft-survival
@@ -102,3 +120,5 @@ spec:
           minecraft:
             port: 25565
             protocol: TCP
+          bluemap:
+            port: 8100
