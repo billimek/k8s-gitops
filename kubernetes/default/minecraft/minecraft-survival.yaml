@@ -22,7 +22,7 @@ spec:
 
     controllers:
       minecraft-survival:
-        replicas: 0
+        replicas: 1
         strategy: Recreate
         containers:
           app:
@@ -31,7 +31,6 @@ spec:
               tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
             env:
               ENABLE_AUTOPAUSE: "FALSE"
-              PAPER_CHANNEL: "experimental"
               EULA: "true"
               TYPE: PAPER
               VERSION: LATEST
@@ -51,8 +50,8 @@ spec:
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
               MOTD: "mcsv.eviljungle.com\n§6§lSMPl§r§l - §r§c§lSMP§r\n"
               JVM_OPTS: "-Xms7168M -Xmx7168M --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20"
-              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/SKQwLLoQ/EssentialsX-2.21.0.jar,https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar,https://cdn.modrinth.com/data/Vebnzrzj/versions/cfNN7sys/LuckPerms-Bukkit-5.4.145.jar"
-              MODRINTH_PROJECTS: "nochatreports-spigot-paper"
+              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar,https://cdn.modrinth.com/data/Lu3KuzdV/versions/6W2ad1iI/CoreProtect-CE-23.2.jar,https://cdn.modrinth.com/data/18HN6DXd/versions/HIMl6isS/LockedChestsPlugin-1.0.jar,https://cdn.modrinth.com/data/Vebnzrzj/versions/cfNN7sys/LuckPerms-Bukkit-5.4.145.jar,https://cdn.modrinth.com/data/7KTcTCzs/versions/bMcXRaEu/FreezeHibernate-1.0.jar,https://cdn.modrinth.com/data/UmLGoGij/versions/MK210KrY/DiscordSRV-Build-1.29.0.jar"
+              MODRINTH_PROJECTS: "bluemap,nochatreports-spigot-paper"
             probes:
               liveness:
                 enabled: true
