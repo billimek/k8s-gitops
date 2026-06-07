@@ -22,7 +22,7 @@ spec:
 
     controllers:
       minecraft-creative:
-        replicas: 0
+        replicas: 1
         strategy: Recreate
         containers:
           app:
@@ -45,9 +45,9 @@ spec:
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
               MOTD: "§feviljungle§ - §a§lcreative§"
               JVM_OPTS: "-Xms5G -Xmx5G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true"
-              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/puUfqBpY/EssentialsX-2.20.1.jar,https://cdn.modrinth.com/data/Lu3KuzdV/versions/llmrc4cl/CoreProtect-22.4.jar"
-              SPIGET_RESOURCES: "83557,4441"
-              MODRINTH_PROJECTS: "nochatreports-spigot-paper"
+              MODS: "https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar,https://cdn.modrinth.com/data/Lu3KuzdV/versions/6W2ad1iI/CoreProtect-CE-23.2.jar"
+              SPIGET_RESOURCES: "4441"
+              MODRINTH_PROJECTS: "bluemap,nochatreports-spigot-paper"
             probes:
               liveness:
                 enabled: true
@@ -95,6 +95,24 @@ spec:
         globalMounts:
           - path: /data
 
+    route:
+      bluemap:
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - mccreative-map.eviljungle.com
+        rules:
+          - matches:
+              - path: {type: PathPrefix, value: /}
+            backendRefs:
+              - name: minecraft-creative
+                port: 8100
+
     service:
       app:
         controller: minecraft-creative
@@ -102,3 +120,5 @@ spec:
           minecraft:
             port: 25565
             protocol: TCP
+          bluemap:
+            port: 8100
