@@ -36,6 +36,10 @@ spec:
             libraries = ["all"]
             albums = ["none"]
 
+            [photos]
+            # name-id7 gives every file a deterministic per-asset id7 stem so re-syncs reconstruct the same path and match existing files; name-size-dedup re-downloads recurring shared-library assets under new suffixes each cycle (kei #546), bloating /photos and self-colliding on content-hash .kei-tmp files
+            file_match_policy = "name-id7"
+
             [watch]
             interval = 3600
 
