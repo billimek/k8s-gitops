@@ -29,18 +29,12 @@ spec:
 
             [download]
             directory = "/photos"
+            # {library} keeps PrimarySync/SharedSync in separate trees so cross-library dupes don't collide+bloat (kei #559)
+            folder_structure = "{library}/%Y/%m/%d"
 
             [filters]
             libraries = ["all"]
             albums = ["none"]
-
-            [metadata]
-            set_exif_datetime = true
-            set_exif_rating = true
-            set_exif_gps = true
-            set_exif_description = true
-            embed_xmp = true
-            xmp_sidecar = false
 
             [watch]
             interval = 3600
