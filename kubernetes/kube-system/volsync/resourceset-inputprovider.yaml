@@ -128,8 +128,3 @@ spec:
         capacity: 20Gi
         cacheCapacity: 12Gi
         schedule: "30 * * * *"
-
-      - app: minecraft-rcon-web
-        pvcSuffix: "db"
-        runAsUser: "1000"
-        capacity: 256Mi
