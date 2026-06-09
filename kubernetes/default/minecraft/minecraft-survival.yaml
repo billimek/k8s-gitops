@@ -22,16 +22,15 @@ spec:
         runAsUser: 1000
 
     configMaps:
-      velocity-patch:
+      direct-auth-patch:
         data:
-          velocity-forwarding.json: |
+          paper-direct-auth.json: |
             {
               "file": "/data/config/paper-global.yml",
               "ops": [
-                { "$set": { "path": "$.proxies['bungee-cord']['online-mode']", "value": false, "value-type": "bool" } },
-                { "$set": { "path": "$.proxies.velocity.enabled", "value": true, "value-type": "bool" } },
-                { "$set": { "path": "$.proxies.velocity['online-mode']", "value": true, "value-type": "bool" } },
-                { "$set": { "path": "$.proxies.velocity.secret", "value": "${CFG_VELOCITY_SECRET}" } }
+                { "$set": { "path": "$.proxies['bungee-cord']['online-mode']", "value": true, "value-type": "bool" } },
+                { "$set": { "path": "$.proxies.velocity.enabled", "value": false, "value-type": "bool" } },
+                { "$set": { "path": "$.proxies.velocity['online-mode']", "value": true, "value-type": "bool" } }
               ]
             }
           disable-bungee-forwarding.json: |
@@ -44,8 +43,11 @@ spec:
 
     controllers:
       minecraft-survival:
-        replicas: 1
-        strategy: Recreate
+        type: statefulset
+        statefulset:
+          serviceName: minecraft-survival
+        replicas: 0
+        strategy: RollingUpdate
         containers:
           app:
             image:
@@ -58,7 +60,7 @@ spec:
               DIFFICULTY: normal
               MODE: survival
               PVP: "false"
-              ONLINE_MODE: "false"
+              ONLINE_MODE: "true"
               OVERRIDE_SERVER_PROPERTIES: "true"
               MEMORY: 7168M
               USE_AIKAR_FLAGS: "true"
@@ -70,7 +72,7 @@ spec:
               SEED: "26.1.2-20260607-1"
               OPS: billimek
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
-              MOTD: "mcsv.eviljungle.com\n§6§lSMPl§r§l - §r§c§lSMP§r\n"
+              MOTD: "mc-smp.eviljungle.com\n§6§lSMPl§r§l - §r§c§lSMP§r\n"
               STOP_SERVER_ANNOUNCE_DELAY: "20"
               PATCH_DEFINITIONS: /patch-defs
               MODRINTH_PROJECTS: |
@@ -126,9 +128,9 @@ spec:
         existingClaim: minecraft-survival-datadir
         globalMounts:
           - path: /data
-      velocity-patch:
+      direct-auth-patch:
         type: configMap
-        identifier: velocity-patch
+        identifier: direct-auth-patch
         globalMounts:
           - path: /patch-defs
 
@@ -153,6 +155,11 @@ spec:
     service:
       app:
         controller: minecraft-survival
+        annotations:
+          mc-router.itzg.me/externalServerName: mc-smp.eviljungle.com
+          mc-router.itzg.me/autoScaleAsleepMOTD: "eviljungle survival is sleeping"
+          mc-router.itzg.me/autoScaleLoadingMOTD: "eviljungle survival is starting"
+          mc-router.itzg.me/autoScaleWaitTimeout: 5m
         ports:
           minecraft:
             port: 25565

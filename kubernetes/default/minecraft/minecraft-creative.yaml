@@ -155,7 +155,7 @@ spec:
       app:
         controller: minecraft-creative
         annotations:
-          mc-router.itzg.me/externalServerName: mccreative.eviljungle.com
+          mc-router.itzg.me/externalServerName: mc.eviljungle.com
           mc-router.itzg.me/autoScaleAsleepMOTD: "eviljungle creative is sleeping"
           mc-router.itzg.me/autoScaleLoadingMOTD: "eviljungle creative is starting"
           mc-router.itzg.me/autoScaleWaitTimeout: 5m

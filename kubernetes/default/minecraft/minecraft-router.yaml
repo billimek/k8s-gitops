@@ -36,6 +36,7 @@ spec:
               - --auto-scale-up
               - --auto-scale-down
               - --auto-scale-down-after=15m
+              - --api-binding=:25566
             env:
               KUBE_NAMESPACE:
                 valueFrom:
@@ -47,16 +48,24 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
-                    port: 25565
+                  httpGet:
+                    path: /routes
+                    port: 25566
+                    httpHeaders:
+                      - name: Accept
+                        value: application/json
                   initialDelaySeconds: 10
                   periodSeconds: 30
               readiness:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
-                    port: 25565
+                  httpGet:
+                    path: /routes
+                    port: 25566
+                    httpHeaders:
+                      - name: Accept
+                        value: application/json
                   initialDelaySeconds: 5
                   periodSeconds: 10
             resources:
@@ -97,10 +106,11 @@ spec:
         controller: minecraft-router
         type: LoadBalancer
         externalTrafficPolicy: Local
-        loadBalancerIP: 10.0.6.107
+        loadBalancerIP: 10.0.6.106
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/hostname: mccreative.eviljungle.com
+          external-dns.alpha.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
+          external-dns.alpha.kubernetes.io/target: "10.0.6.106"
         ports:
           minecraft:
             port: 25565
@@ -108,3 +118,22 @@ spec:
 
     serviceAccount:
       minecraft-router: {}
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/v1/service.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-router-cloudflare-dns
+  namespace: default
+  annotations:
+    external-dns.alpha.kubernetes.io/external: "true"
+    external-dns.alpha.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
+    external-dns.alpha.kubernetes.io/target: direct.eviljungle.com
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  type: ExternalName
+  externalName: direct.eviljungle.com
+  ports:
+    - name: minecraft
+      port: 25565
+      protocol: TCP

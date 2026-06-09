@@ -28,7 +28,7 @@ spec:
             args:
               - export-for-prometheus
               - -servers
-              - minecraft-survival:25565,minecraft-survival2:25565,minecraft-lobby:25565
+              - mc.eviljungle.com:25565,mc-smp.eviljungle.com:25565,mc-smp2.eviljungle.com:25565
               - -port
               - "8080"
             resources:
