@@ -141,15 +141,6 @@ jobs:
             - **Storage**: rook-ceph, volsync (check for data migrations or CRD changes)
             - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
 
-            ## Pre-check: skip redundant re-reviews
-
-            Before doing any research, check whether claude[bot] has already reviewed this PR
-            (`gh pr view <n> --json reviews` or `gh api repos/<owner>/<repo>/pulls/<n>/reviews`). If a prior review exists, compare the package version(s)
-            in the current diff against the versions mentioned in that review. If they are identical
-            (i.e. Renovate just rebased without changing versions), stop immediately without posting
-            a new review. Only proceed with a full review if the versions changed or new packages
-            were added since the last review.
-
             ## Tool Use Efficiency
 
             When you need multiple independent read-only lookups — Grep/Glob/Read on repo files,
