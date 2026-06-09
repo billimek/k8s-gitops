@@ -29,7 +29,7 @@ spec:
 
             bind = "0.0.0.0:25577"
             motd = "<aqua>eviljungle</aqua> <gold><bold>lobby</bold></gold>"
-            show-max-players = 500
+            show-max-players = 100
             online-mode = true
             force-key-authentication = true
             prevent-client-proxy-connections = false
