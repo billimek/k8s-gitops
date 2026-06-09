@@ -168,6 +168,10 @@ jobs:
             `Grep "pattern" "kubernetes/**/*.yaml"` call beats ten sequential `grep -r`/`find`
             invocations and uses far fewer turns.
 
+            **Do not redirect output to temp files.** Claude Code's sandbox blocks writes
+            outside the repo working directory, so `> /tmp/...` will error. Filter inline
+            with `--jq`, or pipe directly: `gh api ... --jq '.content' | base64 -d`.
+
             Rules that *do* cause denials if violated:
 
             - **Always quote `gh api` URLs** that contain `?`, `&`, or `+`. An unquoted `&`
@@ -319,6 +323,9 @@ jobs:
             ```
             If there are no prior reviews (empty list), skip the dismissal loop and proceed
             directly to posting. Do not dismiss reviews from human users.
+
+            Once `gh pr review` exits without error, your work is done — do not make any
+            further tool calls.
 
             **Always wrap the review body in a single-quoted heredoc** to avoid shell-escaping
             failures with backticks, dollar signs, and special characters:
