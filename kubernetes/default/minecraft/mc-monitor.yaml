@@ -97,7 +97,7 @@ spec:
     matchLabels:
       dashboards: grafana
   allowCrossNamespaceImport: true
-  folder: gaming
+  folder: apps
   json: |
     {
       "title": "Minecraft Servers",
