@@ -52,6 +52,11 @@ spec:
                   initialDelaySeconds: 15
                   periodSeconds: 15
                   failureThreshold: 3
+            env:
+              RWA_USERNAME: admin
+              RWA_RCON_HOST: minecraft-survival
+              RWA_RCON_PORT: "25575"
+              RWA_GAME: minecraft
             envFrom:
               - secretRef:
                   name: minecraft-rcon-web-secret
