@@ -1,0 +1,110 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app minecraft-router
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+    controllers:
+      minecraft-router:
+        pod:
+          automountServiceAccountToken: true
+        serviceAccount:
+          identifier: minecraft-router
+        containers:
+          app:
+            image:
+              repository: itzg/mc-router
+              tag: 1.42.1@sha256:bab38fed93b8b54bb36fcded3310e83d92fb65b4df89989f5bcdb4b559e286a3
+            args:
+              - --in-kube-cluster
+              - --auto-scale-up
+              - --auto-scale-down
+              - --auto-scale-down-after=15m
+            env:
+              KUBE_NAMESPACE:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              TZ: America/New_York
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 25565
+                  initialDelaySeconds: 10
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 25565
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
+
+    rbac:
+      roles:
+        minecraft-router:
+          type: Role
+          rules:
+            - apiGroups: [""]
+              resources: ["services"]
+              verbs: ["watch", "list"]
+            - apiGroups: ["apps"]
+              resources: ["statefulsets"]
+              verbs: ["watch", "list", "patch"]
+            - apiGroups: ["apps"]
+              resources: ["statefulsets/scale"]
+              verbs: ["get"]
+      bindings:
+        minecraft-router:
+          type: RoleBinding
+          roleRef:
+            identifier: minecraft-router
+          subjects:
+            - identifier: minecraft-router
+
+    service:
+      app:
+        controller: minecraft-router
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        loadBalancerIP: 10.0.6.107
+        annotations:
+          external-dns.alpha.kubernetes.io/internal: "true"
+          external-dns.alpha.kubernetes.io/hostname: mccreative.eviljungle.com
+        ports:
+          minecraft:
+            port: 25565
+            protocol: TCP
+
+    serviceAccount:
+      minecraft-router: {}

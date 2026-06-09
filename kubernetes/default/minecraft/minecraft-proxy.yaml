@@ -48,7 +48,6 @@ spec:
             lobby    = "minecraft-lobby:25565"
             survival = "minecraft-survival:25565"
             survival2 = "minecraft-survival2:25565"
-            creative = "minecraft-creative:25565"
 
             # land all connecting players on the lobby first
             try = ["lobby"]

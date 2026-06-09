@@ -28,7 +28,7 @@ spec:
             args:
               - export-for-prometheus
               - -servers
-              - minecraft-survival:25565,minecraft-survival2:25565,minecraft-creative:25565,minecraft-lobby:25565
+              - minecraft-survival:25565,minecraft-survival2:25565,minecraft-lobby:25565
               - -port
               - "8080"
             resources:

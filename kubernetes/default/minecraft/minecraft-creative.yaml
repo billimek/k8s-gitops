@@ -22,16 +22,15 @@ spec:
         runAsUser: 1000
 
     configMaps:
-      velocity-patch:
+      direct-auth-patch:
         data:
-          velocity-forwarding.json: |
+          paper-direct-auth.json: |
             {
               "file": "/data/config/paper-global.yml",
               "ops": [
-                { "$set": { "path": "$.proxies['bungee-cord']['online-mode']", "value": false, "value-type": "bool" } },
-                { "$set": { "path": "$.proxies.velocity.enabled", "value": true, "value-type": "bool" } },
-                { "$set": { "path": "$.proxies.velocity['online-mode']", "value": true, "value-type": "bool" } },
-                { "$set": { "path": "$.proxies.velocity.secret", "value": "${CFG_VELOCITY_SECRET}" } }
+                { "$set": { "path": "$.proxies['bungee-cord']['online-mode']", "value": true, "value-type": "bool" } },
+                { "$set": { "path": "$.proxies.velocity.enabled", "value": false, "value-type": "bool" } },
+                { "$set": { "path": "$.proxies.velocity['online-mode']", "value": true, "value-type": "bool" } }
               ]
             }
           disable-bungee-forwarding.json: |
@@ -44,8 +43,11 @@ spec:
 
     controllers:
       minecraft-creative:
-        replicas: 1
-        strategy: Recreate
+        type: statefulset
+        statefulset:
+          serviceName: minecraft-creative
+        replicas: 0
+        strategy: RollingUpdate
         containers:
           app:
             image:
@@ -57,7 +59,7 @@ spec:
               VERSION: LATEST
               DIFFICULTY: normal
               MODE: creative
-              ONLINE_MODE: "false"
+              ONLINE_MODE: "true"
               OVERRIDE_SERVER_PROPERTIES: "true"
               MEMORY: 5120M
               USE_AIKAR_FLAGS: "true"
@@ -125,9 +127,9 @@ spec:
         existingClaim: minecraft-creative-datadir
         globalMounts:
           - path: /data
-      velocity-patch:
+      direct-auth-patch:
         type: configMap
-        identifier: velocity-patch
+        identifier: direct-auth-patch
         globalMounts:
           - path: /patch-defs
 
@@ -152,6 +154,11 @@ spec:
     service:
       app:
         controller: minecraft-creative
+        annotations:
+          mc-router.itzg.me/externalServerName: mccreative.eviljungle.com
+          mc-router.itzg.me/autoScaleAsleepMOTD: "eviljungle creative is sleeping"
+          mc-router.itzg.me/autoScaleLoadingMOTD: "eviljungle creative is starting"
+          mc-router.itzg.me/autoScaleWaitTimeout: 5m
         ports:
           minecraft:
             port: 25565
