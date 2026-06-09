@@ -107,7 +107,7 @@ spec:
       app:
         controller: minecraft-router
         type: LoadBalancer
-        externalTrafficPolicy: Local
+        externalTrafficPolicy: Cluster
         loadBalancerIP: 10.0.6.106
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
