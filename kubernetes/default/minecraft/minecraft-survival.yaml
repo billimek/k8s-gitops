@@ -67,12 +67,13 @@ spec:
               JVM_OPTS: "--add-modules=jdk.incubator.vector"
               MAX_WORLD_SIZE: "5999968"
               MAX_TICK_TIME: "-1"
+              PAUSE_WHEN_EMPTY_SECONDS: "300"
               SPAWN_PROTECTION: "0"
               LEVEL: "26.1.2-20260607-1"
               SEED: "26.1.2-20260607-1"
               OPS: billimek
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
-              MOTD: "mc-smp.eviljungle.com\n§6§lSMPl§r§l - §r§c§lSMP§r\n"
+              MOTD: "§6§lEvilJungle Survival§r\n§7Cozy SMP §8| §emc-smp.eviljungle.com"
               STOP_SERVER_ANNOUNCE_DELAY: "20"
               PATCH_DEFINITIONS: /patch-defs
               MODRINTH_PROJECTS: |
@@ -158,8 +159,8 @@ spec:
         controller: minecraft-survival
         annotations:
           mc-router.itzg.me/externalServerName: mc-smp.eviljungle.com
-          mc-router.itzg.me/autoScaleAsleepMOTD: "eviljungle survival is sleeping"
-          mc-router.itzg.me/autoScaleLoadingMOTD: "eviljungle survival is starting"
+          mc-router.itzg.me/autoScaleAsleepMOTD: "§8[asleep] §6survival§r - connecting wakes it"
+          mc-router.itzg.me/autoScaleLoadingMOTD: "§e[starting] §6survival§r - give it a minute"
           mc-router.itzg.me/autoScaleWaitTimeout: 5m
         ports:
           minecraft:

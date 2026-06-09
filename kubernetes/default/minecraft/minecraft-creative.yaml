@@ -66,9 +66,10 @@ spec:
               JVM_OPTS: "--add-modules=jdk.incubator.vector"
               MAX_WORLD_SIZE: "5999968"
               MAX_TICK_TIME: "-1"
+              PAUSE_WHEN_EMPTY_SECONDS: "300"
               LEVEL: world-20160823
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
-              MOTD: "§feviljungle§ - §a§lcreative§"
+              MOTD: "§b§lEvilJungle Creative§r\n§7Build freely §8| §aFamily server"
               STOP_SERVER_ANNOUNCE_DELAY: "20"
               SPIGET_RESOURCES: "4441"
               PATCH_DEFINITIONS: /patch-defs
@@ -157,8 +158,8 @@ spec:
         controller: minecraft-creative
         annotations:
           mc-router.itzg.me/externalServerName: mc.eviljungle.com
-          mc-router.itzg.me/autoScaleAsleepMOTD: "eviljungle creative is sleeping"
-          mc-router.itzg.me/autoScaleLoadingMOTD: "eviljungle creative is starting"
+          mc-router.itzg.me/autoScaleAsleepMOTD: "§8[asleep] §bcreative§r - connecting wakes it"
+          mc-router.itzg.me/autoScaleLoadingMOTD: "§e[starting] §bcreative§r - give it a minute"
           mc-router.itzg.me/autoScaleWaitTimeout: 5m
         ports:
           minecraft:

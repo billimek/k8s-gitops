@@ -40,6 +40,13 @@ spec:
                 { "$set": { "path": "$.settings.bungeecord", "value": false, "value-type": "bool" } }
               ]
             }
+          discordsrv-token.json: |
+            {
+              "file": "/data/plugins/DiscordSRV/config.yml",
+              "ops": [
+                { "$set": { "path": "$.BotToken", "value": "${CFG_DISCORDSRV_TOKEN}" } }
+              ]
+            }
 
     controllers:
       minecraft-survival2:
@@ -67,15 +74,15 @@ spec:
               JVM_OPTS: "--add-modules=jdk.incubator.vector"
               MAX_WORLD_SIZE: "5999968"
               MAX_TICK_TIME: "-1"
+              PAUSE_WHEN_EMPTY_SECONDS: "300"
               SPAWN_PROTECTION: "4"
               VIEW_DISTANCE: "24"
               LEVEL: world-20250218-thunderdome
               OPS: billimek
               WHITELIST: "billimek,Nadorrior,Sandbragger,tkws88,KhrysPBacon,MackCulley,Guydon,Shivanater"
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
-              MOTD: "§6§lpublic survival§r§l - §r§c§lSMP§r\n"
+              MOTD: "§c§lEvilJungle Survival 2§r\n§7Public SMP §8| §6Thunderdome"
               STOP_SERVER_ANNOUNCE_DELAY: "20"
-              REPLACE_ENV_VARIABLES: "true"
               PATCH_DEFINITIONS: /patch-defs
               MODRINTH_PROJECTS: |
                 essentialsx
@@ -162,8 +169,8 @@ spec:
         controller: minecraft-survival2
         annotations:
           mc-router.itzg.me/externalServerName: mc-smp2.eviljungle.com
-          mc-router.itzg.me/autoScaleAsleepMOTD: "eviljungle survival2 is sleeping"
-          mc-router.itzg.me/autoScaleLoadingMOTD: "eviljungle survival2 is starting"
+          mc-router.itzg.me/autoScaleAsleepMOTD: "§8[asleep] §csurvival2§r - connecting wakes it"
+          mc-router.itzg.me/autoScaleLoadingMOTD: "§e[starting] §csurvival2§r - give it a minute"
           mc-router.itzg.me/autoScaleWaitTimeout: 5m
         ports:
           minecraft:
