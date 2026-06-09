@@ -84,6 +84,10 @@ spec:
               MOTD: "§c§lEvilJungle Survival 2§r\n§7Public SMP §8| §6Thunderdome"
               STOP_SERVER_ANNOUNCE_DELAY: "20"
               PATCH_DEFINITIONS: /patch-defs
+              APPLY_EXTRA_FILES: |
+                plugins/minecraft-prometheus-exporter.jar<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
+              MINECRAFT_PROMETHEUS_EXPORTER_HOST: 0.0.0.0
+              MINECRAFT_PROMETHEUS_EXPORTER_PORT: "9940"
               MODRINTH_PROJECTS: |
                 essentialsx
                 coreprotect?
@@ -167,6 +171,8 @@ spec:
     service:
       app:
         controller: minecraft-survival2
+        labels:
+          minecraft.eviljungle.com/server-metrics: "true"
         annotations:
           mc-router.itzg.me/externalServerName: mc-smp2.eviljungle.com
           mc-router.itzg.me/autoScaleAsleepMOTD: "§8[asleep] §csurvival2§r - connecting wakes it"
@@ -180,3 +186,5 @@ spec:
             port: 25575
           bluemap:
             port: 8100
+          metrics:
+            port: 9940

@@ -1,0 +1,293 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: minecraft-server-metrics
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      minecraft.eviljungle.com/server-metrics: "true"
+  endpoints:
+    - port: metrics
+      interval: 30s
+      scrapeTimeout: 10s
+      path: /metrics
+      relabelings:
+        - action: replace
+          sourceLabels: [__meta_kubernetes_service_name]
+          targetLabel: minecraft_server
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: minecraft-server-metrics
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: apps
+  json: |
+    {
+      "title": "Minecraft Server Metrics",
+      "uid": "minecraft-server-metrics",
+      "tags": ["minecraft", "paper"],
+      "refresh": "30s",
+      "time": {"from": "now-6h", "to": "now"},
+      "timezone": "browser",
+      "templating": {
+        "list": [
+          {
+            "name": "minecraft_server",
+            "label": "Server",
+            "type": "query",
+            "query": "label_values(kube_statefulset_replicas{namespace=\"default\",statefulset=~\"minecraft-(creative|survival|survival2)\"}, statefulset)",
+            "definition": "label_values(kube_statefulset_replicas{namespace=\"default\",statefulset=~\"minecraft-(creative|survival|survival2)\"}, statefulset)",
+            "includeAll": true,
+            "allValue": "minecraft-(creative|survival|survival2)",
+            "multi": true,
+            "sort": 1,
+            "refresh": 1,
+            "current": {"selected": true, "text": "All", "value": "$__all"}
+          }
+        ]
+      },
+      "panels": [
+        {
+          "id": 1,
+          "title": "Server Metrics State",
+          "type": "stat",
+          "gridPos": {"x": 0, "y": 0, "w": 8, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "-1": {"text": "asleep", "color": "blue"},
+                    "0": {"text": "scrape down", "color": "red"},
+                    "2": {"text": "scraping", "color": "green"}
+                  }
+                }
+              ],
+              "thresholds": {"steps": [{"color": "blue", "value": null}, {"color": "red", "value": 0}, {"color": "green", "value": 2}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
+          "targets": [
+            {
+              "expr": "(max by (minecraft_server) (up{namespace=\"default\",minecraft_server=~\"$minecraft_server\"}) * 2) or on (minecraft_server) (label_replace(max by (statefulset) (kube_statefulset_replicas{namespace=\"default\",statefulset=~\"$minecraft_server\"}), \"minecraft_server\", \"$1\", \"statefulset\", \"(.*)\") - 1)",
+              "legendFormat": "{{minecraft_server}}"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Desired Replicas",
+          "type": "stat",
+          "gridPos": {"x": 8, "y": 0, "w": 4, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [
+                {"type": "value", "options": {"0": {"text": "asleep", "color": "blue"}, "1": {"text": "awake", "color": "green"}}}
+              ],
+              "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
+          "targets": [
+            {
+              "expr": "max by (statefulset) (kube_statefulset_replicas{namespace=\"default\",statefulset=~\"$minecraft_server\"})",
+              "legendFormat": "{{statefulset}}"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Ready Replicas",
+          "type": "stat",
+          "gridPos": {"x": 12, "y": 0, "w": 4, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [
+                {"type": "value", "options": {"0": {"text": "not ready", "color": "orange"}, "1": {"text": "ready", "color": "green"}}}
+              ],
+              "thresholds": {"steps": [{"color": "orange", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
+          "targets": [
+            {
+              "expr": "max by (statefulset) (kube_statefulset_status_replicas_ready{namespace=\"default\",statefulset=~\"$minecraft_server\"})",
+              "legendFormat": "{{statefulset}}"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Players Online",
+          "type": "stat",
+          "gridPos": {"x": 16, "y": 0, "w": 8, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
+          "targets": [
+            {
+              "expr": "sum by (minecraft_server) (mc_players_online_total{namespace=\"default\",minecraft_server=~\"$minecraft_server\"})",
+              "legendFormat": "{{minecraft_server}}"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "TPS",
+          "type": "timeseries",
+          "gridPos": {"x": 0, "y": 4, "w": 12, "h": 7},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "min": 0,
+              "max": 20,
+              "thresholds": {"steps": [{"color": "red", "value": 0}, {"color": "orange", "value": 15}, {"color": "green", "value": 18}]}
+            }
+          },
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "mc_tps{namespace=\"default\",minecraft_server=~\"$minecraft_server\"}",
+              "legendFormat": "{{minecraft_server}}"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "MSPT",
+          "type": "timeseries",
+          "gridPos": {"x": 12, "y": 4, "w": 12, "h": 7},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ms",
+              "min": 0,
+              "thresholds": {"steps": [{"color": "green", "value": 0}, {"color": "orange", "value": 40}, {"color": "red", "value": 50}]}
+            }
+          },
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "mc_tick_duration_average{namespace=\"default\",minecraft_server=~\"$minecraft_server\"} / 1000000",
+              "legendFormat": "{{minecraft_server}} avg"
+            },
+            {
+              "expr": "mc_tick_duration_max{namespace=\"default\",minecraft_server=~\"$minecraft_server\"} / 1000000",
+              "legendFormat": "{{minecraft_server}} max"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "JVM Memory",
+          "type": "timeseries",
+          "gridPos": {"x": 0, "y": 11, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "bytes", "min": 0}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "mc_jvm_memory{namespace=\"default\",minecraft_server=~\"$minecraft_server\",type=\"allocated\"} - ignoring(type) mc_jvm_memory{namespace=\"default\",minecraft_server=~\"$minecraft_server\",type=\"free\"}",
+              "legendFormat": "{{minecraft_server}} used"
+            },
+            {
+              "expr": "mc_jvm_memory{namespace=\"default\",minecraft_server=~\"$minecraft_server\",type=\"max\"}",
+              "legendFormat": "{{minecraft_server}} max"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Loaded Chunks",
+          "type": "timeseries",
+          "gridPos": {"x": 12, "y": 11, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "short", "min": 0}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "sum by (minecraft_server, world) (mc_loaded_chunks_total{namespace=\"default\",minecraft_server=~\"$minecraft_server\"})",
+              "legendFormat": "{{minecraft_server}} {{world}}"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "title": "Top Entity Types",
+          "type": "timeseries",
+          "gridPos": {"x": 0, "y": 18, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "short", "min": 0}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "topk(20, sum by (minecraft_server, world, type) (mc_entities_total{namespace=\"default\",minecraft_server=~\"$minecraft_server\"}))",
+              "legendFormat": "{{minecraft_server}} {{world}} {{type}}"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "World Size",
+          "type": "timeseries",
+          "gridPos": {"x": 12, "y": 18, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "bytes", "min": 0}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "sum by (minecraft_server, world) (mc_world_size{namespace=\"default\",minecraft_server=~\"$minecraft_server\"})",
+              "legendFormat": "{{minecraft_server}} {{world}}"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "Players by World",
+          "type": "timeseries",
+          "gridPos": {"x": 0, "y": 25, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "short", "min": 0}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "sum by (minecraft_server, world) (mc_players_online_total{namespace=\"default\",minecraft_server=~\"$minecraft_server\"})",
+              "legendFormat": "{{minecraft_server}} {{world}}"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "Scrape Health",
+          "type": "timeseries",
+          "gridPos": {"x": 12, "y": 25, "w": 12, "h": 7},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bool_up_down",
+              "thresholds": {"steps": [{"color": "red", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "max by (minecraft_server) (up{namespace=\"default\",minecraft_server=~\"$minecraft_server\"})",
+              "legendFormat": "{{minecraft_server}}"
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 36,
+      "version": 1
+    }
