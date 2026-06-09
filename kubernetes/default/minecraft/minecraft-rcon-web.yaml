@@ -52,6 +52,9 @@ spec:
                   initialDelaySeconds: 15
                   periodSeconds: 15
                   failureThreshold: 3
+            envFrom:
+              - secretRef:
+                  name: minecraft-rcon-web-secret
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: {drop: ["ALL"]}
