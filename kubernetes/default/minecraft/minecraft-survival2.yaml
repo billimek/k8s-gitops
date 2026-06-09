@@ -47,6 +47,19 @@ spec:
                 { "$set": { "path": "$.BotToken", "value": "${CFG_DISCORDSRV_TOKEN}" } }
               ]
             }
+          prometheus-exporter-config.json: |
+            {
+              "file": "/data/plugins/PrometheusExporter/config.yml",
+              "ops": [
+                { "$set": { "path": "$.host", "value": "0.0.0.0" } },
+                { "$set": { "path": "$.port", "value": 9940, "value-type": "int" } }
+              ]
+            }
+      prometheus-exporter-config:
+        data:
+          config.yml: |
+            host: 0.0.0.0
+            port: 9940
 
     controllers:
       minecraft-survival2:
@@ -86,8 +99,7 @@ spec:
               PATCH_DEFINITIONS: /patch-defs
               APPLY_EXTRA_FILES: |
                 plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
-              MINECRAFT_PROMETHEUS_EXPORTER_HOST: 0.0.0.0
-              MINECRAFT_PROMETHEUS_EXPORTER_PORT: "9940"
+                plugins/PrometheusExporter</prometheus-exporter-config
               MODRINTH_PROJECTS: |
                 essentialsx
                 coreprotect?
@@ -148,6 +160,11 @@ spec:
         identifier: direct-auth-patch
         globalMounts:
           - path: /patch-defs
+      prometheus-exporter-config:
+        type: configMap
+        identifier: prometheus-exporter-config
+        globalMounts:
+          - path: /prometheus-exporter-config
 
     route:
       bluemap:
