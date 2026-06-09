@@ -35,14 +35,16 @@ spec:
       "tags": ["minecraft"],
       "refresh": "1m",
       "time": {"from": "now-6h", "to": "now"},
+      "timezone": "browser",
       "panels": [
         {
           "id": 1,
           "title": "Active Connections per Server",
           "type": "stat",
-          "gridPos": {"x": 0, "y": 0, "w": 24, "h": 4},
+          "gridPos": {"x": 0, "y": 0, "w": 8, "h": 4},
           "fieldConfig": {
             "defaults": {
+              "unit": "short",
               "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]},
               "mappings": []
             }
@@ -50,7 +52,7 @@ spec:
           "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
           "targets": [
             {
-              "expr": "mc_router_server_active_connections",
+              "expr": "sum by (server_address) (mc_router_server_active_connections)",
               "legendFormat": "{{server_address}}"
             }
           ]
@@ -59,9 +61,12 @@ spec:
           "id": 2,
           "title": "Players Online",
           "type": "stat",
-          "gridPos": {"x": 0, "y": 4, "w": 12, "h": 4},
+          "gridPos": {"x": 8, "y": 0, "w": 8, "h": 4},
           "fieldConfig": {
-            "defaults": {"thresholds": {"steps": [{"color": "blue", "value": 0}]}}
+            "defaults": {
+              "unit": "short",
+              "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]}
+            }
           },
           "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
           "targets": [
@@ -75,9 +80,12 @@ spec:
           "id": 3,
           "title": "Total Active Connections",
           "type": "stat",
-          "gridPos": {"x": 12, "y": 4, "w": 12, "h": 4},
+          "gridPos": {"x": 16, "y": 0, "w": 8, "h": 4},
           "fieldConfig": {
-            "defaults": {"thresholds": {"steps": [{"color": "blue", "value": 0}]}}
+            "defaults": {
+              "unit": "short",
+              "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]}
+            }
           },
           "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
           "targets": [
@@ -89,26 +97,243 @@ spec:
         },
         {
           "id": 4,
-          "title": "Player Logins (last 1h)",
-          "type": "timeseries",
-          "gridPos": {"x": 0, "y": 8, "w": 24, "h": 8},
+          "title": "Desired Replicas",
+          "type": "stat",
+          "gridPos": {"x": 0, "y": 4, "w": 8, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": {"text": "asleep", "color": "blue"},
+                    "1": {"text": "awake", "color": "green"}
+                  }
+                }
+              ],
+              "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
           "targets": [
             {
-              "expr": "increase(mc_router_server_logins[1h])",
-              "legendFormat": "{{player_name}} -> {{server_address}}"
+              "expr": "max by (statefulset) (kube_statefulset_replicas{namespace=\"default\",statefulset=~\"minecraft-(creative|survival|survival2)\"})",
+              "legendFormat": "{{statefulset}}"
             }
           ]
         },
         {
           "id": 5,
-          "title": "Network Throughput",
-          "type": "timeseries",
-          "gridPos": {"x": 0, "y": 16, "w": 24, "h": 8},
-          "fieldConfig": {"defaults": {"unit": "Bps"}},
+          "title": "Ready Replicas",
+          "type": "stat",
+          "gridPos": {"x": 8, "y": 4, "w": 8, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": {"text": "not ready", "color": "orange"},
+                    "1": {"text": "ready", "color": "green"}
+                  }
+                }
+              ],
+              "thresholds": {"steps": [{"color": "orange", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
           "targets": [
             {
-              "expr": "rate(mc_router_bytes[5m])",
+              "expr": "max by (statefulset) (kube_statefulset_status_replicas_ready{namespace=\"default\",statefulset=~\"minecraft-(creative|survival|survival2)\"})",
+              "legendFormat": "{{statefulset}}"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Router Scrape Health",
+          "type": "stat",
+          "gridPos": {"x": 16, "y": 4, "w": 4, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bool_up_down",
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": {"text": "down", "color": "red"},
+                    "1": {"text": "up", "color": "green"}
+                  }
+                }
+              ],
+              "thresholds": {"steps": [{"color": "red", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
+          "targets": [
+            {
+              "expr": "up{job=\"minecraft-router-api\",namespace=\"default\"}",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Errors (last 1h)",
+          "type": "stat",
+          "gridPos": {"x": 20, "y": 4, "w": 4, "h": 4},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "thresholds": {"steps": [{"color": "green", "value": 0}, {"color": "orange", "value": 1}, {"color": "red", "value": 10}]}
+            }
+          },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
+          "targets": [
+            {
+              "expr": "sum by (type) (increase(mc_router_errors[1h]))",
+              "legendFormat": "{{type}}"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Scale State",
+          "type": "state-timeline",
+          "gridPos": {"x": 0, "y": 8, "w": 24, "h": 6},
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": {"text": "asleep", "color": "blue"},
+                    "1": {"text": "desired", "color": "green"}
+                  }
+                }
+              ],
+              "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]}
+            }
+          },
+          "options": {
+            "mergeValues": true,
+            "showValue": "auto",
+            "alignValue": "center",
+            "legend": {"displayMode": "list", "placement": "bottom"}
+          },
+          "targets": [
+            {
+              "expr": "max by (statefulset) (kube_statefulset_replicas{namespace=\"default\",statefulset=~\"minecraft-(creative|survival|survival2)\"})",
+              "legendFormat": "{{statefulset}} desired"
+            },
+            {
+              "expr": "max by (statefulset) (kube_statefulset_status_replicas_ready{namespace=\"default\",statefulset=~\"minecraft-(creative|survival|survival2)\"})",
+              "legendFormat": "{{statefulset}} ready"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "title": "Player Logins by Server",
+          "type": "timeseries",
+          "gridPos": {"x": 0, "y": 14, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "short"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "sum by (server_address) (increase(mc_router_server_logins[1h]))",
+              "legendFormat": "{{server_address}}"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "Network Throughput",
+          "type": "timeseries",
+          "gridPos": {"x": 12, "y": 14, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "Bps"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "rate(mc_router_bytes[$__rate_interval])",
               "legendFormat": "bytes/s"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "Router Connections",
+          "type": "timeseries",
+          "gridPos": {"x": 0, "y": 21, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "cps"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "rate(mc_router_frontend_connections[$__rate_interval])",
+              "legendFormat": "frontend"
+            },
+            {
+              "expr": "sum by (host) (rate(mc_router_backend_connections[$__rate_interval]))",
+              "legendFormat": "backend {{host}}"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "Router Errors",
+          "type": "timeseries",
+          "gridPos": {"x": 12, "y": 21, "w": 12, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "eps"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "sum by (type) (rate(mc_router_errors[$__rate_interval]))",
+              "legendFormat": "{{type}}"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "title": "Rate Limit Tokens",
+          "type": "timeseries",
+          "gridPos": {"x": 0, "y": 28, "w": 8, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "short"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "mc_router_rate_limit_available",
+              "legendFormat": "available"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "title": "Minecraft Server CPU",
+          "type": "timeseries",
+          "gridPos": {"x": 8, "y": 28, "w": 8, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "cores"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"default\",pod=~\"minecraft-(creative|survival|survival2)-.*\",container=\"app\"}[$__rate_interval]))",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "title": "Minecraft Server Memory",
+          "type": "timeseries",
+          "gridPos": {"x": 16, "y": 28, "w": 8, "h": 7},
+          "fieldConfig": {"defaults": {"unit": "bytes"}},
+          "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {
+              "expr": "max by (pod) (container_memory_working_set_bytes{namespace=\"default\",pod=~\"minecraft-(creative|survival|survival2)-.*\",container=\"app\"})",
+              "legendFormat": "{{pod}}"
             }
           ]
         }
