@@ -35,7 +35,7 @@ spec:
             prevent-client-proxy-connections = false
 
             # "modern" forwarding passes player IPs/UUIDs via Velocity's native protocol (MC 1.13+)
-            player-info-forwarding-mode = "MODERN"
+            player-info-forwarding-mode = "modern"
             forwarding-secret-file = "forwarding.secret"
 
             announce-forge = false
