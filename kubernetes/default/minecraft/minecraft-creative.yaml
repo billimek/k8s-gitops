@@ -34,6 +34,13 @@ spec:
                 { "$set": { "path": "$.proxies.velocity.secret", "value": "${CFG_VELOCITY_SECRET}" } }
               ]
             }
+          disable-bungee-forwarding.json: |
+            {
+              "file": "/data/spigot.yml",
+              "ops": [
+                { "$set": { "path": "$.settings.bungeecord", "value": false, "value-type": "bool" } }
+              ]
+            }
 
     controllers:
       minecraft-creative:

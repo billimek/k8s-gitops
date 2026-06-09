@@ -28,10 +28,17 @@ spec:
             {
               "file": "/data/config/paper-global.yml",
               "ops": [
-                { "$set": { "path": "$.proxies['bungee-cord']['online-mode']", "value": true, "value-type": "bool" } },
+                { "$set": { "path": "$.proxies['bungee-cord']['online-mode']", "value": false, "value-type": "bool" } },
                 { "$set": { "path": "$.proxies.velocity.enabled", "value": true, "value-type": "bool" } },
                 { "$set": { "path": "$.proxies.velocity['online-mode']", "value": true, "value-type": "bool" } },
                 { "$set": { "path": "$.proxies.velocity.secret", "value": "${CFG_VELOCITY_SECRET}" } }
+              ]
+            }
+          disable-bungee-forwarding.json: |
+            {
+              "file": "/data/spigot.yml",
+              "ops": [
+                { "$set": { "path": "$.settings.bungeecord", "value": false, "value-type": "bool" } }
               ]
             }
 
