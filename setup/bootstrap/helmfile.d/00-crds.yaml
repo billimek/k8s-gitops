@@ -62,7 +62,7 @@ releases:
   - name: grafana-operator
     namespace: monitoring
     chart: oci://ghcr.io/grafana/helm-charts/grafana-operator
-    version: 5.23.0
+    version: 5.24.0
 
   - name: tuppr
     namespace: system-upgrade
