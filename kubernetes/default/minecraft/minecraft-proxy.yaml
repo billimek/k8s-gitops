@@ -23,67 +23,58 @@ spec:
     configMaps:
       config:
         data:
-          config.yml: |
-            player_limit: -1
-            ip_forward: true
-            permissions:
-              default:
-              - bungeecord.command.server
-              - bungeecord.command.list
-              - alert.trigger
-              - slashserver.lobby
-              - slashserver.survival
-              - slashserver.survival2
-              admin:
-              - bungeecord.command.alert
-              - bungeecord.command.end
-              - bungeecord.command.ip
-              - bungeecord.command.reload
-              - alert.receive
-              - alert.receive.firstjoin
-              - alert.command.toggle
-              - alert.command.reload
-              family:
-              - bungeecord.server.survival
-            timeout: 30000
-            log_pings: true
-            log_commands: false
-            online_mode: true
-            servers:
-              lobby:
-                motd: '&1eviljungle lobby'
-                address: minecraft-lobby:25565
-                restricted: false
-              creative:
-                motd: 'creative server'
-                address: minecraft-creative:25565
-                restricted: false
-              survival:
-                motd: 'Survival SMP'
-                address: minecraft-survival:25565
-                restricted: false
-              survival2:
-                motd: 'Public Survival EZ-mode SMP'
-                address: minecraft-survival2:25565
-                restricted: false
-            listeners:
-            - query_port: 25577
-              motd: '&3eviljungle &6&Llobby'
-              priorities:
-              - lobby
-              bind_local_address: true
-              tab_list: GLOBAL_PING
-              query_enabled: true
-              host: 0.0.0.0:25577
-            ping_passthrough: true
-            groups:
-              billimek:
-              - admin
-              - family
-              AnsleyElla:
-              - family
-              BrinleyHarper:
-              - family
+          velocity.toml: |
+            # Config version. Do not change this
+            config-version = "2.6"
+
+            bind = "0.0.0.0:25577"
+            motd = "<aqua>eviljungle</aqua> <gold><bold>lobby</bold></gold>"
+            show-max-players = 500
+            online-mode = true
+            force-key-authentication = true
+            prevent-client-proxy-connections = false
+
+            # "modern" forwarding passes player IPs/UUIDs via Velocity's native protocol (MC 1.13+)
+            player-info-forwarding-mode = "MODERN"
+            forwarding-secret-file = "forwarding.secret"
+
+            announce-forge = false
+            kick-existing-players = false
+            # pass the backend lobby's description through to the server list
+            ping-passthrough = "description"
+            enable-player-address-logging = true
+
+            [servers]
+            lobby    = "minecraft-lobby:25565"
+            survival = "minecraft-survival:25565"
+            survival2 = "minecraft-survival2:25565"
+            creative = "minecraft-creative:25565"
+
+            # land all connecting players on the lobby first
+            try = ["lobby"]
+
+            [forced-hosts]
+
+            [advanced]
+            compression-threshold = 256
+            compression-level = -1
+            login-ratelimit = 3000
+            connection-timeout = 5000
+            read-timeout = 30000
+            haproxy-protocol = false
+            tcp-fast-open = false
+            bungee-plugin-message-channel = true
+            show-ping-requests = false
+            failover-on-unexpected-server-disconnect = true
+            announce-proxy-commands = true
+            log-command-executions = false
+            log-player-connections = true
+
+            [query]
+            enabled = true
+            port = 25577
+            map = "Velocity"
+            show-plugins = false
 
     controllers:
       mcproxy:
@@ -91,11 +82,9 @@ spec:
           app:
             image:
               repository: itzg/bungeecord
-              tag: 2025.10.0@sha256:28a4f84f538cee00099cee8370b075594b258f93c5feeaefb0fde736aa9636ab
+              tag: 2025.10.0-java21@sha256:2b6088919f75b7ebda4b8f9daae5ab72c46cb6465e3074cfe243cecaf2b8b05a
             env:
-              TYPE: WATERFALL
-              SPIGET_PLUGINS: "78915"
-              PLUGINS: "https://github.com/Army-py/SlashServer/releases/download/tested/SlashServer-4.0.jar"
+              TYPE: VELOCITY
             probes:
               liveness:
                 enabled: true
@@ -132,8 +121,16 @@ spec:
         type: configMap
         identifier: config
         globalMounts:
-          - path: /server/config.yml
-            subPath: config.yml
+          - path: /config/velocity.toml
+            subPath: velocity.toml
+            readOnly: true
+      # forwarding.secret must be at /server/forwarding.secret (relative path in velocity.toml)
+      forwarding-secret:
+        type: secret
+        name: mcproxy-velocity-secret
+        globalMounts:
+          - path: /server/forwarding.secret
+            subPath: forwarding.secret
             readOnly: true
 
     service:
