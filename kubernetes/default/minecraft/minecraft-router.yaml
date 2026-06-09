@@ -37,6 +37,8 @@ spec:
               - --auto-scale-down
               - --auto-scale-down-after=15m
               - --api-binding=:25566
+              - --metrics-backend=prometheus
+              - --record-logins
             env:
               KUBE_NAMESPACE:
                 valueFrom:
@@ -115,6 +117,11 @@ spec:
           minecraft:
             port: 25565
             protocol: TCP
+      api:
+        controller: minecraft-router
+        ports:
+          api:
+            port: 25566
 
     serviceAccount:
       minecraft-router: {}

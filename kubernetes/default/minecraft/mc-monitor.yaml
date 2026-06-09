@@ -1,93 +1,19 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: &app mc-monitor
-  namespace: default
-spec:
-  chartRef:
-    kind: OCIRepository
-    name: app-template
-    namespace: flux-system
-  interval: 1h
-  values:
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-
-    controllers:
-      mc-monitor:
-        containers:
-          app:
-            image:
-              repository: itzg/mc-monitor
-              tag: 0.16.6@sha256:1957e638f79280090a92bf7aaf90d60db566378e6485b25491c2b766e99ba832
-            args:
-              - export-for-prometheus
-              - -servers
-              - mc.eviljungle.com:25565,mc-smp.eviljungle.com:25565,mc-smp2.eviljungle.com:25565
-              - -port
-              - "8080"
-              - -timeout
-              - 10s
-            resources:
-              requests:
-                cpu: 5m
-                memory: 32Mi
-              limits:
-                memory: 64Mi
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /metrics
-                    port: 8080
-                  initialDelaySeconds: 10
-                  periodSeconds: 30
-                  timeoutSeconds: 30
-                  failureThreshold: 3
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /metrics
-                    port: 8080
-                  initialDelaySeconds: 10
-                  periodSeconds: 15
-                  timeoutSeconds: 30
-                  failureThreshold: 3
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: {drop: ["ALL"]}
-              readOnlyRootFilesystem: true
-
-    service:
-      app:
-        controller: mc-monitor
-        ports:
-          metrics:
-            port: 8080
----
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/servicemonitor_v1.json
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: mc-monitor
+  name: minecraft-router
   namespace: default
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: mc-monitor
+      app.kubernetes.io/name: minecraft-router
+      app.kubernetes.io/service: minecraft-router-api
   endpoints:
-    - port: metrics
+    - port: api
       interval: 60s
-      scrapeTimeout: 15s
+      scrapeTimeout: 30s
       path: /metrics
 ---
 # yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -108,27 +34,24 @@ spec:
       "uid": "minecraft-servers",
       "tags": ["minecraft"],
       "refresh": "1m",
-      "time": {"from": "now-1h", "to": "now"},
+      "time": {"from": "now-6h", "to": "now"},
       "panels": [
         {
           "id": 1,
-          "title": "Server Status",
+          "title": "Active Connections per Server",
           "type": "stat",
           "gridPos": {"x": 0, "y": 0, "w": 24, "h": 4},
           "fieldConfig": {
             "defaults": {
-              "mappings": [
-                {"type": "value", "options": {"0": {"text": "DOWN", "color": "red"}, "1": {"text": "UP", "color": "green"}}}
-              ],
-              "thresholds": {"steps": [{"color": "red", "value": 0}, {"color": "green", "value": 1}]}
-            },
-            "overrides": []
+              "thresholds": {"steps": [{"color": "blue", "value": 0}, {"color": "green", "value": 1}]},
+              "mappings": []
+            }
           },
           "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
           "targets": [
             {
-              "expr": "minecraft_status_healthy{job=\"mc-monitor\"}",
-              "legendFormat": "{{server_host}}"
+              "expr": "mc_router_server_active_connections",
+              "legendFormat": "{{server_address}}"
             }
           ]
         },
@@ -143,51 +66,49 @@ spec:
           "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
           "targets": [
             {
-              "expr": "minecraft_status_players_online_count{job=\"mc-monitor\"}",
-              "legendFormat": "{{server_host}}"
+              "expr": "sum by (server_address) (mc_router_server_active_player)",
+              "legendFormat": "{{server_address}}"
             }
           ]
         },
         {
           "id": 3,
-          "title": "Player Slots Used",
-          "type": "bargauge",
+          "title": "Total Active Connections",
+          "type": "stat",
           "gridPos": {"x": 12, "y": 4, "w": 12, "h": 4},
           "fieldConfig": {
-            "defaults": {"min": 0, "thresholds": {"steps": [{"color": "green", "value": 0}, {"color": "orange", "value": 0.75}, {"color": "red", "value": 0.9}]}}
+            "defaults": {"thresholds": {"steps": [{"color": "blue", "value": 0}]}}
           },
-          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "displayMode": "gradient"},
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value"},
           "targets": [
             {
-              "expr": "minecraft_status_players_online_count{job=\"mc-monitor\"} / minecraft_status_players_max_count{job=\"mc-monitor\"}",
-              "legendFormat": "{{server_host}}"
+              "expr": "mc_router_active_connections",
+              "legendFormat": "total"
             }
           ]
         },
         {
           "id": 4,
-          "title": "Response Time",
+          "title": "Player Logins (last 1h)",
           "type": "timeseries",
           "gridPos": {"x": 0, "y": 8, "w": 24, "h": 8},
-          "fieldConfig": {
-            "defaults": {"unit": "s", "thresholds": {"steps": [{"color": "green", "value": 0}, {"color": "yellow", "value": 0.5}, {"color": "red", "value": 1}]}}
-          },
           "targets": [
             {
-              "expr": "minecraft_status_response_time_seconds{job=\"mc-monitor\"}",
-              "legendFormat": "{{server_host}}"
+              "expr": "increase(mc_router_server_logins[1h])",
+              "legendFormat": "{{player_name}} -> {{server_address}}"
             }
           ]
         },
         {
           "id": 5,
-          "title": "Players Online (History)",
+          "title": "Network Throughput",
           "type": "timeseries",
           "gridPos": {"x": 0, "y": 16, "w": 24, "h": 8},
+          "fieldConfig": {"defaults": {"unit": "Bps"}},
           "targets": [
             {
-              "expr": "minecraft_status_players_online_count{job=\"mc-monitor\"}",
-              "legendFormat": "{{server_host}}"
+              "expr": "rate(mc_router_bytes[5m])",
+              "legendFormat": "bytes/s"
             }
           ]
         }
