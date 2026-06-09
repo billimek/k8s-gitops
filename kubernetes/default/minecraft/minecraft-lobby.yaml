@@ -13,6 +13,7 @@ spec:
   interval: 1h
   values:
     defaultPodOptions:
+      terminationGracePeriodSeconds: 60
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -29,7 +30,6 @@ spec:
               repository: ghcr.io/itzg/minecraft-server
               tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
             env:
-              ENABLE_AUTOPAUSE: "FALSE"
               EULA: "true"
               TYPE: PAPER
               VERSION: LATEST
@@ -37,16 +37,24 @@ spec:
               MODE: adventure
               MOTD: "§feviljungle§ - §a§llobby§"
               ONLINE_MODE: "false"
-              FORCE_REDOWNLOAD: "TRUE"
+              OVERRIDE_SERVER_PROPERTIES: "true"
+              MEMORY: 1536M
+              USE_AIKAR_FLAGS: "true"
+              JVM_OPTS: "--add-modules=jdk.incubator.vector"
               MAX_TICK_TIME: "-1"
               LEVEL: "Basic Lobby"
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-13.png
+              STOP_SERVER_ANNOUNCE_DELAY: "20"
               SPIGET_RESOURCES: "28140,6245,4441"
               MODRINTH_PROJECTS: |
                 essentialsx
                 coreprotect?
+                freezehibernate?
                 EWR3hxnq?
                 nochatreports-spigot-paper
+            envFrom:
+              - secretRef:
+                  name: minecraft-lobby-secret
             probes:
               liveness:
                 enabled: true

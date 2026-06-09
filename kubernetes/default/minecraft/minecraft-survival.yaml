@@ -13,6 +13,7 @@ spec:
   interval: 1h
   values:
     defaultPodOptions:
+      terminationGracePeriodSeconds: 120
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -30,7 +31,6 @@ spec:
               repository: ghcr.io/itzg/minecraft-server
               tag: 2026.5.4@sha256:f364bae78a0027aee72b01b9b532b1ae0990b3ee8cadbb6a3bc25db77418a25f
             env:
-              ENABLE_AUTOPAUSE: "FALSE"
               EULA: "true"
               TYPE: PAPER
               VERSION: LATEST
@@ -39,8 +39,9 @@ spec:
               PVP: "false"
               ONLINE_MODE: "false"
               OVERRIDE_SERVER_PROPERTIES: "true"
-              FORCE_REDOWNLOAD: "TRUE"
               MEMORY: 7168M
+              USE_AIKAR_FLAGS: "true"
+              JVM_OPTS: "--add-modules=jdk.incubator.vector"
               MAX_WORLD_SIZE: "5999968"
               MAX_TICK_TIME: "-1"
               SPAWN_PROTECTION: "0"
@@ -49,16 +50,18 @@ spec:
               OPS: billimek
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
               MOTD: "mcsv.eviljungle.com\n§6§lSMPl§r§l - §r§c§lSMP§r\n"
-              JVM_OPTS: "-Xms7168M -Xmx7168M --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20"
+              STOP_SERVER_ANNOUNCE_DELAY: "20"
               MODRINTH_PROJECTS: |
                 essentialsx
                 coreprotect?
                 locked-chests-plugin
                 luckperms
                 freezehibernate?
-                discordsrv
                 bluemap
                 nochatreports-spigot-paper
+            envFrom:
+              - secretRef:
+                  name: minecraft-survival-secret
             probes:
               liveness:
                 enabled: true
