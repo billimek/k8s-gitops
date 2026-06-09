@@ -78,7 +78,7 @@ spec:
               - path: {type: PathPrefix, value: /}
             backendRefs:
               - name: minecraft-rcon-web
-                port: http
+                port: 4326
 
     service:
       app:
