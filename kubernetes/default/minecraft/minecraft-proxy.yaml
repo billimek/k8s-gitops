@@ -85,7 +85,7 @@ spec:
               tag: 2025.10.0-java21@sha256:2b6088919f75b7ebda4b8f9daae5ab72c46cb6465e3074cfe243cecaf2b8b05a
             env:
               TYPE: VELOCITY
-              PLUGINS: https://hangarcdn.papermc.io/plugins/AspyTheAussie/SlashServer/versions/1.0-SNAPSHOT/VELOCITY/slashserver-1.0-SNAPSHOT.jar
+              PLUGINS: https://cdn.modrinth.com/data/NIdM82TF/versions/uyXHe09R/velocity-aliases-1.0.0.jar
             probes:
               liveness:
                 enabled: true
