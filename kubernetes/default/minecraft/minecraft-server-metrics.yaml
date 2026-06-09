@@ -81,7 +81,7 @@ spec:
           "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "background"},
           "targets": [
             {
-              "expr": "(max by (minecraft_server) (up{namespace=\"default\",minecraft_server=~\"$minecraft_server\"}) * 2) or on (minecraft_server) (label_replace(max by (statefulset) (kube_statefulset_replicas{namespace=\"default\",statefulset=~\"$minecraft_server\"}), \"minecraft_server\", \"$1\", \"statefulset\", \"(.*)\") - 1)",
+              "expr": "((max by (minecraft_server) (up{namespace=\"default\",minecraft_server=~\"$minecraft_server\"}) * 2) and on (minecraft_server) max by (minecraft_server) (label_replace(kube_statefulset_replicas{namespace=\"default\",statefulset=~\"$minecraft_server\"} > 0, \"minecraft_server\", \"$1\", \"statefulset\", \"(.*)\"))) or on (minecraft_server) (max by (minecraft_server) (label_replace(kube_statefulset_replicas{namespace=\"default\",statefulset=~\"$minecraft_server\"}, \"minecraft_server\", \"$1\", \"statefulset\", \"(.*)\")) - 1)",
               "legendFormat": "{{minecraft_server}}"
             }
           ]
@@ -282,7 +282,7 @@ spec:
           "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
           "targets": [
             {
-              "expr": "max by (minecraft_server) (up{namespace=\"default\",minecraft_server=~\"$minecraft_server\"})",
+              "expr": "max by (minecraft_server) (up{namespace=\"default\",minecraft_server=~\"$minecraft_server\"}) and on (minecraft_server) max by (minecraft_server) (label_replace(kube_statefulset_replicas{namespace=\"default\",statefulset=~\"$minecraft_server\"} > 0, \"minecraft_server\", \"$1\", \"statefulset\", \"(.*)\"))",
               "legendFormat": "{{minecraft_server}}"
             }
           ]
