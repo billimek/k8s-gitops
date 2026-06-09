@@ -74,7 +74,7 @@ spec:
               SPIGET_RESOURCES: "4441"
               PATCH_DEFINITIONS: /patch-defs
               APPLY_EXTRA_FILES: |
-                plugins/minecraft-prometheus-exporter.jar<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
+                plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
               MINECRAFT_PROMETHEUS_EXPORTER_HOST: 0.0.0.0
               MINECRAFT_PROMETHEUS_EXPORTER_PORT: "9940"
               MODRINTH_PROJECTS: |

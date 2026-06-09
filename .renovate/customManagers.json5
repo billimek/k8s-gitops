@@ -55,9 +55,9 @@
       description: "Process minecraft-prometheus-exporter jar downloads",
       fileMatch: ["\\.ya?ml(\\.j2)?$"],
       matchStrings: [
-        "plugins\\/minecraft-prometheus-exporter\\.jar<https:\\/\\/github\\.com\\/sladkoff\\/minecraft-prometheus-exporter\\/releases\\/download\\/(?<currentValue>v?\\d+(?:\\.\\d+){1,2}(?:[-+][0-9A-Za-z.-]+)?)\\/minecraft-prometheus-exporter-\\d+(?:\\.\\d+){1,2}(?:[-+][0-9A-Za-z.-]+)?\\.jar",
+        "plugins<https:\\/\\/github\\.com\\/sladkoff\\/minecraft-prometheus-exporter\\/releases\\/download\\/(?<currentValue>v?\\d+(?:\\.\\d+){1,2}(?:[-+][0-9A-Za-z.-]+)?)\\/minecraft-prometheus-exporter-\\d+(?:\\.\\d+){1,2}(?:[-+][0-9A-Za-z.-]+)?\\.jar",
       ],
-      autoReplaceStringTemplate: "plugins/minecraft-prometheus-exporter.jar<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/{{{newValue}}}/minecraft-prometheus-exporter-{{{newVersion}}}.jar",
+      autoReplaceStringTemplate: "plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/{{{newValue}}}/minecraft-prometheus-exporter-{{{newVersion}}}.jar",
       datasourceTemplate: "github-releases",
       depNameTemplate: "sladkoff/minecraft-prometheus-exporter",
       versioningTemplate: "semver",
