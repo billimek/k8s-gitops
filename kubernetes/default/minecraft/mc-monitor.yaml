@@ -31,6 +31,8 @@ spec:
               - mc.eviljungle.com:25565,mc-smp.eviljungle.com:25565,mc-smp2.eviljungle.com:25565
               - -port
               - "8080"
+              - -timeout
+              - 10s
             resources:
               requests:
                 cpu: 5m
@@ -47,6 +49,7 @@ spec:
                     port: 8080
                   initialDelaySeconds: 10
                   periodSeconds: 30
+                  timeoutSeconds: 30
                   failureThreshold: 3
               readiness:
                 enabled: true
@@ -57,6 +60,7 @@ spec:
                     port: 8080
                   initialDelaySeconds: 10
                   periodSeconds: 15
+                  timeoutSeconds: 30
                   failureThreshold: 3
             securityContext:
               allowPrivilegeEscalation: false
