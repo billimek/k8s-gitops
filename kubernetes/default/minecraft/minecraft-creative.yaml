@@ -129,5 +129,7 @@ spec:
           minecraft:
             port: 25565
             protocol: TCP
+          rcon:
+            port: 25575
           bluemap:
             port: 8100
