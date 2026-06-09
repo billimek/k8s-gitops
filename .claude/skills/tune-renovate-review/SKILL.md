@@ -1,7 +1,7 @@
 # tune-renovate-review
 
 Mine recent `renovate-review` action runs to surface prompt inefficiencies, permission gaps,
-tier mis-routing, and cost outliers — then offer to apply the highest-impact fixes to the workflow.
+tier mis-routing, and cost outliers -- then offer to apply the highest-impact fixes to the workflow.
 
 ## Usage
 
@@ -13,17 +13,30 @@ tier mis-routing, and cost outliers — then offer to apply the highest-impact f
 
 ---
 
+## Shell environment note
+
+The Bash tool runs **zsh** on macOS. Use `ids=(a b c)` array syntax and `for id in $ids`.
+Do NOT use bash `$()` inside a `for` header or fish `set` syntax -- both fail in zsh.
+Use Python 3 for any multi-line data processing; it avoids quoting and pipeline pitfalls.
+
+---
+
 ## Steps
 
-### 1 — Establish baseline
+### 1 -- Establish baseline
 
 Read the workflow and its commit history so findings don't re-propose already-reverted ideas.
+Run these two commands in parallel:
 
 ```bash
 git log --oneline -20 -- .github/workflows/renovate-review.yaml
 ```
 
-Then read `.github/workflows/renovate-review.yaml`. The primary tuning targets are:
+```bash
+cat .github/workflows/renovate-review.yaml
+```
+
+The primary tuning targets are:
 
 - **`Select model tier` step**: the `title` regex that routes each PR to a model + max-turns.
 - **`claude` step `--allowedTools` arg**: the `Bash(...)` allowlist passed to the action.
@@ -43,7 +56,7 @@ from this session's findings.
 
 ---
 
-### 2 — Enumerate recent gated runs
+### 2 -- Enumerate recent gated runs
 
 ```bash
 gh run list --workflow=renovate-review.yaml --limit 30 \
@@ -53,55 +66,100 @@ gh run list --workflow=renovate-review.yaml --limit 30 \
 Keep only runs where `status == "completed"` and `conclusion != "cancelled"`. Work from the most
 recent 20 (or `--limit N` from the invocation). Single-run mode: use the provided run ID or look
 up the run ID for the given PR number:
+
 ```bash
 gh run list --workflow=renovate-review.yaml --limit 50 \
-  --json databaseId,displayTitle --jq '.[] | select(.displayTitle | test("PR #<N>|<PR title>"))'
+  --json databaseId,displayTitle \
+  --jq '.[] | select(.displayTitle | test("PR #<N>|<PR title>"))'
 ```
 
 ---
 
-### 3 — Mine each run's transcript
+### 3 -- Download all logs and analyze in one pass
 
-Fetch the log once per run and strip the `job<TAB>step<TAB>timestamp ` prefix and ANSI codes:
+**Download all logs to temp files first** (one Bash call with a loop -- do not store in shell
+variables, large logs silently truncate):
 
 ```bash
-id=<databaseId>
-log=$(gh run view "$id" --log 2>/dev/null \
-  | sed -E 's/^[^\t]*\t[^\t]*\t//' \
-  | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z //' \
-  | sed -E 's/\x1b\[[0-9;]*m//g')
+ids=(ID1 ID2 ID3 ...)   # paste the databaseId list from Step 2
+for id in $ids; do
+  gh run view "$id" --log >/tmp/rr_$id.log 2>/dev/null
+done
 ```
 
-From the cleaned log, extract the following signals:
+**Then run a single Python script** to extract all signals and print the summary table.
+This avoids repeated `rg`/`grep` tool calls (and the permission prompts they each trigger):
 
-**Tier and result metadata** (the `result` record and echoed `claude_args`):
+```python
+import re, glob, os, json
+
+fields = {}
+for f in sorted(glob.glob("/tmp/rr_*.log")):
+    id = os.path.basename(f)[3:-4]
+    raw = open(f, encoding="utf-8", errors="replace").read()
+
+    model    = (re.search(r'--model ([\w.-]+)', raw) or ['',''])[1] if re.search(r'--model', raw) else ''
+    maxturns = (re.search(r'--max-turns (\d+)', raw) or ['',''])[1]
+    turns    = ''
+    cost     = ''
+    subtype  = ''
+    # result record is the last occurrence
+    for m in re.finditer(r'"num_turns":\s*(\d+)', raw): turns = m.group(1)
+    for m in re.finditer(r'"total_cost_usd":\s*([\d.]+)', raw): cost = m.group(1)
+    for m in re.finditer(r'"subtype":\s*"(success|error_max_turns|error_during_execution)"', raw):
+        subtype = m.group(1)
+
+    cmds = re.findall(r'"command":\s*"((?:[^"\\]|\\.)*)"', raw)
+    decoded = []
+    for c in cmds:
+        try: c = json.loads('"' + c + '"')
+        except: pass
+        decoded.append(c.replace('\n', ' ; '))
+
+    denials = [m.group(0) for m in re.finditer(r'"permission_denials":\s*\[[^\]]+\]', raw)
+               if '[]' not in m.group(0)]
+    errors  = []
+    for m in re.finditer(r'"is_error":\s*true', raw):
+        seg = raw[max(0, m.start()-400):m.start()]
+        ts  = re.findall(r'"(?:text|content)":\s*"((?:[^"\\]|\\.)*)"', seg)
+        if ts: errors.append(ts[-1][:160].replace('\n', ' '))
+
+    fields[id] = dict(model=model, maxturns=maxturns, turns=turns, cost=cost,
+                      subtype=subtype, cmds=decoded, denials=denials, errors=errors)
+
+# Summary table
+tier_map = {'claude-sonnet-4-6': 's4', 'claude-haiku-4-5-20251001': 'h4'}
+print(f"{'Run ID':<15} {'Tier':<12} {'Turns/Budget':<14} {'Subtype':<25} {'Cost':<10} {'Denials'}")
+print('-'*95)
+for id, d in fields.items():
+    tier = tier_map.get(d['model'], d['model'][-6:])
+    bud  = d['maxturns']
+    trn  = d['turns']
+    print(f"{id:<15} {tier+'/'+bud:<12} {trn+'/'+bud:<14} {d['subtype']:<25} ${d['cost']:<9} {len(d['denials'])}")
+
+# Per-run detail
+print()
+for id, d in fields.items():
+    if d['cmds'] or d['denials'] or d['errors']:
+        print(f"\n=== {id} commands ===")
+        for i, c in enumerate(d['cmds'], 1):
+            print(f"  {i:2}. {c[:160]}")
+        for e in d['errors']:
+            print(f"  ERROR: {e}")
+        for dn in d['denials']:
+            print(f"  DENIAL: {dn[:120]}")
+```
+
+Run the script with: `python3 /tmp/analyze_rr.py` (or inline via `python3 - <<'PY' ... PY`).
+
+**Cleanup** at the end of the session:
 ```bash
-printf '%s\n' "$log" | rg -N \
-  '"subtype"|"num_turns":|"duration_ms":|"total_cost_usd":|--max-turns|--model'
+rm -f /tmp/rr_*.log /tmp/analyze_rr.py
 ```
-`subtype` values: `success`, `error_max_turns`, `error_during_execution`.
-
-**Permission denials** (non-empty array means the model hit the tool allowlist):
-```bash
-printf '%s\n' "$log" | rg -A 10 '"permission_denials"'
-```
-
-**Every Bash command issued** (ordered — reveals sequential turns that could be parallel):
-```bash
-printf '%s\n' "$log" | rg -N '"command":'
-```
-
-**Failed tool results** (denied commands, `is_error` hits):
-```bash
-printf '%s\n' "$log" | rg -B 2 '"is_error": true'
-```
-
-Record per run: PR title, tier (model + max_turns), `num_turns`, `subtype`, cost, denial count,
-and the ordered Bash command list.
 
 ---
 
-### 4 — Derive findings
+### 4 -- Derive findings
 
 Analyze the full run window and group findings into the four categories below. Each finding must
 cite specific run IDs, repeat-counts, and the exact step or section of the workflow to change.
@@ -116,7 +174,7 @@ contains "denied", "not allowed", or "prefix rule".
 
 Proposed fix: add the missing `Bash(<command-prefix>:*)` entry to the `--allowedTools` arg in
 the `claude` step. If the command is already documented in the prompt's **`Shell & Tool
-Conventions`** section but the model still trips it, the doc wording is the bug — propose a
+Conventions`** section but the model still trips it, the doc wording is the bug -- propose a
 rewrite of that guidance instead.
 
 #### B. Turn efficiency and waste
@@ -152,7 +210,7 @@ Flag:
 
 Evidence: `error_during_execution` runs; duplicate or stacked reviews on the same PR (the
 **`Pre-check: skip redundant re-reviews`** section and the **dismiss-stale-reviews block** in the
-**`Submitting the Review`** section are both dedup safeguards — duplicate reviews indicate one
+**`Submitting the Review`** section are both dedup safeguards -- duplicate reviews indicate one
 or both mis-fired); gated runs that ended without posting any review; **`Publish review status`**
 step toggling fail-closed noise.
 
@@ -160,16 +218,16 @@ Proposed fix is specific to the failure mode observed.
 
 ---
 
-### 5 — Report
+### 5 -- Report
 
 Print the summary table first, then the findings list.
 
 **Per-run summary table:**
 
 ```
-Run ID       | PR title (truncated)               | Tier     | Turns/Budget | Subtype         | Cost    | Denials
--------------|------------------------------------|-----------|-----------  |-----------------|---------|--------
-26952735414  | feat(container): kei 0.20.4->0.21.3 | full/25  | 4/25         | success         | $0.107  | 0
+Run ID          | PR title (truncated)                  | Tier   | Turns/Budget | Subtype  | Cost
+----------------|---------------------------------------|--------|--------------|----------|------
+26952735414     | feat(container): kei 0.20.4->0.21.3   | full/25| 4/25         | success  | $0.107
 ...
 ```
 
@@ -193,7 +251,7 @@ cost summary: total spend and average cost per gated run over the window.
 
 ---
 
-### 6 — Offer to apply
+### 6 -- Offer to apply
 
 After printing the report, ask:
 
@@ -201,7 +259,7 @@ After printing the report, ask:
 
 Wait for the response. On confirmation, edit `.github/workflows/renovate-review.yaml` with the
 minimal targeted changes for each approved finding. Do not commit or push unless explicitly asked
-(global safety rule). Keep all edits ASCII-only — no emojis or em-dashes.
+(global safety rule). Keep all edits ASCII-only -- no emojis or em-dashes.
 
 If any finding would substantially restructure the prompt or change the tier routing logic,
 preview the proposed diff in the conversation before applying.
