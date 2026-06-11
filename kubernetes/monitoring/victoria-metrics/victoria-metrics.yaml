@@ -149,6 +149,12 @@ spec:
                 - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit|CephNodeNetworkPacketErrors"
               receiver: 'blackhole'
             
+            # Route 1b: Blackhole expected empty scrape pool for scale-to-zero Minecraft
+            - matchers:
+                - alertname = "ScrapePoolHasNoTargets"
+                - scrape_job =~ "serviceScrape/default/minecraft-server-metrics/.*"
+              receiver: 'blackhole'
+
             # Route 2: Critical infrastructure alerts - group by instance
             - matchers:
                 - severity = "critical"
