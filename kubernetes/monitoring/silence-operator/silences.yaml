@@ -14,6 +14,22 @@ spec:
     - name: instance
       value: nas.home:9100
 ---
+# Silence for ScrapePoolHasNoTargets on Minecraft scrape pool.
+# Minecraft StatefulSets idle at 0/0 replicas (scale-to-zero via mc-router);
+# the ServiceMonitor keeps a configured pool that discovers no endpoints while asleep.
+apiVersion: observability.giantswarm.io/v1alpha2
+kind: Silence
+metadata:
+  name: minecraft-scrape-pool-empty
+  namespace: monitoring
+spec:
+  matchers:
+    - name: alertname
+      value: ScrapePoolHasNoTargets
+    - name: scrape_job
+      value: serviceScrape/default/minecraft-server-metrics/.*
+      matchType: "=~"
+---
 # Silence for CephPGImbalance on osd.4
 # This is kept because osd.4 is a smaller drive (894 GiB vs 1.7 TiB) so PG imbalance is expected.
 # The alert comes from rook-ceph rules and requires label-based filtering (ceph_daemon-specific)
