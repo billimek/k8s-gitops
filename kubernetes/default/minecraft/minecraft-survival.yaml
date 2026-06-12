@@ -59,7 +59,7 @@ spec:
         type: statefulset
         statefulset:
           serviceName: minecraft-survival
-        replicas: 0
+        replicas: 1
         strategy: RollingUpdate
         containers:
           app:
@@ -184,6 +184,7 @@ spec:
           minecraft.eviljungle.com/server-metrics: "true"
         annotations:
           mc-router.itzg.me/externalServerName: mc-smp.eviljungle.com
+          mc-router.itzg.me/autoScaleDown: "false"
           mc-router.itzg.me/autoScaleAsleepMOTD: "§8[asleep] §6survival§r - connecting wakes it"
           mc-router.itzg.me/autoScaleLoadingMOTD: "§e[starting] §6survival§r - give it a minute"
           mc-router.itzg.me/autoScaleWaitTimeout: 5m
