@@ -43,7 +43,7 @@ spec:
           main:
             image:
               repository: teslamate/teslamate
-              tag: 3.1.0@sha256:b7b8b21869d789d043f62b404dd689f55c601ef7d02222e92c0f5d596d0b1044
+              tag: 4.0.0@sha256:1c4f03e1c8a8e43269ac24c78a2f4a4a021637bbedf600d4b951ec1223889a4e
             env:
               TZ: "America/New_York"
               DISABLE_MQTT: "false"
