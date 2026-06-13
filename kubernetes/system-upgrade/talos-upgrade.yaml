@@ -19,7 +19,7 @@ spec:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       expr: |-
-        status.ceph.health in ['HEALTH_OK']
+        status.ceph.health in ['HEALTH_OK', 'HEALTH_WARN']
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
       expr: |-
