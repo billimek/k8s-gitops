@@ -32,5 +32,12 @@
       semanticCommitScope: "grafana-dashboards",
       semanticCommitType: "chore",
     },
+    {
+      // Dashboard 22413 migrated to dashboard.grafana.app/v2 schema at revision 7,
+      // which grafana-operator cannot import via spec.url. Frozen at last classic revision (6).
+      matchDatasources: ["custom.grafana-dashboards"],
+      matchPackageNames: ["22413"],
+      enabled: false,
+    },
   ],
 }

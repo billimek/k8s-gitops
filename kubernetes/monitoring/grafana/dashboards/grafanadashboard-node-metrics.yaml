@@ -10,8 +10,8 @@ spec:
     matchLabels:
       dashboards: grafana
   folder: node-metrics
-  # renovate: depName=22413
-  url: https://grafana.com/api/dashboards/22413/revisions/8/download
+  # renovate: depName=22413 (frozen at rev 6: rev 7+ use dashboard.grafana.app/v2 schema, which grafana-operator cannot import via spec.url)
+  url: https://grafana.com/api/dashboards/22413/revisions/6/download
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
