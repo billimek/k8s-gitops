@@ -3,6 +3,14 @@
 version: "3"
 
 tasks:
+  validate-clusterconfig:
+    desc: Validate talconfig schema and deprecations
+    preconditions:
+      - which talhelper
+      - test -f {{.SETUP_DIR}}/talos/talconfig.yaml
+    cmds:
+      - talhelper validate talconfig {{.SETUP_DIR}}/talos/talconfig.yaml
+
   generate-clusterconfig:
     desc: Generate clusterconfig for Talos
     preconditions:
