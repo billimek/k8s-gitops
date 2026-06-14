@@ -27,6 +27,7 @@ jobs:
         with:
           files: |-
             kubernetes/**/*
+            .github/workflows/flate.yaml
 
   test:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
