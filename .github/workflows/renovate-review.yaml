@@ -218,6 +218,9 @@ jobs:
             Skip the multi-source breadcrumb chase (CHANGELOG files, docs sites, commit history,
             registry metadata, web search) and the upstream-issues search UNLESS the release notes
             show breaking changes, deprecations, or security fixes — then escalate to full depth.
+            **Hard cap: at most 3 upstream API calls total (any mix of `gh api`, `gh release view`,
+            `git log`, `WebFetch`). If release notes are not found within those 3 calls, submit an
+            approval noting "release notes not publicly available" -- do not search further.**
             Target: 5–7 turns.
 
             **full** — minor/feat bump or chart upgrade (sonnet tier):
@@ -315,8 +318,10 @@ jobs:
             If there are no prior reviews (empty list), skip the dismissal loop and proceed
             directly to posting. Do not dismiss reviews from human users.
 
-            Once `gh pr review` exits without error, your work is done — do not make any
-            further tool calls.
+            **STOP immediately after `gh pr review` returns without error. Do NOT call `gh api`,
+            `gh pr view`, or any other tool to confirm the review was posted -- the exit code is
+            authoritative. Any call after a successful review wastes turns and risks a duplicate
+            submission.**
 
             **Always wrap the review body in a single-quoted heredoc** to avoid shell-escaping
             failures with backticks, dollar signs, and special characters:
