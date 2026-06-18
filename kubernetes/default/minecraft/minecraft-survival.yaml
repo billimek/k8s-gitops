@@ -87,8 +87,8 @@ spec:
               MAX_TICK_TIME: "-1"
               PAUSE_WHEN_EMPTY_SECONDS: "300"
               SPAWN_PROTECTION: "0"
-              LEVEL: "26.2-20260618-3"
-              SEED: "26.2-20260618-3"
+              LEVEL: "26.2-20260618-4"
+              SEED: "26.2-20260618-4"
               OPS: billimek
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
               MOTD: "§6§lEvilJungle Survival§r\n§7Cozy SMP §8| §emc-smp.eviljungle.com"
