@@ -53,6 +53,10 @@ spec:
           config.yml: |
             host: 0.0.0.0
             port: 9940
+      bluemap-config:
+        data:
+          core.conf: |
+            accept-download: true
 
     controllers:
       minecraft-survival:
@@ -93,6 +97,7 @@ spec:
               APPLY_EXTRA_FILES: |
                 plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
                 plugins/PrometheusExporter</prometheus-exporter-config/config.yml
+                plugins/BlueMap</bluemap-config/core.conf
                 plugins<https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar
                 plugins<https://cdn.modrinth.com/data/18HN6DXd/versions/2vIWZ3W7/LockedChestsPlugin.jar
                 plugins<https://cdn.modrinth.com/data/Vebnzrzj/versions/MBSY8toc/LuckPerms-Bukkit-5.5.53.jar
@@ -155,6 +160,13 @@ spec:
         globalMounts:
           - path: /prometheus-exporter-config/config.yml
             subPath: config.yml
+            readOnly: true
+      bluemap-config:
+        type: configMap
+        identifier: bluemap-config
+        globalMounts:
+          - path: /bluemap-config/core.conf
+            subPath: core.conf
             readOnly: true
 
     route:
