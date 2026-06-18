@@ -93,7 +93,6 @@ spec:
               MODRINTH_PROJECTS: |
                 essentialsx
                 coreprotect?
-                freezehibernate?
                 bluemap
                 nochatreports-spigot-paper
             envFrom:

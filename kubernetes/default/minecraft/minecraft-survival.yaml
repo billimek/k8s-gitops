@@ -94,12 +94,11 @@ spec:
                 plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
                 plugins/PrometheusExporter</prometheus-exporter-config/config.yml
                 plugins<https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar
-                plugins<https://cdn.modrinth.com/data/Lu3KuzdV/versions/6W2ad1iI/CoreProtect-CE-23.2.jar
                 plugins<https://cdn.modrinth.com/data/18HN6DXd/versions/2vIWZ3W7/LockedChestsPlugin.jar
                 plugins<https://cdn.modrinth.com/data/Vebnzrzj/versions/MBSY8toc/LuckPerms-Bukkit-5.5.53.jar
-                plugins<https://cdn.modrinth.com/data/XRJBgd3p/versions/4AKkSJCL/NoChatReports-2.7.7.jar
+                plugins<https://hangarcdn.papermc.io/plugins/Jelly-Pudding/BlockReports/versions/1.4/PAPER/BlockReports-1.4.jar
               MODRINTH_PROJECTS: |
-                freezehibernate?
+                coreprotect?
                 bluemap
             envFrom:
               - secretRef:
