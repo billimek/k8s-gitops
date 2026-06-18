@@ -96,7 +96,6 @@ spec:
                 plugins<https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar
                 plugins<https://cdn.modrinth.com/data/18HN6DXd/versions/2vIWZ3W7/LockedChestsPlugin.jar
                 plugins<https://cdn.modrinth.com/data/Vebnzrzj/versions/MBSY8toc/LuckPerms-Bukkit-5.5.53.jar
-                plugins<https://hangarcdn.papermc.io/plugins/Jelly-Pudding/BlockReports/versions/1.4/PAPER/BlockReports-1.4.jar
               MODRINTH_PROJECTS: |
                 coreprotect?
                 bluemap
