@@ -91,11 +91,11 @@ spec:
                 plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
                 plugins/PrometheusExporter</prometheus-exporter-config/config.yml
               MODRINTH_PROJECTS: |
-                essentialsx?
+                essentialsx
                 coreprotect?
                 freezehibernate?
-                bluemap?
-                nochatreports-spigot-paper?
+                bluemap
+                nochatreports-spigot-paper
             envFrom:
               - secretRef:
                   name: minecraft-creative-secret

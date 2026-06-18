@@ -94,13 +94,13 @@ spec:
                 plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
                 plugins/PrometheusExporter</prometheus-exporter-config/config.yml
               MODRINTH_PROJECTS: |
-                essentialsx?
-                coreprotect?
-                locked-chests-plugin?
-                luckperms?
+                essentialsx:2.22.0
+                coreprotect:23.2
+                locked-chests-plugin:1.3
+                luckperms:v5.5.53-bukkit
                 freezehibernate?
-                bluemap?
-                nochatreports-spigot-paper?
+                bluemap:5.22-paper
+                nochatreports-spigot-paper:2.7.7
             envFrom:
               - secretRef:
                   name: minecraft-survival-secret

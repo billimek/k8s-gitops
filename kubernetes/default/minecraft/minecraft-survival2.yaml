@@ -102,15 +102,15 @@ spec:
                 plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
                 plugins/PrometheusExporter</prometheus-exporter-config/config.yml
               MODRINTH_PROJECTS: |
-                essentialsx?
+                essentialsx
                 coreprotect?
-                locked-chests-plugin?
+                locked-chests-plugin
                 freezehibernate?
-                discordsrv?
-                distant-horizons-support?
-                bluemap?
-                luckperms?
-                nochatreports-spigot-paper?
+                discordsrv
+                distant-horizons-support
+                bluemap
+                luckperms
+                nochatreports-spigot-paper
             envFrom:
               - secretRef:
                   name: minecraft-survival2-secret
