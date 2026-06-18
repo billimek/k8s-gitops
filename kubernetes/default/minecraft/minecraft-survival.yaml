@@ -70,6 +70,7 @@ spec:
               EULA: "true"
               TYPE: PAPER
               VERSION: LATEST
+              PAPER_CHANNEL: experimental
               DIFFICULTY: normal
               MODE: survival
               PVP: "false"
