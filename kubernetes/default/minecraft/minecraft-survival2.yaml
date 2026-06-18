@@ -109,7 +109,7 @@ spec:
                 discordsrv
                 distant-horizons-support
                 bluemap
-                luckperms
+                luckperms?
                 nochatreports-spigot-paper
             envFrom:
               - secretRef:

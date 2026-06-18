@@ -97,7 +97,7 @@ spec:
                 essentialsx
                 coreprotect?
                 locked-chests-plugin
-                luckperms
+                luckperms?
                 freezehibernate?
                 bluemap
                 nochatreports-spigot-paper
