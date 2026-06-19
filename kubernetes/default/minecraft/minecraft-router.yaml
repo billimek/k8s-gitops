@@ -35,7 +35,7 @@ spec:
               - --in-kube-cluster
               - --auto-scale-up
               - --auto-scale-down
-              - --auto-scale-down-after=1h
+              - --auto-scale-down-after=8h
               - --connection-rate-limit=5
               - --api-binding=:25566
               - --metrics-backend=prometheus
