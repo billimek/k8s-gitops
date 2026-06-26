@@ -34,6 +34,7 @@ spec:
               ECHO_METRICS_ADDR: ":8081"
               ECHO_METRICS_ENABLED: "true"
               ECHO_LOG_FORMAT: json
+              ECHO_PRETTY_PRINT: "true"
               ECHO_KUBERNETES: "true"
               ECHO_POD_NAME:
                 valueFrom:
