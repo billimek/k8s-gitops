@@ -27,12 +27,30 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/mendhak/http-https-echo
-              tag: 41@sha256:2046be25f4a2c0bdda662ebfb7c2b7b60fc95c31d97987be143645a8a2194a40
+              repository: ghcr.io/home-operations/echo
+              tag: 0.1.3@sha256:971fbc6f2007af2f6707d6dcf4c3fa9d25ace0cd867f1f8526263890a709187f
             env:
-              HTTP_PORT: &port 8080
-              LOG_WITHOUT_NEWLINE: "true"
-              LOG_IGNORE_PATH: "/healthz"
+              ECHO_HTTP_PORT: &port 8080
+              ECHO_METRICS_ADDR: ":8081"
+              ECHO_METRICS_ENABLED: "true"
+              ECHO_LOG_FORMAT: json
+              ECHO_KUBERNETES: "true"
+              ECHO_POD_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              ECHO_POD_NAMESPACE:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              ECHO_POD_IP:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              ECHO_NODE_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
             probes:
               liveness: &probes
                 enabled: true
@@ -40,7 +58,7 @@ spec:
                 spec:
                   httpGet:
                     path: /healthz
-                    port: *port
+                    port: &metrics-port 8081
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -52,15 +70,15 @@ spec:
                 spec:
                   httpGet:
                     path: /healthz
-                    port: *port
+                    port: *metrics-port
                   failureThreshold: 30
                   periodSeconds: 5
             resources:
               requests:
                 cpu: 5m
-                memory: 64M
+                memory: 64Mi
               limits:
-                memory: 64M
+                memory: 96Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -111,3 +129,13 @@ spec:
         ports:
           http:
             port: *port
+          metrics:
+            port: *metrics-port
+
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: metrics
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 30s
