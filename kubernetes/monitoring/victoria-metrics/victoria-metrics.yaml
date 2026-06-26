@@ -11,7 +11,7 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.84.0
+    tag: 0.85.5
   url: oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
@@ -54,11 +54,12 @@ spec:
         KubeHpaMaxedOut:
           create: false
       groups:
-        k8sContainerMemorySwap:
+        # renamed from k8sContainerMemorySwap (upstream key change in chart 0.85.0)
+        k8s.rules.container_memory_swap:
           create: false
         # Disabled because kube-scheduler metrics produce no useful data
         # (scheduler is mostly idle, histogram_quantile returns empty results)
-        kubeScheduler:
+        kube-scheduler.rules:
           create: false
 
     vmsingle:
