@@ -54,11 +54,12 @@ spec:
         KubeHpaMaxedOut:
           create: false
       groups:
-        k8sContainerMemorySwap:
+        # renamed from k8sContainerMemorySwap (upstream key change in chart 0.85.0)
+        k8s.rules.container_memory_swap:
           create: false
         # Disabled because kube-scheduler metrics produce no useful data
         # (scheduler is mostly idle, histogram_quantile returns empty results)
-        kubeScheduler:
+        kube-scheduler.rules:
           create: false
 
     vmsingle:
