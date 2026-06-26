@@ -53,7 +53,7 @@ spec:
           app:
             image:
               repository: quay.io/superq/smokeping-prober
-              tag: v0.10.0@sha256:3717411629519de66c7b4ff767f61766c71b8d0d3a80707ae4c970d4e47f6cf6
+              tag: v0.12.0@sha256:a8f38bef71dfddb7a11bcfccdf88ba122cad5ffe0b35e0eb606e0010a24a7f1f
             args:
               - --config.file=/config/smokeping.yaml
               - --web.listen-address=:9374
