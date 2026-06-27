@@ -86,6 +86,7 @@ spec:
               LEVEL: "26.2-20260618-6"
               SEED: "26.2-20260618-6"
               OPS: billimek
+              WHITELIST: "billimek,Nadorrior,Sandbragger,tkws88,KhrysPBacon,MackCulley,Guydon,Shivanater,ceethedog,BrinleyHarper,AnsleyElla"
               ICON: https://www.freeiconspng.com/uploads/minecraft-server-icon-23.png
               MOTD: "§6§lEvilJungle Survival§r\n§7Cozy SMP §8| §emc-smp.eviljungle.com"
               STOP_SERVER_ANNOUNCE_DELAY: "20"
