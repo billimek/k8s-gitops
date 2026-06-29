@@ -96,20 +96,27 @@ spec:
               TZ: America/New_York
               KEI_DATA_DIR: /config
             probes:
-              # 2FA can stall startup indefinitely until a code is submitted; gate liveness behind a long startup window so the pod is not killed mid-auth
+              # startup gates liveness: /healthz is 503 until the first sync succeeds, so liveness
+              # cannot fire prematurely. The 2h window (240x30s) is a maximum; on the common path
+              # it passes within minutes of the first sync. During a 2FA stall the startup window
+              # times out and triggers a restart, which cold-starts via /accountLogin and recovers.
               startup:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
+                  httpGet:
+                    path: /healthz
                     port: 9090
-                  periodSeconds: 10
-                  failureThreshold: 180
+                  periodSeconds: 30
+                  failureThreshold: 240
+              # /healthz returns 503 when last_success_at > watch_interval*2 (2h); restarts ~90s
+              # after that threshold, automating the "restart it again" recovery pattern.
               liveness:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
+                  httpGet:
+                    path: /healthz
                     port: 9090
                   initialDelaySeconds: 30
                   periodSeconds: 30
