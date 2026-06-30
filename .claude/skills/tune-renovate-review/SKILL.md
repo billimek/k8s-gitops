@@ -128,7 +128,7 @@ for f in sorted(glob.glob("/tmp/rr_*.log")):
                       subtype=subtype, cmds=decoded, denials=denials, errors=errors)
 
 # Summary table
-tier_map = {'claude-sonnet-4-6': 's4', 'claude-haiku-4-5-20251001': 'h4'}
+tier_map = {'sonnet': 'son', 'haiku': 'hku'}
 print(f"{'Run ID':<15} {'Tier':<12} {'Turns/Budget':<14} {'Subtype':<25} {'Cost':<10} {'Denials'}")
 print('-'*95)
 for id, d in fields.items():
