@@ -96,19 +96,20 @@ spec:
               TZ: America/New_York
               KEI_DATA_DIR: /config
             probes:
-              # tcpSocket confirms the axum server started; pod becomes Ready quickly so
-              # HelmRelease upgrades don't time out waiting for a 2FA stall to clear.
+              # kei 0.22.9+: /healthz returns 200 before the first sync cycle (only 503 for
+              # genuine staleness/failure once health is established), so httpGet is safe here
+              # and the pod becomes Ready quickly on a healthy boot.
               startup:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
+                  httpGet:
+                    path: /healthz
                     port: 9090
                   periodSeconds: 10
                   failureThreshold: 30
-              # /healthz returns 503 when last_success_at > watch_interval*2 (2h). The 2h
-              # initialDelay gives the first sync time to complete before liveness activates;
-              # after that it stays live and auto-restarts any long-running 2FA stall.
+              # /healthz returns 503 when last_success_at > watch_interval*2 (2h) or
+              # consecutive_failures >= 5; restarts ~3min after that, auto-recovering stalls.
               liveness:
                 enabled: true
                 custom: true
@@ -116,7 +117,7 @@ spec:
                   httpGet:
                     path: /healthz
                     port: 9090
-                  initialDelaySeconds: 7200
+                  initialDelaySeconds: 30
                   periodSeconds: 60
                   failureThreshold: 3
               readiness:
