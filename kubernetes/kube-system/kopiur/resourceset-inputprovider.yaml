@@ -1,0 +1,100 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesetinputproviders.yaml
+# Consolidated ResourceSetInputProvider for all kopiur backup/restore configurations.
+# Ported from the volsync-apps provider; same field semantics.
+# Fields with defaults (can be omitted if value matches):
+#   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
+#   - capacity: "1Gi"
+#   - schedule: "0 * * * *"
+# Backup schedule groups (to reduce concurrent NFS/Ceph pressure):
+#   Group A (:00) - fast apps (~1 min): audiobookshelf, frigate, gatus, minecraft-lobby, qbittorrent, recyclarr, seerr, tautulli
+#   Group B (:15) - medium apps (~1.5 min): continuwuity, home-assistant, mousetrap, node-red, prowlarr, qui, sabnzbd, shelfmark, zwave2mqtt
+#   Group C (:30) - heavy apps (Plex ~8.5 min): minecraft-creative, minecraft-survival, minecraft-survival2, plex, radarr, sonarr, unifi
+# To add a new app: add entry to the apps array below
+# To remove an app: delete entry from the apps array below
+#
+# MIGRATION STATUS: currently contains only shelfmark (pilot).
+# Uncomment remaining apps after the pilot validates end-to-end.
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: kopiur-apps
+  namespace: kube-system
+spec:
+  type: Static
+  defaultValues:
+    defaults:
+      capacity: "1Gi"
+      schedule: "0 * * * *"
+      pvcSuffix: "config"
+    apps:
+      # ---- Pilot app (Group B) ----
+      - app: shelfmark
+        schedule: "15 * * * *"
+
+      # ---- Remaining apps - uncomment to migrate (PR 2) ----
+      # Group A (:00)
+      # - app: audiobookshelf
+      # - app: frigate
+      # - app: gatus
+      #   namespace: "monitoring"
+      # - app: minecraft-lobby
+      #   pvcSuffix: "datadir"
+      #   capacity: 3Gi
+      # - app: qbittorrent
+      # - app: recyclarr
+      #   capacity: 5Gi
+      # - app: seerr
+      # - app: tautulli
+
+      # Group B (:15)
+      # - app: continuwuity
+      #   capacity: 5Gi
+      #   schedule: "15 * * * *"
+      # - app: home-assistant
+      #   capacity: 10Gi
+      #   schedule: "15 * * * *"
+      # - app: kei
+      #   schedule: "15 * * * *"
+      # - app: mousetrap
+      #   schedule: "15 * * * *"
+      # - app: node-red
+      #   pvcSuffix: "data"
+      #   schedule: "15 * * * *"
+      # - app: prowlarr
+      #   schedule: "15 * * * *"
+      # - app: qui
+      #   schedule: "15 * * * *"
+      # - app: sabnzbd
+      #   schedule: "15 * * * *"
+      # - app: zwave2mqtt
+      #   schedule: "15 * * * *"
+
+      # Group C (:30)
+      # - app: minecraft-creative
+      #   pvcSuffix: "datadir"
+      #   capacity: 10Gi
+      #   schedule: "30 * * * *"
+      # - app: minecraft-survival
+      #   pvcSuffix: "datadir"
+      #   capacity: 8Gi
+      #   schedule: "30 * * * *"
+      # - app: minecraft-survival2
+      #   pvcSuffix: "datadir"
+      #   capacity: 20Gi
+      #   cacheCapacity: 12Gi
+      #   schedule: "30 * * * *"
+      # - app: plex
+      #   capacity: 35Gi
+      #   cacheCapacity: 20Gi
+      #   schedule: "30 * * * *"
+      # - app: radarr
+      #   capacity: 3Gi
+      #   schedule: "30 * * * *"
+      # - app: sonarr
+      #   capacity: 2Gi
+      #   schedule: "30 * * * *"
+      # - app: unifi
+      #   pvcSuffix: "data"
+      #   capacity: 2Gi
+      #   schedule: "30 * * * *"

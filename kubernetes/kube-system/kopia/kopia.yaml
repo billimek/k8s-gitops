@@ -92,6 +92,13 @@ spec:
         path: /mnt/ssdtank/kopia
         globalMounts:
           - path: /repository
+      # Temporary: browse new kopiur repo during migration; remove in final PR
+      repository-kopiur:
+        type: nfs
+        server: nas.home
+        path: /mnt/ssdtank/kopia/.kopiur
+        globalMounts:
+          - path: /repository-kopiur
       tmpfs:
         type: emptyDir
         advancedMounts:

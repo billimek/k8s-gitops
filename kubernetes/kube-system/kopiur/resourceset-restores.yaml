@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
+# ResourceSet for kopiur bootstrapped PVCs.
+# Creates per-app Restore (passive populator) + PVC resources.
+# On cluster bootstrap: PVC auto-restores from latest snapshot.
+# On fresh install with no snapshot: provisions an empty volume (onMissingSnapshot: Continue).
+# App definitions are shared via the kopiur-apps ResourceSetInputProvider.
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: kopiur-restores
+  namespace: kube-system
+spec:
+  dependsOn:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSet
+      name: kopiur-snapshots
+      namespace: kube-system
+      ready: true
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: kopiur
+      namespace: kube-system
+      ready: true
+
+  wait: true
+
+  inputsFrom:
+    - name: kopiur-apps
+
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
+    # Restore (passive populator) for bootstrap restore
+    apiVersion: kopiur.home-operations.com/v1alpha1
+    kind: Restore
+    metadata:
+      name: << $app.app >>-bootstrap
+      namespace: << get $app "namespace" | default "default" >>
+      labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+    spec:
+      source:
+        fromPolicy:
+          name: << $app.app >>
+          namespace: << get $app "namespace" | default "default" >>
+      target:
+        populator: {}
+      policy:
+        onMissingSnapshot: Continue
+    ---
+    # PVC with dataSourceRef for automatic bootstrap restore
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
+      namespace: << get $app "namespace" | default "default" >>
+      labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      dataSourceRef:
+        apiGroup: kopiur.home-operations.com
+        kind: Restore
+        name: << $app.app >>-bootstrap
+      storageClassName: ceph-block
+      resources:
+        requests:
+          storage: << get $app "capacity" | default inputs.defaults.capacity >>
+    <<- end >>
