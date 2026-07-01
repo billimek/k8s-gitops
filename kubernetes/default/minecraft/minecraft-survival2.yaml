@@ -107,7 +107,6 @@ spec:
               MODRINTH_PROJECTS: |
                 locked-chests-plugin
                 discordsrv
-                distant-horizons-support
                 bluemap
                 luckperms
                 nochatreports-spigot-paper
