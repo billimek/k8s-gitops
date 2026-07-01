@@ -25,7 +25,7 @@ spec:
       config:
         data:
           config.toml: |
-            log_level = "info"
+            log_level = "debug"
 
             [download]
             directory = "/photos"
