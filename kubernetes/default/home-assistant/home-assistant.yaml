@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.7.0@sha256:dba81097ecdee59dda9adaed94e146398a241efaa74a836567c64f5a3f29ca67
+              tag: &hass-image 2026.7.0@sha256:dba81097ecdee59dda9adaed94e146398a241efaa74a836567c64f5a3f29ca67
             env:
               TZ: "America/New_York"
             envFrom:
@@ -84,6 +84,32 @@ spec:
               limits:
                 memory: 1Gi
 
+        initContainers:
+          venv-reset:
+            image:
+              repository: ghcr.io/home-operations/home-assistant
+              tag: *hass-image
+            command: ["/bin/bash", "-c"]
+            args:
+              - |
+                set -eu
+                marker=/config/.hass-image-version
+                current="$(python3 -c 'from homeassistant.const import __version__; print(__version__)')"
+                previous="$(cat "$marker" 2>/dev/null || true)"
+                if [ "$current" != "$previous" ]; then
+                  echo "HA image changed ($previous -> $current); wiping /config/.venv"
+                  rm -rf /config/.venv/* /config/.venv/.[!.]* 2>/dev/null || true
+                  printf '%s' "$current" > "$marker"
+                else
+                  echo "HA image unchanged ($current); keeping /config/.venv cache"
+                fi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+
     persistence:
       config:
         existingClaim: home-assistant-config
@@ -93,6 +119,8 @@ spec:
               - path: /config
             code-server:
               - path: /config
+            venv-reset:
+              - path: /config
       hass-cache:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
@@ -100,6 +128,9 @@ spec:
         advancedMounts:
           home-assistant:
             app:
+              - path: /config/.venv
+                subPath: hass-venv
+            venv-reset:
               - path: /config/.venv
                 subPath: hass-venv
       tmpfs:
