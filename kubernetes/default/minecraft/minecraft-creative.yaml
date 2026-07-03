@@ -90,12 +90,12 @@ spec:
               APPLY_EXTRA_FILES: |
                 plugins<https://github.com/sladkoff/minecraft-prometheus-exporter/releases/download/v3.1.2/minecraft-prometheus-exporter-3.1.2.jar
                 plugins/PrometheusExporter</prometheus-exporter-config/config.yml
-                plugins<https://cdn.modrinth.com/data/nfGCP9fk/versions/9zLThg7h/item-nbt-api-plugin-2.15.7.jar
                 plugins<https://ci.prism-mc.org/job/prism/228/artifact/prism-paper-loader/build/libs/prism-paper-v4.3-dev73.jar
                 plugins<https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar
               MODRINTH_PROJECTS: |
                 bluemap
                 nochatreports-spigot-paper
+                nbtapi
             envFrom:
               - secretRef:
                   name: minecraft-creative-secret
