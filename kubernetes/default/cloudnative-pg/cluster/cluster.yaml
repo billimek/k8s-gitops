@@ -30,6 +30,10 @@ spec:
     enablePodMonitor: true
   # https://github.com/cloudnative-pg/cloudnative-pg/issues/2570
   enablePDB: false
+  # bound shutdown/switchover so tuppr node drains don't stall (defaults 180/1800/3600)
+  smartShutdownTimeout: 30
+  stopDelay: 120
+  switchoverDelay: 120
   resources:
     requests:
       memory: "512Mi"
