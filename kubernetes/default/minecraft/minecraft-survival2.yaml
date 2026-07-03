@@ -105,7 +105,6 @@ spec:
                 plugins<https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar
               MODRINTH_PROJECTS: |
                 locked-chests-plugin
-                discordsrv
                 bluemap
                 luckperms
                 nochatreports-spigot-paper
