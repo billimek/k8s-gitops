@@ -20,6 +20,10 @@
 
   rebaseWhen: 'auto',
   platformAutomerge: true,
+  // GHCR/OCI images (e.g. siderolabs/installer) and github-actions releases often lack a
+  // releaseTimestamp; without this, Renovate's timestamp-required default marks them pending
+  // forever and never opens a PR, even once minimumReleaseAge would otherwise be satisfied.
+  minimumReleaseAgeBehaviour: 'timestamp-optional',
 
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   suppressNotifications: [
