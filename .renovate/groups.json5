@@ -132,7 +132,7 @@
       description: "Talos Group",
       groupName: "Talos",
       matchDatasources: ["docker", "github-releases", "helm", "git-tags"],
-      matchPackagePatterns: ["siderolabs/talosctl", "siderolabs/installer"],
+      matchPackagePatterns: ["siderolabs/talosctl", "siderolabs/installer", "siderolabs/talos"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
