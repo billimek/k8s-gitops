@@ -101,7 +101,7 @@ jobs:
 
       - id: claude
         if: steps.gate.outputs.gated == 'true'
-        uses: anthropics/claude-code-action@fad22eb3fa582b7357fc0ea48af6645851b884fd # v1.0.161
+        uses: anthropics/claude-code-action@6c0083bb7289c31716797a039b6367b3079cc46e # v1.0.162
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: "renovate[bot]"
