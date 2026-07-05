@@ -101,13 +101,21 @@ spec:
         summary: "Host swap is filling up (instance {{ $labels.instance }})"
         description: "Swap is filling up (>80%)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostSystemdServiceCrashed
-      expr: node_systemd_unit_state{state="failed"} == 1
+      expr: node_systemd_unit_state{state="failed", name!="nixos-upgrade.service"} == 1
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Host SystemD service crashed (instance {{ $labels.instance }})"
         description: "SystemD service crashed\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+    - alert: HostRebootRequired
+      expr: node_reboot_required == 1
+      for: 30m
+      labels:
+        severity: info
+      annotations:
+        summary: "Host reboot required (instance {{ $labels.instance }})"
+        description: "Booted config differs from current-system (new kernel/initrd/modules). Reboot to apply.\n  LABELS: {{ $labels }}"
     - alert: HostPhysicalComponentTooHot
       expr: (node_hwmon_temp_celsius > 75) unless on(instance) ({__name__=~".+", instance=~"10\\.0\\.7\\.(52|54|55|59):9100"})
       for: 5m
