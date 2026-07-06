@@ -86,7 +86,7 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              tag: 0.22.10@sha256:5ab4485f5571bbfc6535b2f4709c7b3f2a4e9f265acd1354e0a9c29d59bb183b
+              tag: 0.22.11@sha256:e901ab85f516d801fc4ab502333579f74998e1ce5beade2eed5a1306ee4f9cae
             args:
               - service
               - run
