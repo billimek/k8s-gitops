@@ -84,9 +84,9 @@ spec:
         mgr:
           requests:
             cpu: 100m
-            memory: 1Gi
-          limits:
             memory: 1536Mi
+          limits:
+            memory: 2Gi # raised from 1536Mi - mgr was pinned at limit and OOMKilling
         mon:
           requests:
             cpu: 35m
