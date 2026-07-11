@@ -78,7 +78,7 @@ nodes:
     controlPlane: false
     ipAddress: 10.0.7.53
     installDiskSelector:
-      model: Samsung SSD 970
+      model: CT500P3SSD8
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: ac:1f:6b:6f:27:5f

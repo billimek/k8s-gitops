@@ -79,7 +79,7 @@ This is a worker node, bare-metal
 - IP: 10.0.7.53
 - CPU: Intel Xeon D-1518 (Broadwell-DE, 8 cores, 8 threads)
 - RAM: 64GB
-- Disk: host - 1TB - `/dev/nvme0n1`
+- Disk: host - 500GB - `/dev/nvme0n1` (Crucial P3 `CT500P3SSD8`)
 - Disk: SSD for ceph - 2TB `/dev/sda` -
   (`/dev/disk/by-id/wwn-0x5002538c000cdf0f`)
 - GPU: ASPEED AST2400 BMC (not suitable for compute workloads)
