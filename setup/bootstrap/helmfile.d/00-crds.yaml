@@ -22,7 +22,7 @@ releases:
   - name: external-secrets
     namespace: kube-system
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 2.7.0
+    version: 2.8.0
 
   - name: volsync
     namespace: kube-system
