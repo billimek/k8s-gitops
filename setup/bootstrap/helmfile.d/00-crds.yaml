@@ -57,7 +57,7 @@ releases:
   - name: snapshot-controller
     namespace: kube-system
     chart: oci://ghcr.io/piraeusdatastore/helm-charts/snapshot-controller
-    version: 5.1.1
+    version: 5.2.0
 
   - name: grafana-operator
     namespace: monitoring
