@@ -8,7 +8,7 @@ metadata:
 spec:
   talos:
     # renovate: datasource=github-releases depName=siderolabs/talos
-    version: v1.13.6
+    version: v1.13.7
   policy:
     rebootMode: default
   healthChecks:
