@@ -11,6 +11,7 @@ includes:
   k8s: .taskfiles/k8s
   k8s-bootstrap: .taskfiles/k8s-bootstrap
   talos: .taskfiles/talos
+  kopiur: .taskfiles/kopiur
   volsync: .taskfiles/volsync
 
 vars:

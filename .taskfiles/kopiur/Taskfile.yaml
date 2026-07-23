@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+tasks:
+  list:
+    desc: List snapshots for an app [NS=default] [APP=required]
+    preconditions:
+      - which kubectl
+      - kubectl --namespace {{.NS}} get snapshotpolicy {{.APP}}
+    requires:
+      vars:
+        - APP
+    vars:
+      NS: '{{.NS | default "default"}}'
+    cmds:
+      - kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/snapshot-policy={{.APP}} --sort-by=.status.timing.startTime
+
+  snapshot:
+    desc: Trigger an immediate snapshot for an app [NS=default] [APP=required]
+    preconditions:
+      - which kubectl
+      - kubectl --namespace {{.NS}} get snapshotpolicy {{.APP}}
+    requires:
+      vars: [APP]
+    vars:
+      NS: '{{.NS | default "default"}}'
+      WAIT: '{{.WAIT | default "true"}}'
+    cmds:
+      - |
+        kubectl --namespace {{.NS}} create -f - <<EOF
+        apiVersion: kopiur.home-operations.com/v1alpha1
+        kind: Snapshot
+        metadata:
+          generateName: {{.APP}}-manual-
+          namespace: {{.NS}}
+        spec:
+          policyRef:
+            name: {{.APP}}
+        EOF
+      - |-
+        {{ if eq "true" .WAIT }}
+        SNAP=$(kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/snapshot-policy={{.APP}} --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1:].metadata.name}')
+        until [ -n "$SNAP" ]; do sleep 2; SNAP=$(kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/snapshot-policy={{.APP}} --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1:].metadata.name}'); done
+        echo "Waiting for snapshot $SNAP to complete..."
+        kubectl --namespace {{.NS}} wait snapshot/$SNAP --for=jsonpath='.status.phase'=Succeeded --timeout=120m
+        {{ end }}
+
+  snapshot-all:
+    desc: Snapshot all apps across all namespaces without waiting
+    preconditions:
+      - which kubectl
+    vars:
+      ALL_POLICIES:
+        sh: kubectl get snapshotpolicies -A --no-headers -o jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
+    cmds:
+      - for:
+          var: ALL_POLICIES
+          split: "\n"
+        task: snapshot
+        vars:
+          WAIT: "false"
+          NS: '{{splitList "," .ITEM | first}}'
+          APP: '{{splitList "," .ITEM | last}}'
+
+  restore:
+    desc: Restore an app from a specific snapshot [NS=default] [APP=required] [SNAPSHOT=optional name; latest if absent]
+    preconditions:
+      - which flux kubectl
+      - kubectl --namespace {{.NS}} get snapshotpolicy {{.APP}}
+    requires:
+      vars:
+        - APP
+    vars:
+      NS: '{{.NS | default "default"}}'
+      CONTROLLER:
+        sh: kubectl --namespace {{.NS}} get deployment {{.APP}} &>/dev/null && echo deployment || echo statefulset
+      PVC_SUFFIX:
+        sh: kubectl --namespace {{.NS}} get snapshotpolicy {{.APP}} -o jsonpath='{.spec.sources[0].pvc.name}' | sed "s/{{.APP}}-//"
+    cmds:
+      # Suspend
+      - flux --namespace flux-system suspend kustomization cluster-apps
+      - flux --namespace {{.NS}} suspend helmrelease {{.APP}}
+      - kubectl --namespace {{.NS}} scale {{.CONTROLLER}}/{{.APP}} --replicas 0
+      - kubectl --namespace {{.NS}} wait pod --for=delete --selector="app.kubernetes.io/instance={{.APP}}" --timeout=5m
+      # Create a side-by-side Restore targeting a new PVC
+      - |
+        kubectl --namespace {{.NS}} create -f - <<EOF
+        apiVersion: kopiur.home-operations.com/v1alpha1
+        kind: Restore
+        metadata:
+          name: {{.APP}}-manual
+          namespace: {{.NS}}
+        spec:
+          source:
+            fromPolicy:
+              name: {{.APP}}
+              namespace: {{.NS}}
+              {{- if .SNAPSHOT}}
+              # Use snapshotRef instead of fromPolicy for a specific snapshot
+              {{- end}}
+          target:
+            pvc:
+              name: {{.APP}}-{{.PVC_SUFFIX}}-restored
+              storageClassName: ceph-block
+              capacity: 10Gi
+              accessModes:
+                - ReadWriteOnce
+          policy:
+            onMissingSnapshot: Fail
+            waitTimeout: 5m
+        EOF
+      - until kubectl --namespace {{.NS}} get restore/{{.APP}}-manual &>/dev/null; do sleep 2; done
+      - kubectl --namespace {{.NS}} wait restore/{{.APP}}-manual --for=jsonpath='.status.phase'=Succeeded --timeout=120m
+      # Resume
+      - flux --namespace flux-system resume kustomization cluster-apps
+      - flux --namespace {{.NS}} resume helmrelease {{.APP}}
+      - flux --namespace {{.NS}} reconcile helmrelease {{.APP}} --force
+      - kubectl --namespace {{.NS}} wait pod --for=condition=ready --selector="app.kubernetes.io/instance={{.APP}}" --timeout=5m
