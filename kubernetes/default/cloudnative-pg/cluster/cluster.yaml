@@ -14,6 +14,7 @@ spec:
   instances: 2
   imageName: ghcr.io/cloudnative-pg/postgresql:18.1-202512290807-standard-trixie@sha256:f445b2f8e9b4b3b9a4df56d944c976a2d7eb9b50280f3a6986b0fc7c422f7f27
   primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: switchover  # promote replica on updates/drains so node drains don't stall
   storage:
     size: 20Gi
     storageClass: ceph-block
