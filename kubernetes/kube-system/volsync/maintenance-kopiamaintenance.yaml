@@ -30,5 +30,7 @@ spec:
     capabilities:
       drop: ["ALL"]
   cacheCapacity: 10Gi
+  metadataCacheSizeLimitMB: 5120  # explicit; volsync default (70% of capacity) fills the PVC to ~90%
+  contentCacheSizeLimitMB: 2048
   cacheAccessModes: ["ReadWriteOnce"]
   cacheStorageClassName: ceph-block
