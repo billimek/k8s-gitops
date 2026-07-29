@@ -76,7 +76,7 @@ spec:
             env:
               EULA: "true"
               TYPE: PAPER
-              VERSION: LATEST
+              VERSION: "26.2"  # pinned: LATEST+experimental resolves backwards to 26.2-rc-2
               PAPER_CHANNEL: experimental
               DIFFICULTY: normal
               MODE: survival
