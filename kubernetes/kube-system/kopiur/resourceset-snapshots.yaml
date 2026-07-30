@@ -47,11 +47,19 @@ spec:
           sourcePathOverride: /data
       copyMethod: Snapshot
       volumeSnapshotClassName: csi-ceph-blockpool
+      compression:
+        compressor: zstd
       retention:
         keepHourly: 24
         keepDaily: 14
         keepWeekly: 8
         keepMonthly: 6
+      # Proves backups are actually restorable, not just that maintenance
+      # succeeded. Daily, hashed to a stable per-app minute within hour 3.
+      verification:
+        quick:
+          schedule:
+            cron: "H 3 * * *"
       # The repository Secret lives in kube-system; movers run in the app's own
       # namespace, so the credential must be projected there.
       credentialProjection:
@@ -78,7 +86,8 @@ spec:
       policyRef:
         name: << $app.app >>
       schedule:
+        # H-style cron already self-distributes load per app; no separate
+        # jitter needed on top of it.
         cron: "<< get $app "schedule" | default inputs.defaults.schedule >>"
-        jitter: 1m
         runOnCreate: false
     <<- end >>

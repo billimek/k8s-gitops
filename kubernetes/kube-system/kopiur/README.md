@@ -21,19 +21,21 @@ resourceset-inputprovider.yaml (apps defined, kopiur-apps)
 
 **Key features**:
 
-- Hourly-by-default backups (staggered into three schedule groups) to
-  `nas.home:/mnt/ssdtank/kopia`; 13 low-churn apps are trimmed to every 4h
-  (see the frequency note in `resourceset-inputprovider.yaml`) to keep
-  Snapshot CR volume and Kopia index-blob churn down
+- Hourly-by-default backups to `nas.home:/mnt/ssdtank/kopia`, using kopiur's
+  Jenkins-style `H` cron substitution (`H * * * *`) so each app's fire time
+  is a stable, deterministic hash — no manual minute-offset bookkeeping, no
+  separate jitter needed. 13 low-churn apps are trimmed to every 4h
+  (`H H/4 * * *`; see the frequency note in `resourceset-inputprovider.yaml`)
+  to keep Snapshot CR volume and Kopia index-blob churn down
 - Automatic cluster bootstrap via PVC `dataSourceRef`
 - Retention: 24 hourly, 14 daily, 8 weekly, 6 monthly snapshots (GFS)
-- Kopia deduplication + compression
+- Kopia deduplication + zstd compression
+- Daily `quick` verification (`H 3 * * *`) proves backups are actually
+  restorable, not just that maintenance ran
 - Default-managed repository maintenance: quick every 6h, full daily (replaces
   the old `KopiaMaintenance` CronJob); `clusterrepository.yaml` also sets
   `parameters.epoch.minDuration: 6h` to fix a pre-existing "too many index
   blobs" condition that a 24h epoch couldn't clear fast enough on its own
-- `SnapshotSchedule.spec.schedule.jitter` staggers mover start times (replaces
-  the old `volsync-mover-jitter` MutatingAdmissionPolicy)
 
 ## Components
 
@@ -54,7 +56,7 @@ resourceset-inputprovider.yaml (apps defined, kopiur-apps)
    - app: my-new-app
      capacity: 5Gi
      runAsUser: "1001"
-     schedule: "0 8 * * *"
+     schedule: "H H/4 * * *"  # omit entirely to inherit the hourly default
    ```
 
 2. **Reference the PVC in the app's HelmRelease**:

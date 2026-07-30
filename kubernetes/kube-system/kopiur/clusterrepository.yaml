@@ -30,6 +30,9 @@ spec:
     usernameExpr: "policyName"
   credentialProjection:
     allowed: true
+  # Matches kopia.yaml's TZ so schedules/reports use local time, not UTC.
+  scheduleDefaults:
+    timezone: America/New_York
   catalog:
     fallbackNamespace: kube-system
     retain:
