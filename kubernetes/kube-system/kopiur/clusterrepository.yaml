@@ -34,6 +34,15 @@ spec:
     fallbackNamespace: kube-system
     retain:
       perIdentity: 100
+  # The repository currently sits at 4000+ index blobs ("too many index
+  # blobs, this may result in degraded performance" in the fork's maintenance
+  # logs) because kopia's default 24h epoch can't close fast enough to
+  # compact them given hourly writes across 25 apps. Lower it to match
+  # kopiur's default quick-maintenance cadence (every 6h) so an epoch
+  # actually closes and compacts each cycle instead of piling up.
+  parameters:
+    epoch:
+      minDuration: 6h
   moverDefaults:
     securityContext:
       runAsUser: 1001
