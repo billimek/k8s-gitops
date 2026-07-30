@@ -81,9 +81,15 @@ Native Kubernetes [HorizontalPodAutoscalers](https://kubernetes.io/docs/tasks/ru
 
 ![](https://i.imgur.com/36Jh5uq.png)
 
-[kopia](https://github.com/kopia/kopia) is a backup repository server with web UI that provides a central backup storage location. Used as the repository backend for volsync-based PVC backups, storing encrypted snapshots on NFS.
+[kopia](https://github.com/kopia/kopia) is a backup repository server with web UI that provides a central backup storage location. Provides browse/manual-restore access to the same NFS-backed Kopia repository that `kopiur` (below) drives.
 
 * [kopia/](kopia/)
+
+# kopiur
+
+[kopiur](https://github.com/home-operations/kopiur) is a Kopia-native Kubernetes backup operator. It drives scheduled PVC backups (`SnapshotPolicy`/`SnapshotSchedule`) and bootstrap restores (`Restore`) for every application via a `ClusterRepository` pointed at the NFS-backed Kopia repository, using the same flat-dir, ResourceSet-driven pattern previously used by `volsync`.
+
+* [kopiur/](kopiur/)
 
 # metrics-server
 
@@ -123,6 +129,6 @@ Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to
 
 # volsync
 
-[volsync](https://github.com/backube/volsync): Asynchronous data replication for Kubernetes volumes.  Leveraging storage CSI snapshotting and restic, this enables the backing-up of persistent volumes to an S3 bucket.
+[volsync](https://github.com/backube/volsync): Asynchronous data replication for Kubernetes volumes. PVC backups now handled by `kopiur` (above); retained temporarily to hold the PVCs it created pending removal.
 
 * [volsync/](volsync/)

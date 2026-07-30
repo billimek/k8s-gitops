@@ -10,9 +10,9 @@ GitOps Kubernetes cluster on Talos + FluxCD. Infrastructure (`/setup`) separate 
 task                    # List all tasks
 task k8s:sync-secrets   # Force sync ExternalSecrets
 task k8s:cleanse-pods   # Delete Failed/Pending/Succeeded pods
-task volsync:snapshot APP=<name>  # Trigger immediate backup
-task volsync:list                 # List ReplicationSources/Destinations
-task volsync:restore APP=<name>   # Restore an app's PVC from latest backup
+task kopiur:snapshot APP=<name>   # Trigger immediate backup
+task kopiur:list APP=<name>       # List snapshots for an app
+task kopiur:restore APP=<name>    # Restore an app's PVC from latest backup
 flux reconcile kustomization cluster-apps --with-source
 ```
 
@@ -54,9 +54,9 @@ tool that creates, updates, deletes, scales, execs, or pushes requires explicit 
 - **Primary**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
 - **Ingress**: Envoy Gateway with HTTPRoute (NOT Traefik/Ingress)
 - **Gateways**: `internal` (LAN + Tailscale, 10.0.6.151) and `public` (internet-facing, 10.0.6.150), both in `kube-system`
-- **Storage**: Ceph block (default), NFS media mounts, VolSync+Kopia backups
+- **Storage**: Ceph block (default), NFS media mounts, kopiur+Kopia backups
 - **Secrets**: ExternalSecret CRDs only (no plaintext)
-- **Backups**: ResourceSet automation in kube-system/volsync/
+- **Backups**: ResourceSet automation in kube-system/kopiur/ (Kopia-native backup operator)
 - **CI**: PRs run `flate` diff/test (`.github/workflows/flate.yaml`); Renovate auto-bumps images per `.renovate/` rules; non-trivial Renovate version bumps are gated by a Claude review (`.github/workflows/renovate-review.yaml`, `claude/renovate-review` status — digest/github-action/grafana-dashboard updates are ungated); use `/review-renovate` to manually review and merge queued PRs and `/tune-renovate-review` to analyze recent CI runs for prompt/tier improvements
 - **Grafana**: Managed by grafana-operator (`kubernetes/monitoring/grafana/`). Dashboards, folders, and datasources are `GrafanaDashboard`/`GrafanaFolder`/`GrafanaDatasource` CRs (`grafana.integreatly.org/v1beta1`). Instance selector label is `dashboards: grafana`. To add a dashboard, create a `GrafanaDashboard` CR next to the relevant app with `instanceSelector: {matchLabels: {dashboards: grafana}}`; add `allowCrossNamespaceImport: true` and a `folderRef` when outside the `monitoring` namespace. grafana.com dashboards use `spec.url`, chart-shipped ConfigMap dashboards use `spec.configMapRef`. Renovate tracks grafana.com revision URLs automatically via `.renovate/grafanaDashboards.json5`.
 
@@ -164,22 +164,28 @@ spec:
 
 ## Backup Configuration
 
-Add to `kubernetes/kube-system/volsync/resourceset-inputprovider.yaml`:
+Add to `kubernetes/kube-system/kopiur/resourceset-inputprovider.yaml`:
 
 ```yaml
 apps:
   - app: app-name
-    namespace: "default"   # omit if default
-    runAsUser: "1001"      # omit to use default
-    capacity: 1Gi          # omit to use default (1Gi)
-    schedule: "0 4 * * *"  # omit to use default (0 * * * *, hourly)
-    pvcSuffix: "config"    # omit to use default (config)
-    cacheCapacity: 20Gi    # omit unless app needs large Kopia cache (e.g. plex)
+    namespace: "default"    # omit if default
+    runAsUser: "1001"       # omit to use default
+    capacity: 1Gi           # omit to use default (1Gi)
+    schedule: "H H/4 * * *" # omit to use default (H * * * *, hourly)
+    pvcSuffix: "config"     # omit to use default (config)
+    cacheCapacity: 20Gi     # omit unless app needs large Kopia cache (e.g. plex)
 ```
 
-**Schedule groups** (see `resourceset-inputprovider.yaml` header): pick `:00` (Group A, fast), `:15` (Group B, medium), or `:30` (Group C, heavy) when adding an app to spread NFS/Ceph load.
+Schedules use kopiur's Jenkins-style `H` cron substitution (`H * * * *`) —
+each app hashes to a stable, deterministic minute so load self-distributes
+with no manual bucket bookkeeping. Trim low-churn apps to `H H/4 * * *`
+(every 4h) instead of hourly.
 
-NFS repository (`nas.home:/mnt/ssdtank/kopia`) is configured via `moverVolumes` directly on each `ReplicationSource`/`ReplicationDestination`/`KopiaMaintenance` resource — no webhook injection.
+NFS repository (`nas.home:/mnt/ssdtank/kopia`) is configured on the single
+`ClusterRepository "nas"` in `clusterrepository.yaml` — apps reference it by
+name (`repository: {kind: ClusterRepository, name: nas}`), no per-app
+volume/secret wiring needed.
 
 ## app-template ConfigMap Naming
 
