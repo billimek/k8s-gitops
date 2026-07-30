@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: nas
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    filesystem:
+      path: /repository
+      volume:
+        nfs:
+          server: nas.home
+          path: /mnt/ssdtank/kopia
+  # No `create` block: this repository already exists (written by the retired
+  # volsync-perfectra1n fork). Adopt it in place; never risk initializing a
+  # second, empty repository at the same path.
+  encryption:
+    passwordSecretRef:
+      name: kopiur-nas-secret
+      namespace: kube-system
+      key: KOPIA_PASSWORD
+  # Reproduces the fork's recorded identity (<app>@<namespace>:/data) exactly,
+  # so adoption continues the existing snapshot history instead of starting a
+  # parallel series. Paired with sourcePathOverride: /data on every source.
+  identityDefaults:
+    hostnameExpr: "namespace"
+    usernameExpr: "policyName"
+  credentialProjection:
+    allowed: true
+  catalog:
+    fallbackNamespace: kube-system
+    retain:
+      perIdentity: 100
+  moverDefaults:
+    securityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+    podSecurityContext:
+      runAsNonRoot: true
+      fsGroup: 1001
+      fsGroupChangePolicy: OnRootMismatch
+    cache:
+      capacity: 1Gi
+      storageClassName: ceph-block
+      mode: Ephemeral
+    ttlSecondsAfterFinished: 300

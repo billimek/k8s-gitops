@@ -3,25 +3,29 @@
 # ResourceSet for migrated PVCs with bootstrap capability
 # Creates PVCs with dataSourceRef for automatic restore during cluster bootstrap
 # App definitions are shared via the volsync-apps ResourceSetInputProvider
+#
+# MIGRATION: kopiur has taken over backups (see kubernetes/kube-system/kopiur/).
+# This ResourceSet is kept alive, prune-disabled, purely to hold onto the live
+# PVCs it created (their dataSourceRef is immutable, so nothing can adopt them
+# in place). Slated for removal once kopiur's own bootstrap PVCs are proven.
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
   name: volsync-pvcs
   namespace: kube-system
 spec:
-  # Dependencies - wait for volsync-backups ResourceSet and volsync controller
+  commonMetadata:
+    annotations:
+      fluxcd.controlplane.io/prune: disabled
+
+  # Dependencies - wait for the volsync controller
   dependsOn:
-    - apiVersion: fluxcd.controlplane.io/v1
-      kind: ResourceSet
-      name: volsync-backups
-      namespace: kube-system
-      ready: true
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: volsync
       namespace: kube-system
       ready: true
-  
+
   # Health checks - wait for generated resources to be ready
   wait: true
   

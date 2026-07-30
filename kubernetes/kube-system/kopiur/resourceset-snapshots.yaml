@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesets.yaml
+# ResourceSet for kopiur backups.
+# Generates per-app SnapshotPolicy + SnapshotSchedule resources.
+# App definitions are shared via the kopiur-apps ResourceSetInputProvider.
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: kopiur-snapshots
+  namespace: kube-system
+spec:
+  dependsOn:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: kopiur
+      namespace: kube-system
+      ready: true
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: external-secrets
+      namespace: kube-system
+      ready: true
+
+  wait: true
+
+  inputsFrom:
+    - name: kopiur-apps
+
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
+    # SnapshotPolicy for backup configuration
+    apiVersion: kopiur.home-operations.com/v1alpha1
+    kind: SnapshotPolicy
+    metadata:
+      name: << $app.app >>
+      namespace: << get $app "namespace" | default "default" >>
+    spec:
+      repository:
+        kind: ClusterRepository
+        name: nas
+      sources:
+        - pvc:
+            name: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
+          # Matches the fork's recorded source path so adoption continues the
+          # existing <app>@<namespace>:/data history instead of starting fresh.
+          sourcePathOverride: /data
+      copyMethod: Snapshot
+      volumeSnapshotClassName: csi-ceph-blockpool
+      retention:
+        keepHourly: 24
+        keepDaily: 14
+        keepWeekly: 8
+        keepMonthly: 6
+      # The repository Secret lives in kube-system; movers run in the app's own
+      # namespace, so the credential must be projected there.
+      credentialProjection:
+        enabled: true
+      mover:
+        securityContext:
+          runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+        podSecurityContext:
+          fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          fsGroupChangePolicy: OnRootMismatch
+        cache:
+          capacity: << get $app "cacheCapacity" | default inputs.defaults.cacheCapacity >>
+          storageClassName: ceph-block
+          mode: Ephemeral
+    ---
+    # SnapshotSchedule for backup timing
+    apiVersion: kopiur.home-operations.com/v1alpha1
+    kind: SnapshotSchedule
+    metadata:
+      name: << $app.app >>-scheduled
+      namespace: << get $app "namespace" | default "default" >>
+    spec:
+      policyRef:
+        name: << $app.app >>
+      schedule:
+        cron: "<< get $app "schedule" | default inputs.defaults.schedule >>"
+        jitter: 1m
+        runOnCreate: false
+    <<- end >>
