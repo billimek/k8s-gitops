@@ -89,7 +89,7 @@ spec:
           app:
             image:
               repository: ghcr.io/calibrain/shelfmark-lite
-              tag: v1.3.4@sha256:1d71d708f68d659226ad8f42a5c2a5c42363e7bd0cfaf1fa5e9204cdb9f59ae2
+              tag: v1.3.5@sha256:ae23600f7dd8e020dd735ed9f3576c091de5ef134295943efd3c561319a4dc88
             args:
               - --access-logfile=-
               - --error-logfile=-
