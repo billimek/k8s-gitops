@@ -30,99 +30,29 @@ spec:
       schedule: "0 * * * *"
       pvcSuffix: "config"
     apps:
-      - app: audiobookshelf
+      # audiobookshelf, continuwuity, frigate, gatus, home-assistant, seerr,
+      # node-red, prowlarr, qbittorrent, qui, radarr, recyclarr, sabnzbd, kei,
+      # mousetrap, minecraft-creative, minecraft-lobby, minecraft-survival,
+      # minecraft-survival2: cut over to kopiur, see kopiur/resourceset-restores.yaml
 
-      - app: continuwuity
-        capacity: 5Gi
-        schedule: "15 * * * *"
-
-      - app: frigate
-        runAsUser: "1000"
-
-      - app: gatus
-        namespace: "monitoring"
-        runAsUser: "1000"
-
-      - app: home-assistant
-        runAsUser: "1000"
-        capacity: 10Gi
-        schedule: "15 * * * *"
-      
-      - app: seerr
-      
-      - app: node-red
-        pvcSuffix: "data"
-        runAsUser: "1000"
-        capacity: 1Gi
-        schedule: "15 * * * *"
-      
       - app: plex
         runAsUser: "1000"
         capacity: 35Gi
         cacheCapacity: 20Gi
         schedule: "30 * * * *"
-      
-      - app: prowlarr
-        schedule: "15 * * * *"
-
-      - app: qbittorrent
-      
-      - app: qui
-        schedule: "15 * * * *"
-
-      - app: radarr
-        capacity: 3Gi
-        schedule: "30 * * * *"
-      
-      - app: recyclarr
-        capacity: 5Gi
-      
-      - app: sabnzbd
-        schedule: "15 * * * *"
 
       # shelfmark: cut over to kopiur (pilot), see kopiur/resourceset-restores.yaml
       - app: sonarr
         capacity: 2Gi
         schedule: "30 * * * *"
-      
+
       - app: tautulli
-      
+
       - app: unifi
         pvcSuffix: "data"
         runAsUser: "999"
         capacity: 2Gi
         schedule: "30 * * * *"
-      
-      - app: kei
-        schedule: "15 * * * *"
-
-      - app: mousetrap
-        runAsUser: "1000"
-        schedule: "15 * * * *"
 
       - app: zwave2mqtt
         schedule: "15 * * * *"
-
-      - app: minecraft-creative
-        pvcSuffix: "datadir"
-        runAsUser: "1000"
-        capacity: 10Gi
-        schedule: "30 * * * *"
-      
-      - app: minecraft-lobby
-        pvcSuffix: "datadir"
-        runAsUser: "1000"
-        capacity: 3Gi
-      
-      - app: minecraft-survival
-        pvcSuffix: "datadir"
-        runAsUser: "1000"
-        capacity: 8Gi
-        schedule: "30 * * * *"
-      
-      - app: minecraft-survival2
-        pvcSuffix: "datadir"
-        runAsUser: "1000"
-        capacity: 20Gi
-        cacheCapacity: 12Gi
-        schedule: "30 * * * *"
