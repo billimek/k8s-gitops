@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: kopiur
+  namespace: kube-system
+spec:
+  interval: 1h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.9.1
+    digest: sha256:1df33568434cb09833226bfc58944932551e54974c6f70f2491af08b7d2f8926
+  url: oci://ghcr.io/home-operations/charts/kopiur
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kopiur
+  namespace: kube-system
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: kopiur
+  interval: 1h
+  # The 8 CRDs ship in the chart's crds/ directory, which `helm upgrade` never
+  # touches by default. CreateReplace makes Flux apply CRD schema changes on
+  # every chart bump instead of silently skipping them.
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    installScope: cluster
+    streamingLists: true
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    features:
+      credentialProjection:
+        enabled: true
+    webhook:
+      tls:
+        mode: self
+      serviceMonitor:
+        enabled: true
+    monitoring:
+      serviceMonitor:
+        enabled: true
+      prometheusRule:
+        enabled: true
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
+          allowCrossNamespaceImport: true
+          folder: infrastructure
+          matchLabels:
+            dashboards: grafana
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      runAsGroup: 65534
+      fsGroup: 65534
+      fsGroupChangePolicy: OnRootMismatch

@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: nas
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    filesystem:
+      path: /repository
+      volume:
+        nfs:
+          server: nas.home
+          path: /mnt/ssdtank/kopia
+  # No `create` block: this repository already exists (written by the retired
+  # volsync-perfectra1n fork). Adopt it in place; never risk initializing a
+  # second, empty repository at the same path.
+  encryption:
+    passwordSecretRef:
+      name: kopiur-nas-secret
+      namespace: kube-system
+      key: KOPIA_PASSWORD
+  # Reproduces the fork's recorded identity (<app>@<namespace>:/data) exactly,
+  # so adoption continues the existing snapshot history instead of starting a
+  # parallel series. Paired with sourcePathOverride: /data on every source.
+  identityDefaults:
+    hostnameExpr: "namespace"
+    usernameExpr: "policyName"
+  credentialProjection:
+    allowed: true
+  # Matches kopia.yaml's TZ so schedules/reports use local time, not UTC.
+  scheduleDefaults:
+    timezone: America/New_York
+  catalog:
+    fallbackNamespace: kube-system
+    retain:
+      perIdentity: 100
+  # The repository currently sits at 4000+ index blobs ("too many index
+  # blobs, this may result in degraded performance" in the fork's maintenance
+  # logs) because kopia's default 24h epoch can't close fast enough to
+  # compact them given hourly writes across 25 apps. Lower it to match
+  # kopiur's default quick-maintenance cadence (every 6h) so an epoch
+  # actually closes and compacts each cycle instead of piling up.
+  parameters:
+    epoch:
+      minDuration: 6h
+  # The fork's maintenance mover needed a 20Gi cache to keep up with this
+  # repo's index-blob volume (grown from 10Gi same-day as this migration was
+  # rebased); kopiur's own auto-projected Maintenance inherits moverDefaults
+  # below, whose 1Gi is sized for per-app snapshot movers, not maintenance.
+  # Override it explicitly so maintenance doesn't stall on cache pressure.
+  maintenance:
+    mover:
+      cache:
+        capacity: 20Gi
+        storageClassName: ceph-block
+        metadataCacheSizeMb: 5120
+        contentCacheSizeMb: 2048
+  moverDefaults:
+    securityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+    podSecurityContext:
+      runAsNonRoot: true
+      fsGroup: 1001
+      fsGroupChangePolicy: OnRootMismatch
+    cache:
+      capacity: 1Gi
+      storageClassName: ceph-block
+      mode: Ephemeral
+    ttlSecondsAfterFinished: 300
