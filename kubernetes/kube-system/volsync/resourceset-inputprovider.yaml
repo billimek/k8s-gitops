@@ -30,29 +30,11 @@ spec:
       schedule: "0 * * * *"
       pvcSuffix: "config"
     apps:
-      # audiobookshelf, continuwuity, frigate, gatus, home-assistant, seerr,
-      # node-red, prowlarr, qbittorrent, qui, radarr, recyclarr, sabnzbd, kei,
-      # mousetrap, minecraft-creative, minecraft-lobby, minecraft-survival,
-      # minecraft-survival2: cut over to kopiur, see kopiur/resourceset-restores.yaml
+      # All other apps: cut over to kopiur, see kopiur/resourceset-restores.yaml.
+      # plex is the only one still here (in active use, cutover deferred).
 
       - app: plex
         runAsUser: "1000"
         capacity: 35Gi
         cacheCapacity: 20Gi
         schedule: "30 * * * *"
-
-      # shelfmark: cut over to kopiur (pilot), see kopiur/resourceset-restores.yaml
-      - app: sonarr
-        capacity: 2Gi
-        schedule: "30 * * * *"
-
-      - app: tautulli
-
-      - app: unifi
-        pvcSuffix: "data"
-        runAsUser: "999"
-        capacity: 2Gi
-        schedule: "30 * * * *"
-
-      - app: zwave2mqtt
-        schedule: "15 * * * *"

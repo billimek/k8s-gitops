@@ -50,7 +50,7 @@ spec:
       labels:
         kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
       annotations:
-        fluxcd.controlplane.io/reconcile: << if or (eq $app.app "shelfmark") (eq $app.app "audiobookshelf") (eq $app.app "continuwuity") (eq $app.app "frigate") (eq $app.app "gatus") (eq $app.app "home-assistant") (eq $app.app "seerr") (eq $app.app "node-red") (eq $app.app "prowlarr") (eq $app.app "qbittorrent") (eq $app.app "qui") (eq $app.app "radarr") (eq $app.app "recyclarr") (eq $app.app "sabnzbd") (eq $app.app "kei") (eq $app.app "mousetrap") (eq $app.app "minecraft-creative") (eq $app.app "minecraft-lobby") (eq $app.app "minecraft-survival") (eq $app.app "minecraft-survival2") >>enabled<< else >>disabled<< end >>
+        fluxcd.controlplane.io/reconcile: << if eq $app.app "plex" >>disabled<< else >>enabled<< end >>
     spec:
       source:
         fromPolicy:
@@ -88,7 +88,7 @@ spec:
         kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
       annotations:
         fluxcd.controlplane.io/prune: disabled
-        fluxcd.controlplane.io/reconcile: << if or (eq $app.app "shelfmark") (eq $app.app "audiobookshelf") (eq $app.app "continuwuity") (eq $app.app "frigate") (eq $app.app "gatus") (eq $app.app "home-assistant") (eq $app.app "seerr") (eq $app.app "node-red") (eq $app.app "prowlarr") (eq $app.app "qbittorrent") (eq $app.app "qui") (eq $app.app "radarr") (eq $app.app "recyclarr") (eq $app.app "sabnzbd") (eq $app.app "kei") (eq $app.app "mousetrap") (eq $app.app "minecraft-creative") (eq $app.app "minecraft-lobby") (eq $app.app "minecraft-survival") (eq $app.app "minecraft-survival2") >>enabled<< else >>disabled<< end >>
+        fluxcd.controlplane.io/reconcile: << if eq $app.app "plex" >>disabled<< else >>enabled<< end >>
     spec:
       accessModes:
         - ReadWriteOnce
