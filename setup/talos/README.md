@@ -1,5 +1,14 @@
 # talos cluster setup
 
+## toolchain
+
+- `talhelper` and `talosctl` are not pinned in this repo; they come from the ambient
+  nix-darwin config. Talos v1.14 machine config (multi-document kinds replacing most of
+  `v1alpha1`) requires a talhelper release with `talos/pkg/machinery` bumped to v1.14.x
+  before `talhelper genconfig`/`validate` can target it - check `talhelper version` against
+  https://budimanjojo.github.io/talhelper/latest/reference/supported-version/ before
+  attempting the v1.14 migration.
+
 ## nodes
 
 ### k8s-cp
@@ -7,7 +16,7 @@
 This is a control plane node
 
 - MAC: `00:1e:06:45:0b:cd`
-- IP: 10.0.7.54
+- IP: 10.0.7.49
 - CPU: Intel Celeron J4105 (Gemini Lake, 4 cores, 4 threads)
 - RAM: 32GB
 - Disk: host - 500GB - `/dev/nvme0n1`
@@ -16,6 +25,10 @@ This is a control plane node
 ### k8s-0
 
 2025-01-02: retired this node as it was replaced by k8s-cp
+
+### k8s-f
+
+retired; removed from the cluster
 
 ### k8s-a
 
@@ -107,17 +120,6 @@ This is a worker node, bare-metal
 - Disk: SSD for ceph = 2TB - `/dev/sda` - **note this is `/dev/sda`** -
   (`/dev/disk/by-id/wwn-0x5002538c000e0a55`)
 - GPU: AMD Radeon Vega 8 Graphics (integrated)
-
-### k8s-f
-
-This is a worker node, bare-metal
-
-- MAC: `68:1d:ef:34:d8:1a`
-- IP: 10.0.7.56
-- CPU: Intel N100 (Alder Lake-N, 4 cores, 4 threads)
-- RAM: 16GB
-- Disk: host - 1TB - `/dev/nvme0n1`
-- GPU: Intel UHD Graphics (Gen 12 Xe, 24 EUs, QuickSync Gen 12 with AV1 encode/decode)
 
 ### k8s-g
 

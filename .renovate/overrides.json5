@@ -10,14 +10,16 @@
     {
       description: "Talos - 3-day cooldown before raising upgrade PRs",
       matchDatasources: ["docker", "github-releases"],
-      matchPackageNames: ["ghcr.io/siderolabs/installer", "ghcr.io/siderolabs/talosctl", "siderolabs/talos", "/factory\\.talos\\.dev/"],
+      matchPackageNames: ["ghcr.io/siderolabs/talos", "ghcr.io/siderolabs/talosctl", "siderolabs/talos", "/factory\\.talos\\.dev/"],
       minimumReleaseAge: "3 days",
     },
     {
+      // Talos v1.14 stops publishing ghcr.io/siderolabs/installer; images come from
+      // Image Factory only, tagged against the ghcr.io/siderolabs/talos release stream.
       description: "Override Talos Installer Package Name",
       matchDatasources: ["docker"],
       matchPackageNames: ["/factory\\.talos\\.dev/"],
-      overridePackageName: "ghcr.io/siderolabs/installer",
+      overridePackageName: "ghcr.io/siderolabs/talos",
     },
     {
       description: "Victoria Logs - 3-day cooldown before raising upgrade PRs",
