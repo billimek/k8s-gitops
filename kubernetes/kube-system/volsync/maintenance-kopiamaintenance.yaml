@@ -29,8 +29,8 @@ spec:
     readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
-  cacheCapacity: 10Gi
-  metadataCacheSizeLimitMB: 5120  # explicit; volsync default (70% of capacity) fills the PVC to ~90%
+  cacheCapacity: 20Gi
+  metadataCacheSizeLimitMB: 5120  # these two bound contents/metadata only; index-blobs is unbounded and grows with repo size
   contentCacheSizeLimitMB: 2048
   cacheAccessModes: ["ReadWriteOnce"]
   cacheStorageClassName: ceph-block
