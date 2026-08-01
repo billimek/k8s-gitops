@@ -14,7 +14,7 @@ tasks:
     vars:
       NS: '{{.NS | default "default"}}'
     cmds:
-      - kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/snapshot-policy={{.APP}} --sort-by=.status.timing.startTime
+      - kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/config={{.APP}} --sort-by=.status.timing.startTime
 
   snapshot:
     desc: Trigger an immediate snapshot for an app [NS=default] [APP=required]
@@ -40,8 +40,8 @@ tasks:
         EOF
       - |-
         {{ if eq "true" .WAIT }}
-        SNAP=$(kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/snapshot-policy={{.APP}} --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1:].metadata.name}')
-        until [ -n "$SNAP" ]; do sleep 2; SNAP=$(kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/snapshot-policy={{.APP}} --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1:].metadata.name}'); done
+        SNAP=$(kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/config={{.APP}} --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1:].metadata.name}')
+        until [ -n "$SNAP" ]; do sleep 2; SNAP=$(kubectl --namespace {{.NS}} get snapshots -l kopiur.home-operations.com/config={{.APP}} --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1:].metadata.name}'); done
         echo "Waiting for snapshot $SNAP to complete..."
         kubectl --namespace {{.NS}} wait snapshot/$SNAP --for=jsonpath='.status.phase'=Succeeded --timeout=120m
         {{ end }}
