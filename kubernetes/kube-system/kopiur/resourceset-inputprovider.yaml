@@ -73,6 +73,7 @@ spec:
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 8Gi
+        cacheCapacity: 10Gi
 
       - app: minecraft-survival2
         pvcSuffix: "datadir"
