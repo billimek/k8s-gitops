@@ -87,7 +87,7 @@ Native Kubernetes [HorizontalPodAutoscalers](https://kubernetes.io/docs/tasks/ru
 
 # kopiur
 
-[kopiur](https://github.com/home-operations/kopiur) is a Kopia-native Kubernetes backup operator. It drives scheduled PVC backups (`SnapshotPolicy`/`SnapshotSchedule`) and bootstrap restores (`Restore`) for every application via a `ClusterRepository` pointed at the NFS-backed Kopia repository, using the same flat-dir, ResourceSet-driven pattern previously used by `volsync`.
+[kopiur](https://github.com/home-operations/kopiur) is a Kopia-native Kubernetes backup operator. It drives scheduled PVC backups (`SnapshotPolicy`/`SnapshotSchedule`) and bootstrap restores (`Restore`) for every application via a `ClusterRepository` pointed at the NFS-backed Kopia repository, using the same flat-dir, ResourceSet-driven pattern used throughout this repo.
 
 * [kopiur/](kopiur/)
 

@@ -15,7 +15,7 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Snapshot
       expr: |-
-        status.phase !in ['Pending', 'Running']
+        status.phase != 'Pending' && status.phase != 'Running'
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       expr: |-

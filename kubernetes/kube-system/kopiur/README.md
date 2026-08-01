@@ -2,12 +2,10 @@
 
 Automated backup and restore for application PVCs using [kopiur](https://kopiur.home-operations.com),
 a Kopia-native Kubernetes backup operator. Managed entirely through Flux Operator
-ResourceSets, mirroring the pattern previously used for VolSync.
+ResourceSets.
 
-Kopiur was adopted onto the **existing** Kopia repository at
-`nas.home:/mnt/ssdtank/kopia` (previously written by the
-[volsync-perfectra1n](https://github.com/perfectra1n/volsync) fork's Kopia mover).
-The `ClusterRepository` carries no `create` block and pins each app's snapshot
+Kopiur was adopted onto an **existing** Kopia repository at
+`nas.home:/mnt/ssdtank/kopia`. The `ClusterRepository` carries no `create` block and pins each app's snapshot
 identity to the fork's recorded `<app>@<namespace>:/data`, so kopiur continued the
 existing snapshot history in place rather than starting a new, empty repository.
 

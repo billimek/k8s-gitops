@@ -14,9 +14,8 @@ spec:
         nfs:
           server: nas.home
           path: /mnt/ssdtank/kopia
-  # No `create` block: this repository already exists (written by the retired
-  # volsync-perfectra1n fork). Adopt it in place; never risk initializing a
-  # second, empty repository at the same path.
+  # No `create` block: this repository already exists. Adopt it in place;
+  # never risk initializing a second, empty repository at the same path.
   encryption:
     passwordSecretRef:
       name: kopiur-nas-secret

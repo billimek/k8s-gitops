@@ -1,7 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesetinputproviders.yaml
 # Consolidated ResourceSetInputProvider for all kopiur backup/restore configurations.
-# Ported 1:1 from the retired volsync-apps provider; same field semantics.
 # Fields with defaults (can be omitted if value matches):
 #   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
 #   - runAsUser: "1001"
