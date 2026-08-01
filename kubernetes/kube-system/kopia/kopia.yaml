@@ -31,9 +31,9 @@ spec:
                   "path": "/repository"
                 }
               },
-              "hostname": "volsync",
-              "username": "volsync",
-              "description": "volsync",
+              "hostname": "kopia-ui",
+              "username": "kopia-ui",
+              "description": "kopia-ui",
               "enableActions": false
             }
 

@@ -24,11 +24,6 @@ releases:
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 2.8.0
 
-  - name: volsync
-    namespace: kube-system
-    chart: oci://ghcr.io/home-operations/charts-mirror/volsync-perfectra1n
-    version: 0.18.5
-
   - name: kopiur
     namespace: kube-system
     chart: oci://ghcr.io/home-operations/charts/kopiur

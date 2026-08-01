@@ -111,7 +111,7 @@ Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to
 
 # snapshot-controller
 
-[snapshot-controller](https://github.com/kubernetes-csi/external-snapshotter): Sidecar container that watches Kubernetes Snapshot CRD objects and triggers CreateSnapshot/DeleteSnapshot against a CSI endpoint.  Used in conjunction with volsync.
+[snapshot-controller](https://github.com/kubernetes-csi/external-snapshotter): Sidecar container that watches Kubernetes Snapshot CRD objects and triggers CreateSnapshot/DeleteSnapshot against a CSI endpoint. Used in conjunction with kopiur.
 
 * [snapshot-controller/snapshot-controller.yaml](snapshot-controller/snapshot-controller.yaml)
 
@@ -126,9 +126,3 @@ Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to
 [Put things in kubernets on your tailnet!](https://tailscale.com/kb/1236/kubernetes-operator)
 
 * [tailscale/tailscale-operator.yaml](tailscale/tailscale-operator.yaml)
-
-# volsync
-
-[volsync](https://github.com/backube/volsync): Asynchronous data replication for Kubernetes volumes. PVC backups now handled by `kopiur` (above); retained temporarily to hold the PVCs it created pending removal.
-
-* [volsync/](volsync/)

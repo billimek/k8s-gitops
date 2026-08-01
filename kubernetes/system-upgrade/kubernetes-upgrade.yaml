@@ -10,10 +10,10 @@ spec:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
     version: v1.36.3
   healthChecks:
-    - apiVersion: volsync.backube/v1alpha1
-      kind: ReplicationSource
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Snapshot
       expr: |-
-        status.conditions.filter(c, c.type == "Synchronizing").all(c, c.status == "False")
+        status.phase !in ['Pending', 'Running']
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       expr: |-

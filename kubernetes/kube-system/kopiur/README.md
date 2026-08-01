@@ -95,7 +95,7 @@ series; the PVC is created empty (`onMissingSnapshot: Continue`) until then.
 ## Resizing a PVC
 
 Kubernetes only supports PVC **expansion**, not shrinking. To shrink a PVC, use
-the same backup/delete/restore workflow documented previously for VolSync:
+the same backup/delete/restore workflow:
 
 1. Suspend the app and scale it to zero (pause any KEDA `ScaledObject` first).
 2. `task kopiur:snapshot APP=<app>` with the app stopped, for a consistent backup.

@@ -21,7 +21,6 @@ spec:
     - "waiting.*socket"
     - "snapshot-controller configured"
     - "snapshot-validation-webhook configured"
-    - "volsync configured"
     - "Health check passed in"
     - "Dependencies do not meet ready condition, retrying in"
     - "read: connection timed out"

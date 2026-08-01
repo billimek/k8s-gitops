@@ -12,5 +12,5 @@ This handles automated upgrades of the Talos OS and Kubernetes cluster using [tu
 
 Both upgrade resources include CEL-based health checks that verify:
 
-1. **VolSync ReplicationSource** - All sync jobs must have `Synchronizing=False` to prevent upgrades during active PVC backups
+1. **kopiur Snapshot** - No backup may be `Pending`/`Running` to prevent upgrades during active PVC backups
 2. **CephCluster** - Must report `HEALTH_OK` to prevent upgrades during degraded storage

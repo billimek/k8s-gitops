@@ -63,10 +63,9 @@ spec:
           storageClassName: ceph-block
           mode: Ephemeral
     ---
-    # PVC with dataSourceRef for automatic bootstrap restore.
-    # Existing PVCs are owned by the volsync-pvcs ResourceSet during the
-    # migration; this template never converges on them (dataSourceRef is
-    # immutable) and only ever creates a PVC on a fresh cluster/namespace.
+    # PVC with dataSourceRef for automatic bootstrap restore. Only ever
+    # creates the PVC on a fresh cluster/namespace (dataSourceRef is
+    # immutable, so this template never converges on an already-bound one).
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
