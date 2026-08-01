@@ -46,6 +46,18 @@ spec:
   parameters:
     epoch:
       minDuration: 6h
+  # The fork's maintenance mover needed a 20Gi cache to keep up with this
+  # repo's index-blob volume (grown from 10Gi same-day as this migration was
+  # rebased); kopiur's own auto-projected Maintenance inherits moverDefaults
+  # below, whose 1Gi is sized for per-app snapshot movers, not maintenance.
+  # Override it explicitly so maintenance doesn't stall on cache pressure.
+  maintenance:
+    mover:
+      cache:
+        capacity: 20Gi
+        storageClassName: ceph-block
+        metadataCacheSizeMb: 5120
+        contentCacheSizeMb: 2048
   moverDefaults:
     securityContext:
       runAsUser: 1001
