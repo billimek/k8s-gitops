@@ -1,17 +1,8 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesetinputproviders.yaml
-# Consolidated ResourceSetInputProvider for all VolSync backup/restore configurations
-# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
-# All 25 apps are defined in a single nested array for easier management
-# Fields with defaults (can be omitted if value matches):
-#   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
-#   - runAsUser: "1001"
-#   - capacity: "1Gi"
-#   - schedule: "0 * * * *"
-# Backup schedule groups (to reduce concurrent NFS/Ceph pressure):
-#   Group A (:00) - fast apps (~1 min): audiobookshelf, frigate, gatus, minecraft-lobby, qbittorrent, recyclarr, seerr, tautulli
-#   Group B (:15) - medium apps (~1.5 min): continuwuity, home-assistant, mousetrap, node-red, prowlarr, qui, sabnzbd, shelfmark, zwave2mqtt
-#   Group C (:30) - heavy apps (Plex ~8.5 min): minecraft-creative, minecraft-survival, minecraft-survival2, plex, radarr, sonarr, unifi
+# Referenced by the volsync-pvcs ResourceSet in kube-system namespace, kept
+# alive only to hold onto plex's live PVC during the kopiur migration -- see
+# kopiur/resourceset-restores.yaml for every other app.
 # To add a new app: add entry to the apps array below
 # To remove an app: delete entry from the apps array below
 apiVersion: fluxcd.controlplane.io/v1

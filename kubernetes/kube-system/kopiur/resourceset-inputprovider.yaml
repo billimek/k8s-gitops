@@ -64,11 +64,6 @@ spec:
         runAsUser: "1000"
         capacity: 10Gi
 
-      - app: minecraft-lobby
-        pvcSuffix: "datadir"
-        runAsUser: "1000"
-        capacity: 3Gi
-
       - app: minecraft-survival
         pvcSuffix: "datadir"
         runAsUser: "1000"
