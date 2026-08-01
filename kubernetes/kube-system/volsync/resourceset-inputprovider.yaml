@@ -80,9 +80,7 @@ spec:
       - app: sabnzbd
         schedule: "15 * * * *"
 
-      - app: shelfmark
-        schedule: "15 * * * *"
-
+      # shelfmark: cut over to kopiur (pilot), see kopiur/resourceset-restores.yaml
       - app: sonarr
         capacity: 2Gi
         schedule: "30 * * * *"
