@@ -54,6 +54,16 @@ spec:
         keepDaily: 14
         keepWeekly: 8
         keepMonthly: 6
+      <<- if or (eq $app.app "minecraft-creative") (eq $app.app "minecraft-survival") (eq $app.app "minecraft-survival2") >>
+      # These accumulate years of manually-archived old worlds (saved/<date>,
+      # world-<date>) with ownership predating the current mover uid. A
+      # handful of unreadable legacy files would otherwise fail the entire
+      # backup instead of just skipping them; the live/current world is
+      # unaffected either way.
+      errorHandling:
+        ignoreFileErrors: true
+        ignoreDirErrors: true
+      <<- end >>
       # Proves backups are actually restorable, not just that maintenance
       # succeeded. Daily, hashed to a stable per-app minute within hour 3.
       verification:
