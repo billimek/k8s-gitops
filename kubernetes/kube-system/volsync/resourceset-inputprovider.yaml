@@ -1,10 +1,9 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/controlplaneio-fluxcd/flux-operator/main/config/crd/bases/fluxcd.controlplane.io_resourcesetinputproviders.yaml
-# Referenced by the volsync-pvcs ResourceSet in kube-system namespace, kept
-# alive only to hold onto plex's live PVC during the kopiur migration -- see
-# kopiur/resourceset-restores.yaml for every other app.
+# Empty: every app has cut over to kopiur, see kopiur/resourceset-restores.yaml.
+# Nothing left needs volsync-pvcs -- kubernetes/kube-system/volsync/ and
+# .taskfiles/volsync/ are safe to remove entirely in a follow-up.
 # To add a new app: add entry to the apps array below
-# To remove an app: delete entry from the apps array below
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSetInputProvider
 metadata:
@@ -20,12 +19,4 @@ spec:
       capacity: "1Gi"
       schedule: "0 * * * *"
       pvcSuffix: "config"
-    apps:
-      # All other apps: cut over to kopiur, see kopiur/resourceset-restores.yaml.
-      # plex is the only one still here (in active use, cutover deferred).
-
-      - app: plex
-        runAsUser: "1000"
-        capacity: 35Gi
-        cacheCapacity: 20Gi
-        schedule: "30 * * * *"
+    apps: []
