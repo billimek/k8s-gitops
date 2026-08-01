@@ -10,13 +10,14 @@
 #   - schedule: "H * * * *"
 #
 # Frequency: hourly by default, using Jenkins-style "H" cron substitution —
-# kopiur hashes a stable, deterministic per-object minute (and, with H/N,
-# hour-step offset) so load self-distributes across apps with no manual
-# minute-offset bookkeeping (matches the pattern used by every kopiur
-# reference implementation). 13 low-churn apps whose config rarely changes
+# kopiur only hashes a bare "H" token (it does NOT support Jenkins' "H/N"
+# step syntax; the admission webhook rejects it), so the per-app hashed slot
+# is minute-only here. The hour field uses plain cron step syntax ("*/4")
+# for the low-churn apps, which still needs no manual offset bookkeeping
+# since the minute is hashed. 13 low-churn apps whose config rarely changes
 # hour to hour (audiobookshelf, frigate, gatus, qbittorrent, recyclarr, seerr,
 # tautulli, prowlarr, sabnzbd, zwave2mqtt, radarr, sonarr, unifi) are trimmed
-# to every 4h ("H H/4 * * *") — this cuts both Snapshot CR volume and the
+# to every 4h ("H */4 * * *") — this cuts both Snapshot CR volume and the
 # rate of Kopia index-blob churn (see clusterrepository.yaml's
 # parameters.epoch.minDuration note) for apps that don't need hourly
 # recovery granularity.
@@ -38,19 +39,19 @@ spec:
       pvcSuffix: "config"
     apps:
       - app: audiobookshelf
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: continuwuity
         capacity: 5Gi
 
       - app: frigate
         runAsUser: "1000"
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: gatus
         namespace: "monitoring"
         runAsUser: "1000"
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: home-assistant
         runAsUser: "1000"
@@ -93,41 +94,41 @@ spec:
         cacheCapacity: 20Gi
 
       - app: prowlarr
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: qbittorrent
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: qui
 
       - app: radarr
         capacity: 3Gi
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: recyclarr
         capacity: 5Gi
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: sabnzbd
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: seerr
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: shelfmark
 
       - app: sonarr
         capacity: 2Gi
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: tautulli
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: unifi
         pvcSuffix: "data"
         runAsUser: "999"
         capacity: 2Gi
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"
 
       - app: zwave2mqtt
-        schedule: "H H/4 * * *"
+        schedule: "H */4 * * *"

@@ -29,6 +29,11 @@ releases:
     chart: oci://ghcr.io/home-operations/charts-mirror/volsync-perfectra1n
     version: 0.18.5
 
+  - name: kopiur
+    namespace: kube-system
+    chart: oci://ghcr.io/home-operations/charts/kopiur
+    version: 0.9.1
+
   - name: rook-ceph
     namespace: rook-ceph
     chart: oci://ghcr.io/rook/rook-ceph

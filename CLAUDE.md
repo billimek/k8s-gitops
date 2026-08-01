@@ -172,15 +172,17 @@ apps:
     namespace: "default"    # omit if default
     runAsUser: "1001"       # omit to use default
     capacity: 1Gi           # omit to use default (1Gi)
-    schedule: "H H/4 * * *" # omit to use default (H * * * *, hourly)
+    schedule: "H */4 * * *" # omit to use default (H * * * *, hourly)
     pvcSuffix: "config"     # omit to use default (config)
     cacheCapacity: 20Gi     # omit unless app needs large Kopia cache (e.g. plex)
 ```
 
 Schedules use kopiur's Jenkins-style `H` cron substitution (`H * * * *`) —
 each app hashes to a stable, deterministic minute so load self-distributes
-with no manual bucket bookkeeping. Trim low-churn apps to `H H/4 * * *`
-(every 4h) instead of hourly.
+with no manual bucket bookkeeping. kopiur only hashes a bare `H` token (no
+`H/N` step syntax — the admission webhook rejects it), so trim low-churn
+apps with plain cron step syntax in the hour field, `H */4 * * *` (every 4h),
+instead of hourly.
 
 NFS repository (`nas.home:/mnt/ssdtank/kopia`) is configured on the single
 `ClusterRepository "nas"` in `clusterrepository.yaml` — apps reference it by

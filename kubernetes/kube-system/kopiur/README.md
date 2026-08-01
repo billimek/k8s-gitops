@@ -24,8 +24,10 @@ resourceset-inputprovider.yaml (apps defined, kopiur-apps)
 - Hourly-by-default backups to `nas.home:/mnt/ssdtank/kopia`, using kopiur's
   Jenkins-style `H` cron substitution (`H * * * *`) so each app's fire time
   is a stable, deterministic hash — no manual minute-offset bookkeeping, no
-  separate jitter needed. 13 low-churn apps are trimmed to every 4h
-  (`H H/4 * * *`; see the frequency note in `resourceset-inputprovider.yaml`)
+  separate jitter needed. Only a bare `H` token is hashed (kopiur's admission
+  webhook rejects Jenkins' `H/N` step syntax), so the hour field uses plain
+  cron steps. 13 low-churn apps are trimmed to every 4h
+  (`H */4 * * *`; see the frequency note in `resourceset-inputprovider.yaml`)
   to keep Snapshot CR volume and Kopia index-blob churn down
 - Automatic cluster bootstrap via PVC `dataSourceRef`
 - Retention: 24 hourly, 14 daily, 8 weekly, 6 monthly snapshots (GFS)
@@ -56,7 +58,7 @@ resourceset-inputprovider.yaml (apps defined, kopiur-apps)
    - app: my-new-app
      capacity: 5Gi
      runAsUser: "1001"
-     schedule: "H H/4 * * *"  # omit entirely to inherit the hourly default
+     schedule: "H */4 * * *"  # omit entirely to inherit the hourly default
    ```
 
 2. **Reference the PVC in the app's HelmRelease**:
