@@ -64,6 +64,16 @@ spec:
       # kube-system, restores run in the app's own namespace.
       credentialProjection:
         enabled: true
+      # Matches the SnapshotPolicy's mover.cache.capacity override -- without
+      # this, every Restore silently falls back to the repository's 1Gi
+      # moverDefaults.cache regardless of the app's cacheCapacity input,
+      # which is too small for large/many-small-file trees (minecraft world
+      # saves) and fails restore with "no space left on device".
+      mover:
+        cache:
+          capacity: << get $app "cacheCapacity" | default inputs.defaults.cacheCapacity >>
+          storageClassName: ceph-block
+          mode: Ephemeral
     ---
     # PVC with dataSourceRef for automatic bootstrap restore.
     # Existing PVCs are owned by the volsync-pvcs ResourceSet during the
