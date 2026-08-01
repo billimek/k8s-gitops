@@ -132,4 +132,5 @@ spec:
         schedule: "H */4 * * *"
 
       - app: zwave2mqtt
+        runAsUser: "1000"
         schedule: "H */4 * * *"
