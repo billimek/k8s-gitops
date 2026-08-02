@@ -79,6 +79,12 @@ spec:
           - path: /etc/ser2net/ser2net.yaml
             subPath: ser2net.yaml
             readOnly: true
+      var-lock:
+        # ser2net writes a device lock file here; without a writable mount it fails to
+        # lock /dev/ttyUSB0 under readOnlyRootFilesystem and resets client connections
+        type: emptyDir
+        globalMounts:
+          - path: /var/lock
 
     service:
       app:
