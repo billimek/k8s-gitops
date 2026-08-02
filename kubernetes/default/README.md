@@ -107,11 +107,11 @@ recyclarr is a tool to help manage and maintain your sonarr/radarr library
 
 * [sabnzbd.yaml](nzbget/sabnzbd.yaml)
 
-# ser2sock
+# ser2net
 
-[ser2sock](https://github.com/nutechsoftware/ser2sock) is a serial to socket redirector.  This is used to bridge a home alarm panel to home-assistant for home automation.
+[ser2net](https://github.com/cminyard/ser2net) is a serial to socket redirector.  This is used to bridge a home alarm panel (AlarmDecoder) to home-assistant for home automation. Also exposes a `ser2sock` Service alias since Home Assistant's AlarmDecoder integration is configured with that hostname.
 
-* [ser2sock.yaml](ser2sock/ser2sock.yaml)
+* [ser2net.yaml](ser2net/ser2net.yaml)
 
 # shelfmark
 

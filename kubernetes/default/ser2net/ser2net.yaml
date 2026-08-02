@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ser2sock
+  name: ser2net
   namespace: default
 spec:
   chartRef:
@@ -26,19 +26,27 @@ spec:
                     values:
                       - "true"
 
+    configMaps:
+      config:
+        data:
+          # bridges the NuTech AlarmDecoder (FTDI FT230X, /dev/ttyUSB0) to Home Assistant
+          # over raw TCP; max-connections mirrors ser2sock's multi-client fan-out
+          ser2net.yaml: |
+            connection: &alarmdecoder
+              accepter: tcp,10000
+              connector: serialdev,/dev/ttyUSB0,115200n81,local
+              options:
+                max-connections: 4
+
     controllers:
-      main:
+      ser2net:
         containers:
-          main:
+          app:
             image:
-              repository: tenstartups/ser2sock
-              tag: latest@sha256:379d9338c720da30b63dc4cf2ecea07eb89dac7d62d5c79047294fffe97ae559
-              pullPolicy: Always
+              repository: ghcr.io/jippi/docker-ser2net
+              tag: 4.6.7@sha256:a1455b7523058ad1a13550bf159d590cf284bb7b8561d6c5d9df3f1d76b90cec
             env:
-              TZ: "America/New York"
-              LISTENER_PORT: 10000
-              BAUD_RATE: 115200
-              SERIAL_DEVICE: "/dev/ttyUSB0"
+              TZ: America/New_York
             probes:
               liveness: &probes
                 enabled: true
@@ -47,7 +55,7 @@ spec:
                   tcpSocket:
                     port: 10000
                   initialDelaySeconds: 10
-                  periodSeconds: 30
+                  periodSeconds: 60
                   timeoutSeconds: 3
                   failureThreshold: 3
               readiness: *probes
@@ -60,13 +68,33 @@ spec:
                 generic-device-plugin/alarmdecoder: 1
             securityContext:
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
 
+    persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /etc/ser2net/ser2net.yaml
+            subPath: ser2net.yaml
+            readOnly: true
+
     service:
-      main:
-        controller: main
+      app:
+        forceRename: ser2net
+        controller: ser2net
+        primary: true
         ports:
           server:
             port: 10000
             primary: true
+            protocol: TCP
+      compat:
+        # kept so Home Assistant's AlarmDecoder integration (host ser2sock:10000) needs no change
+        forceRename: ser2sock
+        controller: ser2net
+        ports:
+          server:
+            port: 10000
             protocol: TCP
