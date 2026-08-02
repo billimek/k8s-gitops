@@ -23,7 +23,12 @@ spec:
       namespace: kube-system
       ready: true
 
-  wait: true
+  # Passive-populator Restores stay AwaitingClaim until a PVC claims them,
+  # and kopiur doesn't refresh observedGeneration on a terminal Restore after
+  # spec is re-applied -- kstatus reads that as permanently InProgress, so
+  # wait: true here can never settle (kopiur-restores errored every
+  # reconcile since the migration). kopiur-snapshots still waits fine.
+  wait: false
 
   inputsFrom:
     - name: kopiur-apps

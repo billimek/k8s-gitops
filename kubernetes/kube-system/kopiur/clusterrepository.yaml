@@ -72,5 +72,8 @@ spec:
     cache:
       capacity: 1Gi
       storageClassName: ceph-block
-      mode: Ephemeral
+      # Persistent so hourly movers reuse a warm kopia index cache instead
+      # of re-pulling it from NFS every run; also promotes the maintenance
+      # mover's cache (spec.maintenance.mover.cache sets no mode of its own).
+      mode: Persistent
     ttlSecondsAfterFinished: 300

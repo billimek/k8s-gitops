@@ -74,7 +74,7 @@ spec:
         cache:
           capacity: << get $app "cacheCapacity" | default inputs.defaults.cacheCapacity >>
           storageClassName: ceph-block
-          mode: Ephemeral
+          mode: Persistent
     ---
     # SnapshotSchedule for backup timing
     apiVersion: kopiur.home-operations.com/v1alpha1
