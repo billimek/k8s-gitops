@@ -68,14 +68,28 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
           title="$PR_TITLE"
-          # Deep (Sonnet, 40 turns): group PRs, major bumps, or high-blast-radius components
-          # Full (Sonnet, 25 turns): all other minor/feat bumps and chart upgrades
-          # Light (Haiku, 25 turns): routine fix(container) patch bumps not matching deep
-          if echo "$title" | grep -qiE 'group|envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets'; then
+          is_patch=false
+          [[ "$title" == fix\(container\):* ]] && is_patch=true
+          is_blast_radius=false
+          echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets' && is_blast_radius=true
+          is_breaking=false
+          echo "$title" | grep -qE 'group|!:' && is_breaking=true
+
+          # Deep (Sonnet, 40 turns): group PRs, breaking-change (!) bumps, or a
+          #   high-blast-radius component NOT limited to a fix(container): patch bump
+          # Full (Sonnet, 25 turns): all other minor/feat bumps and chart upgrades,
+          #   plus fix(container): patch bumps of high-blast-radius components
+          # Light (Haiku, 25 turns): routine fix(container) patch bumps not matching deep/full
+          if [[ "$is_breaking" == true ]] || { [[ "$is_blast_radius" == true ]] && [[ "$is_patch" == false ]]; }; then
             echo "model=sonnet" >> "$GITHUB_OUTPUT"
             echo "depth=deep" >> "$GITHUB_OUTPUT"
             echo "max_turns=40" >> "$GITHUB_OUTPUT"
-          elif [[ "$title" == fix\(container\):* ]]; then
+          elif [[ "$is_blast_radius" == true ]]; then
+            # fix(container): patch bump of a high-blast-radius component
+            echo "model=sonnet" >> "$GITHUB_OUTPUT"
+            echo "depth=full" >> "$GITHUB_OUTPUT"
+            echo "max_turns=25" >> "$GITHUB_OUTPUT"
+          elif [[ "$is_patch" == true ]]; then
             echo "model=haiku" >> "$GITHUB_OUTPUT"
             echo "depth=light" >> "$GITHUB_OUTPUT"
             echo "max_turns=25" >> "$GITHUB_OUTPUT"
@@ -98,6 +112,21 @@ jobs:
             printf '\n---\n## Diff\n'
             gh pr diff "$PR"
           } > pr-context.md
+
+      - name: Dismiss stale claude reviews
+        if: steps.gate.outputs.gated == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          ids=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
+            --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED")) | .id][]')
+          for id in $ids; do
+            gh api -X PUT "repos/$REPO/pulls/$PR/reviews/$id/dismissals" \
+              -f message="Superseded by updated review"
+          done
 
       - id: claude
         if: steps.gate.outputs.gated == 'true'
@@ -148,6 +177,10 @@ jobs:
             turn rather than one at a time. For example, `gh pr view`, `gh api .../reviews`, and
             `git log --grep` can all be issued in the same turn.
 
+            Fetching release notes for several intermediate versions is the common case:
+            `gh api "repos/org/repo/releases/tags/vX"` for each version between old and new
+            belongs in **one** turn as N parallel Bash calls, not N sequential turns.
+
             ## Shell & Tool Conventions
 
             **What the safety gate actually blocks** — only *compound* Bash commands are denied:
@@ -176,11 +209,22 @@ jobs:
               allowlist prefix match and is denied.
             - **Read upstream issues with `gh issue view <n> --repo <org>/<repo>`** or
               `gh api repos/<org>/<repo>/issues/<n> --jq`. Do not use `gh issue list`.
+            - **No shell loops or variable expansion.** `for v in ...; do ... done` is denied
+              ("simple_expansion"). To fetch N versions, issue N separate Bash calls in a single
+              parallel turn instead (see Tool Use Efficiency above).
+            - **`Grep`/`Glob`/`Read` are tools, never pipeline stages.** They operate on repo
+              files only — `gh api ... | base64 -d | Grep -n "tag"` is denied as a compound
+              command. To filter output fetched from a URL or API, use `--jq` or `head` on the
+              fetch command itself.
 
             **Anti-thrash rule:** If a search (`Grep`, `Glob`, or `gh api`) returns empty, that
             means the thing is absent — stop searching. Do **not** re-run the same query with
             permuted patterns, synonyms, or similar terms. One empty result is a conclusive
-            answer; re-running wastes turns without new information.
+            answer; re-running wastes turns without new information. This applies to upstream
+            release lookups specifically: if `releases/tags/<v>` and `releases` both come back
+            empty, the project does not publish release notes. Do not then try `/tags`, the
+            chart repo, or a permuted tag format — record "no upstream release notes published"
+            and move on.
 
             ## Repo File Discovery
 
@@ -188,6 +232,9 @@ jobs:
             Use the **`Glob` and `Grep` tools** (both allowlisted) to find and read repo files —
             they complete in a single turn with no shell-escaping issues. Shell `find`/`grep -r`
             work too but generate more tool calls and are harder to parallelize cleanly.
+
+            `Read` takes file paths only — reading a directory errors with `EISDIR`. Use
+            `Glob "kubernetes/default/<app>/**"` to enumerate a directory's contents first.
 
             To inspect an upstream chart or source file:
             1. **Check the local tree first** — `Glob "kubernetes/**/<component>*.yaml"` and
@@ -304,19 +351,9 @@ jobs:
             Submit your findings as **exactly one** GitHub PR review. Do not call `gh pr review`
             more than once — if the first submission returns success, stop immediately.
 
-            **Before posting, dismiss any stale claude reviews** (keeps only the current verdict
-            visible and prevents stacking on rebases). Do this in one step before the review post:
-            ```
-            gh api "repos/<owner>/<repo>/pulls/<n>/reviews" --paginate \
-              --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED")) | .id][]'
-            ```
-            For each returned `<review_id>`:
-            ```
-            gh api -X PUT "repos/<owner>/<repo>/pulls/<n>/reviews/<review_id>/dismissals" \
-              -f message="Superseded by updated review"
-            ```
-            If there are no prior reviews (empty list), skip the dismissal loop and proceed
-            directly to posting. Do not dismiss reviews from human users.
+            Any stale `claude[bot]`/`github-actions[bot]` reviews on this PR have already been
+            dismissed by a workflow step before you started — you do not need to check for or
+            dismiss prior reviews yourself.
 
             **STOP immediately after `gh pr review` returns without error. Do NOT call `gh api`,
             `gh pr view`, or any other tool to confirm the review was posted -- the exit code is

@@ -209,10 +209,9 @@ Flag:
 #### D. Reliability and noise
 
 Evidence: `error_during_execution` runs; duplicate or stacked reviews on the same PR (the
-**`Pre-check: skip redundant re-reviews`** section and the **dismiss-stale-reviews block** in the
-**`Submitting the Review`** section are both dedup safeguards -- duplicate reviews indicate one
-or both mis-fired); gated runs that ended without posting any review; **`Publish review status`**
-step toggling fail-closed noise.
+**`Dismiss stale claude reviews`** workflow step, run before the `claude` step, is the dedup
+safeguard -- duplicate reviews indicate it mis-fired or was skipped); gated runs that ended
+without posting any review; **`Publish review status`** step toggling fail-closed noise.
 
 Proposed fix is specific to the failure mode observed.
 
