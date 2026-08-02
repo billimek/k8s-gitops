@@ -35,7 +35,11 @@ spec:
   catalog:
     fallbackNamespace: kube-system
     retain:
-      perIdentity: 100
+      # kopiur caps materialized discovered-Snapshot CRs at 1000 (hardcoded)
+      # and truncates in identity-alphabetical order, so the tail of the app
+      # list (sonarr/tautulli/unifi/zwave2mqtt) never got CRs to adopt from.
+      # Keep ~29 identities x 30 comfortably under that cap.
+      perIdentity: 30
   # The repository currently sits at 4000+ index blobs ("too many index
   # blobs, this may result in degraded performance" in the fork's maintenance
   # logs) because kopia's default 24h epoch can't close fast enough to
