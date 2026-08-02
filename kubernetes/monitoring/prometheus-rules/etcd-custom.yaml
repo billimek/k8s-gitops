@@ -1,0 +1,22 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: etcd-custom-rules
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: etcd
+spec:
+  groups:
+    - name: etcd-custom
+      rules:
+        # Early warning: upstream etcdHighFsyncDurations only fires at 500ms, ~150x baseline
+        - alert: EtcdFsyncDurationDegraded
+          expr: |-
+            histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (le)) > 0.025
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "etcd WAL fsync p99 above 25ms"
+            description: "p99 fsync is {{ $value | humanizeDuration }} (baseline ~3ms). Check disk contention; consider lowering kustomize-controller --concurrent."
