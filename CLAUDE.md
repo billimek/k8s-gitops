@@ -43,12 +43,6 @@ tool that creates, updates, deletes, scales, execs, or pushes requires explicit 
 
 ## Architecture
 
-**Directory Structure**:
-- `/setup/` - Talos config, FluxCD setup, OCI repositories
-- `/kubernetes/{namespace}/{app}/` - Application manifests
-
-**Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
-
 **Patterns**:
 - **Cluster**: Single homelab cluster, 1 control plane + 7 workers (Talos)
 - **Primary**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
@@ -60,122 +54,14 @@ tool that creates, updates, deletes, scales, execs, or pushes requires explicit 
 - **CI**: PRs run `flate` diff/test (`.github/workflows/flate.yaml`); Renovate auto-bumps images per `.renovate/` rules; non-trivial Renovate version bumps are gated by a Claude review (`.github/workflows/renovate-review.yaml`, `claude/renovate-review` status — digest/github-action/grafana-dashboard updates are ungated); use `/review-renovate` to manually review and merge queued PRs and `/tune-renovate-review` to analyze recent CI runs for prompt/tier improvements
 - **Grafana**: Managed by grafana-operator (`kubernetes/monitoring/grafana/`). Dashboards, folders, and datasources are `GrafanaDashboard`/`GrafanaFolder`/`GrafanaDatasource` CRs (`grafana.integreatly.org/v1beta1`). Instance selector label is `dashboards: grafana`. To add a dashboard, create a `GrafanaDashboard` CR next to the relevant app with `instanceSelector: {matchLabels: {dashboards: grafana}}`; add `allowCrossNamespaceImport: true` and a `folderRef` when outside the `monitoring` namespace. grafana.com dashboards use `spec.url`, chart-shipped ConfigMap dashboards use `spec.configMapRef`. Renovate tracks grafana.com revision URLs automatically via `.renovate/grafanaDashboards.json5`.
 
-## Application Template
+## Scaffolding a New App
 
-```yaml
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: &app app-name
-  namespace: target-namespace
-spec:
-  chartRef:
-    kind: OCIRepository
-    name: app-template
-    namespace: flux-system
-  interval: 1h
-  values:
-    defaultPodOptions:
-      securityContext:
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 1001
-        runAsNonRoot: true
-        runAsUser: 1001  # Check image docs; common values: 1001, 1000, 65534
-
-    controllers:
-      app-name:
-        containers:
-          app:
-            image:
-              repository: ghcr.io/org/image
-              tag: 1.0.0@sha256:...  # Always pin SHA
-            resources:
-              requests:
-                cpu: 10m
-                memory: 128Mi
-              limits:
-                memory: 512Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: {drop: ["ALL"]}
-              readOnlyRootFilesystem: true
-
-    persistence:
-      config:
-        existingClaim: app-name-config
-
-    route:
-      app:
-        parentRefs:
-          - name: internal          # LAN/Tailscale only
-            namespace: kube-system
-          # - name: public          # Add for internet-facing apps
-          #   namespace: kube-system
-        hostnames:
-          - "app.eviljungle.com"
-        rules:
-          - matches:
-              - path: {type: PathPrefix, value: /}
-            backendRefs:
-              - name: app-name
-                port: http
-
-    service:
-      app:
-        controller: app-name
-        ports:
-          http:
-            port: 8080
-```
-
-## Non-App-Template HelmReleases
-
-For infrastructure charts (not using app-template), use this schema:
-```yaml
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
-```
-
-## ExternalSecret Template
-
-```yaml
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/external-secrets.io/externalsecret_v1.json
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: app-name-secret
-spec:
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: onepassword-connect
-  target:
-    name: app-name-secret
-    template:
-      engineVersion: v2
-      data:
-        API_KEY: "{{ .api_key }}"
-  dataFrom:
-    - extract:
-        key: app-name
-```
+The HelmRelease, ExternalSecret, and kopiur backup-registration templates (including the
+`kubernetes/kube-system/kopiur/resourceset-inputprovider.yaml` entry format) live in the
+`new-app` skill (`.claude/skills/new-app/SKILL.md`) — invoke it when adding a new app rather
+than reproducing the YAML here.
 
 ## Backup Configuration
-
-Add to `kubernetes/kube-system/kopiur/resourceset-inputprovider.yaml`:
-
-```yaml
-apps:
-  - app: app-name
-    namespace: "default"    # omit if default
-    runAsUser: "1001"       # omit to use default
-    capacity: 1Gi           # omit to use default (1Gi)
-    schedule: "H */4 * * *" # omit to use default (H * * * *, hourly)
-    pvcSuffix: "config"     # omit to use default (config)
-    cacheCapacity: 20Gi     # omit unless app needs large Kopia cache (e.g. plex)
-```
 
 Schedules use kopiur's Jenkins-style `H` cron substitution (`H * * * *`) —
 each app hashes to a stable, deterministic minute so load self-distributes
@@ -220,23 +106,9 @@ persistence:
 
 ## Troubleshooting
 
-**Stuck HelmRelease**: When a HelmRelease exhausts its upgrade retries (e.g. due to image pull failures or timeout), scale the deployment to 0 to unblock it, then force reconciliation:
-```bash
-kubectl scale deployment app-name --replicas=0 -n namespace
-flux reconcile helmrelease app-name -n namespace --with-source
-# Flux will scale it back up automatically on success
-```
+Recovering a stuck HelmRelease, forcing an ExternalSecret resync, or unblocking a Flux
+reconcile: see the `flux-recovery` skill (`.claude/skills/flux-recovery/SKILL.md`).
 
-**Force ExternalSecret resync**: Bypass the secretStore cache when a 1Password value changed but the ExternalSecret hasn't picked it up:
-```bash
-kubectl annotate externalsecret <name> -n <ns> force-sync=$(date +%s) --overwrite
-```
-
-**HelmRelease upgrade recovery**: Before reconciling an upgrade, check for stuck pods from the prior revision and scale the workload to 0 if needed. If a HelmRelease is stuck, prefer `helm rollback` or suspend/resume the HR over retrying reconciliation:
-```bash
-flux suspend helmrelease app-name -n namespace
-flux resume helmrelease app-name -n namespace
-```
 ## Standards
 
 - **Images**: Always pin with SHA256 digest
