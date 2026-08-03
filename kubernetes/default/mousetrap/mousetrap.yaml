@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: docker.io/sirjmann92/mousetrap
-              tag: 2.3.48@sha256:c1cff246badf73e1fcbcd8b9be467488b9b31de762eb3aa796e6acd04d28c6cf
+              tag: 2.3.51@sha256:57cc8727b4b88eb5e4ccdc20b0890944e0b56a53ef16d3f24a3a1a5d43f495b3
             env:
               TZ: America/New_York
               LOGLEVEL: INFO
