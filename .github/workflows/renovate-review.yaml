@@ -61,47 +61,26 @@ jobs:
           echo "gated=$gated"             >> "$GITHUB_OUTPUT"
           echo "author=$PR_AUTHOR labels=$labels is_fork=$IS_FORK -> is_renovate=$is_renovate gated=$gated"
 
-      - name: Select model tier
-        id: model_tier
+      - name: Compute review fingerprint
+        id: fingerprint
         if: steps.gate.outputs.gated == 'true'
         env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-        run: |
-          title="$PR_TITLE"
-          is_patch=false
-          [[ "$title" == fix\(container\):* ]] && is_patch=true
-          is_blast_radius=false
-          echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets' && is_blast_radius=true
-          is_breaking=false
-          echo "$title" | grep -qE 'group|!:' && is_breaking=true
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: bash .github/scripts/review-fingerprint.sh
 
-          # Deep (Sonnet, 40 turns): group PRs, breaking-change (!) bumps, or a
-          #   high-blast-radius component NOT limited to a fix(container): patch bump
-          # Full (Sonnet, 25 turns): all other minor/feat bumps and chart upgrades,
-          #   plus fix(container): patch bumps of high-blast-radius components
-          # Light (Haiku, 25 turns): routine fix(container) patch bumps not matching deep/full
-          if [[ "$is_breaking" == true ]] || { [[ "$is_blast_radius" == true ]] && [[ "$is_patch" == false ]]; }; then
-            echo "model=sonnet" >> "$GITHUB_OUTPUT"
-            echo "depth=deep" >> "$GITHUB_OUTPUT"
-            echo "max_turns=40" >> "$GITHUB_OUTPUT"
-          elif [[ "$is_blast_radius" == true ]]; then
-            # fix(container): patch bump of a high-blast-radius component
-            echo "model=sonnet" >> "$GITHUB_OUTPUT"
-            echo "depth=full" >> "$GITHUB_OUTPUT"
-            echo "max_turns=25" >> "$GITHUB_OUTPUT"
-          elif [[ "$is_patch" == true ]]; then
-            echo "model=haiku" >> "$GITHUB_OUTPUT"
-            echo "depth=light" >> "$GITHUB_OUTPUT"
-            echo "max_turns=25" >> "$GITHUB_OUTPUT"
-          else
-            echo "model=sonnet" >> "$GITHUB_OUTPUT"
-            echo "depth=full" >> "$GITHUB_OUTPUT"
-            echo "max_turns=25" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Select model tier
+        id: model_tier
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          DIFF_FILE: pr.diff
+        run: bash .github/scripts/classify-renovate-pr.sh
 
       - name: Gather PR evidence
         id: evidence
-        if: steps.gate.outputs.gated == 'true'
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}
@@ -110,11 +89,54 @@ jobs:
             gh pr view "$PR" --json title,body,labels \
               --jq '"# PR Context\n\n## Title\n" + .title + "\n\n## Labels: " + ([.labels[].name] | join(", ")) + "\n\n## Body (Renovate release notes)\n" + .body'
             printf '\n---\n## Diff\n'
-            gh pr diff "$PR"
+            cat pr.diff
+            printf '\n---\n'
+            cat "${{ steps.model_tier.outputs.must_check_file }}"
           } > pr-context.md
 
+      - name: Render flate diff
+        id: flate
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light'
+        continue-on-error: true
+        uses: home-operations/flate/action@bf3405a189626478b0aa6ec98dc4d6f7d419df17 # v0.4.12
+        with:
+          cache: true
+
+      - name: Append flate evidence
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light'
+        continue-on-error: true
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: |
+          flate diff all \
+            --allow-missing-secrets \
+            --skip-kinds ValidatingWebhookConfiguration \
+            --skip-kinds MutatingWebhookConfiguration \
+            -o diff > flate.diff 2>/dev/null || true
+
+          {
+            printf '\n---\n## Rendered manifest diff (flate)\n\n'
+            printf 'This is the actual cluster-impact diff after Helm/Kustomize rendering -- treat it as\n'
+            printf 'authoritative over the raw git diff above. An empty section means the bump is a\n'
+            printf 'render-time no-op. A render failure below is a blocker.\n\n'
+            if [ -s flate.diff ]; then
+              LIMIT=40000
+              if [ "$(wc -c < flate.diff)" -gt "$LIMIT" ]; then
+                printf '```diff\n'
+                head -c "$LIMIT" flate.diff
+                printf '\n```\n\n(truncated at %s bytes)\n' "$LIMIT"
+              else
+                printf '```diff\n'
+                cat flate.diff
+                printf '\n```\n'
+              fi
+            else
+              printf '(no rendered manifest changes)\n'
+            fi
+          } >> pr-context.md
+
       - name: Dismiss stale claude reviews
-        if: steps.gate.outputs.gated == 'true'
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -129,7 +151,7 @@ jobs:
           done
 
       - id: claude
-        if: steps.gate.outputs.gated == 'true'
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
         uses: anthropics/claude-code-action@be7b93b1907a4abad570368f3c74b6fe3807510b # v1.0.183
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -169,6 +191,31 @@ jobs:
             - **Networking**: envoy-gateway, cilium
             - **Storage**: rook-ceph, volsync (check for data migrations or CRD changes)
             - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
+
+            ## Required Checks and Rendered-Diff Evidence
+
+            `pr-context.md` may contain a `## Required checks` section: deterministically
+            derived items (from the diff and PR title) that you MUST address explicitly in
+            your review. If any item cannot be verified, say so under an explicit
+            **Unknowns** heading in your review rather than silently omitting it. A
+            follow-up step keyword-matches your review against this list, so vague
+            hand-waving that doesn't actually engage with the item will be flagged.
+
+            `pr-context.md` may also contain a `## Rendered manifest diff (flate)` section:
+            the Helm/Kustomize-rendered Kubernetes manifests, which is the actual
+            cluster-impact diff and takes priority over the raw git diff for assessing
+            blast radius. Treat a render failure there as a blocker (the manifests may not
+            apply cleanly). This section is only present at `full`/`deep` depth.
+
+            When a bumped component's version is coupled to a HOST PLATFORM or peer
+            component pinned elsewhere in this repo (a node OS/installer image, an operator
+            or CRD version a chart targets), verify the bump against that host platform's
+            published compatibility matrix -- not just the bumped component's own release
+            notes, which only describe it in isolation. Search for "<platform> <version>
+            support matrix" rather than guessing a docs URL, fetch the best result, and cite
+            it. Do not approve a platform-coupled bump on "patch release, low risk"
+            reasoning alone -- an unchecked compatibility matrix is an Unknown, not an
+            approval.
 
             ## Tool Use Efficiency
 
@@ -412,17 +459,131 @@ jobs:
             - When stuck (private repo, ambiguous package, no changelog anywhere), report what you
               found and what you could not find rather than fabricating information
             - Submit exactly one `gh pr review` at the end of your analysis; if it succeeds, stop — never submit a second review
-            - When citing github.com URLs in the review body (PRs, issues, commits, releases, file
-              or blob links), rewrite the host to `redirect.github.com` while keeping the full
-              `https://` scheme (e.g. `https://redirect.github.com/rook/rook/releases/tag/v1.20.0`).
-              This suppresses the cross-reference backlinks that would otherwise spam every linked
-              issue/PR with a "mentioned in" notification. Non-github.com URLs are unaffected.
-            - NEVER write bare `#NNN` or `org/repo#NNN` references for upstream issues or PRs.
-              GitHub autolinks a bare `#552` to THIS repo (`${{ github.repository }}`), not the
-              upstream project, producing wrong cross-links. Every upstream issue or PR reference
-              must be a full markdown link using `redirect.github.com`, e.g.
-              `[#552](https://redirect.github.com/rhoopr/kei/issues/552)`. This rule applies to
-              prose, bullet points, and the Sources section — wherever a reference appears.
+            - Cite github.com URLs (PRs, issues, commits, releases) normally — a later workflow
+              step deterministically rewrites them to `redirect.github.com` to suppress
+              cross-reference notification noise, so you do not need to do this yourself.
+              Bare `#NNN` references still auto-link to the wrong repo and cannot be fixed
+              after the fact, so avoid them: write `org/repo#123` or a full URL instead of `#123`.
+
+      - name: Check escalation
+        id: escalation
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          DEPTH: ${{ steps.model_tier.outputs.depth }}
+          EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
+        run: bash .github/scripts/check-escalation.sh
+
+      - name: Dismiss stale claude reviews (escalation)
+        if: steps.escalation.outputs.escalate == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          ids=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
+            --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED")) | .id][]')
+          for id in $ids; do
+            gh api -X PUT "repos/$REPO/pulls/$PR/reviews/$id/dismissals" \
+              -f message="Superseded by escalated review"
+          done
+
+      - id: claude_escalated
+        if: steps.escalation.outputs.escalate == 'true'
+        uses: anthropics/claude-code-action@be7b93b1907a4abad570368f3c74b6fe3807510b # v1.0.183
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: "renovate[bot]"
+          show_full_output: true
+          claude_args: |
+            --model sonnet
+            --max-turns 25
+            --setting-sources user
+            --allowedTools "Read,Glob,Grep,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr review:*),Bash(gh issue view:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch"
+            --disallowedTools "Task,Agent"
+          prompt: |
+            The primary (haiku, light-depth) review of this PR was escalated to a deeper pass:
+            ${{ steps.escalation.outputs.reason }}
+
+            Re-review this PR from scratch at **full** depth (12-18 turn target, 25-turn budget).
+            Follow the exact same repo context, workflow, and review-submission format as the
+            primary review below — the only difference is your depth and turn budget.
+
+            REPO: ${{ github.repository }}
+            PR: #${{ github.event.pull_request.number }}
+            REVIEW DEPTH: full
+
+            ## Repo Context
+
+            This is a Flux GitOps repository managing a single homelab Kubernetes cluster running
+            Talos Linux (1 control plane + 7 workers). Dependencies are primarily:
+            - Container images referenced in Kubernetes manifests, pinned with SHA256 digests
+            - Helm chart versions in HelmRelease CRDs
+            - Custom dependencies managed via regex in YAML files
+
+            Architecture details relevant to impact assessment:
+            - **Flux pattern**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
+            - **Ingress**: Envoy Gateway with HTTPRoute only (NOT Traefik/Ingress)
+            - **Storage**: Ceph block (default), NFS media mounts, VolSync + Kopia backups
+            - **Secrets**: ExternalSecret CRDs only (no plaintext secrets)
+            - **Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
+
+            High-blast-radius components that warrant deeper scrutiny:
+            - **Networking**: envoy-gateway, cilium
+            - **Storage**: rook-ceph, volsync (check for data migrations or CRD changes)
+            - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
+
+            `pr-context.md` in the repo root has PR metadata, the full diff, and any `## Required
+            checks` section — read it first instead of calling `gh pr view`/`gh pr diff`.
+
+            Submit your findings as **exactly one** GitHub PR review (`gh pr review --approve` or
+            `--request-changes`), wrapped in a single-quoted heredoc to avoid shell-escaping
+            failures. Any stale reviews have already been dismissed before you started. STOP
+            immediately after `gh pr review` returns without error — do not call any other tool
+            to confirm, and never submit a second review.
+
+            Structure the review body exactly as:
+            ```
+            ### [package]: vOLD → vNEW
+
+            **Verdict**: Safe to merge | Changes required before merge
+
+            **Breaking changes**:
+            - [What changed] — introduced in [version]. Affects `path/to/file`. Fix: [brief description]
+
+            **Deprecations**:
+            - [Same detail as above]
+
+            **New features worth adopting**:
+            - [Feature] — [benefit]. Would change `path/to/file`.
+
+            **Known issues**:
+            - [Issue title/link] — [brief description of impact]
+
+            **Not applicable to this repo**:
+            - [Finding] — [why it doesn't apply]
+
+            **Sources consulted**:
+            - [URLs]
+            ```
+
+            NEVER modify repository files, merge the PR, or run kubectl/flux/cluster commands.
+            Cite github.com URLs normally — a later step rewrites them to `redirect.github.com`.
+            Avoid bare `#NNN` references; use `org/repo#123` or a full URL instead.
+
+      - name: Finalize review
+        if: always() && steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          FP: ${{ steps.fingerprint.outputs.fp }}
+          MUST_CHECK_PAIRS_FILE: ${{ steps.model_tier.outputs.must_check_pairs_file }}
+        run: bash .github/scripts/finalize-review.sh
 
       - name: Publish review status
         if: always()
@@ -434,6 +595,7 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           IS_RENOVATE: ${{ steps.gate.outputs.is_renovate }}
           GATED: ${{ steps.gate.outputs.gated }}
+          SKIP: ${{ steps.fingerprint.outputs.skip }}
         run: |
           context="claude/renovate-review"
 
@@ -449,6 +611,8 @@ jobs:
             # Gated version bump - read Claude's review verdict (fail closed)
             state="failure"
             desc="Claude review pending or errored"
+            suffix=""
+            [[ "$SKIP" == "true" ]] && suffix=" (cached, diff unchanged)"
 
             for attempt in 1 2 3; do
               review_state=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
@@ -457,11 +621,11 @@ jobs:
 
               if [[ "$review_state" == "APPROVED" ]]; then
                 state="success"
-                desc="Claude approved - safe to merge"
+                desc="Claude approved - safe to merge${suffix}"
                 break
               elif [[ "$review_state" == "CHANGES_REQUESTED" ]]; then
                 state="failure"
-                desc="Claude requested changes - manual review required"
+                desc="Claude requested changes - manual review required${suffix}"
                 break
               fi
 
@@ -478,11 +642,23 @@ jobs:
             -f target_url="$RUN_URL"
 
       - name: Log usage
-        if: always() && steps.gate.outputs.gated == 'true'
+        if: always() && steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
         continue-on-error: true
         env:
           EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
           MODEL: ${{ steps.model_tier.outputs.model }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: bash .github/scripts/report-claude-usage.sh
+
+      - name: Log usage (escalated)
+        if: always() && steps.escalation.outputs.escalate == 'true'
+        continue-on-error: true
+        env:
+          EXEC_FILE: ${{ steps.claude_escalated.outputs.execution_file }}
+          MODEL: sonnet
+          ROUTE: escalated
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}

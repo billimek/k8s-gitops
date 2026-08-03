@@ -38,10 +38,22 @@ cat .github/workflows/renovate-review.yaml
 
 The primary tuning targets are:
 
-- **`Select model tier` step**: the `title` regex that routes each PR to a model + max-turns.
+- **`.github/scripts/classify-renovate-pr.sh`**: the `title`/diff-path regex that routes each
+  PR to a model + max-turns, and the deterministic `must_check` rules.
+- **`.github/scripts/review-fingerprint.sh`**: the diff/config fingerprint that decides
+  whether a run is skipped entirely (cache hit) -- a finding where an unchanged-diff PR still
+  burned a full model call maps here.
+- **`.github/scripts/check-escalation.sh`**: what triggers a light-tier PR to escalate to a
+  second full/sonnet pass (`error_max_turns`, execution errors, hedge-phrase matches in the
+  posted review).
+- **`.github/scripts/finalize-review.sh`** / **`sanitize-review-body.sh`**: post-review link
+  sanitization and warn-mode required-check validation against the posted review body.
 - **`claude` step `--allowedTools` arg**: the `Bash(...)` allowlist passed to the action.
 - **`Gather PR evidence` step**: writes `pr-context.md`; a finding where the model re-fetches
   PR data instead of reading that file maps here.
+- **`Render flate diff` / `Append flate evidence` steps**: rendered-manifest evidence added at
+  `full`/`deep` depth; a finding where a chart bump's real impact was missed despite an
+  available rendered diff maps here.
 - **`Tool Use Efficiency` section** (in the prompt): guidance on parallelizing independent
   lookups in a single turn.
 - **`Shell & Tool Conventions` section** (in the prompt): allowlist rules, anti-thrash rule,
@@ -246,7 +258,13 @@ Run ID          | PR title (truncated)                  | Tier   | Turns/Budget 
 ```
 
 Explicitly call out: "No findings for [category]" if a category has no evidence. Include a one-line
-cost summary: total spend and average cost per gated run over the window.
+cost summary: total spend and average cost per gated run over the window, plus the fingerprint
+skip rate (runs where `Compute review fingerprint` emitted `skip=true`, cost $0) and the
+escalation rate (runs where `Check escalation` emitted `escalate=true`, meaning a light-tier PR
+paid for a second full/sonnet pass). A rising escalation rate suggests the light-tier regex in
+`classify-renovate-pr.sh` is too aggressive; a near-zero skip rate on a run of `synchronize`
+events suggests Renovate rebases are changing the diff (expected) rather than the fingerprint
+being broken.
 
 ---
 

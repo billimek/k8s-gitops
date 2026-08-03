@@ -16,6 +16,9 @@
 #   PR           - PR number
 #   REPO         - owner/repo
 #   GH_TOKEN     - default GITHUB_TOKEN (github.token)
+#   ROUTE        - route label for this run, e.g. "escalated" (appended to the
+#                  model column so an escalated second pass is distinguishable
+#                  from the primary run in the cumulative table)
 
 set -u
 
@@ -81,6 +84,9 @@ if [ -n "$pr_title" ]; then
 fi
 
 model_short="${MODEL:-unknown}"
+if [ -n "${ROUTE:-}" ]; then
+  model_short="${model_short} (${ROUTE})"
+fi
 if [ -n "$r" ] && [ "$r" != "null" ]; then
   turns=$(get '.num_turns')
   cost=$(get '(.total_cost_usd // 0)|(.*10000|round)/10000')
