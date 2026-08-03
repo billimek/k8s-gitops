@@ -1,0 +1,41 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kopiur-custom-rules
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: kopiur
+spec:
+  groups:
+    - name: kopiur-custom
+      rules:
+        # kopiur exposes no maintenance-run timestamp metric; key off the
+        # maintenance Job's completion time from kube-state-metrics instead.
+        # Job names are the Maintenance CR name ("nas") prefixed onto
+        # -q-<slot> (quick) / -f-<slot> (full); update the regexes if a
+        # second ClusterRepository/Maintenance is ever added. Jobs are
+        # TTL'd after 300s, so the 2d max_over_time lookback is what keeps
+        # the series populated between runs - if maintenance itself stops
+        # for longer than 2d, the series empties and this alert goes silent
+        # rather than firing (hard repository failure is already covered by
+        # the shipped KopiurRepositoryNotReady alert).
+        - alert: KopiurMaintenanceQuickStale
+          expr: |-
+            time() - max(max_over_time(kube_job_status_completion_time{namespace="kube-system",job_name=~"nas-q-.*"}[2d])) > 43200
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "kopiur quick maintenance hasn't completed in over 12h"
+            description: "Expected every 3h. Check `kubectl get kopiamaint -n kube-system nas -o yaml` and kopiur-controller logs."
+
+        - alert: KopiurMaintenanceFullStale
+          expr: |-
+            time() - max(max_over_time(kube_job_status_completion_time{namespace="kube-system",job_name=~"nas-f-.*"}[2d])) > 172800
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "kopiur full maintenance hasn't completed in over 48h"
+            description: "Expected daily. Check `kubectl get kopiamaint -n kube-system nas -o yaml` and kopiur-controller logs."

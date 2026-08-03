@@ -40,21 +40,29 @@ spec:
       # list (sonarr/tautulli/unifi/zwave2mqtt) never got CRs to adopt from.
       # Keep ~29 identities x 30 comfortably under that cap.
       perIdentity: 30
-  # The repository currently sits at 4000+ index blobs ("too many index
-  # blobs, this may result in degraded performance" in the fork's maintenance
-  # logs) because kopia's default 24h epoch can't close fast enough to
-  # compact them given hourly writes across 25 apps. Lower it to match
-  # kopiur's default quick-maintenance cadence (every 6h) so an epoch
-  # actually closes and compacts each cycle instead of piling up.
+  # The 6h epoch (previously matched to kopiur's default 6h quick cadence,
+  # which brought this down from 4000+ index blobs) still floats 1000-1500
+  # blobs between closes. Lower to 2h and pair with an explicit 3h quick
+  # schedule below so epochs close - and compact - more often than backups
+  # accumulate blobs across 25 apps.
   parameters:
     epoch:
-      minDuration: 6h
+      minDuration: 2h
   # The fork's maintenance mover needed a 20Gi cache to keep up with this
   # repo's index-blob volume (grown from 10Gi same-day as this migration was
   # rebased); kopiur's own auto-projected Maintenance inherits moverDefaults
   # below, whose 1Gi is sized for per-app snapshot movers, not maintenance.
   # Override it explicitly so maintenance doesn't stall on cache pressure.
   maintenance:
+    # schedule requires both quick and full when set; full restates the
+    # existing effective default (daily at scheduleDefaults.timezone 3am).
+    schedule:
+      quick:
+        cron: "0 */3 * * *"
+        jitter: 30m
+      full:
+        cron: "0 3 * * *"
+        jitter: 1h
     mover:
       cache:
         capacity: 20Gi
