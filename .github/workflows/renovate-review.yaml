@@ -96,7 +96,13 @@ jobs:
 
       - name: Render flate diff
         id: flate
-        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light'
+        # Installed whenever the primary OR the (as-yet-unknown) escalated pass
+        # might need it. Escalation only ever fires from light depth, and its
+        # re-review claims "full depth" -- so this can't be gated on
+        # `depth != 'light'` the way it used to be, or the escalated pass would
+        # silently run without rendered-diff evidence. Cheap either way
+        # (cached install, ~2s).
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
         continue-on-error: true
         uses: home-operations/flate/action@bf3405a189626478b0aa6ec98dc4d6f7d419df17 # v0.4.12
         with:
@@ -104,36 +110,9 @@ jobs:
 
       - name: Append flate evidence
         if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light'
-        continue-on-error: true
         env:
           FLATE_PATH: setup/flux/cluster
-        run: |
-          flate diff all \
-            --allow-missing-secrets \
-            --skip-kinds ValidatingWebhookConfiguration \
-            --skip-kinds MutatingWebhookConfiguration \
-            -o diff > flate.diff 2>/dev/null || true
-
-          {
-            printf '\n---\n## Rendered manifest diff (flate)\n\n'
-            printf 'This is the actual cluster-impact diff after Helm/Kustomize rendering -- treat it as\n'
-            printf 'authoritative over the raw git diff above. An empty section means the bump is a\n'
-            printf 'render-time no-op. A render failure below is a blocker.\n\n'
-            if [ -s flate.diff ]; then
-              LIMIT=40000
-              if [ "$(wc -c < flate.diff)" -gt "$LIMIT" ]; then
-                printf '```diff\n'
-                head -c "$LIMIT" flate.diff
-                printf '\n```\n\n(truncated at %s bytes)\n' "$LIMIT"
-              else
-                printf '```diff\n'
-                cat flate.diff
-                printf '\n```\n'
-              fi
-            else
-              printf '(no rendered manifest changes)\n'
-            fi
-          } >> pr-context.md
+        run: bash .github/scripts/append-flate-evidence.sh
 
       - name: Dismiss stale claude reviews
         if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
@@ -183,13 +162,13 @@ jobs:
             Architecture details relevant to impact assessment:
             - **Flux pattern**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
             - **Ingress**: Envoy Gateway with HTTPRoute only (NOT Traefik/Ingress)
-            - **Storage**: Ceph block (default), NFS media mounts, VolSync + Kopia backups
+            - **Storage**: Ceph block (default), NFS media mounts, kopiur + Kopia backups
             - **Secrets**: ExternalSecret CRDs only (no plaintext secrets)
             - **Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
 
             High-blast-radius components that warrant deeper scrutiny:
             - **Networking**: envoy-gateway, cilium
-            - **Storage**: rook-ceph, volsync (check for data migrations or CRD changes)
+            - **Storage**: rook-ceph, kopiur (check for data migrations or CRD changes)
             - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
 
             ## Required Checks and Rendered-Diff Evidence
@@ -204,8 +183,9 @@ jobs:
             `pr-context.md` may also contain a `## Rendered manifest diff (flate)` section:
             the Helm/Kustomize-rendered Kubernetes manifests, which is the actual
             cluster-impact diff and takes priority over the raw git diff for assessing
-            blast radius. Treat a render failure there as a blocker (the manifests may not
-            apply cleanly). This section is only present at `full`/`deep` depth.
+            blast radius. A `RENDER FAILED` marker there means the manifests did not render
+            cleanly -- treat it as a blocker, not as "no changes". This section is only
+            present at `full`/`deep` depth (and on an escalated re-review).
 
             When a bumped component's version is coupled to a HOST PLATFORM or peer
             component pinned elsewhere in this repo (a node OS/installer image, an operator
@@ -321,7 +301,7 @@ jobs:
             Follow the complete Workflow below without shortcuts. Target: 12–18 turns.
 
             **deep** — Renovate group PR, high-blast-radius component (envoy, cilium, rook, ceph,
-            volsync, cert-manager, external-secrets), or any title containing "group" (sonnet tier,
+            kopiur, cert-manager, external-secrets), or any title containing "group" (sonnet tier,
             40-turn budget):
             Follow the complete Workflow. For group PRs bundling multiple components, research each
             component **breadth-first**: check 2–3 sources per component (PR body, GitHub releases,
@@ -476,6 +456,15 @@ jobs:
           EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
         run: bash .github/scripts/check-escalation.sh
 
+      - name: Append flate evidence (escalation)
+        # The primary pass skipped this at light depth, but the escalated pass
+        # claims full depth and needs the same rendered-diff evidence a normal
+        # full-depth run gets -- otherwise it silently reviews without it.
+        if: steps.escalation.outputs.escalate == 'true'
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: bash .github/scripts/append-flate-evidence.sh
+
       - name: Dismiss stale claude reviews (escalation)
         if: steps.escalation.outputs.escalate == 'true'
         continue-on-error: true
@@ -527,17 +516,21 @@ jobs:
             Architecture details relevant to impact assessment:
             - **Flux pattern**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
             - **Ingress**: Envoy Gateway with HTTPRoute only (NOT Traefik/Ingress)
-            - **Storage**: Ceph block (default), NFS media mounts, VolSync + Kopia backups
+            - **Storage**: Ceph block (default), NFS media mounts, kopiur + Kopia backups
             - **Secrets**: ExternalSecret CRDs only (no plaintext secrets)
             - **Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
 
             High-blast-radius components that warrant deeper scrutiny:
             - **Networking**: envoy-gateway, cilium
-            - **Storage**: rook-ceph, volsync (check for data migrations or CRD changes)
+            - **Storage**: rook-ceph, kopiur (check for data migrations or CRD changes)
             - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
 
-            `pr-context.md` in the repo root has PR metadata, the full diff, and any `## Required
-            checks` section — read it first instead of calling `gh pr view`/`gh pr diff`.
+            `pr-context.md` in the repo root has PR metadata, the full diff, any `## Required
+            checks` section, and a `## Rendered manifest diff (flate)` section — read it first
+            instead of calling `gh pr view`/`gh pr diff`. The rendered manifest diff is the
+            actual cluster-impact diff after Helm/Kustomize rendering and takes priority over
+            the raw git diff for assessing blast radius; a `RENDER FAILED` marker there is a
+            blocker, not a no-op.
 
             Submit your findings as **exactly one** GitHub PR review (`gh pr review --approve` or
             `--request-changes`), wrapped in a single-quoted heredoc to avoid shell-escaping
@@ -596,10 +589,19 @@ jobs:
           IS_RENOVATE: ${{ steps.gate.outputs.is_renovate }}
           GATED: ${{ steps.gate.outputs.gated }}
           SKIP: ${{ steps.fingerprint.outputs.skip }}
+          GATE_OUTCOME: ${{ steps.gate.outcome }}
         run: |
           context="claude/renovate-review"
 
-          if [[ "$IS_RENOVATE" != "true" ]]; then
+          if [[ "$GATE_OUTCOME" != "success" ]]; then
+            # Classify PR itself failed (or the job died before it ran) -- IS_RENOVATE
+            # is unset in that case, which would otherwise fall through to the
+            # "not a Renovate PR" branch below and post a green status for a PR whose
+            # review never ran. Fail closed instead, matching every other failure mode
+            # in this workflow.
+            state="failure"
+            desc="Classification step failed - review did not run"
+          elif [[ "$IS_RENOVATE" != "true" ]]; then
             # Human PR or Renovate PR without auto-merge - not gated
             state="success"
             desc="Not a Renovate PR - skipped"

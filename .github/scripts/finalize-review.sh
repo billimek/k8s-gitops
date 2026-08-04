@@ -35,14 +35,18 @@ if [[ -z "$review_id" ]]; then
   exit 0
 fi
 
-# 1. Sanitize links
+# 1. Sanitize links and bare "#NNN" upstream references (rewritten to `#NNN`
+# code spans by sanitize-review-body.sh so they stop auto-linking to this
+# repo). This can't retract a cross-reference notification that already fired
+# at post time -- see the NOTE in sanitize-review-body.sh -- so still flag any
+# survivors in the step log for visibility. After sanitizing, a survivor is
+# one already inside a code span (harmless) or one the rewrite's lookbehind
+# intentionally left alone (e.g. "org/repo#123"); exclude both from the log.
 body="$(printf '%s' "$body" | OWN_REPO="$REPO" "$SCRIPT_DIR/sanitize-review-body.sh")"
 
-# Bare "#NNN" upstream references can't be safely rewritten (the target repo
-# is ambiguous), so just flag them in the step log for visibility.
-bare_refs="$(echo "$body" | grep -oE '(^|[^A-Za-z0-9/])#[0-9]+' | grep -oE '#[0-9]+' | sort -u || true)"
+bare_refs="$(echo "$body" | grep -oE '(^|[^A-Za-z0-9/\`])#[0-9]+' | grep -oE '#[0-9]+' | sort -u || true)"
 if [[ -n "$bare_refs" ]]; then
-  echo "WARNING: review body contains bare #NNN references that may auto-link to the wrong repo: $(echo "$bare_refs" | tr '\n' ' ')"
+  echo "WARNING: review body still contains unescaped bare #NNN references (auto-linked to the wrong repo at post time): $(echo "$bare_refs" | tr '\n' ' ')"
 fi
 
 # 2. Warn-mode required-check validation

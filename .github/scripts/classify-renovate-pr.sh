@@ -30,7 +30,7 @@ title="$PR_TITLE"
 is_patch=false
 [[ "$title" == fix\(container\):* ]] && is_patch=true
 is_blast_radius=false
-echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|volsync|cert-manager|external-secrets' && is_blast_radius=true
+echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|kopiur|cert-manager|external-secrets' && is_blast_radius=true
 is_breaking=false
 echo "$title" | grep -qE 'group|!:' && is_breaking=true
 
@@ -59,9 +59,27 @@ changed_paths="$(grep -E '^\+\+\+ b/' "$DIFF_FILE" 2>/dev/null | sed 's#^+++ b/#
 checks=()
 keywords=()
 
-if echo "$changed_paths" | grep -qE 'HelmRelease|helmrelease'; then
-  chart="$(echo "$changed_paths" | grep -oE '[^/]+/[^/]+\.ya?ml$' | head -1 || true)"
-  checks+=("values schema compatibility for the chart change in ${chart:-the changed HelmRelease}")
+# Files aren't named "helmrelease*" in this repo (app-template convention is
+# <app>.yaml), so path matching never fires. Grep the changed files themselves
+# (at PR head, already checked out) for the resource kind instead.
+#
+# Most apps consume the shared app-template chart (chartRef -> name:
+# app-template); a Renovate PR against one of those only bumps a container
+# image tag in `values`, not the chart itself, so the chart's values schema
+# is unaffected -- skip those. Apps that ship their own chart (kopiur,
+# victoria-metrics-k8s-stack, ...) have a chartRef that does NOT point at
+# app-template, and a version/tag bump there IS a chart change.
+helmrelease_file=""
+while IFS= read -r p; do
+  [[ -z "$p" ]] && continue
+  if [[ -f "$p" ]] && grep -qE '^kind: ?HelmRelease' "$p" && ! grep -q 'name: app-template' "$p"; then
+    helmrelease_file="$p"
+    break
+  fi
+done <<< "$changed_paths"
+
+if [[ -n "$helmrelease_file" ]]; then
+  checks+=("values schema compatibility for the chart change in ${helmrelease_file}")
   keywords+=("schema")
 fi
 

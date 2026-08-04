@@ -49,7 +49,17 @@ if [[ "$escalate" == false ]]; then
   body="$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
     --jq '[.[] | select(.user.login == "claude[bot]" or .user.login == "github-actions[bot]")] | last | .body // ""' \
     2>/dev/null || echo "")"
-  if echo "$body" | grep -qiE 'could not (verify|confirm|determine)|not (publicly available|found)|unable to (verify|confirm|determine)'; then
+  # The light-tier prompt explicitly sanctions one specific hedge -- "release
+  # notes not publicly available" after exhausting the 3-call hard cap -- as
+  # the correct outcome for an obscure image, not a sign the review needs a
+  # deeper pass. Strip that phrase (and its "no upstream release notes
+  # published" variant) before matching so it doesn't trigger an escalation
+  # that burns a second, sonnet-tier pass on exactly the case the cheap tier
+  # exists for. Genuine hedges ("could not verify X", "unable to confirm Y")
+  # still escalate.
+  filtered_body="$(printf '%s' "$body" | sed -E \
+    's/[Rr]elease notes (are )?not publicly available//g; s/[Nn]o upstream release notes published//g')"
+  if echo "$filtered_body" | grep -qiE 'could not (verify|confirm|determine)|not (publicly available|found)|unable to (verify|confirm|determine)'; then
     escalate=true
     reason="review body hedges on findings it could not verify"
   fi
