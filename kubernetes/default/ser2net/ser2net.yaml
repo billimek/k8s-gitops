@@ -44,7 +44,7 @@ spec:
           app:
             image:
               repository: ghcr.io/jippi/docker-ser2net
-              tag: 4.6.7@sha256:a1455b7523058ad1a13550bf159d590cf284bb7b8561d6c5d9df3f1d76b90cec
+              tag: 4.6.8@sha256:349ebeade8ed0ad0d2b97b7002576adbf1f9b101c248ee1cbc1b2a8f617ec4da
             env:
               TZ: America/New_York
             probes:
