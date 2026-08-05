@@ -46,3 +46,21 @@ spec:
     - name: ceph_daemon
       value: osd.4
       matchType: "=~"
+---
+# Silence for OomKilled on rook-ceph mgr.
+# rook-ceph v1.20.3 has a known mgr memory leak (OOMKills on a ~12h cycle); Ceph stays
+# HEALTH_OK and the mgr comes right back, so this is just noise until Rook ships a fix.
+# TODO: remove this silence once the upstream mgr memory leak is fixed and confirmed.
+apiVersion: observability.giantswarm.io/v1alpha2
+kind: Silence
+metadata:
+  name: rook-ceph-mgr-oom
+  namespace: monitoring
+spec:
+  matchers:
+    - name: alertname
+      value: OomKilled
+    - name: namespace
+      value: rook-ceph
+    - name: container
+      value: mgr
