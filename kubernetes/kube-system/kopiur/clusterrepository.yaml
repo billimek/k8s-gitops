@@ -42,12 +42,14 @@ spec:
       perIdentity: 30
   # The 6h epoch (previously matched to kopiur's default 6h quick cadence,
   # which brought this down from 4000+ index blobs) still floats 1000-1500
-  # blobs between closes. Lower to 2h and pair with an explicit 3h quick
-  # schedule below so epochs close - and compact - more often than backups
-  # accumulate blobs across 25 apps.
+  # blobs between closes. Lowered to 2h paired with an explicit 3h quick
+  # schedule below; that combination still hasn't cleared the
+  # TooManyIndexBlobs condition (1552 blobs, still >1000 threshold, days
+  # after the 2h change), so drop to 1h to close epochs faster than 25 apps'
+  # worth of hourly-by-default backups can accumulate blobs.
   parameters:
     epoch:
-      minDuration: 2h
+      minDuration: 1h
   # The fork's maintenance mover needed a 20Gi cache to keep up with this
   # repo's index-blob volume (grown from 10Gi same-day as this migration was
   # rebased); kopiur's own auto-projected Maintenance inherits moverDefaults
@@ -84,4 +86,10 @@ spec:
       # of re-pulling it from NFS every run; also promotes the maintenance
       # mover's cache (spec.maintenance.mover.cache sets no mode of its own).
       mode: Persistent
+      # Without explicit caps kopia falls back to its own defaults (~5GB
+      # metadata + ~5GB content), which don't fit this 1Gi volume alongside
+      # KOPIA_LOG_DIR and temp files - a snapshot mover hit ENOSPC
+      # downloading indexes under this exact default. Cap well inside 1Gi.
+      metadataCacheSizeMb: 400
+      contentCacheSizeMb: 200
     ttlSecondsAfterFinished: 300

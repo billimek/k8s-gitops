@@ -75,6 +75,13 @@ spec:
           capacity: << get $app "cacheCapacity" | default inputs.defaults.cacheCapacity >>
           storageClassName: ceph-block
           mode: Persistent
+          # Explicit here (not left to moverDefaults) because this block
+          # already overrides capacity, and per-field merge of the
+          # ClusterRepository's moverDefaults.cache isn't guaranteed.
+          # Without a cap kopia defaults to ~5GB metadata + ~5GB content,
+          # which doesn't fit a 1Gi cache volume - see clusterrepository.yaml.
+          metadataCacheSizeMb: 400
+          contentCacheSizeMb: 200
     ---
     # SnapshotSchedule for backup timing
     apiVersion: kopiur.home-operations.com/v1alpha1
