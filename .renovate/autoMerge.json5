@@ -28,11 +28,14 @@
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
         "ghcr.io/advplyr/audiobookshelf",
+        "ghcr.io/autobrr/qui",
         "ghcr.io/coder/code-server",
         "ghcr.io/home-operations/plex",
         "ghcr.io/home-operations/qbittorrent",
         "ghcr.io/itzg/minecraft-server",
+        "ghcr.io/seerr-team/seerr",
         "ghcr.io/zwave-js/zwave-js-ui",
+        "itzg/mc-router",
         "nodered/node-red",
       ],
     },
@@ -47,6 +50,36 @@
       matchPackageNames: [
         "ghcr.io/home-operations/prowlarr",
         "ghcr.io/home-operations/readarr"
+      ],
+    },
+    {
+      description: "Auto-merge leaf-app patch releases only - daily",
+      matchDatasources: ["docker"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+      schedule: ["after 1am and before 5am"],
+      matchUpdateTypes: ["patch"],
+      matchPackageNames: [
+        "docker.io/sirjmann92/mousetrap",
+        "ghcr.io/calibrain/shelfmark-lite",
+        "ghcr.io/home-operations/echo",
+        "ghcr.io/jippi/docker-ser2net",
+        "ghcr.io/unpoller/unpoller",
+      ],
+    },
+    {
+      // Node-upgrade operator: patch only, minor stays gated for human sign-off
+      description: "Auto-merge tuppr patch releases only - daily",
+      matchDatasources: ["docker", "helm"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+      schedule: ["after 1am and before 5am"],
+      matchUpdateTypes: ["patch"],
+      matchPackageNames: [
+        "ghcr.io/home-operations/charts/tuppr",
+        "ghcr.io/home-operations/tuppr",
       ],
     },
     {
