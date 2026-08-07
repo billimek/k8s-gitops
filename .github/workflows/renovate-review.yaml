@@ -404,7 +404,12 @@ jobs:
             **If the upgrade is safe** (no actionable findings):
             Use `gh pr review --approve` with a brief summary.
 
-            Structure the review body as follows (omit empty sections):
+            Structure the review body as follows (omit empty sections). **`New features worth
+            adopting` and `Known issues` are blocking** — a non-empty section holds an
+            otherwise-approved PR for manual merge. Put a negative search result (e.g. "no open
+            issues found for this version") under `Sources consulted` instead, and omit the
+            section entirely when there is nothing actionable — do not add a "none found" bullet
+            just to show the search happened:
 
             ```
             ### [package]: vOLD → vNEW
@@ -538,7 +543,12 @@ jobs:
             immediately after `gh pr review` returns without error — do not call any other tool
             to confirm, and never submit a second review.
 
-            Structure the review body exactly as:
+            Structure the review body exactly as (omit empty sections). **`New features worth
+            adopting` and `Known issues` are blocking** — a non-empty section holds an
+            otherwise-approved PR for manual merge. Put a negative search result (e.g. "no open
+            issues found for this version") under `Sources consulted` instead, and omit the
+            section entirely when there is nothing actionable — do not add a "none found" bullet
+            just to show the search happened:
             ```
             ### [package]: vOLD → vNEW
 
@@ -617,13 +627,21 @@ jobs:
             [[ "$SKIP" == "true" ]] && suffix=" (cached, diff unchanged)"
 
             for attempt in 1 2 3; do
-              review_state=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
-                --jq '[.[] | select(.user.login == "claude[bot]" or .user.login == "github-actions[bot]")]
-                      | last | .state // ""' 2>/dev/null || echo "")
+              last_review=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
+                --jq '[.[] | select(.user.login == "claude[bot]" or .user.login == "github-actions[bot]")] | last // {}' \
+                2>/dev/null || echo '{}')
+              review_state=$(printf '%s' "$last_review" | jq -r '.state // ""')
 
               if [[ "$review_state" == "APPROVED" ]]; then
-                state="success"
-                desc="Claude approved - safe to merge${suffix}"
+                review_body=$(printf '%s' "$last_review" | jq -r '.body // ""')
+                findings=$(printf '%s' "$review_body" | bash .github/scripts/detect-advisory-findings.sh)
+                if [[ "$findings" -gt 0 ]]; then
+                  state="failure"
+                  desc="Approved with ${findings} advisory finding(s) - manual review required${suffix}"
+                else
+                  state="success"
+                  desc="Claude approved - safe to merge${suffix}"
+                fi
                 break
               elif [[ "$review_state" == "CHANGES_REQUESTED" ]]; then
                 state="failure"
