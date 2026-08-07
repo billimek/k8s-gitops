@@ -406,10 +406,15 @@ jobs:
 
             Structure the review body as follows (omit empty sections). **`New features worth
             adopting` and `Known issues` are blocking** — a non-empty section holds an
-            otherwise-approved PR for manual merge. Put a negative search result (e.g. "no open
-            issues found for this version") under `Sources consulted` instead, and omit the
-            section entirely when there is nothing actionable — do not add a "none found" bullet
-            just to show the search happened:
+            otherwise-approved PR for manual merge. Only a `- ` bullet in one of these two
+            sections counts as blocking; prose on the section header line is not scanned and
+            will not hold the PR, so never rely on it to convey a finding. Put a negative search
+            result (e.g. "no open issues found for this version") under `Sources consulted`
+            instead, and omit the section entirely when there is nothing actionable — do not add
+            a "none found" bullet just to show the search happened. A finding you have already
+            judged does not affect this repo belongs under `Not applicable to this repo`, never
+            under `Known issues` — `Known issues` is only for open bugs that could plausibly
+            affect this cluster and warrant a human decision:
 
             ```
             ### [package]: vOLD → vNEW
@@ -545,10 +550,15 @@ jobs:
 
             Structure the review body exactly as (omit empty sections). **`New features worth
             adopting` and `Known issues` are blocking** — a non-empty section holds an
-            otherwise-approved PR for manual merge. Put a negative search result (e.g. "no open
-            issues found for this version") under `Sources consulted` instead, and omit the
-            section entirely when there is nothing actionable — do not add a "none found" bullet
-            just to show the search happened:
+            otherwise-approved PR for manual merge. Only a `- ` bullet in one of these two
+            sections counts as blocking; prose on the section header line is not scanned and
+            will not hold the PR, so never rely on it to convey a finding. Put a negative search
+            result (e.g. "no open issues found for this version") under `Sources consulted`
+            instead, and omit the section entirely when there is nothing actionable — do not add
+            a "none found" bullet just to show the search happened. A finding you have already
+            judged does not affect this repo belongs under `Not applicable to this repo`, never
+            under `Known issues` — `Known issues` is only for open bugs that could plausibly
+            affect this cluster and warrant a human decision:
             ```
             ### [package]: vOLD → vNEW
 
