@@ -64,7 +64,6 @@
         "docker.io/sirjmann92/mousetrap",
         "ghcr.io/calibrain/shelfmark-lite",
         "ghcr.io/home-operations/echo",
-        "ghcr.io/jippi/docker-ser2net",
         "ghcr.io/unpoller/unpoller",
       ],
     },
