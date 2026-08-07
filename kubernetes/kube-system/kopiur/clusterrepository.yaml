@@ -53,7 +53,7 @@ spec:
   # The fork's maintenance mover needed a 20Gi cache to keep up with this
   # repo's index-blob volume (grown from 10Gi same-day as this migration was
   # rebased); kopiur's own auto-projected Maintenance inherits moverDefaults
-  # below, whose 1Gi is sized for per-app snapshot movers, not maintenance.
+  # below, whose 3Gi is sized for per-app snapshot movers, not maintenance.
   # Override it explicitly so maintenance doesn't stall on cache pressure.
   maintenance:
     # schedule requires both quick and full when set; full restates the
@@ -80,16 +80,18 @@ spec:
       fsGroup: 1001
       fsGroupChangePolicy: OnRootMismatch
     cache:
-      capacity: 1Gi
+      capacity: 3Gi
       storageClassName: ceph-block
       # Persistent so hourly movers reuse a warm kopia index cache instead
       # of re-pulling it from NFS every run; also promotes the maintenance
       # mover's cache (spec.maintenance.mover.cache sets no mode of its own).
       mode: Persistent
       # Without explicit caps kopia falls back to its own defaults (~5GB
-      # metadata + ~5GB content), which don't fit this 1Gi volume alongside
+      # metadata + ~5GB content), which don't fit this volume alongside
       # KOPIA_LOG_DIR and temp files - a snapshot mover hit ENOSPC
-      # downloading indexes under this exact default. Cap well inside 1Gi.
+      # downloading indexes under a 1Gi default (the metadata cache tracks
+      # the shared repo's index, not the app's own data, so even tiny apps
+      # converged on ~2Gi steady state). Cap well inside 3Gi.
       metadataCacheSizeMb: 400
       contentCacheSizeMb: 200
     ttlSecondsAfterFinished: 300

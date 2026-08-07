@@ -5,7 +5,8 @@
 #   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
 #   - runAsUser: "1001"
 #   - capacity: "1Gi"
-#   - cacheCapacity: "1Gi"
+#   - cacheCapacity: "3Gi" (1Gi is too small: kopia's cache+log budget on the
+#     shared repo's index alone runs ~2Gi steady state regardless of app size)
 #   - schedule: "H * * * *"
 #
 # Frequency: hourly by default, using Jenkins-style "H" cron substitution —
@@ -33,7 +34,7 @@ spec:
     defaults:
       runAsUser: "1001"
       capacity: "1Gi"
-      cacheCapacity: "1Gi"
+      cacheCapacity: "3Gi"
       schedule: "H * * * *"
       pvcSuffix: "config"
     apps:
