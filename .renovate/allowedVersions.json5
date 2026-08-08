@@ -13,5 +13,11 @@
       matchPackageNames: ["emqx-operator"],
       allowedVersions: "<2.3.0",
     },
+    {
+      description: "Block k8s-stack 0.90.1 - its sync-job v0.0.12 discards all defaultRules per-rule and group overrides (helm-charts#3151)",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/victoriametrics\\/helm-charts\\/victoria-metrics-k8s-stack/"],
+      allowedVersions: "<0.90.1 || >0.90.1",
+    },
   ],
 }
