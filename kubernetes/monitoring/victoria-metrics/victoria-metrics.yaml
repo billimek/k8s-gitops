@@ -46,6 +46,11 @@ spec:
       enabled: true
       grafanaOperator:
         enabled: true
+        spec:
+          instanceSelector:
+            matchLabels:
+              dashboards: grafana
+          folder: monitoring   # explicit; previously implied by CR namespace
 
     defaultRules:
       create: true

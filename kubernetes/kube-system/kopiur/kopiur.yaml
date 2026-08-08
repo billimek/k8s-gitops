@@ -60,7 +60,7 @@ spec:
         grafanaOperator:
           enabled: true
           allowCrossNamespaceImport: true
-          folder: infrastructure
+          folder: storage
           matchLabels:
             dashboards: grafana
     podSecurityContext:
