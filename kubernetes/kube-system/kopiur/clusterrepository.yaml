@@ -71,6 +71,12 @@ spec:
         storageClassName: ceph-block
         metadataCacheSizeMb: 5120
         contentCacheSizeMb: 2048
+      # Requests only (no limit) - maintenance movers peak ~1919Mi and scale
+      # with repo index size; a limit would turn a slow run into a failed one.
+      resources:
+        requests:
+          cpu: 200m
+          memory: 1Gi
   moverDefaults:
     securityContext:
       runAsUser: 1001
@@ -94,4 +100,10 @@ spec:
       # converged on ~2Gi steady state). Cap well inside 3Gi.
       metadataCacheSizeMb: 400
       contentCacheSizeMb: 200
+    # Requests only (no limit) - scheduled snapshot movers peak 1100-1300Mi
+    # and scale with app data size; a limit would fail large backups mid-run.
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
     ttlSecondsAfterFinished: 300

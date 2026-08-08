@@ -49,10 +49,11 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 250Mi
+                memory: 512Mi
                 ephemeral-storage: 5Gi
               limits:
-                memory: 2Gi
+                # raised from 2Gi - 30d peak was 2020Mi, essentially pinned at limit
+                memory: 3Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: {drop: ["ALL"]}

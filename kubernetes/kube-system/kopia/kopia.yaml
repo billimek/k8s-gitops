@@ -71,8 +71,12 @@ spec:
             resources:
               requests:
                 cpu: 10m
+                # was request-less (no memory floor), a top eviction target;
+                # limit raised from 1Gi after repeat OOMKills despite a
+                # modest 734Mi observed peak
+                memory: 256Mi
               limits:
-                memory: 1Gi
+                memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:

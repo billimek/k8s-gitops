@@ -53,10 +53,13 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                memory: 250Mi
-                ephemeral-storage: 5Gi
+                memory: 512Mi
+                ephemeral-storage: 20Gi
               limits:
-                memory: 3Gi
+                # 4Gi gives headroom over the 2456Mi 30d peak; cache_limit
+                # (article cache) + direct_unpack + par2 spiked past the
+                # prior 3Gi limit and got OOMKilled
+                memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: {drop: ["ALL"]}

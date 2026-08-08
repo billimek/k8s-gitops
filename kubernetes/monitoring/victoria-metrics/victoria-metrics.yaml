@@ -79,10 +79,11 @@ spec:
           memory.allowedPercent: "75"
         resources:
           limits:
-            memory: 3Gi
+            # raised from 3Gi - 30d peak was 3062Mi, essentially pinned at limit
+            memory: 4Gi
           requests:
             cpu: 530m
-            memory: 1.5Gi
+            memory: 2Gi
 
       route:
         enabled: true

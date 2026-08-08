@@ -62,7 +62,8 @@ spec:
                 cpu: 50m
                 memory: 1Gi
               limits:
-                memory: 1600Mi
+                # raised from 1600Mi - 30d peak was ~1245Mi (78% of limit)
+                memory: 2Gi
 
     persistence:
       data:
