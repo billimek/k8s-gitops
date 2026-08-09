@@ -11,8 +11,8 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.9.5
-    digest: sha256:f760feb4858a1bd6a3cf951a13df3472825041eebad3e0d6e56b2b05dd4c6b7d
+    tag: 0.10.0
+    digest: sha256:5ce7e1ef30a218264f6095f09f4d659e6a7d872fb310cefff87ee86dc305f2bb
   url: oci://ghcr.io/home-operations/charts/kopiur
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
