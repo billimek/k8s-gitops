@@ -131,7 +131,7 @@ jobs:
 
       - id: claude
         if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
-        uses: anthropics/claude-code-action@7ff6806c8ebd129a7043b947af920074d3819dc8 # v1.0.188
+        uses: anthropics/claude-code-action@6b082c41935b4c8a3b8b0ef85ba4ba4d9eeb8975 # v1.0.189
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: "renovate[bot]"
@@ -492,7 +492,7 @@ jobs:
 
       - id: claude_escalated
         if: steps.escalation.outputs.escalate == 'true'
-        uses: anthropics/claude-code-action@7ff6806c8ebd129a7043b947af920074d3819dc8 # v1.0.188
+        uses: anthropics/claude-code-action@6b082c41935b4c8a3b8b0ef85ba4ba4d9eeb8975 # v1.0.189
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: "renovate[bot]"
