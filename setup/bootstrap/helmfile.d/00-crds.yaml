@@ -27,7 +27,7 @@ releases:
   - name: kopiur
     namespace: kube-system
     chart: oci://ghcr.io/home-operations/charts/kopiur
-    version: 0.10.1
+    version: 0.10.2
 
   - name: rook-ceph
     namespace: rook-ceph
