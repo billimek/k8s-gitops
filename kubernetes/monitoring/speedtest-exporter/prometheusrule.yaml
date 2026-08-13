@@ -20,37 +20,37 @@ spec:
             severity: critical
         - alert: SpeedtestSlowInternetDownload
           annotations:
-            description: Internet download speed is averaging {{ humanize $value }} bytes/s.
+            description: Best observed internet download speed over 6h is {{ humanize $value }} bytes/s.
             summary: SpeedTest slow internet download.
           expr: |
-            # Exclude Tata Communications (server_id 73614) - this Atlanta-listed server is a
-            # tier-1 global backbone provider whose test endpoint consistently delivers ~17 MB/s
-            # vs ~100-112 MB/s from all other local servers. Ookla's auto-selection picks it due
-            # to low ping latency, but it is not representative of actual connection performance.
-            # See: kubectl exec -n monitoring deploy/speedtest-exporter -- speedtest --servers
-            avg_over_time(speedtest_download_bandwidth_bytes{job=~".*speedtest-exporter.*",server_id!="73614"}[4h])
-              < 50000000
+            # Aggregate across Ookla servers - some endpoints are slow, the link is not.
+            max by (job) (
+              max_over_time(speedtest_download_bandwidth_bytes{job=~".*speedtest-exporter.*"}[6h])
+            ) < 50000000
           for: 1h
           labels:
             severity: warning
         - alert: SpeedtestSlowInternetUpload
           annotations:
-            description: Internet upload speed is averaging {{ humanize $value }} bytes/s.
+            description: Best observed internet upload speed over 6h is {{ humanize $value }} bytes/s.
             summary: SpeedTest slow internet upload.
           expr: |
-            # Exclude Tata Communications (server_id 73614) - see SpeedtestSlowInternetDownload comment.
-            avg_over_time(speedtest_upload_bandwidth_bytes{job=~".*speedtest-exporter.*",server_id!="73614"}[4h])
-              < 50000000
+            # Aggregate across Ookla servers - some endpoints are slow, the link is not.
+            max by (job) (
+              max_over_time(speedtest_upload_bandwidth_bytes{job=~".*speedtest-exporter.*"}[6h])
+            ) < 50000000
           for: 1h
           labels:
             severity: warning
         - alert: SpeedtestHighPingLatency
           annotations:
-            description: Internet ping latency is averaging {{ humanize $value }} s.
+            description: Best observed internet ping latency over 6h is {{ humanize $value }} s.
             summary: SpeedTest high ping latency.
           expr: |
-            avg_over_time(speedtest_ping_latency_seconds{job=~".*speedtest-exporter.*"}[4h])
-              > 0.020
-          for: 0m
+            # Nearest-server latency - remote test endpoints are legitimately far away.
+            min by (job) (
+              min_over_time(speedtest_ping_latency_seconds{job=~".*speedtest-exporter.*"}[6h])
+            ) > 0.020
+          for: 1h
           labels:
             severity: warning
