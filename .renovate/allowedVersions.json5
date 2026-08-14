@@ -19,5 +19,11 @@
       matchPackageNames: ["/victoriametrics\\/helm-charts\\/victoria-metrics-k8s-stack/"],
       allowedVersions: "<0.90.1 || >0.90.1",
     },
+    {
+      description: "Block kei 0.23.0 - #706 asset-only delta hydration never advances the PrimarySync checkpoint (kei#719)",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/rhoopr\\/kei/"],
+      allowedVersions: "<0.23.0 || >0.23.0",
+    },
   ],
 }

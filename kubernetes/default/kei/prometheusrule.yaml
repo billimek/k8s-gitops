@@ -29,9 +29,22 @@ spec:
 
         - alert: KeiNoRecentSync
           annotations:
-            description: kei has not completed a successful iCloud sync in over 2 hours (last success was {{ $value | humanizeDuration }} ago).
+            description: kei has not completed a successful iCloud sync in over 2 hours (last success was {{ $value | humanizeDuration }} ago), or has never synced since the pod started (last_success_timestamp still 0).
             summary: kei has not synced recently.
-          expr: ((time() - kei_health_last_success_timestamp_seconds) > 7200) and (kei_health_last_success_timestamp_seconds > 0)
+          # kei_health_last_success_timestamp_seconds == 0 means "no success since boot",
+          # not "no data yet" (kei#719: PrimarySync checkpoint can stay stuck for days
+          # without ever recording a success). Gate on process uptime instead of dropping
+          # the epoch-0 case outright, so a genuinely fresh boot still gets a grace period.
+          expr: |
+            (
+              ((time() - kei_health_last_success_timestamp_seconds) > 7200)
+              and (kei_health_last_success_timestamp_seconds > 0)
+            )
+            or
+            (
+              (kei_health_last_success_timestamp_seconds == 0)
+              and on() (time() - max(kube_pod_start_time{namespace="default", pod=~"kei-.*"}) > 7200)
+            )
           for: 5m
           labels:
             severity: warning
@@ -50,6 +63,24 @@ spec:
             description: An iCloud session expiration was detected. Manual 2FA re-authentication may be required.
             summary: kei iCloud session expired.
           expr: increase(kei_sync_session_expirations_total[1h]) > 0
+          for: 0m
+          labels:
+            severity: warning
+
+        - alert: KeiCheckpointBlocked
+          annotations:
+            description: kei's iCloud sync checkpoint has been blocked for {{ $value }} cycles in the last 3 hours instead of advancing. Downloads may still succeed but incremental progress is not being committed (kei#719).
+            summary: kei sync checkpoint is stuck, not advancing.
+          expr: increase(kei_sync_token_blocked_cycles_total[3h]) > 2
+          for: 30m
+          labels:
+            severity: warning
+
+        - alert: KeiStateWriteFailures
+          annotations:
+            description: kei failed to durably persist sync state {{ $value }} times in the last hour. This can escalate a blocked checkpoint from a proof issue to a state-write issue.
+            summary: kei sync state writes are failing.
+          expr: increase(kei_sync_state_write_failures_total[1h]) > 0
           for: 0m
           labels:
             severity: warning

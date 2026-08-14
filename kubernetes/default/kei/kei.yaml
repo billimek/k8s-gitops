@@ -86,7 +86,9 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              tag: 0.23.0@sha256:236847df1ac013306ebc33d2e58f415002fd82c4d6c2bf74b3b04504b0a85bc1
+              # pinned below 0.23.0: rhoopr/kei#719 - asset-only delta hydration never
+              # advances the PrimarySync checkpoint (see .renovate/allowedVersions.json5)
+              tag: 0.22.12@sha256:339e58307ad7ae51fdef0fa2aae5681014d6b67d6c6cc3d5097415df943aaa6b
             args:
               - service
               - run
