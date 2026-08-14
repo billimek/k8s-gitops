@@ -65,6 +65,19 @@ spec:
                   timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probes
+              # 4.1.0 runs a one-time Ecto migration synchronously before the
+              # HTTP server starts; give it headroom on this long-lived DB.
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 4000
+                  initialDelaySeconds: 0
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+                  failureThreshold: 60
             resources:
               requests:
                 cpu: 50m
