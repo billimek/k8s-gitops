@@ -69,21 +69,27 @@ spec:
         summary: "Host out of inodes (instance {{ $labels.instance }})"
         description: "Disk is almost running out of available inodes (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostUnusualDiskReadLatency
-      expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 100
+      # node_disk_read_time_seconds_total is in seconds, so the threshold below is
+      # also in seconds; was previously "> 100" (i.e. 100s) which never fires
+      expr: rate(node_disk_read_time_seconds_total[5m]) / rate(node_disk_reads_completed_total[5m]) > 0.25
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Host unusual disk read latency (instance {{ $labels.instance }})"
-        description: "Disk latency is growing (read operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        description: "Disk latency is growing (read operations > 250ms)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostUnusualDiskWriteLatency
-      expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 100
+      # node_disk_write_time_seconds_total is in seconds, so the threshold below is
+      # also in seconds; was previously "> 100" (i.e. 100s) which never fires -
+      # see rook-ceph mon quorum-at-risk incident 2026-08-14, caused by a ~7.8s
+      # write stall on k8s-g's nvme0n1 that this alert should have caught
+      expr: rate(node_disk_write_time_seconds_total[5m]) / rate(node_disk_writes_completed_total[5m]) > 0.25
       for: 5m
       labels:
         severity: warning
       annotations:
         summary: "Host unusual disk write latency (instance {{ $labels.instance }})"
-        description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+        description: "Disk latency is growing (write operations > 250ms)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostHighCpuLoad
       expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
       for: 5m

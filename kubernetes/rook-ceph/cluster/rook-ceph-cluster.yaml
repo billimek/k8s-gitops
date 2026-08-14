@@ -62,6 +62,12 @@ spec:
         urlPrefix: /
         ssl: false
         prometheusEndpoint: http://vmsingle-stack.monitoring.svc.cluster.local:8428
+      healthCheck:
+        livenessProbe:
+          mon:
+            probe:
+              timeoutSeconds: 10
+              failureThreshold: 6 # tolerate a transient disk stall instead of killing the mon
       mgr:
         count: 1
         modules:
