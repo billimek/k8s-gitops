@@ -69,9 +69,14 @@ spec:
         summary: "Host out of inodes (instance {{ $labels.instance }})"
         description: "Disk is almost running out of available inodes (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostUnusualDiskReadLatency
-      # node_disk_read_time_seconds_total is in seconds, so the threshold below is
-      # also in seconds; was previously "> 100" (i.e. 100s) which never fires
-      expr: rate(node_disk_read_time_seconds_total[5m]) / rate(node_disk_reads_completed_total[5m]) > 0.25
+      # physical disks only (nvme*/sd*) with a min-IOPS guard - rbd/zd virtual devices
+      # produce meaningless averages (or +Inf) at near-zero IOPS and false-positive
+      expr: |
+        (
+          rate(node_disk_read_time_seconds_total{device=~"nvme[0-9]+n[0-9]+|sd[a-z]+"}[5m])
+          / rate(node_disk_reads_completed_total{device=~"nvme[0-9]+n[0-9]+|sd[a-z]+"}[5m])
+        ) > 0.25
+        and rate(node_disk_reads_completed_total{device=~"nvme[0-9]+n[0-9]+|sd[a-z]+"}[5m]) > 10
       for: 5m
       labels:
         severity: warning
@@ -79,11 +84,15 @@ spec:
         summary: "Host unusual disk read latency (instance {{ $labels.instance }})"
         description: "Disk latency is growing (read operations > 250ms)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
     - alert: HostUnusualDiskWriteLatency
-      # node_disk_write_time_seconds_total is in seconds, so the threshold below is
-      # also in seconds; was previously "> 100" (i.e. 100s) which never fires -
-      # see rook-ceph mon quorum-at-risk incident 2026-08-14, caused by a ~7.8s
-      # write stall on k8s-g's nvme0n1 that this alert should have caught
-      expr: rate(node_disk_write_time_seconds_total[5m]) / rate(node_disk_writes_completed_total[5m]) > 0.25
+      # physical disks only (nvme*/sd*) with a min-IOPS guard - see rook-ceph mon
+      # quorum-at-risk incident 2026-08-14 (k8s-g nvme0n1 write stall) for why this
+      # alert exists; rbd/zd virtual devices produce meaningless averages at near-zero IOPS
+      expr: |
+        (
+          rate(node_disk_write_time_seconds_total{device=~"nvme[0-9]+n[0-9]+|sd[a-z]+"}[5m])
+          / rate(node_disk_writes_completed_total{device=~"nvme[0-9]+n[0-9]+|sd[a-z]+"}[5m])
+        ) > 0.25
+        and rate(node_disk_writes_completed_total{device=~"nvme[0-9]+n[0-9]+|sd[a-z]+"}[5m]) > 10
       for: 5m
       labels:
         severity: warning
