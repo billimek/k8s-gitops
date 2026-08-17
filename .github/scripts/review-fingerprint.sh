@@ -43,7 +43,7 @@ skip=false
 review_state="$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
   --jq "[.[] | select((.user.login == \"claude[bot]\" or .user.login == \"github-actions[bot]\")
         and (.body // \"\" | contains(\"${MARKER_PREFIX}${fp} -->\"))
-        and (.state == \"APPROVED\" or .state == \"CHANGES_REQUESTED\"))] | last | .state // \"\"" \
+        and (.state == \"APPROVED\" or .state == \"CHANGES_REQUESTED\" or .state == \"COMMENTED\"))] | last | .state // \"\"" \
   2>/dev/null || echo "")"
 
 if [[ -n "$review_state" ]]; then
