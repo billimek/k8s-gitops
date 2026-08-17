@@ -61,6 +61,24 @@ jobs:
           echo "gated=$gated"             >> "$GITHUB_OUTPUT"
           echo "author=$PR_AUTHOR labels=$labels is_fork=$IS_FORK -> is_renovate=$is_renovate gated=$gated"
 
+      - name: Auto-approve ungated Renovate update
+        # Branch protection requires an approving review to auto-merge. Ungated updates
+        # (digest/github-action/grafana-dashboard) skip the Claude review entirely, so
+        # without this they'd stall waiting for a review nobody submits. This is the
+        # fast lane's replacement for what used to be a plain "success" status.
+        if: steps.gate.outputs.is_renovate == 'true' && steps.gate.outputs.gated == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr review "$PR" --repo "$REPO" --approve --body "$(cat <<'EOF'
+          Auto-approved: ungated update type (digest, GitHub Action, or Grafana dashboard
+          revision). These are excluded from the Claude review by policy -- see
+          `.github/workflows/renovate-review.yaml`.
+          EOF
+          )"
+
       - name: Compute review fingerprint
         id: fingerprint
         if: steps.gate.outputs.gated == 'true'
@@ -123,7 +141,7 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
         run: |
           ids=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
-            --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED")) | .id][]')
+            --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED" or .state == "COMMENTED")) | .id][]')
           for id in $ids; do
             gh api -X PUT "repos/$REPO/pulls/$PR/reviews/$id/dismissals" \
               -f message="Superseded by updated review"
@@ -401,20 +419,28 @@ jobs:
             **If there are breaking changes or deprecations that affect this repo**:
             Use `gh pr review --request-changes` with a structured body.
 
-            **If the upgrade is safe** (no actionable findings):
+            **If there are no breaking changes or deprecations, but there is a non-empty `New
+            features worth adopting` or `Known issues` section**:
+            Use `gh pr review --comment` (NOT `--approve`) with the full structured body. This
+            repo's branch protection requires an approving review to auto-merge; a `--comment`
+            review leaves that requirement unsatisfied on purpose, so the PR waits for a human to
+            look at the advisory finding and approve it themselves, without blocking the PR with a
+            failing check the way `--request-changes` does.
+
+            **If the upgrade is safe** (no actionable findings at all):
             Use `gh pr review --approve` with a brief summary.
 
-            Structure the review body as follows (omit empty sections). **`New features worth
-            adopting` and `Known issues` are blocking** — a non-empty section holds an
-            otherwise-approved PR for manual merge. Only a `- ` bullet in one of these two
-            sections counts as blocking; prose on the section header line is not scanned and
-            will not hold the PR, so never rely on it to convey a finding. Put a negative search
-            result (e.g. "no open issues found for this version") under `Sources consulted`
-            instead, and omit the section entirely when there is nothing actionable — do not add
-            a "none found" bullet just to show the search happened. A finding you have already
-            judged does not affect this repo belongs under `Not applicable to this repo`, never
-            under `Known issues` — `Known issues` is only for open bugs that could plausibly
-            affect this cluster and warrant a human decision:
+            Structure the review body as follows (omit empty sections). **A non-empty `New
+            features worth adopting` or `Known issues` section is what decides `--comment` vs
+            `--approve` above.** Only a `- ` bullet in one of these two sections counts; prose on
+            the section header line is not scanned and will not affect the verdict, so never rely
+            on it to convey a finding. Put a negative search result (e.g. "no open issues found
+            for this version") under `Sources consulted` instead, and omit the section entirely
+            when there is nothing actionable — do not add a "none found" bullet just to show the
+            search happened. A finding you have already judged does not affect this repo belongs
+            under `Not applicable to this repo`, never under `Known issues` — `Known issues` is
+            only for open bugs that could plausibly affect this cluster and warrant a human
+            decision:
 
             ```
             ### [package]: vOLD → vNEW
@@ -455,6 +481,18 @@ jobs:
               Bare `#NNN` references still auto-link to the wrong repo and cannot be fixed
               after the fact, so avoid them: write `org/repo#123` or a full URL instead of `#123`.
 
+      - name: Enforce advisory-comment backstop
+        # The reviewer prompt asks the model to submit --comment (not --approve) when
+        # advisory findings are present, but it doesn't always follow that rule. This
+        # deterministically checks the just-posted review and retargets it to COMMENT
+        # if it approved despite carrying findings -- see enforce-advisory-comment.sh.
+        if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: bash .github/scripts/enforce-advisory-comment.sh
+
       - name: Check escalation
         id: escalation
         if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
@@ -484,7 +522,7 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
         run: |
           ids=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
-            --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED")) | .id][]')
+            --jq '[.[] | select((.user.login == "claude[bot]" or .user.login == "github-actions[bot]") and (.state == "APPROVED" or .state == "CHANGES_REQUESTED" or .state == "COMMENTED")) | .id][]')
           for id in $ids; do
             gh api -X PUT "repos/$REPO/pulls/$PR/reviews/$id/dismissals" \
               -f message="Superseded by escalated review"
@@ -542,23 +580,26 @@ jobs:
             the raw git diff for assessing blast radius; a `RENDER FAILED` marker there is a
             blocker, not a no-op.
 
-            Submit your findings as **exactly one** GitHub PR review (`gh pr review --approve` or
-            `--request-changes`), wrapped in a single-quoted heredoc to avoid shell-escaping
-            failures. Any stale reviews have already been dismissed before you started. STOP
-            immediately after `gh pr review` returns without error — do not call any other tool
-            to confirm, and never submit a second review.
+            Submit your findings as **exactly one** GitHub PR review: `gh pr review --request-changes`
+            if there are breaking changes/deprecations that affect this repo; `gh pr review --comment`
+            (NOT `--approve`) if there are none of those but there is a non-empty `New features worth
+            adopting` or `Known issues` section — this repo's branch protection requires an approving
+            review to auto-merge, so `--comment` leaves that unsatisfied on purpose and waits for a
+            human to look before it merges; otherwise `gh pr review --approve`. Wrap the body in a
+            single-quoted heredoc to avoid shell-escaping failures. Any stale reviews have already been
+            dismissed before you started. STOP immediately after `gh pr review` returns without error —
+            do not call any other tool to confirm, and never submit a second review.
 
-            Structure the review body exactly as (omit empty sections). **`New features worth
-            adopting` and `Known issues` are blocking** — a non-empty section holds an
-            otherwise-approved PR for manual merge. Only a `- ` bullet in one of these two
-            sections counts as blocking; prose on the section header line is not scanned and
-            will not hold the PR, so never rely on it to convey a finding. Put a negative search
-            result (e.g. "no open issues found for this version") under `Sources consulted`
-            instead, and omit the section entirely when there is nothing actionable — do not add
-            a "none found" bullet just to show the search happened. A finding you have already
-            judged does not affect this repo belongs under `Not applicable to this repo`, never
-            under `Known issues` — `Known issues` is only for open bugs that could plausibly
-            affect this cluster and warrant a human decision:
+            Structure the review body exactly as (omit empty sections). **A non-empty `New features
+            worth adopting` or `Known issues` section is what decides `--comment` vs `--approve`
+            above.** Only a `- ` bullet in one of these two sections counts; prose on the section
+            header line is not scanned and will not affect the verdict, so never rely on it to convey
+            a finding. Put a negative search result (e.g. "no open issues found for this version")
+            under `Sources consulted` instead, and omit the section entirely when there is nothing
+            actionable — do not add a "none found" bullet just to show the search happened. A finding
+            you have already judged does not affect this repo belongs under `Not applicable to this
+            repo`, never under `Known issues` — `Known issues` is only for open bugs that could
+            plausibly affect this cluster and warrant a human decision:
             ```
             ### [package]: vOLD → vNEW
 
@@ -586,6 +627,14 @@ jobs:
             NEVER modify repository files, merge the PR, or run kubectl/flux/cluster commands.
             Cite github.com URLs normally — a later step rewrites them to `redirect.github.com`.
             Avoid bare `#NNN` references; use `org/repo#123` or a full URL instead.
+
+      - name: Enforce advisory-comment backstop (escalation)
+        if: steps.escalation.outputs.escalate == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: bash .github/scripts/enforce-advisory-comment.sh
 
       - name: Finalize review
         if: always() && steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
@@ -630,34 +679,39 @@ jobs:
             state="success"
             desc="Ungated update type (digest/github-actions) - auto-approved"
           else
-            # Gated version bump - read Claude's review verdict (fail closed)
+            # Gated version bump. This status now only reports whether the automation
+            # itself completed -- actual merge gating happens via branch protection's
+            # required-approving-review rule reading the review state Claude submitted
+            # (APPROVED/CHANGES_REQUESTED/COMMENTED), not via this status. A COMMENTED
+            # verdict (advisory findings, no blocker) deliberately withholds approval so
+            # the PR waits for a human, without failing this check.
             state="failure"
             desc="Claude review pending or errored"
             suffix=""
             [[ "$SKIP" == "true" ]] && suffix=" (cached, diff unchanged)"
 
             for attempt in 1 2 3; do
-              last_review=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
-                --jq '[.[] | select(.user.login == "claude[bot]" or .user.login == "github-actions[bot]")] | last // {}' \
-                2>/dev/null || echo '{}')
-              review_state=$(printf '%s' "$last_review" | jq -r '.state // ""')
+              review_state=$(gh api "repos/$REPO/pulls/$PR/reviews" --paginate \
+                --jq '[.[] | select(.user.login == "claude[bot]" or .user.login == "github-actions[bot]")] | last // {} | .state // ""' \
+                2>/dev/null || echo "")
 
-              if [[ "$review_state" == "APPROVED" ]]; then
-                review_body=$(printf '%s' "$last_review" | jq -r '.body // ""')
-                findings=$(printf '%s' "$review_body" | bash .github/scripts/detect-advisory-findings.sh)
-                if [[ "$findings" -gt 0 ]]; then
-                  state="failure"
-                  desc="Approved with ${findings} advisory finding(s) - manual review required${suffix}"
-                else
+              case "$review_state" in
+                APPROVED)
                   state="success"
                   desc="Claude approved - safe to merge${suffix}"
-                fi
-                break
-              elif [[ "$review_state" == "CHANGES_REQUESTED" ]]; then
-                state="failure"
-                desc="Claude requested changes - manual review required${suffix}"
-                break
-              fi
+                  break
+                  ;;
+                CHANGES_REQUESTED)
+                  state="success"
+                  desc="Claude requested changes - manual review required${suffix}"
+                  break
+                  ;;
+                COMMENTED)
+                  state="success"
+                  desc="Claude flagged advisory findings - approval needed to merge${suffix}"
+                  break
+                  ;;
+              esac
 
               echo "Attempt $attempt: review_state='$review_state' - retrying in 5s..."
               sleep 5
