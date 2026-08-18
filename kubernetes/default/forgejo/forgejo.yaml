@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: forgejo
+  namespace: default
+spec:
+  interval: 1h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 17.1.4
+  url: oci://code.forgejo.org/forgejo-helm/forgejo
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: forgejo
+  interval: 1h
+  values:
+    replicaCount: 1
+    strategy:
+      type: Recreate
+
+    podSecurityContext:
+      fsGroup: 1000
+
+    persistence:
+      enabled: true
+      create: true
+      claimName: forgejo-config
+      size: 10Gi
+      storageClass: ceph-block
+
+    gitea:
+      admin:
+        existingSecret: forgejo-admin
+      config:
+        APP_NAME: "Forgejo"
+        server:
+          DOMAIN: git.eviljungle.com
+          ROOT_URL: https://git.eviljungle.com/
+          SSH_DOMAIN: git.eviljungle.com
+        service:
+          # single-admin instance; accounts for renovate/CI are created manually
+          DISABLE_REGISTRATION: true
+
+    service:
+      http:
+        type: ClusterIP
+        port: 3000
+      ssh:
+        type: LoadBalancer
+        port: 22
+        loadBalancerIP: 10.0.6.59
+        externalTrafficPolicy: Local
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 1Gi

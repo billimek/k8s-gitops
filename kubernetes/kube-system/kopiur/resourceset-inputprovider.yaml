@@ -44,6 +44,10 @@ spec:
       - app: continuwuity
         capacity: 5Gi
 
+      - app: forgejo
+        runAsUser: "1000"
+        capacity: 10Gi
+
       - app: frigate
         runAsUser: "1000"
         schedule: "H */4 * * *"
