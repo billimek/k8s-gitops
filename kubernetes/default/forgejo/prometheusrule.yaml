@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: forgejo-rules
+  namespace: default
+spec:
+  groups:
+    - name: forgejo.rules
+      rules:
+        - alert: ForgejoDown
+          annotations:
+            description: Forgejo has not been scraped successfully for 10 minutes. The web UI, git HTTP, and SSH clone paths may all be unreachable.
+            summary: Forgejo is down.
+          expr: up{namespace="default", job="forgejo-http"} == 0
+          for: 10m
+          labels:
+            severity: critical

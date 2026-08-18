@@ -43,6 +43,10 @@ spec:
     gitea:
       admin:
         existingSecret: forgejo-admin
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
       config:
         APP_NAME: "Forgejo"
         server:
