@@ -10,6 +10,9 @@ spec:
     - name: internal
       namespace: kube-system
       sectionName: forgejo-ssh
+    - name: public
+      namespace: kube-system
+      sectionName: forgejo-ssh
   rules:
     - backendRefs:
         - name: forgejo-ssh
