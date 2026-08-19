@@ -55,10 +55,3 @@ spec:
           - kind: Secret
             name: acme-crt-secret
             namespace: cert-manager
-    # Forgejo SSH (git clone/push) - router forwards external :22 to this gateway's IP.
-    - name: forgejo-ssh
-      protocol: TCP
-      port: 22
-      allowedRoutes:
-        namespaces:
-          from: All
