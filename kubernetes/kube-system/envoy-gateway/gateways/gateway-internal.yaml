@@ -56,3 +56,12 @@ spec:
           - kind: Secret
             name: acme-crt-secret
             namespace: cert-manager
+    # Forgejo SSH (git clone/push) - shares this gateway's IP so git.eviljungle.com
+    # works for both HTTPS and SSH, same as github.com does. TCP has no SNI, so this
+    # listener carries only Forgejo's SSH traffic; nothing else should ever use :22 here.
+    - name: forgejo-ssh
+      protocol: TCP
+      port: 22
+      allowedRoutes:
+        namespaces:
+          from: All

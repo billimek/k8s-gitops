@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/tcproute_v1alpha2.json
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: forgejo-ssh
+  namespace: default
+spec:
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+      sectionName: forgejo-ssh
+  rules:
+    - backendRefs:
+        - name: forgejo-ssh
+          port: 22

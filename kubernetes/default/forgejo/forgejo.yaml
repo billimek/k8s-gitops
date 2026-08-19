@@ -62,10 +62,10 @@ spec:
         type: ClusterIP
         port: 3000
       ssh:
-        type: LoadBalancer
+        # Reached via the internal Gateway's TCPRoute (git.eviljungle.com:22),
+        # not a dedicated LoadBalancer IP - see gateway-internal.yaml.
+        type: ClusterIP
         port: 22
-        loadBalancerIP: 10.0.6.59
-        externalTrafficPolicy: Local
 
     resources:
       requests:
