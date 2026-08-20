@@ -89,7 +89,7 @@ spec:
           - name: pg_autoscaler
             enabled: true
           - name: rook
-            enabled: true
+            enabled: false # rook/rook#18124: node_proxy_fullreport() crashes mgr every scrape on Tentacle, no fix yet
           - name: telemetry
             enabled: true
       mon:
