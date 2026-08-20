@@ -84,6 +84,11 @@ spec:
       mon:
         count: 3
         allowMultiplePerNode: false
+      security:
+        cephx:
+          daemon:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2 # CVE-2025-30156: rotate mon/mgr/osd keys off insecure aes cephx key type
       network:
         provider: host
         connections:
