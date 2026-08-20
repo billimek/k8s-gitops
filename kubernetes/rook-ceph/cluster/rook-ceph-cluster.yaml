@@ -68,6 +68,17 @@ spec:
             probe:
               timeoutSeconds: 10
               failureThreshold: 6 # tolerate a transient disk stall instead of killing the mon
+        muteHealthWarning:
+          # CVE-2025-30156: CSI client keys are pinned to aes (aes256k requires kernel 7.0+)
+          # - accepted until node kernels catch up
+          AUTH_INSECURE_CLIENT_KEY_TYPE:
+            policy: mute
+          AUTH_INSECURE_KEYS_ALLOWED:
+            policy: mute
+          AUTH_INSECURE_KEYS_CREATABLE:
+            policy: mute
+          AUTH_INSECURE_ROTATING_SERVICE_KEY_TYPE: # transient for 2-3h during daemon key rotation
+            policy: mute
       mgr:
         count: 1
         modules:
@@ -89,6 +100,8 @@ spec:
           daemon:
             keyRotationPolicy: KeyGeneration
             keyGeneration: 2 # CVE-2025-30156: rotate mon/mgr/osd keys off insecure aes cephx key type
+          csi:
+            keyType: aes # aes256k requires kernel 7.0+
       network:
         provider: host
         connections:
