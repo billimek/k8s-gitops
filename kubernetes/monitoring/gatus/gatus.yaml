@@ -103,7 +103,7 @@ spec:
           gatus-sidecar:
             image:
               repository: ghcr.io/home-operations/gatus-sidecar
-              tag: 0.4.1@sha256:e6470515bc63a714d1d4630761f72b4bc5be775aad6e09be4becb11505fae38e
+              tag: 0.5.0@sha256:69fdae76df3e5b82df369fa7185a1483739144037a1189af0d2b8c5d600988cf
             args:
               - --auto-httproute
               - --enable-httproute
