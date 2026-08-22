@@ -29,6 +29,14 @@ jobs:
 
       - name: Sync Labels
         uses: https://github.com/EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
+        env:
+          # The runner-injected GITHUB_API_URL (built from our internal
+          # forgejo-http:3000 service address, no scheme) trips a bug in
+          # this action's URL parsing: it mis-detects the port's colon as
+          # IPv6 and brackets the whole host+path, producing
+          # https://[forgejo-http...:3000/api/v1]/... -> ERR_INVALID_URL.
+          # A clean, schemed, standard-port URL sidesteps it.
+          GITHUB_API_URL: https://git.eviljungle.com/api/v1
         with:
           config-file: .forgejo/labels.yaml
           # Start non-destructive: EndBug/label-sync drives octokit against
