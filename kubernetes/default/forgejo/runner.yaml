@@ -50,7 +50,11 @@ spec:
               dir: /data/cache
             plugins:
               k8s:
-                address: "unix:///plugin/forgejo-runner-k8s.sock"
+                # The runner-k8s-plugin image's default entrypoint listens on
+                # TCP :9090 (not the unix socket its own --help default
+                # claims - confirmed live via `ps`/`--help` on first
+                # rollout), so dial that instead of shipping a socket mount.
+                address: "localhost:9090"
                 options:
                   namespace: default
                   poll_timeout: 10m
