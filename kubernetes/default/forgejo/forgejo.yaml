@@ -56,6 +56,14 @@ spec:
         service:
           # single-admin instance; accounts for renovate/CI are created manually
           DISABLE_REGISTRATION: true
+        actions:
+          # Factory default (data.forgejo.org, a curated GitHub Actions
+          # mirror) rewrites *any* github.com action reference through
+          # itself - including fully-qualified `uses: https://github.com/...`
+          # steps - and 404s on anything outside its curated set (e.g.
+          # EndBug/label-sync). Point straight at github.com so our
+          # .forgejo/workflows/* can reference arbitrary GitHub Actions.
+          DEFAULT_ACTIONS_URL: https://github.com
 
     service:
       http:
