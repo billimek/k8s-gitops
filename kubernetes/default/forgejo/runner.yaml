@@ -1,0 +1,255 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo-runner
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    defaultPodOptions:
+      automountServiceAccountToken: true
+      securityContext:
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+    configMaps:
+      config:
+        data:
+          # Forgejo Actions runner - github.com/bjw-s-labs/forgejo-runner (via
+          # #6119). Jobs run as ephemeral pods through the k8s plugin, not
+          # inside this pod - see plugins.k8s below and the two podspecs.
+          runner.yaml: |
+            log:
+              level: info
+            runner:
+              # Deliberately not mounted: identity comes from --uuid /
+              # --token-url on the daemon command, not this file. UNVERIFIED:
+              # if `daemon` insists on writing this path even with those
+              # flags set, readOnlyRootFilesystem below will need to drop,
+              # or this path needs an emptyDir - check runner logs on first
+              # rollout (see plan verification step 1).
+              file: /persistent/.runner
+              capacity: 2
+              timeout: 1h
+              shutdown_timeout: 3m
+              labels:
+                - ubuntu-latest:k8s:/config/podspec-default.yaml
+                - ubuntu-slim:k8s:/config/podspec-default.yaml
+                - docker:k8s:/config/podspec-dind.yaml
+            cache:
+              enabled: true
+              dir: /data/cache
+            plugins:
+              k8s:
+                address: "unix:///plugin/forgejo-runner-k8s.sock"
+                options:
+                  namespace: default
+                  poll_timeout: 10m
+                  resources: |
+                    requests:
+                      cpu: 100m
+                      memory: 256Mi
+                    limits:
+                      memory: 1Gi
+          # NOT YET RENOVATE-TRACKED: images embedded in these podspec blocks
+          # are plain strings inside a ConfigMap, invisible to the normal
+          # image.repository/tag manager. The repo's generic "# renovate:
+          # depName=... datasource=..." inline-comment convention
+          # (.renovate/customManagers.json5) captures the whole `key: value`
+          # after the colon, which here would be "repo:tag@digest" combined -
+          # wrong shape for the docker datasource, which wants just the
+          # tag@digest. Needs a purpose-built customManager (see #6119
+          # plan, section 6) before Renovate can bump these; bump by hand
+          # until then.
+          podspec-default.yaml: |-
+            containers:
+              - name: main
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:fea96a5b525857bee41cc132cf95df67191b73cdd681569ada3000111420397e
+                imagePullPolicy: IfNotPresent
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+                  limits:
+                    memory: 2Gi
+            restartPolicy: Never
+          podspec-dind.yaml: |-
+            initContainers:
+              - name: dind
+                image: docker:29-dind@sha256:12e683a161823b2a839aeea999b9d960e6e1f9a97b1679ad6b441982e2d9cf07
+                # Privileged is required for Docker-in-Docker; scoped to the
+                # per-job pod only, never the long-lived runner deployment.
+                securityContext:
+                  privileged: true
+                restartPolicy: Always
+                env:
+                  - name: DOCKER_TLS_CERTDIR
+                    value: /certs
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+                  limits:
+                    memory: 4Gi
+                volumeMounts:
+                  - name: docker-storage
+                    mountPath: /var/lib/docker
+                  - name: docker-certs
+                    mountPath: /certs
+                startupProbe:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - docker --tlsverify --tlscacert=/certs/client/ca.pem --tlscert=/certs/client/cert.pem --tlskey=/certs/client/key.pem -H tcp://localhost:2376 info
+                  initialDelaySeconds: 5
+                  periodSeconds: 1
+                  failureThreshold: 30
+            containers:
+              - name: main
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:fea96a5b525857bee41cc132cf95df67191b73cdd681569ada3000111420397e
+                imagePullPolicy: IfNotPresent
+                env:
+                  - name: DOCKER_HOST
+                    value: tcp://localhost:2376
+                  - name: DOCKER_TLS_VERIFY
+                    value: "1"
+                  - name: DOCKER_CERT_PATH
+                    value: /certs/client
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+                  limits:
+                    memory: 2Gi
+                volumeMounts:
+                  - name: docker-certs
+                    mountPath: /certs
+                    readOnly: true
+            volumes:
+              - name: docker-storage
+                emptyDir: {}
+              - name: docker-certs
+                emptyDir: {}
+            restartPolicy: Never
+
+    controllers:
+      forgejo-runner:
+        type: deployment
+        # Must cover runner.shutdown_timeout above plus the plugin's own
+        # cleanup budget for in-flight job pods.
+        pod:
+          terminationGracePeriodSeconds: 300
+        serviceAccount:
+          identifier: forgejo-runner
+        initContainers:
+          # Native sidecar: must stay up for the runner's whole lifetime so
+          # the socket survives job draining on shutdown.
+          plugin:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              tag: 12.10.9@sha256:7fb94371ccc6ef3ff7e2110b2c04050a68bb8031d3224ed8aee2cd5e1d31c673
+            restartPolicy: Always
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
+        containers:
+          runner:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/runner
+              tag: 12.13.0@sha256:b71959782cea9cbc86eaeb47e5ba32bf8179fbd117dd849e001c9a13807b1a07
+            command:
+              - sh
+              - -ec
+              - |
+                exec /bin/forgejo-runner daemon \
+                  --config /config/runner.yaml \
+                  --url "http://forgejo-http.default.svc.cluster.local:3000" \
+                  --uuid "$(cat /etc/forgejo-runner-secret/uuid)" \
+                  --token-url file:///etc/forgejo-runner-secret/token
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+              readOnlyRootFilesystem: true
+
+    persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config/runner.yaml
+            subPath: runner.yaml
+            readOnly: true
+          - path: /config/podspec-default.yaml
+            subPath: podspec-default.yaml
+            readOnly: true
+          - path: /config/podspec-dind.yaml
+            subPath: podspec-dind.yaml
+            readOnly: true
+      plugin-socket:
+        type: emptyDir
+        globalMounts:
+          - path: /plugin
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      runner-secret:
+        type: secret
+        name: forgejo-runner-secret
+        advancedMounts:
+          forgejo-runner:
+            runner:
+              - path: /etc/forgejo-runner-secret
+                readOnly: true
+
+    rbac:
+      roles:
+        forgejo-runner:
+          type: Role
+          rules:
+            - apiGroups: ["batch"]
+              resources: ["jobs"]
+              verbs: ["create", "get", "list", "watch", "delete"]
+            - apiGroups: [""]
+              resources: ["pods", "pods/log"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: [""]
+              resources: ["pods/exec"]
+              verbs: ["create", "get"]
+      bindings:
+        forgejo-runner:
+          type: RoleBinding
+          roleRef:
+            identifier: forgejo-runner
+          subjects:
+            - identifier: forgejo-runner
+
+    serviceAccount:
+      forgejo-runner: {}
