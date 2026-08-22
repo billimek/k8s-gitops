@@ -24,21 +24,13 @@ spec:
     configMaps:
       config:
         data:
-          # Forgejo Actions runner - github.com/bjw-s-labs/forgejo-runner (via
-          # #6119). Jobs run as ephemeral pods through the k8s plugin, not
-          # inside this pod - see plugins.k8s below and the two podspecs.
           runner.yaml: |
             log:
               level: info
             runner:
-              # Deliberately not mounted: identity comes from --uuid /
-              # --token-url on the daemon command, not this file. UNVERIFIED:
-              # if `daemon` insists on writing this path even with those
-              # flags set, readOnlyRootFilesystem below will need to drop,
-              # or this path needs an emptyDir - check runner logs on first
-              # rollout (see plan verification step 1).
+              # Never written: identity comes from --uuid/--token-url on the daemon command.
               file: /persistent/.runner
-              capacity: 2
+              capacity: 5
               timeout: 1h
               shutdown_timeout: 3m
               labels:
@@ -50,10 +42,7 @@ spec:
               dir: /data/cache
             plugins:
               k8s:
-                # The runner-k8s-plugin image's default entrypoint listens on
-                # TCP :9090 (not the unix socket its own --help default
-                # claims - confirmed live via `ps`/`--help` on first
-                # rollout), so dial that instead of shipping a socket mount.
+                # Plugin entrypoint listens on TCP :9090, not the unix socket its --help claims.
                 address: "localhost:9090"
                 options:
                   namespace: default
@@ -64,16 +53,7 @@ spec:
                       memory: 256Mi
                     limits:
                       memory: 1Gi
-          # NOT YET RENOVATE-TRACKED: images embedded in these podspec blocks
-          # are plain strings inside a ConfigMap, invisible to the normal
-          # image.repository/tag manager. The repo's generic "# renovate:
-          # depName=... datasource=..." inline-comment convention
-          # (.renovate/customManagers.json5) captures the whole `key: value`
-          # after the colon, which here would be "repo:tag@digest" combined -
-          # wrong shape for the docker datasource, which wants just the
-          # tag@digest. Needs a purpose-built customManager (see #6119
-          # plan, section 6) before Renovate can bump these; bump by hand
-          # until then.
+          # Podspec images are not Renovate-tracked yet - bump by hand until #6148 lands a customManager.
           podspec-default.yaml: |-
             containers:
               - name: main
@@ -90,8 +70,7 @@ spec:
             initContainers:
               - name: dind
                 image: docker:29-dind@sha256:12e683a161823b2a839aeea999b9d960e6e1f9a97b1679ad6b441982e2d9cf07
-                # Privileged is required for Docker-in-Docker; scoped to the
-                # per-job pod only, never the long-lived runner deployment.
+                # Required for DinD; scoped to the per-job pod, never the runner deployment.
                 securityContext:
                   privileged: true
                 restartPolicy: Always
@@ -149,15 +128,13 @@ spec:
     controllers:
       forgejo-runner:
         type: deployment
-        # Must cover runner.shutdown_timeout above plus the plugin's own
-        # cleanup budget for in-flight job pods.
+        # Must cover runner.shutdown_timeout plus the plugin's cleanup of in-flight job pods.
         pod:
           terminationGracePeriodSeconds: 300
         serviceAccount:
           identifier: forgejo-runner
         initContainers:
-          # Native sidecar: must stay up for the runner's whole lifetime so
-          # the socket survives job draining on shutdown.
+          # Native sidecar: must outlive the runner so job draining survives shutdown.
           plugin:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
@@ -212,10 +189,6 @@ spec:
           - path: /config/podspec-dind.yaml
             subPath: podspec-dind.yaml
             readOnly: true
-      plugin-socket:
-        type: emptyDir
-        globalMounts:
-          - path: /plugin
       data:
         type: emptyDir
         globalMounts:
