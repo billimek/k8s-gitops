@@ -1,0 +1,158 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Flate
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  filter-changes:
+    name: Filter changes
+    runs-on: ubuntu-slim
+    outputs:
+      changed-files: ${{ steps.changed-files.outputs.changed_files }}
+    steps:
+      - name: Get changed files
+        id: changed-files
+        # Kept as-is per #6119: both this and bjw-s-labs/action-changed-files
+        # call GitHub's octokit client via GITHUB_API_URL, which Forgejo
+        # points at itself, but this action's fallback paths (git.getRef,
+        # git.getCommit) are unverified against Forgejo. Only swap if this
+        # demonstrably breaks.
+        uses: https://github.com/step-security/changed-files@2e07db73e5ccdb319b9a6c7766bd46d39d304bad # v47.0.5
+        with:
+          files: |-
+            kubernetes/**/*
+            .forgejo/workflows/flate.yaml
+
+  test:
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
+    name: Flate Test
+    runs-on: ubuntu-latest
+    needs:
+      - filter-changes
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Flate
+        uses: https://github.com/home-operations/flate/action@2862e47ed4d6efebeffb43c7691ee6df06b4536c # v0.5.0
+        with:
+          cache: true
+
+      - name: Run Flate test
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: flate test all --allow-missing-secrets
+
+  diff:
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
+    name: Flate Diff
+    runs-on: ubuntu-latest
+    needs:
+      - filter-changes
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Flate
+        uses: https://github.com/home-operations/flate/action@2862e47ed4d6efebeffb43c7691ee6df06b4536c # v0.5.0
+        with:
+          cache: true
+
+      - name: Run Flate diff
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: |
+          flate diff all \
+            --allow-missing-secrets \
+            --skip-kinds ValidatingWebhookConfiguration \
+            --skip-kinds MutatingWebhookConfiguration \
+            -o diff > flate.diff || true
+          [ -s flate.diff ] || rm -f flate.diff
+
+      - name: Build comment body
+        if: ${{ hashFiles('flate.diff') != '' }}
+        env:
+          RUN_URL: ${{ forgejo.server_url }}/${{ forgejo.repository }}/actions/runs/${{ forgejo.run_id }}
+        run: |
+          LIMIT=60000
+          DIFF_LEN=$(wc -c < flate.diff)
+          OVERHEAD=300
+          BUDGET=$((LIMIT - OVERHEAD))
+          {
+            printf '<!-- flate-diff-comment -->\n'
+            printf '```diff\n'
+            if [ "$DIFF_LEN" -gt "$BUDGET" ]; then
+              head -c "$BUDGET" flate.diff
+              printf '\n```\n\n> [!NOTE]\n> Diff truncated -- showing first %s of %s bytes. Full diff in [workflow run](%s).\n' \
+                "$BUDGET" "$DIFF_LEN" "$RUN_URL"
+            else
+              cat flate.diff
+              printf '\n```\n'
+            fi
+          } > comment.md
+
+      # Reimplements marocchino/sticky-pull-request-comment against Forgejo's
+      # own API: find an existing comment carrying the <!-- flate-diff-comment
+      # --> marker on this PR and PATCH it, otherwise POST a new one. Uses
+      # the automatic per-job token (permissions.issues: write above), no
+      # app-token generation needed.
+      - if: ${{ hashFiles('comment.md') != '' }}
+        name: Add or update comment
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_BASE: ${{ forgejo.server_url }}/api/v1/repos/${{ forgejo.repository }}
+          ISSUE_NUMBER: ${{ forgejo.event.number }}
+        run: |
+          MARKER='<!-- flate-diff-comment -->'
+          AUTH="Authorization: token ${FORGEJO_TOKEN}"
+
+          existing_id=$(curl -fsSL -H "$AUTH" \
+            "${API_BASE}/issues/${ISSUE_NUMBER}/comments" \
+            | jq -r --arg marker "$MARKER" \
+              '[.[] | select(.body | startswith($marker))][0].id // empty')
+
+          if [ -n "$existing_id" ]; then
+            curl -fsSL -X PATCH -H "$AUTH" -H "Content-Type: application/json" \
+              "${API_BASE}/issues/comments/${existing_id}" \
+              --data-binary @<(jq -Rs '{body: .}' comment.md)
+          else
+            curl -fsSL -X POST -H "$AUTH" -H "Content-Type: application/json" \
+              "${API_BASE}/issues/${ISSUE_NUMBER}/comments" \
+              --data-binary @<(jq -Rs '{body: .}' comment.md)
+          fi
+
+  flate-success:
+    needs:
+      - test
+      - diff
+    if: ${{ !cancelled() }}
+    name: Flate successful
+    runs-on: ubuntu-slim
+    steps:
+      - name: Any jobs failed?
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+      - name: All jobs passed or skipped?
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: echo "All jobs passed or skipped" && echo "${{ toJSON(needs.*.result) }}"

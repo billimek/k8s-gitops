@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Label Sync
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["master"]
+    paths: [".forgejo/labels.yaml"]
+  schedule:
+    - cron: "0 0 * * *" # Every day at midnight
+
+permissions:
+  contents: read
+
+jobs:
+  main:
+    name: Label Sync - Sync Labels
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: .forgejo/labels.yaml
+          persist-credentials: false
+
+      - name: Sync Labels
+        uses: https://github.com/EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
+        with:
+          config-file: .forgejo/labels.yaml
+          # Start non-destructive: EndBug/label-sync drives octokit against
+          # GITHUB_API_URL, which Forgejo points at itself, but this is
+          # unverified against Forgejo's label API. Flip to true once a run
+          # has been reviewed and matches the GitHub Actions version.
+          delete-other-labels: false
