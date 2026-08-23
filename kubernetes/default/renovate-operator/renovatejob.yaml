@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mogenius/renovate-operator/main/charts/renovate-operator/crd/renovate-operator.mogenius.com_renovatejobs.yaml
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: k8s-gitops
+  namespace: default
+spec:
+  discoveryFilters:
+    - billimek/k8s-gitops
+  image: ghcr.io/renovatebot/renovate:35.10.0@sha256:4528b67b58c87e59af97df6877b12c702b0883d3a9942c7bb70dd6f130589c0b
+  parallelism: 1
+  provider:
+    name: forgejo
+    endpoint: https://git.eviljungle.com/api/v1
+  schedule: "*/30 * * * *"
+  secretRef: renovate-secret
+  webhook:
+    enabled: false

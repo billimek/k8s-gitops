@@ -69,3 +69,15 @@ releases:
     chart: oci://ghcr.io/home-operations/charts/tuppr
     version: 0.5.0
 
+  - name: renovate-operator
+    namespace: default
+    chart: oci://ghcr.io/mogenius/helm-charts/renovate-operator
+    version: 6.0.1
+    # Chart installs its CRD via a Helm hook by default, which --include-crds can't
+    # extract (it only reads the standard crds/ directory) -- force template mode
+    # here so the bootstrap extraction finds it. The HelmRelease itself is unaffected
+    # and keeps the chart default.
+    set:
+      - name: crd.mode
+        value: template
+
