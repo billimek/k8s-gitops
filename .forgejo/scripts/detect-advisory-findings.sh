@@ -1,0 +1,1 @@
+../../.github/scripts/detect-advisory-findings.sh

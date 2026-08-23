@@ -1,0 +1,1 @@
+../../.github/scripts/classify-renovate-pr.sh

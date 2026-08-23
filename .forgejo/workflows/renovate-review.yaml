@@ -1,0 +1,209 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+#
+# Forgejo port of .github/workflows/renovate-review.yaml, with the model step
+# stubbed (#6149). The GitHub workflow stays untouched and keeps running in
+# parallel; it remains the authoritative gate until #6151 says otherwise.
+#
+# Two structural differences from the GitHub version, both forced by Forgejo's
+# API rather than chosen:
+#
+#   1. No `gh`. Forgejo Actions points GITHUB_API_URL at the Forgejo instance,
+#      so `gh` would speak GitHub's REST dialect to a Gitea-shaped API. Every
+#      call goes through .forgejo/scripts/forgejo-api.sh instead.
+#   2. Review post-processing moved *before* the post. Forgejo has no endpoint
+#      to edit a submitted review, so the sanitize / advisory-downgrade /
+#      fingerprint-stamp work that .github/scripts/{enforce-advisory-comment,
+#      finalize-review}.sh do afterwards has to happen up front -- see
+#      prepare-review-body.sh.
+#
+# Escalation (check-escalation.sh) is deliberately absent: it keys off the
+# model's execution file, so it lands with the model in #6150.
+name: "Renovate PR Review"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: renovate-review-${{ forgejo.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Breaking Change Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+      issues: write
+    env:
+      FORGEJO_API: ${{ forgejo.server_url }}/api/v1
+      REPO: ${{ forgejo.repository }}
+      PR: ${{ forgejo.event.pull_request.number }}
+    steps:
+      - uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Classify PR
+        id: gate
+        env:
+          # secrets.GITHUB_TOKEN is the Forgejo Actions token here, not a
+          # github.com one. Named FORGEJO_TOKEN at every step that uses it so
+          # that stays unambiguous.
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Renovate authenticates to Forgejo as a plain bot account, so the
+          # author is "renovate" -- there is no "[bot]" suffix to match on the
+          # way there is on GitHub.
+          PR_AUTHOR: ${{ forgejo.event.pull_request.user.login }}
+          IS_FORK: ${{ forgejo.event.pull_request.head.repo.fork }}
+        run: |
+          source .forgejo/scripts/forgejo-api.sh
+
+          labels=$(fj_curl GET "/pulls/${PR}" | jq -r '[.labels[].name] | join(" ")')
+
+          is_renovate=false
+          gated=false
+
+          if [[ "$PR_AUTHOR" == "renovate" ]]; then
+            is_renovate=true
+            # Ungated = digest-only update, Actions bump, or Grafana dashboard
+            # revision. Everything else from Renovate (minor/patch/major
+            # container/helm/release) is gated.
+            if echo "$labels" | grep -qwE 'type/digest|renovate/github-action|renovate/grafana-dashboard'; then
+              gated=false
+            else
+              gated=true
+            fi
+          fi
+
+          # Belt-and-suspenders: never gate tool execution on fork-supplied code
+          if [[ "$IS_FORK" == "true" ]]; then
+            is_renovate=false
+            gated=false
+          fi
+
+          echo "is_renovate=$is_renovate" >> "$GITHUB_OUTPUT"
+          echo "gated=$gated"             >> "$GITHUB_OUTPUT"
+          echo "author=$PR_AUTHOR labels=$labels is_fork=$IS_FORK -> is_renovate=$is_renovate gated=$gated"
+
+      - name: Auto-approve ungated Renovate update
+        # Branch protection requires an approving review to auto-merge. Ungated
+        # updates skip the review entirely, so without this they'd stall waiting
+        # for a review nobody submits.
+        if: ${{ steps.gate.outputs.is_renovate == 'true' && steps.gate.outputs.gated == 'false' }}
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERDICT: APPROVED
+          BODY_FILE: auto-approve.md
+        run: |
+          cat > auto-approve.md <<'EOF'
+          Auto-approved: ungated update type (digest, Actions, or Grafana dashboard
+          revision). These are excluded from the Claude review by policy -- see
+          `.forgejo/workflows/renovate-review.yaml`.
+          EOF
+          bash .forgejo/scripts/post-review.sh
+
+      - name: Compute review fingerprint
+        id: fingerprint
+        if: ${{ steps.gate.outputs.gated == 'true' }}
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .forgejo/scripts/review-fingerprint.sh
+
+      - name: Select model tier
+        id: model_tier
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        env:
+          PR_TITLE: ${{ forgejo.event.pull_request.title }}
+          DIFF_FILE: pr.diff
+        run: bash .forgejo/scripts/classify-renovate-pr.sh
+
+      - name: Gather PR evidence
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MUST_CHECK_FILE: ${{ steps.model_tier.outputs.must_check_file }}
+        run: |
+          source .forgejo/scripts/forgejo-api.sh
+          {
+            fj_curl GET "/pulls/${PR}" \
+              | jq -r '"# PR Context\n\n## Title\n" + .title + "\n\n## Labels: " + ([.labels[].name] | join(", ")) + "\n\n## Body (Renovate release notes)\n" + (.body // "")'
+            printf '\n---\n## Diff\n'
+            cat pr.diff
+            printf '\n---\n'
+            cat "$MUST_CHECK_FILE"
+          } > pr-context.md
+
+      - name: Render flate diff
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        continue-on-error: true
+        uses: https://github.com/home-operations/flate/action@2862e47ed4d6efebeffb43c7691ee6df06b4536c # v0.5.0
+        with:
+          cache: true
+
+      - name: Append flate evidence
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light' }}
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: bash .forgejo/scripts/append-flate-evidence.sh
+
+      - name: Generate review (model stubbed)
+        # Replaced by the real Claude Code CLI invocation in #6150. Writes the
+        # same review.md / verdict.txt contract that step will.
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        env:
+          DEPTH: ${{ steps.model_tier.outputs.depth }}
+          MODEL: ${{ steps.model_tier.outputs.model }}
+        run: bash .forgejo/scripts/stub-reviewer.sh
+
+      - name: Prepare review body
+        id: prepare
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        env:
+          FP: ${{ steps.fingerprint.outputs.fp }}
+          MUST_CHECK_PAIRS_FILE: ${{ steps.model_tier.outputs.must_check_pairs_file }}
+        run: bash .forgejo/scripts/prepare-review-body.sh
+
+      - name: Dismiss stale reviews
+        # Runs immediately before the post, not at the top of the job: the
+        # window where this PR has no live verdict at all is then a couple of
+        # seconds rather than the whole review, so a merge cannot slip through
+        # ungated in between.
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        continue-on-error: true
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .forgejo/scripts/dismiss-stale-reviews.sh
+
+      - name: Post review
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERDICT: ${{ steps.prepare.outputs.verdict }}
+          COMMIT_ID: ${{ forgejo.event.pull_request.head.sha }}
+        run: bash .forgejo/scripts/post-review.sh
+
+      - name: Publish review status
+        if: ${{ always() }}
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ forgejo.event.pull_request.head.sha }}
+          RUN_URL: ${{ forgejo.server_url }}/${{ forgejo.repository }}/actions/runs/${{ forgejo.run_id }}
+          IS_RENOVATE: ${{ steps.gate.outputs.is_renovate }}
+          GATED: ${{ steps.gate.outputs.gated }}
+          SKIP: ${{ steps.fingerprint.outputs.skip }}
+          GATE_OUTCOME: ${{ steps.gate.outcome }}
+        run: bash .forgejo/scripts/publish-review-status.sh
+
+      - name: Log usage
+        if: ${{ always() && steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        continue-on-error: true
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODEL: ${{ steps.model_tier.outputs.model }}
+        run: bash .forgejo/scripts/report-claude-usage.sh
