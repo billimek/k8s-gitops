@@ -53,6 +53,12 @@ spec:
           DOMAIN: git.eviljungle.com
           ROOT_URL: https://git.eviljungle.com/
           SSH_DOMAIN: git.eviljungle.com
+        security:
+          # Without this, Forgejo doesn't trust Envoy's X-Forwarded-* headers,
+          # which manifests as API 404s (e.g. GET /api/v1/orgs/<nonexistent>)
+          # coming back as a 302 with an HTML body instead of a proper JSON 404 --
+          # broke Renovate's forgejo platform org-existence check (#6148).
+          REVERSE_PROXY_TRUSTED_PROXIES: 10.244.0.0/16
         service:
           # single-admin instance; accounts for renovate/CI are created manually
           DISABLE_REGISTRATION: true
