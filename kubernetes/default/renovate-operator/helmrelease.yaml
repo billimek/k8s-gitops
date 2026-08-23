@@ -10,6 +10,17 @@ spec:
     kind: OCIRepository
     name: renovate-operator
   interval: 1h
-  # UI/webhook route intentionally left disabled for now -- schedule-triggered only.
-  # Revisit once instant-trigger-on-push and the operator dashboard are wanted.
-  values: {}
+  values:
+    route:
+      enabled: true
+      annotations:
+        external-dns.alpha.kubernetes.io/internal: "true"
+        external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+      hostnames:
+        - renovate.eviljungle.com
+      parentRefs:
+        - name: internal
+          namespace: kube-system
+          sectionName: https
+    # Webhook (instant-trigger-on-push) intentionally left disabled for now --
+    # schedule-triggered only. Revisit once that's wanted.
