@@ -33,15 +33,5 @@
       matchPackageNames: ["ghcr.io/pennydreadful/bookshelf"],
       versioning: "regex:^softcover-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)$",
     },
-    {
-      // Digest dbb94e8977 (#6205) makes every flate invocation in a job pod die with
-      // SIGSEGV before it prints a byte, which took out Flate Test and silently
-      // no-op'd Flate Diff. Held at fea96a5b until the upstream regression is fixed.
-      // Re-enable together with the pin in kubernetes/default/forgejo/runner.yaml.
-      description: "Freeze forgejo-runner job-pod image - dbb94e8977 segfaults flate",
-      matchDatasources: ["docker"],
-      matchPackageNames: ["ghcr.io/bjw-s-labs/forgejo-runner"],
-      enabled: false,
-    },
   ],
 }
