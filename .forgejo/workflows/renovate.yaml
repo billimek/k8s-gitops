@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Renovate
+
+on:
+  schedule:
+    - cron: "0/30 * * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: renovate
+  cancel-in-progress: false
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run Renovate
+        uses: docker://ghcr.io/renovatebot/renovate:35.10.0@sha256:4528b67b58c87e59af97df6877b12c702b0883d3a9942c7bb70dd6f130589c0b
+        env:
+          RENOVATE_PLATFORM: forgejo
+          # In-cluster service, not the public git.eviljungle.com hostname.
+          RENOVATE_ENDPOINT: http://forgejo-http.default.svc.cluster.local:3000
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+          RENOVATE_AUTODISCOVER: "false"
+          RENOVATE_REPOSITORIES: billimek/k8s-gitops
+          # Public-read GitHub PAT so Renovate can still fetch changelogs/release notes
+          # from github.com; unrelated to the repo's own git host. Secret is named
+          # GH_COM_TOKEN, not GITHUB_COM_TOKEN -- Forgejo rejects GITHUB_-prefixed
+          # secret names as reserved for its own runner context.
+          GITHUB_COM_TOKEN: ${{ secrets.GH_COM_TOKEN }}
+          LOG_LEVEL: info
