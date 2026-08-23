@@ -50,7 +50,10 @@ jobs:
       - name: Run Flate test
         env:
           FLATE_PATH: setup/flux/cluster
-        run: flate test all --allow-missing-secrets
+        # GOMAXPROCS must be set explicitly: flate's cgroup-aware auto-detection
+        # segfaults in job pods with no CPU limit (cpu.max "max") on both v0.5.0
+        # and v0.6.0; any explicit value avoids it.
+        run: GOMAXPROCS=$(nproc) flate test all --allow-missing-secrets
 
   diff:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
@@ -76,7 +79,10 @@ jobs:
       - name: Run Flate diff
         env:
           FLATE_PATH: setup/flux/cluster
+        # See the Flate test step: GOMAXPROCS must be set explicitly to avoid
+        # flate's cgroup auto-detection segfault.
         run: |
+          export GOMAXPROCS=$(nproc)
           flate diff all \
             --allow-missing-secrets \
             --skip-kinds ValidatingWebhookConfiguration \
