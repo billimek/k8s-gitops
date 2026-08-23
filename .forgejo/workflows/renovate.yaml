@@ -21,7 +21,9 @@ jobs:
           persist-credentials: false
 
       - name: Run Renovate
-        uses: docker://ghcr.io/renovatebot/renovate:35.10.0@sha256:4528b67b58c87e59af97df6877b12c702b0883d3a9942c7bb70dd6f130589c0b
+        # k8sjob (the runner's backend) doesn't support `uses: docker://...`
+        # container actions, so run via npx in the job's own container instead.
+        run: npx --yes renovate@35.10.0
         env:
           RENOVATE_PLATFORM: forgejo
           # In-cluster service, not the public git.eviljungle.com hostname.
