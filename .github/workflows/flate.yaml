@@ -6,7 +6,6 @@ on:
   pull_request:
     branches:
       - master
-  workflow_dispatch: {} # TEMP: debugging the flate-test segfault, remove after
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -17,7 +16,6 @@ permissions:
 
 jobs:
   filter-changes:
-    if: ${{ github.event_name != 'workflow_dispatch' }}
     name: Filter changes
     runs-on: ubuntu-slim
     outputs:
@@ -32,7 +30,7 @@ jobs:
             .github/workflows/flate.yaml
 
   test:
-    if: ${{ always() && (github.event_name == 'workflow_dispatch' || needs.filter-changes.outputs.changed-files != '[]') }}
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
     name: Flate Test
     runs-on: ubuntu-latest
     needs:
@@ -55,16 +53,10 @@ jobs:
         # GOMAXPROCS must be set explicitly: flate's cgroup-aware auto-detection
         # segfaults in job pods with no CPU limit (cpu.max "max") on both v0.5.0
         # and v0.6.0; any explicit value avoids it.
-        # TEMP: set -x + a debug sleep after, to confirm the runner actually
-        # executes this script content and to give a window to kubectl exec in.
-        run: |
-          set -x
-          GOMAXPROCS=$(nproc) flate test all --allow-missing-secrets || rc=$?
-          sleep 300
-          exit "${rc:-0}"
+        run: GOMAXPROCS=$(nproc) flate test all --allow-missing-secrets
 
   diff:
-    if: ${{ always() && (github.event_name == 'workflow_dispatch' || needs.filter-changes.outputs.changed-files != '[]') }}
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
     name: Flate Diff
     runs-on: ubuntu-latest
     needs:
