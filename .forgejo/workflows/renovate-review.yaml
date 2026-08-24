@@ -1,24 +1,25 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 #
-# Forgejo port of .github/workflows/renovate-review.yaml, with the model step
-# stubbed (#6149). The GitHub workflow stays untouched and keeps running in
-# parallel; it remains the authoritative gate until #6151 says otherwise.
+# Forgejo port of .github/workflows/renovate-review.yaml. The GitHub workflow
+# stays untouched and keeps running in parallel.
 #
-# Two structural differences from the GitHub version, both forced by Forgejo's
-# API rather than chosen:
+# Structural differences from the GitHub version, forced by Forgejo's API and
+# by `anthropics/claude-code-action` being GitHub-only rather than chosen:
 #
-#   1. No `gh`. Forgejo Actions points GITHUB_API_URL at the Forgejo instance,
-#      so `gh` would speak GitHub's REST dialect to a Gitea-shaped API. Every
-#      call goes through .forgejo/scripts/forgejo-api.sh instead.
+#   1. No `gh` against this repo. Forgejo Actions points GITHUB_API_URL at the
+#      Forgejo instance, so `gh` would speak GitHub's REST dialect to a
+#      Gitea-shaped API. Every call against THIS repo goes through
+#      .forgejo/scripts/forgejo-api.sh instead. The reviewer step uses `gh`
+#      only for upstream github.com research, with GH_HOST/GITHUB_API_URL
+#      overridden back to github.com for that step alone.
 #   2. Review post-processing moved *before* the post. Forgejo has no endpoint
 #      to edit a submitted review, so the sanitize / advisory-downgrade /
-#      fingerprint-stamp work that .github/scripts/{enforce-advisory-comment,
-#      finalize-review}.sh do afterwards has to happen up front -- see
-#      prepare-review-body.sh.
-#
-# Escalation (check-escalation.sh) is deliberately absent: it keys off the
-# model's execution file, so it lands with the model in #6150.
+#      fingerprint-stamp work happens up front -- see prepare-review-body.sh.
+#   3. The model doesn't post its own review. It writes review.md/verdict.txt;
+#      a deterministic step (post-review.sh) posts them once, at the end,
+#      whichever pass (primary or escalated) produced them. Escalation here
+#      just overwrites those files before that single post happens.
 name: "Renovate PR Review"
 
 on:
@@ -152,14 +153,472 @@ jobs:
           FLATE_PATH: setup/flux/cluster
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
-      - name: Generate review (model stubbed)
-        # Replaced by the real Claude Code CLI invocation in #6150. Writes the
-        # same review.md / verdict.txt contract that step will.
+      - name: Setup Claude Code CLI
+        # anthropics/claude-code-action is GitHub-only, so this invokes the CLI
+        # it wraps directly. The runner image has no Node.js preinstalled.
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq nodejs npm
+          npm install -g @anthropic-ai/claude-code@2.1.241
+
+      - name: Generate review
+        id: claude
+        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Upstream research (release notes, issues) targets github.com, not
+          # this Forgejo instance -- but Forgejo Actions points GITHUB_API_URL
+          # at itself by default, so `gh` has to be pointed back at github.com
+          # explicitly for this step, with a github.com-scoped token.
+          GH_HOST: github.com
+          GITHUB_API_URL: https://api.github.com
+          GH_TOKEN: ${{ secrets.GH_COM_TOKEN }}
+          DEPTH: ${{ steps.model_tier.outputs.depth }}
+          MODEL: ${{ steps.model_tier.outputs.model }}
+          MAX_TURNS: ${{ steps.model_tier.outputs.max_turns }}
+        run: |
+          cat > prompt.md <<'PROMPT_EOF'
+          You research dependency upgrades in Renovate pull requests and report your
+          findings by writing two files in the repo root: `review.md` (the structured
+          body below) and `verdict.txt` (exactly one word: `APPROVED`, `REQUEST_CHANGES`,
+          or `COMMENT`). You do not make changes to files, do not merge PRs, and do not
+          run any kubectl, flux, or cluster commands. You investigate and report only.
+          A deterministic step posts what you write -- you never post anything yourself.
+
+          REPO: ${REPO}
+          PR: #${PR}
+          REVIEW DEPTH: ${DEPTH}
+
+          ## Repo Context
+
+          This is a Flux GitOps repository managing a single homelab Kubernetes cluster running
+          Talos Linux (1 control plane + 7 workers). Dependencies are primarily:
+          - Container images referenced in Kubernetes manifests, pinned with SHA256 digests
+          - Helm chart versions in HelmRelease CRDs
+          - Custom dependencies managed via regex in YAML files
+
+          Architecture details relevant to impact assessment:
+          - **Flux pattern**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
+          - **Ingress**: Envoy Gateway with HTTPRoute only (NOT Traefik/Ingress)
+          - **Storage**: Ceph block (default), NFS media mounts, kopiur + Kopia backups
+          - **Secrets**: ExternalSecret CRDs only (no plaintext secrets)
+          - **Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
+
+          High-blast-radius components that warrant deeper scrutiny:
+          - **Networking**: envoy-gateway, cilium
+          - **Storage**: rook-ceph, kopiur (check for data migrations or CRD changes)
+          - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
+
+          ## Required Checks and Rendered-Diff Evidence
+
+          `pr-context.md` may contain a `## Required checks` section: deterministically
+          derived items (from the diff and PR title) that you MUST address explicitly in
+          your review. If any item cannot be verified, say so under an explicit
+          **Unknowns** heading in your review rather than silently omitting it. A
+          follow-up step keyword-matches your review against this list, so vague
+          hand-waving that doesn't actually engage with the item will be flagged.
+
+          `pr-context.md` may also contain a `## Rendered manifest diff (flate)` section:
+          the Helm/Kustomize-rendered Kubernetes manifests, which is the actual
+          cluster-impact diff and takes priority over the raw git diff for assessing
+          blast radius. A `RENDER FAILED` marker there means the manifests did not render
+          cleanly -- treat it as a blocker, not as "no changes". This section is only
+          present at `full`/`deep` depth (and on an escalated re-review).
+
+          When a bumped component's version is coupled to a HOST PLATFORM or peer
+          component pinned elsewhere in this repo (a node OS/installer image, an operator
+          or CRD version a chart targets), verify the bump against that host platform's
+          published compatibility matrix -- not just the bumped component's own release
+          notes, which only describe it in isolation. Search for "<platform> <version>
+          support matrix" rather than guessing a docs URL, fetch the best result, and cite
+          it. Do not approve a platform-coupled bump on "patch release, low risk"
+          reasoning alone -- an unchecked compatibility matrix is an Unknown, not an
+          approval.
+
+          ## Tool Use Efficiency
+
+          When you need multiple independent read-only lookups — Grep/Glob/Read on repo files,
+          git log, or independent gh api calls — issue them as parallel tool calls in a single
+          turn rather than one at a time. For example, `gh api .../releases/tags/vX`, WebSearch,
+          and `git log --grep` can all be issued in the same turn.
+
+          Fetching release notes for several intermediate versions is the common case:
+          `gh api "repos/org/repo/releases/tags/vX"` for each version between old and new
+          belongs in **one** turn as N parallel Bash calls, not N sequential turns.
+
+          ## Shell & Tool Conventions
+
+          **`gh` targets github.com, not this repo.** `GH_HOST`/`GITHUB_API_URL` are set to
+          github.com for this step -- use `gh` only to research the upstream package being
+          upgraded (its releases, issues, tags), never to look up anything about this PR or
+          this repo. PR metadata, the diff, and any required-checks/rendered-diff evidence
+          are already in `pr-context.md` -- read that instead.
+
+          **What the safety gate actually blocks** — only *compound* Bash commands are denied:
+          pipes to `xargs`, pipes to bare `grep`/`awk`/`sed`, `&&`-chained commands, and
+          command substitution inside `find -exec`. Simple single-command invocations of
+          `find`, `grep -r`, `ls`, `cat`, etc. are allowed by the gate.
+
+          Even so, **prefer `Grep`/`Glob`/`Read`** over shell commands for repo files — one
+          `Grep "pattern" "kubernetes/**/*.yaml"` call beats ten sequential `grep -r`/`find`
+          invocations and uses far fewer turns.
+
+          **Do not redirect output to temp files.** Claude Code's sandbox blocks writes
+          outside the repo working directory, so `> /tmp/...` will error. Filter inline
+          with `--jq`, or pipe directly: `gh api ... --jq '.content' | base64 -d`.
+
+          Rules that *do* cause denials if violated:
+
+          - **Always quote `gh api` URLs** that contain `?`, `&`, or `+`. An unquoted `&`
+            splits the command at the shell level. Use `+`-joined qualifiers:
+            `gh api "search/issues?q=repo:org/repo+label:bug+v1.20.0&per_page=20"`
+          - **Filter JSON with `--jq`, not pipes**. Piping `gh`/`git`/`curl` output to bare
+            `jq`, `python3`, or `grep -E` is denied. Use `--jq` directly on the command.
+            Correct: `gh api "repos/org/repo/releases/tags/v1.0" --jq '.body'`
+          - **Run `git` without `-C <path>`**. The checkout is already the working directory;
+            use plain `git log`, `git show`, `git tag`. The `-C /abs/path` flag breaks the
+            allowlist prefix match and is denied.
+          - **Read upstream issues with `gh issue view <n> --repo <org>/<repo>`** or
+            `gh api repos/<org>/<repo>/issues/<n> --jq`. Do not use `gh issue list`.
+          - **No shell loops or variable expansion.** `for v in ...; do ... done` is denied
+            ("simple_expansion"). To fetch N versions, issue N separate Bash calls in a single
+            parallel turn instead (see Tool Use Efficiency above).
+          - **`Grep`/`Glob`/`Read` are tools, never pipeline stages.** They operate on repo
+            files only — `gh api ... | base64 -d | Grep -n "tag"` is denied as a compound
+            command. To filter output fetched from a URL or API, use `--jq` or `head` on the
+            fetch command itself.
+
+          **Anti-thrash rule:** If a search (`Grep`, `Glob`, or `gh api`) returns empty, that
+          means the thing is absent — stop searching. Do **not** re-run the same query with
+          permuted patterns, synonyms, or similar terms. One empty result is a conclusive
+          answer; re-running wastes turns without new information. This applies to upstream
+          release lookups specifically: if `releases/tags/<v>` and `releases` both come back
+          empty, the project does not publish release notes. Do not then try `/tags`, the
+          chart repo, or a permuted tag format — record "no upstream release notes published"
+          and move on.
+
+          ## Repo File Discovery
+
+          The repository is **fully checked out** in the working directory (`fetch-depth: 0`).
+          Use the **`Glob` and `Grep` tools** (both allowlisted) to find and read repo files —
+          they complete in a single turn with no shell-escaping issues. Shell `find`/`grep -r`
+          work too but generate more tool calls and are harder to parallelize cleanly.
+
+          `Read` takes file paths only — reading a directory errors with `EISDIR`. Use
+          `Glob "kubernetes/default/<app>/**"` to enumerate a directory's contents first.
+
+          To inspect an upstream chart or source file:
+          1. **Check the local tree first** — `Glob "kubernetes/**/<component>*.yaml"` and
+             `Read` the file. If it is present, there is no need for any `gh api .../contents` call.
+          2. **If the file is only upstream**, resolve the full path with a **single**
+             `gh api "repos/org/repo/git/trees/<ref>?recursive=1"` call and then fetch the one
+             file you need. Do NOT walk the directory tree one level at a time.
+
+          ## Review Depth
+
+          Your depth for this PR is **${DEPTH}** and your turn budget is **${MAX_TURNS}** turns.
+
+          **Turn-budget rule (applies at all depths):** Reserve your last turn for writing
+          `review.md`/`verdict.txt`. If research is still incomplete when the budget runs low,
+          write what you have found, noting explicitly what you could not verify (e.g., "could
+          not confirm ceph-csi-drivers values schema changes"). A hedged verdict is far better
+          than exhausting the budget with nothing written -- always write both files before
+          you run out of turns.
+
+          **light** — routine patch container bump (haiku tier):
+          1. Analyze (step 1 below) — `pr-context.md` is already available; `Read` it first.
+          2. The PR body in `pr-context.md` contains Renovate-embedded release notes. If they
+             cover the full old→new range, use them. Otherwise fetch the upstream releases for
+             that range with a single `gh api` call.
+          3. Grep/Read the repo files that reference this component (step 3 below).
+          4. Write review.md/verdict.txt.
+          Skip the multi-source breadcrumb chase (CHANGELOG files, docs sites, commit history,
+          registry metadata, web search) and the upstream-issues search UNLESS the release notes
+          show breaking changes, deprecations, or security fixes — then escalate to full depth.
+          **Hard cap: at most 3 upstream API calls total (any mix of `gh api`, `gh release view`,
+          `git log`, `WebFetch`). If release notes are not found within those 3 calls, write an
+          APPROVED verdict noting "release notes not publicly available" -- do not search further.**
+          Target: 5–7 turns.
+
+          **full** — minor/feat bump or chart upgrade (sonnet tier):
+          Follow the complete Workflow below without shortcuts. Target: 12–18 turns.
+
+          **deep** — Renovate group PR, high-blast-radius component (envoy, cilium, rook, ceph,
+          kopiur, cert-manager, external-secrets), or any title containing "group" (sonnet tier,
+          40-turn budget):
+          Follow the complete Workflow. For group PRs bundling multiple components, research each
+          component **breadth-first**: check 2–3 sources per component (PR body, GitHub releases,
+          CHANGELOG) before moving to the next, rather than deep-diving any one component.
+          After covering all components, do the upstream-issues search and repo impact assessment.
+          Target: 20–30 turns.
+
+          ## Workflow
+
+          ### 1. Analyze
+
+          PR metadata (title, labels, Renovate-embedded release notes) and the full diff have
+          been pre-fetched into `pr-context.md` in the repo root. **`Read` that file first**
+          — this saves a turn on every tier. Identify:
+          - What is being upgraded (container image, Helm chart, tool, etc.)
+          - The old and new version
+          - Whether this is a wrapper that bundles another component (a Docker image wrapping
+            upstream software, a Helm chart wrapping an application). Identify the inner component
+            and its version change too.
+
+          ### 2. Research
+
+          Trace the dependency chain to its origin. Changelogs live at the source, not always at
+          the wrapper. A Docker image bump from v1.2 to v1.3 might re-wrap an upstream tool that
+          jumped from 4.0 to 5.0; the meaningful changelog is the upstream one.
+
+          Follow breadcrumbs systematically. When one source is a dead end, try the next:
+          - **PR body**: Check for linked release notes; start there.
+          - **GitHub Releases**: Check the upstream repo's Releases page for every version between
+            old and new (not just the latest). Migration notes often appear in intermediate releases.
+          - **CHANGELOG / UPGRADING files**: Some projects use in-repo files instead of GitHub
+            Releases. Check the repo root and docs/ directory.
+          - **Wrapper changelogs**: For wrapper upgrades (charts, images, meta-packages), check
+            changelogs for both the wrapper AND the underlying component separately.
+          - **Documentation sites**: Search for migration guides or "what's new" pages for
+            deprecation notices not mentioned in changelogs.
+          - **Commit history**: If no changelog exists, scan commit messages between the two
+            tags/versions for keywords: breaking, deprecat, remov, renam, migrat, drop, require.
+          - **Registry metadata**: When a repo has no releases or changelog, check the README or
+            container registry (Docker Hub, GHCR, quay.io) for links to the upstream project.
+          - **Web search**: Last resort for hard-to-find changelogs or community migration reports.
+          - **Upstream issues**: After reviewing release notes, search the upstream repo's GitHub
+            issues for open bugs or regressions reported against the new version. Use
+            `gh api "search/issues?q=repo:org/repo+label:bug+VERSION"` or WebSearch for issues
+            referencing the version number. This catches regressions that ship before being
+            documented in a changelog.
+
+          Do not stop at the first source. Cross-reference multiple sources.
+
+          ### 3. Assess Impact
+
+          Read the files in this repository that reference or consume the upgraded component:
+          HelmRelease CRDs, Kustomizations, ConfigMaps, ExternalSecrets, HTTPRoutes, and anything
+          else that touches the dependency.
+
+          Map each finding from the research step against what this repository actually uses. A
+          breaking change that affects a feature we don't use is not actionable.
+
+          ### 4. Categorize
+
+          Sort actionable findings into four buckets:
+          - **Breaking changes**: Incompatibilities requiring repo changes before or alongside
+            this upgrade
+          - **Deprecations**: Treat identically to breaking changes; update usage now rather than
+            relying on deprecated behavior
+          - **New features**: Capabilities worth adopting (simplifies config, eliminates
+            workarounds, improves functionality)
+          - **Known issues**: Open bugs or regressions reported against this version in the
+            upstream issue tracker that could affect this repo
+
+          ## Writing review.md and verdict.txt
+
+          Write your findings to **exactly one** `review.md` and **exactly one** `verdict.txt`.
+          Do not write them more than once — if you need to revise, overwrite both files, don't
+          append.
+
+          **If there are breaking changes or deprecations that affect this repo**:
+          Write `REQUEST_CHANGES` to verdict.txt, with a structured review.md body.
+
+          **If there are no breaking changes or deprecations, but there is a non-empty `New
+          features worth adopting` or `Known issues` section**:
+          Write `COMMENT` (NOT `APPROVED`) to verdict.txt, with the full structured body. This
+          repo's branch protection requires an approving review to auto-merge; a `COMMENT`
+          verdict leaves that requirement unsatisfied on purpose, so the PR waits for a human to
+          look at the advisory finding and approve it themselves, without blocking the PR with a
+          failing check the way `REQUEST_CHANGES` does.
+
+          **If the upgrade is safe** (no actionable findings at all):
+          Write `APPROVED` to verdict.txt, with a brief summary in review.md.
+
+          Structure review.md as follows (omit empty sections). **A non-empty `New
+          features worth adopting` or `Known issues` section is what decides `COMMENT` vs
+          `APPROVED` above.** Only a `- ` bullet in one of these two sections counts; prose on
+          the section header line is not scanned and will not affect the verdict, so never rely
+          on it to convey a finding. Put a negative search result (e.g. "no open issues found
+          for this version") under `Sources consulted` instead, and omit the section entirely
+          when there is nothing actionable — do not add a "none found" bullet just to show the
+          search happened. A finding you have already judged does not affect this repo belongs
+          under `Not applicable to this repo`, never under `Known issues` — `Known issues` is
+          only for open bugs that could plausibly affect this cluster and warrant a human
+          decision:
+
+          ```
+          ### [package]: vOLD → vNEW
+
+          **Verdict**: Safe to merge | Changes required before merge
+
+          **Breaking changes**:
+          - [What changed] — introduced in [version]. Affects `path/to/file`. Fix: [brief description]
+
+          **Deprecations**:
+          - [Same detail as above]
+
+          **New features worth adopting**:
+          - [Feature] — [benefit]. Would change `path/to/file`.
+
+          **Known issues**:
+          - [Issue title/link] — [brief description of impact]
+
+          **Not applicable to this repo**:
+          - [Finding] — [why it doesn't apply]
+
+          **Sources consulted**:
+          - [URLs]
+          ```
+
+          ## Constraints
+
+          - NEVER modify repository files (other than review.md/verdict.txt) — read-only
+            investigation only
+          - NEVER merge the PR, approve merges, or run kubectl/flux/cluster commands
+          - Check git history for context: `git log --oneline --grep="<package>" -n 10`
+          - If unclear, research more rather than guess
+          - When stuck (private repo, ambiguous package, no changelog anywhere), report what you
+            found and what you could not find rather than fabricating information
+          - Write exactly one review.md and one verdict.txt at the end of your analysis
+          - Cite github.com URLs (PRs, issues, commits, releases) normally — write full URLs or
+            `org/repo#123`, never a bare `#NNN` (Forgejo would auto-link it to this repo, not
+            upstream)
+          PROMPT_EOF
+
+          claude -p \
+            --model "$MODEL" \
+            --max-turns "$MAX_TURNS" \
+            --output-format json \
+            --setting-sources user \
+            --allowedTools "Read,Glob,Grep,Write,Bash(gh issue view:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch" \
+            --disallowedTools "Task,Agent" \
+            < prompt.md > claude-exec.json
+
+      - name: Check escalation
+        id: escalation
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         env:
           DEPTH: ${{ steps.model_tier.outputs.depth }}
-          MODEL: ${{ steps.model_tier.outputs.model }}
-        run: bash .forgejo/scripts/stub-reviewer.sh
+          EXEC_FILE: claude-exec.json
+        run: bash .forgejo/scripts/check-escalation.sh
+
+      - name: Append flate evidence (escalation)
+        # The primary pass skipped this at light depth, but the escalated pass
+        # claims full depth and needs the same rendered-diff evidence a normal
+        # full-depth run gets -- otherwise it silently reviews without it.
+        if: ${{ steps.escalation.outputs.escalate == 'true' }}
+        env:
+          FLATE_PATH: setup/flux/cluster
+        run: bash .forgejo/scripts/append-flate-evidence.sh
+
+      - name: Generate review (escalated)
+        id: claude_escalated
+        if: ${{ steps.escalation.outputs.escalate == 'true' }}
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GH_HOST: github.com
+          GITHUB_API_URL: https://api.github.com
+          GH_TOKEN: ${{ secrets.GH_COM_TOKEN }}
+          REASON: ${{ steps.escalation.outputs.reason }}
+        run: |
+          cat > prompt-escalated.md <<EOF
+          The primary (haiku, light-depth) review of this PR was escalated to a deeper pass: ${REASON}
+          EOF
+          cat >> prompt-escalated.md <<'PROMPT_EOF'
+
+          Re-review this PR from scratch at **full** depth (12-18 turn target, 25-turn budget).
+          Follow the exact same repo context, workflow, and review-output format as the primary
+          review below — the only difference is your depth and turn budget. Write your findings
+          to `review.md` and `verdict.txt`, overwriting whatever the primary pass wrote there —
+          neither file is read again after you finish.
+
+          REPO: ${REPO}
+          PR: #${PR}
+          REVIEW DEPTH: full
+
+          ## Repo Context
+
+          This is a Flux GitOps repository managing a single homelab Kubernetes cluster running
+          Talos Linux (1 control plane + 7 workers). Dependencies are primarily:
+          - Container images referenced in Kubernetes manifests, pinned with SHA256 digests
+          - Helm chart versions in HelmRelease CRDs
+          - Custom dependencies managed via regex in YAML files
+
+          Architecture details relevant to impact assessment:
+          - **Flux pattern**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
+          - **Ingress**: Envoy Gateway with HTTPRoute only (NOT Traefik/Ingress)
+          - **Storage**: Ceph block (default), NFS media mounts, kopiur + Kopia backups
+          - **Secrets**: ExternalSecret CRDs only (no plaintext secrets)
+          - **Namespaces**: cert-manager, default, flux-system, kube-system, monitoring, rook-ceph, system-upgrade
+
+          High-blast-radius components that warrant deeper scrutiny:
+          - **Networking**: envoy-gateway, cilium
+          - **Storage**: rook-ceph, kopiur (check for data migrations or CRD changes)
+          - **Auth/secrets**: external-secrets, cert-manager (CRD compatibility)
+
+          `pr-context.md` in the repo root has PR metadata, the full diff, any `## Required
+          checks` section, and a `## Rendered manifest diff (flate)` section — read it first.
+          The rendered manifest diff is the actual cluster-impact diff after Helm/Kustomize
+          rendering and takes priority over the raw git diff for assessing blast radius; a
+          `RENDER FAILED` marker there is a blocker, not a no-op.
+
+          Write `REQUEST_CHANGES` to verdict.txt if there are breaking changes/deprecations that
+          affect this repo; `COMMENT` (NOT `APPROVED`) if there are none of those but there is a
+          non-empty `New features worth adopting` or `Known issues` section — this repo's branch
+          protection requires an approving review to auto-merge, so `COMMENT` leaves that
+          unsatisfied on purpose and waits for a human to look before it merges; otherwise
+          `APPROVED`. `gh` is pointed at github.com (not this repo) for upstream research only —
+          `pr-context.md` already has everything about this PR.
+
+          Structure review.md exactly as (omit empty sections). **A non-empty `New features
+          worth adopting` or `Known issues` section is what decides `COMMENT` vs `APPROVED`
+          above.** Only a `- ` bullet in one of these two sections counts; prose on the section
+          header line is not scanned and will not affect the verdict, so never rely on it to convey
+          a finding. Put a negative search result (e.g. "no open issues found for this version")
+          under `Sources consulted` instead, and omit the section entirely when there is nothing
+          actionable — do not add a "none found" bullet just to show the search happened. A finding
+          you have already judged does not affect this repo belongs under `Not applicable to this
+          repo`, never under `Known issues` — `Known issues` is only for open bugs that could
+          plausibly affect this cluster and warrant a human decision:
+          ```
+          ### [package]: vOLD → vNEW
+
+          **Verdict**: Safe to merge | Changes required before merge
+
+          **Breaking changes**:
+          - [What changed] — introduced in [version]. Affects `path/to/file`. Fix: [brief description]
+
+          **Deprecations**:
+          - [Same detail as above]
+
+          **New features worth adopting**:
+          - [Feature] — [benefit]. Would change `path/to/file`.
+
+          **Known issues**:
+          - [Issue title/link] — [brief description of impact]
+
+          **Not applicable to this repo**:
+          - [Finding] — [why it doesn't apply]
+
+          **Sources consulted**:
+          - [URLs]
+          ```
+
+          NEVER modify repository files (other than review.md/verdict.txt), merge the PR, or run
+          kubectl/flux/cluster commands. Cite github.com URLs normally; avoid bare `#NNN`
+          references — use `org/repo#123` or a full URL instead.
+          PROMPT_EOF
+
+          claude -p \
+            --model sonnet \
+            --max-turns 25 \
+            --output-format json \
+            --setting-sources user \
+            --allowedTools "Read,Glob,Grep,Write,Bash(gh issue view:*),Bash(gh api:*),Bash(gh release view:*),Bash(gh release list:*),Bash(gh repo view:*),Bash(git log:*),Bash(git show:*),Bash(git tag:*),Bash(curl:*),WebFetch,WebSearch" \
+            --disallowedTools "Task,Agent" \
+            < prompt-escalated.md > claude-exec-escalated.json
 
       - name: Prepare review body
         id: prepare
@@ -206,4 +665,15 @@ jobs:
         env:
           FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODEL: ${{ steps.model_tier.outputs.model }}
+          EXEC_FILE: claude-exec.json
+        run: bash .forgejo/scripts/report-claude-usage.sh
+
+      - name: Log usage (escalated)
+        if: ${{ always() && steps.escalation.outputs.escalate == 'true' }}
+        continue-on-error: true
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODEL: sonnet
+          ROUTE: escalated
+          EXEC_FILE: claude-exec-escalated.json
         run: bash .forgejo/scripts/report-claude-usage.sh
