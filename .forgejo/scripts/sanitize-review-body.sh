@@ -1,0 +1,1 @@
+../../.github/scripts/sanitize-review-body.sh
