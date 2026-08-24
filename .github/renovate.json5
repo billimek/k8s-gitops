@@ -24,6 +24,14 @@
   // releaseTimestamp; without this, Renovate's timestamp-required default marks them pending
   // forever and never opens a PR, even once minimumReleaseAge would otherwise be satisfied.
   minimumReleaseAgeBehaviour: 'timestamp-optional',
+  // Posting the renovate/stability-days status check crashes on Forgejo (mirrors
+  // renovatebot/renovate#44119's GitHub case: an error setting the branch status
+  // gets swallowed by processBranch and reported as repository-changed, aborting
+  // every run right after the first branch is created). minimumReleaseAge gating
+  // itself still applies; this just stops Renovate from posting a status about it.
+  statusCheckNames: {
+    minimumReleaseAge: null,
+  },
 
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   suppressNotifications: [
