@@ -9,7 +9,7 @@ spec:
   discoveryFilters:
     - billimek/k8s-gitops
   # Native forgejo platform support landed in Renovate 41.41.0; must stay >= that.
-  image: ghcr.io/renovatebot/renovate:44.41.0@sha256:98c8add98a9ae56c7ffaf16b7ce73decce03bbf17fb1cece248c18b1a7bebcd2
+  image: ghcr.io/renovatebot/renovate:44.41.1@sha256:cb7aa8247e907244e4aefe65a9f7ae9c1f493aafc2a86cbc277d92c5c0eca477
   parallelism: 1
   provider:
     name: forgejo
