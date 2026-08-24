@@ -47,12 +47,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set GOMAXPROCS
-        # flate's cgroup-aware GOMAXPROCS auto-detect segfaults in job pods with
-        # no CPU limit (cpu.max "max"); must be set before Setup Flate runs, since
-        # that action invokes the flate binary itself right after install.
-        run: echo "GOMAXPROCS=$(nproc)" >> "$GITHUB_ENV"
-
       - name: Setup Flate
         uses: https://github.com/home-operations/flate/action@797c483c107913d3f7757b7d3e1f6bc9179fe43d # v0.6.0
         with:
@@ -79,12 +73,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-
-      - name: Set GOMAXPROCS
-        # flate's cgroup-aware GOMAXPROCS auto-detect segfaults in job pods with
-        # no CPU limit (cpu.max "max"); must be set before Setup Flate runs, since
-        # that action invokes the flate binary itself right after install.
-        run: echo "GOMAXPROCS=$(nproc)" >> "$GITHUB_ENV"
 
       - name: Setup Flate
         uses: https://github.com/home-operations/flate/action@797c483c107913d3f7757b7d3e1f6bc9179fe43d # v0.6.0
