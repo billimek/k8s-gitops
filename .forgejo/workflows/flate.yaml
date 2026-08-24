@@ -58,6 +58,13 @@ jobs:
       - name: Run Flate test
         env:
           FLATE_PATH: setup/flux/cluster
+          # flate test ks has a goroutine race that segfaults under real
+          # parallelism -- reproduced 10/10 with default GOMAXPROCS on this
+          # runner's nodes, 0/10 with GOMAXPROCS=1. Not a runner config issue;
+          # this cluster's hardware/scheduling just triggers it reliably
+          # where GitHub-hosted runners apparently don't. Remove once fixed
+          # upstream in home-operations/flate.
+          GOMAXPROCS: "1"
         run: flate test all --allow-missing-secrets
 
   diff:
@@ -80,6 +87,7 @@ jobs:
       - name: Run Flate diff
         env:
           FLATE_PATH: setup/flux/cluster
+          GOMAXPROCS: "1"
         run: |
           flate diff all \
             --allow-missing-secrets \
