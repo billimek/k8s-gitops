@@ -2,12 +2,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 #
 # No "Setup Flate" step: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04 bakes
-# in a flate binary already on PATH, and invoking flate/action's steps from
-# inside its composite action reliably segfaults on this runner (confirmed:
-# the identical binary runs fine as a plain job step, only crashes when
-# invoked as a nested composite-action step). Bump the baked-in binary by
-# rebuilding the runner image when flate needs to move; there is nothing here
-# to keep in sync with it.
+# in flate already on PATH. Bump the baked-in binary by rebuilding that image.
 name: Flate
 
 on:
@@ -58,12 +53,8 @@ jobs:
       - name: Run Flate test
         env:
           FLATE_PATH: setup/flux/cluster
-          # flate test ks has a goroutine race that segfaults under real
-          # parallelism -- reproduced 10/10 with default GOMAXPROCS on this
-          # runner's nodes, 0/10 with GOMAXPROCS=1. Not a runner config issue;
-          # this cluster's hardware/scheduling just triggers it reliably
-          # where GitHub-hosted runners apparently don't. Remove once fixed
-          # upstream in home-operations/flate.
+          # Works around a goroutine race in flate's `test ks` that segfaults
+          # under real parallelism on this cluster's nodes.
           GOMAXPROCS: "1"
         run: flate test all --allow-missing-secrets
 
