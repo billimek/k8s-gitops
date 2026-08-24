@@ -122,7 +122,7 @@ jobs:
         # (cached install, ~2s).
         if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
         continue-on-error: true
-        uses: home-operations/flate/action@2862e47ed4d6efebeffb43c7691ee6df06b4536c # v0.5.0
+        uses: home-operations/flate/action@797c483c107913d3f7757b7d3e1f6bc9179fe43d # v0.6.0
         with:
           cache: true
 
@@ -149,7 +149,7 @@ jobs:
 
       - id: claude
         if: steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true'
-        uses: anthropics/claude-code-action@5ee796a55f92566ecd7e39d70dd613abcbea0d7c # v1.0.197
+        uses: anthropics/claude-code-action@dcb57747bfceeaa1fa72638cae52295d1d853d4a # v1.0.199
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: "renovate[bot]"
@@ -530,7 +530,7 @@ jobs:
 
       - id: claude_escalated
         if: steps.escalation.outputs.escalate == 'true'
-        uses: anthropics/claude-code-action@5ee796a55f92566ecd7e39d70dd613abcbea0d7c # v1.0.197
+        uses: anthropics/claude-code-action@dcb57747bfceeaa1fa72638cae52295d1d853d4a # v1.0.199
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           allowed_bots: "renovate[bot]"
