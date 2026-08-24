@@ -51,12 +51,15 @@ jobs:
         uses: https://github.com/home-operations/flate/action@797c483c107913d3f7757b7d3e1f6bc9179fe43d # v0.6.0
         with:
           cache: true
-          # The default install path is shared across concurrent job pods on
-          # the same runner node with no locking, so simultaneous jobs racing
-          # to install the same pinned version can execute a partially
-          # written binary (segfault or "Text file busy"). A per-run path
-          # avoids sharing it at all.
-          bindir: ${{ runner.temp }}/flate-bin-${{ forgejo.run_id }}-${{ forgejo.job }}
+          # ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04 bakes in a flate
+          # binary at exactly the version pinned above. Pointing bindir here
+          # makes the action's own already-installed check find it and skip
+          # downloading a second copy -- which is what was segfaulting.
+          # Bump this pin only after confirming the runner image was rebuilt
+          # with the matching flate version; otherwise the action falls back
+          # to downloading, which will fail to write to this root-owned path
+          # as the job's non-root user (loud failure, not a silent mismatch).
+          bindir: /usr/local/bin
 
       - name: Run Flate test
         env:
@@ -84,7 +87,7 @@ jobs:
         uses: https://github.com/home-operations/flate/action@797c483c107913d3f7757b7d3e1f6bc9179fe43d # v0.6.0
         with:
           cache: true
-          bindir: ${{ runner.temp }}/flate-bin-${{ forgejo.run_id }}-${{ forgejo.job }}
+          bindir: /usr/local/bin
 
       - name: Run Flate diff
         env:
