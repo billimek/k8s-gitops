@@ -4,8 +4,8 @@ Supporting scripts for `.forgejo/workflows/renovate-review.yaml`.
 
 Several entries here are **symlinks into `.github/scripts/`**. Those scripts are pure text
 processing with no platform coupling, and the GitHub and Forgejo review gates run in parallel
-until #6151 signs off — a divergent copy on either side would confound exactly the comparison
-that phase exists to make. Symlinking removes the possibility:
+until the Forgejo one is proven out — a divergent copy on either side would confound that
+comparison. Symlinking removes the possibility:
 
 | Symlinked (shared, unchanged) | Ported (Forgejo `/api/v1`) |
 | --- | --- |
@@ -16,11 +16,11 @@ that phase exists to make. Symlinking removes the possibility:
 | | `prepare-review-body.sh` |
 | | `publish-review-status.sh` |
 | | `report-claude-usage.sh` |
-| | `stub-reviewer.sh` (temporary, replaced in #6150) |
+| | `check-escalation.sh` |
 
-At cutover (#6121) `.github/` goes away, so each symlink has to become a real file in the same
+Once the GitHub workflow is retired, each symlink has to become a real file in the same
 change. A dangling symlink fails loudly rather than silently, which is the intent.
 
-`check-escalation.sh` and `finalize-review.sh` have no counterpart here: escalation keys off the
-model's execution file and lands with the model in #6150, and finalization is impossible
-after the fact on Forgejo — see the header of `prepare-review-body.sh`.
+`finalize-review.sh` has no counterpart here: Forgejo has no endpoint to edit a submitted
+review, so `prepare-review-body.sh` does that work up front instead of after the fact — see
+its header.

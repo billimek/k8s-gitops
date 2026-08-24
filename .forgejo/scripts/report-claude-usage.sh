@@ -1,21 +1,16 @@
 #!/usr/bin/env bash
-# Forgejo port of .github/scripts/report-claude-usage.sh.
-#
 # Summarize Claude Code usage from the reviewer's execution file and upsert a
 # sticky PR comment with a cumulative table -- one row per workflow run -- so
 # every review run's cost stays visible rather than overwriting the previous
 # run's numbers.
-#
-# While the model step is stubbed (see #6149) EXEC_FILE is absent on every run
-# and each row lands as "(no data)". That is the point: it exercises the
-# create-then-PATCH upsert path without spending tokens.
 #
 # Required env:
 #   REPO, PR, FORGEJO_TOKEN, FORGEJO_API
 #   MODEL        - model name (steps.model_tier.outputs.model)
 #
 # Optional env:
-#   EXEC_FILE    - path to the reviewer's execution file
+#   EXEC_FILE    - path to the reviewer's captured `claude --output-format
+#                  json` result (a single JSON object)
 #   ROUTE        - route label for this run, e.g. "escalated" (appended to the
 #                  model column so a second pass is distinguishable from the
 #                  primary run in the cumulative table)
@@ -31,7 +26,7 @@ out="${GITHUB_STEP_SUMMARY:-/dev/stdout}"
 
 r=""
 if [ -n "${EXEC_FILE:-}" ] && [ -f "$EXEC_FILE" ]; then
-  r=$(jq -c 'map(select(.type=="result")) | last' "$EXEC_FILE" 2>/dev/null)
+  r=$(jq -c '.' "$EXEC_FILE" 2>/dev/null)
 fi
 
 # NOTE: computed fields must guard the source field INSIDE the expression. jq's //

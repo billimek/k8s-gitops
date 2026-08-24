@@ -64,7 +64,7 @@ spec:
                     cpu: 100m
                     memory: 256Mi
                   limits:
-                    memory: 2Gi
+                    memory: 4Gi
             restartPolicy: Never
           podspec-dind.yaml: |-
             initContainers:
