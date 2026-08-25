@@ -53,22 +53,7 @@ jobs:
       - name: Run Flate test
         env:
           FLATE_PATH: setup/flux/cluster
-        # GOMAXPROCS=1 (set here since #6119, on the theory that it worked
-        # around a goroutine race) was the actual cause of flate's SIGSEGV in
-        # this runner's job pods, not a fix for it -- confirmed by direct
-        # testing: 12/12 crashes with it set, 12/12 clean without it, across
-        # every node, at the job pod's real 4Gi limit. Never set on
-        # GitHub-hosted runners, which is why this never happened there.
-        # The retry stays as a cheap safety net; it should never fire now.
-        run: |
-          for attempt in 1 2 3; do
-            flate test all --allow-missing-secrets && exit 0
-            rc=$?
-            [ "$rc" -eq 139 ] || exit "$rc"
-            echo "::warning::flate segfaulted (attempt $attempt/3), retrying"
-            sleep 2
-          done
-          exit 139
+        run: flate test all --allow-missing-secrets
 
   diff:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
@@ -90,19 +75,12 @@ jobs:
       - name: Run Flate diff
         env:
           FLATE_PATH: setup/flux/cluster
-        # See "Run Flate test" above re: GOMAXPROCS and the retry.
         run: |
-          for attempt in 1 2 3; do
-            flate diff all \
-              --allow-missing-secrets \
-              --skip-kinds ValidatingWebhookConfiguration \
-              --skip-kinds MutatingWebhookConfiguration \
-              -o diff > flate.diff
-            rc=$?
-            [ "$rc" -eq 139 ] || break
-            echo "::warning::flate segfaulted (attempt $attempt/3), retrying"
-            sleep 2
-          done
+          flate diff all \
+            --allow-missing-secrets \
+            --skip-kinds ValidatingWebhookConfiguration \
+            --skip-kinds MutatingWebhookConfiguration \
+            -o diff > flate.diff || true
           [ -s flate.diff ] || rm -f flate.diff
 
       - name: Build comment body

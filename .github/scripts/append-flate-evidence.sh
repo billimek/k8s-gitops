@@ -20,22 +20,11 @@ set -euo pipefail
 : "${FLATE_PATH:?FLATE_PATH required}"
 
 rc=0
-# flate segfaulted (exit 139) in the Forgejo runner's job pods whenever
-# GOMAXPROCS=1 was set (see .forgejo/workflows/flate.yaml) -- that's no
-# longer set here, so this retry is a cheap safety net that should never
-# fire. Kept in case something else surfaces; a genuine render failure exits
-# non-139 and is not retried.
-for attempt in 1 2 3; do
-  flate diff all \
-    --allow-missing-secrets \
-    --skip-kinds ValidatingWebhookConfiguration \
-    --skip-kinds MutatingWebhookConfiguration \
-    -o diff > flate.diff 2> flate.err || rc=$?
-  [ "$rc" -eq 139 ] || break
-  echo "flate segfaulted (attempt $attempt/3), retrying" >&2
-  rc=0
-  sleep 2
-done
+flate diff all \
+  --allow-missing-secrets \
+  --skip-kinds ValidatingWebhookConfiguration \
+  --skip-kinds MutatingWebhookConfiguration \
+  -o diff > flate.diff 2> flate.err || rc=$?
 
 {
   printf '\n---\n## Rendered manifest diff (flate)\n\n'
