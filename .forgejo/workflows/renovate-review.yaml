@@ -146,9 +146,12 @@ jobs:
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light' }}
         env:
           FLATE_PATH: setup/flux/cluster
-          # Works around a goroutine race in flate's `test`/`diff` that
-          # segfaults under real parallelism on this cluster's nodes.
+          # See .forgejo/workflows/flate.yaml -- GOMAXPROCS=1 alone doesn't
+          # fully prevent the segfault; asyncpreemptoff disables the Go
+          # runtime mechanism (SIGURG-based goroutine preemption) that
+          # crashes under this runner's restricted seccomp profile.
           GOMAXPROCS: "1"
+          GODEBUG: "asyncpreemptoff=1"
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
       - name: Setup Claude Code CLI
@@ -510,6 +513,7 @@ jobs:
         env:
           FLATE_PATH: setup/flux/cluster
           GOMAXPROCS: "1"
+          GODEBUG: "asyncpreemptoff=1"
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
       - name: Generate review (escalated)
