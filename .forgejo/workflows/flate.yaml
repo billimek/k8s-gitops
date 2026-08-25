@@ -53,16 +53,23 @@ jobs:
       - name: Run Flate test
         env:
           FLATE_PATH: setup/flux/cluster
-          # GOMAXPROCS=1 alone didn't fully fix the segfault (still recurred
-          # on #6219 after two retries): the runner's job pods run under
-          # seccompProfile RuntimeDefault (kubernetes/default/forgejo/runner.yaml),
-          # which GitHub-hosted runners don't have, and Go's async goroutine
-          # preemption (SIGURG-based, Go 1.14+) is documented to segfault
-          # under restricted seccomp/container syscall environments.
-          # asyncpreemptoff disables that mechanism outright.
+          # Works around a goroutine race in flate's `test ks` that segfaults
+          # under real parallelism on this cluster's nodes.
           GOMAXPROCS: "1"
-          GODEBUG: "asyncpreemptoff=1"
-        run: flate test all --allow-missing-secrets
+        # flate intermittently SIGSEGVs (exit 139) in this runner's job pods --
+        # never on GitHub-hosted runners, cause unknown despite repeated
+        # investigation (see git log for kubernetes/default/forgejo/runner.yaml
+        # and this file). Retrying is a deliberate mitigation, not a fix: a
+        # genuine test failure exits non-139 and is not retried.
+        run: |
+          for attempt in 1 2 3; do
+            flate test all --allow-missing-secrets && exit 0
+            rc=$?
+            [ "$rc" -eq 139 ] || exit "$rc"
+            echo "::warning::flate segfaulted (attempt $attempt/3), retrying"
+            sleep 2
+          done
+          exit 139
 
   diff:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
@@ -85,13 +92,19 @@ jobs:
         env:
           FLATE_PATH: setup/flux/cluster
           GOMAXPROCS: "1"
-          GODEBUG: "asyncpreemptoff=1"
+        # See "Run Flate test" above re: the retry.
         run: |
-          flate diff all \
-            --allow-missing-secrets \
-            --skip-kinds ValidatingWebhookConfiguration \
-            --skip-kinds MutatingWebhookConfiguration \
-            -o diff > flate.diff || true
+          for attempt in 1 2 3; do
+            flate diff all \
+              --allow-missing-secrets \
+              --skip-kinds ValidatingWebhookConfiguration \
+              --skip-kinds MutatingWebhookConfiguration \
+              -o diff > flate.diff
+            rc=$?
+            [ "$rc" -eq 139 ] || break
+            echo "::warning::flate segfaulted (attempt $attempt/3), retrying"
+            sleep 2
+          done
           [ -s flate.diff ] || rm -f flate.diff
 
       - name: Build comment body

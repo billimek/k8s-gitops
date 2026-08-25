@@ -20,11 +20,22 @@ set -euo pipefail
 : "${FLATE_PATH:?FLATE_PATH required}"
 
 rc=0
-flate diff all \
-  --allow-missing-secrets \
-  --skip-kinds ValidatingWebhookConfiguration \
-  --skip-kinds MutatingWebhookConfiguration \
-  -o diff > flate.diff 2> flate.err || rc=$?
+# flate intermittently SIGSEGVs (exit 139) in the Forgejo runner's job pods --
+# never on GitHub-hosted runners, cause unknown despite repeated investigation
+# (see git log for kubernetes/default/forgejo/runner.yaml and
+# .forgejo/workflows/flate.yaml). Retrying is a deliberate mitigation, not a
+# fix: a genuine render failure exits non-139 and is not retried.
+for attempt in 1 2 3; do
+  flate diff all \
+    --allow-missing-secrets \
+    --skip-kinds ValidatingWebhookConfiguration \
+    --skip-kinds MutatingWebhookConfiguration \
+    -o diff > flate.diff 2> flate.err || rc=$?
+  [ "$rc" -eq 139 ] || break
+  echo "flate segfaulted (attempt $attempt/3), retrying" >&2
+  rc=0
+  sleep 2
+done
 
 {
   printf '\n---\n## Rendered manifest diff (flate)\n\n'
