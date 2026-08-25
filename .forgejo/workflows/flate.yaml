@@ -53,14 +53,13 @@ jobs:
       - name: Run Flate test
         env:
           FLATE_PATH: setup/flux/cluster
-          # Works around a goroutine race in flate's `test ks` that segfaults
-          # under real parallelism on this cluster's nodes.
-          GOMAXPROCS: "1"
-        # flate intermittently SIGSEGVs (exit 139) in this runner's job pods --
-        # never on GitHub-hosted runners, cause unknown despite repeated
-        # investigation (see git log for kubernetes/default/forgejo/runner.yaml
-        # and this file). Retrying is a deliberate mitigation, not a fix: a
-        # genuine test failure exits non-139 and is not retried.
+        # GOMAXPROCS=1 (set here since #6119, on the theory that it worked
+        # around a goroutine race) was the actual cause of flate's SIGSEGV in
+        # this runner's job pods, not a fix for it -- confirmed by direct
+        # testing: 12/12 crashes with it set, 12/12 clean without it, across
+        # every node, at the job pod's real 4Gi limit. Never set on
+        # GitHub-hosted runners, which is why this never happened there.
+        # The retry stays as a cheap safety net; it should never fire now.
         run: |
           for attempt in 1 2 3; do
             flate test all --allow-missing-secrets && exit 0
@@ -91,8 +90,7 @@ jobs:
       - name: Run Flate diff
         env:
           FLATE_PATH: setup/flux/cluster
-          GOMAXPROCS: "1"
-        # See "Run Flate test" above re: the retry.
+        # See "Run Flate test" above re: GOMAXPROCS and the retry.
         run: |
           for attempt in 1 2 3; do
             flate diff all \
