@@ -17,4 +17,11 @@ spec:
   schedule: "*/30 * * * *"
   secretRef: renovate-secret
   webhook:
-    enabled: false
+    enabled: true
+    # Forgejo and the operator both run in this cluster, so delivery never
+    # needs to leave it -- no HTTPRoute/ingress required. Chart's Service
+    # already exposes the webhook port once webhook.enabled is set (see
+    # helmrelease.yaml); this just points registration at it directly.
+    baseUrl: http://renovate-operator-renovate-operator.default.svc.cluster.local:8082
+    sync:
+      enabled: true
