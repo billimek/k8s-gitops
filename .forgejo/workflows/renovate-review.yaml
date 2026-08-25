@@ -140,17 +140,15 @@ jobs:
             cat "$MUST_CHECK_FILE"
           } > pr-context.md
 
-      - name: Render flate diff
-        if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
-        continue-on-error: true
-        uses: https://github.com/home-operations/flate/action@2862e47ed4d6efebeffb43c7691ee6df06b4536c # v0.5.0
-        with:
-          cache: true
-
       - name: Append flate evidence
+        # No "Setup Flate" step: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+        # bakes in flate already on PATH (see .forgejo/workflows/flate.yaml).
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light' }}
         env:
           FLATE_PATH: setup/flux/cluster
+          # Works around a goroutine race in flate's `test`/`diff` that
+          # segfaults under real parallelism on this cluster's nodes.
+          GOMAXPROCS: "1"
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
       - name: Setup Claude Code CLI
@@ -511,6 +509,7 @@ jobs:
         if: ${{ steps.escalation.outputs.escalate == 'true' }}
         env:
           FLATE_PATH: setup/flux/cluster
+          GOMAXPROCS: "1"
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
       - name: Generate review (escalated)
