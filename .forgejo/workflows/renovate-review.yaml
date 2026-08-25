@@ -146,9 +146,10 @@ jobs:
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light' }}
         env:
           FLATE_PATH: setup/flux/cluster
-          # See .forgejo/workflows/flate.yaml -- append-flate-evidence.sh
-          # retries the flate invocation itself on segfault.
-          GOMAXPROCS: "1"
+          # No GOMAXPROCS override -- see .forgejo/workflows/flate.yaml,
+          # setting it was the actual cause of flate's SIGSEGV here, not a
+          # fix. append-flate-evidence.sh retries on segfault as a cheap
+          # safety net; it should never fire now.
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
       - name: Setup Claude Code CLI

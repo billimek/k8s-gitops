@@ -20,11 +20,11 @@ set -euo pipefail
 : "${FLATE_PATH:?FLATE_PATH required}"
 
 rc=0
-# flate intermittently SIGSEGVs (exit 139) in the Forgejo runner's job pods --
-# never on GitHub-hosted runners, cause unknown despite repeated investigation
-# (see git log for kubernetes/default/forgejo/runner.yaml and
-# .forgejo/workflows/flate.yaml). Retrying is a deliberate mitigation, not a
-# fix: a genuine render failure exits non-139 and is not retried.
+# flate segfaulted (exit 139) in the Forgejo runner's job pods whenever
+# GOMAXPROCS=1 was set (see .forgejo/workflows/flate.yaml) -- that's no
+# longer set here, so this retry is a cheap safety net that should never
+# fire. Kept in case something else surfaces; a genuine render failure exits
+# non-139 and is not retried.
 for attempt in 1 2 3; do
   flate diff all \
     --allow-missing-secrets \
