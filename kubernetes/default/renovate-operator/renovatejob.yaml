@@ -14,9 +14,7 @@ spec:
   provider:
     name: forgejo
     endpoint: https://git.eviljungle.com/api/v1
-  # Temporarily disabled while migrating to Forgejo; switched to a schedule
-  # that never fires so GitHub's Renovate app is the sole runner again.
-  schedule: "0 0 31 2 *"
+  schedule: "*/30 * * * *"
   secretRef: renovate-secret
   webhook:
     enabled: false
