@@ -70,6 +70,12 @@ spec:
           # EndBug/label-sync). Point straight at github.com so our
           # .forgejo/workflows/* can reference arbitrary GitHub Actions.
           DEFAULT_ACTIONS_URL: https://github.com
+        webhook:
+          # Forgejo's SSRF guard rejects webhook deliveries to any host not
+          # listed here by default. renovate-operator's webhook receiver is
+          # in-cluster (kubernetes/default/renovate-operator/), so its
+          # cluster-DNS name needs an explicit allow.
+          ALLOWED_HOST_LIST: "*.default.svc.cluster.local"
 
     service:
       http:
