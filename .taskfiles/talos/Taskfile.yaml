@@ -3,82 +3,72 @@
 version: "3"
 
 tasks:
-  validate-clusterconfig:
-    desc: Validate talconfig schema and deprecations
+  generate-secrets:
+    desc: Render secrets.yaml for topf from 1Password
     preconditions:
-      - which talhelper
-      - test -f {{.SETUP_DIR}}/talos/talconfig.yaml
-    cmds:
-      - talhelper validate talconfig {{.SETUP_DIR}}/talos/talconfig.yaml
-
-  generate-clusterconfig:
-    desc: Generate clusterconfig for Talos
-    preconditions:
-      - which op test talhelper
-      - test -f {{.SETUP_DIR}}/talos/talsecret.yaml
-      - test -f {{.SETUP_DIR}}/talos/talconfig.yaml
+      - which op envsubst
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml.tpl
       - test -f {{.SETUP_DIR}}/talos/talhelper-secrets.env
       - op user get --me
     cmds:
-      - op run --env-file {{.SETUP_DIR}}/talos/talhelper-secrets.env --no-masking -- talhelper genconfig
-        --secret-file {{.SETUP_DIR}}/talos/talsecret.yaml
-        --config-file {{.SETUP_DIR}}/talos/talconfig.yaml
-        --out-dir {{.SETUP_DIR}}/talos/clusterconfig
+      - op run --env-file {{.SETUP_DIR}}/talos/talhelper-secrets.env --no-masking -- sh -c
+        'envsubst < {{.SETUP_DIR}}/talos/secrets.yaml.tpl > {{.SETUP_DIR}}/talos/secrets.yaml'
+
+  render-clusterconfig:
+    desc: Render Talos machine configs locally for validation (no apply)
+    preconditions:
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/topf.yaml
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
+    dir: "{{.SETUP_DIR}}/talos"
+    cmds:
+      - topf render -o ./render-output
+
+  generate-talosconfig:
+    desc: Generate talosconfig from the secrets bundle
+    preconditions:
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/topf.yaml
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
+    dir: "{{.SETUP_DIR}}/talos"
+    cmds:
+      - topf talosconfig > "{{.TALOSCONFIG}}"
 
   apply-clusterconfig:
     desc: Apply clusterconfig for a Talos cluster
-    vars:
-      CLUSTERCONFIG_FILES:
-        sh: ls {{.SETUP_DIR}}/talos/clusterconfig/*.yaml
     preconditions:
-      - which ls
-      - test -f "{{.TALOSCONFIG}}"
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/topf.yaml
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
+    dir: "{{.SETUP_DIR}}/talos"
     cmds:
-      - for:
-          var: CLUSTERCONFIG_FILES
-        task: _apply-machineconfig
-        vars:
-          FILENAME: "{{.ITEM}}"
-          HOSTNAME: |-
-            {{ trimPrefix (printf "home-") (base .ITEM) | trimSuffix ".yaml" }}
-          DRY_RUN: "{{ .DRY_RUN }}"
+      - topf apply {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}
 
   apply-node:
     desc: Apply Talos config to a node [NODE=required]
     preconditions:
-      - which talosctl
-      - test -f "{{.TALOSCONFIG}}"
-      - talosctl --nodes {{.NODE}} get machineconfig
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
     requires:
       vars:
         - NODE
-    vars:
-      FILE:
-        sh: ls {{.SETUP_DIR}}/talos/clusterconfig/home-{{.NODE}}*.yaml
+    dir: "{{.SETUP_DIR}}/talos"
     cmds:
-      - task: _apply-machineconfig
-        vars:
-          FILENAME: "{{.FILE}}"
-          HOSTNAME: "{{.NODE}}"
-      - talosctl --nodes {{.NODE}} health
+      - topf apply --nodes-filter "^{{.NODE}}$" {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}
 
   upgrade-node:
     desc: Upgrade Talos on a single node [NODE=required]
     preconditions:
-      - which talosctl yq
-      - test -f "{{.TALOSCONFIG}}"
-      - talosctl --nodes {{.NODE}} get machineconfig
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
     requires:
       vars:
         - NODE
     vars:
-      FILE:
-        sh: ls {{.SETUP_DIR}}/talos/clusterconfig/home-{{.NODE}}*.yaml
-      TALOS_IMAGE:
-        sh: yq '.machine.install.image' < "{{.FILE}}"
       MODE: '{{.MODE | default "powercycle"}}'
+    dir: "{{.SETUP_DIR}}/talos"
     cmds:
-      - talosctl --nodes {{.NODE}} upgrade --image="{{.TALOS_IMAGE}}" --reboot-mode={{.MODE}} --timeout=10m
+      - topf upgrade --nodes-filter "^{{.NODE}}$" --reboot-mode={{.MODE}}
 
   upgrade-k8s:
     desc: Upgrade Kubernetes across the whole cluster
@@ -137,56 +127,31 @@ tasks:
   reset-node:
     desc: Reset Talos on a single node [NODE=required]
     preconditions:
-      - talosctl --nodes {{.NODE}} get machineconfig
-      - which talosctl
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
     requires:
       vars:
         - NODE
+    dir: "{{.SETUP_DIR}}/talos"
     prompt: Reset Talos node '{{.NODE}}' ... continue?
     cmds:
-      - talosctl reset --nodes {{.NODE}} --graceful=false
+      - topf reset --nodes-filter "^{{.NODE}}$"
 
   reset-cluster:
     desc: Reset Talos across the whole cluster
     preconditions:
-      - talosctl --nodes {{.NODES}} get machineconfig
-      - which jq talosctl
-    vars:
-      NODES:
-        sh: talosctl --talosconfig "{{.TALOSCONFIG}}" config info --output json | jq --exit-status --join-output '[.nodes[]] | join(",")'
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
+    dir: "{{.SETUP_DIR}}/talos"
     prompt: Reset the Talos cluster ... continue?
     cmds:
-      - talosctl reset --nodes {{.NODES}} --graceful=false
+      - topf reset
 
   kubeconfig:
     desc: Generate the kubeconfig for a Talos cluster
     preconditions:
-      - talosctl --nodes {{.NODE}} get machineconfig
-      - which jq talosctl
-    vars:
-      NODE:
-        sh: talosctl --talosconfig "{{.TALOSCONFIG}}" config info --output json | jq --exit-status --raw-output '.endpoints[]' | shuf -n 1
+      - which topf
+      - test -f {{.SETUP_DIR}}/talos/secrets.yaml
+    dir: "{{.SETUP_DIR}}/talos"
     cmds:
-      - talosctl kubeconfig --nodes {{.NODE}} --force --force-context-name "home" "{{.KUBECONFIG}}"
-
-  _apply-machineconfig:
-    internal: true
-    desc: Apply a single Talos machineConfig to a Talos node
-    preconditions:
-      - which talosctl
-      - test -f "{{.FILENAME}}"
-    requires:
-      vars:
-        - HOSTNAME
-        - FILENAME
-    vars:
-      MODE: '{{.MODE | default "auto"}}'
-      INSECURE:
-        sh: talosctl --nodes {{.HOSTNAME}} get machineconfig &> /dev/null || echo true
-    cmds:
-      - talosctl apply-config
-          --nodes "{{.HOSTNAME}}"
-          --file "{{.FILENAME}}"
-          --mode="{{.MODE}}"
-          {{ if eq "true" .INSECURE }}--insecure{{ end }}
-          {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}
+      - topf kubeconfig > "{{.KUBECONFIG}}"

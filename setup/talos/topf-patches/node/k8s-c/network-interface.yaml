@@ -1,0 +1,10 @@
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: ethSel0
+selector:
+  match: glob("ac:1f:6b:6f:27:5f", mac(link.hardware_addr))
+---
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: ethSel0

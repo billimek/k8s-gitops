@@ -1,0 +1,4 @@
+customization:
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/intel-ucode

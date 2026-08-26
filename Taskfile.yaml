@@ -18,7 +18,7 @@ vars:
   SETUP_DIR: "{{.ROOT_DIR}}/setup"
   KUBECONFIG: "{{.ROOT_DIR}}/kubeconfig"
   MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.taskfiles/.minijinja.toml"
-  TALOSCONFIG: "{{.SETUP_DIR}}/talos/clusterconfig/talosconfig"
+  TALOSCONFIG: "{{.SETUP_DIR}}/talos/talosconfig"
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"

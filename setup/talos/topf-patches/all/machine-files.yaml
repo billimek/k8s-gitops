@@ -1,0 +1,21 @@
+machine:
+  files:
+    - # Spegel
+      op: create
+      path: /etc/cri/conf.d/20-customization.part
+      content: |
+        [plugins."io.containerd.cri.v1.images"]
+          discard_unpacked_layers = false
+        [plugins."io.containerd.cri.v1.runtime"]
+          device_ownership_from_security_context = true
+
+    - #NFS Mount
+      op: overwrite
+      path: /etc/nfsmount.conf
+      permissions: 0o644
+      content: |-
+        [ NFSMount_Global_Options ]
+        nfsvers=4.2
+        hard=True
+        nconnect=16
+        noatime=True

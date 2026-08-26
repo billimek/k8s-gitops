@@ -1,0 +1,4 @@
+machine:
+  install:
+    diskSelector:
+      model: WDS500G3X0C-00SJG0

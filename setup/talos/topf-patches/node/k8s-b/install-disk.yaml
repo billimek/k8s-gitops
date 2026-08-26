@@ -1,0 +1,4 @@
+machine:
+  install:
+    diskSelector:
+      model: Samsung SSD 970

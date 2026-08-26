@@ -1,0 +1,4 @@
+machine:
+  install:
+    diskSelector:
+      model: M4-CT256M4SSD2
