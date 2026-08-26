@@ -95,7 +95,7 @@ fi
 # Fetch the existing sticky comment: id + body.
 existing=$(fj_get_all "/issues/${PR}/comments" 2>/dev/null \
   | MARKER="$MARKER" jq -r \
-    '[.[] | select(.user.login == env.FJ_REVIEWER_LOGIN and ((.body // "") | startswith(env.MARKER)))]
+    '[.[] | select(.user.login == env.FJ_ACTIONS_LOGIN and ((.body // "") | startswith(env.MARKER)))]
      | last | {id: (.id // empty), body: (.body // "")}' \
   2>/dev/null || true)
 
