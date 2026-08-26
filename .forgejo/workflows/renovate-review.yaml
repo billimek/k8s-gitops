@@ -98,7 +98,10 @@ jobs:
         # for a review nobody submits.
         if: ${{ steps.gate.outputs.is_renovate == 'true' && steps.gate.outputs.gated == 'false' }}
         env:
-          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Posted as the "clanker" collaborator account, not the Actions
+          # token, so the approval counts toward branch protection -- see
+          # forgejo-api.sh.
+          FORGEJO_TOKEN: ${{ secrets.CLANKER_REVIEW_TOKEN }}
           VERDICT: APPROVED
           BODY_FILE: auto-approve.md
         run: |
@@ -633,13 +636,18 @@ jobs:
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         continue-on-error: true
         env:
-          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Dismissal targets clanker's own prior review; the Actions token
+          # can't dismiss it (same write-access gap as approval counting).
+          FORGEJO_TOKEN: ${{ secrets.CLANKER_REVIEW_TOKEN }}
         run: bash .forgejo/scripts/dismiss-stale-reviews.sh
 
       - name: Post review
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         env:
-          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Posted as the "clanker" collaborator account, not the Actions
+          # token, so the approval counts toward branch protection -- see
+          # forgejo-api.sh.
+          FORGEJO_TOKEN: ${{ secrets.CLANKER_REVIEW_TOKEN }}
           VERDICT: ${{ steps.prepare.outputs.verdict }}
           COMMIT_ID: ${{ forgejo.event.pull_request.head.sha }}
         run: bash .forgejo/scripts/post-review.sh
