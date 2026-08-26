@@ -15,15 +15,24 @@
 : "${REPO:?REPO required}"
 
 # The per-job Actions token authenticates as Forgejo's built-in actions user
-# (id -2), NOT as the user who triggered the run -- verified against the PR
-# timeline, where labeler-applied labels are attributed to "forgejo-actions"
-# while everything renovate did is attributed to "renovate". Two consequences:
-# reviews this harness posts are authored by that account (so it replaces the
-# claude[bot]/github-actions[bot] filters from the .github/ version), and the
-# API's "you cannot approve your own pull request" check never trips on a
-# Renovate PR.
-FJ_REVIEWER_LOGIN="${FJ_REVIEWER_LOGIN:-forgejo-actions}"
+# (id -2), not as the user who triggered the run, and that account is not a
+# repo collaborator -- so an APPROVED review posted with it does not count
+# toward branch protection's required-approval check (Forgejo only counts
+# reviews from users with write access). Review posting and dismissal
+# therefore authenticate as a dedicated collaborator account ("clanker",
+# Write access) instead, via secrets.CLANKER_REVIEW_TOKEN -- see
+# post-review.sh / dismiss-stale-reviews.sh. Every review-state lookup below
+# filters on that same login, replacing the claude[bot]/github-actions[bot]
+# filters from the .github/ version.
+FJ_REVIEWER_LOGIN="${FJ_REVIEWER_LOGIN:-clanker}"
 export FJ_REVIEWER_LOGIN
+
+# Separate from FJ_REVIEWER_LOGIN: the identity that posts the sticky usage
+# comment (report-claude-usage.sh), which stays on the plain Actions token
+# since comments don't need collaborator-level write access to "count" at
+# anything.
+FJ_ACTIONS_LOGIN="${FJ_ACTIONS_LOGIN:-forgejo-actions}"
+export FJ_ACTIONS_LOGIN
 
 # Reviews we own and that still count: Forgejo does not rewrite a dismissed
 # review's state to DISMISSED the way GitHub does -- it keeps APPROVED and
