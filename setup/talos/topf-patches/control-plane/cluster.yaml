@@ -10,13 +10,6 @@ cluster:
       feature-gates: HPAScaleToZero=true
   coreDNS:
     disabled: true
-  # discovery:
-  #   enabled: true
-  #   registries:
-  #     kubernetes:
-  #       disabled: false
-  #     service:
-  #       disabled: true
   etcd:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
@@ -45,4 +38,3 @@ cluster:
                   - maxSkew: 1
                     topologyKey: kubernetes.io/hostname
                     whenUnsatisfiable: ScheduleAnyway
-

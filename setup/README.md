@@ -23,10 +23,11 @@ Talos Linux configuration for all cluster nodes.  See [talos/](talos/README.md) 
 
 (run from the repo root)
 
-Use talhelper to generate the config files in the `clusterconfig` directory.
+Generate the secrets bundle and render the machine configs locally for validation.
 
 ```shell
-task talos:generate-clusterconfig
+task talos:generate-secrets
+task talos:render-clusterconfig
 ```
 
 Bootstrap the talos nodes. It may take some time for the cluster to be ready.

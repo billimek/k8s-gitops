@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/postfinance/topf/main/schema/topf.json
+---
+# renovate: datasource=github-releases depName=siderolabs/talos
+talosVersion: v1.13.9
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.36.4
+
+clusterName: home
+clusterEndpoint: https://k8s-cp.home:6443
+
+patchesDir: topf-patches
+
+nodes:
+  - host: k8s-cp
+    ip: 10.0.7.49
+    role: control-plane
+    schematicId: '@topf-patches/schematics/control-plane.yaml'
+  - host: k8s-a
+    ip: 10.0.7.51
+    role: worker
+    schematicId: '@topf-patches/schematics/k8s-a.yaml'
+  - host: k8s-b
+    ip: 10.0.7.52
+    role: worker
+    schematicId: '@topf-patches/schematics/worker.yaml'
+  - host: k8s-c
+    ip: 10.0.7.53
+    role: worker
+    schematicId: '@topf-patches/schematics/worker.yaml'
+  - host: k8s-d
+    ip: 10.0.7.54
+    role: worker
+    schematicId: '@topf-patches/schematics/worker.yaml'
+  - host: k8s-e
+    ip: 10.0.7.55
+    role: worker
+    schematicId: '@topf-patches/schematics/worker.yaml'
+  - host: k8s-g
+    ip: 10.0.7.57
+    role: worker
+    schematicId: '@topf-patches/schematics/worker.yaml'
+  - host: k8s-h
+    ip: 10.0.7.58
+    role: worker
+    schematicId: '@topf-patches/schematics/worker.yaml'

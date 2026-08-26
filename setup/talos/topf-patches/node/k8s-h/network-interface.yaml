@@ -1,0 +1,10 @@
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: ethSel0
+selector:
+  match: glob("68:1d:ef:34:d9:c7", mac(link.hardware_addr))  # formerly k3s-h
+---
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: ethSel0

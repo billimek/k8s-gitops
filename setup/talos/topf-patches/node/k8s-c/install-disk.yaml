@@ -1,0 +1,4 @@
+machine:
+  install:
+    diskSelector:
+      model: CT500P3SSD8
