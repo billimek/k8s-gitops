@@ -8,10 +8,10 @@ tasks:
     preconditions:
       - which op envsubst
       - test -f {{.SETUP_DIR}}/talos/secrets.yaml.tpl
-      - test -f {{.SETUP_DIR}}/talos/talhelper-secrets.env
+      - test -f {{.SETUP_DIR}}/talos/secrets.env
       - op user get --me
     cmds:
-      - op run --env-file {{.SETUP_DIR}}/talos/talhelper-secrets.env --no-masking -- sh -c
+      - op run --env-file {{.SETUP_DIR}}/talos/secrets.env --no-masking -- sh -c
         'envsubst < {{.SETUP_DIR}}/talos/secrets.yaml.tpl > {{.SETUP_DIR}}/talos/secrets.yaml'
 
   render-clusterconfig:

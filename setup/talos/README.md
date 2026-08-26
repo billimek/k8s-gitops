@@ -2,12 +2,10 @@
 
 ## toolchain
 
-- `talhelper` and `talosctl` are not pinned in this repo; they come from the ambient
-  nix-darwin config. Talos v1.14 machine config (multi-document kinds replacing most of
-  `v1alpha1`) requires a talhelper release with `talos/pkg/machinery` bumped to v1.14.x
-  before `talhelper genconfig`/`validate` can target it - check `talhelper version` against
-  https://budimanjojo.github.io/talhelper/latest/reference/supported-version/ before
-  attempting the v1.14 migration.
+- `topf` and `talosctl` are not pinned in this repo; they come from the ambient
+  nix-darwin config. Cluster config lives in `topf.yaml` + `topf-patches/` and is rendered
+  and applied with `topf` (see `.taskfiles/talos/Taskfile.yaml`); talhelper is no longer
+  used (see https://github.com/postfinance/topf).
 
 ## nodes
 
