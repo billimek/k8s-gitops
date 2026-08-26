@@ -55,6 +55,9 @@ spec:
                       memory: 1Gi
           # Podspec images are not Renovate-tracked yet - bump by hand until #6148 lands a customManager.
           podspec-default.yaml: |-
+            # Service-link env injection puts ~470 vars in job pods, which trips a
+            # UPX stub bug (upx/upx#18902) that segfaults packed binaries like flate.
+            enableServiceLinks: false
             containers:
               - name: main
                 image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:dbb94e8977d600a7dac84d22fb5a1b6abe2c53bbc2fa7bcab7e8ea25f1284c6b
@@ -67,6 +70,8 @@ spec:
                     memory: 4Gi
             restartPolicy: Never
           podspec-dind.yaml: |-
+            # See podspec-default.yaml: keeps job-pod env small (upx/upx#18902).
+            enableServiceLinks: false
             initContainers:
               - name: dind
                 image: docker:29-dind@sha256:12e683a161823b2a839aeea999b9d960e6e1f9a97b1679ad6b441982e2d9cf07
