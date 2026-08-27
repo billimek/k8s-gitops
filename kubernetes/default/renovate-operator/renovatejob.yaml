@@ -11,6 +11,15 @@ spec:
   # Native forgejo platform support landed in Renovate 41.41.0; must stay >= that.
   image: ghcr.io/renovatebot/renovate:44.46.6@sha256:db2bf4cf3a1847bb4fa0a3e0572cc71374ef190347e89a20912d3447d4688a24
   parallelism: 1
+  # Signs every commit Renovate creates with the same SSH key Forgejo uses
+  # for its own server-side signing (kubernetes/default/forgejo/), so
+  # Renovate's branch commits verify as "git.eviljungle.com Instance" too.
+  extraEnv:
+    - name: RENOVATE_GIT_PRIVATE_KEY
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-admin
+          key: ed25519
   provider:
     name: forgejo
     endpoint: https://git.eviljungle.com/api/v1
