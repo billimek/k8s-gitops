@@ -76,6 +76,61 @@ spec:
           # in-cluster (kubernetes/default/renovate-operator/), so its
           # cluster-DNS name needs an explicit allow.
           ALLOWED_HOST_LIST: "*.default.svc.cluster.local"
+        repository:
+          DISABLE_DOWNLOAD_SOURCE_ARCHIVES: true
+        repository.pull-request:
+          DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
+          DEFAULT_MERGE_STYLE: squash
+        indexer:
+          ISSUE_INDEXER_TYPE: bleve
+          REPO_INDEXER_ENABLED: true
+        cron.archive_cleanup:
+          ENABLED: true
+          RUN_AT_START: true
+          SCHEDULE: "@every 1h"
+          OLDER_THAN: 2h
+        repository.signing:
+          FORMAT: ssh
+          SIGNING_KEY: /data/signing/ed25519.pub
+          SIGNING_NAME: git.eviljungle.com Instance
+          SIGNING_EMAIL: noreply@git.eviljungle.com
+          INITIAL_COMMIT: pubkey
+          CRUD_ACTIONS: pubkey, parentsigned
+          WIKI: never
+          MERGES: pubkey
+        mailer:
+          ENABLED: true
+          PROTOCOL: smtp+starttls
+          SMTP_ADDR: smtp.mail.me.com
+          SMTP_PORT: 587
+          FROM: "Forgejo <jeff@eviljungle.com>"
+
+    deployment:
+      env:
+        - name: GITEA__mailer__USER
+          valueFrom:
+            secretKeyRef:
+              name: forgejo-admin
+              key: SMTP_USER
+        - name: GITEA__mailer__PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: forgejo-admin
+              key: SMTP_PASSWD
+
+    extraVolumes:
+      - name: signing-key
+        secret:
+          secretName: forgejo-admin
+          defaultMode: 0o400
+    extraInitVolumeMounts:
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
+    extraContainerVolumeMounts:
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
 
     service:
       http:
