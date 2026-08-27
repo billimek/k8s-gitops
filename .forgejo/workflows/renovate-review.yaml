@@ -1,25 +1,11 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 #
-# Forgejo port of .github/workflows/renovate-review.yaml. The GitHub workflow
-# stays untouched and keeps running in parallel.
-#
-# Structural differences from the GitHub version, forced by Forgejo's API and
-# by `anthropics/claude-code-action` being GitHub-only rather than chosen:
-#
-#   1. No `gh` against this repo. Forgejo Actions points GITHUB_API_URL at the
-#      Forgejo instance, so `gh` would speak GitHub's REST dialect to a
-#      Gitea-shaped API. Every call against THIS repo goes through
-#      .forgejo/scripts/forgejo-api.sh instead. The reviewer step uses `gh`
-#      only for upstream github.com research, with GH_HOST/GITHUB_API_URL
-#      overridden back to github.com for that step alone.
-#   2. Review post-processing moved *before* the post. Forgejo has no endpoint
-#      to edit a submitted review, so the sanitize / advisory-downgrade /
-#      fingerprint-stamp work happens up front -- see prepare-review-body.sh.
-#   3. The model doesn't post its own review. It writes review.md/verdict.txt;
-#      a deterministic step (post-review.sh) posts them once, at the end,
-#      whichever pass (primary or escalated) produced them. Escalation here
-#      just overwrites those files before that single post happens.
+# Reviews gated Renovate PRs with Claude. Same-repo API calls go through
+# .forgejo/scripts/forgejo-api.sh; `gh` is reserved for upstream github.com
+# research. Review post-processing (sanitize/advisory-downgrade/fingerprint)
+# happens in prepare-review-body.sh before post-review.sh posts once, at the
+# end, whichever pass (primary or escalated) produced the final verdict.
 name: "Renovate PR Review"
 
 on:
@@ -53,13 +39,9 @@ jobs:
       - name: Classify PR
         id: gate
         env:
-          # secrets.GITHUB_TOKEN is the Forgejo Actions token here, not a
-          # github.com one. Named FORGEJO_TOKEN at every step that uses it so
-          # that stays unambiguous.
+          # Forgejo Actions token, named FORGEJO_TOKEN for clarity at every step that uses it.
           FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Renovate authenticates to Forgejo as a plain bot account, so the
-          # author is "renovate" -- there is no "[bot]" suffix to match on the
-          # way there is on GitHub.
+          # Renovate's Forgejo author is plain "renovate", no "[bot]" suffix.
           PR_AUTHOR: ${{ forgejo.event.pull_request.user.login }}
           IS_FORK: ${{ forgejo.event.pull_request.head.repo.fork }}
         run: |
@@ -72,9 +54,7 @@ jobs:
 
           if [[ "$PR_AUTHOR" == "renovate" ]]; then
             is_renovate=true
-            # Ungated = digest-only update, Actions bump, or Grafana dashboard
-            # revision. Everything else from Renovate (minor/patch/major
-            # container/helm/release) is gated.
+            # Ungated: digest-only, Actions bump, or Grafana dashboard revision.
             if echo "$labels" | grep -qwE 'type/digest|renovate/github-action|renovate/grafana-dashboard'; then
               gated=false
             else
@@ -93,14 +73,10 @@ jobs:
           echo "author=$PR_AUTHOR labels=$labels is_fork=$IS_FORK -> is_renovate=$is_renovate gated=$gated"
 
       - name: Auto-approve ungated Renovate update
-        # Branch protection requires an approving review to auto-merge. Ungated
-        # updates skip the review entirely, so without this they'd stall waiting
-        # for a review nobody submits.
+        # Satisfies the branch-protection approving-review requirement for ungated updates.
         if: ${{ steps.gate.outputs.is_renovate == 'true' && steps.gate.outputs.gated == 'false' }}
         env:
-          # Posted as the "clanker" collaborator account, not the Actions
-          # token, so the approval counts toward branch protection -- see
-          # forgejo-api.sh.
+          # Posted as the "clanker" collaborator account so the approval counts toward branch protection.
           FORGEJO_TOKEN: ${{ secrets.CLANKER_REVIEW_TOKEN }}
           VERDICT: APPROVED
           BODY_FILE: auto-approve.md
@@ -144,16 +120,14 @@ jobs:
           } > pr-context.md
 
       - name: Append flate evidence
-        # No "Setup Flate" step: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
-        # bakes in flate already on PATH (see .forgejo/workflows/flate.yaml).
+        # flate is pre-baked on PATH in the runner image; no Setup Flate step needed.
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' && steps.model_tier.outputs.depth != 'light' }}
         env:
           FLATE_PATH: setup/flux/cluster
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
       - name: Setup Claude Code CLI
-        # anthropics/claude-code-action is GitHub-only, so this invokes the CLI
-        # it wraps directly. The runner image has no Node.js preinstalled.
+        # Invokes the Claude Code CLI directly; the runner image has no Node.js preinstalled.
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         run: |
           apt-get update -qq
@@ -165,10 +139,7 @@ jobs:
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          # Upstream research (release notes, issues) targets github.com, not
-          # this Forgejo instance -- but Forgejo Actions points GITHUB_API_URL
-          # at itself by default, so `gh` has to be pointed back at github.com
-          # explicitly for this step, with a github.com-scoped token.
+          # `gh` is pointed at github.com for upstream research (release notes, issues).
           GH_HOST: github.com
           GITHUB_API_URL: https://api.github.com
           GH_TOKEN: ${{ secrets.GH_COM_TOKEN }}
@@ -503,9 +474,7 @@ jobs:
         run: bash .forgejo/scripts/check-escalation.sh
 
       - name: Append flate evidence (escalation)
-        # The primary pass skipped this at light depth, but the escalated pass
-        # claims full depth and needs the same rendered-diff evidence a normal
-        # full-depth run gets -- otherwise it silently reviews without it.
+        # Escalated pass runs at full depth, which requires rendered-diff evidence.
         if: ${{ steps.escalation.outputs.escalate == 'true' }}
         env:
           FLATE_PATH: setup/flux/cluster
@@ -629,24 +598,18 @@ jobs:
         run: bash .forgejo/scripts/prepare-review-body.sh
 
       - name: Dismiss stale reviews
-        # Runs immediately before the post, not at the top of the job: the
-        # window where this PR has no live verdict at all is then a couple of
-        # seconds rather than the whole review, so a merge cannot slip through
-        # ungated in between.
+        # Runs immediately before the post to minimize the window with no live verdict.
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         continue-on-error: true
         env:
-          # Dismissal targets clanker's own prior review; the Actions token
-          # can't dismiss it (same write-access gap as approval counting).
+          # Dismissal targets clanker's own prior review; the Actions token lacks the write access.
           FORGEJO_TOKEN: ${{ secrets.CLANKER_REVIEW_TOKEN }}
         run: bash .forgejo/scripts/dismiss-stale-reviews.sh
 
       - name: Post review
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         env:
-          # Posted as the "clanker" collaborator account, not the Actions
-          # token, so the approval counts toward branch protection -- see
-          # forgejo-api.sh.
+          # Posted as the "clanker" collaborator account so the approval counts toward branch protection.
           FORGEJO_TOKEN: ${{ secrets.CLANKER_REVIEW_TOKEN }}
           VERDICT: ${{ steps.prepare.outputs.verdict }}
           COMMIT_ID: ${{ forgejo.event.pull_request.head.sha }}

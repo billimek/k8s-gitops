@@ -53,7 +53,7 @@ spec:
                       memory: 256Mi
                     limits:
                       memory: 1Gi
-          # Podspec images are not Renovate-tracked yet - bump by hand until #6148 lands a customManager.
+          # Podspec images are not Renovate-tracked yet - bump by hand.
           podspec-default.yaml: |-
             # Service-link env injection puts ~470 vars in job pods, which trips a
             # UPX stub bug (upx/upx#18902) that segfaults packed binaries like flate.

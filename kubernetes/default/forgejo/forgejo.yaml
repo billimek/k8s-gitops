@@ -57,27 +57,17 @@ spec:
           ROOT_URL: https://git.eviljungle.com/
           SSH_DOMAIN: git.eviljungle.com
         security:
-          # Without this, Forgejo doesn't trust Envoy's X-Forwarded-* headers,
-          # which manifests as API 404s (e.g. GET /api/v1/orgs/<nonexistent>)
-          # coming back as a 302 with an HTML body instead of a proper JSON 404 --
-          # broke Renovate's forgejo platform org-existence check (#6148).
+          # Required for Forgejo to trust Envoy's X-Forwarded-* headers, so API 404s
+          # come back as JSON instead of a 302 redirect with an HTML body.
           REVERSE_PROXY_TRUSTED_PROXIES: 10.244.0.0/16
         service:
           # single-admin instance; accounts for renovate/CI are created manually
           DISABLE_REGISTRATION: true
         actions:
-          # Factory default (data.forgejo.org, a curated GitHub Actions
-          # mirror) rewrites *any* github.com action reference through
-          # itself - including fully-qualified `uses: https://github.com/...`
-          # steps - and 404s on anything outside its curated set (e.g.
-          # EndBug/label-sync). Point straight at github.com so our
-          # .forgejo/workflows/* can reference arbitrary GitHub Actions.
+          # Points straight at github.com so .forgejo/workflows/* can reference arbitrary GitHub Actions.
           DEFAULT_ACTIONS_URL: https://github.com
         webhook:
-          # Forgejo's SSRF guard rejects webhook deliveries to any host not
-          # listed here by default. renovate-operator's webhook receiver is
-          # in-cluster (kubernetes/default/renovate-operator/), so its
-          # cluster-DNS name needs an explicit allow.
+          # Allows webhook delivery to renovate-operator's in-cluster receiver.
           ALLOWED_HOST_LIST: "*.default.svc.cluster.local"
         repository:
           DISABLE_DOWNLOAD_SOURCE_ARCHIVES: true

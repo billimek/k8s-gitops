@@ -22,9 +22,6 @@ spec:
         - name: internal
           namespace: kube-system
           sectionName: https
-    # Forgejo and the operator are both in-cluster, so the webhook server
-    # needs no route/ingress of its own -- the chart's Service exposes its
-    # port directly, and the RenovateJob points registration at that Service
-    # DNS name (kubernetes/default/renovate-operator/renovatejob.yaml).
+    # In-cluster only, no route/ingress; see renovate-operator/renovatejob.yaml for registration.
     webhook:
       enabled: true

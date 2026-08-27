@@ -11,12 +11,9 @@ spec:
   # Native forgejo platform support landed in Renovate 41.41.0; must stay >= that.
   image: ghcr.io/renovatebot/renovate:44.48.0@sha256:330148e4ea9ea15f16e48f311d337da760ebec6fcf6e33ed5347afc2c5cf5c69
   parallelism: 1
-  # Signs every commit Renovate creates with its own dedicated SSH key
-  # (separate from the instance's server-side signing key in
-  # kubernetes/default/forgejo/) -- Forgejo only shows a signed commit as
-  # Verified if the key is registered to the account matching the commit's
-  # identity, and one SSH key can only be registered to one account, so
-  # renovate needs its own rather than sharing the instance's.
+  # Renovate's own SSH key for commit signing, separate from the instance's
+  # server-side signing key in kubernetes/default/forgejo/: one key can only
+  # be registered to one account.
   extraEnv:
     - name: RENOVATE_GIT_PRIVATE_KEY
       valueFrom:
@@ -30,10 +27,7 @@ spec:
   secretRef: renovate-secret
   webhook:
     enabled: true
-    # Forgejo and the operator both run in this cluster, so delivery never
-    # needs to leave it -- no HTTPRoute/ingress required. Chart's Service
-    # already exposes the webhook port once webhook.enabled is set (see
-    # helmrelease.yaml); this just points registration at it directly.
+    # In-cluster delivery via the chart's Service; no HTTPRoute/ingress required.
     baseUrl: http://renovate-operator-renovate-operator.default.svc.cluster.local:8082
     sync:
       enabled: true

@@ -26,11 +26,7 @@ jobs:
     steps:
       - name: Get changed files
         id: changed-files
-        # Kept as-is per #6119: both this and bjw-s-labs/action-changed-files
-        # call GitHub's octokit client via GITHUB_API_URL, which Forgejo
-        # points at itself, but this action's fallback paths (git.getRef,
-        # git.getCommit) are unverified against Forgejo. Only swap if this
-        # demonstrably breaks.
+        # Uses GitHub's octokit client via GITHUB_API_URL, which Forgejo points at itself.
         uses: https://github.com/step-security/changed-files@2e07db73e5ccdb319b9a6c7766bd46d39d304bad # v47.0.5
         with:
           files: |-
@@ -105,11 +101,8 @@ jobs:
             fi
           } > comment.md
 
-      # Reimplements marocchino/sticky-pull-request-comment against Forgejo's
-      # own API: find an existing comment carrying the <!-- flate-diff-comment
-      # --> marker on this PR and PATCH it, otherwise POST a new one. Uses
-      # the automatic per-job token (permissions.issues: write above), no
-      # app-token generation needed.
+      # Finds an existing comment carrying the <!-- flate-diff-comment --> marker on this PR
+      # and PATCHes it via Forgejo's API, otherwise POSTs a new one.
       - if: ${{ hashFiles('comment.md') != '' }}
         name: Add or update comment
         env:
