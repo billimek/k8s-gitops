@@ -12,9 +12,7 @@ spec:
   allowCrossNamespaceImport: true
   folder: apps
   # renovate: depName=17802
-  # NOTE: PVC Storage panel is broken as shipped (its $cluster/$namespace/
-  # $volume template vars are literal grafana.com onboarding placeholders,
-  # not real queries) - ignore it.
+  # PVC Storage panel is broken as shipped: its template vars are literal placeholders, not queries
   url: https://grafana.com/api/dashboards/17802/revisions/1/download
   datasources:
     - inputName: DS_PROMETHEUS

@@ -3,9 +3,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  # Not "forgejo" - the chart previously owned a ServiceMonitor by that name
-  # (gitea.metrics.serviceMonitor.enabled: true); Helm prunes resources it no
-  # longer renders by name on upgrade, which deleted this one when it collided.
+  # named forgejo-metrics, not forgejo: avoids Helm prune collision with the chart's own ServiceMonitor name
   name: forgejo-metrics
   namespace: default
 spec:
@@ -15,8 +13,7 @@ spec:
       app.kubernetes.io/instance: forgejo
   endpoints:
     - port: http
-      # Dashboard 17802's panels hardcode job="gitea-http"; relabel to match
-      # instead of forking the dashboard JSON.
+      # dashboard 17802 hardcodes job="gitea-http"
       relabelings:
         - targetLabel: job
           replacement: gitea-http

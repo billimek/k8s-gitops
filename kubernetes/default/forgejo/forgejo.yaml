@@ -46,9 +46,7 @@ spec:
       metrics:
         enabled: true
         serviceMonitor:
-          # Hand-rolled ServiceMonitor (servicemonitor.yaml) relabels the job
-          # to gitea-http to match dashboard 17802's queries.
-          enabled: false
+          enabled: false # replaced by servicemonitor.yaml, which relabels job to gitea-http
       config:
         APP_NAME: "Forgejo"
         metrics:
