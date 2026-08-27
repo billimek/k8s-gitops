@@ -6,11 +6,9 @@ area/docs:
   - changed-files:
       - any-glob-to-any-file:
           - "README.md"
-area/github:
-  - all:
-    - changed-files:
-      - any-glob-to-any-file: ['.github/**/*', '.forgejo/**/*']
-      - all-globs-to-all-files: '!.github/renovaterc.json5'
+area/ci:
+  - changed-files:
+      - any-glob-to-any-file: ".forgejo/**/*"
 area/kubernetes:
   - changed-files:
       - any-glob-to-any-file: "kubernetes/**/*"
@@ -18,7 +16,7 @@ area/renovate:
   - changed-files:
       - any-glob-to-any-file:
           - ".renovate/**/*"
-          - ".github/renovaterc.json5"
+          - "renovate.json5"
 area/talos:
   - changed-files:
       - any-glob-to-any-file: "setup/talos/**/*"

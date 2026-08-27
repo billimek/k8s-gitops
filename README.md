@@ -4,6 +4,8 @@
 
 Leverages [flux](https://github.com/fluxcd/flux2) to automate cluster state using code residing in this repo
 
+Primary hosting is a [self-hosted Forgejo instance](https://git.eviljungle.com/billimek/k8s-gitops); GitHub is a read-only mirror.
+
 ## :computer:&nbsp; Infrastructure
 
 See the [talos cluster setup](setup/talos/README.md) for more detail about hardware and infrastructure
