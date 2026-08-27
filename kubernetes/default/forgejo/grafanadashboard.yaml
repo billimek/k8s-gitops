@@ -13,7 +13,7 @@ spec:
   folder: apps
   # renovate: depName=17802
   # PVC Storage panel is broken as shipped: its template vars are literal placeholders, not queries
-  url: https://grafana.com/api/dashboards/17802/revisions/1/download
+  url: https://grafana.com/api/dashboards/17802/revisions/3/download
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
