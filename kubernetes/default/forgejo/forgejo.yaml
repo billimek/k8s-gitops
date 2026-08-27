@@ -46,9 +46,14 @@ spec:
       metrics:
         enabled: true
         serviceMonitor:
-          enabled: true
+          # Hand-rolled ServiceMonitor (servicemonitor.yaml) relabels the job
+          # to gitea-http to match dashboard 17802's queries.
+          enabled: false
       config:
         APP_NAME: "Forgejo"
+        metrics:
+          ENABLED_ISSUE_BY_LABEL: true
+          ENABLED_ISSUE_BY_REPOSITORY: true
         server:
           DOMAIN: git.eviljungle.com
           ROOT_URL: https://git.eviljungle.com/

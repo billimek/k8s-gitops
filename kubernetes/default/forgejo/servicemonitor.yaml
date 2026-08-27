@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: forgejo
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forgejo
+      app.kubernetes.io/instance: forgejo
+  endpoints:
+    - port: http
+      # Dashboard 17802's panels hardcode job="gitea-http"; relabel to match
+      # instead of forking the dashboard JSON.
+      relabelings:
+        - targetLabel: job
+          replacement: gitea-http
