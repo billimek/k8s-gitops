@@ -67,7 +67,7 @@ releases:
   - name: tuppr
     namespace: system-upgrade
     chart: oci://ghcr.io/home-operations/charts/tuppr
-    version: 0.5.1
+    version: 0.5.2
 
   - name: renovate-operator
     namespace: default
