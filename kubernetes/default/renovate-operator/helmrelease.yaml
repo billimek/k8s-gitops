@@ -33,6 +33,7 @@ spec:
         enabled: true
         grafanaDashboard:
           allowCrossNamespaceImport: true
+          folder: apps
           instanceSelector:
             matchLabels:
               dashboards: grafana
