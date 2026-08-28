@@ -25,3 +25,13 @@ spec:
     # In-cluster only, no route/ingress; see renovate-operator/renovatejob.yaml for registration.
     webhook:
       enabled: true
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+      dashboard:
+        enabled: true
+        grafanaDashboard:
+          instanceSelector:
+            matchLabels:
+              dashboards: grafana
