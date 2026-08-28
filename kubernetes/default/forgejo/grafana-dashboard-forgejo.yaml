@@ -107,42 +107,33 @@ data:
 
         { "id": 350, "type": "row", "title": "Bot Fingerprinting (Public Route Logs)", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 } },
         {
-          "id": 40, "type": "table", "title": "Top User-Agents",
+          "id": 40, "type": "bargauge", "title": "Top User-Agents",
           "description": "Distinct User-Agent strings hitting the public route, most frequent first. Known bots (crawlers, federation, link-preview fetchers) show up here by name.",
           "gridPos": { "h": 9, "w": 8, "x": 0, "y": 27 },
           "datasource": { "type": "victoriametrics-logs-datasource", "uid": "${DS_VICTORIALOGS}" },
+          "options": { "displayMode": "gradient", "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"] } },
           "targets": [
-            { "expr": "route_name:=\"httproute/default/forgejo-public/rule/0/match/0/git_eviljungle_com\" | stats by (`user-agent`) count() as requests | sort by (requests) desc | limit 20", "queryType": "stats", "refId": "A" }
-          ],
-          "transformations": [
-            { "id": "labelsToFields", "options": {} },
-            { "id": "organize", "options": { "excludeByName": { "Time": true, "__name__": true } } }
+            { "expr": "route_name:=\"httproute/default/forgejo-public/rule/0/match/0/git_eviljungle_com\" | stats by (`user-agent`) count() as requests | sort by (requests) desc | limit 20", "queryType": "stats", "legendFormat": "{{user-agent}}", "refId": "A" }
           ]
         },
         {
-          "id": 41, "type": "table", "title": "Top Client Chains (X-Forwarded-For)",
+          "id": 41, "type": "bargauge", "title": "Top Client Chains (X-Forwarded-For)",
           "description": "Grouped by the full X-Forwarded-For chain (client IP, then Cloudflare edge IP). The leftmost address is the actual client; a chain repeating far more than others indicates one source hammering the endpoint.",
           "gridPos": { "h": 9, "w": 8, "x": 8, "y": 27 },
           "datasource": { "type": "victoriametrics-logs-datasource", "uid": "${DS_VICTORIALOGS}" },
+          "options": { "displayMode": "gradient", "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"] } },
           "targets": [
-            { "expr": "route_name:=\"httproute/default/forgejo-public/rule/0/match/0/git_eviljungle_com\" | stats by (`x-forwarded-for`) count() as requests | sort by (requests) desc | limit 20", "queryType": "stats", "refId": "A" }
-          ],
-          "transformations": [
-            { "id": "labelsToFields", "options": {} },
-            { "id": "organize", "options": { "excludeByName": { "Time": true, "__name__": true } } }
+            { "expr": "route_name:=\"httproute/default/forgejo-public/rule/0/match/0/git_eviljungle_com\" | stats by (`x-forwarded-for`) count() as requests | sort by (requests) desc | limit 20", "queryType": "stats", "legendFormat": "{{x-forwarded-for}}", "refId": "A" }
           ]
         },
         {
-          "id": 42, "type": "table", "title": "Non-2xx Requests by Path",
+          "id": 42, "type": "bargauge", "title": "Non-2xx Requests by Path",
           "description": "Public-route requests that returned 4xx/5xx, grouped by requested path and status code. Repeated hits on paths like /.git, /wp-admin, /.env are typical of scanner bots, not legitimate traffic.",
           "gridPos": { "h": 9, "w": 8, "x": 16, "y": 27 },
           "datasource": { "type": "victoriametrics-logs-datasource", "uid": "${DS_VICTORIALOGS}" },
+          "options": { "displayMode": "gradient", "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"] } },
           "targets": [
-            { "expr": "route_name:=\"httproute/default/forgejo-public/rule/0/match/0/git_eviljungle_com\" response_code:>=400 | stats by (`x-envoy-origin-path`, response_code) count() as hits | sort by (hits) desc | limit 20", "queryType": "stats", "refId": "A" }
-          ],
-          "transformations": [
-            { "id": "labelsToFields", "options": {} },
-            { "id": "organize", "options": { "excludeByName": { "Time": true, "__name__": true } } }
+            { "expr": "route_name:=\"httproute/default/forgejo-public/rule/0/match/0/git_eviljungle_com\" response_code:>=400 | stats by (`x-envoy-origin-path`, response_code) count() as hits | sort by (hits) desc | limit 20", "queryType": "stats", "legendFormat": "{{x-envoy-origin-path}} ({{response_code}})", "refId": "A" }
           ]
         },
 
