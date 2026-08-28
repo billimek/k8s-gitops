@@ -32,6 +32,7 @@ spec:
       dashboard:
         enabled: true
         grafanaDashboard:
+          allowCrossNamespaceImport: true
           instanceSelector:
             matchLabels:
               dashboards: grafana
