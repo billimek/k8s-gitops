@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: renovate-operator-rules
+  namespace: default
+spec:
+  groups:
+    - name: renovate-operator.rules
+      rules:
+        - alert: RenovateOperatorRunFailed
+          annotations:
+            description: renovate-operator reported a failed run in the last 5 minutes.
+            summary: A renovate-operator run failed.
+          expr: renovate_operator_run_failed > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: RenovateOperatorScheduleStale
+          annotations:
+            description: renovate-operator's next scheduled run is more than an hour overdue.
+            summary: renovate-operator schedule appears stuck.
+          expr: time() - renovate_operator_schedule_next_run_timestamp_seconds > 3600
+          for: 15m
+          labels:
+            severity: warning

@@ -17,3 +17,51 @@ spec:
           for: 10m
           labels:
             severity: critical
+        - alert: ForgejoHighLatency
+          annotations:
+            description: p95 request latency on the internal route has been above 1s for 15 minutes. SQLite write contention is a likely cause under concurrent Actions/webhook load.
+            summary: Forgejo request latency is elevated.
+          expr: histogram_quantile(0.95, sum by (le) (rate(envoy_cluster_upstream_rq_time_bucket{envoy_cluster_name="httproute/default/forgejo/rule/0"}[10m]))) > 1000
+          for: 15m
+          labels:
+            severity: warning
+        - alert: ForgejoHighMemoryUsage
+          annotations:
+            description: Forgejo's container memory working set has been above 85% of its 1Gi limit for 15 minutes.
+            summary: Forgejo memory usage is elevated.
+          expr: container_memory_working_set_bytes{namespace="default", container="forgejo"} / 1073741824 > 0.85
+          for: 15m
+          labels:
+            severity: warning
+        - alert: ForgejoPublicRouteErrorRate
+          annotations:
+            description: Over half of requests to the public route have returned 4xx/5xx for 15 minutes.
+            summary: Forgejo public route error rate is elevated.
+          expr: sum(rate(envoy_cluster_upstream_rq_xx{envoy_cluster_name="httproute/default/forgejo-public/rule/0", envoy_response_code_class=~"4|5"}[10m])) / sum(rate(envoy_cluster_upstream_rq_xx{envoy_cluster_name="httproute/default/forgejo-public/rule/0"}[10m])) > 0.5
+          for: 15m
+          labels:
+            severity: warning
+        - alert: ForgejoPublicRouteRequestSpike
+          annotations:
+            description: Request rate on the public route has been above 5 req/s for 15 minutes, well above normal baseline. Worth checking for scraping/bot activity.
+            summary: Forgejo public route request rate is elevated.
+          expr: sum(rate(envoy_cluster_upstream_rq_xx{envoy_cluster_name="httproute/default/forgejo-public/rule/0"}[10m])) > 5
+          for: 15m
+          labels:
+            severity: warning
+        - alert: ForgejoRunnerUnavailable
+          annotations:
+            description: The forgejo-runner deployment has had 0 available replicas for 10 minutes. Actions workflows cannot run.
+            summary: Forgejo Actions runner is unavailable.
+          expr: kube_deployment_status_replicas_available{namespace="default", deployment="forgejo-runner"} == 0
+          for: 10m
+          labels:
+            severity: critical
+        - alert: ForgejoConfigPVCNearFull
+          annotations:
+            description: The forgejo-config PVC has been above 85% used for 15 minutes.
+            summary: Forgejo config PVC is nearly full.
+          expr: 1 - kubelet_volume_stats_available_bytes{namespace="default", persistentvolumeclaim="forgejo-config"} / kubelet_volume_stats_capacity_bytes{namespace="default", persistentvolumeclaim="forgejo-config"} > 0.85
+          for: 15m
+          labels:
+            severity: warning
