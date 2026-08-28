@@ -1,0 +1,137 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-forgejo
+  namespace: default
+data:
+  forgejo.json: |
+    {
+      "title": "Forgejo Ops",
+      "uid": "forgejo-ops",
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "refresh": "1m",
+      "time": { "from": "now-6h", "to": "now" },
+      "tags": ["forgejo", "prometheus"],
+      "templating": {
+        "list": [
+          {
+            "name": "DS_PROMETHEUS",
+            "type": "datasource",
+            "query": "prometheus",
+            "hide": 0,
+            "current": { "text": "Prometheus", "value": "Prometheus" }
+          }
+        ]
+      },
+      "panels": [
+        { "id": 100, "type": "row", "title": "Resource Health", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 } },
+        {
+          "id": 1, "type": "timeseries", "title": "CPU Usage",
+          "gridPos": { "h": 7, "w": 8, "x": 0, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+          "targets": [
+            { "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"default\",container=\"forgejo\"}[5m]))", "legendFormat": "{{pod}}" }
+          ]
+        },
+        {
+          "id": 2, "type": "timeseries", "title": "Memory Working Set",
+          "gridPos": { "h": 7, "w": 8, "x": 8, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] },
+          "targets": [
+            { "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"default\",container=\"forgejo\"})", "legendFormat": "{{pod}}" }
+          ]
+        },
+        {
+          "id": 3, "type": "timeseries", "title": "Config PVC Usage",
+          "gridPos": { "h": 7, "w": 8, "x": 16, "y": 1 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] },
+          "targets": [
+            { "expr": "kubelet_volume_stats_capacity_bytes{namespace=\"default\",persistentvolumeclaim=\"forgejo-config\"} - kubelet_volume_stats_available_bytes{namespace=\"default\",persistentvolumeclaim=\"forgejo-config\"}", "legendFormat": "used" },
+            { "expr": "kubelet_volume_stats_capacity_bytes{namespace=\"default\",persistentvolumeclaim=\"forgejo-config\"}", "legendFormat": "capacity" }
+          ]
+        },
+
+        { "id": 200, "type": "row", "title": "HTTP Traffic (Envoy, per route)", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 8 } },
+        {
+          "id": 10, "type": "timeseries", "title": "Request Rate by Status Class",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 9 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+          "targets": [
+            { "expr": "sum by (envoy_cluster_name, envoy_response_code_class) (rate(envoy_cluster_upstream_rq_xx{envoy_cluster_name=~\"httproute/default/forgejo(-public)?/rule/0\"}[5m]))", "legendFormat": "{{envoy_cluster_name}} {{envoy_response_code_class}}xx" }
+          ]
+        },
+        {
+          "id": 11, "type": "timeseries", "title": "p50 / p95 Request Latency",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 9 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "ms" }, "overrides": [] },
+          "targets": [
+            { "expr": "histogram_quantile(0.5, sum by (le, envoy_cluster_name) (rate(envoy_cluster_upstream_rq_time_bucket{envoy_cluster_name=~\"httproute/default/forgejo(-public)?/rule/0\"}[5m])))", "legendFormat": "{{envoy_cluster_name}} p50" },
+            { "expr": "histogram_quantile(0.95, sum by (le, envoy_cluster_name) (rate(envoy_cluster_upstream_rq_time_bucket{envoy_cluster_name=~\"httproute/default/forgejo(-public)?/rule/0\"}[5m])))", "legendFormat": "{{envoy_cluster_name}} p95" }
+          ]
+        },
+
+        { "id": 300, "type": "row", "title": "Public-Endpoint Abuse Signals", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 17 } },
+        {
+          "id": 20, "type": "timeseries", "title": "Public Route: 4xx/5xx Rate",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+          "targets": [
+            { "expr": "sum by (envoy_response_code_class) (rate(envoy_cluster_upstream_rq_xx{envoy_cluster_name=\"httproute/default/forgejo-public/rule/0\", envoy_response_code_class=~\"4|5\"}[5m]))", "legendFormat": "{{envoy_response_code_class}}xx" }
+          ]
+        },
+        {
+          "id": 21, "type": "timeseries", "title": "Public Route: Total Request Rate",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+          "description": "Sudden sustained jumps relative to normal baseline usage are worth investigating for scraping/credential-stuffing activity.",
+          "targets": [
+            { "expr": "sum(rate(envoy_cluster_upstream_rq_xx{envoy_cluster_name=\"httproute/default/forgejo-public/rule/0\"}[5m]))", "legendFormat": "req/s" }
+          ]
+        },
+
+        { "id": 400, "type": "row", "title": "Application Signals", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 } },
+        {
+          "id": 30, "type": "timeseries", "title": "Webhook Task Backlog",
+          "gridPos": { "h": 7, "w": 8, "x": 0, "y": 27 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+          "targets": [
+            { "expr": "gitea_hooktasks", "legendFormat": "hooktasks" }
+          ]
+        },
+        {
+          "id": 31, "type": "stat", "title": "Repositories",
+          "gridPos": { "h": 3, "w": 4, "x": 8, "y": 27 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "targets": [{ "expr": "gitea_repositories" }]
+        },
+        {
+          "id": 32, "type": "stat", "title": "Open Issues",
+          "gridPos": { "h": 3, "w": 4, "x": 12, "y": 27 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "targets": [{ "expr": "gitea_issues_open" }]
+        },
+        {
+          "id": 33, "type": "stat", "title": "Users",
+          "gridPos": { "h": 3, "w": 4, "x": 16, "y": 27 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "targets": [{ "expr": "gitea_users" }]
+        },
+        {
+          "id": 34, "type": "stat", "title": "Uptime",
+          "gridPos": { "h": 3, "w": 4, "x": 20, "y": 27 },
+          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+          "targets": [{ "expr": "time() - max(process_start_time_seconds{job=\"gitea-http\"})" }]
+        }
+      ]
+    }
