@@ -22,7 +22,7 @@ releases:
   - name: external-secrets
     namespace: kube-system
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 2.9.0
+    version: 2.10.0
 
   - name: kopiur
     namespace: kube-system
