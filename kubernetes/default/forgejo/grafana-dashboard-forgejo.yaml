@@ -139,7 +139,8 @@ data:
 
         { "id": 400, "type": "row", "title": "Application Signals", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 36 } },
         {
-          "id": 30, "type": "timeseries", "title": "Webhook Task Backlog",
+          "id": 30, "type": "timeseries", "title": "Webhook Deliveries (cumulative)",
+          "description": "Cumulative row count of Forgejo's hook_task table, not a live queue depth. Rises with each webhook delivery; drops/flattens when the daily cleanup cron (cron.cleanup_hook_task_table) prunes successful deliveries older than 7 days.",
           "gridPos": { "h": 7, "w": 8, "x": 0, "y": 37 },
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
           "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
