@@ -154,4 +154,4 @@ tasks:
       - test -f {{.SETUP_DIR}}/talos/secrets.yaml
     dir: "{{.SETUP_DIR}}/talos"
     cmds:
-      - topf kubeconfig > "{{.KUBECONFIG}}"
+      - topf kubeconfig --validity 8760h0m0s > "{{.KUBECONFIG}}"
