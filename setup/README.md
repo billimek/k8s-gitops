@@ -19,9 +19,20 @@ Flux GitOps configuration files which are the entrypoint for flux operating the 
 
 Talos Linux configuration for all cluster nodes.  See [talos/](talos/README.md) for details on the nodes and talos configuration
 
-## talos setup & bootstrapping
+## full cluster bootstrap
 
 (run from the repo root)
+
+For a fresh cluster, this runs the entire flow below in order (secrets ->
+render/validate -> Talos bootstrap -> apps), prompting once before starting:
+
+```shell
+task k8s-bootstrap:cluster
+```
+
+## talos setup & bootstrapping
+
+The individual steps, useful for recovery/re-running a single stage:
 
 Generate the secrets bundle and render the machine configs locally for validation.
 

@@ -3,6 +3,15 @@
 version: "3"
 
 tasks:
+  cluster:
+    desc: Full cluster bootstrap (secrets -> talos -> apps), for a fresh cluster
+    prompt: Bootstrap the entire cluster from scratch (secrets, Talos, apps)?
+    cmds:
+      - task: :talos:generate-secrets
+      - task: :talos:render-clusterconfig
+      - task: talos
+      - task: apps
+
   talos:
     desc: Bootstrap Talos
     vars:
@@ -14,8 +23,6 @@ tasks:
       - talosctl config info
     cmds:
       - task: :talos:apply-clusterconfig
-        vars:
-          INSECURE: "true"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
       - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "home" "{{.KUBECONFIG}}"
 
