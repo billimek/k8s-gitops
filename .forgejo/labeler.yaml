@@ -20,8 +20,8 @@ area/renovate:
 area/talos:
   - changed-files:
       - any-glob-to-any-file: "setup/talos/**/*"
-area/taskfile:
+area/justfile:
   - changed-files:
       - any-glob-to-any-file:
-          - ".taskfiles/**/*"
-          - "Taskfile.yaml"
+          - ".justfiles/**/*"
+          - ".justfile"

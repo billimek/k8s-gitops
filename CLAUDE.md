@@ -7,12 +7,12 @@ GitOps Kubernetes cluster on Talos + FluxCD. Infrastructure (`/setup`) separate 
 ## Key Commands
 
 ```bash
-task                    # List all tasks
-task k8s:sync-secrets   # Force sync ExternalSecrets
-task k8s:cleanse-pods   # Delete Failed/Pending/Succeeded pods
-task kopiur:snapshot APP=<name>   # Trigger immediate backup
-task kopiur:list APP=<name>       # List snapshots for an app
-task kopiur:restore APP=<name>    # Restore an app's PVC from latest backup
+just                        # List all recipes
+just k8s sync-secrets       # Force sync ExternalSecrets
+just k8s cleanse-pods       # Delete Failed/Pending/Succeeded pods
+just kopiur snapshot <app>  # Trigger immediate backup
+just kopiur list <app>      # List snapshots for an app
+just kopiur restore <app>   # Restore an app's PVC from latest backup
 flux reconcile kustomization cluster-apps --with-source
 ```
 

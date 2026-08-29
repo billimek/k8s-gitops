@@ -86,9 +86,9 @@ series; the PVC is created empty (`onMissingSnapshot: Continue`) until then.
 `resourceset-restores.yaml` automatically restores from the latest snapshot via
 `dataSourceRef`.
 
-**Manual restore/snapshot**: see `.taskfiles/kopiur/Taskfile.yaml`
-(`task kopiur:list`, `task kopiur:snapshot`, `task kopiur:snapshot-all`,
-`task kopiur:restore`).
+**Manual restore/snapshot**: see `.justfiles/kopiur.just`
+(`just kopiur list`, `just kopiur snapshot`, `just kopiur snapshot-all`,
+`just kopiur restore`).
 
 ## Resizing a PVC
 
@@ -96,7 +96,7 @@ Kubernetes only supports PVC **expansion**, not shrinking. To shrink a PVC, use
 the same backup/delete/restore workflow:
 
 1. Suspend the app and scale it to zero (pause any KEDA `ScaledObject` first).
-2. `task kopiur:snapshot APP=<app>` with the app stopped, for a consistent backup.
+2. `just kopiur snapshot <app>` with the app stopped, for a consistent backup.
 3. Update `capacity` in `resourceset-inputprovider.yaml`.
 4. `kubectl delete pvc <app>-config -n <namespace>` and delete the corresponding
    `restore/<app>-bootstrap`.

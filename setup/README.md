@@ -27,7 +27,7 @@ For a fresh cluster, this runs the entire flow below in order (secrets ->
 render/validate -> Talos bootstrap -> apps), prompting once before starting:
 
 ```shell
-task k8s-bootstrap:cluster
+just bootstrap cluster
 ```
 
 ## talos setup & bootstrapping
@@ -37,14 +37,14 @@ The individual steps, useful for recovery/re-running a single stage:
 Generate the secrets bundle and render the machine configs locally for validation.
 
 ```shell
-task talos:generate-secrets
-task talos:render-clusterconfig
+just talos generate-secrets
+just talos render-clusterconfig
 ```
 
 Bootstrap the talos nodes. It may take some time for the cluster to be ready.
 
 ```shell
-task k8s-bootstrap:talos
+just bootstrap talos
 ```
 
 ## kubernetes setup & bootstrapping
@@ -52,5 +52,5 @@ task k8s-bootstrap:talos
 Bootstrap the kubernetes cluster with required prerequisites (cilium CNI, CRDs, flux, etc).
 
 ```shell
-task k8s-bootstrap:apps
+just bootstrap apps
 ```

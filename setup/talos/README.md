@@ -4,7 +4,7 @@
 
 - `topf` and `talosctl` are not pinned in this repo; they come from the ambient
   nix-darwin config. Cluster config lives in `topf.yaml` + `topf-patches/` and is rendered
-  and applied with `topf` (see `.taskfiles/talos/Taskfile.yaml`); talhelper is no longer
+  and applied with `topf` (see `.justfiles/talos.just`); talhelper is no longer
   used (see https://github.com/postfinance/topf).
 
 ## nodes
