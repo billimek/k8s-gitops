@@ -11,6 +11,9 @@ spec:
     version: v1.14.0
   policy:
     rebootMode: default
+    waitForVolumeDetach: true
+  drain:
+    enabled: true
   healthChecks:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Snapshot
