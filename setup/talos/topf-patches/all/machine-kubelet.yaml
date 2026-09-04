@@ -1,6 +1,6 @@
-machine:
-  kubelet:
-    extraConfig:
-      serializeImagePulls: false
-      imageGCHighThresholdPercent: 70
-      imageGCLowThresholdPercent: 50
+apiVersion: v1alpha1
+kind: KubeletConfig
+config:
+  serializeImagePulls: false
+  imageGCHighThresholdPercent: 70
+  imageGCLowThresholdPercent: 50

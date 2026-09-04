@@ -162,7 +162,7 @@ jobs:
           ## Repo Context
 
           This is a Flux GitOps repository managing a single homelab Kubernetes cluster running
-          Talos Linux (1 control plane + 7 workers). Dependencies are primarily:
+          Talos Linux (1 control plane + 6 workers). Dependencies are primarily:
           - Container images referenced in Kubernetes manifests, pinned with SHA256 digests
           - Helm chart versions in HelmRelease CRDs
           - Custom dependencies managed via regex in YAML files
@@ -510,7 +510,7 @@ jobs:
           ## Repo Context
 
           This is a Flux GitOps repository managing a single homelab Kubernetes cluster running
-          Talos Linux (1 control plane + 7 workers). Dependencies are primarily:
+          Talos Linux (1 control plane + 6 workers). Dependencies are primarily:
           - Container images referenced in Kubernetes manifests, pinned with SHA256 digests
           - Helm chart versions in HelmRelease CRDs
           - Custom dependencies managed via regex in YAML files
