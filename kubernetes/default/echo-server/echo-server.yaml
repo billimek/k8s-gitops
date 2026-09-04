@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/echo
-              tag: 0.2.4@sha256:ae3966bf6d1999f6662db0baf7c66a2b423287c120bcd45b6df2fe127e4715fd
+              tag: 0.2.5@sha256:1f1417684b255721eebb98b486df77b4619183330a1ef0f1f6b01e73601dbe41
             env:
               ECHO_HTTP_PORT: &port 8080
               ECHO_METRICS_PORT: &metrics-port 8081
