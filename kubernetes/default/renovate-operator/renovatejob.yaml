@@ -23,7 +23,7 @@ spec:
   provider:
     name: forgejo
     endpoint: https://git.eviljungle.com/api/v1
-  schedule: "*/30 * * * *"
+  schedule: "0 * * * *"
   secretRef: renovate-secret
   webhook:
     enabled: true
