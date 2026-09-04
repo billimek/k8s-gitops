@@ -1,3 +1,5 @@
-machine:
-  install:
-    disk: /dev/nvme0n1
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.dev_path == "/dev/nvme0n1"

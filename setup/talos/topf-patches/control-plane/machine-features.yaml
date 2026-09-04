@@ -1,10 +1,8 @@
-machine:
-  features:
-    kubernetesTalosAPIAccess:
-      enabled: true
-      allowedRoles:
-        - os:admin
-        - os:etcd:backup
-      allowedKubernetesNamespaces:
-        - kube-system
-        - system-upgrade
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:admin
+  - os:etcd:backup
+allowedKubernetesNamespaces:
+  - kube-system
+  - system-upgrade

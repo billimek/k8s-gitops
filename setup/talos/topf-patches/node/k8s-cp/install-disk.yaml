@@ -1,4 +1,5 @@
-machine:
-  install:
-    diskSelector:
-      model: WDS500G3X0C-00SJG0
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.model == "WDS500G3X0C-00SJG0"
