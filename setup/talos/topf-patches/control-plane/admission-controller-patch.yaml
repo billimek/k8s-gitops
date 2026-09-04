@@ -1,5 +1,4 @@
-cluster:
-  apiServer:
-    admissionControl:
-      - name: PodSecurity
-        $patch: delete
+apiVersion: v1alpha1
+kind: KubeAdmissionControlConfig
+name: PodSecurity
+$patch: delete

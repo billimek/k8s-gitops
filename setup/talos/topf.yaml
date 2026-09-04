@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/postfinance/topf/main/schema/topf.json
 ---
 # renovate: datasource=github-releases depName=siderolabs/talos
-talosVersion: v1.13.9
+talosVersion: v1.14.0
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.36.4
 

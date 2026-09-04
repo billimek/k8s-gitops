@@ -1,4 +1,3 @@
-cluster:
-  network:
-    cni:
-      name: none
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
