@@ -44,7 +44,7 @@ tool that creates, updates, deletes, scales, execs, or pushes requires explicit 
 ## Architecture
 
 **Patterns**:
-- **Cluster**: Single homelab cluster, 1 control plane + 7 workers (Talos)
+- **Cluster**: Single homelab cluster, 1 control plane + 6 workers (Talos); k8s-g sidelined pending hardware decision (#6287)
 - **Primary**: OCIRepository + chartRef (exceptions: minecraft uses HelmRepository)
 - **Ingress**: Envoy Gateway with HTTPRoute (NOT Traefik/Ingress)
 - **Gateways**: `internal` (LAN + Tailscale, 10.0.6.151) and `public` (internet-facing, 10.0.6.150), both in `kube-system`

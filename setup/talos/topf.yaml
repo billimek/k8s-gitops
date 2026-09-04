@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/postfinance/topf/main/schema/topf.json
 ---
 # renovate: datasource=github-releases depName=siderolabs/talos
-talosVersion: v1.13.9
+talosVersion: v1.14.0
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.37.0
 
@@ -35,10 +35,8 @@ nodes:
     ip: 10.0.7.55
     role: worker
     schematicId: '@topf-patches/schematics/worker.yaml'
-  - host: k8s-g
-    ip: 10.0.7.57
-    role: worker
-    schematicId: '@topf-patches/schematics/worker.yaml'
+  # k8s-g sidelined pending hardware decision (repeat NVMe medium errors, #6287) -
+  # patches kept in topf-patches/node/k8s-g/ for re-add once resolved
   - host: k8s-h
     ip: 10.0.7.58
     role: worker

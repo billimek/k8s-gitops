@@ -8,9 +8,12 @@ metadata:
 spec:
   talos:
     # renovate: datasource=github-releases depName=siderolabs/talos
-    version: v1.13.9
+    version: v1.14.0
   policy:
     rebootMode: default
+    waitForVolumeDetach: true
+  drain:
+    enabled: true
   healthChecks:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Snapshot

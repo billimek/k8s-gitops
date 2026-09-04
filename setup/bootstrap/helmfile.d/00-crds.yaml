@@ -72,7 +72,7 @@ releases:
   - name: renovate-operator
     namespace: default
     chart: oci://ghcr.io/mogenius/helm-charts/renovate-operator
-    version: 6.2.0
+    version: 6.3.0
     # Forces template mode so --include-crds can extract the CRD; HelmRelease keeps the chart default.
     set:
       - name: crd.mode

@@ -1,4 +1,5 @@
-machine:
-  install:
-    diskSelector:
-      model: M4-CT256M4SSD2
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.model == "M4-CT256M4SSD2"
