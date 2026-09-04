@@ -121,13 +121,19 @@ This is a worker node, bare-metal
 
 ### k8s-g
 
-This is a worker node, bare-metal
+2026-09-04: sidelined pending a hardware decision - repeat NVMe medium errors on the
+system disk, second distinct failure mode from this drive in three weeks (#6287, prior
+incident #6096). Cordoned/drained, then removed from `topf.yaml` so it's no longer
+managed; not in the CRUSH map, so no Ceph data exposure. Patches kept in
+`topf-patches/node/k8s-g/` to re-add once the drive is replaced or the risk is accepted.
+
+Was a worker node, bare-metal:
 
 - MAC: `68:1d:ef:34:66:3f`
 - IP: 10.0.7.57
 - CPU: Intel N100 (Alder Lake-N, 4 cores, 4 threads)
 - RAM: 16GB
-- Disk: host - 1TB - `/dev/nvme0n1`
+- Disk: host - 1TB - `/dev/nvme0n1` (`GV-1TB-2242`, serial `V3230620000018` - suspect drive)
 - GPU: Intel UHD Graphics (Gen 12 Xe, 24 EUs, QuickSync Gen 12 with AV1 encode/decode)
 
 ### k8s-h
