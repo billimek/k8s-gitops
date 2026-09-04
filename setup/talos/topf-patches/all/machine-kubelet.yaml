@@ -4,3 +4,10 @@ config:
   serializeImagePulls: false
   imageGCHighThresholdPercent: 70
   imageGCLowThresholdPercent: 50
+  imageMaximumGCAge: 168h
+  maxParallelImagePulls: 3
+  shutdownGracePeriod: 90s
+  shutdownGracePeriodCriticalPods: 60s
+  crashLoopBackOff:
+    maxContainerRestartPeriod: 60s
+defaultRuntimeSeccompProfileEnabled: true

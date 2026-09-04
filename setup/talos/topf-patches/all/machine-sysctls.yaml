@@ -8,3 +8,13 @@ params:
   net.core.wmem_max: "67108864"            # Cloudflared / QUIC
   net.ipv4.tcp_fastopen: "3"               # Send and accept data in the opening SYN packet
   vm.nr_hugepages: "1024"                  # PostgreSQL
+  net.core.default_qdisc: fq               # Pair with BBR
+  net.ipv4.tcp_congestion_control: bbr     # Better throughput under loss/latency
+  net.ipv4.tcp_mtu_probing: "1"            # Path MTU black-hole recovery
+  net.ipv4.tcp_notsent_lowat: "131072"     # Reduce bufferbloat for latency-sensitive apps
+  net.ipv4.tcp_rmem: 4096 131072 67108864
+  net.ipv4.tcp_wmem: 4096 65536 67108864
+  net.ipv4.ping_group_range: 0 2147483647  # Allow unprivileged ICMP ping
+  net.ipv4.neigh.default.gc_thresh1: "4096"
+  net.ipv4.neigh.default.gc_thresh2: "8192"
+  net.ipv4.neigh.default.gc_thresh3: "16384"

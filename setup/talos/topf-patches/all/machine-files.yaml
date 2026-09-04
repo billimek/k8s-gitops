@@ -2,6 +2,9 @@ apiVersion: v1alpha1
 kind: CRICustomizationConfig
 name: spegel
 content: |
+  [plugins."io.containerd.grpc.v1.cri"]
+    enable_unprivileged_ports = true
+    enable_unprivileged_icmp = true
   [plugins."io.containerd.cri.v1.images"]
     discard_unpacked_layers = false
   [plugins."io.containerd.cri.v1.runtime"]
@@ -17,3 +20,5 @@ contents: |-
   hard=True
   nconnect=16
   noatime=True
+  rsize=1048576
+  wsize=1048576
