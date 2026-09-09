@@ -72,7 +72,7 @@ spec:
           app:
             image:
               repository: ghcr.io/itzg/minecraft-server
-              tag: 2026.8.2@sha256:efa878ddb49cf5251b2e5f2ad71b08fd2f7236c1f7907433f6697258b31d2ce4
+              tag: 2026.9.0@sha256:4e29d14082d94748f945edad3ee5307b97adc730fec49860199f5e52218a9ae3
             env:
               EULA: "true"
               TYPE: PAPER
