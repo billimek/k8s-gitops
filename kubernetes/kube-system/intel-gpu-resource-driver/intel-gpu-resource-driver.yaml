@@ -11,7 +11,7 @@ spec:
     operation: copy
   ref:
     tag: 0.12.0
-  url: oci://ghcr.io/intel/intel-resource-drivers-for-kubernetes/intel-gpu-resource-driver-chart
+  url: oci://ghcr.io/intel/intel-gpu-resource-driver-chart
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
