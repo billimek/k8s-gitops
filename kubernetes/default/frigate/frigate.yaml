@@ -83,10 +83,6 @@ spec:
                 cpu: 1500m
               limits:
                 memory: 5000Mi
-            securityContext:
-              capabilities:
-                add:
-                  - PERFMON
 
     persistence:
       config:

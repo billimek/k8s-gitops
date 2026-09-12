@@ -247,11 +247,18 @@ data:
           fps: 4
         motion:
           mask:
-            - 0,352,151,352,153,242,0,243
+            motion_mask_1:
+              friendly_name: "Motion Mask 1"
+              enabled: true
+              coordinates: "0,352,151,352,153,242,0,243"
         objects:
           filters:
             person:
-              mask: 0,352,151,352,153,242,0,243
+              mask:
+                object_mask_1:
+                  friendly_name: "Object Mask 1 (person)"
+                  enabled: true
+                  coordinates: "0,352,151,352,153,242,0,243"
         live:
           streams:
             main_stream: basement_record
