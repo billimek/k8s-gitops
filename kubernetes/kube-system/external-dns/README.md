@@ -88,7 +88,7 @@ route:
   main:
     annotations:
       external-dns.alpha.kubernetes.io/internal: "true"
-      external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+      external-dns.kubernetes.io/target: "10.0.6.151"
     parentRefs:
       - name: internal
         namespace: kube-system
@@ -116,7 +116,7 @@ route:
   internal:
     annotations:
       external-dns.alpha.kubernetes.io/internal: "true"
-      external-dns.alpha.kubernetes.io/target: "10.0.6.151"
+      external-dns.kubernetes.io/target: "10.0.6.151"
     parentRefs:
       - name: internal
         namespace: kube-system

@@ -115,7 +115,7 @@ Both gateways have wildcard catchall routes (`*.eviljungle.com`) that route unde
 
 **Route Matching Precedence**: Gateway API ensures specific hostnames (e.g., `grafana.eviljungle.com`) always take precedence over wildcard patterns (`*.eviljungle.com`), so existing applications are unaffected.
 
-**DNS Exclusion**: Wildcard routes have `external-dns.alpha.kubernetes.io/exclude: "true"` to prevent External-DNS from creating wildcard DNS records. Only explicit application routes create DNS entries.
+**DNS Exclusion**: Wildcard routes have `external-dns.kubernetes.io/exclude: "true"` to prevent External-DNS from creating wildcard DNS records. Only explicit application routes create DNS entries.
 
 ## DNS Integration
 

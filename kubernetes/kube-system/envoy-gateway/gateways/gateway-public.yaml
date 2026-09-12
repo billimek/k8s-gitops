@@ -8,7 +8,7 @@ metadata:
   name: public
   namespace: kube-system
   annotations:
-    external-dns.alpha.kubernetes.io/target: "eviljungle.com"
+    external-dns.kubernetes.io/target: "eviljungle.com"
     gatus.home-operations.com/endpoint: |
       group: public
 spec:
