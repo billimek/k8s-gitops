@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: general-custom-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: kube-prometheus-general.rules
+    rules:
+    # Replaces the upstream count:up0 default rule (disabled in victoria-metrics.yaml):
+    # count(up == 0) alone returns an empty vector, not zero, when nothing is
+    # down, which trips RecordingRulesNoData. "or vector(0)" keeps it always
+    # returning data.
+    - record: count:up0
+      expr: count(up == 0) without(instance, pod, node) or vector(0)
