@@ -127,12 +127,11 @@ jobs:
         run: bash .forgejo/scripts/append-flate-evidence.sh
 
       - name: Setup Claude Code CLI
-        # Invokes the Claude Code CLI directly; the runner image has no Node.js preinstalled.
+        # Native installer avoids apt-installing nodejs/npm on the bare ubuntu-24.04 runner image.
         if: ${{ steps.gate.outputs.gated == 'true' && steps.fingerprint.outputs.skip != 'true' }}
         run: |
-          apt-get update -qq
-          apt-get install -y -qq nodejs npm
-          npm install -g @anthropic-ai/claude-code@2.1.241
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Generate review
         id: claude
