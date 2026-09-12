@@ -112,8 +112,8 @@ spec:
         loadBalancerIP: 10.0.6.106
         annotations:
           external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.alpha.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
-          external-dns.alpha.kubernetes.io/target: "10.0.6.106"
+          external-dns.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
+          external-dns.kubernetes.io/target: "10.0.6.106"
         ports:
           minecraft:
             port: 25565
@@ -129,9 +129,9 @@ spec:
         externalName: direct.eviljungle.com
         annotations:
           external-dns.alpha.kubernetes.io/external: "true"
-          external-dns.alpha.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
-          external-dns.alpha.kubernetes.io/target: direct.eviljungle.com
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+          external-dns.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
+          external-dns.kubernetes.io/target: direct.eviljungle.com
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         ports:
           minecraft:
             port: 25565
