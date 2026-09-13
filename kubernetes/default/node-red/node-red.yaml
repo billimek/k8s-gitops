@@ -33,6 +33,9 @@ spec:
               FLOWS: "flows.json"
               NODE_RED_ENABLE_PROJECTS: "true"
               NODE_RED_ENABLE_SAFE_MODE: "false"
+              GIT_CONFIG_COUNT: "1"
+              GIT_CONFIG_KEY_0: "safe.directory"
+              GIT_CONFIG_VALUE_0: "/data/projects/node-red-config"
             probes:
               liveness: &probes
                 enabled: true
