@@ -47,10 +47,13 @@ spec:
 
               - name: Google
                 group: connectivity
-                url: icmp://8.8.8.8
+                url: 8.8.8.8
                 interval: 1m
+                dns:
+                  query-name: cloudflare.com
+                  query-type: A
                 conditions:
-                  - "[CONNECTED] == true"
+                  - "[DNS_RCODE] == NOERROR"
 
               - name: Quad9
                 group: connectivity
