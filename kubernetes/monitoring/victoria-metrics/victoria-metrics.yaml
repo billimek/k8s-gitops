@@ -88,12 +88,16 @@ spec:
               storage: 60Gi
         extraArgs:
           memory.allowedPercent: "75"
+          # default (2x node CPUs = 16) gets exceeded when vmalert's ~90+ rule
+          # groups tick at once, causing bursts of 429s that flap
+          # AlertingRulesError/RecordingRulesError
+          search.maxConcurrentRequests: "32"
         resources:
           limits:
             # raised from 3Gi - 30d peak was 3062Mi, essentially pinned at limit
             memory: 4Gi
           requests:
-            cpu: 530m
+            cpu: 1000m
             memory: 2Gi
 
       route:
