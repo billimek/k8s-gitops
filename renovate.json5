@@ -33,6 +33,17 @@
     minimumReleaseAge: null,
   },
 
+  // git.eviljungle.com (the Forgejo platform endpoint used by the renovate-operator
+  // RenovateJob, kubernetes/default/renovate-operator/renovatejob.yaml) resolves to the
+  // internal Envoy gateway IP, since Forgejo is only exposed on the internal (LAN +
+  // Tailscale) gateway. Without this, Renovate's SSRF guard blocks all platform API calls.
+  hostRules: [
+    {
+      matchHost: 'git.eviljungle.com',
+      allowInternal: true,
+    },
+  ],
+
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   suppressNotifications: [
     'prEditedNotification',
