@@ -20,6 +20,12 @@ spec:
         secretKeyRef:
           name: renovate-secret
           key: ssh_private_key
+    # git.eviljungle.com (the Forgejo platform endpoint below) resolves to the internal
+    # Envoy gateway IP, since Forgejo is only exposed on the internal (LAN + Tailscale)
+    # gateway. hostRules.allowInternal is a self-hosted-admin-only option (rejected if set
+    # in the repo's renovate.json5), so it must be set here as global config instead.
+    - name: RENOVATE_HOST_RULES
+      value: '[{"matchHost":"git.eviljungle.com","allowInternal":true}]'
   provider:
     name: forgejo
     endpoint: https://git.eviljungle.com/api/v1
