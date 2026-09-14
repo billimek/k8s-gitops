@@ -20,7 +20,8 @@
 # to every 4h ("H */4 * * *") — this cuts both Snapshot CR volume and the
 # rate of Kopia index-blob churn (see clusterrepository.yaml's
 # parameters.epoch.minDuration note) for apps that don't need hourly
-# recovery granularity.
+# recovery granularity. The remaining apps run daily ("H 3 * * *", same
+# slot as kopiur's own maintenance jobs).
 # To add a new app: add entry to the apps array below
 # To remove an app: delete entry from the apps array below
 apiVersion: fluxcd.controlplane.io/v1
@@ -43,10 +44,12 @@ spec:
 
       - app: continuwuity
         capacity: 5Gi
+        schedule: "H 3 * * *"
 
       - app: forgejo
         runAsUser: "1000"
         capacity: 10Gi
+        schedule: "H 3 * * *"
 
       - app: frigate
         runAsUser: "1000"
@@ -60,38 +63,46 @@ spec:
       - app: home-assistant
         runAsUser: "1000"
         capacity: 10Gi
+        schedule: "H 3 * * *"
 
       - app: kei
+        schedule: "H 3 * * *"
 
       - app: minecraft-creative
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 10Gi
+        schedule: "H 3 * * *"
 
       - app: minecraft-survival
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 8Gi
         cacheCapacity: 10Gi
+        schedule: "H 3 * * *"
 
       - app: minecraft-survival2
         pvcSuffix: "datadir"
         runAsUser: "1000"
         capacity: 20Gi
         cacheCapacity: 12Gi
+        schedule: "H 3 * * *"
 
       - app: mousetrap
         runAsUser: "1000"
+        schedule: "H 3 * * *"
 
       - app: node-red
         pvcSuffix: "data"
         runAsUser: "1000"
         capacity: 1Gi
+        schedule: "H 3 * * *"
 
       - app: plex
         runAsUser: "1000"
         capacity: 35Gi
         cacheCapacity: 20Gi
+        schedule: "H 3 * * *"
 
       - app: prowlarr
         schedule: "H */4 * * *"
@@ -100,6 +111,7 @@ spec:
         schedule: "H */4 * * *"
 
       - app: qui
+        schedule: "H 3 * * *"
 
       - app: radarr
         capacity: 3Gi
@@ -116,6 +128,7 @@ spec:
         schedule: "H */4 * * *"
 
       - app: shelfmark
+        schedule: "H 3 * * *"
 
       - app: sonarr
         capacity: 2Gi

@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: vmalert-meta-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: vmalert-meta.rules
+    interval: 30s
+    rules:
+    # Replaces upstream AlertingRulesError (disabled in victoria-metrics.yaml)
+    - alert: AlertingRulesError
+      expr: sum(increase(vmalert_alerting_rules_errors_total[1m])) without(id) > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Alerting rules are failing for vmalert instance {{ $labels.instance }}"
+        description: >-
+          Alerting rules execution is failing for "{{ $labels.alertname }}" from
+          group "{{ $labels.group }}" in file "{{ $labels.file }}". Check
+          vmalert's logs for detailed error message.
+        dashboard: '{{ $externalURL }}/d/LzldHAVnz?viewPanel=13&var-instance={{ $labels.instance }}&var-file={{ $labels.file }}&var-group={{ $labels.group }}'
+    # Replaces upstream RecordingRulesError (disabled in victoria-metrics.yaml)
+    - alert: RecordingRulesError
+      expr: sum(increase(vmalert_recording_rules_errors_total[1m])) without(id) > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Recording rules are failing for vmalert instance {{ $labels.instance }}"
+        description: >-
+          Recording rules execution is failing for "{{ $labels.recording }}" from
+          group "{{ $labels.group }}" in file "{{ $labels.file }}". Check
+          vmalert's logs for detailed error message.
+        dashboard: '{{ $externalURL }}/d/LzldHAVnz?viewPanel=30&var-instance={{ $labels.instance }}&var-file={{ $labels.file }}&var-group={{ $labels.group }}'
