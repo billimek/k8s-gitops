@@ -41,7 +41,7 @@ spec:
           - name: OPNSENSE_SKIP_TLS_VERIFY
             value: "true"
           - name: LOG_LEVEL
-            value: "debug"
+            value: "info"
         livenessProbe:
           httpGet:
             path: /healthz
@@ -61,7 +61,7 @@ spec:
           limits:
             memory: 128Mi
 
-    # Service is the only source with no Gateway parentRef to filter on, so it can't share an instance with the gateway-httproute (--gateway-name) source - see external-dns docs/faq.md "annotation filters with multiple sources". This instance exists only for dns.eviljungle.com/visibility annotated Services (currently just minecraft-router's LoadBalancer).
+    # Service source only; --gateway-name cannot scope Services
     sources:
       - service
 

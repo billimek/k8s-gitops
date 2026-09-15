@@ -6,7 +6,7 @@ metadata:
   name: wildcard-internal
   namespace: kube-system
   annotations:
-    external-dns.kubernetes.io/exclude: "true"
+    external-dns.kubernetes.io/controller: none
     gatus.home-operations.com/enabled: "false"
 spec:
   parentRefs:
