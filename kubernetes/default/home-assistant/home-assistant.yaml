@@ -119,6 +119,8 @@ spec:
               - path: /config
             code-server:
               - path: /config
+              - path: /home/coder
+                subPath: code-server-home
             venv-reset:
               - path: /config
       hass-cache:
