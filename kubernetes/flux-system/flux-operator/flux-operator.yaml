@@ -38,8 +38,6 @@ spec:
     web:
       httpRoute:
         enabled: true
-        annotations:
-          external-dns.kubernetes.io/target: "10.0.6.151"
         hostnames:
           - flux.eviljungle.com
         parentRefs:

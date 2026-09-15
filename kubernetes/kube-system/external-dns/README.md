@@ -88,8 +88,6 @@ route:
 ```yaml
 route:
   main:
-    annotations:
-      external-dns.kubernetes.io/target: "10.0.6.151"
     parentRefs:
       - name: internal
         namespace: kube-system
@@ -97,7 +95,7 @@ route:
       - "app.eviljungle.com"
 ```
 
-**Note**: Tailscale users access via App Connector which routes to the internal gateway.
+**Note**: Tailscale users access via App Connector which routes to the internal gateway. The target (`10.0.6.151`) comes from the `internal` Gateway object's own `external-dns.kubernetes.io/target` annotation, not a per-route annotation - external-dns's gateway-httproute source only reads target overrides off the Gateway/ListenerSet, never off individual routes.
 
 #### Split-Horizon Service (Public + Internal + Tailscale)
 
@@ -113,8 +111,6 @@ route:
   
   # Internal/LAN Access + Tailscale VPN Access
   internal:
-    annotations:
-      external-dns.kubernetes.io/target: "10.0.6.151"
     parentRefs:
       - name: internal
         namespace: kube-system

@@ -170,7 +170,6 @@ spec:
     route:
       bluemap:
         annotations:
-          external-dns.kubernetes.io/target: "10.0.6.151"
           gatus.home-operations.com/enabled: "false"
         parentRefs:
           - name: internal

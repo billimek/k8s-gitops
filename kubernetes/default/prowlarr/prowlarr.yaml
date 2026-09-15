@@ -75,8 +75,6 @@ spec:
     route:
       main:
         enabled: true
-        annotations:
-          external-dns.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: internal
             namespace: kube-system

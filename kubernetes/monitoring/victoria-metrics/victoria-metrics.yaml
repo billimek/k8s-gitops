@@ -107,8 +107,6 @@ spec:
 
       route:
         enabled: true
-        annotations:
-          external-dns.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -139,8 +137,6 @@ spec:
                   storage: 1Gi
       route:
         enabled: true
-        annotations:
-          external-dns.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -286,8 +282,6 @@ spec:
         evaluationInterval: 15s
       route:
         enabled: true
-        annotations:
-          external-dns.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -324,8 +318,6 @@ spec:
 
       route:
         enabled: true
-        annotations:
-          external-dns.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: internal
             namespace: kube-system

@@ -19,8 +19,6 @@ kind: HTTPRoute
 metadata:
   name: external-proxmox
   namespace: kube-system
-  annotations:
-    external-dns.kubernetes.io/target: "10.0.6.151"
 spec:
   parentRefs:
     - name: internal

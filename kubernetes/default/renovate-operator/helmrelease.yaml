@@ -13,8 +13,6 @@ spec:
   values:
     route:
       enabled: true
-      annotations:
-        external-dns.kubernetes.io/target: "10.0.6.151"
       hostnames:
         - renovate.eviljungle.com
       parentRefs:
