@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: external-dns-opnsense
+  name: external-dns-opnsense-services
   namespace: kube-system
 spec:
   chartRef:
@@ -56,51 +56,50 @@ spec:
           timeoutSeconds: 5
         resources:
           requests:
-            memory: 128Mi
+            memory: 64Mi
             cpu: 10m
           limits:
-            memory: 256Mi
-    
-    # Sources to watch for DNS records - scoped to the "internal" Gateway via --gateway-name below, so only routes attached to it are managed here
+            memory: 128Mi
+
+    # Service is the only source with no Gateway parentRef to filter on, so it can't share an instance with the gateway-httproute (--gateway-name) source - see external-dns docs/faq.md "annotation filters with multiple sources". This instance exists only for dns.eviljungle.com/visibility annotated Services (currently just minecraft-router's LoadBalancer).
     sources:
-      - gateway-httproute
+      - service
 
     # Only manage eviljungle.com domain
     domainFilters:
       - eviljungle.com
 
     # Unique identifier for this external-dns instance
-    txtOwnerId: k8s-internal
+    txtOwnerId: k8s-internal-svc
 
     # Extra arguments for external-dns
     extraArgs:
-      - --gateway-name=internal
-    
+      - --annotation-filter=dns.eviljungle.com/visibility=internal
+
     # Policy and registry settings
     policy: sync
     registry: txt
 
     triggerLoopOnEvent: true
 
-    
     # Resource limits
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 10m
+        memory: 64Mi
       limits:
-        memory: 256Mi
-    
+        memory: 128Mi
+
     interval: 5m
-    
+
     # Logging
     logLevel: info
-    
+
     # Metrics
     metrics:
       enabled: true
       port: 7979
-    
+
     # Service monitor for Prometheus
     serviceMonitor:
       enabled: true

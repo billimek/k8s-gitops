@@ -53,8 +53,6 @@ spec:
 
     route:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
         parentRefs:
           - name: public
             namespace: kube-system
@@ -65,8 +63,6 @@ spec:
           - backendRefs:
               - port: 8080
       internal:
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
         parentRefs:
           - name: internal
             namespace: kube-system

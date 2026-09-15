@@ -88,8 +88,6 @@ spec:
 
     route:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
         parentRefs:
           - name: public
             namespace: kube-system
@@ -97,8 +95,6 @@ spec:
         hostnames:
           - &host www.eviljungle.com
       internal:
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -106,8 +102,6 @@ spec:
         hostnames:
           - *host
       bare:
-        annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
         parentRefs:
           - name: public
             namespace: kube-system
@@ -115,8 +109,6 @@ spec:
         hostnames:
           - eviljungle.com
       bare-internal:
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
         parentRefs:
           - name: internal
             namespace: kube-system

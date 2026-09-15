@@ -111,7 +111,7 @@ spec:
         externalTrafficPolicy: Cluster
         loadBalancerIP: 10.0.6.106
         annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
+          dns.eviljungle.com/visibility: internal
           external-dns.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
           external-dns.kubernetes.io/target: "10.0.6.106"
         ports:
@@ -128,7 +128,7 @@ spec:
         type: ExternalName
         externalName: direct.eviljungle.com
         annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
+          dns.eviljungle.com/visibility: external
           external-dns.kubernetes.io/hostname: mc.eviljungle.com,mc-smp.eviljungle.com,mc-smp2.eviljungle.com
           external-dns.kubernetes.io/target: direct.eviljungle.com
           external-dns.kubernetes.io/cloudflare-proxied: "false"

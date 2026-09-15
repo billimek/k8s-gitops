@@ -40,7 +40,6 @@ spec:
       route:
         enabled: true
         annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
           external-dns.kubernetes.io/target: "10.0.6.151"
         parentRefs:
           - name: internal

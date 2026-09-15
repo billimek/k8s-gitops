@@ -6,7 +6,6 @@ metadata:
   name: forgejo-public
   namespace: default
   annotations:
-    external-dns.alpha.kubernetes.io/external: "true"
     gatus.home-operations.com/endpoint: |-
       url: https://git.eviljungle.com/api/healthz
 spec:
