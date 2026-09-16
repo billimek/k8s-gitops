@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: external-dns-cloudflare
+  name: external-dns-cloudflare-services
   namespace: kube-system
 spec:
   chartRef:
@@ -17,26 +17,27 @@ spec:
     # Use Cloudflare provider
     provider:
       name: cloudflare
-    
+
     policy: sync
+    registry: txt
     triggerLoopOnEvent: true
-    
-    # Sources to watch for DNS records - scoped to the "public" Gateway via --gateway-name below, so only routes attached to it are managed here
+
+    # Service source only; --gateway-name cannot scope Services
     sources:
-      - gateway-httproute
+      - service
 
     # Only manage eviljungle.com domain
     domainFilters:
       - eviljungle.com
 
     # Unique identifier for this external-dns instance
-    txtOwnerId: k8s-external
+    txtOwnerId: k8s-external-svc
 
     # Extra arguments for external-dns
     extraArgs:
-      - --gateway-name=public
+      - --annotation-filter=dns.eviljungle.com/visibility=external
       - --cloudflare-proxied
-    
+
     # Cloudflare configuration (using Global API Key)
     env:
       - name: CF_API_KEY
@@ -49,26 +50,26 @@ spec:
           secretKeyRef:
             name: cloudflare-credentials
             key: email
-    
+
     # Resource limits
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 10m
+        memory: 64Mi
       limits:
-        memory: 256Mi
-    
+        memory: 128Mi
+
     # Update interval
     interval: 5m
-    
+
     # Logging
     logLevel: info
-    
+
     # Metrics
     metrics:
       enabled: true
       port: 7979
-    
+
     # Service monitor for Prometheus
     serviceMonitor:
       enabled: true

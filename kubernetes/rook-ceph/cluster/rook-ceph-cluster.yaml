@@ -133,9 +133,6 @@ spec:
 
     route:
       dashboard:
-        annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
-          external-dns.kubernetes.io/target: "10.0.6.151"
         host:
           name: rook.eviljungle.com
           path: /

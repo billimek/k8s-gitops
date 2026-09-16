@@ -184,7 +184,6 @@ spec:
     route:
       app:
         annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
           gatus.home-operations.com/enabled: "false"
         parentRefs:
           - name: public
@@ -194,7 +193,6 @@ spec:
           - &host status.eviljungle.com
       internal:
         annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
           gatus.home-operations.com/enabled: "false"
         parentRefs:
           - name: internal

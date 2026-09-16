@@ -6,7 +6,6 @@ metadata:
   name: flux-webhook
   namespace: flux-system
   annotations:
-    external-dns.alpha.kubernetes.io/external: "true"
     gatus.home-operations.com/enabled: "false"
 spec:
   parentRefs:

@@ -69,6 +69,8 @@ Internal Users (LAN):
 
 ### Service Exposure Patterns
 
+Which of the two `gateway-httproute` external-dns instances (cloudflare or opnsense) manages a route's DNS record is determined entirely by which Gateway (`public` or `internal`) the route's `parentRefs` points to - `external-dns-cloudflare` runs with `--gateway-name=public`, `external-dns-opnsense` with `--gateway-name=internal`. No DNS annotation is needed on HTTPRoutes.
+
 #### Standard Public Service (Envoy Gateway)
 
 ```yaml
@@ -86,9 +88,6 @@ route:
 ```yaml
 route:
   main:
-    annotations:
-      external-dns.alpha.kubernetes.io/internal: "true"
-      external-dns.kubernetes.io/target: "10.0.6.151"
     parentRefs:
       - name: internal
         namespace: kube-system
@@ -96,7 +95,7 @@ route:
       - "app.eviljungle.com"
 ```
 
-**Note**: Tailscale users access via App Connector which routes to the internal gateway.
+**Note**: Tailscale users access via App Connector which routes to the internal gateway. The target (`10.0.6.151`) comes from the `internal` Gateway object's own `external-dns.kubernetes.io/target` annotation, not a per-route annotation - external-dns's gateway-httproute source only reads target overrides off the Gateway/ListenerSet, never off individual routes.
 
 #### Split-Horizon Service (Public + Internal + Tailscale)
 
@@ -104,8 +103,6 @@ route:
 route:
   # External/Public Access
   public:
-    annotations:
-      external-dns.alpha.kubernetes.io/external: "true"
     parentRefs:
       - name: public
         namespace: kube-system
@@ -114,14 +111,29 @@ route:
   
   # Internal/LAN Access + Tailscale VPN Access
   internal:
-    annotations:
-      external-dns.alpha.kubernetes.io/internal: "true"
-      external-dns.kubernetes.io/target: "10.0.6.151"
     parentRefs:
       - name: internal
         namespace: kube-system
     hostnames:
       - "app.eviljungle.com"
+```
+
+#### Service-Sourced Record (no Gateway parentRef)
+
+A bare `Service` (LoadBalancer/ExternalName) has no Gateway to filter on, so `--gateway-name` can't scope it. These are handled by two small dedicated instances (`external-dns-cloudflare-services` / `external-dns-opnsense-services`, `sources: [service]` only) gated by a `dns.eviljungle.com/visibility` annotation - see [external-dns's own FAQ](https://kubernetes-sigs.github.io/external-dns/latest/faq/#how-do-i-specify-multiple-dns-sources) on why annotation-filter can't be scoped to one source within a shared instance. Currently only `minecraft-router`'s two Services use this:
+
+```yaml
+service:
+  internal-lb:
+    annotations:
+      dns.eviljungle.com/visibility: internal
+      external-dns.kubernetes.io/hostname: mc.eviljungle.com
+      external-dns.kubernetes.io/target: "10.0.6.106"
+  external-cname:
+    annotations:
+      dns.eviljungle.com/visibility: external
+      external-dns.kubernetes.io/hostname: mc.eviljungle.com
+      external-dns.kubernetes.io/target: direct.eviljungle.com
 ```
 
 **Result**: 
@@ -136,18 +148,26 @@ This ensures that during an ISP outage, local devices can still access the servi
 ### 1. External-DNS OpnSense (`external-dns-opnsense.yaml`)
 
 - Manages internal DNS records in OpnSense Unbound as **host overrides**
-- Watches for `HTTPRoute` with `external-dns.alpha.kubernetes.io/internal=true`
+- `sources: [gateway-httproute]`, scoped via `--gateway-name=internal`
 - Creates A records pointing to `10.0.6.151` (Envoy Gateway Internal)
 - Uses webhook provider with `crutonjohn/external-dns-opnsense-webhook`
 
 ### 2. External-DNS Cloudflare (`external-dns-cloudflare.yaml`)
 
 - Manages external DNS records in Cloudflare
-- Watches for `HTTPRoute` with `external-dns.alpha.kubernetes.io/external=true`
+- `sources: [gateway-httproute]`, scoped via `--gateway-name=public`
 - Uses native Cloudflare provider
 - **Registry**: `txt` with `txtOwnerId: k8s-external` for proper record lifecycle management
 
-### 3. Credentials
+### 3. External-DNS OpnSense/Cloudflare Services (`external-dns-{opnsense,cloudflare}-services.yaml`)
+
+- Same providers as above, but `sources: [service]` only, for the handful of
+  bare Services (LoadBalancer/ExternalName) that need DNS records and have no
+  Gateway parentRef to scope by - see "Service-Sourced Record" above
+- Gated by `--annotation-filter=dns.eviljungle.com/visibility=<internal|external>`
+- **Registry**: `txt` with `txtOwnerId: k8s-internal-svc` / `k8s-external-svc`
+
+### 4. Credentials
 
 - `opnsense-credentials.yaml`: OpnSense API credentials from 1Password
 - `cloudflare-credentials.yaml`: Cloudflare API token from 1Password
@@ -156,7 +176,7 @@ This ensures that during an ISP outage, local devices can still access the servi
 
 ### Services That Will Work During Internet Outages
 
-Any service with `external-dns.alpha.kubernetes.io/internal=true` annotation will remain accessible because:
+Any app with a `route` block attached to the `internal` Gateway will remain accessible because:
 
 1. DNS query goes to OpnSense (local)
 2. OpnSense finds the host override (created by External-DNS)

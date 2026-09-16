@@ -149,7 +149,6 @@ spec:
     route:
       app:
         annotations:
-          external-dns.alpha.kubernetes.io/external: "true"
           gatus.home-operations.com/endpoint: |-
             url: https://plex.eviljungle.com/identity
         parentRefs:
@@ -166,7 +165,6 @@ spec:
               backendRequest: 3600s
       internal:
         annotations:
-          external-dns.alpha.kubernetes.io/internal: "true"
           gatus.home-operations.com/endpoint: |-
             url: https://plex.eviljungle.com/identity
         parentRefs:
