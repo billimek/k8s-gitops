@@ -69,7 +69,9 @@ spec:
   disableDefaultAdminSecret: true
   disableDefaultSecurityContext: All
   httpRoute:
-    metadata: {}
+    metadata:
+      labels:
+        app.kubernetes.io/managed-by: grafana-operator
     spec:
       parentRefs:
         - name: internal
