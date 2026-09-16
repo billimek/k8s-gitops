@@ -69,7 +69,7 @@ spec:
   disableDefaultAdminSecret: true
   disableDefaultSecurityContext: All
   httpRoute:
-    metadata:
+    metadata: {}
     spec:
       parentRefs:
         - name: internal
