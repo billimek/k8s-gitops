@@ -20,6 +20,24 @@ spec:
         runAsNonRoot: true
         runAsUser: 1001
 
+    externalSecrets:
+      recyclarr:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: recyclarr-secret
+          creationPolicy: Owner
+        data:
+          - secretKey: RADARR_API_KEY
+            remoteRef:
+              key: radarr
+              property: api_key
+          - secretKey: SONARR_API_KEY
+            remoteRef:
+              key: sonarr
+              property: api_key
+
     controllers:
       recyclarr:
         type: cronjob

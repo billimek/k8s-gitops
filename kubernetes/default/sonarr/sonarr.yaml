@@ -22,6 +22,21 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 
+    externalSecrets:
+      sonarr:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: sonarr-secret
+          creationPolicy: Owner
+        data:
+          - secretKey: api_key
+            remoteRef:
+              key: sonarr
+              property: api_key
+
     controllers:
       sonarr:
         containers:

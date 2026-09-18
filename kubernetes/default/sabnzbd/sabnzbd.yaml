@@ -22,6 +22,19 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 
+    externalSecrets:
+      sabnzbd:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: sabnzbd-secret
+          creationPolicy: Owner
+        dataFrom:
+          - extract:
+              # SABNZBD__API_KEY, SABNZBD__NZB_KEY
+              key: sabnzbd
+
     controllers:
       sabnzbd:
         containers:
