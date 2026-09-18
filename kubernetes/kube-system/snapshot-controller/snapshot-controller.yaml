@@ -26,6 +26,7 @@ spec:
     kind: OCIRepository
     name: snapshot-controller
   values:
+    keepCRDs: true
     controller:
       serviceMonitor:
         create: true
