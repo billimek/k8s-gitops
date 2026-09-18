@@ -22,6 +22,21 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 
+    externalSecrets:
+      prowlarr:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: prowlarr-secret
+          creationPolicy: Owner
+        data:
+          - secretKey: api_key
+            remoteRef:
+              key: prowlarr
+              property: api_key
+
     controllers:
       prowlarr:
         containers:

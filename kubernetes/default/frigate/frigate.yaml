@@ -46,6 +46,18 @@ spec:
                     values:
                       - "kabylake"
 
+    externalSecrets:
+      frigate:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: frigate-secret
+          creationPolicy: Owner
+        dataFrom:
+          - extract:
+              key: frigate
+
     controllers:
       main:
         containers:

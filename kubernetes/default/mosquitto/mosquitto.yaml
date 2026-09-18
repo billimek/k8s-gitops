@@ -30,6 +30,26 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 
+    externalSecrets:
+      mosquitto:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: mosquitto-secret
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              # Mosquitto password file format: username:hashed_password
+              # Use the hashed password from 1Password field: mqtt_password_hashed
+              passwd: |
+                {{ .mqtt_password_hashed }}
+        dataFrom:
+          - extract:
+              key: emqx
+
     configMaps:
       config:
         data:
@@ -61,7 +81,7 @@ spec:
           app:
             image:
               repository: public.ecr.aws/docker/library/eclipse-mosquitto
-              tag: 2.0.22@sha256:212f89e1eaeb2c322d6441b64396e3346026674db8fa9c27beac293405c32b3c
+              tag: 2.0.22@sha256:199ea8ef2e35ec2b1b37e59cfd1dbae538ed4dfa4a2251a121a52215a6248a21
             env:
               TZ: America/New_York
             probes:

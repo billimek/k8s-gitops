@@ -20,6 +20,22 @@ spec:
         runAsNonRoot: true
         runAsUser: 1001
 
+    externalSecrets:
+      kopia:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: kopia-secret
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
+        dataFrom:
+          - extract:
+              key: kopia
+
     configMaps:
       config:
         data:
