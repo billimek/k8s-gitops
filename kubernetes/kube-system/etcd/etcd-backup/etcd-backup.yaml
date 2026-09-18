@@ -21,6 +21,30 @@ spec:
           operator: Exists
           effect: NoSchedule
 
+    externalSecrets:
+      etcd-backup-s3:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: etcd-backup-s3-secret
+          creationPolicy: Owner
+          template:
+            data:
+              AWS_REGION: garage
+              AWS_ACCESS_KEY_ID: '{{ .TALOS_BACKUP_ACCESS_KEY }}' # garage
+              AWS_SECRET_ACCESS_KEY: '{{ .TALOS_BACKUP_SECRET_KEY }}' # garage
+              CUSTOM_S3_ENDPOINT: http://nas.home:3900
+              BUCKET: talos-backup
+              CLUSTER_NAME: home
+              DISABLE_ENCRYPTION: "true"
+              USE_PATH_STYLE: "false"
+        dataFrom:
+          - extract:
+              key: garage
+          - extract:
+              key: talos
+
     controllers:
       etcd-backup:
         type: cronjob

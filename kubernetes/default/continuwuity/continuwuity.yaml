@@ -20,6 +20,23 @@ spec:
         runAsNonRoot: true
         runAsUser: 1001
 
+    externalSecrets:
+      continuwuity:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: continuwuity-secret
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              CONDUWUIT_REGISTRATION_TOKEN: "{{ .registration_token }}"
+        dataFrom:
+          - extract:
+              key: continuwuity
+
     controllers:
       continuwuity:
         containers:

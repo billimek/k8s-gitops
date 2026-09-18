@@ -20,6 +20,21 @@ spec:
         runAsNonRoot: true
         runAsUser: 1001
 
+    externalSecrets:
+      qui:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: qui-secret
+          creationPolicy: Owner
+        data:
+          - secretKey: QUI__SESSION_SECRET
+            remoteRef:
+              key: qui
+              property: session_secret
+
     controllers:
       qui:
         containers:

@@ -80,6 +80,24 @@ spec:
               -H "Content-Type: application/json" \
               -d "{\"content\": \"**kei** [\`$KEI_EVENT\`]: $KEI_MESSAGE (\`$KEI_ICLOUD_USERNAME\`)\"}"
 
+    externalSecrets:
+      kei:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: kei-secret
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              ICLOUD_USERNAME: "{{ .ICLOUD_USERNAME }}"
+              ICLOUD_PASSWORD: "{{ .ICLOUD_PASSWORD }}"
+              DISCORD_WEBHOOK_URL: "{{ .DISCORD_WEBHOOK_URL }}"
+        dataFrom:
+          - extract:
+              key: icloudpd
+
     controllers:
       kei:
         containers:

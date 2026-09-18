@@ -30,6 +30,22 @@ spec:
         runAsNonRoot: true
         runAsUser: 1001  # Check image docs; common values: 1001, 1000, 65534
 
+    externalSecrets:
+      app-name:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: app-name-secret
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              API_KEY: "{{ .api_key }}"
+        dataFrom:
+          - extract:
+              key: app-name
+
     controllers:
       app-name:
         containers:
@@ -83,7 +99,14 @@ For infrastructure charts (not using app-template), use this schema:
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 ```
 
-## ExternalSecret Template
+## ExternalSecret
+
+For app-template apps, use the inline `externalSecrets` block shown above (app-template
+5.2+ / common library 5.2+ renders it as a native `ExternalSecret` object — no standalone
+manifest needed).
+
+For non-app-template HelmReleases (or standalone secrets with no owning HelmRelease), use a
+standalone manifest instead:
 
 ```yaml
 ---
@@ -91,13 +114,14 @@ For infrastructure charts (not using app-template), use this schema:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: app-name-secret
+  name: app-name
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
     name: app-name-secret
+    creationPolicy: Owner
     template:
       engineVersion: v2
       data:
