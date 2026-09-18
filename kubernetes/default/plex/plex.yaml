@@ -56,6 +56,19 @@ spec:
                     values:
                       - "kabylake"
 
+    externalSecrets:
+      plex:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: plex-secret
+          creationPolicy: Owner
+        dataFrom:
+          - extract:
+              # PLEX_CLAIM
+              key: plex
+
     controllers:
       plex:
         containers:

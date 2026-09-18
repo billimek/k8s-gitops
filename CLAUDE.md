@@ -105,6 +105,18 @@ persistence:
     # name: gatus-config  # WRONG: do not append the configMap key
 ```
 
+## app-template ExternalSecrets
+
+App-template 5.2+ (common library 5.2+) renders `ExternalSecret` objects natively from
+`values.externalSecrets` — prefer this over a standalone `ExternalSecret` manifest for any
+app already on the `app-template` chartRef (see the `new-app` skill for the template).
+`target.name` is what other fields (`envFrom.secretRef.name`, `persistence.*.name`) actually
+reference, so set it explicitly; it does not follow the ConfigMap naming convention above.
+The generated object's own name does follow that convention though — a single
+`externalSecrets` entry is named after the release, multiple entries become
+`<release>-<identifier>`, so keep identifiers short (e.g. `main`, `gcp-sa`) to avoid a
+doubled `<release>-<release>-...` name.
+
 ## Troubleshooting
 
 Recovering a stuck HelmRelease, forcing an ExternalSecret resync, or unblocking a Flux

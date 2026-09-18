@@ -24,6 +24,21 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 
+    externalSecrets:
+      radarr:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: radarr-secret
+          creationPolicy: Owner
+        data:
+          - secretKey: api_key
+            remoteRef:
+              key: radarr
+              property: api_key
+
     controllers:
       radarr:
         containers:

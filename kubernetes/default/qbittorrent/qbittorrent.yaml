@@ -22,6 +22,26 @@ spec:
         seccompProfile:
           type: RuntimeDefault
 
+    externalSecrets:
+      qbittorrent:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: qbittorrent-secret
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              DISCORD_WEBHOOK_URL: "{{ .DISCORD_WEBHOOK_URL }}"
+              PLEX_TOKEN: "{{ .PLEX_TOKEN }}"
+              AUDIOBOOKSHELF_TOKEN: "{{ .AUDIOBOOKSHELF_TOKEN }}"
+              AUDIOBOOKSHELF_LIBRARY_ID: "{{ .AUDIOBOOKSHELF_LIBRARY_ID }}"
+        dataFrom:
+          - extract:
+              key: qbittorrent
+
     controllers:
       qbittorrent:
         containers:

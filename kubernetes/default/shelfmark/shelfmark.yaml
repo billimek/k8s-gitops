@@ -83,6 +83,34 @@ spec:
             rm -f /tmp/abs-match.json
             exit 0
 
+    externalSecrets:
+      shelfmark:
+        refreshInterval: 5m
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: shelfmark-secret
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              # Metadata provider - Hardcover
+              HARDCOVER_API_KEY: "{{ .HARDCOVER_API_KEY }}"
+
+              # Prowlarr
+              PROWLARR_API_KEY: "{{ .PROWLARR_API_KEY }}"
+
+              # Download client - qBittorrent (required if using Prowlarr)
+              QBITTORRENT_USERNAME: "{{ .QBITTORRENT_USERNAME }}"
+              QBITTORRENT_PASSWORD: "{{ .QBITTORRENT_PASSWORD }}"
+
+              # Audiobookshelf integration
+              AUDIOBOOKSHELF_TOKEN: "{{ .AUDIOBOOKSHELF_TOKEN }}"
+        dataFrom:
+          - extract:
+              key: shelfmark
+
     controllers:
       shelfmark:
         containers:
