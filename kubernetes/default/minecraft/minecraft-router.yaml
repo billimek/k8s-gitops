@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: itzg/mc-router
-              tag: 1.47.0@sha256:5be4448eb990f8eb14125547ead8eea2bb61f380ccf110044d536eeb5d8f7eda
+              tag: 1.47.1@sha256:177433dd91507339924d60205a19ae9a289afd0e69dbad54e1a55d497f7523f8
             args:
               - --in-kube-cluster
               - --auto-scale-up
