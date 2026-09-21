@@ -104,10 +104,8 @@ spec:
           app:
             image:
               repository: ghcr.io/rhoopr/kei
-              # pinned below 0.23.0: rhoopr/kei#719 - asset-only delta hydration never
-              # advances the PrimarySync checkpoint; 0.23.1's fix covers some but not all
-              # cases (permanently-missing master assets still stall) (see .renovate/allowedVersions.json5)
-              tag: 0.24.0@sha256:19aca8a2268a66de29b8882c2ae35d7722784c715db1aa6a4bc26f2604e4099e
+              # pinned below 0.23.0: asset-only delta hydration stalls the PrimarySync checkpoint on 0.23.x and 0.24.0 (rhoopr/kei#719, #765; see .renovate/allowedVersions.json5)
+              tag: 0.22.12@sha256:339e58307ad7ae51fdef0fa2aae5681014d6b67d6c6cc3d5097415df943aaa6b
             args:
               - service
               - run

@@ -20,10 +20,10 @@
       allowedVersions: "<0.90.1 || >0.90.1",
     },
     {
-      description: "Block kei 0.23.x - #706 asset-only delta hydration never advances the PrimarySync checkpoint (kei#719); 0.23.1's fix does not cover permanently-missing-master assets, same stall recurs",
+      description: "Block kei >=0.23.0 - asset-only delta hydration never advances the PrimarySync checkpoint (kei#719, #765); still reproduces on 0.24.0 and needs a schema-25 DB that 0.22.x cannot read",
       matchDatasources: ["docker"],
       matchPackageNames: ["/rhoopr\\/kei/"],
-      allowedVersions: "<0.23.0 || >=0.24.0",
+      allowedVersions: "<0.23.0",
     },
   ],
 }
