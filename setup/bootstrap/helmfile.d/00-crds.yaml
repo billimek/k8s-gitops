@@ -37,7 +37,7 @@ releases:
   - name: cloudnative-pg
     namespace: default
     chart: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
-    version: 0.29.0
+    version: 0.29.1
 
   - name: envoy-gateway
     namespace: kube-system
