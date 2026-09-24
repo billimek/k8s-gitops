@@ -167,7 +167,7 @@ spec:
           plugin:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: 13.2.0@sha256:1ee698a62fadae1fe0ff8ae24c1012c2fda0bb9c97bbd1e57606ce4445932bf9
+              tag: 13.2.1@sha256:d62811841a20fd1a311b2c90c6ffcec37d09e52ebb46834b0c04f3ad2a3bcbe7
             restartPolicy: Always
             resources:
               requests:
