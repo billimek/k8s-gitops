@@ -79,7 +79,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: &hass-image 2026.9.3@sha256:638c4c8d62caad377e70bfa7beef75f70c9343a49aed64aad824f2cd06843c1c
+              tag: &hass-image 2026.9.4@sha256:68dbac1e259cea28c23031e456d31a27f9429e9b5711500ac21ac7d5bcdcb57f
             env:
               TZ: "America/New_York"
             envFrom:
