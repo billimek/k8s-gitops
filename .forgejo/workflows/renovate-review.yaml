@@ -455,6 +455,16 @@ jobs:
             upstream)
           PROMPT_EOF
 
+          # The heredoc above is quoted (<<'PROMPT_EOF') on purpose -- its body is full of
+          # literal $/backtick shell examples that must not expand. That also leaves these
+          # four placeholders unexpanded, so substitute just them here.
+          sed -i \
+            -e "s#\${REPO}#${REPO}#g" \
+            -e "s#\${PR}#${PR}#g" \
+            -e "s#\${DEPTH}#${DEPTH}#g" \
+            -e "s#\${MAX_TURNS}#${MAX_TURNS}#g" \
+            prompt.md
+
           claude -p \
             --model "$MODEL" \
             --max-turns "$MAX_TURNS" \
@@ -578,6 +588,12 @@ jobs:
           kubectl/flux/cluster commands. Cite github.com URLs normally; avoid bare `#NNN`
           references — use `org/repo#123` or a full URL instead.
           PROMPT_EOF
+
+          # See the primary prompt.md step: the quoted heredoc above never expands ${REPO}/${PR}.
+          sed -i \
+            -e "s#\${REPO}#${REPO}#g" \
+            -e "s#\${PR}#${PR}#g" \
+            prompt-escalated.md
 
           claude -p \
             --model sonnet \
