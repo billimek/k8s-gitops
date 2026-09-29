@@ -18,7 +18,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: forgejo-public
-  compression:
+  compressor:
     - type: Zstd
     - type: Brotli
     - type: Gzip
@@ -37,5 +37,6 @@ spec:
   tcpKeepalive: {}
   timeout:
     http:
+      connectionIdleTimeout: 4s
       requestTimeout: 0s
   # No responseOverride -- API clients need raw status codes

@@ -10,7 +10,7 @@ spec:
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
-  compression:
+  compressor:
     - type: Zstd
     - type: Brotli
     - type: Gzip
@@ -29,6 +29,7 @@ spec:
   tcpKeepalive: {}
   timeout:
     http:
+      connectionIdleTimeout: 4s
       requestTimeout: 0s
   
   # Custom error page redirects
