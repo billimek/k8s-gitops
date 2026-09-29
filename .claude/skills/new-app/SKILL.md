@@ -37,9 +37,7 @@ spec:
           name: onepassword-connect
         target:
           name: app-name-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               API_KEY: "{{ .api_key }}"
         dataFrom:
@@ -121,9 +119,7 @@ spec:
     name: onepassword-connect
   target:
     name: app-name-secret
-    creationPolicy: Owner
     template:
-      engineVersion: v2
       data:
         API_KEY: "{{ .api_key }}"
   dataFrom:

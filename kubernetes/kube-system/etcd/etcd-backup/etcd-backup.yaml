@@ -28,7 +28,6 @@ spec:
           name: onepassword-connect
         target:
           name: etcd-backup-s3-secret
-          creationPolicy: Owner
           template:
             data:
               AWS_REGION: garage

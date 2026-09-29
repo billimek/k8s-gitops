@@ -19,9 +19,7 @@ spec:
           name: onepassword-connect
         target:
           name: home-assistant-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               # Home Assistant
               CAMERA_AUTH: "{{ .CAMERA_AUTH }}"
@@ -56,7 +54,6 @@ spec:
           name: onepassword-connect
         target:
           name: home-assistant-gcp-sa-secret
-          creationPolicy: Owner
         data:
           - secretKey: home-assistant-7c48d-e078848c9fb0.json
             remoteRef:

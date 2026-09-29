@@ -28,7 +28,6 @@ spec:
           name: onepassword-connect
         target:
           name: qui-secret
-          creationPolicy: Owner
         data:
           - secretKey: QUI__SESSION_SECRET
             remoteRef:

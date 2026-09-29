@@ -30,9 +30,7 @@ spec:
           name: onepassword-connect
         target:
           name: qbittorrent-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               DISCORD_WEBHOOK_URL: "{{ .DISCORD_WEBHOOK_URL }}"
               PLEX_TOKEN: "{{ .PLEX_TOKEN }}"

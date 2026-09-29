@@ -30,7 +30,6 @@ spec:
           name: onepassword-connect
         target:
           name: sonarr-secret
-          creationPolicy: Owner
         data:
           - secretKey: api_key
             remoteRef:

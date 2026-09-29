@@ -32,7 +32,6 @@ spec:
           name: onepassword-connect
         target:
           name: radarr-secret
-          creationPolicy: Owner
         data:
           - secretKey: api_key
             remoteRef:

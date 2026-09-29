@@ -29,9 +29,7 @@ spec:
           name: onepassword-connect
         target:
           name: teslamate-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               # Teslamate
               MQTT_PASSWORD: "{{ .MQTT_PASSWORD }}"

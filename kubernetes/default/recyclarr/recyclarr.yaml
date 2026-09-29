@@ -27,7 +27,6 @@ spec:
           name: onepassword-connect
         target:
           name: recyclarr-secret
-          creationPolicy: Owner
         data:
           - secretKey: RADARR_API_KEY
             remoteRef:

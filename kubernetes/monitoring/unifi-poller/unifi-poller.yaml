@@ -28,9 +28,7 @@ spec:
           name: onepassword-connect
         target:
           name: unifi-poller-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               UP_UNIFI_DEFAULT_USER: "{{ .UP_UNIFI_DEFAULT_USER }}"
               UP_UNIFI_DEFAULT_PASS: "{{ .UP_UNIFI_DEFAULT_PASS }}"

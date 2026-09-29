@@ -27,9 +27,7 @@ spec:
           name: onepassword-connect
         target:
           name: kopia-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               KOPIA_PASSWORD: '{{ .KOPIA_PASSWORD }}'
         dataFrom:

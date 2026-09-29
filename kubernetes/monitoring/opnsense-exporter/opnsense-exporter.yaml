@@ -28,9 +28,7 @@ spec:
           name: onepassword-connect
         target:
           name: opnsense-exporter-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               OPNSENSE_API_KEY: "{{ .OPNSENSE_PROM_API_KEY }}"
               OPNSENSE_API_SECRET: "{{ .OPNSENSE_PROM_API_SECRET }}"

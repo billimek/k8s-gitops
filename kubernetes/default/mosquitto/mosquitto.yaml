@@ -38,9 +38,7 @@ spec:
           name: onepassword-connect
         target:
           name: mosquitto-secret
-          creationPolicy: Owner
           template:
-            engineVersion: v2
             data:
               # Mosquitto password file format: username:hashed_password
               # Use the hashed password from 1Password field: mqtt_password_hashed

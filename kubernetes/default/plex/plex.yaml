@@ -63,7 +63,6 @@ spec:
           name: onepassword-connect
         target:
           name: plex-secret
-          creationPolicy: Owner
         dataFrom:
           - extract:
               # PLEX_CLAIM

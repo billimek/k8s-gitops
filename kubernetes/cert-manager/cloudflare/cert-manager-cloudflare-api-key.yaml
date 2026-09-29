@@ -12,7 +12,6 @@ spec:
     name: onepassword-connect
   target:
     name: cloudflare-api-key
-    creationPolicy: Owner
   dataFrom:
     - extract:
         key: cloudflare
