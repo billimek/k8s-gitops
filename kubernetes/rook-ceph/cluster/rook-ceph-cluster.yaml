@@ -106,7 +106,7 @@ spec:
                 - matchExpressions:
                     - key: kubernetes.io/hostname
                       operator: In
-                      values: [k8s-b, k8s-d, k8s-g]
+                      values: [k8s-b, k8s-d, k8s-e, k8s-g]
       security:
         cephx:
           daemon:
