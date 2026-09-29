@@ -22,6 +22,12 @@ Various custom PrometheusRule definitions for this cluster
 
 * [prometheus-rules/](prometheus-rules/)
 
+# smartctl-exporter
+
+[smartctl_exporter](https://github.com/prometheus-community/smartctl_exporter) DaemonSet exporting SMART data for every node's disks. Metrics share the `smartctl` job label with the NAS target, so the rules in `prometheus-rules/smartctl-exporter.yaml` cover both.
+
+* [smartctl-exporter/smartctl-exporter.yaml](smartctl-exporter/smartctl-exporter.yaml)
+
 # speedtest-exporter
 
 ![](https://i.imgur.com/avohPk6.png)
