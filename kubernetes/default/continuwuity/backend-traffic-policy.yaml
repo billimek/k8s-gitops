@@ -29,6 +29,7 @@ spec:
     retryOn:
       triggers:
         - reset
+        - connect-failure
   tcpKeepalive: {}
   timeout:
     http:
