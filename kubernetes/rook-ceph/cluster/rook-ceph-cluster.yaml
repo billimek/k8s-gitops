@@ -63,9 +63,6 @@ spec:
         ssl: false
         prometheusEndpoint: http://vmsingle-stack.monitoring.svc.cluster.local:8428
       healthCheck:
-        daemonHealth:
-          mon:
-            timeout: 2m # temporary, fail over an out-of-quorum mon after 2m
         livenessProbe:
           mon:
             probe:
