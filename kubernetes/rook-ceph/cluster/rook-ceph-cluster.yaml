@@ -93,7 +93,7 @@ spec:
           - name: telemetry
             enabled: true
       mon:
-        count: 4 # temporary, adds a mon on k8s-g before mon.k is removed
+        count: 3
         allowMultiplePerNode: false
       placement:
         mon:
