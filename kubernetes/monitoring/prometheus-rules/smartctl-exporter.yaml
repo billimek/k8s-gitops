@@ -56,3 +56,48 @@ spec:
           annotations:
             summary: Smart NVME Wearout Indicator (instance {{ $labels.instance }})
             description: "NVMe device is wearing out (instance {{ $labels.instance }})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: SmartDeviceFailed
+          expr: 'smartctl_device_smart_status == 0 unless on (instance, device) smartctl_device{model_name=~"QEMU.*"}'
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Smart overall health failed (instance {{ $labels.instance }})
+            description: "device {{ $labels.device }} reports SMART overall-health FAILED (instance {{ $labels.instance }})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: SmartReallocatedSectors
+          expr: 'smartctl_device_attribute{attribute_id="5", attribute_value_type="raw"} > 0'
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Smart reallocated sectors (instance {{ $labels.instance }})
+            description: "device {{ $labels.device }} has reallocated sectors (instance {{ $labels.instance }})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: SmartReportedUncorrectable
+          expr: 'smartctl_device_attribute{attribute_id="187", attribute_value_type="raw"} > 0'
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Smart reported uncorrectable errors (instance {{ $labels.instance }})
+            description: "device {{ $labels.device }} has reported uncorrectable errors (instance {{ $labels.instance }})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: SmartPendingSectors
+          expr: 'smartctl_device_attribute{attribute_id=~"197|198", attribute_value_type="raw"} > 0'
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Smart pending or offline uncorrectable sectors (instance {{ $labels.instance }})
+            description: "device {{ $labels.device }} has {{ $labels.attribute_name }} > 0 (instance {{ $labels.instance }})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+        - alert: SmartErrorCountIncreasing
+          expr: 'increase(smartctl_device_attribute{attribute_id=~"5|187|197|198", attribute_value_type="raw"}[1d]) > 0'
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Smart error count increasing (instance {{ $labels.instance }})
+            description: "device {{ $labels.device }} {{ $labels.attribute_name }} increased in the last 24h (instance {{ $labels.instance }})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
