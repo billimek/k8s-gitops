@@ -23,7 +23,7 @@ spec:
             limits:
               memory: 2Gi
       envoyService:
-        externalTrafficPolicy: Local
+        externalTrafficPolicy: Cluster
   telemetry:
     metrics:
       prometheus:
