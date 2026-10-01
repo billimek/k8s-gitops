@@ -199,6 +199,20 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
+  name: teslamate-temperatures
+  namespace: default
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  allowCrossNamespaceImport: true
+  folder: teslamate
+  url: https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/temperatures.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
   name: teslamate-timeline
   namespace: default
 spec:
