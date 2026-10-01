@@ -83,7 +83,7 @@ spec:
             enableServiceLinks: false
             containers:
               - name: main
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:fea688b875acdce4e7c786d117b30c1b0203271b23e77d80c306b373d9f5422f
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:ddb813440c31a678989e3d0c6dc53a59e5e6750c9ccd1b858a9aca44395c5ae2
                 imagePullPolicy: IfNotPresent
                 resources:
                   requests:
@@ -127,7 +127,7 @@ spec:
                   failureThreshold: 30
             containers:
               - name: main
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:fea688b875acdce4e7c786d117b30c1b0203271b23e77d80c306b373d9f5422f
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:ddb813440c31a678989e3d0c6dc53a59e5e6750c9ccd1b858a9aca44395c5ae2
                 imagePullPolicy: IfNotPresent
                 env:
                   - name: DOCKER_HOST
