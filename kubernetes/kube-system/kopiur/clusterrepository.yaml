@@ -50,6 +50,10 @@ spec:
   parameters:
     epoch:
       minDuration: 1h
+  # Each probe runs a discovery Job that loads the repository index onto the node's disk.
+  health:
+    probe:
+      interval: 6h
   # The fork's maintenance mover needed a 20Gi cache to keep up with this
   # repo's index-blob volume (grown from 10Gi same-day as this migration was
   # rebased); kopiur's own auto-projected Maintenance inherits moverDefaults

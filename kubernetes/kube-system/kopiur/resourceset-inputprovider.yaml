@@ -7,21 +7,12 @@
 #   - capacity: "1Gi"
 #   - cacheCapacity: "3Gi" (1Gi is too small: kopia's cache+log budget on the
 #     shared repo's index alone runs ~2Gi steady state regardless of app size)
-#   - schedule: "H * * * *"
+#   - schedule: "H 3 * * *"
 #
-# Frequency: hourly by default, using Jenkins-style "H" cron substitution —
-# kopiur only hashes a bare "H" token (it does NOT support Jenkins' "H/N"
-# step syntax; the admission webhook rejects it), so the per-app hashed slot
-# is minute-only here. The hour field uses plain cron step syntax ("*/4")
-# for the low-churn apps, which still needs no manual offset bookkeeping
-# since the minute is hashed. 13 low-churn apps whose config rarely changes
-# hour to hour (audiobookshelf, frigate, gatus, qbittorrent, recyclarr, seerr,
-# tautulli, prowlarr, sabnzbd, zwave2mqtt, radarr, sonarr, unifi) are trimmed
-# to every 4h ("H */4 * * *") — this cuts both Snapshot CR volume and the
-# rate of Kopia index-blob churn (see clusterrepository.yaml's
-# parameters.epoch.minDuration note) for apps that don't need hourly
-# recovery granularity. The remaining apps run daily ("H 3 * * *", same
-# slot as kopiur's own maintenance jobs).
+# Frequency: daily ("H 3 * * *") for most apps; sonarr, radarr, zwave2mqtt and
+# unifi run every 12h ("H */12 * * *"). kopiur only hashes a bare "H" token
+# (no "H/N" step syntax; the admission webhook rejects it), so the hashed slot
+# is minute-only and the hour field uses plain cron syntax.
 # To add a new app: add entry to the apps array below
 # To remove an app: delete entry from the apps array below
 apiVersion: fluxcd.controlplane.io/v1
@@ -36,11 +27,11 @@ spec:
       runAsUser: "1001"
       capacity: "1Gi"
       cacheCapacity: "3Gi"
-      schedule: "H * * * *"
+      schedule: "H 3 * * *"
       pvcSuffix: "config"
     apps:
       - app: audiobookshelf
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: continuwuity
         capacity: 5Gi
@@ -53,12 +44,12 @@ spec:
 
       - app: frigate
         runAsUser: "1000"
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: gatus
         namespace: "monitoring"
         runAsUser: "1000"
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: home-assistant
         runAsUser: "1000"
@@ -105,44 +96,44 @@ spec:
         schedule: "H 3 * * *"
 
       - app: prowlarr
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: qbittorrent
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: qui
         schedule: "H 3 * * *"
 
       - app: radarr
         capacity: 3Gi
-        schedule: "H */4 * * *"
+        schedule: "H */12 * * *"
 
       - app: recyclarr
         capacity: 5Gi
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: sabnzbd
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: seerr
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: shelfmark
         schedule: "H 3 * * *"
 
       - app: sonarr
         capacity: 2Gi
-        schedule: "H */4 * * *"
+        schedule: "H */12 * * *"
 
       - app: tautulli
-        schedule: "H */4 * * *"
+        schedule: "H 3 * * *"
 
       - app: unifi
         pvcSuffix: "data"
         runAsUser: "999"
         capacity: 2Gi
-        schedule: "H */4 * * *"
+        schedule: "H */12 * * *"
 
       - app: zwave2mqtt
         runAsUser: "1000"
-        schedule: "H */4 * * *"
+        schedule: "H */12 * * *"
