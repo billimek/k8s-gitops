@@ -25,6 +25,9 @@
 #
 # Optional env:
 #   REVIEW_FILE, VERDICT_FILE, MUST_CHECK_PAIRS_FILE
+#   HEAD_SHA, SERVER_URL - when both are set, `path:LINE` code spans link to
+#                          that line at the head commit and a footer is added
+#   REVIEW_MODEL         - model name shown in the footer
 #
 # Outputs (GITHUB_OUTPUT):
 #   verdict, findings, unaddressed_count
@@ -70,6 +73,27 @@ if [[ "$verdict" == "APPROVED" && "$findings" -gt 0 ]]; then
   verdict="COMMENT"
 fi
 
+# 2a. Link `path/to/file:LINE` code spans to that line at the head commit.
+if [[ -n "${HEAD_SHA:-}" && -n "${SERVER_URL:-}" ]]; then
+  src_base="${SERVER_URL}/${REPO}/src/commit/${HEAD_SHA}"
+  body="$(printf '%s\n' "$body" | sed -E 's#`([^`[:space:]:]+/[^`[:space:]:]+\.[A-Za-z0-9]+):([0-9]+)`#[`\1:\2`]('"$src_base"'/\1\#L\2)#g')"
+fi
+
+# 2b. Collapse the low-signal sections into <details> blocks.
+body="$(printf '%s\n' "$body" | awk '
+  function close_block() { if (open) { print "\n</details>\n"; open = 0 } }
+  /^\*\*(Not applicable to this repo|Sources consulted)\*\*:?[[:space:]]*$/ {
+    close_block()
+    t = $0; gsub(/^\*\*|\*\*:?[[:space:]]*$/, "", t)
+    print "<details>\n<summary>" t "</summary>\n"
+    open = 1
+    next
+  }
+  open && /^(\*\*|---|<!--|>)/ { close_block() }
+  { print }
+  END { close_block() }
+')"
+
 # 3. Warn-mode required-check validation
 unaddressed=()
 if [[ -f "$PAIRS_FILE" ]]; then
@@ -89,6 +113,13 @@ if [[ "${#unaddressed[@]}" -gt 0 ]]; then
 > **Unaddressed required checks (auto-detected, warn mode)**
 > The following deterministically-derived checks were not clearly addressed in this review:
 $(for u in "${unaddressed[@]}"; do echo ">- $u"; done)"
+fi
+
+# 3b. Footer naming the commit and model that produced the review.
+if [[ -n "${HEAD_SHA:-}" && -n "${SERVER_URL:-}" ]]; then
+  body="${body}
+
+<sub>Reviewed [\`${HEAD_SHA:0:7}\`](${SERVER_URL}/${REPO}/commit/${HEAD_SHA}) with ${REVIEW_MODEL:-unknown}.</sub>"
 fi
 
 # 4. Stamp the fingerprint marker so an identical re-push skips the model.
