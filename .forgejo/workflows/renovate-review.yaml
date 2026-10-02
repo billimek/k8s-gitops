@@ -355,6 +355,11 @@ jobs:
           - **Registry metadata**: When a repo has no releases or changelog, check the README or
             container registry (Docker Hub, GHCR, quay.io) for links to the upstream project.
           - **Web search**: Last resort for hard-to-find changelogs or community migration reports.
+          - **Chart/template diff** (Helm chart bumps, full and deep depth): diff `values.yaml`
+            and `templates/` between the old and new chart tags (`gh api
+            repos/org/repo/compare/OLD...NEW`, or a shallow clone in a temp dir) and check
+            every value this repo sets against it. Report renamed, removed, or changed-default
+            values.
           - **Upstream issues**: After reviewing release notes, search the upstream repo's GitHub
             issues for open bugs or regressions reported against the new version. Use
             `gh api "search/issues?q=repo:org/repo+label:bug+VERSION"` or WebSearch for issues
@@ -422,13 +427,13 @@ jobs:
           **Verdict**: Safe to merge | Changes required before merge
 
           **Breaking changes**:
-          - [What changed] — introduced in [version]. Affects `path/to/file`. Fix: [brief description]
+          - [What changed] — introduced in [version]. Affects `path/to/file:LINE`. Fix: [brief description]
 
           **Deprecations**:
           - [Same detail as above]
 
           **New features worth adopting**:
-          - [Feature] — [benefit]. Would change `path/to/file`.
+          - [Feature] — [benefit]. Would change `path/to/file:LINE`.
 
           **Known issues**:
           - [Issue title/link] — [brief description of impact]
@@ -439,6 +444,15 @@ jobs:
           **Sources consulted**:
           - [URLs]
           ```
+
+          **File references**: when a finding points at one specific line, write it as
+          `path/to/file:LINE` in backticks (repo-relative path, single line number). The poster
+          turns it into a link to that line at the PR head.
+
+          **Length**: keep review.md short. For `APPROVED`, write 3-6 lines: the verdict, what
+          changed, and what you checked. Do not add sections for unknowns or negative results.
+          `Not applicable to this repo` and `Sources consulted` are collapsed into `<details>`
+          blocks by the poster, so keep them to one line per item.
 
           ## Constraints
 
@@ -566,13 +580,13 @@ jobs:
           **Verdict**: Safe to merge | Changes required before merge
 
           **Breaking changes**:
-          - [What changed] — introduced in [version]. Affects `path/to/file`. Fix: [brief description]
+          - [What changed] — introduced in [version]. Affects `path/to/file:LINE`. Fix: [brief description]
 
           **Deprecations**:
           - [Same detail as above]
 
           **New features worth adopting**:
-          - [Feature] — [benefit]. Would change `path/to/file`.
+          - [Feature] — [benefit]. Would change `path/to/file:LINE`.
 
           **Known issues**:
           - [Issue title/link] — [brief description of impact]
@@ -583,6 +597,18 @@ jobs:
           **Sources consulted**:
           - [URLs]
           ```
+
+          For Helm chart bumps, diff `values.yaml` and `templates/` between the old and new chart
+          tags and check every value this repo sets against it.
+
+          **File references**: when a finding points at one specific line, write it as
+          `path/to/file:LINE` in backticks (repo-relative path, single line number). The poster
+          turns it into a link to that line at the PR head.
+
+          **Length**: keep review.md short. For `APPROVED`, write 3-6 lines: the verdict, what
+          changed, and what you checked. Do not add sections for unknowns or negative results.
+          `Not applicable to this repo` and `Sources consulted` are collapsed into `<details>`
+          blocks by the poster, so keep them to one line per item.
 
           NEVER modify repository files (other than review.md/verdict.txt), merge the PR, or run
           kubectl/flux/cluster commands. Cite github.com URLs normally; avoid bare `#NNN`
@@ -610,6 +636,9 @@ jobs:
         env:
           FP: ${{ steps.fingerprint.outputs.fp }}
           MUST_CHECK_PAIRS_FILE: ${{ steps.model_tier.outputs.must_check_pairs_file }}
+          HEAD_SHA: ${{ forgejo.event.pull_request.head.sha }}
+          SERVER_URL: ${{ forgejo.server_url }}
+          REVIEW_MODEL: ${{ steps.escalation.outputs.escalate == 'true' && 'sonnet' || steps.model_tier.outputs.model }}
         run: bash .forgejo/scripts/prepare-review-body.sh
 
       - name: Dismiss stale reviews
