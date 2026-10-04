@@ -2,4 +2,4 @@ apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 provisioning:
   diskSelector:
-    match: disk.model == "M4-CT256M4SSD2"
+    match: disk.model == "Samsung SSD 850"

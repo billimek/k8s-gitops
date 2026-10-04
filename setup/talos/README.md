@@ -114,7 +114,7 @@ This is a worker node, bare-metal
 - IP: 10.0.7.55
 - CPU: AMD Ryzen 3 3200G (Zen+, 4 cores, 4 threads)
 - RAM: 32GB
-- Disk: host - 256GB - `/dev/sdb`
+- Disk: host - 250GB - `/dev/sdb` (Samsung SSD 850 EVO 250GB SATA)
 - Disk: SSD for ceph = 2TB - `/dev/sda` - **note this is `/dev/sda`** -
   (`/dev/disk/by-id/wwn-0x5002538c000e0a55`)
 - GPU: AMD Radeon Vega 8 Graphics (integrated)
