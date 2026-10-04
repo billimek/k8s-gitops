@@ -2,4 +2,4 @@ apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 provisioning:
   diskSelector:
-    match: disk.model == "Samsung SSD 970"
+    match: disk.model == "Samsung SSD 860"

@@ -77,8 +77,8 @@ This is a worker node, bare-metal
 - IP: 10.0.7.52
 - CPU: Intel Core i3-7100 (Kaby Lake, 2 cores, 4 threads)
 - RAM: 32GB
-- Disk: host - 500GB - `/dev/nvme0n1`
-- Disk: SSD for ceph - 2TB `/dev/sda` -
+- Disk: host - 500GB - `/dev/sda` (Samsung SSD 860 EVO 500GB SATA)
+- Disk: SSD for ceph - 2TB `/dev/sdb` -
   (`/dev/disk/by-id/wwn-0x5002538c000fc709`)
 - GPU: Intel HD Graphics 630 (Kaby Lake, Gen 9.5, 24 EUs, QuickSync Gen 9)
 
