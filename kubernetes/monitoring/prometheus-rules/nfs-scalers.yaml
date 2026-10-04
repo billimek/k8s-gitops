@@ -13,11 +13,13 @@ spec:
         # Aggregated alert: All apps scaled down (NAS unavailable)
         - alert: NFSScalersDeactivated
           expr: |
-            count(
-              kube_horizontalpodautoscaler_status_current_replicas{
-                namespace="default",
-                horizontalpodautoscaler=~".*-nfs-scaler"
-              } == 1
+            (
+              count(
+                kube_horizontalpodautoscaler_status_current_replicas{
+                  namespace="default",
+                  horizontalpodautoscaler=~".*-nfs-scaler"
+                } > 0
+              ) or vector(0)
             ) == 0
             and
             count(
