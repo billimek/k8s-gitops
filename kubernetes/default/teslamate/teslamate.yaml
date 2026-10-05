@@ -77,6 +77,7 @@ spec:
               DISABLE_MQTT: "false"
               MQTT_USERNAME: "mqtt"
               MQTT_HOST: "mosquitto"
+              MQTT_HOME_ASSISTANT_DISCOVERY: "true"
             envFrom: &envFrom
               - secretRef:
                   name: teslamate-secret
