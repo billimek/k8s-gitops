@@ -14,6 +14,7 @@ spec:
   values:
     controllers:
       main:
+        replicas: 0
         pod:
           securityContext:
             fsGroup: 1000
