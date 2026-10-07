@@ -36,7 +36,6 @@
         "ghcr.io/seerr-team/seerr",
         "ghcr.io/zwave-js/zwave-js-ui",
         "itzg/mc-router",
-        "nodered/node-red",
       ],
     },
     {

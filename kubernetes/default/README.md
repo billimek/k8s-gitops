@@ -57,15 +57,6 @@ Using the [minecraft server](https://hub.docker.com/r/itzg/minecraft-server) con
 
 [mousetrap](https://github.com/sirjmann92/mousetrap) is an automated MyAnonaMouse (MaM) IP/ASN/perk management tool
 
-# node-red
-
-![](https://i.imgur.com/ABTbYw1.png)
-
-Rules-engine for automations
-
-* [node-red.yaml](node-red/node-red.yaml)
-* Node-Red configuration is persisted to a [configuration repo](https://github.com/billimek/node-red-config)
-
 # plex
 
 ![](https://i.imgur.com/nDyS9OA.jpg)

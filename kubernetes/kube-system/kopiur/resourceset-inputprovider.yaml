@@ -83,12 +83,6 @@ spec:
         runAsUser: "1000"
         schedule: "H 3 * * *"
 
-      - app: node-red
-        pvcSuffix: "data"
-        runAsUser: "1000"
-        capacity: 1Gi
-        schedule: "H 3 * * *"
-
       - app: plex
         runAsUser: "1000"
         capacity: 35Gi

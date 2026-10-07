@@ -191,7 +191,7 @@ Any app with a `route` block attached to the `internal` Gateway will remain acce
 - `abs.eviljungle.com` (Audiobookshelf)
 - All monitoring dashboards (Grafana, VictoriaMetrics, etc.)
 - Media management (Radarr, Sonarr, Prowlarr, etc.)
-- Home automation (Node-RED, Z-Wave JS UI, EMQX)
+- Home automation (Z-Wave JS UI, EMQX)
 - Infrastructure (UniFi, Rook-Ceph, Proxmox, MinIO)
 
 ### Services That Will Fail During Outages
