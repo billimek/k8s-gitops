@@ -78,15 +78,22 @@ while IFS= read -r p; do
   fi
 done <<< "$changed_paths"
 
-if [[ -n "$helmrelease_file" ]]; then
-  checks+=("values schema compatibility for the chart change in ${helmrelease_file}")
-  keywords+=("schema")
-fi
-
 # Extract old/new versions from a Renovate title like "( 1.2.3 -> 2.0.0 )" and
 # compare majors.
 from_ver="$(echo "$title" | grep -oE '\( ?v?[0-9]+\.[0-9]+\.[0-9]+' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)"
 to_ver="$(echo "$title" | grep -oE '[→>-] ?v?[0-9]+\.[0-9]+\.[0-9]+' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | tail -1 || true)"
+# Patch bumps (same major.minor) don't change a chart's values schema; skip the
+# check there. Unparseable versions keep it.
+patch_only=false
+if [[ -n "$from_ver" && -n "$to_ver" && "${from_ver%.*}" == "${to_ver%.*}" ]]; then
+  patch_only=true
+fi
+
+if [[ -n "$helmrelease_file" && "$patch_only" != "true" ]]; then
+  checks+=("values schema compatibility for the chart change in ${helmrelease_file}")
+  keywords+=("schema")
+fi
+
 if [[ -n "$from_ver" && -n "$to_ver" ]]; then
   from_major="${from_ver%%.*}"
   to_major="${to_ver%%.*}"
