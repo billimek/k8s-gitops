@@ -28,7 +28,7 @@ spec:
       dashboards: grafana
   folder: storage
   # renovate: depName=22604
-  url: https://grafana.com/api/dashboards/22604/revisions/3/download
+  url: https://grafana.com/api/dashboards/22604/revisions/4/download
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: Prometheus
