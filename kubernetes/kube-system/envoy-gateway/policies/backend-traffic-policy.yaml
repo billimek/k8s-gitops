@@ -32,7 +32,8 @@ spec:
       connectionIdleTimeout: 4s
       requestTimeout: 0s
   
-  # Custom error page redirects
+  # Custom error page redirects. 403/404/500 redirect only HTML responses so API
+  # clients get the upstream status and body.
   responseOverride:
     # 401 Unauthorized
     # - match:
@@ -52,6 +53,11 @@ spec:
         statusCodes:
           - type: Value
             value: 403
+        responseHeaders:
+          - name: content-type
+            value:
+              type: Prefix
+              value: text/html
       redirect:
         scheme: https
         hostname: error-pages.eviljungle.com
@@ -65,6 +71,11 @@ spec:
         statusCodes:
           - type: Value
             value: 404
+        responseHeaders:
+          - name: content-type
+            value:
+              type: Prefix
+              value: text/html
       redirect:
         scheme: https
         hostname: error-pages.eviljungle.com
@@ -78,6 +89,11 @@ spec:
         statusCodes:
           - type: Value
             value: 500
+        responseHeaders:
+          - name: content-type
+            value:
+              type: Prefix
+              value: text/html
       redirect:
         scheme: https
         hostname: error-pages.eviljungle.com
