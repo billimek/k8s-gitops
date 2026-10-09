@@ -95,8 +95,17 @@ spec:
           - name: telemetry
             enabled: true
       mon:
-        count: 3
+        count: 4 # temporary, adds a mon on k8s-h before mon.n is removed
         allowMultiplePerNode: false
+      placement:
+        mon:
+          nodeAffinity: # temporary, k8s-h is the only allowed node without a mon
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: In
+                      values: [k8s-b, k8s-d, k8s-g, k8s-h]
       security:
         cephx:
           daemon:
