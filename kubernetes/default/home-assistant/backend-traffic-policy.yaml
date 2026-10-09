@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
+# Route-level BackendTrafficPolicy for home-assistant.
+# Merges into the global policy and clears its responseOverride rules, which
+# convert HTTP error responses (403/404/500/etc) into 302 redirects. The Home
+# Assistant iOS Companion app requires raw status codes on /api and /auth.
+# The home-assistant-code route stays on the global policy.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: home-assistant
+  namespace: default
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: home-assistant-app
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: home-assistant-internal
+  mergeType: JSONMerge
+  responseOverride: []
