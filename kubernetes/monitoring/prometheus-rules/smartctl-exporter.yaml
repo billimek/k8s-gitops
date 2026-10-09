@@ -13,7 +13,7 @@ spec:
     - name: SmartctlExporter
       rules:
         - alert: SmartDeviceTemperatureWarning
-          expr: 'smartctl_device_temperature > 60'
+          expr: 'smartctl_device_temperature{temperature_type=~"current|"} > 60'
           for: 2m
           labels:
             severity: warning
@@ -22,7 +22,7 @@ spec:
             description: "Device temperature  warning (instance {{ $labels.instance }})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
         - alert: SmartDeviceTemperatureCritical
-          expr: 'smartctl_device_temperature > 80'
+          expr: 'smartctl_device_temperature{temperature_type=~"current|"} > 80'
           for: 2m
           labels:
             severity: critical
