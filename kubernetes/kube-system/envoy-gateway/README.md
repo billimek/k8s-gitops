@@ -96,10 +96,11 @@ Remote access via Tailscale is handled by the **App Connector** (see `/kubernete
 ## Traffic Policies
 
 **BackendTrafficPolicy**: Controls connection settings to backend services
-- Compression (Gzip)
-- Connection buffer limits
+- Compression (Zstd, Brotli, Gzip)
+- Passive health check and retries
 - TCP keepalive
 - Request timeouts
+- Error page redirects (see Error Pages)
 
 **ClientTrafficPolicy**: Controls client-facing connection settings
 - TLS configuration (min version, ALPN)
@@ -116,6 +117,8 @@ Both gateways have wildcard catchall routes (`*.eviljungle.com`) that route unde
 **Route Matching Precedence**: Gateway API ensures specific hostnames (e.g., `grafana.eviljungle.com`) always take precedence over wildcard patterns (`*.eviljungle.com`), so existing applications are unaffected.
 
 **DNS Exclusion**: Wildcard routes have `external-dns.kubernetes.io/controller: none` to prevent External-DNS from creating wildcard DNS records - both external-dns instances select HTTPRoutes by Gateway name, not by an opt-in annotation, so an unclaimed hostname (`*.eviljungle.com`) would otherwise get its own DNS record. Only explicit application routes create DNS entries.
+
+**Error page redirects**: The global BackendTrafficPolicy (`policies/backend-traffic-policy.yaml`) redirects upstream 403/404/500 responses to `error-pages.eviljungle.com` only when the response `Content-Type` starts with `text/html`. JSON and plain-text errors from API clients pass through with the upstream status and body. 502/503/504 are always redirected. Apps need no per-route opt-out.
 
 ## DNS Integration
 
