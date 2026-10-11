@@ -22,7 +22,6 @@ spec:
           template:
             data:
               # Home Assistant
-              CAMERA_AUTH: "{{ .CAMERA_AUTH }}"
               HASS_TOKEN: "{{ .HASS_TOKEN }}"
               LATITUDE: "{{ .LATITUDE }}"
               LONGITUDE: "{{ .LONGITUDE }}"
@@ -34,17 +33,8 @@ spec:
               JENS_WORK_LONGITUDE: "{{ .JENS_WORK_LONGITUDE }}"
               ALARMCD: "{{ .ALARMCD }}"
               SECURE_DEVICES_PIN: "{{ .SECURE_DEVICES_PIN }}"
-              JEFF_WATCH_IRK: "{{ .JEFF_WATCH_IRK }}"
-              JEFF_PHONE_IRK: "{{ .JEFF_PHONE_IRK }}"
-              JEN_WATCH_IRK: "{{ .JEN_WATCH_IRK }}"
-              JEN_PHONE_IRK: "{{ .JEN_PHONE_IRK }}"
-              ANSLEY_WATCH_IRK: "{{ .ANSLEY_WATCH_IRK }}"
-              ANSLEY_PHONE_IRK: "{{ .ANSLEY_PHONE_IRK }}"
-              BRINLEY_PHONE_IRK: "{{ .BRINLEY_PHONE_IRK }}"
               OPNSENSE_USER: "{{ .OPNSENSE_USER }}"
               OPNSENSE_KEY: "{{ .OPNSENSE_KEY }}"
-              O365_APP_ID: "{{ .O365_APP_ID }}"
-              O365_CLIENT_SECRET: "{{ .O365_CLIENT_SECRET }}"
         dataFrom:
           - extract:
               key: home-assistant
