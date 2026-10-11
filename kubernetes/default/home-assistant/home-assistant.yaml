@@ -59,6 +59,28 @@ spec:
             remoteRef:
               key: home-assistant-gcp-sa
               property: home-assistant-7c48d-e078848c9fb0.json
+      code-server:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: home-assistant-code-server-secret
+        data:
+          - secretKey: HASHED_PASSWORD
+            remoteRef:
+              key: home-assistant
+              property: code-server-hashed-password
+      git:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: home-assistant-git-secret
+        data:
+          - secretKey: deploy-key
+            remoteRef:
+              key: home-assistant-git-key
+              property: private key
 
     controllers:
       home-assistant:
@@ -116,7 +138,7 @@ spec:
               tag: 4.141.0@sha256:72ab24b5680ee597dd647b30d82625752f40109b5f61bef90ffbf1ea1f02dbb8
             args:
               - --auth
-              - none
+              - password
               - --disable-telemetry
               - --disable-update-check
               - --user-data-dir
@@ -129,6 +151,11 @@ spec:
             env:
               HASS_SERVER: http://localhost:8123
               TZ: America/New_York
+              HASHED_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: home-assistant-code-server-secret
+                    key: HASHED_PASSWORD
             resources:
               requests:
                 cpu: 10m
@@ -137,6 +164,24 @@ spec:
                 memory: 2Gi
 
         initContainers:
+          git-ssh-setup:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.141.0@sha256:72ab24b5680ee597dd647b30d82625752f40109b5f61bef90ffbf1ea1f02dbb8
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                set -eu
+                install -d -m 700 /home/coder/.ssh
+                printf '%s\n' "$(cat /secrets/git/deploy-key)" > /home/coder/.ssh/id_ed25519
+                chmod 600 /home/coder/.ssh/id_ed25519
+                echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' > /home/coder/.ssh/known_hosts
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
           venv-reset:
             image:
               repository: ghcr.io/home-operations/home-assistant
@@ -175,6 +220,17 @@ spec:
                 subPath: code-server-home
             venv-reset:
               - path: /config
+            git-ssh-setup:
+              - path: /home/coder
+                subPath: code-server-home
+      git-secret:
+        type: secret
+        name: home-assistant-git-secret
+        advancedMounts:
+          home-assistant:
+            git-ssh-setup:
+              - path: /secrets/git
+                readOnly: true
       hass-cache:
         storageClass: "ceph-block"
         accessMode: ReadWriteOnce
