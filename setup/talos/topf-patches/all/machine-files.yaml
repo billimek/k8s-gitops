@@ -22,3 +22,12 @@ contents: |-
   noatime=True
   rsize=1048576
   wsize=1048576
+---
+apiVersion: v1alpha1
+kind: EtcFileConfig
+name: nfs.conf
+mode: 0o644
+contents: |-
+  [ nfsrahead ]
+  nfs4=8192
+  default=128
