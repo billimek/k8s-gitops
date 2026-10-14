@@ -15,6 +15,7 @@ spec:
       enabled: true
       allowedHosts:
         - git.eviljungle.com
+        - renovate-operator-renovate-operator.default.svc.cluster.local
     route:
       enabled: true
       hostnames:
