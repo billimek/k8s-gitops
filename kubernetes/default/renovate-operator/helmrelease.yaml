@@ -11,6 +11,10 @@ spec:
     name: renovate-operator
   interval: 1h
   values:
+    policy:
+      enabled: true
+      allowedHosts:
+        - git.eviljungle.com
     route:
       enabled: true
       hostnames:
