@@ -18,6 +18,8 @@ spec:
     initialConnectionWindowSize: 32Mi
     onInvalidMessage: TerminateStream
   http3: {}
+  path:
+    escapedSlashesAction: KeepUnchanged
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
