@@ -28,6 +28,17 @@
       commitMessageTopic: "image {{depName}}",
     },
     {
+      description: "OCI Helm charts",
+      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "/\\/(helm-)?charts(-mirror)?\\//",
+        "/\\/helm\\//",
+        "/forgejo-helm\\//",
+      ],
+      semanticCommitScope: "helm",
+      commitMessageTopic: "chart {{depName}}",
+    },
+    {
       matchDatasources: ["helm"],
       semanticCommitScope: "helm",
       commitMessageTopic: "chart {{depName}}",

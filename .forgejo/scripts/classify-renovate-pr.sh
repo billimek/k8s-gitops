@@ -28,7 +28,7 @@ title="$PR_TITLE"
 # Tier routing (unchanged from the original "Select model tier" step)
 # ---------------------------------------------------------------------------
 is_patch=false
-[[ "$title" == fix\(container\):* ]] && is_patch=true
+[[ "$title" == fix\(container\):* || "$title" == fix\(helm\):* ]] && is_patch=true
 is_blast_radius=false
 echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|kopiur|cert-manager|external-secrets' && is_blast_radius=true
 is_breaking=false
