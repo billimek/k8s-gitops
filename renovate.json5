@@ -18,7 +18,7 @@
     ':timezone(America/New_York)',
   ],
 
-  rebaseWhen: 'auto',
+  rebaseWhen: 'conflicted',
   platformAutomerge: true,
   // GHCR/OCI images (e.g. siderolabs/installer) and github-actions releases often lack a
   // releaseTimestamp; without this, Renovate's timestamp-required default marks them pending

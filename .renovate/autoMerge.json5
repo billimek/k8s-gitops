@@ -109,7 +109,7 @@
       automergeType: "pr",
       matchUpdateTypes: ["minor", "patch", "digest"],
       minimumReleaseAge: "3 days",
-      ignoreTests: true,
+      ignoreTests: false,
     },
   ],
 }
