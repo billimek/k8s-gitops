@@ -32,8 +32,6 @@ spec:
       containerdRegistryConfigPath: /etc/cri/conf.d/hosts
     serviceMonitor:
       enabled: true
-    grafanaDashboard:
-      enabled: true
     resources:
       requests:
         cpu: 50m
