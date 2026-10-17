@@ -59,6 +59,7 @@ Internal Users (LAN):
 3. **Tailscale users** query `app.eviljungle.com` → Tailscale DNS
    - App Connector resolves via cluster DNS → `10.0.6.151`
    - Routes traffic through connector pod to internal gateway
+   - `10.0.7.0/24` (NAS, Proxmox) and `*.home` DNS are reached through the OPNsense subnet router, not the connector
 
 ## Gateway Architecture
 
