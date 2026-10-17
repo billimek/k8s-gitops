@@ -45,7 +45,6 @@ Automated maintenance tools for etcd database health and backup operations:
 [Envoy Gateway](https://gateway.envoyproxy.io/) is the primary Gateway API controller, replacing Cilium Gateway. It manages multiple gateways for different access patterns:
 - `gateway-public.yaml` - For public/internet DNS records (Cloudflare) pointing to eviljungle.com
 - `gateway-internal.yaml` - For internal/local DNS records (OpnSense) pointing to 10.0.6.150
-- `gateway.yaml` - For Tailscale integration providing a dedicated LoadBalancer IP from the Tailnet for secure VPN access
 
 * [envoy-gateway/](envoy-gateway/)
 
@@ -126,3 +125,6 @@ Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to
 [Put things in kubernets on your tailnet!](https://tailscale.com/kb/1236/kubernetes-operator)
 
 * [tailscale/tailscale-operator.yaml](tailscale/tailscale-operator.yaml)
+* [tailscale/connector.yaml](tailscale/connector.yaml) - app connector (2 replicas) for `*.eviljungle.com` and the `10.0.6.0/24` gateway subnet
+
+The infrastructure subnet `10.0.7.0/24` (NAS, Proxmox, `*.home` DNS) is advertised by OPNsense, so it stays reachable remotely when the cluster is down. The tailnet policy lives in [billimek/tailscale-infra](https://github.com/billimek/tailscale-infra).
