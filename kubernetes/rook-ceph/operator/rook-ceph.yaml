@@ -32,7 +32,7 @@ spec:
     csi:
       serviceMonitor:
         enabled: false # liveness metrics require Driver.spec.liveness (not yet in ceph-csi-drivers chart v1.0.1)
-    enableDiscoveryDaemon: true
+    enableDiscoveryDaemon: false
     monitoring:
       enabled: true
     resources:
