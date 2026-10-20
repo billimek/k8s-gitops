@@ -24,7 +24,7 @@ spec:
           main:
             image:
               repository: ghcr.io/squat/generic-device-plugin
-              tag: latest@sha256:44e7c3c7164fc224d6cbc479bc57484080eb4fbefc6c1a18673810ab86d6684d
+              tag: latest@sha256:5c48f7a16cfb37c4e07731bfa384b9dba6e12d2b0fb4350d8a321d49f12ac494
             args:
               - --log-level=info
               - --domain=generic-device-plugin
