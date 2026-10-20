@@ -41,7 +41,7 @@ spec:
           app:
             image:
               repository: ghcr.io/ahrtr/etcd-defrag
-              tag: v0.46.0@sha256:297a7e6057c19771ae2eccca2b7452b8142d9f647a8f41bcadeb4e1c81623256
+              tag: v0.47.0@sha256:a65154ee2424cc9988b434deb1d8c003385e6e0158360b18556fb9112103afa3
             args:
               - --endpoints=https://127.0.0.1:2379
               - --cluster
