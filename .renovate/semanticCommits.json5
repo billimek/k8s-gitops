@@ -29,12 +29,7 @@
     },
     {
       description: "OCI Helm charts",
-      matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/\\/(helm-)?charts(-mirror)?\\//",
-        "/\\/helm\\//",
-        "/forgejo-helm\\//",
-      ],
+      matchDepTypes: ["HelmChart"],
       semanticCommitScope: "helm",
       commitMessageTopic: "chart {{depName}}",
     },

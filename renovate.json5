@@ -3,7 +3,7 @@
   extends: [
     'config:recommended',
     'docker:enableMajor',
-    'helpers:pinGitHubActionDigests',
+    'helpers:pinGitHubActionDigestsToSemver',
     'local>billimek/k8s-gitops//.renovate/allowedVersions.json5',
     'local>billimek/k8s-gitops//.renovate/autoMerge.json5',
     'local>billimek/k8s-gitops//.renovate/customManagers.json5',
