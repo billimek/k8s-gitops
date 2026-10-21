@@ -42,7 +42,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/sonarr
-              tag: 5.0.0.2701@sha256:1620725621cfda0360bd680dacf3246c4696c27c4b768b4346e07e8917e94499
+              tag: 5.0.0.2742@sha256:461e64f41e45e95637aae49d660b2116f0f8f43b0f1df86224a0e5f8a1b9f339
             env:
               SONARR__APP__INSTANCENAME: sonarr
               SONARR__APPLICATION_URL: 'https://shows.eviljungle.com'
