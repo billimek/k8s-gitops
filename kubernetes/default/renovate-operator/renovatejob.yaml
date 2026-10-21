@@ -9,7 +9,7 @@ spec:
   discoveryFilters:
     - billimek/k8s-gitops
   # Native forgejo platform support landed in Renovate 41.41.0; must stay >= that.
-  image: ghcr.io/renovatebot/renovate:44.167.5@sha256:c33150ec6407624a9399a2d827fd125becafdbe4519d7584488cbdd17f99081e
+  image: ghcr.io/renovatebot/renovate:44.175.5@sha256:8af47680e016b008c6d259ac633386eeef73ef4a6694c692f3b5f15d98523214
   parallelism: 1
   # Renovate's own SSH key for commit signing, separate from the instance's
   # server-side signing key in kubernetes/default/forgejo/: one key can only
