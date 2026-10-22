@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: silo-rules
+  namespace: default
+  labels:
+    prometheus: k8s
+    role: alert-rules
+spec:
+  groups:
+    - name: silo_observability
+      rules:
+        - record: silo:queue_items:max
+          expr: max by (cluster, queue, state) (silo_queue_items)
+        - record: silo:queue_oldest_requested_timestamp_seconds:min
+          expr: min by (cluster, queue, state) (silo_queue_oldest_requested_timestamp_seconds)
+        - alert: SiloTargetUnavailable
+          expr: up{job="silo"} == 0
+          for: 2m
+          labels: {severity: warning}
+          annotations:
+            summary: Silo scrape target is unavailable
+            description: Check process/container health and network access before interpreting missing metrics as idle work.
+        - alert: SiloResourceSampleStale
+          expr: silo_resource_sample_stale == 1
+          for: 1m
+          labels: {severity: warning}
+          annotations:
+            summary: Silo resource sampling stopped advancing
+            description: Inspect source availability and the local profiler for blocked sampling; check mount and GPU probe health.
+        - alert: SiloQueueSamplingFailed
+          expr: silo_queue_sample_available == 0
+          for: 2m
+          labels: {severity: warning}
+          annotations:
+            summary: A shared queue cannot be measured
+            description: Check PostgreSQL pool waits and dependency errors; absent queue values do not mean an empty queue.
+        - alert: SiloQueueAgeHigh
+          expr: (time() - silo:queue_oldest_requested_timestamp_seconds:min{state="queued"}) > 1800
+          for: 10m
+          labels: {severity: warning}
+          annotations:
+            summary: Silo has old queued work
+            description: Includes delayed retries. Inspect queue retry gates, worker attempts and admin job progress before treating this as a stall.
+        - alert: SiloCgroupMemoryHigh
+          expr: silo_cgroup_memory_current_bytes / silo_cgroup_memory_limit_bytes > 0.9
+          for: 5m
+          labels: {severity: warning}
+          annotations:
+            summary: Silo cgroup memory is near its reported limit
+            description: Compare Go heap, process RSS, children and cache; these populations overlap. Check cgroup events and container history.
+        - alert: SiloCgroupOOM
+          expr: increase(silo_cgroup_memory_oom_kills_total[5m]) > 0
+          labels: {severity: warning}
+          annotations:
+            summary: An OOM kill occurred in the measured cgroup
+            description: The killed process may be a child. Also check orchestrator restart/OOM status because a dead Silo cannot scrape its own event.
+        - alert: SiloCPUThrottled
+          expr: rate(silo_cgroup_cpu_throttled_periods_total[5m]) / clamp_min(rate(silo_cgroup_cpu_periods_total[5m]), 0.001) > 0.2
+          for: 10m
+          labels: {severity: warning}
+          annotations:
+            summary: Silo cgroup CPU throttling is sustained
+            description: Compare quota cores, request latency and task demand; capture CPU for one process and inspect owned FFmpeg usage separately.
+        - alert: SiloOTLPExportFailure
+          expr: sum by (cluster, instance, signal) (increase(silo_otel_export_records_total{outcome="error"}[5m])) > 0
+          for: 2m
+          labels: {severity: warning}
+          annotations:
+            summary: Silo telemetry exports are failing
+            description: Check collector health and bounded queue loss after drain. Telemetry failure must not block requests.
+        - alert: SiloScrapeSlow
+          expr: scrape_duration_seconds{job="silo"} > 1
+          for: 5m
+          labels: {severity: warning}
+          annotations:
+            summary: Silo scrapes exceed the target budget
+            description: Inspect sample count and collector contention before increasing the timeout.
+        - alert: SiloPostgresPoolSaturated
+          expr: sum without (state) (silo_postgres_pool_connections{state="acquired"}) / sum without (state) (silo_postgres_pool_connections{state="maximum"}) > 0.9
+          for: 2m
+          labels: {severity: warning}
+          annotations:
+            summary: A Silo PostgreSQL pool is near capacity
+            description: Compare postgres acquire duration and timeout/error outcomes by pool role, then inspect long transactions and query spans before increasing the connection limit.

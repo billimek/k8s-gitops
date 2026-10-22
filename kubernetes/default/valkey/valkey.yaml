@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: valkey
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
+
+    externalSecrets:
+      valkey:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: valkey-secret
+        dataFrom:
+          - extract:
+              key: valkey
+
+    controllers:
+      valkey:
+        containers:
+          app:
+            image:
+              repository: docker.io/valkey/valkey
+              tag: 9.1.2-alpine@sha256:48332870af354a799964c0012ae1194a0bf2bf894eb508f945810596dc2d8d11
+            args:
+              - valkey-server
+              - --save
+              - ""
+              - --appendonly
+              - "no"
+              - --maxmemory
+              - 256mb
+              - --maxmemory-policy
+              - volatile-ttl
+              - --requirepass
+              - $(VALKEY_PASSWORD)
+            envFrom:
+              - secretRef:
+                  name: valkey-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 6379
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 6379
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 384Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+
+    persistence:
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+
+    service:
+      app:
+        controller: valkey
+        ports:
+          redis:
+            port: 6379

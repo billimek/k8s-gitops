@@ -13,9 +13,6 @@ spec:
   interval: 1h
   values:
     defaultPodOptions:
-      resourceClaims:
-        - name: gpu
-          resourceClaimTemplateName: silo
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -36,30 +33,29 @@ spec:
           template:
             data:
               SECRET_KEY: "{{ .SECRET_KEY }}"
+              DATABASE_URL: "postgres://silo:{{ urlquery .SILO_POSTGRES_PASS }}@postgres-rw.default.svc.cluster.local:5432/silo"
+              REDIS_URL: "redis://:{{ urlquery .VALKEY_PASSWORD }}@valkey.default.svc.cluster.local:6379/0"
         dataFrom:
           - extract:
               key: silo
+          - extract:
+              key: valkey
 
     controllers:
       silo:
         containers:
           app:
-            image:
+            image: &image
               repository: ghcr.io/silo-server/silo-server
               tag: latest@sha256:986b9afbf6a05435b0fd3c204832e6caaf2b1c3ff5907879a981d9731351d1c3
-            env:
-              MODE: integrated
+            env: &env
               PORT: &port 8080
               JF_PORT: &jfPort 8096
               HOME: /tmp
+              SILO_METRICS_LISTEN: :9091
               SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
               SILO_TRUSTED_PROXIES: 10.244.0.0/16
-              DATABASE_URL:
-                valueFrom:
-                  secretKeyRef:
-                    name: silo-postgres-app
-                    key: uri
-            envFrom:
+            envFrom: &envFrom
               - secretRef:
                   name: silo-secret
             probes:
@@ -87,25 +83,73 @@ spec:
                   periodSeconds: 10
                   failureThreshold: 60
             resources:
-              claims:
-                - name: gpu
               requests:
                 cpu: 100m
                 memory: 512Mi
               limits:
                 memory: 4Gi
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
               readOnlyRootFilesystem: true
 
+      transcode:
+        type: statefulset
+        replicas: 1
+        statefulset:
+          podManagementPolicy: Parallel
+          serviceName:
+            identifier: transcode
+        pod:
+          terminationGracePeriodSeconds: 700
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: silo
+        containers:
+          app:
+            image: *image
+            env:
+              <<: *env
+              MODE: transcode
+              POD_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              NODE_NAME:
+                value: $(POD_NAME)
+                dependsOn: POD_NAME
+              NODE_URL:
+                value: http://$(POD_NAME).silo-transcode.default.svc.cluster.local:8080
+                dependsOn: POD_NAME
+            envFrom: *envFrom
+            probes:
+              liveness: &nodeProbe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: *port
+              readiness: *nodeProbe
+            resources:
+              claims:
+                - name: gpu
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 4Gi
+            securityContext: *securityContext
+
     persistence:
       config:
         existingClaim: silo-config
-        globalMounts:
-          - path: /var/lib/silo
+        advancedMounts:
+          silo:
+            app:
+              - path: /var/lib/silo
       nfs-nas-media:
         type: nfs
         server: nas.home
@@ -170,3 +214,39 @@ spec:
             port: *port
           jellyfin:
             port: *jfPort
+          metrics:
+            port: 9091
+      transcode:
+        controller: transcode
+        clusterIP: None
+        ports:
+          http:
+            port: *port
+
+    serviceMonitor:
+      app:
+        serviceName: silo
+        endpoints:
+          - port: metrics
+            relabelings:
+              - sourceLabels: [__meta_kubernetes_pod_name]
+                targetLabel: instance
+              - targetLabel: job
+                replacement: silo
+              - targetLabel: cluster
+                replacement: home
+              - targetLabel: process_role
+                replacement: api
+      transcode:
+        serviceName: silo-transcode
+        endpoints:
+          - port: http
+            relabelings:
+              - sourceLabels: [__meta_kubernetes_pod_name]
+                targetLabel: instance
+              - targetLabel: job
+                replacement: silo
+              - targetLabel: cluster
+                replacement: home
+              - targetLabel: process_role
+                replacement: transcode
