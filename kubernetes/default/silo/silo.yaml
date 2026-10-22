@@ -109,6 +109,16 @@ spec:
             identifier: transcode
         pod:
           terminationGracePeriodSeconds: 700
+        initContainers:
+          wait-for-api:
+            image:
+              repository: busybox
+              tag: 1.38.0@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
+            command:
+              - /bin/sh
+              - -c
+              - until wget -q -O /dev/null http://silo-app.default.svc.cluster.local:8080/api/v1/ready; do sleep 3; done
+            securityContext: *securityContext
         containers:
           app:
             image: *image
