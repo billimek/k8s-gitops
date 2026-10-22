@@ -111,7 +111,7 @@ spec:
           terminationGracePeriodSeconds: 700
           resourceClaims:
             - name: gpu
-              resourceClaimName: igpu-shared
+              resourceClaimName: igpu-media
         initContainers:
           wait-for-api:
             image:

@@ -15,7 +15,7 @@ spec:
     defaultPodOptions:
       resourceClaims:
         - name: gpu
-          resourceClaimTemplateName: plex
+          resourceClaimName: igpu-media
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -147,16 +147,19 @@ spec:
 
     rawResources:
       gpu:
+        forceRename: igpu-media
         manifest:
           apiVersion: resource.k8s.io/v1
-          kind: ResourceClaimTemplate
+          kind: ResourceClaim
           spec:
-            spec:
-              devices:
-                requests:
-                  - name: gpu
-                    exactly:
-                      deviceClassName: gpu.intel.com
+            devices:
+              requests:
+                - name: gpu
+                  exactly:
+                    deviceClassName: gpu.intel.com
+                    selectors:
+                      - cel:
+                          expression: device.attributes["gpu.intel.com"].pciId == "0xa7a9"
 
     route:
       app:
