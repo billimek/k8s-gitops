@@ -44,7 +44,7 @@ spec:
           app:
             image:
               repository: ghcr.io/athennamind/opnsense-exporter
-              tag: 0.0.18@sha256:b7178768cef76a85e02f2d78a0d380b49969972712c65218b390b015e2d3ad27
+              tag: 0.0.19@sha256:e1f79c770dba7d3165e12836e4b6f849be93a8b2a25116b7ea11c5da8c3ad2db
             args:
               - --log.level=info
               - --log.format=json
