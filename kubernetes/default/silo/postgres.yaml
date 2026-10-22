@@ -1,0 +1,118 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: silo-postgres
+  namespace: default
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: "enabled"
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.1-202512290807-standard-trixie@sha256:f445b2f8e9b4b3b9a4df56d944c976a2d7eb9b50280f3a6986b0fc7c422f7f27
+  primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: switchover
+  storage:
+    size: 10Gi
+    storageClass: ceph-block
+  postgresql:
+    extensions:
+      - name: pgvector
+        image:
+          reference: ghcr.io/cloudnative-pg/pgvector:0.8.7-18-trixie@sha256:c07bb083581455d4b7c35f337bf72b5483e076d796e75f0c0ca460f34fdc52f1
+    parameters:
+      max_connections: "100"
+      shared_buffers: 256MB
+  monitoring:
+    enablePodMonitor: true
+  enablePDB: false
+  smartShutdownTimeout: 30
+  stopDelay: 120
+  switchoverDelay: 120
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 100m
+    limits:
+      memory: 2Gi
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          cnpg.io/cluster: silo-postgres
+  bootstrap:
+    initdb:
+      database: silo
+      owner: silo
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: silo-postgres
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: silo
+  namespace: default
+spec:
+  name: silo
+  owner: silo
+  cluster:
+    name: silo-postgres
+  extensions:
+    - name: vector
+      ensure: present
+---
+# yaml-language-server: $schema=https://github.com/datreeio/CRDs-catalog/raw/refs/heads/main/barmancloud.cnpg.io/objectstore_v1.json
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: silo-postgres
+  namespace: default
+spec:
+  retentionPolicy: 30d
+  instanceSidecarConfiguration:
+    resources:
+      limits:
+        memory: 512Mi
+        cpu: 1
+      requests:
+        memory: 128Mi
+        cpu: 10m
+  configuration:
+    destinationPath: s3://postgresql/
+    endpointURL: http://nas.home:3900
+    s3Credentials:
+      region:
+        name: cloudnative-pg-secret
+        key: REGION
+      accessKeyId:
+        name: cloudnative-pg-secret
+        key: aws-access-key-id
+      secretAccessKey:
+        name: cloudnative-pg-secret
+        key: aws-secret-access-key
+    wal:
+      compression: zstd
+    data:
+      compression: gzip
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/refs/heads/main/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: silo-postgres
+  namespace: default
+spec:
+  backupOwnerReference: self
+  cluster:
+    name: silo-postgres
+  schedule: "0 0 2 * * *"
+  immediate: true
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
