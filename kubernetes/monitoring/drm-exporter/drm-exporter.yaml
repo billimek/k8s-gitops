@@ -69,6 +69,6 @@ spec:
         grafanaOperator:
           enabled: true
           allowCrossNamespaceImport: true
-          folder: media
+          folder: apps
           matchLabels:
             dashboards: grafana

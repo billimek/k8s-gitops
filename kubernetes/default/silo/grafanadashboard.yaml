@@ -10,7 +10,7 @@ spec:
     matchLabels:
       dashboards: grafana
   allowCrossNamespaceImport: true
-  folder: media
+  folder: apps
   url: https://raw.githubusercontent.com/Silo-Server/silo-server/main/deploy/observability/grafana-dashboard.json
   datasources:
     - inputName: DS_PROMETHEUS
