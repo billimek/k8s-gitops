@@ -90,9 +90,9 @@ spec:
                 - name: gpu
               requests:
                 cpu: 100m
-                memory: 512Mi
+                memory: 2Gi
               limits:
-                memory: 4Gi
+                memory: 6Gi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities:
@@ -207,6 +207,9 @@ spec:
             timeouts:
               backendRequest: 3600s
       jellyfin:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://silo-jf.eviljungle.com/System/Info/Public
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -239,7 +242,7 @@ spec:
 
     serviceMonitor:
       app:
-        serviceName: silo
+        serviceName: silo-app
         endpoints:
           - port: metrics
             relabelings:
