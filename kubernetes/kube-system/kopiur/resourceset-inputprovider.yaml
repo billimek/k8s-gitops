@@ -115,6 +115,11 @@ spec:
       - app: shelfmark
         schedule: "H 3 * * *"
 
+      - app: silo
+        runAsUser: "1000"
+        capacity: 10Gi
+        schedule: "H 3 * * *"
+
       - app: sonarr
         capacity: 2Gi
         schedule: "H */12 * * *"

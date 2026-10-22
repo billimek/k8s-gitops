@@ -1,0 +1,172 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: silo
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: silo
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+        supplementalGroups: [44]
+
+    externalSecrets:
+      silo:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: silo-secret
+          template:
+            data:
+              SECRET_KEY: "{{ .SECRET_KEY }}"
+        dataFrom:
+          - extract:
+              key: silo
+
+    controllers:
+      silo:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/silo-server/silo-server
+              tag: latest@sha256:986b9afbf6a05435b0fd3c204832e6caaf2b1c3ff5907879a981d9731351d1c3
+            env:
+              MODE: integrated
+              PORT: &port 8080
+              JF_PORT: &jfPort 8096
+              HOME: /tmp
+              SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
+              SILO_TRUSTED_PROXIES: 10.244.0.0/16
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: silo-postgres-app
+                    key: uri
+            envFrom:
+              - secretRef:
+                  name: silo-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: *port
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/ready
+                    port: *port
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: *port
+                  periodSeconds: 10
+                  failureThreshold: 60
+            resources:
+              claims:
+                - name: gpu
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+
+    persistence:
+      config:
+        existingClaim: silo-config
+        globalMounts:
+          - path: /var/lib/silo
+      nfs-nas-media:
+        type: nfs
+        server: nas.home
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /mnt/media
+            readOnly: true
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+    rawResources:
+      gpu:
+        manifest:
+          apiVersion: resource.k8s.io/v1
+          kind: ResourceClaimTemplate
+          spec:
+            spec:
+              devices:
+                requests:
+                  - name: gpu
+                    exactly:
+                      deviceClassName: gpu.intel.com
+
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://silo.eviljungle.com/api/v1/health
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - silo.eviljungle.com
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+            timeouts:
+              backendRequest: 3600s
+      jellyfin:
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - silo-jf.eviljungle.com
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *jfPort
+            timeouts:
+              backendRequest: 3600s
+
+    service:
+      app:
+        controller: silo
+        ports:
+          http:
+            port: *port
+          jellyfin:
+            port: *jfPort

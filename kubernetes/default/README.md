@@ -39,6 +39,10 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 
 [seerr](https://github.com/seerr-team/seerr) is an open-source media request and discovery manager for Jellyfin, Plex, and Emby (successor to Overseerr/Jellyseerr)
 
+# silo
+
+[silo](https://github.com/Silo-Server/silo-server) is a pre-release self-hosted media server with Jellyfin/Emby-compatible APIs, trialed alongside plex. Uses a dedicated CNPG cluster (`silo-postgres`) with pgvector.
+
 # minecraft
 
 Using the [minecraft server](https://hub.docker.com/r/itzg/minecraft-server) container images to run multiple different minecraft servers.
