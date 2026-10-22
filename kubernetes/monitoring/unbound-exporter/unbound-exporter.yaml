@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/cyb3r-jak3/unbound-exporter
-              tag: 0.6.0@sha256:957fd2d2230b59d01ede1a37a7bb7ffb1b5900e4e20eb4cb0a498bc106f6834b
+              tag: 0.6.0@sha256:9db2304986d5496cec971da7f57507d2ed29a53c160060f2b811b35deccc209c
             args:
               - -unbound.host=tcp://10.0.7.1:953
               - -unbound.ca=
