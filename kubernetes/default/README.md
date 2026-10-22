@@ -41,7 +41,7 @@ Installs [frigate](https://github.com/blakeblackshear/frigate/): Realtime object
 
 # silo
 
-[silo](https://github.com/Silo-Server/silo-server) is a pre-release self-hosted media server with Jellyfin/Emby-compatible APIs, trialed alongside plex. Uses a dedicated CNPG cluster (`silo-postgres`) with pgvector.
+[silo](https://github.com/Silo-Server/silo-server) is a pre-release self-hosted media server with Jellyfin/Emby-compatible APIs, trialed alongside plex. Uses the shared CNPG cluster (pgvector enabled), valkey for Redis, and a transcode node StatefulSet.
 
 # minecraft
 

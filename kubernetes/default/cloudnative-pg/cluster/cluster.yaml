@@ -21,7 +21,18 @@ spec:
   enableSuperuserAccess: true
   superuserSecret:
     name: cloudnative-pg-secret
+  managed:
+    roles:
+      - name: silo
+        ensure: present
+        login: true
+        passwordSecret:
+          name: silo-postgres-user
   postgresql:
+    extensions:
+      - name: pgvector
+        image:
+          reference: ghcr.io/cloudnative-pg/pgvector:0.8.7-18-trixie@sha256:c07bb083581455d4b7c35f337bf72b5483e076d796e75f0c0ca460f34fdc52f1
     parameters:
       max_connections: "300"
       shared_buffers: 512MB
