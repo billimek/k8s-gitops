@@ -1,0 +1,71 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: drm-exporter
+  namespace: kube-system
+spec:
+  interval: 15m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.3.5
+    digest: sha256:b7b212c80cfa0b0c907c57ec47e12397691e8124b6e4cf916dfea68ca21771c9
+  url: oci://ghcr.io/home-operations/charts/drm-exporter
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: drm-exporter
+  namespace: kube-system
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: drm-exporter
+  interval: 1h
+  values:
+    fullnameOverride: drm-exporter
+    image:
+      tag: 0.3.5
+      digest: sha256:3c82a61f086381f53772a5a9420dc484f559807cd32cc6b5eae89e74fb2f13f9
+    hostAccess:
+      devDri: /dev/dri
+      sys: /sys
+      devCpu: ""
+    dra:
+      enabled: false
+    securityContext:
+      privileged: false
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: ["ALL"]
+        add: ["PERFMON"]
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        memory: 128Mi
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: intel.feature.node.kubernetes.io/gpu-gen
+                  operator: Exists
+    monitoring:
+      serviceMonitor:
+        enabled: true
+        interval: 30s
+        scrapeTimeout: 10s
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
+          allowCrossNamespaceImport: true
+          folder: media
+          matchLabels:
+            dashboards: grafana
