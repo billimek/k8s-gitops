@@ -20,7 +20,7 @@ spec:
             summary: drm-exporter scrape target is unavailable
             description: Check the drm-exporter pod on the node and its /dev/dri and PERFMON access before treating missing GPU metrics as idle.
         - alert: GpuVideoEngineBusy
-          expr: max by (cluster, node, device, engine) (drm_engine_utilization_ratio{engine=~"vcs.*|video.*"}) > 0.9
+          expr: max by (cluster, node, device, engine) (drm_engine_utilization_ratio{engine="video"}) > 0.9
           for: 10m
           labels: {severity: warning}
           annotations:
