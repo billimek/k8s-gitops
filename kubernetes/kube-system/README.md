@@ -128,10 +128,3 @@ Using [generic-device-plugin](https://github.com/squat/generic-device-plugin) to
 * [tailscale/connector.yaml](tailscale/connector.yaml) - app connector (2 replicas) for `*.eviljungle.com` and the `10.0.6.0/24` gateway subnet
 
 The infrastructure subnet `10.0.7.0/24` (NAS, Proxmox, `*.home` DNS) is advertised by OPNsense, so it stays reachable remotely when the cluster is down. The tailnet policy lives in [billimek/tailscale-infra](https://github.com/billimek/tailscale-infra).
-
-# drm-exporter
-
-[drm-exporter](https://github.com/home-operations/drm-exporter) exports Intel iGPU metrics (engine utilization, frequency, memory, power) as Prometheus `drm_*` series. Runs as a DaemonSet on nodes carrying the NFD `intel.feature.node.kubernetes.io/gpu-gen` label, using hostPath `/dev/dri` and `/sys` with only `CAP_PERFMON`. Lives next to the GPU resource driver and NFD rules it depends on.
-
-* [drm-exporter/drm-exporter.yaml](drm-exporter/drm-exporter.yaml)
-* [drm-exporter/prometheusrule.yaml](drm-exporter/prometheusrule.yaml)

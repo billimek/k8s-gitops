@@ -66,3 +66,11 @@ VictoriaMetrics [k8s stack helm chart](https://github.com/VictoriaMetrics/helm-c
 
 * [unbound-exporter/unbound-exporter.yaml](unbound-exporter/unbound-exporter.yaml)
 * Grafana Dashboard: [21006](https://grafana.com/grafana/dashboards/21006-unbound)
+
+
+# drm-exporter
+
+[drm-exporter](https://github.com/home-operations/drm-exporter) exports Intel iGPU metrics (engine utilization, frequency, memory, power) as Prometheus `drm_*` series. Runs as a DaemonSet on nodes carrying the NFD `intel.feature.node.kubernetes.io/gpu-gen` label and sees the GPUs through a read-only admin-access DRA claim (the `monitoring` namespace carries the `resource.kubernetes.io/admin-access` label), so it never takes a GPU from workloads. Only `CAP_PERFMON` and a read-only `/sys` mount.
+
+* [drm-exporter/drm-exporter.yaml](drm-exporter/drm-exporter.yaml)
+* [drm-exporter/prometheusrule.yaml](drm-exporter/prometheusrule.yaml)

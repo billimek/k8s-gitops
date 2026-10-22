@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: drm-exporter
-  namespace: kube-system
+  namespace: monitoring
 spec:
   interval: 15m
   layerSelector:
@@ -19,7 +19,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: drm-exporter
-  namespace: kube-system
+  namespace: monitoring
 spec:
   chartRef:
     kind: OCIRepository
@@ -31,11 +31,14 @@ spec:
       tag: 0.3.5
       digest: sha256:3c82a61f086381f53772a5a9420dc484f559807cd32cc6b5eae89e74fb2f13f9
     hostAccess:
-      devDri: /dev/dri
+      devDri: ""
       sys: /sys
       devCpu: ""
     dra:
-      enabled: false
+      enabled: true
+      deviceClassName: gpu.intel.com
+      adminAccess: true
+      allocationMode: All
     securityContext:
       privileged: false
       allowPrivilegeEscalation: false
