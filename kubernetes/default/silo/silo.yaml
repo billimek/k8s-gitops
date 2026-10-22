@@ -109,6 +109,9 @@ spec:
             identifier: transcode
         pod:
           terminationGracePeriodSeconds: 700
+          resourceClaims:
+            - name: gpu
+              resourceClaimName: igpu-shared
         initContainers:
           wait-for-api:
             image:
