@@ -13,6 +13,9 @@ spec:
   interval: 1h
   values:
     defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimName: silo
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -83,6 +86,8 @@ spec:
                   periodSeconds: 10
                   failureThreshold: 60
             resources:
+              claims:
+                - name: gpu
               requests:
                 cpu: 100m
                 memory: 512Mi
@@ -104,9 +109,6 @@ spec:
             identifier: transcode
         pod:
           terminationGracePeriodSeconds: 700
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: silo
         containers:
           app:
             image: *image
@@ -166,14 +168,13 @@ spec:
       gpu:
         manifest:
           apiVersion: resource.k8s.io/v1
-          kind: ResourceClaimTemplate
+          kind: ResourceClaim
           spec:
-            spec:
-              devices:
-                requests:
-                  - name: gpu
-                    exactly:
-                      deviceClassName: gpu.intel.com
+            devices:
+              requests:
+                - name: gpu
+                  exactly:
+                    deviceClassName: gpu.intel.com
 
     route:
       app:
