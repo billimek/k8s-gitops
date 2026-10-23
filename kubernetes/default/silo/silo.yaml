@@ -195,7 +195,7 @@ spec:
           gatus.home-operations.com/endpoint: |-
             url: https://silo.eviljungle.com/api/v1/health
         parentRefs:
-          - name: internal
+          - name: public
             namespace: kube-system
             sectionName: https
         hostnames:
