@@ -38,7 +38,7 @@ spec:
             summary: A shared queue cannot be measured
             description: Check PostgreSQL pool waits and dependency errors; absent queue values do not mean an empty queue.
         - alert: SiloQueueAgeHigh
-          expr: (time() - silo:queue_oldest_requested_timestamp_seconds:min{state="queued"}) > 1800
+          expr: (time() - silo:queue_oldest_requested_timestamp_seconds:min{state="queued",queue!="images"}) > 1800
           for: 10m
           labels: {severity: warning}
           annotations:
