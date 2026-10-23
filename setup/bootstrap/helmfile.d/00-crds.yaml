@@ -52,7 +52,7 @@ releases:
   - name: silence-operator
     namespace: monitoring
     chart: oci://gsoci.azurecr.io/charts/giantswarm/silence-operator
-    version: 0.21.0
+    version: 0.21.1
 
   - name: snapshot-controller
     namespace: kube-system
