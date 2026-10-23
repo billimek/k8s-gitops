@@ -26,8 +26,6 @@ spec:
     name: silence-operator
   interval: 1h
   values:
-    image:
-      tag: "0.20.0"
     alertmanagerAddress: http://vmalertmanager-stack.monitoring.svc.cluster.local:9093
     networkPolicy:
       enabled: false
