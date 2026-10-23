@@ -47,7 +47,7 @@ releases:
   - name: node-feature-discovery
     namespace: kube-system
     chart: oci://registry.k8s.io/nfd/charts/node-feature-discovery
-    version: 0.20.0
+    version: 0.20.1
 
   - name: silence-operator
     namespace: monitoring
