@@ -45,14 +45,6 @@ spec:
             sectionName: https
         hostnames:
           - vlogs.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: victoria-logs-server
-                port: 9428
     dashboards:
       enabled: false
       grafanaOperator:

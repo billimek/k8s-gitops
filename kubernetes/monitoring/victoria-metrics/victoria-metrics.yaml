@@ -53,7 +53,6 @@ spec:
           folder: monitoring   # explicit; previously implied by CR namespace
 
     defaultRules:
-      create: true
       rules:
         # Disabled because NFS zero-scalers intentionally run at maxReplicas=1
         KubeHpaMaxedOut:
@@ -113,14 +112,6 @@ spec:
             sectionName: https
         hostnames:
           - vmsingle.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: vmsingle-stack
-                port: 8428
 
     alertmanager:
       enabled: true
@@ -143,14 +134,6 @@ spec:
             sectionName: https
         hostnames:
           - vmalertmanager.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: vmalertmanager-stack
-                port: 9093
 
       config:
         route:
@@ -288,14 +271,6 @@ spec:
             sectionName: https
         hostnames:
           - vmalert.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: vmalert-stack
-                port: 8080
 
     vmagent:
       enabled: true
@@ -324,14 +299,6 @@ spec:
             sectionName: https
         hostnames:
           - vmagent.eviljungle.com
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - name: vmagent-stack
-                port: 8429
     grafana:
       enabled: false
     prometheus-node-exporter:
