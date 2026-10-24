@@ -10,8 +10,8 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.3.5
-    digest: sha256:b7b212c80cfa0b0c907c57ec47e12397691e8124b6e4cf916dfea68ca21771c9
+    tag: 0.3.6
+    digest: sha256:167a79ca9783720fcea151614833e1d89762c6db927705eafa38174d3cfd9d7a
   url: oci://ghcr.io/home-operations/charts/drm-exporter
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
