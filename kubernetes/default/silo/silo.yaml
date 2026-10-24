@@ -50,7 +50,7 @@ spec:
           app:
             image: &image
               repository: ghcr.io/silo-server/silo-server
-              tag: latest@sha256:35c4bb814ec29e2599e8fa9c27ab91fbb958fd0cb01ad2126de4c5d62688b5f9
+              tag: latest@sha256:13a03e469358bc87392bd591e65255f98456dc0011ff05a1e17a1a686e453a46
             env: &env
               PORT: &port 8080
               JF_PORT: &jfPort 8096
