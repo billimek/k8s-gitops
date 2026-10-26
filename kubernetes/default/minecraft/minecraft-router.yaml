@@ -30,12 +30,13 @@ spec:
           app:
             image:
               repository: itzg/mc-router
-              tag: 1.49.0@sha256:76697861c41e7d64880accf0d25e953a3c2d871e6f5f0922d7c830ffcb2b75ab
+              tag: 1.50.0@sha256:d49d1332ec9b6aa07a2ca87e0ac2cfeda9dcfe7b29a4d1d7a0de24d3eedae3fe
             args:
               - --in-kube-cluster
               - --auto-scale-up
               - --auto-scale-down
               - --auto-scale-down-after=12h
+              - --auto-scale-wake-kick-message=Server is starting. Reconnect in about a minute.
               - --connection-rate-limit=5
               - --api-binding=:25566
               - --metrics-backend=prometheus
