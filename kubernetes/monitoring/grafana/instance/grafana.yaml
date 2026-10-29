@@ -12,6 +12,7 @@ spec:
     analytics:
       check_for_updates: "false"
       check_for_plugin_updates: "false"
+      feedback_links_enabled: "false"
       reporting_enabled: "false"
     auth:
       disable_login_form: "false"
@@ -22,6 +23,10 @@ spec:
       mode: console
     news:
       news_feed_enabled: "false"
+    plugins:
+      plugin_admin_enabled: "false"
+      preinstall_auto_update: "false"
+      public_key_retrieval_disabled: "true"
     security:
       angular_support_enabled: "true"
       allow_embedding: "true"
