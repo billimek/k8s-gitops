@@ -28,6 +28,11 @@ spec:
         login: true
         passwordSecret:
           name: silo-postgres-user
+      - name: miniflux
+        ensure: present
+        login: true
+        passwordSecret:
+          name: miniflux-postgres-user
   postgresql:
     extensions:
       - name: pgvector

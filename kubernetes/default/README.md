@@ -53,6 +53,13 @@ Using the [minecraft server](https://hub.docker.com/r/itzg/minecraft-server) con
 * [minecraft-survival.yaml](minecraft/minecraft-survival.yaml)
 * [minecraft-bedrock.yaml](minecraft/minecraft-bedrock.yaml)
 
+# miniflux
+
+[miniflux](https://github.com/miniflux/v2) is a minimalist feed reader. Uses the shared CNPG cluster; local admin created from 1Password on first start.
+
+* [miniflux.yaml](miniflux/miniflux.yaml)
+* [postgres.yaml](miniflux/postgres.yaml)
+
 # mosquitto
 
 [mosquitto](https://mosquitto.org/) is an MQTT broker used for home automation messaging
