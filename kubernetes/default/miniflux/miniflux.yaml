@@ -35,6 +35,21 @@ spec:
         dataFrom:
           - extract:
               key: miniflux
+      mcp:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: miniflux-mcp-secret
+        data:
+          - secretKey: MCP_AUTH_TOKEN
+            remoteRef:
+              key: miniflux
+              property: MCP_AUTH_TOKEN
+          - secretKey: MINIFLUX_API_KEY
+            remoteRef:
+              key: miniflux
+              property: MINIFLUX_API_KEY
 
     controllers:
       miniflux:
@@ -108,6 +123,66 @@ spec:
                   - ALL
               readOnlyRootFilesystem: true
 
+      mcp:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: jwonder/miniflux-mcp
+              tag: 0.8.0@sha256:bfe785ba2918f2f12073e8fde1ef1a72c0e5d61c3655e228a3b041312d24d836
+            env:
+              MCP_TRANSPORT: streamable-http
+              MCP_HTTP_ADDR: ":8080"
+              MCP_HTTP_PATH: /mcp
+              MINIFLUX_URL: http://miniflux.default.svc.cluster.local:8080
+            envFrom:
+              - secretRef:
+                  name: miniflux-mcp-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  initialDelaySeconds: 2
+                  periodSeconds: 5
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+
     persistence:
       tmpfs:
         type: emptyDir
@@ -129,10 +204,32 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
+      mcp:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
+        parentRefs:
+          - name: public
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - miniflux-mcp.eviljungle.com
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /mcp
+            backendRefs:
+              - identifier: mcp
+                port: *port
 
     service:
       app:
         controller: miniflux
+        ports:
+          http:
+            port: *port
+      mcp:
+        controller: mcp
         ports:
           http:
             port: *port
