@@ -26,10 +26,10 @@
       allowedVersions: "<0.23.0",
     },
     {
-      description: "Pin qbittorrent below 5.3.0 - minor bumps need manual sign-off",
+      description: "Block qbittorrent 5.3.0",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/home-operations/qbittorrent"],
-      allowedVersions: "<5.3.0",
+      allowedVersions: "<5.3.0 || >5.3.0",
     },
   ],
 }
