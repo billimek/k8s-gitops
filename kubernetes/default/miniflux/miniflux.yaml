@@ -135,7 +135,7 @@ spec:
               MCP_TRANSPORT: streamable-http
               MCP_HTTP_ADDR: ":8080"
               MCP_HTTP_PATH: /mcp
-              MINIFLUX_URL: http://miniflux.default.svc.cluster.local:8080
+              MINIFLUX_URL: http://miniflux-app.default.svc.cluster.local:8080
             envFrom:
               - secretRef:
                   name: miniflux-mcp-secret
@@ -239,7 +239,7 @@ spec:
 
     serviceMonitor:
       app:
-        serviceName: miniflux
+        serviceName: miniflux-app
         endpoints:
           - port: http
             path: /metrics
