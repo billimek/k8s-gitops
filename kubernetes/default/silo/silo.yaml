@@ -51,6 +51,8 @@ spec:
             image: &image
               repository: ghcr.io/silo-server/silo-server
               tag: latest@sha256:8b652b0be194081936889b8ce48d5fc25cd8f71269d376a51170aada75678d07
+            command: &command
+              - silo
             env: &env
               PORT: &port 8080
               JF_PORT: &jfPort 8096
@@ -125,6 +127,7 @@ spec:
         containers:
           app:
             image: *image
+            command: *command
             env:
               <<: *env
               MODE: transcode
@@ -164,7 +167,13 @@ spec:
         advancedMounts:
           silo:
             app:
-              - path: /var/lib/silo
+              - path: /config/silo
+      config-node:
+        type: emptyDir
+        advancedMounts:
+          transcode:
+            app:
+              - path: /config/silo
       nfs-nas-media:
         type: nfs
         server: nas.home
