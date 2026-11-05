@@ -63,8 +63,8 @@ spec:
             env:
               BASE_URL: https://miniflux.eviljungle.com
               BATCH_SIZE: 100
-              CLEANUP_ARCHIVE_READ_DAYS: 60
-              CLEANUP_ARCHIVE_UNREAD_DAYS: 180
+              CLEANUP_ARCHIVE_READ_DAYS: 7
+              CLEANUP_ARCHIVE_UNREAD_DAYS: 14
               CREATE_ADMIN: 1
               LOG_FORMAT: json
               METRICS_COLLECTOR: 1
