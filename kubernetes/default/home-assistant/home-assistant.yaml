@@ -125,7 +125,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.144.0@sha256:b9e8056bb74bd0c4f90284c7559eddeccd38400cfedc28e64c9d3ca50fef1f83
+              tag: 4.145.0@sha256:992796b850b8b7ec6f7393b8dd2295840a65cf5071981990ff41ef52dd566c43
             args:
               - --auth
               - password
@@ -157,7 +157,7 @@ spec:
           git-ssh-setup:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.144.0@sha256:b9e8056bb74bd0c4f90284c7559eddeccd38400cfedc28e64c9d3ca50fef1f83
+              tag: 4.145.0@sha256:992796b850b8b7ec6f7393b8dd2295840a65cf5071981990ff41ef52dd566c43
             command: ["/bin/sh", "-c"]
             args:
               - |
