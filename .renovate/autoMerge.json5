@@ -2,6 +2,31 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      description: "Auto-merge patch releases once the Claude review approves - daily",
+      matchDatasources: ["docker", "helm"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+      schedule: ["after 1am and before 5am"],
+      matchUpdateTypes: ["patch"],
+    },
+    {
+      description: "Blast-radius components stay manual",
+      matchDatasources: ["docker", "helm"],
+      matchUpdateTypes: ["patch"],
+      matchPackageNames: [
+        "/rook/",
+        "/ceph/",
+        "/cilium/",
+        "/cnpg/",
+        "/cloudnative-pg/",
+        "/envoy/",
+        "/siderolabs/",
+        "/talos/",
+      ],
+      automerge: false,
+    },
+    {
       description: "Auto-merge trusted containers - anytime",
       matchDatasources: ["docker"],
       automerge: true,
@@ -20,7 +45,7 @@
     },
     {
       description: "Auto-merge trusted containers - daily",
-      matchDatasources: ["docker"],
+      matchDatasources: ["docker", "helm"],
       automerge: true,
       automergeType: "pr",
       ignoreTests: false,
@@ -32,7 +57,10 @@
         "ghcr.io/coder/code-server",
         "ghcr.io/home-operations/plex",
         "ghcr.io/itzg/minecraft-server",
+        "ghcr.io/mogenius/helm-charts/renovate-operator",
         "ghcr.io/seerr-team/seerr",
+        "ghcr.io/silo-server/silo-server",
+        "ghcr.io/unpoller/unpoller",
         "ghcr.io/zwave-js/zwave-js-ui",
         "itzg/mc-router",
       ],
@@ -47,7 +75,6 @@
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: [
         "ghcr.io/home-operations/prowlarr",
-        "ghcr.io/home-operations/readarr",
         "ghcr.io/renovatebot/renovate"
       ],
     },
@@ -63,7 +90,6 @@
         "docker.io/sirjmann92/mousetrap",
         "ghcr.io/calibrain/shelfmark-lite",
         "ghcr.io/home-operations/echo",
-        "ghcr.io/unpoller/unpoller",
       ],
     },
     {
@@ -77,7 +103,6 @@
       matchUpdateTypes: ["patch"],
       matchPackageNames: [
         "ghcr.io/home-operations/charts/tuppr",
-        "ghcr.io/home-operations/tuppr",
       ],
     },
     {
@@ -109,6 +134,13 @@
       matchUpdateTypes: ["minor", "patch", "digest"],
       minimumReleaseAge: "3 days",
       ignoreTests: false,
+    },
+    {
+      description: "qbittorrent: minor and major stay manual",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/home-operations/qbittorrent"],
+      matchUpdateTypes: ["minor", "major"],
+      automerge: false,
     },
   ],
 }

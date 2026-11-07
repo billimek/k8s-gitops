@@ -5,7 +5,8 @@
 # gating happens via branch protection's required-approving-review rule reading
 # the review state the harness submitted (APPROVED / REQUEST_CHANGES /
 # COMMENT), not via this status. A COMMENT verdict deliberately withholds
-# approval so the PR waits for a human, without failing this check.
+# approval so the PR waits for a human, without failing this check;
+# REQUEST_CHANGES fails it.
 #
 # Unlike the .github/ version this does not retry the review lookup: there the
 # review is posted asynchronously by the model and may not be visible yet, but
@@ -57,7 +58,7 @@ else
       desc="Claude approved - safe to merge${suffix}"
       ;;
     REQUEST_CHANGES)
-      state="success"
+      state="failure"
       desc="Claude requested changes - manual review required${suffix}"
       ;;
     COMMENT)

@@ -36,7 +36,7 @@ count=0
 in_section=0
 
 while IFS= read -r line; do
-  if [[ "$line" =~ ^\*\*(New\ features\ worth\ adopting|Known\ issues) ]]; then
+  if [[ "$line" =~ ^\*\*(New\ features\ worth\ adopting|Known\ issues|Unknowns) ]]; then
     in_section=1
     # Inline content on the header line itself is narration, not a finding --
     # only bullets below the header count. See the header comment.

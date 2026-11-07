@@ -5,8 +5,6 @@
       customType: "regex",
       description: "Process annotated dependencies",
       fileMatch: [
-        "(^|/).+\\.env$",
-        "(^|/).+\\.sh$",
         "(^|/).+\\.ya?ml(?:\\.j2)?$",
       ],
       matchStrings: [
@@ -35,20 +33,6 @@
       versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
       extractVersionTemplate: "{{#if extractVersion}}{{{extractVersion}}}{{else}}^(?<version>.*)${{/if}}",
       packageNameTemplate: "{{#if packageName}}{{{packageName}}}{{else}}{{{depName}}}{{/if}}",
-    },
-    {
-      customType: "regex",
-      description: "Process GitHub download dependencies in YAML files",
-      fileMatch: ["\\.ya?ml(\\.j2)?$"],
-      matchStrings: [
-        // https://github.com/rancher/system-upgrade-controller/releases/download/v0.13.2/crd.yaml
-        "(^|[^<])https:\\/\\/github.com\\/(?<depName>\\S+?\\/\\S+?)\\/releases\\/download\\/(?<currentValue>(v|\\d)\\S+?)\\/\\S+",
-        // https://raw.githubusercontent.com/external-secrets/external-secrets/v0.9.11/docs/snippets/dashboard.json
-        "(^|[^<])https:\\/\\/raw.githubusercontent.com\\/(?<depName>\\S+?\\/\\S+?)\\/(?<currentValue>(v|\\d)\\S+?)\\/\\S+",
-      ],
-      datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
-      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
-      extractVersionTemplate: "{{#if extractVersion}}{{{extractVersion}}}{{else}}^(?<version>.*)${{/if}}",
     },
     {
       customType: "regex",

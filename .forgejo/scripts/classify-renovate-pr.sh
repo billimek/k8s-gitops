@@ -30,7 +30,7 @@ title="$PR_TITLE"
 is_patch=false
 [[ "$title" == fix\(container\):* || "$title" == fix\(helm\):* ]] && is_patch=true
 is_blast_radius=false
-echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|kopiur|cert-manager|external-secrets' && is_blast_radius=true
+echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|kopiur|cert-manager|external-secrets|talos|tuppr|cloudnative-pg|cnpg|postgres|victoria|home-assistant' && is_blast_radius=true
 is_breaking=false
 echo "$title" | grep -qE 'group|!:' && is_breaking=true
 
