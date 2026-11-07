@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Decide whether a "light" (haiku) tier review needs to be escalated to a
-# second, deeper "full" (sonnet) pass: max-turns error, execution error, or
-# hedging language in the review body.
+# second, deeper "full" (sonnet) pass: max-turns error, execution error,
+# hedging language, missing release notes, or an Unknowns section.
 #
 # Required env:
 #   DEPTH      - the tier depth that was used (light/full/deep)
@@ -45,19 +45,13 @@ fi
 
 if [[ "$escalate" == false && -s "$REVIEW_FILE" ]]; then
   body="$(cat "$REVIEW_FILE")"
-  # The light-tier prompt explicitly sanctions one specific hedge -- "release
-  # notes not publicly available" after exhausting the 3-call hard cap -- as
-  # the correct outcome for an obscure image, not a sign the review needs a
-  # deeper pass. Strip that phrase (and its "no upstream release notes
-  # published" variant) before matching so it doesn't trigger an escalation
-  # that burns a second, sonnet-tier pass on exactly the case the cheap tier
-  # exists for. Genuine hedges ("could not verify X", "unable to confirm Y")
-  # still escalate.
-  filtered_body="$(printf '%s' "$body" | sed -E \
-    's/[Rr]elease notes (are )?not publicly available//g; s/[Nn]o upstream release notes published//g')"
-  if echo "$filtered_body" | grep -qiE 'could not (verify|confirm|determine)|not (publicly available|found)|unable to (verify|confirm|determine)'; then
+  # Missing release notes, hedged findings, and Unknowns bullets all escalate.
+  if echo "$body" | grep -qiE 'could not (verify|confirm|determine|be retrieved)|not (publicly available|found)|unable to (verify|confirm|determine)|no upstream release notes published'; then
     escalate=true
     reason="review body hedges on findings it could not verify"
+  elif printf '%s\n' "$body" | awk '/^\*\*Unknowns\*\*/{s=1;next} /^(\*\*|---)/{s=0} s&&/^[[:space:]]*[-*][[:space:]]/&&!/[Nn]one|[Nn]\/[Aa]/{f=1} END{exit !f}'; then
+    escalate=true
+    reason="review lists Unknowns at light tier"
   fi
 fi
 

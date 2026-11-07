@@ -10,28 +10,14 @@
     {
       description: "Talos - 3-day cooldown before raising upgrade PRs",
       matchDatasources: ["docker", "github-releases"],
-      matchPackageNames: ["ghcr.io/siderolabs/talos", "ghcr.io/siderolabs/talosctl", "siderolabs/talos", "/factory\\.talos\\.dev/"],
+      matchPackageNames: ["ghcr.io/siderolabs/talos", "siderolabs/talos"],
       minimumReleaseAge: "3 days",
-    },
-    {
-      // Talos v1.14 stops publishing ghcr.io/siderolabs/installer; images come from
-      // Image Factory only, tagged against the ghcr.io/siderolabs/talos release stream.
-      description: "Override Talos Installer Package Name",
-      matchDatasources: ["docker"],
-      matchPackageNames: ["/factory\\.talos\\.dev/"],
-      overridePackageName: "ghcr.io/siderolabs/talos",
     },
     {
       description: "Victoria Logs - 3-day cooldown before raising upgrade PRs",
       matchDatasources: ["docker"],
       matchPackageNames: ["/victoriametrics\\/helm-charts\\/victoria-logs/"],
       minimumReleaseAge: "3 days",
-    },
-    {
-      description: "pennydreadful/bookshelf uses prefixed tags with 4-part versions",
-      matchDatasources: ["docker"],
-      matchPackageNames: ["ghcr.io/pennydreadful/bookshelf"],
-      versioning: "regex:^softcover-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)$",
     },
   ],
 }
