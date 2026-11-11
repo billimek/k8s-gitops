@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pvc-custom-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: pvc-custom
+      rules:
+        - alert: PersistentVolumeClaimNearFull
+          annotations:
+            summary: PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} has {{ $value | humanizePercentage }} free space.
+          expr: |
+            (
+              kubelet_volume_stats_available_bytes{job="kubelet",metrics_path="/metrics"}
+              / kubelet_volume_stats_capacity_bytes{job="kubelet",metrics_path="/metrics"}
+            ) < 0.15
+            unless on (cluster, namespace, persistentvolumeclaim) (kube_persistentvolumeclaim_access_mode{access_mode="ReadOnlyMany"} == 1)
+            unless on (cluster, namespace, persistentvolumeclaim) (kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1)
+          for: 1h
+          labels:
+            severity: warning
