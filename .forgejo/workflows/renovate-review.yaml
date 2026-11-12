@@ -482,9 +482,9 @@ jobs:
           - When stuck (private repo, ambiguous package, no changelog anywhere), report what you
             found and what you could not find rather than fabricating information
           - Write exactly one review.md and one verdict.txt at the end of your analysis
-          - Cite github.com URLs (PRs, issues, commits, releases) normally — write full URLs or
-            `org/repo#123`, never a bare `#NNN` (Forgejo would auto-link it to this repo, not
-            upstream)
+          - Cite upstream PRs, issues, commits and releases as full https://github.com/... URLs.
+            Never write `org/repo#123` or a bare `#NNN` (Forgejo auto-links both to this
+            instance, not github.com)
           PROMPT_EOF
 
           # The heredoc above is quoted (<<'PROMPT_EOF') on purpose -- its body is full of
@@ -631,8 +631,9 @@ jobs:
           blocks by the poster, so keep them to one line per item.
 
           NEVER modify repository files (other than review.md/verdict.txt), merge the PR, or run
-          kubectl/flux/cluster commands. Cite github.com URLs normally; avoid bare `#NNN`
-          references — use `org/repo#123` or a full URL instead.
+          kubectl/flux/cluster commands. Cite upstream PRs, issues and commits as full
+          https://github.com/... URLs. Never write `org/repo#123` or a bare `#NNN` (Forgejo
+          auto-links both to this instance, not github.com).
           PROMPT_EOF
 
           # See the primary prompt.md step: the quoted heredoc above never expands ${REPO}/${PR}.
