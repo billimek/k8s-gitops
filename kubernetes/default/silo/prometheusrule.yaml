@@ -45,7 +45,7 @@ spec:
             summary: Silo has old queued work
             description: Includes delayed retries. Inspect queue retry gates, worker attempts and admin job progress before treating this as a stall.
         - alert: SiloCgroupMemoryHigh
-          expr: silo_cgroup_memory_current_bytes / silo_cgroup_memory_limit_bytes > 0.9
+          expr: silo_cgroup_memory_working_set_bytes / silo_cgroup_memory_limit_bytes > 0.9
           for: 5m
           labels: {severity: warning}
           annotations:
