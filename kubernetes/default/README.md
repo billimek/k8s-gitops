@@ -14,6 +14,10 @@ postgresql operator for kubernetes
 
 echo server for testing
 
+# floppy
+
+[Floppy](https://github.com/dannyvfilms/Floppy) is a self-hosted media tracker (SQLite) running at `floppy.eviljungle.com`; syncs with Silo via plugin
+
 # frigate
 
 ![](https://i.imgur.com/hv7bh6m.png)
