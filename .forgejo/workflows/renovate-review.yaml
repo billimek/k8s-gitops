@@ -129,6 +129,7 @@ jobs:
             printf '\n---\n'
             cat "$MUST_CHECK_FILE"
           } > pr-context.md
+          bash .forgejo/scripts/append-platform-versions.sh
 
       - name: Append flate evidence
         # flate is pre-baked on PATH in the runner image; no Setup Flate step needed.
@@ -213,7 +214,8 @@ jobs:
           support matrix" rather than guessing a docs URL, fetch the best result, and cite
           it. Do not approve a platform-coupled bump on "patch release, low risk"
           reasoning alone -- an unchecked compatibility matrix is an Unknown, not an
-          approval.
+          approval. The `## Platform versions` section of `pr-context.md` gives the
+          pinned Talos and Kubernetes versions; use it instead of searching for them.
 
           ## Tool Use Efficiency
 
