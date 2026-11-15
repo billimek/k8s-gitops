@@ -41,7 +41,7 @@ spec:
           app:
             image:
               repository: ghcr.io/continuwuity/continuwuity
-              tag: v26.9.3-maxperf@sha256:0226cd42554761d5845df0cee5f525b6d18573bbbd6d34dc50d8c5aeff70911d
+              tag: v26.9.4-maxperf@sha256:b8d9739c84028382194f766edddc3c71a90e111f36d829ede02c9fbad3c576a2
             env:
               TZ: "America/New_York"
               CONDUWUIT_SERVER_NAME: eviljungle.com
