@@ -54,7 +54,7 @@ spec:
               TZ: America/New_York
               DEBUG: "False"
               DEMO_ACCOUNT_ENABLED: "False"
-              REGISTRATION: "True"
+              REGISTRATION: "False"
               URLS: https://floppy.eviljungle.com
               ALLOWED_HOSTS: floppy.eviljungle.com,floppy.default.svc.cluster.local,localhost,127.0.0.1
               BACKUP_DIR: /floppy/db/backups
