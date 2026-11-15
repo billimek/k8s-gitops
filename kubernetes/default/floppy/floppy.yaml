@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: floppy
+  namespace: default
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    defaultPodOptions:
+      # image entrypoint remaps PUID/PGID and nginx rewrites its config, so it starts as root
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+
+    externalSecrets:
+      floppy:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: floppy-secret
+          template:
+            data:
+              SECRET: "{{ .SECRET }}"
+              TMDB_API: "{{ .TMDB_API }}"
+              REDIS_URL: "redis://:{{ urlquery .VALKEY_PASSWORD }}@valkey.default.svc.cluster.local:6379/5"
+        dataFrom:
+          - extract:
+              key: floppy
+          - extract:
+              key: valkey
+
+    controllers:
+      floppy:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/dannyvfilms/floppy
+              tag: 26.11.12@sha256:f8ed2ad2ce767f3fb16663244206b586d92f21b88159253a015ff55d27fccb5e
+            env:
+              TZ: America/New_York
+              DEBUG: "False"
+              DEMO_ACCOUNT_ENABLED: "False"
+              REGISTRATION: "True"
+              URLS: https://floppy.eviljungle.com
+              ALLOWED_HOSTS: floppy.eviljungle.com,floppy.default.svc.cluster.local,localhost,127.0.0.1
+              BACKUP_DIR: /floppy/db/backups
+              LOG_DIR: /floppy/db/logs
+              FLOPPY_DATA_DIR: /floppy/db
+              HOME: /tmp
+            envFrom:
+              - secretRef:
+                  name: floppy-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/
+                    port: &port 8000
+                    httpHeaders:
+                      - name: Host
+                        value: localhost
+                  initialDelaySeconds: 60
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 6
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop: ["ALL"]
+                add: ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETUID", "SETGID"]
+
+    persistence:
+      config:
+        existingClaim: floppy-config
+        globalMounts:
+          - path: /floppy/db
+      runtime:
+        type: emptyDir
+        sizeLimit: 16Mi
+        globalMounts:
+          - path: /run/floppy
+      tmpfs:
+        type: emptyDir
+        sizeLimit: 1Gi
+        globalMounts:
+          - path: /tmp
+
+    route:
+      app:
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - floppy.eviljungle.com
+
+    service:
+      app:
+        controller: floppy
+        ports:
+          http:
+            port: *port
