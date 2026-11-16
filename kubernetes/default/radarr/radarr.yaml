@@ -44,7 +44,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/radarr
-              tag: 7.0.2.10888@sha256:69ea515df6e2a3ea1490cfa127ffaaf9597a9db84fffa2fa150a6fae98fe04cb
+              tag: 7.0.3.10918@sha256:55d3cf8a4c4c531bb8b5c1ba88eb270d4435e01e228fbdb16cdfc910a17e3b06
             env:
               RADARR__APP__INSTANCENAME: Radarr
               RADARR__APPLICATION_URL: 'https://movies.eviljungle.com'
