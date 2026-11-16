@@ -104,7 +104,7 @@ spec:
 
       transcode:
         type: statefulset
-        replicas: 1
+        replicas: 0
         statefulset:
           podManagementPolicy: Parallel
           serviceName:
@@ -131,17 +131,7 @@ spec:
             env:
               <<: *env
               MODE: transcode
-              POD_NAME:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.name
-              NODE_NAME:
-                value: $(POD_NAME)
-                dependsOn: POD_NAME
-              NODE_URL:
-                value: http://$(POD_NAME).silo-transcode.default.svc.cluster.local:8080
-                dependsOn: POD_NAME
-            envFrom: *envFrom
+              SILO_CORE_URL: http://silo-app.default.svc.cluster.local:8080
             probes:
               liveness: &nodeProbe
                 enabled: true
