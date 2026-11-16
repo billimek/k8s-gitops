@@ -36,6 +36,7 @@ spec:
           template:
             data:
               SECRET_KEY: "{{ .SECRET_KEY }}"
+              SILO_NODE_KEY: "{{ .SILO_NODE_KEY }}"
               DATABASE_URL: "postgres://silo:{{ urlquery .SILO_POSTGRES_PASS }}@postgres-rw.default.svc.cluster.local:5432/silo"
               REDIS_URL: "redis://:{{ urlquery .VALKEY_PASSWORD }}@valkey.default.svc.cluster.local:6379/0"
         dataFrom:
@@ -104,7 +105,7 @@ spec:
 
       transcode:
         type: statefulset
-        replicas: 0
+        replicas: 1
         statefulset:
           podManagementPolicy: Parallel
           serviceName:
@@ -132,6 +133,11 @@ spec:
               <<: *env
               MODE: transcode
               SILO_CORE_URL: http://silo-app.default.svc.cluster.local:8080
+              SILO_NODE_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: silo-secret
+                    key: SILO_NODE_KEY
             probes:
               liveness: &nodeProbe
                 enabled: true
