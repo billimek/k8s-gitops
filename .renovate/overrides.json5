@@ -19,5 +19,11 @@
       matchPackageNames: ["/victoriametrics\\/helm-charts\\/victoria-logs/"],
       minimumReleaseAge: "3 days",
     },
+    {
+      description: "Silo - build-N tags compare numerically; each build is a patch update",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/silo-server/silo-server"],
+      versioning: "regex:^build-(?<patch>\\d+)$",
+    },
   ],
 }

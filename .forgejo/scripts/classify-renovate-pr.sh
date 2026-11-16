@@ -30,7 +30,7 @@ title="$PR_TITLE"
 is_patch=false
 [[ "$title" == fix\(container\):* || "$title" == fix\(helm\):* ]] && is_patch=true
 is_blast_radius=false
-echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|kopiur|cert-manager|external-secrets|talos|tuppr|cloudnative-pg|cnpg|postgres|victoria|home-assistant' && is_blast_radius=true
+echo "$title" | grep -qiE 'envoy|cilium|rook|ceph|kopiur|cert-manager|external-secrets|talos|tuppr|cloudnative-pg|cnpg|postgres|victoria|home-assistant|silo' && is_blast_radius=true
 is_breaking=false
 echo "$title" | grep -qE 'group|!:' && is_breaking=true
 
@@ -118,6 +118,15 @@ if echo "$title" | grep -qi 'group'; then
   keywords+=("group")
 fi
 
+if echo "$changed_paths" | grep -q '^kubernetes/default/silo/'; then
+  old_build="$(grep -oE '^-[[:space:]]+tag: build-[0-9]+' "$DIFF_FILE" | grep -oE '[0-9]+$' | head -1 || true)"
+  new_build="$(grep -oE '^\+[[:space:]]+tag: build-[0-9]+' "$DIFF_FILE" | grep -oE '[0-9]+$' | head -1 || true)"
+  if [[ -n "$old_build" && -n "$new_build" ]]; then
+    checks+=("silo build-${old_build} to build-${new_build}: every new or changed required env var, config key, migration and upgrade note in the Upstream evidence section is satisfied by kubernetes/default/silo/silo.yaml for BOTH the silo and silo-transcode controllers")
+    keywords+=("env")
+  fi
+fi
+
 {
   if [[ "${#checks[@]}" -gt 0 ]]; then
     echo "## Required checks"
@@ -131,6 +140,56 @@ fi
     done
   fi
 } > "$MUST_CHECK_FILE"
+
+# Upstream evidence for silo build bumps: image revision labels are read from
+# ghcr.io, then the upstream commit range, changed files, new env var reads and
+# upgrade docs are appended to the must-check file.
+if [[ -n "${old_build:-}" && -n "${new_build:-}" ]]; then
+  silo_upstream_evidence() {
+    local repo="silo-server/silo-server" gh_repo="Silo-Server/silo-server" tok
+    tok="$(curl -fsS "https://ghcr.io/token?scope=repository:${repo}:pull" | jq -r .token)"
+    revision_of() {
+      local idx amd cfg
+      idx="$(curl -fsS -H "Authorization: Bearer $tok" -H 'Accept: application/vnd.oci.image.index.v1+json' "https://ghcr.io/v2/${repo}/manifests/$1")"
+      amd="$(echo "$idx" | jq -r '.manifests[] | select(.platform.architecture=="amd64") | .digest' | head -1)"
+      cfg="$(curl -fsS -H "Authorization: Bearer $tok" -H 'Accept: application/vnd.oci.image.manifest.v1+json' "https://ghcr.io/v2/${repo}/manifests/${amd}" | jq -r .config.digest)"
+      curl -fsSL -H "Authorization: Bearer $tok" "https://ghcr.io/v2/${repo}/blobs/${cfg}" | jq -r '.config.Labels["org.opencontainers.image.revision"]'
+    }
+    local old_rev new_rev cmp
+    old_rev="$(revision_of "build-${old_build}")"
+    new_rev="$(revision_of "build-${new_build}")"
+    cmp="$(curl -fsS ${GH_TOKEN:+-H "Authorization: Bearer $GH_TOKEN"} "https://api.github.com/repos/${gh_repo}/compare/${old_rev}...${new_rev}")"
+    echo
+    echo "## Upstream evidence (silo build-${old_build} -> build-${new_build})"
+    echo
+    echo "Image revisions: ${old_rev} -> ${new_rev}"
+    echo "Compare: https://github.com/${gh_repo}/compare/${old_rev}...${new_rev}"
+    echo "Commits in range: $(echo "$cmp" | jq -r '.total_commits') (build numbers are not all tagged, so the range can span several builds)"
+    echo
+    echo "### Commit subjects (up to 150)"
+    echo "$cmp" | jq -r '.commits[:150][] | "- " + (.commit.message | split("\n")[0])'
+    echo
+    echo "### Changed files (up to 300)"
+    echo "$cmp" | jq -r '.files[:300][] | "- " + .filename'
+    echo
+    echo "### Env var names added in code or docs (added lines)"
+    echo "$cmp" | jq -r '.files[] | select((.filename | endswith(".go")) or (.filename | startswith("docs/"))) | .patch // empty' \
+      | grep -E '^\+' | grep -oE '\b(SILO_[A-Z0-9_]+|(NODE|CORE|REDIS|DATABASE|JF|MODE)_[A-Z0-9_]+|MODE)\b' | sort -u | sed 's/^/- /' || true
+    echo
+    echo "### Upgrade guide patches (docs/update-*, docs/upgrad*, docs/migrat*; truncated)"
+    echo "$cmp" | jq -r '.files[] | select(.filename | test("^docs/(update|upgrad|migrat)")) | "#### " + .filename + "\n" + ((.patch // "") | split("\n")[:150] | join("\n"))' | head -300
+  }
+  if ! silo_upstream_evidence >> "$MUST_CHECK_FILE" 2>silo-evidence.err; then
+    {
+      echo
+      echo "## Upstream evidence (silo build-${old_build} -> build-${new_build})"
+      echo
+      echo "Upstream evidence could not be fetched. Research the upstream commit range"
+      echo "yourself with gh against Silo-Server/silo-server and list any gap under **Unknowns**."
+    } >> "$MUST_CHECK_FILE"
+    cat silo-evidence.err >&2 || true
+  fi
+fi
 
 # "keyword|description" pairs consumed by finalize-review.sh for warn-mode
 # validation; not shown to the model.
