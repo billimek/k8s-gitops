@@ -26,5 +26,7 @@ spec:
     name: grafana-operator
   interval: 1h
   values:
+    crds:
+      immutable: false
     serviceMonitor:
       enabled: true
