@@ -204,7 +204,23 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - silo.eviljungle.com
+          - &host silo.eviljungle.com
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+            timeouts:
+              backendRequest: 3600s
+      internal:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://silo.eviljungle.com/api/v1/health
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - *host
         rules:
           - backendRefs:
               - identifier: app
