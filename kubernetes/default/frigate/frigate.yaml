@@ -16,7 +16,7 @@ spec:
     defaultPodOptions:
       resourceClaims:
         - name: gpu
-          resourceClaimTemplateName: frigate
+          resourceClaimName: igpu-media
       affinity:
         nodeAffinity:
           # Soft preferences - scheduler tries these in order but allows fallback
@@ -121,19 +121,6 @@ spec:
         sizeLimit: 4Gi
         globalMounts:
           - path: /dev/shm
-
-    rawResources:
-      gpu:
-        manifest:
-          apiVersion: resource.k8s.io/v1
-          kind: ResourceClaimTemplate
-          spec:
-            spec:
-              devices:
-                requests:
-                  - name: gpu
-                    exactly:
-                      deviceClassName: gpu.intel.com
 
     route:
       main:
