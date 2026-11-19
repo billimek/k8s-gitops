@@ -29,9 +29,9 @@ spec:
               - hosts:
                   - 1.1.1.1              # Cloudflare Primary
                   - 1.0.0.1              # Cloudflare Secondary
-                  - 8.8.8.8              # Google Primary
+                  - 208.67.222.222       # OpenDNS
                   - 9.9.9.9              # Quad9 Primary
-                  # 149.112.112.112 is used for WAN2 gateway monitoring in OPNsense
+                  # 8.8.8.8 and 8.8.4.4 are OPNsense gateway monitor IPs, do not probe
                 interval: 1s
                 network: ip4
                 protocol: icmp
