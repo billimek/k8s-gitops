@@ -37,10 +37,6 @@ spec:
         capacity: 5Gi
         schedule: "H 3 * * *"
 
-      - app: floppy
-        runAsUser: "1000"
-        schedule: "H 3 * * *"
-
       - app: forgejo
         runAsUser: "1000"
         capacity: 10Gi
