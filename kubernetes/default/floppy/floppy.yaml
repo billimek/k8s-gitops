@@ -49,7 +49,7 @@ spec:
           app:
             image:
               repository: ghcr.io/dannyvfilms/floppy
-              tag: 26.11.12@sha256:f8ed2ad2ce767f3fb16663244206b586d92f21b88159253a015ff55d27fccb5e
+              tag: 26.11.19@sha256:1eb6cfc2b79a53a892cd6bf39e67ab4e11731a25aaac1666b1cbac802c447fa3
             env:
               TZ: America/New_York
               DEBUG: "False"
