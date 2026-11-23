@@ -59,7 +59,7 @@ spec:
           app:
             image:
               repository: ghcr.io/siderolabs/talos-backup
-              tag: v0.1.0-beta.3@sha256:0741255027c4dcae6bb8d4e18a824ba73c431d11b3dff4967e95b9ff5388cb85
+              tag: v0.1.0@sha256:3635df0be0862d71bba7a34dca3e7f7c790887f5c5d0129002191c4c2d92dd15
             command:
               - /talos-backup
             env:
