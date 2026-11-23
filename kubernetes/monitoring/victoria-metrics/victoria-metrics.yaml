@@ -303,6 +303,10 @@ spec:
       enabled: false
     prometheus-node-exporter:
       enabled: true
+      # keeps CSI volume mounts visible so node_filesystem_readonly covers PVCs
+      extraArgs:
+        - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/plugins/.+|var/lib/kubelet/pods/[^/]+/(containers|etc-hosts|volume-subpaths|volumes/kubernetes.io~(secret|projected|configmap|downward-api|empty-dir))($|/).*)($|/)
+        - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|erofs|sysfs|tracefs)$
     kube-state-metrics:
       enabled: true
     kubelet:
