@@ -211,11 +211,3 @@ spec:
       annotations:
         summary: ZFS offline pool (instance {{ $labels.instance }})
         description: "A ZFS zpool is in a unexpected state: {{ $labels.state }}.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-    - alert: HostFilesystemReadOnly
-      expr: 'node_filesystem_readonly{fstype=~"ext4|xfs"} == 1'
-      for: 5m
-      labels:
-        severity: critical
-      annotations:
-        summary: "Filesystem read-only (instance {{ $labels.instance }})"
-        description: "{{ $labels.mountpoint }} ({{ $labels.device }}) on {{ $labels.instance }} is mounted read-only. Pods using it keep running but cannot write. Recreate the affected pod.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
