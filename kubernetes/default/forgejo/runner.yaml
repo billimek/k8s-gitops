@@ -78,9 +78,6 @@ spec:
                       memory: 1Gi
           # Podspec images are not Renovate-tracked yet - bump by hand.
           podspec-default.yaml: |-
-            # Service-link env injection puts ~470 vars in job pods, which trips a
-            # UPX stub bug (upx/upx#18902) that segfaults packed binaries like flate.
-            enableServiceLinks: false
             containers:
               - name: main
                 image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:8b7a25c7b3235c27e97df1cbb8411c1d12d2676e739265b5fbb66bb55f72dbf6
