@@ -76,8 +76,7 @@ spec:
             env:
               EULA: "true"
               TYPE: PAPER
-              VERSION: "26.2"  # pinned: LATEST+experimental resolves backwards to 26.2-rc-2
-              PAPER_CHANNEL: experimental
+              VERSION: "26.3"
               DIFFICULTY: normal
               MODE: survival
               HARDCORE: "false"
@@ -106,8 +105,9 @@ spec:
                 locked-chests-plugin
                 bluemap
                 luckperms
-                nochatreports-spigot-paper
+                nochatreports-spigot-paper?
                 nbtapi
+                coreprotect?
                 prism
             envFrom:
               - secretRef:
