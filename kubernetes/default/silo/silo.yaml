@@ -227,6 +227,22 @@ spec:
                 port: *port
             timeouts:
               backendRequest: 3600s
+      jellyfin-public:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://silo-jf.eviljungle.com/System/Info/Public
+        parentRefs:
+          - name: public
+            namespace: kube-system
+            sectionName: https
+        hostnames:
+          - &jfHost silo-jf.eviljungle.com
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *jfPort
+            timeouts:
+              backendRequest: 3600s
       jellyfin:
         annotations:
           gatus.home-operations.com/endpoint: |-
@@ -236,7 +252,7 @@ spec:
             namespace: kube-system
             sectionName: https
         hostnames:
-          - silo-jf.eviljungle.com
+          - *jfHost
         rules:
           - backendRefs:
               - identifier: app
