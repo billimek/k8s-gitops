@@ -122,11 +122,11 @@ spec:
             target:
               kind: Deployment
               name: source-controller
-          # Flux near OOM detection for Helm
+          # Helm feature gates: OOM detection, cancel health checks on new revision, retry on failure
           - patch: |
               - op: add
                 path: /spec/template/spec/containers/0/args/-
-                value: --feature-gates=OOMWatch=true
+                value: --feature-gates=OOMWatch=true,CancelHealthCheckOnNewRevision=true,DefaultToRetryOnFailure=true,DisableChartDigestTracking=true
               - op: add
                 path: /spec/template/spec/containers/0/args/-
                 value: --oom-watch-memory-threshold=95
