@@ -51,7 +51,7 @@ spec:
           app:
             image: &image
               repository: ghcr.io/silo-server/silo-server
-              tag: build-2972@sha256:47f1f9e991a01921fe1ed17beb19f483589a34e53d6ac0139676f5144136ff2c
+              tag: build-3019@sha256:575fb4dcd9406d2fe958526fe45f0aa7fe395c8c36cacb57ea341b99c436078d
             command: &command
               - silo
             env: &env
