@@ -37,7 +37,7 @@ spec:
               BUCKET: talos-backup
               CLUSTER_NAME: home
               DISABLE_ENCRYPTION: "true"
-              USE_PATH_STYLE: "false"
+              USE_PATH_STYLE: "true"
         dataFrom:
           - extract:
               key: garage
