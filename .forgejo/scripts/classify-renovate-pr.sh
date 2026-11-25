@@ -122,7 +122,7 @@ if echo "$changed_paths" | grep -q '^kubernetes/default/silo/'; then
   old_build="$(grep -oE '^-[[:space:]]+tag: build-[0-9]+' "$DIFF_FILE" | grep -oE '[0-9]+$' | head -1 || true)"
   new_build="$(grep -oE '^\+[[:space:]]+tag: build-[0-9]+' "$DIFF_FILE" | grep -oE '[0-9]+$' | head -1 || true)"
   if [[ -n "$old_build" && -n "$new_build" ]]; then
-    checks+=("silo build-${old_build} to build-${new_build}: every new or changed required env var, config key, migration and upgrade note in the Upstream evidence section is satisfied by kubernetes/default/silo/silo.yaml for BOTH the silo and silo-transcode controllers")
+    checks+=("silo build-${old_build} to build-${new_build}: every new or changed required env var, config key, migration and upgrade note in the Upstream evidence section is satisfied by kubernetes/default/silo/silo.yaml for BOTH the silo and silo-transcode controllers. The core silo controller applies migrations at startup and silo-transcode waits for core /api/v1/ready before starting, so migrations do not need separate verification on the transcode node; classify each migration as additive or destructive")
     keywords+=("env")
   fi
 fi

@@ -439,7 +439,12 @@ jobs:
           search happened. A finding you have already judged does not affect this repo belongs
           under `Not applicable to this repo`, never under `Known issues` — `Known issues` is
           only for open bugs that could plausibly affect this cluster and warrant a human
-          decision:
+          decision.
+          Routine database migrations are not Known issues. A migration that is additive
+          (new table, column, index, widened constraint) or a backfill goes under `Sources
+          consulted`; the CNPG database is backed up, so "rollback is harder" is not a finding.
+          Only a migration that drops or rewrites existing data, or a specific incompatibility
+          between the core and transcode nodes, is a Known issue:
 
           ```
           ### [package]: vOLD → vNEW
@@ -595,7 +600,12 @@ jobs:
           actionable — do not add a "none found" bullet just to show the search happened. A finding
           you have already judged does not affect this repo belongs under `Not applicable to this
           repo`, never under `Known issues` — `Known issues` is only for open bugs that could
-          plausibly affect this cluster and warrant a human decision:
+          plausibly affect this cluster and warrant a human decision. Routine database
+          migrations are not Known issues: additive migrations (new table, column, index,
+          widened constraint) and backfills go under `Sources consulted`; the CNPG database is
+          backed up, so "rollback is harder" is not a finding. Only a migration that drops or
+          rewrites existing data, or a specific incompatibility between the core and transcode
+          nodes, is a Known issue:
           ```
           ### [package]: vOLD → vNEW
 
