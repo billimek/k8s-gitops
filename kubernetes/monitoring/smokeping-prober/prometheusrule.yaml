@@ -21,15 +21,17 @@ spec:
         
         - alert: SmokepingHighLatency
           annotations:
-            description: 'Network latency to {{ $labels.host }} is averaging {{ printf "%.2f" $value | humanize }}ms over the last 5 minutes.'
-            summary: High network latency detected to {{ $labels.host }}.
+            description: '{{ $value }} external targets have averaged over 100ms for 15 minutes. The gateway is not included, so this is likely an ISP or WAN issue.'
+            summary: Sustained high latency to multiple external targets.
           expr: |
-            (
-              rate(smokeping_response_duration_seconds_sum{job=~".*smokeping-prober.*"}[5m])
-              /
-              rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*"}[5m])
-            ) * 1000 > 50
-          for: 5m
+            count(
+              (
+                rate(smokeping_response_duration_seconds_sum{job=~".*smokeping-prober.*", host!="10.0.7.1"}[5m])
+                /
+                rate(smokeping_response_duration_seconds_count{job=~".*smokeping-prober.*", host!="10.0.7.1"}[5m])
+              ) * 1000 > 100
+            ) >= 4
+          for: 15m
           labels:
             severity: warning
         
@@ -46,8 +48,8 @@ spec:
               )
               /
               rate(smokeping_requests_total{job=~".*smokeping-prober.*"}[5m])
-            ) > 0.20
-          for: 5m
+            ) > 0.30
+          for: 15m
           labels:
             severity: warning
         
