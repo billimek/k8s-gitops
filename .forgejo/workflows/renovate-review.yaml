@@ -429,6 +429,14 @@ jobs:
           Write `APPROVED` to verdict.txt, with a brief summary in review.md that states
           which release notes range and which repo files were checked.
 
+          **Silo exception**: Silo publishes no release notes. When `pr-context.md` has an
+          `Upstream evidence (silo ...)` section with commit subjects and changed files, it
+          counts as release notes for the full range, so missing release notes are not an
+          Unknown. `APPROVED` still requires checking every listed env var, classifying each
+          migration, and completing the upstream issue search. Write `COMMENT` if the evidence
+          could not be fetched, or if it may be truncated (more than 150 commits in range, or
+          300 changed files listed).
+
           Structure review.md as follows (omit empty sections). **A non-empty `New
           features worth adopting` or `Known issues` section is what decides `COMMENT` vs
           `APPROVED` above.** Only a `- ` bullet in one of these two sections counts; prose on
@@ -590,6 +598,14 @@ jobs:
           unsatisfied on purpose and waits for a human to look before it merges; otherwise
           `APPROVED`. `gh` is pointed at github.com (not this repo) for upstream research only —
           `pr-context.md` already has everything about this PR.
+
+          Silo exception: Silo publishes no release notes. When `pr-context.md` has an
+          `Upstream evidence (silo ...)` section with commit subjects and changed files, it
+          counts as release notes for the full range, so missing release notes are not an
+          Unknown. `APPROVED` still requires checking every listed env var, classifying each
+          migration, and completing the upstream issue search. Write `COMMENT` if the evidence
+          could not be fetched, or if it may be truncated (more than 150 commits in range, or
+          300 changed files listed).
 
           Structure review.md exactly as (omit empty sections). **A non-empty `New features
           worth adopting` or `Known issues` section is what decides `COMMENT` vs `APPROVED`
