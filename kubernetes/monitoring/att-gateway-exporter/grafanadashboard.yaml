@@ -47,7 +47,7 @@ spec:
             "defaults": {
               "unit": "s",
               "custom": {
-                "showPoints": "never"
+                "showPoints": "auto"
               }
             },
             "overrides": []
@@ -81,7 +81,7 @@ spec:
             "defaults": {
               "unit": "s",
               "custom": {
-                "showPoints": "never"
+                "showPoints": "auto"
               }
             },
             "overrides": []
@@ -115,7 +115,7 @@ spec:
             "defaults": {
               "unit": "percentunit",
               "custom": {
-                "showPoints": "never"
+                "showPoints": "auto"
               }
             },
             "overrides": []
@@ -149,7 +149,7 @@ spec:
             "defaults": {
               "unit": "percentunit",
               "custom": {
-                "showPoints": "never"
+                "showPoints": "auto"
               }
             },
             "overrides": []
@@ -172,7 +172,7 @@ spec:
           "id": 5,
           "title": "Gateway uptime",
           "description": "",
-          "type": "timeseries",
+          "type": "stat",
           "gridPos": {
             "h": 8,
             "w": 12,
@@ -181,24 +181,26 @@ spec:
           },
           "fieldConfig": {
             "defaults": {
-              "unit": "s",
-              "custom": {
-                "showPoints": "never"
-              }
+              "unit": "s"
             },
             "overrides": []
           },
           "options": {
-            "tooltip": {
-              "mode": "multi",
-              "sort": "desc"
-            }
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "graphMode": "area",
+            "colorMode": "none",
+            "textMode": "value"
           },
           "targets": [
             {
               "refId": "A",
               "expr": "att_gateway_uptime_seconds",
-              "legendFormat": "uptime"
+              "legendFormat": "uptime",
+              "instant": false
             }
           ]
         },
@@ -206,7 +208,7 @@ spec:
           "id": 6,
           "title": "Gateway firmware",
           "description": "",
-          "type": "timeseries",
+          "type": "stat",
           "gridPos": {
             "h": 8,
             "w": 12,
@@ -215,24 +217,26 @@ spec:
           },
           "fieldConfig": {
             "defaults": {
-              "unit": "short",
-              "custom": {
-                "showPoints": "never"
-              }
+              "unit": "none"
             },
             "overrides": []
           },
           "options": {
-            "tooltip": {
-              "mode": "multi",
-              "sort": "desc"
-            }
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "graphMode": "none",
+            "colorMode": "none",
+            "textMode": "name"
           },
           "targets": [
             {
               "refId": "A",
               "expr": "att_gateway_info",
-              "legendFormat": "{{model}} {{firmware}}"
+              "legendFormat": "{{model}} {{firmware}}",
+              "instant": true
             }
           ]
         },
@@ -251,7 +255,7 @@ spec:
             "defaults": {
               "unit": "dBm",
               "custom": {
-                "showPoints": "never"
+                "showPoints": "auto"
               }
             },
             "overrides": []
@@ -290,7 +294,7 @@ spec:
             "defaults": {
               "unit": "celsius",
               "custom": {
-                "showPoints": "never"
+                "showPoints": "auto"
               }
             },
             "overrides": []
