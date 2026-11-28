@@ -1,0 +1,313 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: att-gateway
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: networking
+  json: |
+    {
+      "title": "AT&T Gateway",
+      "uid": "att-gateway",
+      "schemaVersion": 39,
+      "time": {
+        "from": "now-7d",
+        "to": "now"
+      },
+      "refresh": "1m",
+      "annotations": {
+        "list": [
+          {
+            "name": "Gateway reboots",
+            "enable": true,
+            "iconColor": "red",
+            "expr": "resets(att_gateway_uptime_seconds[5m]) > 0",
+            "titleFormat": "Gateway reboot"
+          }
+        ]
+      },
+      "panels": [
+        {
+          "id": 1,
+          "title": "Lowest latency per hop (1h floor)",
+          "description": "Lowest 5m average in the past hour. A steady climb after a gateway reboot is the early warning sign.",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "min_over_time((sum by (host) (rate(smokeping_response_duration_seconds_sum{host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m])) / sum by (host) (rate(smokeping_response_duration_seconds_count{host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m])))[1h:1m])",
+              "legendFormat": "{{host}}"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Average latency per hop",
+          "description": "",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (host) (rate(smokeping_response_duration_seconds_sum{host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m])) / sum by (host) (rate(smokeping_response_duration_seconds_count{host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m]))",
+              "legendFormat": "{{host}}"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Replies slower than 102ms",
+          "description": "",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "clamp_min(1 - sum by (host) (rate(smokeping_response_duration_seconds_bucket{le=\"0.1024\",host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m])) / sum by (host) (rate(smokeping_response_duration_seconds_count{host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m])), 0)",
+              "legendFormat": "{{host}}"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Packet loss",
+          "description": "",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "clamp_min(1 - sum by (host) (rate(smokeping_response_duration_seconds_count{host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m])) / sum by (host) (rate(smokeping_requests_total{host=~\"10[.]0[.]7[.]1|nas[.]home|192[.]168[.]1[.]254|162[.]226[.]216[.]1|107[.]212[.]168[.]24|1[.]1[.]1[.]1|9[.]9[.]9[.]9\"}[5m])), 0)",
+              "legendFormat": "{{host}}"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Gateway uptime",
+          "description": "",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "att_gateway_uptime_seconds",
+              "legendFormat": "uptime"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Gateway firmware",
+          "description": "",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "att_gateway_info",
+              "legendFormat": "{{model}} {{firmware}}"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Optical power",
+          "description": "",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 32
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "dBm",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "att_gateway_optical_rx_power_dbm",
+              "legendFormat": "rx"
+            },
+            {
+              "refId": "B",
+              "expr": "att_gateway_optical_tx_power_dbm",
+              "legendFormat": "tx"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Optical temperature",
+          "description": "",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 32
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "custom": {
+                "showPoints": "never"
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "att_gateway_optical_temperature_celsius",
+              "legendFormat": "temperature"
+            }
+          ]
+        }
+      ]
+    }

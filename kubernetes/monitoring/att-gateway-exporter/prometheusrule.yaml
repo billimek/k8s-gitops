@@ -1,0 +1,74 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: att-gateway-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: att-gateway.rules
+      rules:
+        - alert: ATTGatewayLatencyCreep
+          annotations:
+            summary: WAN idle latency is elevated.
+            description: 'The lowest 5m average ping to 1.1.1.1 and 9.9.9.9 has stayed above 5.8ms for 3 hours. The AT&T gateway may need a reboot.'
+          expr: |
+            count(
+              min_over_time((
+                rate(smokeping_response_duration_seconds_sum{host=~"1[.]1[.]1[.]1|9[.]9[.]9[.]9"}[5m])
+                /
+                rate(smokeping_response_duration_seconds_count{host=~"1[.]1[.]1[.]1|9[.]9[.]9[.]9"}[5m])
+              )[3h:1m]) > 0.0058
+            ) == 2
+          for: 1h
+          labels:
+            severity: warning
+
+        - alert: ATTGatewayScrapeFailing
+          annotations:
+            summary: AT&T gateway status page cannot be read.
+            description: 'Reading {{ $labels.page }} from the AT&T gateway has failed for 30 minutes.'
+          expr: |
+            min_over_time(att_gateway_scrape_success[15m]) == 0
+            and
+            max_over_time(att_gateway_scrape_success[15m]) == 0
+          for: 15m
+          labels:
+            severity: warning
+
+        - alert: ATTGatewayExporterDown
+          annotations:
+            summary: AT&T gateway exporter is down.
+            description: 'The AT&T gateway exporter has not been scraped successfully for 15 minutes.'
+          expr: |
+            absent(up{job=~".*att-gateway-exporter.*"} == 1)
+          for: 15m
+          labels:
+            severity: warning
+
+        - alert: ATTGatewayFirmwareChanged
+          annotations:
+            summary: AT&T gateway firmware changed.
+            description: 'The AT&T gateway now reports firmware {{ $labels.firmware }}.'
+          expr: |
+            count by (firmware) (att_gateway_info)
+            unless
+            count by (firmware) (att_gateway_info offset 1h)
+            and on ()
+            count(att_gateway_info offset 1h)
+          for: 5m
+          labels:
+            severity: info
+
+        - alert: ATTGatewayOpticalRxPowerOutOfRange
+          annotations:
+            summary: AT&T gateway fiber signal is out of range.
+            description: 'Optical receive power is {{ $value }} dBm.'
+          expr: |
+            att_gateway_optical_rx_power_dbm < -27.9
+            or
+            att_gateway_optical_rx_power_dbm > -10
+          for: 15m
+          labels:
+            severity: warning

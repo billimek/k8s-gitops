@@ -24,7 +24,18 @@ spec:
                 network: ip4
                 protocol: icmp
                 size: 56
-              
+
+              # Wired LAN host, AT&T gateway and first AT&T hops
+              - hosts:
+                  - nas.home
+                  - 192.168.1.254        # AT&T BGW320 LAN IP
+                  - 162.226.216.1        # AT&T hop 1
+                  - 107.212.168.24       # AT&T hop 2
+                interval: 1s
+                network: ip4
+                protocol: icmp
+                size: 56
+
               # Public DNS Servers (IPv4)
               - hosts:
                   - 1.1.1.1              # Cloudflare Primary

@@ -1,0 +1,151 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: att-gateway-exporter
+  namespace: monitoring
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    configMaps:
+      config:
+        data:
+          exporter.py: |
+            import html
+            import re
+            import urllib.request
+            from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+            BASE = "http://192.168.1.254/cgi-bin/"
+
+
+            def fetch(page):
+                with urllib.request.urlopen(BASE + page, timeout=10) as r:
+                    return r.read().decode("utf-8", "replace")
+
+
+            def row(page, label):
+                m = re.search(r">\s*" + label + r"\s*</th>\s*<td[^>]*>(.*?)</td>", page, re.S)
+                if not m:
+                    raise ValueError("missing field: " + label)
+                return html.unescape(m.group(1)).strip()
+
+
+            def reading(page, label):
+                m = re.search(r"<h1>\s*" + label + r"(?:&nbsp;|\s)+Currently\s+(-?\d+)", page)
+                if not m:
+                    raise ValueError("missing reading: " + label)
+                return int(m.group(1))
+
+
+            def uptime_seconds(value):
+                days, hours, minutes, seconds = (int(x) for x in value.split(":"))
+                return days * 86400 + hours * 3600 + minutes * 60 + seconds
+
+
+            def system_metrics():
+                page = fetch("sysinfo.ha")
+                labels = 'model="%s",firmware="%s"' % (row(page, "Model Number"), row(page, "Software Version"))
+                return [
+                    "att_gateway_info{%s} 1" % labels,
+                    "att_gateway_uptime_seconds %d" % uptime_seconds(row(page, "Time Since Last Reboot")),
+                ]
+
+
+            def fiber_metrics():
+                page = fetch("fiberstat.ha")
+                return [
+                    "att_gateway_optical_rx_power_dbm %.1f" % (reading(page, "Rx Power") / 10),
+                    "att_gateway_optical_tx_power_dbm %.1f" % (reading(page, "Tx Power") / 10),
+                    "att_gateway_optical_temperature_celsius %d" % reading(page, "Temperature"),
+                ]
+
+
+            def collect():
+                lines = []
+                for name, source in (("sysinfo", system_metrics), ("fiberstat", fiber_metrics)):
+                    try:
+                        lines += source()
+                        ok = 1
+                    except Exception as e:
+                        print("%s: %s" % (name, e), flush=True)
+                        ok = 0
+                    lines.append('att_gateway_scrape_success{page="%s"} %d' % (name, ok))
+                return "\n".join(lines) + "\n"
+
+
+            class Handler(BaseHTTPRequestHandler):
+                def do_GET(self):
+                    if self.path not in ("/metrics", "/healthz"):
+                        self.send_error(404)
+                        return
+                    body = (collect() if self.path == "/metrics" else "ok\n").encode()
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/plain; version=0.0.4")
+                    self.end_headers()
+                    self.wfile.write(body)
+
+                def log_message(self, *args):
+                    pass
+
+
+            if __name__ == "__main__":
+                ThreadingHTTPServer(("0.0.0.0", 9877), Handler).serve_forever()
+
+    defaultPodOptions:
+      securityContext:
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
+
+    controllers:
+      att-gateway-exporter:
+        containers:
+          app:
+            image:
+              repository: docker.io/library/python
+              tag: 3.14-alpine@sha256:5862d971d1f0ae26b258cefa4e893556b1d3aba81bd2ff30888704ad378bab67
+            command: ["python3", "-B", "/config/exporter.py"]
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 9877
+                  periodSeconds: 60
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+              readOnlyRootFilesystem: true
+
+    persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config
+            readOnly: true
+
+    service:
+      app:
+        controller: att-gateway-exporter
+        ports:
+          metrics:
+            port: 9877

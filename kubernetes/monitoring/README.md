@@ -1,3 +1,9 @@
+# att-gateway-exporter
+
+Reads the AT&T BGW320 status pages (uptime, firmware, fiber levels). Its dashboard compares ping latency and loss per hop using smokeping-prober data.
+
+* [att-gateway-exporter/att-gateway-exporter.yaml](att-gateway-exporter/att-gateway-exporter.yaml)
+
 # grafana
 
 ![](https://i.imgur.com/hzBFkEE.png)
