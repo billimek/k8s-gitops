@@ -38,7 +38,6 @@
         "ghcr.io/home-operations/sabnzbd",
         "ghcr.io/home-operations/sonarr",
         "ghcr.io/home-operations/tautulli",
-        "ghcr.io/recyclarr/recyclarr",
         "ghcr.io/tarampampam/error-pages",
         "/grafana/"
       ],
