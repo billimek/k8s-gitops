@@ -1,5 +1,46 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/ocirepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: recyclarr
+  namespace: default
+spec:
+  interval: 30m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 9.0.0
+  url: oci://ghcr.io/recyclarr/charts/recyclarr
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/external-secrets.io/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: recyclarr-keys
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: recyclarr-keys
+  data:
+    - secretKey: RECYCLARR_API_KEY
+      remoteRef:
+        key: recyclarr
+        property: api_key
+    - secretKey: RADARR_API_KEY
+      remoteRef:
+        key: recyclarr
+        property: radarr_api_key
+    - secretKey: SONARR_API_KEY
+      remoteRef:
+        key: recyclarr
+        property: sonarr_api_key
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -8,93 +49,35 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+    name: recyclarr
   interval: 1h
   values:
-    defaultPodOptions:
-      securityContext:
-        fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 1001
-        runAsNonRoot: true
-        runAsUser: 1001
-
-    externalSecrets:
-      recyclarr:
-        secretStoreRef:
-          kind: ClusterSecretStore
-          name: onepassword-connect
-        target:
-          name: recyclarr-secret
-        data:
-          - secretKey: RADARR_API_KEY
-            remoteRef:
-              key: radarr
-              property: api_key
-          - secretKey: SONARR_API_KEY
-            remoteRef:
-              key: sonarr
-              property: api_key
-
-    controllers:
-      recyclarr:
-        type: cronjob
-
-        cronjob:
-          schedule: "@daily"
-          backoffLimit: 0
-          concurrencyPolicy: Forbid
-          failedJobsHistory: 1
-          successfulJobsHistory: 0
-          ttlSecondsAfterFinished: 86400
-
-        pod:
-          restartPolicy: Never
-
-        containers:
-          app:
-            image:
-              repository: ghcr.io/recyclarr/recyclarr
-              tag: 8.8.1@sha256:3e9c41b9ec29bbf65fe846864058730d321a21f7695d8c0d9437b73e34d50ad9
-            args:
-              - sync
-            env:
-              TZ: America/New_York
-              COMPlus_EnableDiagnostics: "0"
-              RECYCLARR_DATA_DIR: /tmp
-            envFrom:
-              - secretRef:
-                  name: recyclarr-secret
-            resources:
-              requests:
-                cpu: 5m
-                memory: 36Mi
-              limits:
-                memory: 128Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
-
+    apiKey:
+      existingSecret: recyclarr-keys
+      existingSecretKey: RECYCLARR_API_KEY
+    configs:
+      existingConfigMap: recyclarr-configmap
+    settings:
+      content: |
+        server:
+          schedule:
+            cron: "0 0 * * *"
+    env:
+      - name: TZ
+        value: America/New_York
+    envFrom:
+      - secretRef:
+          name: recyclarr-keys
     persistence:
-      config:
+      state:
         existingClaim: recyclarr-config
-      config-file:
-        type: configMap
-        name: recyclarr-configmap
-        globalMounts:
-          - path: /config/recyclarr.yml
-            subPath: recyclarr.yml
-            readOnly: true
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          recyclarr:
-            app:
-              - path: /config/logs
-                subPath: logs
-              - path: /config/repositories
-                subPath: repositories
-              - path: /tmp
-                subPath: tmp
+    podSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
